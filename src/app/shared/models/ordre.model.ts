@@ -107,7 +107,7 @@ export class Ordre extends Model {
   @Field({ model: import("./devise.model") }) public transporteurDEVCode?: Devise;
   @Field() public transporteurDEVTaux?: number;
   @Field({ model: import("./base-tarif.model") })
-  public baseTarifTransport?: BaseTarif;
+  public baseTarifTransport?: Partial<BaseTarif>;
   @Field({ model: import("./base-tarif.model") })
   public baseTarifTransit?: BaseTarif;
   @Field({ model: import("./type-vente.model") })

@@ -4,8 +4,9 @@ import { Apollo } from "apollo-angular";
 import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { forkJoin, from, fromEvent, of, zip } from "rxjs";
-import { concatMap, filter, first, map, mergeMap, scan, take, takeUntil, tap } from "rxjs/operators";
+import notify from "devextreme/ui/notify";
+import { from, iif, of, throwError } from "rxjs";
+import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
@@ -38,7 +39,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
@@ -518,61 +519,49 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
-  public updateFortaitsTransporteur(ordreID: Ordre["id"], chunk?: {
-    cenRef: string,
-    incCode: string,
-    trpDevPu: number,
-    btaCode: string,
-    devCode: string,
-    typeOrd: string,
-  }) {
-
-    return forkJoin([
-      of(chunk),
-      this.getOne_v2(ordreID, new Set([
-        "entrepot.id",
-        "incoterm.id",
-        "client.incoterm.id",
-        "transporteurDEVPrixUnitaire",
-        "transporteur.devise.id",
-        "devise.id",
-        "baseTarifTransport.id",
-        "type.id",
-      ]))
-    ]).pipe(
-      // prepare context data, parameters data first, then fallback to persisted data
-      map(([context, res]) => ({
-        cenRef: context?.cenRef ?? res.data.ordre?.entrepot?.id, // cenRef
-        incCode: context?.incCode ?? res.data.ordre?.client?.incoterm?.id ?? res.data.ordre?.incoterm?.id, // incCode
-        typeOrd: context?.typeOrd ?? res.data.ordre?.type?.id, // typeOrd
-      })),
-      // merge context with `fReturnForfaitsTrp` response
-      concatMap(context => this.functionsService.fReturnForfaitsTrp(
-        context.cenRef,
-        context.incCode,
-        context.typeOrd,
-      ).pipe(map(res => ({
-        ...context,
+  public updateTransporteurPU(ordreChunk: Partial<Ordre>) {
+    return this.functionsService.fReturnForfaitsTrp(
+      ordreChunk.entrepot?.id,
+      ordreChunk.incoterm?.id,
+      ordreChunk.type?.id,
+    ).pipe(
+      map(res => ({
         forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
+        // default?
         trpDevPu: res.data.fReturnForfaitsTrp.data.arg_trp_dev_pu,
         btaCode: res.data.fReturnForfaitsTrp.data.arg_bta_code,
         devCode: res.data.fReturnForfaitsTrp.data.arg_dev_code,
-      })))),
+      })),
       // continue if we have `forfaitsTrp` value
-      filter(context => context.forfaitsTrp > 0),
-      // merge context with associated `deviseRef.taux`
-      concatMap(context => this.devisesRefsService.getList(
-        `devise.id==${context.devCode} and id==${this.currentCompanyService.getCompany().devise.id}`,
-        ["id", "taux"],
-      ).pipe(map(res => ({
-        ...context,
-        deviseRefTaux: res.data.allDeviseRefList?.[0].taux,
-      })))),
-      // calculate & add `transporteur PU` to context
-      map(context => ({
-        ...context,
-        trpPU: context.deviseRefTaux * context.trpDevPu,
-      }))
+      concatMap(context => iif(
+        () => context.forfaitsTrp > 0,
+        // merge context with associated `deviseRef.taux`
+        this.devisesRefsService.getList(
+          `devise.id==${ordreChunk.transporteurDEVCode.id} and id==${context.devCode}`,
+          ["id", "devise.id", "taux"],
+        ).pipe(
+          concatMap(res => !res.data.allDeviseRefList?.[0].taux
+            ? throwError(new Error("Le taux de cette devise n'est pas renseigné"))
+            : of({
+              transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
+              transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
+            })),
+          catchError((err, catched) => {
+            notify(err.message, "warning");
+            return of({
+              transporteurDEVPrixUnitaire: context.trpDevPu,
+              transporteurDEVCode: { id: context.devCode },
+            });
+          }),
+        ),
+        of({}),
+      )),
+      // merge input data
+      concatMap(data => this.save_v2([
+        "transporteurDEVPrixUnitaire",
+        "transporteurDEVCode.id",
+      ], { ordre: { id: ordreChunk.id, ...data } })),
+      map(res => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)),
     );
   }
 }

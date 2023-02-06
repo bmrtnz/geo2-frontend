@@ -40,7 +40,7 @@ import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, defer, Observable, of, Subject } from "rxjs";
 // tslint:disable-next-line: max-line-length
-import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile, tap } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
@@ -61,7 +61,6 @@ import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/gr
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
-import { PackingListPopupComponent } from "../packing-list-popup/packing-list-popup.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
@@ -178,7 +177,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "incoterm.id",
     "transporteur.id",
     "typeTransport.id",
-    "prixUnitaireTarifTransport",
+    "transporteurDEVPrixUnitaire",
     "fraisUnite.id",
     "instructionsLogistiques",
     "commentaireUsageInterne",
@@ -242,7 +241,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     referenceClient: [""],
     transporteur: [""],
     transporteurDEVCode: [""],
-    prixUnitaireTarifTransport: [""],
+    transporteurDEVPrixUnitaire: [""],
     transporteurDEVTaux: [""],
     baseTarifTransport: [""],
     typeTransport: [""],
@@ -411,6 +410,24 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           concatMap(([, ordre]) => this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)),
           map(res => res.data.ofInitRegimeTva.msg),
         );
+
+    combineLatest([
+      this.formGroup.get("transporteurDEVCode").valueChanges,
+      this.formGroup.get("incoterm").valueChanges,
+    ]).pipe(
+      filter(res => !!this.ordre.transporteurDEVCode?.id),
+      concatMap(([transporteurDEVCode, incoterm]) => this.ordresService
+        .updateTransporteurPU({
+          ...this.ordre,
+          transporteurDEVCode,
+          incoterm,
+        })),
+    ).subscribe(res => {
+      this.formGroup
+        .get("transporteurDEVPrixUnitaire")
+        .setValue(res.transporteurDEVPrixUnitaire);
+    },
+    );
   }
 
   ngAfterViewInit() {
