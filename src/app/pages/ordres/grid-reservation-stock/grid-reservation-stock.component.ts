@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import { AuthService, FournisseursService, LocalizationService } from "app/shared/services";
@@ -25,7 +25,7 @@ export type Reservation = [number, number, string];
   templateUrl: "./grid-reservation-stock.component.html",
   styleUrls: ["./grid-reservation-stock.component.scss"]
 })
-export class GridReservationStockComponent implements OnInit {
+export class GridReservationStockComponent implements OnInit, OnChanges {
 
   @Input() public ordreLigneInfo: any;
   @Input() public articleID: string;
@@ -39,6 +39,7 @@ export class GridReservationStockComponent implements OnInit {
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  private gridReady: boolean;
   columnChooser = environment.columnChooser;
   reservationsSource: Observable<DataSource>;
   public summaryFields = [
@@ -62,11 +63,17 @@ export class GridReservationStockComponent implements OnInit {
     private fournisseursService: FournisseursService,
     public gridsService: GridsService,
   ) {
+    this.gridReady = false;
   }
 
   async ngOnInit() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStock);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+  }
+
+  ngOnChanges() {
+    this.gridReady = false;
+    this.datagrid?.instance?.option("grouping", { autoExpandAll: false });
   }
 
   onCellPrepared(e) {
@@ -158,6 +165,13 @@ export class GridReservationStockComponent implements OnInit {
         : of(true)),
       filter(result => !!result),
     );
+  }
+
+  onContentReady(e) {
+    if (!this.gridReady && this.datagrid.instance.getVisibleRows()?.length === 1) {
+      this.gridReady = true;
+      this.datagrid.instance.option("grouping", { autoExpandAll: true });
+    }
   }
 
   onCellClick(e) {

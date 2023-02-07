@@ -73,11 +73,9 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Article);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise(), this.fetchPolicy);
   }
 
   loadPreFilters() {
@@ -92,7 +90,7 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     ];
     dataToLoad.forEach(data => {
       let pimpedFilter;
-      // filtering emballages by their groupes
+      // filtering emballages by their groups
       if (data.var === "emballages" && this.groupesSB.value.length) {
         pimpedFilter = refCltFilter;
         for (const { key } of this.groupesSB.value)
@@ -100,10 +98,10 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
       }
 
       this[data.var] = this.articlesService.getDistinctEntityDatasource(data.id, data.desc, pimpedFilter ?? refCltFilter, "no-cache");
-      this[data.var].subscribe(res => res.load().then(result => {
-        const selectBox = data.var + "SB";
-        if (result?.length === 1) this[selectBox].instance.option("value", [result[0].node]);
-      }));
+      // this[data.var].subscribe(res => res.load().then(result => {
+      //   const selectBox = data.var + "SB";
+      //   if (result?.length === 1) this[selectBox].instance.option("value", [result[0].node]);
+      // }));
     });
   }
 
@@ -111,14 +109,14 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     this.selectChange.emit(e);
   }
 
-  refreshArticlesGrid() {
+  async refreshArticlesGrid() {
     this.toRefresh = false;
     this.loadPreFilters();
-    if (this.dataGrid.dataSource === null
-      || (Array.isArray(this.dataGrid.dataSource)
-        && !this.dataGrid.dataSource.length))
-      this.dataGrid.dataSource = this.articles;
-    this.dataGrid.instance.filter(this.allGridFilters);
+    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
+    console.log(this.fetchPolicy);
+    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise(), this.fetchPolicy);
+    this.articles.filter(this.allGridFilters);
+    this.dataGrid.dataSource = this.articles;
   }
 
   onRowPrepared(e) {

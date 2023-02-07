@@ -251,7 +251,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       "raisonSocial",
       "secteur.id",
     ]);
-    if (e.value) this.clients.filter(["secteur.id", "=", e.value.id]);
+    if (e.value) this.clients.filter([
+      ["secteur.id", "=", e.value.id],
+      "and",
+      ["societe.id", "=", this.currentCompanyService.getCompany().id]
+    ]);
   }
 
   onClientChange(e) {
