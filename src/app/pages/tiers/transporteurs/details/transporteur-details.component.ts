@@ -97,7 +97,6 @@ export class TransporteurDetailsComponent
     "historique.userModification",
     "historique.dateModification",
     "typeTiers",
-    "typeClient.id"
   ]);
   helpBtnOptions = {
     icon: "help",

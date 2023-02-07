@@ -585,7 +585,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   onCellClick() {
-    self = this; // KEEP THIS to have a consistant value of 'self' when navigating through order tabs
+    self = this; // KEEP THIS to have a consistent value of 'self' when navigating through order tabs
   }
 
   setCellValue(newData, value, currentData) {
