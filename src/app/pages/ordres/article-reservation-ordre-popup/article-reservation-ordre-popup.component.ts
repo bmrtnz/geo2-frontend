@@ -45,6 +45,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     private calibresFournisseurService: CalibresFournisseurService,
     private localizeService: LocalizationService,
     private cd: ChangeDetectorRef,
+    private gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService,
     private grids: GridsService,
@@ -80,11 +81,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
-    // this.gridResa.reloadSource(this.ordreLigne.article.id);
   }
 
   resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
+    if (this.popupFullscreen)
+      this.gridResa.datagrid.instance.option("grouping", { autoExpandAll: false });
+    // Timeout to overcome a visual popup content issue otherwise due to grouping
+    setTimeout(() => this.popupFullscreen = !this.popupFullscreen, 10);
   }
 
   clearAll() {
