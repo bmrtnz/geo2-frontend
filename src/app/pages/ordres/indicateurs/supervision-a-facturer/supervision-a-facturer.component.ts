@@ -467,7 +467,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         if (e.data.description) {
           e.cellElement.setAttribute(
             "title",
-            e.data.description.replaceAll("%%%", "BLOQUANT :").replaceAll("~r~n", "\r\n")
+            e.data.description
+              .replaceAll("%%%", this.localization.localize("blocking"))
+              .replaceAll("~r~n", "\r\n")
           );
         }
       }
