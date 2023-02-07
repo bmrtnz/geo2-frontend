@@ -458,6 +458,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
           { name: "nomUtilisateur", type: "String", isOptionnal: false },
         ])),
         variables: { socCode, scoCode, dateMin, dateMax, nomUtilisateur },
+        fetchPolicy: "network-only",
       })
       .pipe(map(res => res.data.fEnvoiBLAuto));
   }
