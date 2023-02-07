@@ -500,7 +500,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (addedArt.length) {
           const addedArtids = [];
           addedArt.map(artId => addedArtids.push(artId.article?.id));
-          let message = this.localization.localize("articles-ajoutes-refs-client")
+          const trad = this.vowelTest(this.ordre.client.code[0]) ? "-vowel" : "";
+          let message = this.localization.localize(`articles-ajoutes-refs-client${trad}`)
             .split("&&").join(addedArtids.length > 1 ? "s" : "")
             .replace("&A", this.gridUtilsService.friendlyFormatList(addedArtids))
             .replace("&C", this.ordre.client.code);
@@ -1284,10 +1285,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshDescriptifRegroupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
       .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
-  }
-
-  public formatDepassement(dep) {
-    dep = dep.toFixed(2);
   }
 
 }

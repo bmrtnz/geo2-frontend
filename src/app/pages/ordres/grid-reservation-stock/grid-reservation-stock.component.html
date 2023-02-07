@@ -20,6 +20,7 @@
     [rowAlternationEnabled]="true"
     (onCellPrepared)="onCellPrepared($event)"
     (onCellClick)="onCellClick($event)"
+    (onContentReady)="onContentReady($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

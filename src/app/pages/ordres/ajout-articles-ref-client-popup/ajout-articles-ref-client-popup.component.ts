@@ -117,7 +117,8 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
       artIds = [...new Set(artIds)]; // Removing duplicates
       this.referencesClientService.removeRefs(this.ordre.client.id, artIds).subscribe({
         next: () => {
-          const message = this.localizeService.localize("articles-supprimes-refs-client")
+          const trad = this.vowelTest(this.ordre.client.code[0]) ? "-vowel" : "";
+          const message = this.localizeService.localize(`articles-supprimes-refs-client${trad}`)
             .split("&&").join(artIds.length > 1 ? "s" : "")
             .replace("&A", this.gridUtilsService.friendlyFormatList(artIds))
             .replace("&C", this.ordre.client.code);
@@ -129,6 +130,10 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
       });
     }
 
+  }
+
+  vowelTest(text) {
+    return (/^[AEIOUYaeiouy]$/i).test(text);
   }
 
   onShowing(e) {
