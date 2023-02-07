@@ -5,10 +5,12 @@ import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
-import { first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { from, iif, of, throwError } from "rxjs";
+import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import { CurrentCompanyService } from "../current-company.service";
+import { DevisesRefsService } from "./devises-refs.service";
 import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 
 export enum Operation {
@@ -29,13 +31,15 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   constructor(
     apollo: Apollo,
-    public functionsService: FunctionsService
+    public functionsService: FunctionsService,
+    private devisesRefsService: DevisesRefsService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     super(apollo, Ordre);
   }
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut)$/i;
+  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
@@ -513,5 +517,51 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "societeID", type: "String", value: societeID },
     ]);
+  }
+
+  public updateTransporteurPU(ordreChunk: Partial<Ordre>) {
+    return this.functionsService.fReturnForfaitsTrp(
+      ordreChunk.entrepot?.id,
+      ordreChunk.incoterm?.id,
+      ordreChunk.type?.id,
+    ).pipe(
+      map(res => ({
+        forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
+        // default?
+        trpDevPu: res.data.fReturnForfaitsTrp.data.arg_trp_dev_pu,
+        btaCode: res.data.fReturnForfaitsTrp.data.arg_bta_code,
+        devCode: res.data.fReturnForfaitsTrp.data.arg_dev_code,
+      })),
+      // continue if we have `forfaitsTrp` value
+      concatMap(context => iif(
+        () => context.forfaitsTrp > 0,
+        // merge context with associated `deviseRef.taux`
+        this.devisesRefsService.getList(
+          `devise.id==${ordreChunk.transporteurDEVCode.id} and id==${context.devCode}`,
+          ["id", "devise.id", "taux"],
+        ).pipe(
+          concatMap(res => !res.data.allDeviseRefList?.[0].taux
+            ? throwError(new Error("Le taux de cette devise n'est pas renseigné"))
+            : of({
+              transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
+              transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
+            })),
+          catchError((err, catched) => {
+            notify(err.message, "warning");
+            return of({
+              transporteurDEVPrixUnitaire: context.trpDevPu,
+              transporteurDEVCode: { id: context.devCode },
+            });
+          }),
+        ),
+        of({}),
+      )),
+      // merge input data
+      concatMap(data => this.save_v2([
+        "transporteurDEVPrixUnitaire",
+        "transporteurDEVCode.id",
+      ], { ordre: { id: ordreChunk.id, ...data } })),
+      map(res => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)),
+    );
   }
 }

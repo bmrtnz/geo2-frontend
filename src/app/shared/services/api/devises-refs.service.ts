@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import DeviseRef from "app/shared/models/devise-ref.model";
 import { Apollo, gql } from "apollo-angular";
-import { ApiService } from "../api.service";
-import { takeWhile } from "rxjs/operators";
+import DeviseRef from "app/shared/models/devise-ref.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { takeWhile } from "rxjs/operators";
+import { ApiService } from "../api.service";
 
 @Injectable({
   providedIn: "root",
@@ -29,6 +29,7 @@ export class DevisesRefsService extends ApiService {
       .query<{ allDeviseRefList: DeviseRef[] }>({
         query: gql(this.buildGetListGraph(columns)),
         variables: { search },
+        fetchPolicy: "network-only",
       })
       .pipe(takeWhile((res) => !res.loading));
   }

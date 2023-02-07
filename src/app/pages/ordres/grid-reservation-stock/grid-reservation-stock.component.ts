@@ -129,7 +129,7 @@ export class GridReservationStockComponent implements OnInit {
       .subscribe({
         next: res => {
           const { nb_resa: nombreResa, nb_dispo: quantiteDisponible } = res.data.fResaUneLigne.data;
-          this.reservationChange.emit([nombreResa, quantiteDisponible, event.key[0]]);
+          this.reservationChange.emit([nombreResa, quantiteDisponible, event.data.fournisseurCode]);
           // Updating new ordreLigneInfo for grid focus purposes
           this.ordreLigneInfo.proprietaireMarchandise = { code: proprietaire };
           this.ordreLigneInfo.fournisseur = { code: fournisseur };
@@ -190,7 +190,6 @@ export class GridReservationStockComponent implements OnInit {
 
     const otherReservation = !!(e.data.option && !e.data.option?.toUpperCase().includes(this.authService.currentUser.nomUtilisateur));
     const alertOther = this.alertOtherReservation.bind(this, otherReservation, e.data.option);
-    console.log("Message nécessaire ?", otherReservation);
 
     // when selected source differ from the target (fournisseur)
     if (

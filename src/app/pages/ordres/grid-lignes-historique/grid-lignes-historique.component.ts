@@ -293,7 +293,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   onSecteurChanged(e) {
     this.onFieldValueChange();
-    console.log("onSecteurChanged");
     this.clients = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial", "valide"]);
     const filter: any = [
       ["secteur.id", "=", e.value?.id],

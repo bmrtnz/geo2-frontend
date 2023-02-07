@@ -527,7 +527,8 @@
                               <dx-number-box
                                 [readOnly]="ordreFacture"
                                 class="alignright"
-                                formControlName="prixUnitaireTarifTransport"
+                                formControlName="transporteurDEVPrixUnitaire"
+                                [format]="'#0.00'"
                               >
                                 <!-- <dx-validator name="{{ 'ordres-prixUnitaireTarifTransport' | localize }}">
                                         <dxi-validation-rule type="required"></dxi-validation-rule>

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { BaseTarif, Devise } from "app/shared/models";
 import { ApiService } from "../api.service";
 
 export enum FunctionResult {
@@ -748,11 +749,15 @@ export class FunctionsService {
   public fReturnForfaitsTrp = (
     cenRef: string,
     incCode: string,
-    trpDevPu: number,
-    btaCode: string,
-    devCode: string,
     typeOrd: string) => this.apollo
-      .query<{ fReturnForfaitsTrp: FunctionResponse<{ li_ret: number }> }>({
+      .query<{
+        fReturnForfaitsTrp: FunctionResponse<{
+          li_ret: number,
+          arg_trp_dev_pu: number,
+          arg_bta_code: BaseTarif["id"],
+          arg_dev_code: Devise["id"],
+        }>
+      }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -762,9 +767,6 @@ export class FunctionsService {
               params: [
                 { name: "cenRef", value: "cenRef", isVariable: true },
                 { name: "incCode", value: "incCode", isVariable: true },
-                { name: "trpDevPu", value: "trpDevPu", isVariable: true },
-                { name: "btaCode", value: "btaCode", isVariable: true },
-                { name: "devCode", value: "devCode", isVariable: true },
                 { name: "typeOrd", value: "typeOrd", isVariable: true },
               ]
             }
@@ -772,18 +774,12 @@ export class FunctionsService {
           [
             { name: "cenRef", type: "String", isOptionnal: false },
             { name: "incCode", type: "String", isOptionnal: false },
-            { name: "trpDevPu", type: "Double", isOptionnal: false },
-            { name: "btaCode", type: "String", isOptionnal: false },
-            { name: "devCode", type: "String", isOptionnal: false },
             { name: "typeOrd", type: "String", isOptionnal: false },
           ],
         )),
         variables: {
           cenRef,
           incCode,
-          trpDevPu,
-          btaCode,
-          devCode,
           typeOrd,
         },
         fetchPolicy: "network-only",
