@@ -773,7 +773,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         "fAnnulationOrdre",
         "fCreeOrdreComplementaire",
         "fCreeOrdreComplementaire",
-        "fnMajOrdreRegroupementV2"
+        "fnMajOrdreRegroupementV2",
+        "fBonAFacturer"
       ];
     functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
@@ -1210,9 +1211,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe(res => {
-      this.refreshHeader();
-    });
+    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id)
+      .subscribe({
+        error: ({ message }: Error) => {
+          console.log(message);
+          notify(this.messageFormat(message), "error", 7000);
+        },
+        next: () => this.refreshHeader()
+      });
 
   }
 
