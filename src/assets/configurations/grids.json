@@ -4114,27 +4114,27 @@
   "litiges": {
     "columns": [
       {
-        "visibleIndex": 2,
+        "visibleIndex": 1,
         "dataField": "nomPersonne",
         "dataType": "string",
         "groupIndex": 0,
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 3,
         "dataField": "prenomPersonne",
         "dataType": "string",
         "visible": false
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 5,
         "dataField": "litige.id",
         "dataType": "string",
         "groupIndex": 1,
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 7,
         "dataField": "delai",
         "cssClass": "red-font bold-text",
         "format": "#",
@@ -4142,7 +4142,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 9,
         "dataField": "dateCreationLitige",
         "dataType": "date",
         "cssClass": "multi-line-header",
@@ -4151,7 +4151,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 11,
         "dataField": "societe.id",
         "dataType": "string",
         "cssClass": "no-padding text-align-center",
@@ -4159,7 +4159,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 13,
         "dataField": "numeroOrdre",
         "dataType": "string",
         "cssClass": "no-padding",
@@ -4167,7 +4167,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 15,
         "dataField": "clientClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
@@ -4175,7 +4175,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 17,
         "dataField": "prixClient",
         "dataType": "number",
         "format": {
@@ -4187,7 +4187,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 19,
         "dataField": "fournisseurClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
@@ -4195,7 +4195,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 21,
         "dataField": "prixFourni",
         "dataType": "number",
         "format": {

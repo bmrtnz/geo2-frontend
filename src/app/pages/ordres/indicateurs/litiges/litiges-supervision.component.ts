@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Role } from "app/shared/models/personne.model";
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -17,6 +17,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
+import { LitigeCloturePopupComponent } from "./litige-cloture-popup/litige-cloture-popup.component";
 
 enum InputField {
   codeSecteur = "secteur",
@@ -39,6 +40,8 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
 })
 export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
+  @Output() public infosLitige;
+
   public ordresDataSource: DataSource;
   public secteurs: DataSource;
   public commerciaux: DataSource;
@@ -53,8 +56,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public firstRun = true;
   public currCompanyId: string;
 
-
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
 
   public formGroup = new FormGroup({
     codeSecteur: new FormControl(),
@@ -191,7 +194,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   onCellClick(e) {
     if (e.rowType === "group") {
       if (e.summaryItems[0]?.column === "id") {
-        console.log(e.data.key);
+        this.infosLitige = e.data?.items[0];
+        this.cloturePopup.visible = true;
         ///////////////////////////
         // Fonction clôture
         ///////////////////////////
@@ -267,7 +271,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (e.summaryItems[0]?.column === "id") {
         // Showing cloture button in group header
         e.cellElement.innerHTML =
-          `<div class="cloture-button inactive-button">${this.localization.localize("ordres-supervision-litiges-cloture")}</div>`;
+          `<div class="cloture-button">${this.localization.localize("btn-close")}</div>`;
       }
 
     }

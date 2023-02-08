@@ -1,0 +1,49 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  width="400"
+  height="auto"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [focusStateEnabled]="false"
+  (onShowing)="onShowing($event)"
+>
+
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-end">{{ titleEnd }}</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+  </div>
+
+  <div class="dx-field segment-box" [ngClass]="{ 'inactive-item': oneIsCloture }">
+    <div class="dx-field-value">
+      <dx-list
+        [items]="tiersList"
+        selectionMode="multiple"
+        selectAllMode="false"
+        [showSelectionControls]="true"
+        [selectedItemKeys]="[]"
+        (onSelectionChanged)="changeTiers($event)"
+      >
+      </dx-list>
+    </div>
+  </div>
+
+  <div class="popup-buttons-container">
+    <dx-button
+      type="default"
+      text="{{ 'btn-close' | localize }}"
+      [disabled]="!enableCloture"
+      (onClick)="validateCloture()"
+    ></dx-button>
+    <dx-button
+      type="default"
+      text="Annuler"
+      (onClick)="hidePopup()"
+      ></dx-button>
+    </div>
+</dx-popup>
