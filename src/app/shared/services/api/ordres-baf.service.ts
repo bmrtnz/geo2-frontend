@@ -9,6 +9,7 @@ import { alert, confirm } from "devextreme/ui/dialog";
 import { EMPTY, from, of, zip } from "rxjs";
 import { catchError, concatMap, filter, first, map } from "rxjs/operators";
 import { APICount, APIRead, ApiService } from "../api.service";
+import { LocalizationService } from "../localization.service";
 import { functionBody, FunctionResponse, FunctionResult } from "./functions.service";
 
 export type CountResponse = { countOrdreBaf: number };
@@ -19,7 +20,10 @@ export type CountResponse = { countOrdreBaf: number };
 export class OrdresBafService
   extends ApiService
   implements APIRead, APICount<CountResponse> {
-  constructor(apollo: Apollo) {
+  constructor(
+    apollo: Apollo,
+    public localizationService: LocalizationService,
+  ) {
     super(apollo, OrdreBaf);
   }
 
@@ -203,7 +207,7 @@ export class OrdresBafService
       })
 
   private messageFormat(mess) {
-    mess = mess.replaceAll("%%%", "");
+    mess = mess.replaceAll("%%%", this.localizationService.localize("blocking"));
     mess = mess.replace("Exception while fetching data (/fBonAFacturerPrepare) : ", "");
     mess = mess.replaceAll("(", "<br>(");
     mess = mess.replaceAll(/(?:\\[r])+/g, "<br><br>");
