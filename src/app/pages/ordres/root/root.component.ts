@@ -67,6 +67,7 @@ export class RootComponent implements OnInit, OnDestroy {
   public tabPanelInitialized = new EventEmitter<any>();
   public tabPanelReady = new EventEmitter<any>();
   public activeStateEnabled = false;
+  public typeTab = TabType;
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true }) tabPanel: DxTabPanelComponent;

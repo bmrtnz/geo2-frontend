@@ -30,7 +30,9 @@
         >
           <small>{{ tab.title }}</small>
           <ng-container *ngIf="tab.details">
-            <span>{{ tab.details }}</span>
+            <span
+              [ngClass]="{ 'std-order-width': tab.type === typeTab.Ordre}"
+            >{{ tab.details }}</span>
           </ng-container>
         </span>
         <i
