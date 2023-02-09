@@ -182,50 +182,50 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     });
   }
 
-  getSuiviDepartsDatasource(body: Array<string> | Set<string>) {
-    return new DataSource({
-      store: this.createCustomStore({
-        // byKey: this.byKey([...body]),
-        load: options => this.apollo
-          .query<{ allOrdreLigneSuiviDeparts: RelayPage<OrdreLigne> }>({
-            query: gql(ApiService.buildGraph(
-              "query",
-              [
-                {
-                  name: "allOrdreLigneSuiviDeparts",
-                  body: [
-                    "pageInfo.startCursor",
-                    "pageInfo.endCursor",
-                    "pageInfo.hasPreviousPage",
-                    "pageInfo.hasNextPage",
-                    "totalCount",
-                    ...[...body].map(c => `edges.node.${c}`),
-                  ],
-                  params: [
-                    { name: "search", value: "search", isVariable: true },
-                    { name: "pageable", value: "pageable", isVariable: true },
-                    { name: "onlyColisDiff", value: "onlyColisDiff", isVariable: true },
-                  ],
-                },
-              ],
-              [
-                { name: "search", type: "String", isOptionnal: true },
-                { name: "pageable", type: "PaginationInput", isOptionnal: false },
-                { name: "onlyColisDiff", type: "Boolean", isOptionnal: false },
-              ],
-            )),
-            variables: {
-              ...this.persistantVariables,
-              ...this.mapLoadOptionsToVariables(options)
-            },
-          })
-          .pipe(
-            map(res => this.asInstancedListCount(res.data.allOrdreLigneSuiviDeparts, e => new OrdreLigne(e))),
-          )
-          .toPromise(),
-      }),
-    });
-  }
+  // getSuiviDepartsDatasource(body: Array<string> | Set<string>) {
+  //   return new DataSource({
+  //     store: this.createCustomStore({
+  //       // byKey: this.byKey([...body]),
+  //       load: options => this.apollo
+  //         .query<{ allOrdreLigneSuiviDeparts: RelayPage<OrdreLigne> }>({
+  //           query: gql(ApiService.buildGraph(
+  //             "query",
+  //             [
+  //               {
+  //                 name: "allOrdreLigneSuiviDeparts",
+  //                 body: [
+  //                   "pageInfo.startCursor",
+  //                   "pageInfo.endCursor",
+  //                   "pageInfo.hasPreviousPage",
+  //                   "pageInfo.hasNextPage",
+  //                   "totalCount",
+  //                   ...[...body].map(c => `edges.node.${c}`),
+  //                 ],
+  //                 params: [
+  //                   { name: "search", value: "search", isVariable: true },
+  //                   { name: "pageable", value: "pageable", isVariable: true },
+  //                   { name: "onlyColisDiff", value: "onlyColisDiff", isVariable: true },
+  //                 ],
+  //               },
+  //             ],
+  //             [
+  //               { name: "search", type: "String", isOptionnal: true },
+  //               { name: "pageable", type: "PaginationInput", isOptionnal: false },
+  //               { name: "onlyColisDiff", type: "Boolean", isOptionnal: false },
+  //             ],
+  //           )),
+  //           variables: {
+  //             ...this.persistantVariables,
+  //             ...this.mapLoadOptionsToVariables(options)
+  //           },
+  //         })
+  //         .pipe(
+  //           map(res => this.asInstancedListCount(res.data.allOrdreLigneSuiviDeparts, e => new OrdreLigne(e))),
+  //         )
+  //         .toPromise(),
+  //     }),
+  //   });
+  // }
 
   save(variables: OperationVariables & { ordre: Partial<Ordre> }) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);

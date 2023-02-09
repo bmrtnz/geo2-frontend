@@ -4563,45 +4563,45 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "ordre.numero",
+        "dataField": "ordreLogistique.ordre.numero",
         "width": 80,
         "visible": true
       },
       {
         "visibleIndex": 1,
-        "dataField": "ordre.codeClient",
+        "dataField": "ordreLogistique.ordre.codeClient",
         "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 2,
-        "dataField": "ordre.transporteur.id",
+        "dataField": "ordreLogistique.ordre.transporteur.id",
         "visible": false
       },
       {
         "visibleIndex": 4,
         "width": 50,
-        "dataField": "ordre.versionDetail",
+        "dataField": "ordreLogistique.ordre.versionDetail",
         "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "width": 50,
-        "dataField": "ordre.sommeColisCommandes",
+        "dataField": "ordreLogistique.ordre.sommeColisCommandes",
         "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "width": 50,
-        "dataField": "ordre.sommeColisExpedies",
+        "dataField": "ordreLogistique.ordre.sommeColisExpedies",
         "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "logistique.fournisseur.code",
+        "dataField": "ordreLogistique.fournisseur.code",
         "visible": true
       },
       {
@@ -4609,13 +4609,13 @@
         "class": "no-padding multi-line-header",
         "width": 25,
         "cssClass": "no-padding",
-        "dataField": "logistique.expedieStation",
+        "dataField": "ordreLogistique.expedieStation",
         "showInColumnChooser": false,
         "visible": true
       },
       {
         "visibleIndex": 14,
-        "dataField": "logistique.dateDepartReelleFournisseur",
+        "dataField": "ordreLogistique.dateDepartReelleFournisseur",
         "cssClass": "no-padding text-align-center multi-line-header",
         "width": 115,
         "dataType": "date",
@@ -4624,7 +4624,7 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "ordre.dateLivraisonPrevue",
+        "dataField": "ordreLogistique.ordre.dateLivraisonPrevue",
         "cssClass": "no-padding text-align-center multi-line-header",
         "width": 90,
         "dataType": "date",
@@ -4635,55 +4635,60 @@
         "visibleIndex": 18,
         "width": 50,
         "cssClass": "no-padding multi-line-header",
-        "dataField": "nombreColisCommandes",
+        "dataField": "sommeColisCommandes",
         "visible": true
       },
       {
         "visibleIndex": 20,
         "width": 50,
         "cssClass": "no-padding multi-line-header",
-        "dataField": "nombreColisExpedies",
+        "dataField": "sommeColisExpedies",
         "visible": true
       },
       {
         "visibleIndex": 22,
-        "dataField": "logistique.fournisseurReferenceDOC",
+        "dataField": "ordreLogistique.fournisseurReferenceDOC",
         "visible": true
       },
       {
         "visibleIndex": 24,
-        "dataField": "logistique.okStation",
+        "dataField": "ordreLogistique.okStation",
         "cssClass": "no-padding-left",
         "visible": true
       },
       {
         "visibleIndex": 26,
-        "dataField": "ordre.assistante.id",
+        "dataField": "ordreLogistique.ordre.assistante.id",
         "width": 40,
         "cssClass": "no-padding",
         "visible": true
       },
       {
         "visibleIndex": 28,
-        "dataField": "ordre.commercial.id",
+        "dataField": "ordreLogistique.ordre.commercial.id",
         "width": 40,
         "cssClass": "no-padding",
         "visible": true
       },
       {
-        "dataField": "ordre.referenceClient",
+        "dataField": "ordreLogistique.ordre.referenceClient",
         "visible": true
       },
       {
-        "dataField": "ordre.codeChargement",
+        "dataField": "ordreLogistique.ordre.codeChargement",
         "visible": false
       },
       {
-        "dataField": "ordre.campagne.id",
+        "dataField": "ordreLogistique.ordre.campagne.id",
         "visible": false
       },
       {
-        "dataField": "ordre.codeAlphaEntrepot",
+        "dataField": "ordreLogistique.ordre.codeAlphaEntrepot",
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.ordre.id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {

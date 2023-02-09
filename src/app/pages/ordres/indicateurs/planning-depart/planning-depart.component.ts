@@ -1,17 +1,16 @@
 import { DatePipe } from "@angular/common";
-import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import { LocalizePipe } from "app/shared/pipes";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
-import { EnvoisService } from "app/shared/services/api/envois.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { Indicateur } from "app/shared/services/api/indicateurs.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { PlanningDepartService } from "app/shared/services/api/planning-depart.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { Indicator, OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
 import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -31,14 +30,13 @@ export class PlanningDepartComponent implements AfterViewInit {
   readonly INDICATOR_NAME = Indicateur.PlanningDepart;
   options: {};
   secteurs: DataSource;
-  indicator: Indicator;
   filter: any;
   columnChooser = environment.columnChooser;
   detailedFields: Observable<
     ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
   >;
 
-  @ViewChild("gridPLANNINGDEPART", { static: false }) gridPLANNINGDEPARTComponent: DxDataGridComponent;
+  @ViewChild("gridPLANNINGDEPART", { static: false }) datagrid: DxDataGridComponent;
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("diffCheckBox", { static: false }) diffSumColisOrNotDetail: DxCheckBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -61,16 +59,13 @@ export class PlanningDepartComponent implements AfterViewInit {
     public dateManagementService: DateManagementService,
     public secteursService: SecteursService,
     public currentCompanyService: CurrentCompanyService,
+    public planningDepartService: PlanningDepartService,
     public ordresService: OrdresService,
     public authService: AuthService,
     public localizeService: LocalizationService,
-    private ordresIndicatorsService: OrdresIndicatorsService,
     private localizePipe: LocalizePipe,
     private tabContext: TabContext,
     private datePipe: DatePipe,
-    private envoisService: EnvoisService,
-    private vcr: ViewContainerRef,
-    private cfr: ComponentFactoryResolver,
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -82,9 +77,6 @@ export class PlanningDepartComponent implements AfterViewInit {
         this.currentCompanyService.getCompany().id,
       ],
     ]);
-    this.indicator = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
-    );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.PlanningDepart
     );
@@ -106,13 +98,13 @@ export class PlanningDepartComponent implements AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description
       };
     }
-    this.titleElement = this.gridPLANNINGDEPARTComponent.instance.$element()[0].querySelector(
+    this.titleElement = this.datagrid.instance.$element()[0].querySelector(
       ".dx-toolbar-before .dx-placeholder",
     ) as HTMLInputElement;
     this.updateFilters();
   }
 
-  updateFilters(e?) {
+  async updateFilters(e?) {
 
     // Allow only user change
     if (e) {
@@ -121,62 +113,60 @@ export class PlanningDepartComponent implements AfterViewInit {
 
     this.toRefresh = false;
     this.dataSource = null;
-    this.dataSource = this.indicator.dataSource;
 
-    const filters = this.indicator.cloneFilter();
-    if (this.secteurSB.value)
-      filters.push("and", [
-        "ordre.secteurCommercial.id",
-        "=",
-        this.secteurSB.value.id,
-      ]);
-    filters.push("and", [
-      "logistique.dateDepartPrevueFournisseur",
-      ">=",
-      this.dateMin.value,
-    ]);
-    filters.push("and", [
-      "logistique.dateDepartPrevueFournisseur",
-      "<=",
-      this.dateMax.value,
-    ]);
-    this.ordresService.persistantVariables.onlyColisDiff = false;
-    this.dataSource.filter(filters);
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField)),
+    );
+
+    this.dataSource =
+      this.planningDepartService.getDataSource(
+        {
+          societeCode: this.currentCompanyService.getCompany().id,
+          secteurCode: this.secteurSB.value?.id ?? "%",
+          dateMin: this.dateMin.value,
+          dateMax: this.dateMax.value
+        },
+        new Set(await fields.toPromise())
+      );
 
     this.dataSource.reload().then(res => {
 
+      let DsItems = JSON.parse(JSON.stringify(res));
       // Sort by numero ordre
-      res.sort((a, b) => a.ordre.numero - b.ordre.numero);
+      DsItems.sort((a, b) => a.ordreLogistique.ordre.numero - b.ordreLogistique.ordre.numero);
 
       // Clear repeated fields, a kind of group structure wanted by BW
       // with new id assignement
-      // Handles checkbox filter
+      // Also handles checkbox filter (Différence sur expédition et/ou sans détail client)
       let oldOrderId;
       let id = 1;
-      res.map(data => {
+      DsItems.map(data => {
+
+        // if (data.ordreLogistique.ordre.numero === "253754") data.ordreLogistique.ordre.versionDetail = "BLA";
+
         if (this.diffSumColisOrNotDetail.value
-          && ((data.ordre.sommeColisCommandes === data.ordre.sommeColisExpedies)
-            && data.ordre.versionDetail)
+          && ((data.ordreLogistique.ordre.sommeColisCommandes === data.ordreLogistique.ordre.sommeColisExpedies)
+            && data.ordreLogistique.ordre.versionDetail)
         ) {
           data.id = 0; // Sums are equal and there's a version number
         } else {
           data.id = id;
           id++;
         }
-        if (oldOrderId === data.ordre.id) {
-          data.ordre = {
-            dateLivraisonPrevue: data.ordre.dateLivraisonPrevue,
-            transporteur: { id: data.ordre.transporteur.id },
-            assistante: { id: data.ordre.assistante.id },
-            commercial: { id: data.ordre.commercial.id }
+        if (oldOrderId === data.ordreLogistique.ordre.id) {
+          data.ordreLogistique.ordre = {
+            dateLivraisonPrevue: data.ordreLogistique.ordre.dateLivraisonPrevue,
+            transporteur: { id: data.ordreLogistique.ordre.transporteur.id },
+            assistante: { id: data.ordreLogistique.ordre.assistante.id },
+            commercial: { id: data.ordreLogistique.ordre.commercial.id }
           };
         } else {
-          oldOrderId = data.ordre.id;
+          oldOrderId = data.ordreLogistique.ordre.id;
         }
       });
 
-      res = res.filter(r => r.id); // Removing unwanted items (see above)
-      this.gridPLANNINGDEPARTComponent.dataSource = res;
+      DsItems = DsItems.filter(r => r.id); // Removing unwanted items (see filter part above)
+      this.datagrid.dataSource = DsItems;
     });
 
     // Customizing period/date display
@@ -206,13 +196,15 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   onRowDblClick(e) {
-    if (!e.data?.ordre?.numero) return;
-    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", e.data.ordre.numero), "info", 1500);
-    setTimeout(() => this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id, false));
+    if (!e.data?.ordreLogistique?.ordre?.numero) return;
+    notify(this.localizePipe.transform("ouverture-ordre").replace("&NO", e.data.ordreLogistique.ordre.numero), "info", 1500);
+    setTimeout(() => this.tabContext.openOrdre(
+      e.data.ordreLogistique.ordre.numero, e.data.ordreLogistique.ordre.campagne.id, false
+    ));
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "data" && e.data.ordre.numero) {
+    if (e.rowType === "data" && e.data.ordreLogistique.ordre.numero) {
       e.rowElement.classList.add("cursor-pointer");
       e.rowElement.setAttribute(
         "title",
@@ -221,20 +213,24 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
   }
 
-  onCellPrepared(event) {
-    if (event.rowType !== "data") return;
-    const equal = event.data.nombreColisCommandes === event.data.nombreColisExpedies;
+  onCellPrepared(e) {
+    if (e.rowType !== "data") return;
+    const equal = e.data.sommeColisCommandes === e.data.sommeColisExpedies;
 
-    if (event.data.ordre.id) {
-      if (event.column.dataField === "ordre.versionDetail") this.colorizeRedGreen(event, event.value);
+    if (e.data.ordreLogistique.ordre.id) {
+      if (e.column.dataField === "ordreLogistique.ordre.versionDetail") this.colorizeRedGreen(e, e.value);
     }
 
-    if (event.column.dataField === "logistique.dateDepartReelleFournisseur") this.colorizeRedGreen(event, event.value);
-    if (["nombreColisCommandes", "nombreColisExpedies"].includes(event.column.dataField)) {
-      if (event.data.logistique.dateDepartReelleFournisseur) {
-        this.colorizeRedGreen(event, equal);
+    if (e.column.dataField === "ordreLogistique.okStation") {
+      if (!e.value) e.cellElement.textContent = "OK";
+    }
+
+    if (e.column.dataField === "ordreLogistique.dateDepartReelleFournisseur") this.colorizeRedGreen(e, e.value);
+    if (["sommeColisCommandes", "sommeColisExpedies"].includes(e.column.dataField)) {
+      if (e.data.ordreLogistique.dateDepartReelleFournisseur) {
+        this.colorizeRedGreen(e, equal);
       } else {
-        if (equal) event.cellElement.classList.add("highlight-ok");
+        if (equal) e.cellElement.classList.add("highlight-ok");
       }
     }
   }
