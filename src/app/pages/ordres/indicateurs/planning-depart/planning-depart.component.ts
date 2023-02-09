@@ -118,6 +118,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       map((columns) => columns.map((column) => column.dataField)),
     );
 
+    this.datagrid.instance.beginCustomLoading("");
     this.dataSource =
       this.planningDepartService.getDataSource(
         {
@@ -141,9 +142,6 @@ export class PlanningDepartComponent implements AfterViewInit {
       let oldOrderId;
       let id = 1;
       DsItems.map(data => {
-
-        // if (data.ordreLogistique.ordre.numero === "253754") data.ordreLogistique.ordre.versionDetail = "BLA";
-
         if (this.diffSumColisOrNotDetail.value
           && ((data.ordreLogistique.ordre.sommeColisCommandes === data.ordreLogistique.ordre.sommeColisExpedies)
             && data.ordreLogistique.ordre.versionDetail)
@@ -167,6 +165,7 @@ export class PlanningDepartComponent implements AfterViewInit {
 
       DsItems = DsItems.filter(r => r.id); // Removing unwanted items (see filter part above)
       this.datagrid.dataSource = DsItems;
+      this.datagrid.instance.endCustomLoading();
     });
 
     // Customizing period/date display
@@ -222,7 +221,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     }
 
     if (e.column.dataField === "ordreLogistique.okStation") {
-      if (!e.value) e.cellElement.textContent = "OK";
+      e.cellElement.textContent = this.setOkStationField(e);
     }
 
     if (e.column.dataField === "ordreLogistique.dateDepartReelleFournisseur") this.colorizeRedGreen(e, e.value);
@@ -237,6 +236,32 @@ export class PlanningDepartComponent implements AfterViewInit {
 
   colorizeRedGreen(e, condition) {
     e.cellElement.classList.add(condition ? "highlight-ok" : "highlight-err");
+  }
+
+  setOkStationField(e) {
+    // Seen with Bruno 09-02-2023 - Field is assigned like this within the grid
+    if (!e.data.ordreLogistique.dateDepartReelleFournisseur) {
+      if (e.data.ordreLogistique.expedieStation &&
+        !e.data.ordreLogistique.totalPalettesExpediees &&
+        !e.data.ordreLogistique.nombrePalettesAuSol &&
+        !e.data.ordreLogistique.nombrePalettes100x120 &&
+        !e.data.ordreLogistique.nombrePalettes60x80 &&
+        !e.data.ordreLogistique.nombrePalettes80x120) {
+        return "Clôturé à zéro";
+      } else {
+        if (e.data.ordreLogistique.expedieStation) {
+          return "OK";
+        } else {
+          return "Non clôturé";
+        }
+      }
+    } else {
+      if (e.data.sommeColisCommandes !== e.data.sommeColisExpedies) {
+        return "Diff. qté";
+      } else {
+        return "OK";
+      }
+    }
   }
 
   manualDate(e) {

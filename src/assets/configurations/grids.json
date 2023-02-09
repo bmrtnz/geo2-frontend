@@ -4690,6 +4690,31 @@
         "visible": false
       },
       {
+        "dataField": "ordreLogistique.nombrePalettesAuSol",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.totalPalettesExpediees",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes100x120",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes60x80",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes80x120",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
         "dataField": "id",
         "showInColumnChooser": false,
         "visible": false
