@@ -50,13 +50,8 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   onClickUpload() {
     const chooseFileButton = document.querySelector(".import-programme-popup .dx-fileuploader-button") as HTMLElement;
     if (this.programID === "tesco") {
-      confirm(
-        this.localizeService.localize("entrepot-import-programme"),
-        this.title
-      ).then(ent => {
-        this.customUploadData = this.programService.buildCustomData(ent);
-        chooseFileButton.click();
-      });
+      this.customUploadData = this.programService.buildCustomData(false);
+      chooseFileButton.click();
     } else {
       chooseFileButton.click();
     }
