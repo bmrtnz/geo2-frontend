@@ -63,8 +63,9 @@
     </div>
     <div class="dx-field-value">
       <dx-select-box
-        [dataSource]="secteursSource"
+        [dataSource]="secteurs"
         displayExpr="description"
+        [valueExpr]="'id'"
         [showClearButton]="true"
         searchExpr="description"
         [width]="200"
@@ -115,9 +116,7 @@
           </div>
           <dx-button
             *ngIf="
-              !indicator.loading &&
-              indicator.warningIcon &&
-              indicator.number
+              !indicator.loading && indicator.warningIcon && indicator.number
             "
             type="danger"
             icon="{{ indicator.warningIcon }}"
