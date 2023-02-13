@@ -39,17 +39,20 @@
     }
   }
 
-  dx-list {
-    position: relative;
-    left: 65px;
+  // dx-list {
+  //   position: relative;
+  //   left: 65px;
 
-    .dx-list-item-content {
-      padding-left: 0;
-    }
+  //   .dx-list-item-content {
+  //     padding-left: 0;
+  //   }
 
-    .dx-list-select-checkbox-container {
-      width: 47px;
-    }
+  //   .dx-list-select-checkbox-container {
+  //     width: 47px;
+  //   }
+  // }
+  .frais-annexes-expl {
+    text-align: justify;
   }
 
 }

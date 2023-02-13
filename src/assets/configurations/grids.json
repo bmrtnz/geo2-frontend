@@ -6352,11 +6352,17 @@
       {
         "visibleIndex": 4,
         "dataField": "montant",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "frais.id",
         "visible": true
       },
       {

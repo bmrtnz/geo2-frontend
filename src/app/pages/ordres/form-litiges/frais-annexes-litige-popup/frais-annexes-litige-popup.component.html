@@ -8,6 +8,7 @@
   [(visible)]="visible"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
   [resizeEnabled]="true"
 >
 
@@ -32,6 +33,8 @@
    [idLitige]="idLitige"
   ></app-grid-frais-annexes-litige>
 
+  <br>
+  <div class= "frais-annexes-expl red-font">{{ 'frais-annexes-expl' | localize }}</div>
   <br>
 
   <div class="popup-buttons-container">

@@ -1,4 +1,5 @@
 import { Component, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import FraisLitige from "app/shared/models/ordre-frais-litige.model";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, EntrepotsService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
 import { DevisesService } from "app/shared/services/api/devises.service";
@@ -33,11 +34,6 @@ export class GridFraisAnnexesLitigeComponent {
   public fraisSource: DataSource;
   public deviseSource: DataSource;
   public codePlusSource: DataSource;
-  public transporteurSource: DataSource;
-  public entrepotSource: DataSource;
-  public transitaireSource: DataSource;
-  public transitaireDouanierSource: DataSource;
-  public lieuxPassageAQuaiSource: DataSource;
   public codePlusList: string[];
   public selectPhase: boolean;
   public codePlusTransporteurs: string[];
@@ -73,68 +69,16 @@ export class GridFraisAnnexesLitigeComponent {
       map((config) => config.columns),
     );
     this.itemsWithSelectBox = [
-      "frais",
-      "devise",
       "transporteurCodePlus"
     ];
-    this.descriptionOnlyDisplaySB = [
-      "frais"
-    ];
-    this.codePlusTransporteurs = [];
-    this.fraisSource = this.fraisService.getDataSource_v2(["id", "description"]);
-    this.fraisSource.filter(["valide", "=", true]);
-    this.deviseSource = this.deviseService.getDataSource_v2(["id", "description", "taux"]);
-    this.deviseSource.filter(["valide", "=", true]);
-    this.initializeFournDataSources();
     this.selectPhase = false;
-  }
-
-  initializeFournDataSources() {
-    this.transporteurSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
-    this.transporteurSource.filter(["valide", "=", true]);
-    this.lieuxPassageAQuaiSource = this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"]);
-    this.lieuxPassageAQuaiSource.filter(["valide", "=", true]);
-    this.transitaireSource = this.transitairesService.getDataSource_v2(["id", "raisonSocial"]);
-    this.transitaireSource.filter(["valide", "=", true]);
-    this.transitaireDouanierSource = this.transitairesService.getDataSource_v2(["id", "raisonSocial"]);
-    this.transitaireDouanierSource.filter([
-      ["valide", "=", true],
-      "and",
-      ["declarantDouanier", "=", true]
-    ]);
-    if (this?.ordre?.id) {
-      this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
-      const filtersEnt = [
-        ["valide", "=", true],
-        "and",
-        ["client.valide", "=", true],
-        "and",
-        ["client.societe.id", "=", "BWS"],
-        "and",
-        ["client.code", "<>", "BWS GBP"],
-        "and",
-        ["client.code", "<>", "BWSMARKETING"],
-        "and",
-        ["code", "<>", "BWSMARKETING RMT"],
-        "and",
-        ["code", "<>", "Blue-Whale STOCK"],
-        "and",
-        ["code", "<>", "DIR GB  DURTAL"],
-        "and",
-        [
-          [["client.secteur.id", "=", "GB"], "and", ["client.secteur.id", "=", this.ordre.secteurCommercial.id]],
-          "or",
-          [["client.secteur.id", "<>", "GB"], "and", ["client.secteur.id", "=", "F"]]
-        ]
-      ];
-      this.entrepotSource.filter(filtersEnt);
-    }
+    this.updateCodePlusDataSource();
   }
 
   async enableFilters() {
     if (this.idLitige) {
       const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return (this.addKeyToField(column.dataField));
+        return column.dataField;
       })));
       this.dataSource = this.ordresFraisLitigeService.getDataSource_v2(
         await fields.toPromise(),
@@ -145,14 +89,14 @@ export class GridFraisAnnexesLitigeComponent {
   }
 
   onInitNewRow(e) {
-    e.data.valide = true;
-    e.data.ordre = { id: this.ordre.id };
-    e.data.devise = {
-      id: this.currentCompanyService.getCompany().devise.id,
-      description: this.currentCompanyService.getCompany().devise.description
-    };
-    e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
+    e.litige = { id: this.idLitige };
+    e.frais = { id: "DIVERS" };
     setTimeout(() => this.datagrid.instance.saveEditData(), 1);
+  }
+
+  onRowInserting({ data }: { data: Partial<FraisLitige> }) {
+    // data.litige = { id: this.idLitige };
+    // data.frais = { id: "DIVERS" };
   }
 
   onValueChanged(event, cell) {
@@ -161,35 +105,16 @@ export class GridFraisAnnexesLitigeComponent {
 
     if (cell.setValue) {
       if (typeof event.value === "object" && cell.column.dataField === "transporteurCodePlus") {
-        valueToSave = this.displayCodeBefore(event.value);
+        valueToSave = event.value.id;
       } else {
         valueToSave = event.value;
-      }
-      if (cell.column.dataField === "transporteurCodePlus" && valueToSave !== null) valueToSave = valueToSave.substring(0, 35);
-
-      switch (cell.column.dataField) {
-
-        case "frais": {
-          if (cell.data.transporteurCodePlus)
-            cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key), "transporteurCodePlus", null);
-          break;
-        }
       }
       cell.setValue(valueToSave);
     }
   }
 
-  onEditingStart(cell) {
-    if (!cell.column || !cell.data.deviseTaux) return;
-    if (cell.column.dataField === "transporteurCodePlus" && !cell.data.frais?.id) cell.cancel = true;
-  }
-
-  displayCodeBefore(data) {
-    if (data && !data.id) return data;
-    return data ?
-      (data.code ? data.code : data.id) + " - " + (data.raisonSocial ? data.raisonSocial :
-        (data.ville ? data.ville : data.description))
-      : null;
+  displayIdBefore(data) {
+    return data ? data.id + " - " + data.raisonSocial : null;
   }
 
   displayDescOnly(data) {
@@ -198,58 +123,37 @@ export class GridFraisAnnexesLitigeComponent {
 
   displayCustom(data) {
     if (this.selectPhase) {
-      return this.displayCodeBefore(data);
+      return this.displayIdBefore(data);
     } else {
       return data;
     }
-  }
-
-  returnCodeId(data) {
-    return data.code ? data.code : data.id;
   }
 
   capitalize(data) {
     return data ? data.charAt(0).toUpperCase() + data.slice(1).toLowerCase() : null;
   }
 
-  updateCodePlusDataSource(data) {
-    const frais = data.frais?.id;
-    if (!frais) return;
-    this.selectPhase = true;
-    this.initializeFournDataSources();
-    this.selectBoxes
-      .filter(component => component.instance.$element()[0].id === data.id)
-      .map(component => {
-        if (frais === "RAMASS" || frais === "FRET") component.dataSource = this.transporteurSource;
-        if (frais === "DEDIMP" || frais === "DEDEXP") component.dataSource = this.transitaireDouanierSource;
-        if (frais === "TRANSI") component.dataSource = this.transitaireSource;
-        if (frais === "QUAI") component.dataSource = this.lieuxPassageAQuaiSource;
-        if (frais === "ENTBWS") component.dataSource = this.entrepotSource;
-      });
+  updateCodePlusDataSource() {
+    this.codePlusSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
   }
 
-  onCellClick(e) {
-    // Warning when no cost type
-    if (!e.data?.frais?.id && e.column.dataField === "transporteurCodePlus") {
-      console.log(e.data.frais);
-      notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
-    }
-    // No DS is displayed
-    if (e.column.dataField === "transporteurCodePlus") {
-      if (this.isCustomText(e.data)) {
-        this.SelectBoxPopupWidth = 0;
-        e.cellElement.classList.add("no-arrow");
-      } else {
-        this.SelectBoxPopupWidth = 400;
-        e.cellElement.classList.remove("no-arrow");
-        this.updateCodePlusDataSource(e.data);
-      }
-    }
-  }
+  // onCellClick(e) {
+  //   // No DS is displayed
+  //   if (e.column.dataField === "transporteurCodePlus") {
+  //     if (this.isCustomText(e.data)) {
+  //       this.SelectBoxPopupWidth = 0;
+  //       e.cellElement.classList.add("no-arrow");
+  //     } else {
+  //       this.SelectBoxPopupWidth = 400;
+  //       e.cellElement.classList.remove("no-arrow");
+  //       this.updateCodePlusDataSource(e.data);
+  //     }
+  //   }
+  // }
 
-  isCustomText(data) {
-    return ["DIVERS", "ANIM"].includes(data.frais?.id);
-  }
+  // isCustomText(data) {
+  //   return ["DIVERS", "ANIM"].includes(data.frais?.id);
+  // }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
@@ -262,14 +166,6 @@ export class GridFraisAnnexesLitigeComponent {
         e.cellElement.classList.add("grey-light");
       }
     }
-  }
-
-  addKeyToField(field) {
-    return field;
-    if (this.itemsWithSelectBox.includes(field) && field !== "codePlus") {
-      field += `.${this[field + "Service"].model.getKeyField()}`;
-    }
-    return field;
   }
 
   onSaved() {

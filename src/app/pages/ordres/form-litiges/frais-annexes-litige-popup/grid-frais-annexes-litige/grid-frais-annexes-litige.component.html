@@ -5,11 +5,9 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  (onCellClick)="onCellClick($event)"
-  (onEditingStart)="onEditingStart($event)"
   (onInitNewRow)="onInitNewRow($event)"
+  (onRowInserting)="onRowInserting($event)"
   (onSaved)="onSaved()"
-  (onCellDblClick)="(onCellClick)"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -80,22 +78,16 @@
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
     <dx-select-box
-      [dataSource]="this[cell.column.dataField + 'Source']"
-      [displayExpr]="
-        descriptionOnlyDisplaySB.includes(cell.column.dataField)
-          ? displayDescOnly
-          : displayCodeBefore
-      "
-      [searchExpr]="[
-        this[cell.column.dataField + 'Service'].model.getKeyField()
-      ]"
+      [dataSource]="codePlusSource"
+      [displayExpr]="displayIdBefore"
+      [searchExpr]="['id', 'raisonSocial']"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
       <dxo-drop-down-options [width]="400"></dxo-drop-down-options>
     </dx-select-box>
   </div>
-  <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
+  <!-- <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
     <dx-select-box
       [id]="cell.key"
       [displayExpr]="displayCustom"
@@ -110,5 +102,5 @@
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
-  </div>
+  </div> -->
 </dx-data-grid>

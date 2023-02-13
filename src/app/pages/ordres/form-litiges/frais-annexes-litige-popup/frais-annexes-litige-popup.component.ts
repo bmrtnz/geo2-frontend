@@ -47,6 +47,10 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
     e.component.content().parentNode.classList.add("frais-annexes-litige-popup");
   }
 
+  onShown(e) {
+    this.datagrid.enableFilters();
+  }
+
   hidePopup() {
     this.popup.visible = false;
   }

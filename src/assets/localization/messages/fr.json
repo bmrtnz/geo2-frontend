@@ -1456,6 +1456,7 @@
     "ordreFraisLitige-montant": "Montant",
     "ordreFraisLitige-description": "Commentaire",
     "ordreFraisLitige-litige-id": "n° litige",
+    "frais-annexes-expl": "Les frais annexes sont des provisions. Ils constituent le récapitulatif des factures que Blue Whale peut recevoir et servent d'informations à la comptabilité (ex. : coûts de transport des retours marchandises ou replacement, ré-étiquetage, re-triage...)",
     "ordresBAF-numeroOrdre": "Ordre",
     "ordresBAF-ordreRef": "Réf. Ordre",
     "ordresBAF-indicateurBaf": "BAF ?",
