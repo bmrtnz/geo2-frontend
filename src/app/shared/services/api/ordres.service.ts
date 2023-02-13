@@ -6,7 +6,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
 import { from, iif, of, throwError } from "rxjs";
-import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { catchError, concatMap, first, map, mergeMap, take, takeUntil, tap } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
@@ -546,12 +546,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
             : of({
               transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
               transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
+              baseTarifTransport: { id: context.btaCode },
             })),
           catchError((err, catched) => {
             notify(err.message, "warning");
             return of({
               transporteurDEVPrixUnitaire: context.trpDevPu,
               transporteurDEVCode: { id: context.devCode },
+              baseTarifTransport: { id: context.btaCode },
             });
           }),
         ),
@@ -561,6 +563,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       concatMap(data => this.save_v2([
         "transporteurDEVPrixUnitaire",
         "transporteurDEVCode.id",
+        "baseTarifTransport.id",
       ], { ordre: { id: ordreChunk.id, ...data } })),
       map(res => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)),
     );

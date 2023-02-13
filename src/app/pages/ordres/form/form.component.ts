@@ -426,6 +426,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formGroup
         .get("transporteurDEVPrixUnitaire")
         .setValue(res.transporteurDEVPrixUnitaire);
+      this.formGroup
+        .get("baseTarifTransport")
+        .setValue(res.baseTarifTransport);
     },
     );
   }
