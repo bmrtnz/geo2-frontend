@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
-import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
 import { from, iif, of, throwError } from "rxjs";
-import { catchError, concatMap, first, map, mergeMap, take, takeUntil, tap } from "rxjs/operators";
+import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
@@ -545,6 +544,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
             ? throwError(new Error("Le taux de cette devise n'est pas renseigné"))
             : of({
               transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
+              prixUnitaireTarifTransport: context.trpDevPu,
               transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
               baseTarifTransport: { id: context.btaCode },
             })),
