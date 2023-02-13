@@ -1,0 +1,114 @@
+<dx-data-grid
+  class="dx-card wide-card grid-frais-annexes-litiges"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  (onCellClick)="onCellClick($event)"
+  (onEditingStart)="onEditingStart($event)"
+  (onInitNewRow)="onInitNewRow($event)"
+  (onSaved)="onSaved()"
+  (onCellDblClick)="(onCellClick)"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Frais annexes',
+      $event,
+      gridConfiguratorService.Grid.OrdreFraisLitige,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-export fileName="Frais annexes litige"></dxo-export>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowAdding]="true"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [mode]="'cell'"
+  ></dxo-editing>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdreFraisLitige"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [caption]="
+      ('ordreFraisLitige-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [dataType]="column?.dataType"
+    [showEditorAlways]="true"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
+    [allowEditing]="column.allowEditing"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [format]="column.format"
+    [editorOptions]="column.editorOptions"
+    [editCellTemplate]="column.editCellTemplate"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  >
+  </dxi-column>
+
+  <div *dxTemplate="let cell of 'selectBoxTemplate'">
+    <dx-select-box
+      [dataSource]="this[cell.column.dataField + 'Source']"
+      [displayExpr]="
+        descriptionOnlyDisplaySB.includes(cell.column.dataField)
+          ? displayDescOnly
+          : displayCodeBefore
+      "
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField()
+      ]"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+    >
+      <dxo-drop-down-options [width]="400"></dxo-drop-down-options>
+    </dx-select-box>
+  </div>
+  <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
+    <dx-select-box
+      [id]="cell.key"
+      [displayExpr]="displayCustom"
+      [searchExpr]="[
+        this[cell.column.dataField + 'Service'].model.getKeyField()
+      ]"
+      [deferRendering]="false"
+      [acceptCustomValue]="true"
+      [value]="cell.data[cell.column.dataField]"
+      (onValueChanged)="onValueChanged($event, cell)"
+    >
+      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
+      </dxo-drop-down-options>
+    </dx-select-box>
+  </div>
+</dx-data-grid>

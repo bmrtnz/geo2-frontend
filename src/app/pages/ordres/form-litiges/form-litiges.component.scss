@@ -1,24 +1,102 @@
-::ng-deep .form-litiges .dx-field-value {
-  width: 200px;
+// Var
+@import "~themes/generated/variables.base";
+
+::ng-deep .form-litiges {
+
+  width: calc(100% - 170px);
+  margin: 0 0 20px 0;
+  float: left;
+
+  .dx-field-value {
+    width: 200px;
+  }
+
+  .dx-field-label.shortLabel {
+    width: 20px !important;
+  }
+
+  .dx-field {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .border-top {
+    border-top: 2px solid #00759c;
+  }
+
+  .dx-form-group .dx-checkbox.dx-state-readonly {
+    pointer-events: none;
+
+    &.dx-checkbox-checked .dx-checkbox-icon {
+      background: #79B23F !important;
+    }
+  }
+
+  .btn-frais-annexes {
+    height: auto;
+    min-height: 36px;
+
+    .dx-button-content {
+      padding: 4px 13px 2px 13px !important;
+
+      .dx-button-text {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .cloture-info {
+    background: #EEE;
+    padding: 0 10px;
+  }
+
+  .cloture-box-adjust {
+    margin: 8px 0 -8px 0;
+  }
 }
-::ng-deep .form-litiges .dx-field-label.shortLabel {
-  width: 20px !important;
+
+::ng-deep .litige-btn-container {
+  position: relative;
+  top: -4px;
+  margin: -10px 0 18px 0;
+  width: 170px;
+  overflow: hidden;
 }
-::ng-deep .form-litiges .dx-field {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+
+::ng-deep .litige-btn-container,
+.form-litiges {
+
+  .dx-button {
+    width: calc(100% - 10px);
+    margin: 4px 2px;
+
+    &.dx-button-normal {
+      .dx-button-text {
+        color: rgba(0, 0, 0, .87) !important;
+      }
+    }
+
+    .dx-button-content {
+      padding: 4px 13px 2px 13px !important;
+
+      .dx-button-text {
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 ::ng-deep .nolitiges {
+  margin: -27px 0 -24px 0;
   text-align: center;
   font-size: 16px;
-  margin-bottom: 15px;
+  color: rgba(102, 102, 102, .87)
 }
 
-::ng-deep .form-litiges {
-  margin: 0 0 20px 0;
-}
+::ng-deep .create-litige-btn {
+  margin-top: 15px;
 
-::ng-deep .border-top {
-  border-top: 2px solid #00759c;
+  .dx-button-content {
+    padding: 5px 22px !important;
+  }
 }

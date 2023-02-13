@@ -62,7 +62,7 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
 
   setTitle() {
     this.titleStart = this.localizeService.localize("title-cloture-popup");
-    this.titleEnd = "réf. " + this.infosLitige.litige.id;
+    this.titleEnd = "n° " + this.infosLitige.litige.id;
   }
 
   changeTiers(e) {

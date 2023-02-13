@@ -159,6 +159,10 @@ import {
 } from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
 import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
 import { LitigeCloturePopupComponent } from "./indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
+import { FraisAnnexesLitigePopupComponent } from "./form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
+import {
+  GridFraisAnnexesLitigeComponent
+} from "./form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
 
 @NgModule({
   declarations: [
@@ -256,7 +260,9 @@ import { LitigeCloturePopupComponent } from "./indicateurs/litiges/litige-clotur
     OptionStockPopupComponent,
     GridOptionReservationStockComponent,
     AssociatedArticlePromptComponent,
-    LitigeCloturePopupComponent
+    LitigeCloturePopupComponent,
+    FraisAnnexesLitigePopupComponent,
+    GridFraisAnnexesLitigeComponent
   ],
   imports: [
     OrdresRoutingModule,

@@ -133,13 +133,14 @@ body app-root.production {
 
   .dx-accordion-item-title::before {
     font-size: 18px;
+    top: 11px;
   }
 
   .left-button-container-detail .dx-button {
     margin-bottom: 10px;
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.grid-grouping-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     // margin-bottom: 10px;
 
     .dx-button-content {

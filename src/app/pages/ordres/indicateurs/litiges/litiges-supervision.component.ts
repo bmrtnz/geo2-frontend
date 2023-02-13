@@ -254,7 +254,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
         if (e.cellElement.textContent) {
           const data = e.data.items ?? e.data.collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent = `Litige réf. ${data[0].litige.id}`;
+          e.cellElement.textContent = `Litige n° ${data[0].litige.id}`;
         }
       }
 

@@ -6335,6 +6335,38 @@
       }
     ]
   },
+  "ordre-frais-litige": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "transporteurCodePlus",
+        "editCellTemplate": "selectBoxTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "montant",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "litige.id",
+        "allowEditing": false,
+        "visible": false
+      }
+    ]
+  },
   "commandes-edi": {
     "columns": [
       {

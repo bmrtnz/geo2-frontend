@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component, ElementRef, EventEmitter, OnDestroy, OnInit,
+  Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit,
   Output, QueryList, ViewChild, ViewChildren
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
@@ -143,6 +143,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     self = this;
   }
 
+  @Input() public noLitiges: boolean;
   @Output() public ordre: Ordre;
   @Output() openArticleManuPopup = new EventEmitter<any>();
   @Output() articleRowKey: string;
@@ -222,7 +223,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "descriptifRegroupement",
     "client.devise.id",
     "listeOrdreRefPalox",
-    "ordreRefPaloxPere"
+    "ordreRefPaloxPere",
+    "factureAvoir"
   ];
 
   private destroy = new Subject<boolean>();
@@ -303,6 +305,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public promptPopupPurpose: string;
   public selectedLignes: string[];
   public selectedGridCdesRows: boolean;
+  public cancelledOrder: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -975,6 +978,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.saveHeaderOnTheFly();
           });
 
+          this.cancelledOrder = Statut[this.ordre.statut] === Statut.ANNULE.toString();
           this.histoLigneOrdreText =
             `${this.localization.localize("hint-ajout-ordre")} ${this.localization.localize("hint-source-historique")}`;
           this.histoLigneOrdreReadOnlyText =
@@ -1136,6 +1140,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
     this.ordreBAFOuFacture = this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
+    this.cancelledOrder = Statut[this.ordre.statut] === Statut.ANNULE.toString();
   }
 
   openClientFilePopup() {

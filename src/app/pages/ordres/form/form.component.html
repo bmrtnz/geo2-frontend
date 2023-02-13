@@ -172,7 +172,7 @@
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="ordreFacture || !fullOrderNumber"
+                  [disabled]="ordreFacture || !fullOrderNumber || cancelledOrder"
                   hint="{{ 'hint-cancelorder' | localize }}"
                   text="{{ 'btn-cancelorder' | localize }}"
                   (onClick)="onCancelOrderClick()"

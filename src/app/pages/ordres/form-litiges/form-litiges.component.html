@@ -5,15 +5,24 @@
   class="nolitiges"
 >
   {{ "ordres-litiges-noLitiges" | localize }}
+  <div style="clear:both"></div>
+  <dx-button
+    type="default"
+    class="create-litige-btn"
+    [disabled]="disableCreate"
+    [focusStateEnabled]="false"
+    text="{{ 'ordres-litiges-create' | localize }}"
+    (onClick)="createLitige()"
+    >
+  </dx-button>
 </div>
 <form
   *ngIf="noLitiges !== null && noLitiges !== true"
   [formGroup]="formGroup"
-  (ngSubmit)="onSubmit()"
 >
   <div class="content-block form-litiges">
     <dx-box direction="row">
-      <dxi-item [ratio]="4">
+      <dxi-item [ratio]="5">
         <div class="dx-form-group">
           <dx-box direction="row">
             <dxi-item [ratio]="6">
@@ -98,7 +107,7 @@
               </div>
             </dxi-item>
           </dx-box>
-          <dx-box>
+          <dx-box class="cloture-info cloture-box-adjust">
             <dxi-item [ratio]="4">
               <!--  Client Clôturé -->
               <div class="dx-field">
@@ -108,7 +117,7 @@
                 <div class="dx-field-value">
                   <dx-check-box
                     class="thin-checkbox"
-                    [disabled]="true"
+                    [readOnly]="true"
                     formControlName="clientCloture"
                   ></dx-check-box>
                 </div>
@@ -124,14 +133,14 @@
                 <div class="dx-field-value">
                   <dx-check-box
                     class="thin-checkbox"
-                    [disabled]="true"
+                    [readOnly]="true"
                     formControlName="clientValideAdmin"
                   ></dx-check-box>
                 </div>
               </div>
             </dxi-item>
           </dx-box>
-          <dx-box>
+          <dx-box class="cloture-info">
             <dxi-item [ratio]="4">
               <!-- Fournisseur Clôturé -->
               <div class="dx-field">
@@ -141,7 +150,7 @@
                 <div class="dx-field-value">
                   <dx-check-box
                     class="thin-checkbox"
-                    [disabled]="true"
+                    [readOnly]="true"
                     formControlName="fournisseurCloture"
                   ></dx-check-box>
                 </div>
@@ -157,7 +166,7 @@
                 <div class="dx-field-value">
                   <dx-check-box
                     class="thin-checkbox"
-                    [disabled]="true"
+                    [readOnly]="true"
                     formControlName="fournisseurValideAdmin"
                   ></dx-check-box>
                 </div>
@@ -199,9 +208,9 @@
         </div>
       </dxi-item>
       <dxi-item [ratio]="0.4"></dxi-item>
-      <dxi-item [ratio]="4">
+      <dxi-item [ratio]="3">
         <dx-box>
-          <dxi-item [ratio]="4">
+          <dxi-item [ratio]="3.5">
             <div class="dx-form-group">
               <div class="dx-form-group-content">
                 <!-- Avoir au client -->
@@ -298,11 +307,19 @@
                     </dx-number-box>
                   </div>
                 </div>
+                <br>
+                <dx-button
+                  class="btn-frais-annexes"
+                  type="default"
+                  [focusStateEnabled]="false"
+                  text="{{ 'btn-fraisAnnnexes' | localize }}"
+                  (onClick)="fraisAnnexes()"
+                ></dx-button>
               </div>
             </div>
           </dxi-item>
           <dxi-item [ratio]="0.4"></dxi-item>
-          <dxi-item [ratio]="1">
+          <dxi-item [ratio]="1.5">
             <div class="dx-form-group">
               <div class="dx-form-group-content">
                 <!-- Avoir au client Taux-->
@@ -358,6 +375,56 @@
           </dxi-item>
         </dx-box>
       </dxi-item>
+      <dxi-item [ratio]="0.4"></dxi-item>
     </dx-box>
   </div>
+
+  <div class="litige-btn-container">
+    <dx-button
+      type="default"
+      text="{{ 'btn-saveLitige' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="saveLitige()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-incidentLitige' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="incidentLitige()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-avisResolution' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="avisResolution()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-recapInterne' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="recapInterne()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-creerLot' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="creerLot()"
+    ></dx-button>
+    <dx-button
+      type="success"
+      text="{{ 'btn-close' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="cloturer()"
+    ></dx-button>
+  </div>
+
 </form>
+<div style="clear:both;"></div>
+
+<app-litige-cloture-popup
+ [infosLitige]="infosLitige"
+></app-litige-cloture-popup>
+
+<app-frais-annexes-litige-popup
+  [litigeID]="litigeID"
+></app-frais-annexes-litige-popup>
