@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ApolloQueryResult } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { Flux } from "app/shared/models";
 import Envois from "app/shared/models/envois.model";
@@ -8,7 +7,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { FunctionResponse, FunctionsService } from "./functions.service";
+import { FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root",
@@ -165,6 +164,23 @@ export class EnvoisService extends ApiService implements APIRead {
     }).pipe(take(1));
   }
 
+  public countBy(search: string) {
+    return this.apollo.query<{ countBy: number }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "countBy",
+          params: [
+            { name: "search", value: "search", isVariable: true },
+          ],
+        },
+      ], [
+        { name: "search", type: "String", isOptionnal: true },
+      ])),
+      variables: { search },
+      fetchPolicy: "network-only",
+    });
+  }
+
   public countByOrdreAndFlux(
     ordre: { id: string } & Partial<Ordre>,
     flux: { id: string } & Partial<Flux>,
@@ -229,9 +245,8 @@ export class EnvoisService extends ApiService implements APIRead {
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "societeCode", type: "String", value: societeCode }
     ]).pipe(map(res => {
-      const clone = JSON.parse(JSON.stringify(res));
-      clone.data.fDocumentEnvoiDetailsExp.data.ordreRef = ordreRef;
-      return clone as ApolloQueryResult<{ [name: string]: FunctionResponse }>;
+      res.data.fDocumentEnvoiDetailsExp.data.ordreRef = ordreRef;
+      return res;
     }));
   }
 
@@ -281,23 +296,6 @@ export class EnvoisService extends ApiService implements APIRead {
     return this.functionsService.queryFunction("fDocumentEnvoiDeclarationBollore", [
       { name: "ordreRef", type: "String", value: ordreRef }
     ]);
-  }
-
-  public countBy(search: string) {
-    return this.apollo.query<{ countBy: number }>({
-      query: gql(ApiService.buildGraph("query", [
-        {
-          name: "countBy",
-          params: [
-            { name: "search", value: "search", isVariable: true },
-          ],
-        },
-      ], [
-        { name: "search", type: "String", isOptionnal: true },
-      ])),
-      variables: { search },
-      fetchPolicy: "network-only",
-    });
   }
 
   public deleteTempEnvois(allEnvois: Array<Partial<Envois>>) {

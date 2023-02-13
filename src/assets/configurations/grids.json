@@ -1126,7 +1126,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "emballage.emballage.description",
+        "dataField": "emballage.emballage.id",
         "dataType": "string",
         "visible": true
       },
@@ -1180,8 +1180,7 @@
         "showInColumnChooser": true
       },
       {
-        "visibleIndex": 24,
-        "dataField": "emballage.emballage.id",
+        "dataField": "emballage.emballage.description",
         "dataType": "string",
         "visible": false,
         "showInColumnChooser": false
@@ -4393,7 +4392,7 @@
         "visibleIndex": 0,
         "dataField": "typeTiers.description",
         "dataType": "string",
-        "width": "100",
+        "width": "110",
         "allowEditing": false,
         "visible": true
       },
@@ -4480,6 +4479,11 @@
         "visibleIndex": 20,
         "dataField": "id",
         "allowEditing": false,
+        "visible": false
+      },
+      {
+        "dataField": "typeTiers.id",
+        "showInColumnChooser": false,
         "visible": false
       }
     ]
@@ -4688,6 +4692,31 @@
       },
       {
         "dataField": "ordreLogistique.ordre.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettesAuSol",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.totalPalettesExpediees",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes100x120",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes60x80",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLogistique.nombrePalettes80x120",
         "showInColumnChooser": false,
         "visible": false
       },

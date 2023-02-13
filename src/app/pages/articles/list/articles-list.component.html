@@ -110,7 +110,7 @@
             #emballageSB
             [dataSource]="emballages"
             (valueChange)="onFieldValueChange($event, 'emballage.emballage.id')"
-            [searchExpr]="['id']"
+            [searchExpr]="['id', 'description']"
             [displayExpr]="formatListItem"
             valueExpr="id"
             [disabled]="!especeSB.selectedItems.length"

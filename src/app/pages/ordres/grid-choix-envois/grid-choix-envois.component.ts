@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
+import Ordre from "app/shared/models/ordre.model";
 import TypeTiers from "app/shared/models/type-tiers.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
@@ -43,7 +44,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     private ar: FluxArService,
   ) { }
 
-  @Input() public ordreID: string;
+  @Input() public ordre: Partial<Ordre>;
   @Input() public fluxID: string;
   @Input() public annuleOrdre: boolean;
   @Input() public fournisseurCode: string;
@@ -176,7 +177,7 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   reload(annuleOrdre?) {
     this.functionsService.geoPrepareEnvois(
-      this.ordreID,
+      this.ordre.id,
       this.fluxID,
       true,
       annuleOrdre ? annuleOrdre : false,
@@ -184,7 +185,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     )
       .pipe(
         concatMapTo(this.envoisService.getList(
-          `ordre.id==${this.ordreID} and traite==A`,
+          `ordre.id==${this.ordre.id} and traite==A`,
           this.CHOIX_ENVOIS_FIELDS,
         )),
         map(res => JSON.parse(JSON.stringify(res.data.allEnvoisList)) as Envois[]), // unseal data
@@ -193,7 +194,7 @@ export class GridChoixEnvoisComponent implements OnInit {
         next: data => {
 
           this.canSelectAll = true;
-          // console.log(this.ar?.hasData, this.annuleOrdre);
+
           // handle annule&remplace
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();
@@ -210,12 +211,33 @@ export class GridChoixEnvoisComponent implements OnInit {
                 return e;
               });
             }
+            // We pre-fill comments when complementary order
+            if (this.fluxID === "ORDRE" && this.ordre.type.id === "COM") this.addComplComment(data);
           }
-
           this.gridData = new DataSource(data);
         },
         error: message => notify({ message }, "error", 7000),
       });
+  }
+
+  private addComplComment(data) {
+    data = data.map((e) => {
+      const comInt = this.ordre.commentaireUsageInterne;
+      const typeTiers = e.typeTiers.id;
+      if (typeTiers === "C") {
+        e.commentairesAvancement = comInt;
+      } else {
+        let filter = `ordre.numero==${comInt.slice(-6)} and typeTiers.id==${typeTiers} and `;
+        filter += `codeTiers==${e.codeTiers} and (traite==N or traite==O)`;
+        this.envoisService.countBy(filter).subscribe(res => {
+          if (res.data.countBy) {
+            e.commentairesAvancement = comInt;
+            this.dataGrid.instance.selectAll();
+          }
+        });
+      }
+      return e;
+    });
   }
 
   public done() {
@@ -232,5 +254,6 @@ export class GridChoixEnvoisComponent implements OnInit {
       this.envoisService.deleteTempEnvois(allNonEnvois)
     ).pipe(finalize(() => this.ar.clear()));
   }
+
 
 }
