@@ -112,7 +112,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
         mruEntrepot,
       },
     ).subscribe({
-      error: (err) => console.log("Echec de la sauvegarde MRU Entrepot", err),
+      error: (err) => console.log("Échec de la sauvegarde MRU Entrepot", err),
     });
   }
 

@@ -420,7 +420,7 @@ export class TransporteurDetailsComponent
               this.afterLoadInitForm(res)
             );
         },
-        error: () => notify("Echec de la sauvegarde", "error", 3000),
+        error: () => notify("Échec de la sauvegarde", "error", 3000),
       });
   }
 
@@ -445,7 +445,7 @@ export class TransporteurDetailsComponent
           },
           error: (err) => {
             console.log(err);
-            notify("Echec de la sauvegarde", "error", 3000);
+            notify("Échec de la sauvegarde", "error", 3000);
           },
         });
     }

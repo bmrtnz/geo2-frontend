@@ -1,0 +1,105 @@
+<dx-popup
+  [width]="950"
+  height="auto"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [resizeEnabled]="true"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
+  (onHidden)="onHidden()"
+  >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-popup">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    >
+    </dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+        <dx-data-grid
+          class="dx-card wide-card grid-selection-compte-palox"
+          [showBorders]="false"
+          [focusedRowIndex]="0"
+          [focusedRowEnabled]="true"
+          [remoteOperations]="true"
+          [keyExpr]="'id'"
+          (onCellPrepared)="onCellPrepared($event)"
+          (onRowPrepared)="onRowPrepared($event)"
+          (onRowDblClick)="onRowDblClick($event)"
+          [columnAutoWidth]="true"
+          [columnHidingEnabled]="false"
+          [allowColumnReordering]="true"
+          (onToolbarPreparing)="
+            gridConfiguratorService.onToolbarPreparing(
+              this.localizeService.localize('hint-dblClick-select-client'),
+              $event,
+              gridConfiguratorService.Grid.ComptePalox
+            )
+          "
+        >
+          <!-- Grid configuration -->
+          <dxo-export fileName="Liste clients pour compte palox"></dxo-export>
+          <dxo-header-filter
+            [visible]="true"
+            [allowSearch]="true"
+          ></dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-pager
+            [showPageSizeSelector]="true"
+            [showInfo]="true"
+            [showNavigationButtons]="true"
+          ></dxo-pager>
+          <dxo-state-storing
+            [enabled]="true"
+            type="custom"
+            [storageKey]="gridConfiguratorService.Grid.ComptePalox"
+            [customLoad]="gridConfiguratorService.load"
+            [customSave]="gridConfiguratorService.save"
+          ></dxo-state-storing>
+          <dxo-column-chooser
+            [enabled]="true"
+            mode="select"
+            title="{{ 'columnChooser' | localize }}"
+            [allowSearch]="true"
+            [width]="columnChooser.width"
+            [height]="columnChooser.height"
+          >
+          </dxo-column-chooser>
+          <dxi-column
+            *ngFor="let column of this.columns | async"
+            [dataField]="column.dataField"
+            [encodeHtml]="false"
+            [visible]="false"
+            [width]="column.width"
+            [caption]="
+              ('tiers-clients-' + column.dataField?.split('.').join('-') | localize) ||
+              column.name
+            "
+            [cssClass]="column?.cssClass"
+            allowSearch="false"
+            [dataType]="column?.dataType"
+            [allowHeaderFiltering]="
+              column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+            "
+            [showInColumnChooser]="column.showInColumnChooser"
+          ></dxi-column>
+        </dx-data-grid>
+        <br>
+        <div class="popup-action">
+          <dx-button
+            text="{{ 'btn-fermer' | localize }}"
+            type="default"
+            (onClick)="quitPopup()"
+          ></dx-button>
+        </div>
+    </dx-scroll-view>
+  </div>
+
+</dx-popup>

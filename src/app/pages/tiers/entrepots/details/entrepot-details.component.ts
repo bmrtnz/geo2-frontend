@@ -398,7 +398,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
             }
             if (this.entrepot) this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
           },
-          error: () => notify("Echec de la sauvegarde", "error", 3000),
+          error: () => notify("Échec de la sauvegarde", "error", 3000),
         });
     }
 

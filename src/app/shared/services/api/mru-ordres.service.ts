@@ -149,7 +149,7 @@ export class MruOrdresService extends ApiService implements APIRead {
         mruOrdre,
       },
     ).subscribe({
-      error: (err) => console.log("Echec de la sauvegarde MRU", err),
+      error: (err) => console.log("Échec de la sauvegarde MRU", err),
     });
   }
 
