@@ -1126,7 +1126,7 @@
       },
       {
         "visibleIndex": 6,
-        "dataField": "emballage.emballage.description",
+        "dataField": "emballage.emballage.id",
         "dataType": "string",
         "visible": true
       },
@@ -1180,8 +1180,7 @@
         "showInColumnChooser": true
       },
       {
-        "visibleIndex": 24,
-        "dataField": "emballage.emballage.id",
+        "dataField": "emballage.emballage.description",
         "dataType": "string",
         "visible": false,
         "showInColumnChooser": false
