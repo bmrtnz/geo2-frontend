@@ -32,7 +32,7 @@ export class GridFraisAnnexesLitigeComponent {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
 
   constructor(

@@ -23,7 +23,7 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
 
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(GridFraisAnnexesLitigeComponent, { static: false }) datagrid: GridFraisAnnexesLitigeComponent;
+  @ViewChild(GridFraisAnnexesLitigeComponent, { static: false }) datagridComponent: GridFraisAnnexesLitigeComponent;
 
   constructor(
     private localizeService: LocalizationService
@@ -49,11 +49,11 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
   }
 
   onShown(e) {
-    this.datagrid.enableFilters();
+    this.datagridComponent.enableFilters();
   }
 
   hidePopup() {
-    this.datagrid.dataSource = null;
+    this.datagridComponent.datagrid.dataSource = null;
     this.popup.visible = false;
   }
 
