@@ -158,7 +158,7 @@ import {
   GridOptionReservationStockComponent
 } from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
 import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
-import { SelectionComptePaloxPopupComponent } from './selection-compte-palox-popup/selection-compte-palox-popup.component';
+import { SelectionComptePaloxPopupComponent } from "./selection-compte-palox-popup/selection-compte-palox-popup.component";
 
 @NgModule({
   declarations: [
