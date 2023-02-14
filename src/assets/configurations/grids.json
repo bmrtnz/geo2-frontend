@@ -7032,5 +7032,39 @@
         "visible": false
       }
     ]
+  },
+  "compte-palox": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "code",
+        "sortOrder": "asc",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSocial",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ville",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "valide",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
   }
 }

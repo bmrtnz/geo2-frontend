@@ -103,6 +103,7 @@ export enum Grid {
   LitigeLigne = "litige-ligne",
   Litiges = "litiges",
   HistoriqueModifDetail = "histo-modif-detail",
+  ComptePalox = "compte-palox",
 
   OrdreSupervisionLivraison = "ordre-supervision-livraison",
   OrdreBonAFacturer = "ordre-bon-a-facturer",

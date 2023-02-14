@@ -417,7 +417,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
             this.formGroup.markAsPristine();
           },
           error: () =>
-            notify("Echec de la sauvegarde", "error", 3000),
+            notify("Échec de la sauvegarde", "error", 3000),
         });
     }
     this.warningMode = false;
