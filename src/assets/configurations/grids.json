@@ -6336,10 +6336,12 @@
     ]
   },
   "ordre-frais-litige": {
+    "pageSize": 1000,
     "columns": [
       {
         "visibleIndex": 0,
         "dataField": "id",
+        "sortOrder": "desc",
         "allowEditing": false,
         "visible": false
       },
@@ -6352,22 +6354,25 @@
       {
         "visibleIndex": 4,
         "dataField": "montant",
+        "width": 120,
         "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "description",
+        "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 6,
         "dataField": "frais.id",
-        "visible": true
+        "showInColumnChooser": false,
+        "allowEditing": false,
+        "visible": false
       },
       {
-        "visibleIndex": 8,
         "dataField": "litige.id",
+        "showInColumnChooser": false,
         "allowEditing": false,
         "visible": false
       }

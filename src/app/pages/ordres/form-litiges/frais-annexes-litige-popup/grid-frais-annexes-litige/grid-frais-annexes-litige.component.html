@@ -1,12 +1,18 @@
 <dx-data-grid
   class="dx-card wide-card grid-frais-annexes-litiges"
-  [remoteOperations]="true"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: false,
+    groupPaging: false,
+    paging: true,
+    sorting: true,
+    summary: false
+  }"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onInitNewRow)="onInitNewRow($event)"
-  (onRowInserting)="onRowInserting($event)"
   (onSaved)="onSaved()"
   (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
@@ -61,7 +67,7 @@
       column.name
     "
     [dataType]="column?.dataType"
-    [showEditorAlways]="true"
+    [showEditorAlways]="false"
     [cssClass]="column.cssClass"
     [width]="column.width"
     [allowEditing]="column.allowEditing"
@@ -74,33 +80,36 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   >
+  <dxi-validation-rule
+    *ngIf="['transporteurCodePlus', 'montant', 'description'].includes(column.dataField)"
+    type="required"
+  ></dxi-validation-rule>
+  <dxi-validation-rule
+    *ngIf="column.dataField === 'montant'"
+    type="range"
+    [min]="1"
+    message="{{ 'MontantNonNul' | localize }}"
+  ></dxi-validation-rule>
+
   </dxi-column>
+
+  <dxo-summary>
+    <dxi-total-item
+      column="montant"
+      summaryType="sum"
+      displayFormat="Total : {0}"
+    ></dxi-total-item>
+  </dxo-summary>
 
   <div *dxTemplate="let cell of 'selectBoxTemplate'">
     <dx-select-box
-      [dataSource]="codePlusSource"
+      [items]="codePlusItems"
       [displayExpr]="displayIdBefore"
-      [searchExpr]="['id', 'raisonSocial']"
+      [searchExpr]="['codeFournisseur', 'raisonSociale']"
       [value]="cell.data[cell.column.dataField]"
       (onValueChanged)="onValueChanged($event, cell)"
     >
       <dxo-drop-down-options [width]="400"></dxo-drop-down-options>
     </dx-select-box>
   </div>
-  <!-- <div *dxTemplate="let cell of 'customSelectBoxTemplate'">
-    <dx-select-box
-      [id]="cell.key"
-      [displayExpr]="displayCustom"
-      [searchExpr]="[
-        this[cell.column.dataField + 'Service'].model.getKeyField()
-      ]"
-      [deferRendering]="false"
-      [acceptCustomValue]="true"
-      [value]="cell.data[cell.column.dataField]"
-      (onValueChanged)="onValueChanged($event, cell)"
-    >
-      <dxo-drop-down-options [width]="SelectBoxPopupWidth">
-      </dxo-drop-down-options>
-    </dx-select-box>
-  </div> -->
 </dx-data-grid>

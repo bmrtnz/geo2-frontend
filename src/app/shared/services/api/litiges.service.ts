@@ -8,155 +8,155 @@ import LitigeSupervision from "app/shared/models/litige-supervision.model";
 import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 
 @Injectable({
-    providedIn: "root",
+  providedIn: "root",
 })
 export class LitigesService extends ApiService implements APIRead {
-    listRegexp = /.*\.(?:id|libelle)$/i;
+  listRegexp = /.*\.(?:id|libelle)$/i;
 
-    constructor(apollo: Apollo) {
-        super(apollo, Litige);
-    }
+  constructor(apollo: Apollo) {
+    super(apollo, Litige);
+  }
 
-    getDataSource() {
-        return new DataSource({
-            store: this.createCustomStore({
-                load: (options: LoadOptions) =>
-                    new Promise(async (resolve) => {
-                        if (options.group)
-                            return this.loadDistinctQuery(options, (res) => {
-                                if (res.data && res.data.distinct)
-                                    resolve(
-                                        this.asListCount(res.data.distinct),
-                                    );
-                            });
+  getDataSource() {
+    return new DataSource({
+      store: this.createCustomStore({
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(
+                    this.asListCount(res.data.distinct),
+                  );
+              });
 
-                        const query = await this.buildGetAll(1);
-                        type Response = { allLitige: RelayPage<Litige> };
-                        const variables =
-                            this.mapLoadOptionsToVariables(options);
+            const query = await this.buildGetAll(1);
+            type Response = { allLitige: RelayPage<Litige> };
+            const variables =
+              this.mapLoadOptionsToVariables(options);
 
-                        this.listenQuery<Response>(
-                            query,
-                            { variables },
-                            (res) => {
-                                if (res.data && res.data.allLitige)
-                                    resolve(
-                                        this.asInstancedListCount(
-                                            res.data.allLitige,
-                                        ),
-                                    );
-                            },
-                        );
-                    }),
-                byKey: (key) =>
-                    new Promise(async (resolve) => {
-                        const query = await this.buildGetOne(1);
-                        type Response = { litige: Litige };
-                        const variables = { id: key };
-                        this.listenQuery<Response>(
-                            query,
-                            { variables },
-                            (res) => {
-                                if (res.data && res.data.litige)
-                                    resolve(new Litige(res.data.litige));
-                            },
-                        );
-                    }),
-            }),
+            this.listenQuery<Response>(
+              query,
+              { variables },
+              (res) => {
+                if (res.data && res.data.allLitige)
+                  resolve(
+                    this.asInstancedListCount(
+                      res.data.allLitige,
+                    ),
+                  );
+              },
+            );
+          }),
+        byKey: (key) =>
+          new Promise(async (resolve) => {
+            const query = await this.buildGetOne(1);
+            type Response = { litige: Litige };
+            const variables = { id: key };
+            this.listenQuery<Response>(
+              query,
+              { variables },
+              (res) => {
+                if (res.data && res.data.litige)
+                  resolve(new Litige(res.data.litige));
+              },
+            );
+          }),
+      }),
+    });
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { litige: Litige };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, (res) => {
+          if (res.data && res.data.litige)
+            resolve(new Litige(res.data.litige));
         });
-    }
+      });
+  }
 
-    private byKey(columns: Array<string>) {
-        return (key) =>
-            new Promise(async (resolve) => {
-                const query = await this.buildGetOne_v2(columns);
-                type Response = { litige: Litige };
-                const variables = { id: key };
-                this.listenQuery<Response>(query, { variables }, (res) => {
-                    if (res.data && res.data.litige)
-                        resolve(new Litige(res.data.litige));
-                });
-            });
-    }
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [{ selector: this.model.getKeyField() }],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(
+                    this.asListCount(res.data.distinct),
+                  );
+              });
 
-    getDataSource_v2(columns: Array<string>) {
-        return new DataSource({
-            sort: [{ selector: this.model.getKeyField() }],
-            store: this.createCustomStore({
-                load: (options: LoadOptions) =>
-                    new Promise(async (resolve) => {
-                        if (options.group)
-                            return this.loadDistinctQuery(options, (res) => {
-                                if (res.data && res.data.distinct)
-                                    resolve(
-                                        this.asListCount(res.data.distinct),
-                                    );
-                            });
-
-                        type Response = { allLitige: RelayPage<Litige> };
-                        const query = await this.buildGetAll_v2(columns);
-                        const variables =
-                            this.mapLoadOptionsToVariables(options);
-                        this.listenQuery<Response>(
-                            query,
-                            { variables },
-                            (res) => {
-                                if (res.data && res.data.allLitige) {
-                                    resolve(
-                                        this.asInstancedListCount(
-                                            res.data.allLitige,
-                                        ),
-                                    );
-                                }
-                            },
-                        );
-                    }),
-                byKey: this.byKey(columns),
-            }),
-        });
-    }
-
-    allSupervisionLitige(
-        type: string,
-        code: string,
-        body: Set<string>,
-    ) {
-        return this.apollo.query<{ allSupervisionLitige: Partial<LitigeSupervision>[] }>({
-            query: gql(ApiService.buildGraph("query",
-                [{
-                    name: "allSupervisionLitige",
-                    body,
-                    params: [
-                        { name: "type", value: "type", isVariable: true },
-                        { name: "code", value: "code", isVariable: true },
-                    ],
-                }],
-                [
-                    { name: "type", type: "String", isOptionnal: false },
-                    { name: "code", type: "String", isOptionnal: false },
-                ],
-            )),
-            variables: { code, type },
-        });
-    }
-
-    getLitigesAPayer(litigeID: string, body: Set<string>) {
-        return this.apollo.query<{ allLitigeAPayer: LitigeAPayer[] }>({
-            query: gql(ApiService.buildGraph("query", [
-                {
-                    name: "allLitigeAPayer",
-                    body,
-                    params: [{ name: "litigeID", value: "litigeID", isVariable: true }],
+            type Response = { allLitige: RelayPage<Litige> };
+            const query = await this.buildGetAll_v2(columns);
+            const variables =
+              this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(
+              query,
+              { variables, fetchPolicy: "no-cache" },
+              (res) => {
+                if (res.data && res.data.allLitige) {
+                  resolve(
+                    this.asInstancedListCount(
+                      res.data.allLitige,
+                    ),
+                  );
                 }
-            ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
-            variables: { litigeID },
-        });
-    }
+              },
+            );
+          }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
 
-    save(body: Set<string>, litige: Partial<Litige>) {
-        return this.apollo.mutate<{ saveLitige: Partial<Litige> }>({
-            mutation: gql(this.buildSaveGraph([...body])),
-            variables: { litige },
-        });
-    }
+  allSupervisionLitige(
+    type: string,
+    code: string,
+    body: Set<string>,
+  ) {
+    return this.apollo.query<{ allSupervisionLitige: Partial<LitigeSupervision>[] }>({
+      query: gql(ApiService.buildGraph("query",
+        [{
+          name: "allSupervisionLitige",
+          body,
+          params: [
+            { name: "type", value: "type", isVariable: true },
+            { name: "code", value: "code", isVariable: true },
+          ],
+        }],
+        [
+          { name: "type", type: "String", isOptionnal: false },
+          { name: "code", type: "String", isOptionnal: false },
+        ],
+      )),
+      variables: { code, type },
+    });
+  }
+
+  getLitigesAPayer(litigeID: string, body: Set<string>) {
+    return this.apollo.query<{ allLitigeAPayer: LitigeAPayer[] }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "allLitigeAPayer",
+          body,
+          params: [{ name: "litigeID", value: "litigeID", isVariable: true }],
+        }
+      ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
+      variables: { litigeID },
+    });
+  }
+
+  save(body: Set<string>, litige: Partial<Litige>) {
+    return this.apollo.mutate<{ saveLitige: Partial<Litige> }>({
+      mutation: gql(this.buildSaveGraph([...body])),
+      variables: { litige },
+    });
+  }
 }

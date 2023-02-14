@@ -1,10 +1,15 @@
-::ng-deep .grid-frais-annexes-litige {
+::ng-deep .grid-frais-annexes-litiges {
 
-  .grey-light {
-    background-color: #EEE !important;
+  max-height: 300px;
+
+  .grey-light-montant {
+    background-color: #EEE;
   }
 
-  .no-arrow .dx-texteditor-buttons-container {
-    display: none !important;
+  .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
+    padding: 0 2px !important;
+    width: 30px !important;
+    min-width: 30px !important;
   }
+
 }

@@ -189,9 +189,6 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   fraisAnnexes() {
     this.litigeID = this.litigesData.id;
     this.fraisAnnexesPopup.visible = true;
-    //////////////////////////////////////
-    // Affichage Popup
-    //////////////////////////////////////
   }
 
   cloturer() {

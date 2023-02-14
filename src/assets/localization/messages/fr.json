@@ -336,6 +336,7 @@
     "auth-login-btn": "Connexion",
     "auth-societe": "Société",
     "valeurIncorrecte": "Valeur incorrecte",
+    "MontantNonNul": "Saisir un montant non nul",
     "date-depassee": "Date dépassée",
     "text-palox-popup-title-ajuster": "Ajuster le nombre de palox",
     "text-palox-popup-title-decompte": "Inventaire palox",

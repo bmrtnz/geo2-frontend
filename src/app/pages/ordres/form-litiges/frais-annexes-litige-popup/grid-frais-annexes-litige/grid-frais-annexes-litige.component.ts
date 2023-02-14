@@ -1,16 +1,10 @@
-import { Component, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
-import FraisLitige from "app/shared/models/ordre-frais-litige.model";
+import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService, EntrepotsService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
-import { DevisesService } from "app/shared/services/api/devises.service";
+import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
+import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresFraisLitigeService } from "app/shared/services/api/ordres-frais-litige.service";
-import { TransitairesService } from "app/shared/services/api/transitaires.service";
-import { TypesFraisService } from "app/shared/services/api/types-frais.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import {
-  Grid,
-  GridConfig, GridConfiguratorService
-} from "app/shared/services/grid-configurator.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -28,16 +22,11 @@ export class GridFraisAnnexesLitigeComponent {
 
   @Input() public ordre: Ordre;
   @Input() public idLitige: string;
+  @Output() public totalFraisSaved = new EventEmitter();
 
 
   public dataSource: DataSource;
-  public fraisSource: DataSource;
-  public deviseSource: DataSource;
-  public codePlusSource: DataSource;
-  public codePlusList: string[];
-  public selectPhase: boolean;
-  public codePlusTransporteurs: string[];
-  public itemsWithSelectBox: string[];
+  public codePlusItems: any[];
   public descriptionOnlyDisplaySB: string[];
   public SelectBoxPopupWidth: number;
   public columnChooser = environment.columnChooser;
@@ -48,31 +37,19 @@ export class GridFraisAnnexesLitigeComponent {
 
   constructor(
     private ordresFraisLitigeService: OrdresFraisLitigeService,
-    public fraisService: TypesFraisService,
-    public deviseService: DevisesService,
+    private litigesService: LitigesService,
     public gridConfiguratorService: GridConfiguratorService,
-    public codePlusService: TransporteursService,
     public transporteursService: TransporteursService,
-    public transitairesService: TransitairesService,
-    public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
-    public entrepotsService: EntrepotsService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public authService: AuthService
   ) {
-    this.displayDescOnly = this.displayDescOnly.bind(this);
-    this.displayCustom = this.displayCustom.bind(this);
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreFraisLitige,
     );
     this.columns = from(this.gridConfig).pipe(
       map((config) => config.columns),
     );
-    this.itemsWithSelectBox = [
-      "transporteurCodePlus"
-    ];
-    this.selectPhase = false;
-    this.updateCodePlusDataSource();
   }
 
   async enableFilters() {
@@ -86,91 +63,56 @@ export class GridFraisAnnexesLitigeComponent {
       this.dataSource.filter(["litige.id", "=", this.idLitige]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
+
+    // Get transporteur (A payer) list
+    this.litigesService.getLitigesAPayer(
+      this.idLitige,
+      new Set(["id", "codeFournisseur", "raisonSociale", "numeroTri", "type"])
+    ).subscribe({
+      next: (res) => {
+        this.codePlusItems = res.data.allLitigeAPayer;
+      }
+    });
+
   }
 
   onInitNewRow(e) {
-    e.litige = { id: this.idLitige };
-    e.frais = { id: "DIVERS" };
+    e.data.litige = { id: this.idLitige };
+    e.data.frais = { id: "DIVERS" };
     setTimeout(() => this.datagrid.instance.saveEditData(), 1);
-  }
-
-  onRowInserting({ data }: { data: Partial<FraisLitige> }) {
-    // data.litige = { id: this.idLitige };
-    // data.frais = { id: "DIVERS" };
   }
 
   onValueChanged(event, cell) {
     if (!event.event) return;
-    let valueToSave;
-
-    if (cell.setValue) {
-      if (typeof event.value === "object" && cell.column.dataField === "transporteurCodePlus") {
-        valueToSave = event.value.id;
-      } else {
-        valueToSave = event.value;
-      }
-      cell.setValue(valueToSave);
-    }
+    if (cell.setValue) cell.setValue(event.value.codeFournisseur);
   }
 
   displayIdBefore(data) {
-    return data ? data.id + " - " + data.raisonSocial : null;
+    return data ? data.codeFournisseur + " - " + data.raisonSociale : null;
   }
-
-  displayDescOnly(data) {
-    return data ? this.capitalize(data.description) : null;
-  }
-
-  displayCustom(data) {
-    if (this.selectPhase) {
-      return this.displayIdBefore(data);
-    } else {
-      return data;
-    }
-  }
-
-  capitalize(data) {
-    return data ? data.charAt(0).toUpperCase() + data.slice(1).toLowerCase() : null;
-  }
-
-  updateCodePlusDataSource() {
-    this.codePlusSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
-  }
-
-  // onCellClick(e) {
-  //   // No DS is displayed
-  //   if (e.column.dataField === "transporteurCodePlus") {
-  //     if (this.isCustomText(e.data)) {
-  //       this.SelectBoxPopupWidth = 0;
-  //       e.cellElement.classList.add("no-arrow");
-  //     } else {
-  //       this.SelectBoxPopupWidth = 400;
-  //       e.cellElement.classList.remove("no-arrow");
-  //       this.updateCodePlusDataSource(e.data);
-  //     }
-  //   }
-  // }
-
-  // isCustomText(data) {
-  //   return ["DIVERS", "ANIM"].includes(data.frais?.id);
-  // }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Higlight important columns
-      if ([
-        "deviseTaux",
-        "montantTotal"
-      ].includes(e.column.dataField)) {
-        // Grey background
-        e.cellElement.classList.add("grey-light");
-      }
+      if (e.column.dataField === "montant")
+        e.cellElement.classList.add("grey-light-montant"); // Grey background
+      // if (e.column.dataField === "transporteurCodePlus" && this.codePlusItems?.length) {
+      //   e.cellElement.textContent = e.value + " - " + this.codePlusItems.filter(r => r.codeFournisseur === e.value)[0].raisonSociale;
+      // }
     }
+
   }
 
   onSaved() {
-    this.selectPhase = false;
-    this.datagrid.instance.repaint();
+    const litige = { id: this.idLitige, fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant") };
+    // Saving total
+    this.litigesService.save(new Set(["id"]), litige).subscribe({
+      next: () => this.totalFraisSaved.emit(),
+      error: (error: Error) => {
+        console.log(error);
+        notify(error.message, "error", 7000);
+      },
+    });
   }
 
 }

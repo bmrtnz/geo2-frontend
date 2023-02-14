@@ -14,6 +14,7 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
 
   @Input() public litigeID: any;
   @Output() public idLitige: string;
+  @Output() public updateTotalFraisLitige = new EventEmitter();
 
   public visible: boolean;
   public titleStart: string;
@@ -52,11 +53,16 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
   }
 
   hidePopup() {
+    this.datagrid.dataSource = null;
     this.popup.visible = false;
   }
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
+  }
+
+  updateTotalFrais() {
+    this.updateTotalFraisLitige.emit();
   }
 
 }
