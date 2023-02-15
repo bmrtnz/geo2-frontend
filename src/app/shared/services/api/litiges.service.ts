@@ -6,7 +6,7 @@ import Litige from "app/shared/models/litige.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import LitigeSupervision from "app/shared/models/litige-supervision.model";
 import LitigeAPayer from "app/shared/models/litige-a-payer.model";
-import { FunctionsService } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 import { OrdreLigne } from "app/shared/models";
 
 @Injectable({
@@ -163,6 +163,49 @@ export class LitigesService extends ApiService implements APIRead {
       mutation: gql(this.buildSaveGraph([...body])),
       variables: { litige },
     });
+  }
+
+  ofClotureLitigeClient(
+    litigeRef: string,
+    societeCode: string,
+    promptFraisAnnexe = "",
+    promptClotureClient = "",
+    promptCreateAvoirClient = "",
+  ) {
+    return this.apollo
+      .query<{ ofClotureLitigeClient: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofClotureLitigeClient",
+              body: functionBody,
+              params: [
+                { name: "litigeRef", value: "litigeRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "promptFraisAnnexe", value: "promptFraisAnnexe", isVariable: true },
+                { name: "promptClotureClient", value: "promptClotureClient", isVariable: true },
+                { name: "promptCreateAvoirClient", value: "promptCreateAvoirClient", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "litigeRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
+            { name: "promptClotureClient", type: "String", isOptionnal: false },
+            { name: "promptCreateAvoirClient", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          litigeRef,
+          societeCode,
+          promptFraisAnnexe,
+          promptClotureClient,
+          promptCreateAvoirClient,
+        },
+        fetchPolicy: "network-only",
+      });
   }
 
 }
