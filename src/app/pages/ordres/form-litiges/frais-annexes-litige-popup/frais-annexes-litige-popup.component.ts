@@ -10,7 +10,7 @@ import { GridFraisAnnexesLitigeComponent } from "./grid-frais-annexes-litige/gri
   templateUrl: "./frais-annexes-litige-popup.component.html",
   styleUrls: ["./frais-annexes-litige-popup.component.scss"]
 })
-export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
+export class FraisAnnexesLitigePopupComponent implements OnChanges {
 
   @Input() public litigeID: any;
   @Output() public idLitige: string;
@@ -28,9 +28,6 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
   constructor(
     private localizeService: LocalizationService
   ) { }
-
-  ngOnInit() {
-  }
 
   ngOnChanges() {
     if (this.litigeID) {
@@ -55,6 +52,13 @@ export class FraisAnnexesLitigePopupComponent implements OnInit, OnChanges {
   hidePopup() {
     this.datagridComponent.datagrid.dataSource = null;
     this.popup.visible = false;
+  }
+
+  exitPopup() {
+    if (this.datagridComponent?.datagrid?.instance?.hasEditData()) {
+      this.datagridComponent.datagrid.instance.cancelEditData();
+    }
+    setTimeout(() => this.hidePopup());
   }
 
   resizePopup() {

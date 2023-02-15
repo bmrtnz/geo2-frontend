@@ -18,7 +18,7 @@
     <dx-button
       class="close-article-popup"
       icon="close"
-      (onClick)="hidePopup()"
+      (onClick)="exitPopup()"
     ></dx-button>
     <dx-button
       class="min-max-imize-popup-icon"
@@ -41,6 +41,7 @@
   <div class="popup-buttons-container">
     <dx-button
       type="default"
+      [disabled]="datagridComponent?.datagrid?.instance?.hasEditData()"
       text="ok"
       (onClick)="hidePopup()"
       ></dx-button>

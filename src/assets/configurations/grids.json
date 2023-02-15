@@ -6355,6 +6355,17 @@
         "visibleIndex": 4,
         "dataField": "montant",
         "width": 120,
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "editorOptions": {
+          "step": 0,
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
         "dataType": "number",
         "visible": true
       },

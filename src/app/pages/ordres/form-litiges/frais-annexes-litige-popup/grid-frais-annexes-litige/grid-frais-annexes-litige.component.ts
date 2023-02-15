@@ -96,11 +96,7 @@ export class GridFraisAnnexesLitigeComponent {
       // Higlight important columns
       if (e.column.dataField === "montant")
         e.cellElement.classList.add("grey-light-montant"); // Grey background
-      // if (e.column.dataField === "transporteurCodePlus" && this.codePlusItems?.length) {
-      //   e.cellElement.textContent = e.value + " - " + this.codePlusItems.filter(r => r.codeFournisseur === e.value)[0].raisonSociale;
-      // }
     }
-
   }
 
   onSaved() {

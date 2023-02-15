@@ -98,6 +98,10 @@
       column="montant"
       summaryType="sum"
       displayFormat="Total : {0}"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
     ></dxi-total-item>
   </dxo-summary>
 
