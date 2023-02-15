@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { ApolloQueryResult } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { Flux } from "app/shared/models";
 import Envois from "app/shared/models/envois.model";
@@ -7,7 +8,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { FunctionsService } from "./functions.service";
+import { FunctionResponse, FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root",
@@ -245,8 +246,9 @@ export class EnvoisService extends ApiService implements APIRead {
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "societeCode", type: "String", value: societeCode }
     ]).pipe(map(res => {
-      res.data.fDocumentEnvoiDetailsExp.data.ordreRef = ordreRef;
-      return res;
+      const clone = JSON.parse(JSON.stringify(res));
+      clone.data.fDocumentEnvoiDetailsExp.data.ordreRef = ordreRef;
+      return clone as ApolloQueryResult<{ [name: string]: FunctionResponse }>;
     }));
   }
 
