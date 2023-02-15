@@ -8,7 +8,7 @@ export class DepotEnvoi extends Model {
   @Field({ model: import("./ordre.model") }) public ordre: Partial<Ordre>;
   @Field({ dataType: "datetime " }) public dateDepot: string;
   @Field() public fluxID: string;
-  @Field({ model: import("./utilisateur.model") }) public utilisateur: Partial<Utilisateur>;
+  @Field() public mailUtilisateur: string;
 }
 
 export default DepotEnvoi;
