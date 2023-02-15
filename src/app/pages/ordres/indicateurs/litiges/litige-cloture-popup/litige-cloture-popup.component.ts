@@ -19,13 +19,17 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   tiersList: any[];
   enableCloture: boolean;
   oneIsCloture: boolean;
+  choices: string[];
+  selected: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxListComponent, { static: false }) list: DxListComponent;
 
   constructor(
     private localizeService: LocalizationService
-  ) { }
+  ) {
+    this.choices = ["Client", "Responsable", "Client ET Responsable"];
+  }
 
   ngOnInit() {
   }
@@ -40,17 +44,17 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   resetList() {
     this.tiersList = [
       {
-        text: "Client",
+        text: this.choices[0],
         disabled: this.infosLitige.clientClos,
         value: this.oneIsCloture
       },
       {
-        text: "Responsable",
+        text: this.choices[1],
         disabled: this.infosLitige.fournisseurClos,
         value: this.oneIsCloture
       },
       {
-        text: "Client ET Responsable",
+        text: this.choices[2],
         disabled: this.oneIsCloture
       }
     ];
@@ -69,6 +73,7 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
     this.enableCloture = !!this.list.selectedItemKeys?.length || this.oneIsCloture;
     // Do not allow multiple selection when no cloture yet
     if (this.list.selectedItems.length && !this.oneIsCloture) this.list.selectedItemKeys.shift();
+    this.selected = (e.addedItems?.length) ? e.addedItems.filter(r => !r.disabled)[0].text : "";
   }
 
   onShowing(e) {
@@ -77,9 +82,26 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   }
 
   validateCloture() {
+
     /////////////////////////////////
     // Cloture function
     /////////////////////////////////
+
+    switch (this.selected) {
+      case this.choices[0]: {
+        // Client
+        break;
+      }
+      case this.choices[1]: {
+        // Responsable
+        break;
+      }
+      case this.choices[2]: {
+        // Client ET Responsable
+        break;
+      }
+    }
+
   }
 
   hidePopup() {
