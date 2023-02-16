@@ -208,4 +208,47 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofClotureLitigeResponsable(
+    litigeRef: string,
+    societeCode: string,
+    promptFraisAnnexe = "",
+    promptClotureResponsable = "",
+    promptCreateAvoirResponsable = "",
+  ) {
+    return this.apollo
+      .query<{ ofClotureLitigeResponsable: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofClotureLitigeResponsable",
+              body: functionBody,
+              params: [
+                { name: "litigeRef", value: "litigeRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "promptFraisAnnexe", value: "promptFraisAnnexe", isVariable: true },
+                { name: "promptClotureResponsable", value: "promptClotureResponsable", isVariable: true },
+                { name: "promptCreateAvoirResponsable", value: "promptCreateAvoirResponsable", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "litigeRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
+            { name: "promptClotureResponsable", type: "String", isOptionnal: false },
+            { name: "promptCreateAvoirResponsable", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          litigeRef,
+          societeCode,
+          promptFraisAnnexe,
+          promptClotureResponsable,
+          promptCreateAvoirResponsable,
+        },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
