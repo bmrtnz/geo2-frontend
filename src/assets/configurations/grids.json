@@ -7187,5 +7187,29 @@
         "visible": false
       }
     ]
+  },
+  "ordre-forfait-litige": {
+    "pageSize": 1000,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "sortOrder": "desc",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "description",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "dataField": "litige.id",
+        "showInColumnChooser": true,
+        "allowEditing": false,
+        "visible": false
+      }
+    ]
   }
 }

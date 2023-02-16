@@ -1,0 +1,94 @@
+<dx-data-grid
+  class="dx-card wide-card grid-forfait-litige"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: false,
+    groupPaging: false,
+    paging: true,
+    sorting: true,
+    summary: false
+  }"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  (onInitNewRow)="onInitNewRow($event)"
+  (onSaved)="onSaved()"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      '',
+      $event,
+      gridConfiguratorService.Grid.OrdreForfaitLitige,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-export fileName="Forfaits litige"></dxo-export>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-editing *ngIf="!this.infosLitige?.fournisseurClos || !this.infosLitige?.clientClos"
+    [selectTextOnEditStart]="true"
+    [allowUpdating]="true"
+    [mode]="'cell'"
+  ></dxo-editing>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdreForfaitLitige"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [caption]="
+      ('ordreForfaitLitige-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [dataType]="column?.dataType"
+    [showEditorAlways]="false"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
+    [allowEditing]="column.allowEditing"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [format]="column.format"
+    [editorOptions]="column.editorOptions"
+    [editCellTemplate]="column.editCellTemplate"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  >
+  <dxi-validation-rule
+    *ngIf="['forfait'].includes(column.dataField)"
+    type="required"
+  ></dxi-validation-rule>
+  <dxi-validation-rule
+    *ngIf="column.dataField === 'montant'"
+    type="range"
+    [min]="1"
+    message="{{ 'MontantNonNul' | localize }}"
+  ></dxi-validation-rule>
+
+  </dxi-column>
+
+</dx-data-grid>

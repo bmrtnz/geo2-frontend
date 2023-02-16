@@ -447,10 +447,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     this.fakeinfosLitige = {
-      clientClos: false,
+      clientClos: true,
       fournisseurClos: false,
       fraisAnnexes: 0,
-      litige: { id: "138842" }
+      litige: { id: "136092" }
     };
     // this.gestionOpPopup.visible = true;
 

@@ -152,7 +152,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
               const totaux: LitigeLigneTotaux & {
                 resultat?: number;
               } = result.data.litigeLigneTotaux;
-              totaux.resultat =
+              if (totaux) totaux.resultat =
                 totaux.avoirFournisseur -
                 totaux.avoirClient -
                 totaux.fraisAnnexes;
@@ -227,6 +227,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     //////////////////////////////////////
     // Fonction à implémenter
     //////////////////////////////////////
+    this.selectLignesPopup.visible = true;
   }
 
   modifierLot() {
