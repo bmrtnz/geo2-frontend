@@ -251,4 +251,51 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofClotureLitigeGlobale(
+    litigeRef: string,
+    societeCode: string,
+    promptFraisAnnexe = "",
+    promptAvoirClient = "",
+    promptAvoirGlobal = "",
+    promptCreateAvoirGlobal = "",
+  ) {
+    return this.apollo
+      .query<{ ofClotureLitigeGlobale: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofClotureLitigeGlobale",
+              body: functionBody,
+              params: [
+                { name: "litigeRef", value: "litigeRef", isVariable: true },
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "promptFraisAnnexe", value: "promptFraisAnnexe", isVariable: true },
+                { name: "promptAvoirClient", value: "promptAvoirClient", isVariable: true },
+                { name: "promptAvoirGlobal", value: "promptAvoirGlobal", isVariable: true },
+                { name: "promptCreateAvoirGlobal", value: "promptCreateAvoirGlobal", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "litigeRef", type: "String", isOptionnal: false },
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
+            { name: "promptAvoirClient", type: "String", isOptionnal: false },
+            { name: "promptAvoirGlobal", type: "String", isOptionnal: false },
+            { name: "promptCreateAvoirGlobal", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: {
+          litigeRef,
+          societeCode,
+          promptFraisAnnexe,
+          promptAvoirClient,
+          promptAvoirGlobal,
+          promptCreateAvoirGlobal,
+        },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
