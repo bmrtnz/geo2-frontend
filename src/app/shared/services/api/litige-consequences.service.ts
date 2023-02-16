@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import LitigeConsequence from "app/shared/models/litige-cause.model";
+import LitigeConsequence from "app/shared/models/litige-consequence.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { APIRead, ApiService, RelayPage } from "../api.service";

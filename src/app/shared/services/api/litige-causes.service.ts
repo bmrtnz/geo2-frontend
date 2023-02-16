@@ -67,7 +67,7 @@ export class LitigeCausesService extends ApiService implements APIRead {
     return this.apollo
       .query<{ allLitigeCauseList: Partial<LitigeCause>[] }>({
         query: gql(this.buildGetListGraph(columns)),
-        variables: { search },
+        variables: { search }
       });
   }
 }

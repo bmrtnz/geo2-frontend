@@ -25,6 +25,7 @@ import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-clotu
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import notify from "devextreme/ui/notify";
+import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 
 @Component({
   selector: "app-form-litiges",
@@ -84,6 +85,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
   @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
   @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
+  @ViewChild(GestionOperationsPopupComponent, { static: false }) gestionOpPopup: GestionOperationsPopupComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -225,6 +227,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     //////////////////////////////////////
     // Fonction à implémenter
     //////////////////////////////////////
+  }
+
+  modifierLot() {
+    this.gestionOpPopup.visible = true;
   }
 
   fraisAnnexes() {
