@@ -33,7 +33,7 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-editing
+  <dxo-editing *ngIf="!this.infosLitige?.fournisseurClos || !this.infosLitige?.clientClos"
     [selectTextOnEditStart]="true"
     [allowAdding]="true"
     [allowUpdating]="true"

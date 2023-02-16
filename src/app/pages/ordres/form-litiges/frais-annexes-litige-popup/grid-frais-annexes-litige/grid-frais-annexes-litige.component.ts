@@ -21,7 +21,7 @@ import { map } from "rxjs/operators";
 export class GridFraisAnnexesLitigeComponent {
 
   @Input() public ordre: Ordre;
-  @Input() public idLitige: string;
+  @Input() public infosLitige: any;
   @Output() public totalFraisSaved = new EventEmitter();
 
 
@@ -53,20 +53,20 @@ export class GridFraisAnnexesLitigeComponent {
   }
 
   async enableFilters() {
-    if (this.idLitige) {
+    if (this.infosLitige) {
       const fields = this.columns.pipe(map(columns => columns.map(column => {
         return column.dataField;
       })));
       this.dataSource = this.ordresFraisLitigeService.getDataSource_v2(
         await fields.toPromise(),
       );
-      this.dataSource.filter(["litige.id", "=", this.idLitige]);
+      this.dataSource.filter(["litige.id", "=", this.infosLitige.litige.id]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
 
     // Get transporteur (A payer) list
     this.litigesService.getLitigesAPayer(
-      this.idLitige,
+      this.infosLitige.litige.id,
       new Set(["id", "codeFournisseur", "raisonSociale", "numeroTri", "type"])
     ).subscribe({
       next: (res) => {
@@ -77,7 +77,7 @@ export class GridFraisAnnexesLitigeComponent {
   }
 
   onInitNewRow(e) {
-    e.data.litige = { id: this.idLitige };
+    e.data.litige = { id: this.infosLitige.litige.id };
     e.data.frais = { id: "DIVERS" };
     setTimeout(() => this.datagrid.instance.saveEditData(), 1);
   }
@@ -100,7 +100,7 @@ export class GridFraisAnnexesLitigeComponent {
   }
 
   onSaved() {
-    const litige = { id: this.idLitige, fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant") };
+    const litige = { id: this.infosLitige.litige.id, fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant") };
     // Saving total
     this.litigesService.save(new Set(["id"]), litige).subscribe({
       next: () => this.totalFraisSaved.emit(),

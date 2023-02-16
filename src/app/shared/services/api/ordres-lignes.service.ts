@@ -538,7 +538,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
             }
           ],
           [
-            { name: "lignes", type: "ordreID", isOptionnal: false },
+            { name: "ordreID", type: "String", isOptionnal: false },
           ],
         )),
         variables: { ordreID },

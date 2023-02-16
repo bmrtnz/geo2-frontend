@@ -165,6 +165,19 @@
   top: -10px;
 }
 
+::ng-deep .add-litige-button {
+  position: absolute;
+  right: 0;
+  width: 0 !important;
+  min-width: 23px;
+  margin: -6px 3px 0 0;
+  z-index: 1;
+
+  .dx-icon {
+    font-size: 15px;
+  }
+}
+
 ::ng-deep .form-scrollTo-buttons-container {
   position: fixed;
   top: 32px;

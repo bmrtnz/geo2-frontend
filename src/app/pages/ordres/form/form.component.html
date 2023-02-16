@@ -33,7 +33,16 @@
       >
         {{ dotLitiges }}
       </div>
+      <div *ngIf="!dotLitiges && ordre && gridCommandes?.gridRowsTotal"
+        (click)="onClickCreateLitige()"
+        class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
+        title="{{ 'ordres-litiges-create' | localize }}">
+        <div class="dx-button-content">
+          <i class="dx-icon dx-icon-edit-button-addrow"></i>
+        </div>
+      </div>
       <dx-button
+        #litigesBtn
         class="black dotted-button"
         data-accordion="litiges"
         height="auto"
@@ -1143,6 +1152,7 @@
                   <dxi-item>
                     <app-form-litiges
                       [ordre]="ordre"
+                      [gridCdeHasRows]="!!gridCommandes?.gridRowsTotal"
                       #formLitiges
                     ></app-form-litiges>
                     <app-grid-litiges-lignes

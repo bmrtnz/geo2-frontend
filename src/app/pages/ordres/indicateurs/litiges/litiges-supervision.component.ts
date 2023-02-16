@@ -12,6 +12,7 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { alert, confirm } from "devextreme/ui/dialog";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -191,14 +192,19 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     this.firstRun = false;
   }
 
-  onCellClick(e) {
+  async onCellClick(e) {
     if (e.rowType === "group") {
       if (e.summaryItems[0]?.column === "id") {
         this.infosLitige = e.data?.items[0];
-        this.cloturePopup.visible = true;
-        ///////////////////////////
-        // Fonction clôture
-        ///////////////////////////
+        if (!this.infosLitige?.litige?.fraisAnnexes) {
+          if (await confirm(
+            this.localization.localize("ask-cloture-frais-zero"),
+            this.localization.localize("btn-close"))) {
+            this.cloturePopup.visible = true;
+          }
+        } else {
+          this.cloturePopup.visible = true;
+        }
       }
     }
     if (e.rowType !== "data") return;

@@ -102,6 +102,8 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
       }
     }
 
+    this.hidePopup();
+
   }
 
   hidePopup() {

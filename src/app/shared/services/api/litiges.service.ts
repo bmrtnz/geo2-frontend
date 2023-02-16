@@ -6,6 +6,8 @@ import Litige from "app/shared/models/litige.model";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import LitigeSupervision from "app/shared/models/litige-supervision.model";
 import LitigeAPayer from "app/shared/models/litige-a-payer.model";
+import { FunctionsService } from "./functions.service";
+import { OrdreLigne } from "app/shared/models";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +15,10 @@ import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 export class LitigesService extends ApiService implements APIRead {
   listRegexp = /.*\.(?:id|libelle)$/i;
 
-  constructor(apollo: Apollo) {
+  constructor(
+    apollo: Apollo,
+    public functionsService: FunctionsService
+  ) {
     super(apollo, Litige);
   }
 
@@ -159,4 +164,5 @@ export class LitigesService extends ApiService implements APIRead {
       variables: { litige },
     });
   }
+
 }

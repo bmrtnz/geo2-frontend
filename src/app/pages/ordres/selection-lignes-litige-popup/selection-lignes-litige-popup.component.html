@@ -1,0 +1,122 @@
+<dx-popup
+  height="auto"
+  [fullScreen]="this.popupFullscreen"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
+  (onHidden)="onHidden()"
+  [shading]="true"
+  [resizeEnabled]="true"
+>
+
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-popup">{{ title }}</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    ></dx-button>
+    <dx-button
+      class="minimize-popup"
+      icon="material-icons fullscreen_exit"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <dx-data-grid
+        class="dx-card wide-card grid-selection-lignes-litige"
+        [showBorders]="false"
+        [focusedRowIndex]="0"
+        [focusedRowEnabled]="true"
+        [remoteOperations]="true"
+        [keyExpr]="'ordreLigne.id'"
+        (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onSelectionChanged)="onSelectionChanged($event)"
+        [columnAutoWidth]="true"
+        [columnHidingEnabled]="false"
+        [allowColumnReordering]="true"
+        (onToolbarPreparing)="
+          gridConfiguratorService.onToolbarPreparing(
+            this.localizeService.localize('title-selection-ligne-grid'),
+            $event,
+            gridConfiguratorService.Grid.SelectionLignesCdeLitige
+          )
+        "
+      >
+        <!-- Grid configuration -->
+        <dxo-export fileName="Liste clients pour compte palox"></dxo-export>
+        <dxo-header-filter
+          [visible]="true"
+          [allowSearch]="true"
+        ></dxo-header-filter>
+        <dxo-paging [enabled]="true"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [showInfo]="true"
+          [showNavigationButtons]="true"
+        ></dxo-pager>
+        <dxo-state-storing
+          [enabled]="true"
+          type="custom"
+          [storageKey]="gridConfiguratorService.Grid.SelectionLignesCdeLitige"
+          [customLoad]="gridConfiguratorService.load"
+          [customSave]="gridConfiguratorService.save"
+        ></dxo-state-storing>
+        <dxo-column-chooser
+          [enabled]="true"
+          mode="select"
+          title="{{ 'columnChooser' | localize }}"
+          [allowSearch]="true"
+          [width]="columnChooser.width"
+          [height]="columnChooser.height"
+        >
+        </dxo-column-chooser>
+        <dxo-selection
+          mode="multiple"
+          [allowSelectAll]="true"
+          [showCheckBoxesMode]="'always'"
+        ></dxo-selection>
+        <dxi-column
+          *ngFor="let column of this.columns | async"
+          [dataField]="column.dataField"
+          [encodeHtml]="false"
+          [visible]="false"
+          [width]="column.width"
+          [format]="column.format"
+          [caption]="
+            ('selectionLignesCde-' + column.dataField?.split('.').join('-') | localize) ||
+            column.name
+          "
+          [cssClass]="column?.cssClass"
+          allowSearch="false"
+          [dataType]="column?.dataType"
+          [allowHeaderFiltering]="
+            column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+          "
+          [showInColumnChooser]="column.showInColumnChooser"
+        ></dxi-column>
+      </dx-data-grid>
+
+      <br>
+
+      <div class="popup-action">
+        <dx-button
+          type="success"
+          icon="arrowright"
+          [disabled]="!selectedLignesIds?.length"
+          text="{{ 'btn-assign-lignes' | localize }}"
+          (onClick)="assignLitige()"
+        ></dx-button>
+
+      </div>
+
+    </dx-scroll-view>
+  </div>
+
+</dx-popup>

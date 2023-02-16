@@ -33,7 +33,7 @@ import { TypesCamionService } from "app/shared/services/api/types-camion.service
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxButtonComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
@@ -54,6 +54,7 @@ import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-clie
 import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { DestockageAutoPopupComponent } from "../destockage-auto-popup/destockage-auto-popup.component";
 import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
+import { FormLitigesComponent } from "../form-litiges/form-litiges.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
@@ -339,6 +340,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DuplicationOrdrePopupComponent) duplicationPopup: DuplicationOrdrePopupComponent;
   @ViewChild(GroupageChargementsPopupComponent) groupagePopup: GroupageChargementsPopupComponent;
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
+  @ViewChild(FormLitigesComponent) formLitiges: FormLitigesComponent;
+  @ViewChild("litigesBtn", { read: ElementRef }) litigesBtn: ElementRef;
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -1313,6 +1316,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshDescriptifRegroupement() {
     this.ordresService.getOne_v2(this.refOrdre, ["descriptifRegroupement"], "no-cache")
       .subscribe(res => this.descriptifRegroupement = res.data.ordre.descriptifRegroupement);
+  }
+
+  onClickCreateLitige() {
+    this.litigesBtn.nativeElement.click();
+    this.formLitiges.createLitige();
   }
 
 }

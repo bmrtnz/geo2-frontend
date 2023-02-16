@@ -4271,6 +4271,10 @@
         "showInColumnChooser": false
       },
       {
+        "dataField": "litige.fraisAnnexes",
+        "showInColumnChooser": false
+      },
+      {
         "dataField": "personne.id",
         "showInColumnChooser": false
       },
@@ -7078,6 +7082,108 @@
         "dataField": "etdDate",
         "dataType": "date",
         "format": "dd-MM-yyyy",
+        "visible": false
+      }
+    ]
+  },
+  "selection-lignes-litige": {
+    "pageSize": 10,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordreLigne.numero",
+        "visible": true,
+        "sortOrder": "asc",
+        "cssClass": "medium-horiz-padding text-align-center number-column"
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "ordreLigne.article.id",
+        "visible": true,
+        "cssClass": "medium-horiz-padding text-align-center number-column"
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "ordreLigne.article.articleDescription.descriptionReferenceLongue",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "ordreLigne.nombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "dataField": "ordreLigne.nombrePalettesExpediees",
+        "showInColumnChooser": false,
+        "cssClass": "no-padding",
+        "visible": false
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "ordreLigne.nombreColisCommandes",
+        "visible": true
+      },
+      {
+        "dataField": "ordreLigne.nombreColisExpedies",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "ordreLigne.ventePrixUnitaire",
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "width": 95,
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "ordreLigne.achatDevisePrixUnitaire",
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "width": 95,
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "ordreLigne.poidsNetExpedie",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "ordreLigne.proprietaireMarchandise.code",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "ordreLigne.fournisseur.code",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "ordreLigne.libelleDLV",
+        "visible": true
+      },
+      {
+        "dataField": "totalNombreColis",
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.id",
+        "visible": false
+      },
+      {
+        "dataField": "id",
         "visible": false
       }
     ]

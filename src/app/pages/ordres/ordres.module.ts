@@ -163,6 +163,7 @@ import { FraisAnnexesLitigePopupComponent } from "./form-litiges/frais-annexes-l
 import {
   GridFraisAnnexesLitigeComponent
 } from "./form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
+import { SelectionLignesLitigePopupComponent } from "./selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
 @NgModule({
   declarations: [
@@ -262,7 +263,8 @@ import {
     AssociatedArticlePromptComponent,
     LitigeCloturePopupComponent,
     FraisAnnexesLitigePopupComponent,
-    GridFraisAnnexesLitigeComponent
+    GridFraisAnnexesLitigeComponent,
+    SelectionLignesLitigePopupComponent
   ],
   imports: [
     OrdresRoutingModule,

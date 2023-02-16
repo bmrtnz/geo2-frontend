@@ -12,8 +12,8 @@ import { GridFraisAnnexesLitigeComponent } from "./grid-frais-annexes-litige/gri
 })
 export class FraisAnnexesLitigePopupComponent implements OnChanges {
 
-  @Input() public litigeID: any;
-  @Output() public idLitige: string;
+  @Input() public infosLitige: any;
+  @Output() public litige: any;
   @Output() public updateTotalFraisLitige = new EventEmitter();
 
   public visible: boolean;
@@ -30,15 +30,15 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
-    if (this.litigeID) {
-      this.idLitige = this.litigeID;
+    if (this.infosLitige) {
+      this.litige = this.infosLitige;
       this.setTitle();
     }
   }
 
   setTitle() {
     this.titleStart = this.localizeService.localize("title-frais-annexes-litiges-popup");
-    this.titleEnd = "n° " + this.litigeID;
+    this.titleEnd = "n° " + this.infosLitige.litige.id;
   }
 
   onShowing(e) {
