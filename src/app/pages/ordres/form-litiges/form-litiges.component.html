@@ -412,6 +412,12 @@
       (onClick)="creerLot()"
     ></dx-button>
     <dx-button
+      type="normal"
+      text="{{ 'btn-modifierLot' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="modifierLot()"
+    ></dx-button>
+    <dx-button
       type="success"
       text="{{ 'btn-close' | localize }}"
       [focusStateEnabled]="false"
@@ -435,3 +441,8 @@
   [ordre]="currOrdre"
   (selectedLignes)="assignLitigeLignes($event)"
 ></app-selection-lignes-litige-popup>
+
+<app-gestion-operations-popup
+  [ordre]="currOrdre"
+  [infosLitige]="infosLitige"
+></app-gestion-operations-popup>

@@ -396,7 +396,12 @@ dx-button[type="normal"] {
   height: 25px;
 }
 
+.linkedOrder-RefClt {
+  min-width: 112px;
+}
+
 .linkedOrder-Compl {
+  min-width: 112px;
   background: $BW-purple-medium;
 
   &:hover {
@@ -405,6 +410,7 @@ dx-button[type="normal"] {
 }
 
 .linkedOrder-Regul {
+  min-width: 104px;
   background: $BW-turquoise-medium;
 
   &:hover {
@@ -413,6 +419,7 @@ dx-button[type="normal"] {
 }
 
 .linkedOrder-Palox {
+  min-width: 100px;
   background: $BW-orange-medium;
 
   &:hover {

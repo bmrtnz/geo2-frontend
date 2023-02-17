@@ -75,4 +75,9 @@ export class FormUtilsService {
     if (!myInput?.hasAttribute("readonly")) myInput?.select();
   }
 
+  // Replace diacritics in a string
+  noDiacritics(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
 }

@@ -55,6 +55,7 @@ import { AjoutArticlesStockPopupComponent } from "../ajout-articles-stock-popup/
 import { DestockageAutoPopupComponent } from "../destockage-auto-popup/destockage-auto-popup.component";
 import { DuplicationOrdrePopupComponent } from "../duplication-ordre-popup/duplication-ordre-popup.component";
 import { FormLitigesComponent } from "../form-litiges/form-litiges.component";
+import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
@@ -158,6 +159,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public transporteurTitle: string;
   @Output() public readOnlyMode: boolean;
   @Output() public ordreBAFOuFacture: boolean;
+
+  @Output() public fakeinfosLitige: any; /// A VIRER !!
 
   private readonly headerFields = [
     "id",
@@ -342,6 +345,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DestockageAutoPopupComponent) destockageAutoPopup: DestockageAutoPopupComponent;
   @ViewChild(FormLitigesComponent) formLitiges: FormLitigesComponent;
   @ViewChild("litigesBtn", { read: ElementRef }) litigesBtn: ElementRef;
+  @ViewChild(GestionOperationsPopupComponent) gestionOpPopup: GestionOperationsPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -440,6 +444,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     // Show/hide left button panel
     this.leftAccessPanel.value =
       window.localStorage.getItem("HideOrderleftPanelView") === "true" ? false : true;
+
+
+    this.fakeinfosLitige = {
+      clientClos: false,
+      fournisseurClos: false,
+      fraisAnnexes: 0,
+      litige: { id: "138842" }
+    };
+    // this.gestionOpPopup.visible = true;
+
   }
 
   ngOnDestroy() {
@@ -861,7 +875,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           .filter(value => value.numero !== numero)
           .filter(value => !this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",").includes(value.numero))
           .map(value => {
-            this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client });
+            this.linkedOrders.push({ ordre: value, criteria: LinkedCriterias.Client, class: "RefClt" });
           });
         this.findComplRegulLinkedOrders(refClt);
         this.findPaloxLinkedOrders();
