@@ -1,11 +1,16 @@
-import { Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
 import { LitigeConsequencesService } from "app/shared/services/api/litige-consequences.service";
+import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
+import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
+import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridsService } from "../grids.service";
+import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
 @Component({
   selector: "app-gestion-operations-popup",
@@ -16,6 +21,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public infosLitige: any;
+  @Output() public litigeID: string;
+  @Output() public currOrdre: Partial<Ordre>;
+  @Output() public updateFrais = new EventEmitter();
+
 
   public visible: boolean;
   public causeItems: any[];
@@ -33,9 +42,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild("consequences", { static: false }) consequences: DxListComponent;
   @ViewChild("responsibles", { static: false }) responsibles: DxRadioGroupComponent;
 
+  @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
+  @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
+  @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
+
   constructor(
     private localizeService: LocalizationService,
     public causesService: LitigeCausesService,
+    public ordresLogistiquesService: OrdresLogistiquesService,
     public fUtils: FormUtilsService,
     public consequencesService: LitigeConsequencesService,
     public gridsService: GridsService,
@@ -57,7 +71,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       {
         id: "transpApproche",
         disabled: false,
-        typeTiers: "R",
+        typeTiers: "G",
         visible: false,
       },
       {
@@ -108,7 +122,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.firstShown = false;
         }
         // Filter indemnisation
-        if (this.selectedResponsible !== "transporteur")
+        if (["transporteur", "transpApproche"].includes(this.selectedResponsible))
           this.consequenceItems.filter(c => c.id === "G")[0].visible = false;
 
       });
@@ -116,7 +130,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   changeResponsible(e) {
     this.selectedResponsible = e.value?.id;
-    this.updateCauseConseq(e.value.typeTiers);
+    if (e.value) this.updateCauseConseq(e.value.typeTiers);
   }
 
   onCauseChanged(e) {
@@ -143,7 +157,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   openOrder() {
-
+    // Appel tab
   }
 
   validate() {
@@ -169,6 +183,61 @@ export class GestionOperationsPopupComponent implements OnChanges {
     /////////////////////////////////
     //  Fonction
     /////////////////////////////////
+  }
+
+  addArticle() {
+    // Geo1 : Ouverture de la fenêtre w_litige_pick_ordre_ordlig_v2
+  }
+
+  autoFill() {
+
+    if (this.checkEmptyCauseConseq()) return;
+    /////////////////////////////////
+    //  Fonction
+    /////////////////////////////////
+  }
+
+  forfait() {
+    if (this.responsibles.value?.typeTiers !== "F" && this.selectedConsequence === "B")
+      return notify(
+        `${this.localizeService.localize("no-possible-saisie-forfait")}`, "warning", 3000
+      );
+
+    if (this.checkEmptyCauseConseq()) return;
+
+    this.forfaitPopup.visible = true;
+
+  }
+
+  reInitialize() {
+    /////////////////////////////////
+    //  Fonction
+    /////////////////////////////////
+  }
+
+  fraisAnnexes() {
+    this.litigeID = this.infosLitige.litige.id;
+    this.fraisAnnexesPopup.visible = true;
+  }
+
+  assignLitigeLignes(e) {
+    console.log(e);
+    //////////////////////////////////////
+    // Fonction à implémenter
+    //////////////////////////////////////
+  }
+
+
+  checkEmptyCauseConseq() {
+    const texts = [];
+    let message;
+    if (!this.selectedCause) texts.push(this.localizeService.localize("one-cause"));
+    if (!this.selectedConsequence) texts.push(this.localizeService.localize("one-consequence"));
+    if (texts.length) {
+      message = texts.join(" & ");
+      notify(`${this.localizeService.localize("please-select")} ${message}`, "warning", 5000);
+      return true;
+    }
   }
 
   resizePopup() {
@@ -201,6 +270,13 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.ordre?.id) {
       this.firstShown = true;
       this.responsibles.value = this.responsibleList[0];
+      // Is there a transporteur approche? Then show corresponding radio btn
+      this.ordresLogistiquesService
+        .count(`ordre.id == ${this.ordre.id} and transporteurGroupage.id=isnotnull=null`)
+        .subscribe((res) => {
+          if (res.data.countOrdreLogistique)
+            this.responsibleList.filter(r => r.id === "transpApproche")[0].visible = true;
+        });
     }
   }
 

@@ -31,10 +31,10 @@
 <div *dxTemplate="let data of 'content'">
   <dx-scroll-view>
 
-    <dxi-item [ratio]="1">
+    <div class="resp-cau-con-container">
       <dx-box direction="row">
         <dxi-item [ratio]="0.7">
-          <div class="gestionOp-top-titles">{{ "ordreLitigesLignes-responsableTypeCode" | localize }}</div>
+          <div class="gestionOp-top-title-resp">{{ "ordreLitigesLignes-responsableTypeCode" | localize }}</div>
           <!-- {{ selectedCause }} / {{ selectedConsequence }} / {{ selectedResponsible }} -->
           <div class="dx-field responsible-box">
             <div class="dx-field-value">
@@ -55,7 +55,7 @@
             #causes
             class="list-causes"
             [items]="causeItems"
-            [height]="220"
+            [height]="215"
             [displayExpr]="displayCapitalize"
             selectionMode="multiple"
             selectAllMode="false"
@@ -71,7 +71,7 @@
             #consequences
             class="list-consequences"
             [items]="consequenceItems"
-            [height]="220"
+            [height]="215"
             [displayExpr]="displayCapitalize"
             selectionMode="multiple"
             selectAllMode="false"
@@ -81,9 +81,45 @@
             (onSelectionChanged)="onConsequenceChanged($event)"
           ></dx-list>
         </dxi-item>
+        <dxi-item [ratio]="0.07"></dxi-item>
       </dx-box>
-    </dxi-item>
+    </div>
 
+    <div class="right-btn-container">
+      <dx-button
+        type="success"
+        text="{{ 'btn-addArticle' | localize }}"
+        [focusStateEnabled]="false"
+        (onClick)="addArticle()"
+      ></dx-button>
+      <dx-button
+        type="normal"
+        text="{{ 'btn-auto' | localize }}"
+        [focusStateEnabled]="false"
+        (onClick)="autoFill()"
+      ></dx-button>
+      <dx-button
+        type="normal"
+        text="{{ 'btn-forfait' | localize }}"
+        [focusStateEnabled]="false"
+        (onClick)="forfait()"
+      ></dx-button>
+      <dx-button
+        type="normal"
+        text="{{ 'btn-reinit' | localize }}"
+        [focusStateEnabled]="false"
+        (onClick)="reInitialize()"
+      ></dx-button>
+      <dx-button
+        type="normal"
+        text="{{ 'btn-fraisAnnexes' | localize }}"
+        [focusStateEnabled]="false"
+        (onClick)="fraisAnnexes()"
+      ></dx-button>
+    </div>
+
+
+    <div style="clear:both;"></div>
     <br>
 
     <div class="bottom-buttons-container float-left">
@@ -155,3 +191,17 @@
 </div>
 
 </dx-popup>
+
+<app-frais-annexes-litige-popup
+  [infosLitige]="infosLitige"
+  (updateTotalFraisLitige)="updateFrais.emit()"
+></app-frais-annexes-litige-popup>
+
+<app-selection-lignes-litige-popup
+  [ordre]="currOrdre"
+  (selectedLignes)="assignLitigeLignes($event)"
+></app-selection-lignes-litige-popup>
+
+<app-forfait-litige-popup
+  [infosLitige]="infosLitige"
+></app-forfait-litige-popup>

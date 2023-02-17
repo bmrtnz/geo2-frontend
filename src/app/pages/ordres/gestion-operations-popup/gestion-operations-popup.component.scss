@@ -21,6 +21,39 @@
   .dx-popup-content {
     padding-top: 12px;
 
+    .resp-cau-con-container {
+      width: calc(100% - 170px);
+      margin: 0 0 20px 0;
+      float: left;
+    }
+
+    .right-btn-container {
+      position: relative;
+      top: 15px;
+      margin: 0 0 0 0;
+      width: 170px;
+      overflow: hidden;
+
+      .dx-button {
+        width: calc(100% - 10px);
+        margin: 4px 2px;
+
+        &.dx-button-normal {
+          .dx-button-text {
+            color: rgba(0, 0, 0, .87) !important;
+          }
+        }
+
+        .dx-button-content {
+          padding: 4px 13px 2px 13px !important;
+
+          .dx-button-text {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
     .responsible-box {
 
       dx-radio-group {
@@ -30,6 +63,18 @@
         }
       }
 
+    }
+
+    .gestionOp-top-title-resp {
+      position: relative;
+      top: -4px;
+      left: 0;
+    }
+
+    .gestionOp-top-titles {
+      position: relative;
+      top: -4px;
+      left: 12px;
     }
 
     .list-causes,

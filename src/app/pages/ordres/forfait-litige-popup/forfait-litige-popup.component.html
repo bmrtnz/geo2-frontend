@@ -1,0 +1,45 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [fullScreen]="this.popupFullscreen"
+  width="800"
+  height="auto"
+  [closeOnOutsideClick]="true"
+  [(visible)]="visible"
+  [focusStateEnabled]="false"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+  [resizeEnabled]="true"
+>
+
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="exitPopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <app-grid-forfait-litige
+   [infosLitige]="litige"
+  ></app-grid-forfait-litige>
+
+  <br>
+
+  <div class="popup-buttons-container">
+    <dx-button
+      type="default"
+      [disabled]="datagridComponent?.datagrid?.instance?.hasEditData()"
+      text="ok"
+      (onClick)="hidePopup()"
+      ></dx-button>
+    </div>
+</dx-popup>

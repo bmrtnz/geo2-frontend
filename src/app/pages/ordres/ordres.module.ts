@@ -165,6 +165,8 @@ import {
 } from "./form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
 import { SelectionLignesLitigePopupComponent } from "./selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { GestionOperationsPopupComponent } from "./gestion-operations-popup/gestion-operations-popup.component";
+import { ForfaitLitigePopupComponent } from "./forfait-litige-popup/forfait-litige-popup.component";
+import { GridForfaitLitigeComponent } from "./forfait-litige-popup/grid-forfait-litige/grid-forfait-litige.component";
 
 @NgModule({
   declarations: [
@@ -266,7 +268,9 @@ import { GestionOperationsPopupComponent } from "./gestion-operations-popup/gest
     FraisAnnexesLitigePopupComponent,
     GridFraisAnnexesLitigeComponent,
     SelectionLignesLitigePopupComponent,
-    GestionOperationsPopupComponent
+    GestionOperationsPopupComponent,
+    ForfaitLitigePopupComponent,
+    GridForfaitLitigeComponent
   ],
   imports: [
     OrdresRoutingModule,
