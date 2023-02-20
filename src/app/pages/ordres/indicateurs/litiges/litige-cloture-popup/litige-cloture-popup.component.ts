@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
+import { LitigesService } from "app/shared/services/api/litiges.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 
@@ -26,7 +28,9 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   @ViewChild(DxListComponent, { static: false }) list: DxListComponent;
 
   constructor(
-    private localizeService: LocalizationService
+    private localizeService: LocalizationService,
+    private litigesService: LitigesService,
+    private currentCompanyService: CurrentCompanyService
   ) {
     this.choices = ["Client", "Responsable", "Client ET Responsable"];
   }
@@ -90,6 +94,16 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
     switch (this.selected) {
       case this.choices[0]: {
         // Client
+        this.litigesService.ofClotureLitigeClient(
+          this.infosLitige.litige.id,
+          this.currentCompanyService.getCompany().id
+        ).subscribe({
+          next: (res) => console.log(res),
+          error: (error: Error) => {
+            console.log(error);
+            notify(this.messageFormat(error.message), "error", 7000);
+          }
+        });
         break;
       }
       case this.choices[1]: {
@@ -109,6 +123,15 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   hidePopup() {
     this.enableCloture = false;
     this.popup.visible = false;
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
+      .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
 }
