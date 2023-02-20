@@ -298,4 +298,27 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofSauveLitige(litigeRef: string) {
+    return this.apollo
+      .query<{ ofSauveLitige: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofSauveLitige",
+              body: functionBody,
+              params: [
+                { name: "litigeRef", value: "litigeRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "litigeRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { litigeRef },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
