@@ -8,7 +8,6 @@
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-end">{{ titleEnd }}</div>
@@ -19,7 +18,10 @@
     ></dx-button>
   </div>
 
-  <div class="dx-field segment-box" [ngClass]="{ 'inactive-item': oneIsCloture }">
+  <div
+    class="dx-field segment-box"
+    [ngClass]="{ 'inactive-item': oneIsCloture }"
+  >
     <div class="dx-field-value">
       <dx-list
         [items]="tiersList"
@@ -38,12 +40,13 @@
       type="default"
       text="{{ 'btn-close' | localize }}"
       [disabled]="!enableCloture"
-      (onClick)="validateCloture()"
+      (onClick)="doCloture()"
     ></dx-button>
     <dx-button
       type="default"
       text="Annuler"
       (onClick)="hidePopup()"
-      ></dx-button>
-    </div>
+    ></dx-button>
+  </div>
 </dx-popup>
+<app-confirmation-result-popup #clotureWarning></app-confirmation-result-popup>

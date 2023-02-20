@@ -9,6 +9,8 @@ import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 import { OrdreLigne } from "app/shared/models";
 
+export type ClotureResponse = FunctionResponse<{ triggered_prompt: string }>;
+
 @Injectable({
   providedIn: "root",
 })
@@ -168,12 +170,14 @@ export class LitigesService extends ApiService implements APIRead {
   ofClotureLitigeClient(
     litigeRef: string,
     societeCode: string,
-    promptFraisAnnexe = "",
-    promptAvoirClient = "",
-    promptCreateAvoirClient = "",
+    prompts: {
+      promptFraisAnnexe?: boolean,
+      promptAvoirClient?: boolean,
+      promptCreateAvoirClient?: boolean,
+    },
   ) {
     return this.apollo
-      .query<{ ofClotureLitigeClient: FunctionResponse }>({
+      .query<{ ofClotureLitigeClient: ClotureResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -192,17 +196,15 @@ export class LitigesService extends ApiService implements APIRead {
           [
             { name: "litigeRef", type: "String", isOptionnal: false },
             { name: "societeCode", type: "String", isOptionnal: false },
-            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
-            { name: "promptAvoirClient", type: "String", isOptionnal: false },
-            { name: "promptCreateAvoirClient", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "Boolean", isOptionnal: true },
+            { name: "promptAvoirClient", type: "Boolean", isOptionnal: true },
+            { name: "promptCreateAvoirClient", type: "Boolean", isOptionnal: true },
           ],
         )),
         variables: {
           litigeRef,
           societeCode,
-          promptFraisAnnexe,
-          promptAvoirClient,
-          promptCreateAvoirClient,
+          ...prompts
         },
         fetchPolicy: "network-only",
       });
@@ -211,12 +213,13 @@ export class LitigesService extends ApiService implements APIRead {
   ofClotureLitigeResponsable(
     litigeRef: string,
     societeCode: string,
-    promptFraisAnnexe = "",
-    promptAvoirResponsable = "",
-    promptCreateAvoirResponsable = "",
-  ) {
+    prompts: {
+      promptAvoirResponsable?: boolean,
+      promptCreateAvoirResponsable?: boolean,
+      promptFraisAnnexe?: boolean,
+    }) {
     return this.apollo
-      .query<{ ofClotureLitigeResponsable: FunctionResponse }>({
+      .query<{ ofClotureLitigeResponsable: ClotureResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -235,17 +238,15 @@ export class LitigesService extends ApiService implements APIRead {
           [
             { name: "litigeRef", type: "String", isOptionnal: false },
             { name: "societeCode", type: "String", isOptionnal: false },
-            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
-            { name: "promptAvoirResponsable", type: "String", isOptionnal: false },
-            { name: "promptCreateAvoirResponsable", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "Boolean", isOptionnal: true },
+            { name: "promptAvoirResponsable", type: "Boolean", isOptionnal: true },
+            { name: "promptCreateAvoirResponsable", type: "Boolean", isOptionnal: true },
           ],
         )),
         variables: {
           litigeRef,
           societeCode,
-          promptFraisAnnexe,
-          promptAvoirResponsable,
-          promptCreateAvoirResponsable,
+          ...prompts,
         },
         fetchPolicy: "network-only",
       });
@@ -254,13 +255,15 @@ export class LitigesService extends ApiService implements APIRead {
   ofClotureLitigeGlobale(
     litigeRef: string,
     societeCode: string,
-    promptFraisAnnexe = "",
-    promptAvoirClient = "",
-    promptAvoirGlobal = "",
-    promptCreateAvoirGlobal = "",
+    prompts: {
+      promptAvoirClient?: boolean,
+      promptAvoirGlobal?: boolean,
+      promptCreateAvoirGlobal?: boolean,
+      promptFraisAnnexe?: boolean,
+    },
   ) {
     return this.apollo
-      .query<{ ofClotureLitigeGlobale: FunctionResponse }>({
+      .query<{ ofClotureLitigeGlobale: ClotureResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [
@@ -280,19 +283,16 @@ export class LitigesService extends ApiService implements APIRead {
           [
             { name: "litigeRef", type: "String", isOptionnal: false },
             { name: "societeCode", type: "String", isOptionnal: false },
-            { name: "promptFraisAnnexe", type: "String", isOptionnal: false },
-            { name: "promptAvoirClient", type: "String", isOptionnal: false },
-            { name: "promptAvoirGlobal", type: "String", isOptionnal: false },
-            { name: "promptCreateAvoirGlobal", type: "String", isOptionnal: false },
+            { name: "promptFraisAnnexe", type: "Boolean", isOptionnal: true },
+            { name: "promptAvoirClient", type: "Boolean", isOptionnal: true },
+            { name: "promptAvoirGlobal", type: "Boolean", isOptionnal: true },
+            { name: "promptCreateAvoirGlobal", type: "Boolean", isOptionnal: true },
           ],
         )),
         variables: {
           litigeRef,
           societeCode,
-          promptFraisAnnexe,
-          promptAvoirClient,
-          promptAvoirGlobal,
-          promptCreateAvoirGlobal,
+          ...prompts,
         },
         fetchPolicy: "network-only",
       });
@@ -346,7 +346,7 @@ export class LitigesService extends ApiService implements APIRead {
 
   ofLitigeCtlClientInsert(societeCode: string, ordreRef: string, litigeRef: string) {
     return this.apollo
-      .query<{ ofLitigeCtlClientInsert: FunctionResponse<{ is_cur_lit_ref: Litige["id"] }> }>({
+      .query<{ ofLitigeCtlClientInsert: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [

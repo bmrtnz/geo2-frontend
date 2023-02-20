@@ -284,6 +284,10 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
   }
 
+  public onClotureChanged() {
+    this.datagrid.instance.refresh();
+  }
+
 }
 
 export default LitigesSupervisionComponent;

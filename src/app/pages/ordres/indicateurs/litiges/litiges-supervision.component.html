@@ -198,7 +198,6 @@
       [alignByColumn]="true"
     >
     </dxi-group-item>
-
   </dxo-summary>
 
   <dxi-column
@@ -208,8 +207,8 @@
     [format]="column.format"
     [width]="column.width"
     [caption]="
-      ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+      ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
     "
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
@@ -228,42 +227,99 @@
       <div class="cause-container">
         <span class="litiges-tiers bold-text">{{ ds.data.codeClient }}</span>
         <span class="">&nbsp;-&nbsp;</span>
-        <span class="litiges-tiers bold-text">{{ ds.data.litige.ordreOrigine.entrepot.code }}</span>
+        <span class="litiges-tiers bold-text">{{
+          ds.data.litige.ordreOrigine.entrepot.code
+        }}</span>
         <span class="">&nbsp;-&nbsp;</span>
-        <span class="">{{ "ordres-supervision-litiges-dateDepartPrevueFournisseur" | localize }} :&nbsp;</span>
-        <span class="litiges-dateDepartPrevueFournisseur bold-text">{{ dateManagementService.formatDate(ds.data.dateDepartPrevueFournisseur, "dd-MM-yyyy") }}</span>
+        <span class=""
+          >{{
+            "ordres-supervision-litiges-dateDepartPrevueFournisseur" | localize
+          }}
+          :&nbsp;</span
+        >
+        <span class="litiges-dateDepartPrevueFournisseur bold-text">{{
+          dateManagementService.formatDate(
+            ds.data.dateDepartPrevueFournisseur,
+            "dd-MM-yyyy"
+          )
+        }}</span>
         <span class="">&nbsp;-&nbsp;</span>
-        <span class="">{{ "articles-matierePremiere-variete" | localize }} :&nbsp;</span>
+        <span class=""
+          >{{ "articles-matierePremiere-variete" | localize }} :&nbsp;</span
+        >
         <span class="bold-text">{{ ds.data.descriptionVariete }}</span>
       </div>
-      <div style="clear:both"></div>
+      <div style="clear: both"></div>
       <div class="conseq-container">
-        <span class="litiges-causeconseq red-font text-align-right float-left">{{ "ordres-supervision-litiges-descriptionCause" | localize }} :&nbsp;</span>
-        <span class="litiges-descriptionCause bold-text float-left">{{ ds.data.descriptionCause }}</span>
+        <span class="litiges-causeconseq red-font text-align-right float-left"
+          >{{
+            "ordres-supervision-litiges-descriptionCause" | localize
+          }}
+          :&nbsp;</span
+        >
+        <span class="litiges-descriptionCause bold-text float-left">{{
+          ds.data.descriptionCause
+        }}</span>
         <span class="float-left">&nbsp;-&nbsp;</span>
-        <span class="litiges-causeconseq green-font text-align-right float-left">{{ "ordres-supervision-litiges-descriptionConsequence" | localize }} :&nbsp;</span>
-        <span class="litiges-descriptionConsequence bold-text float-left">{{ ds.data.descriptionConsequence }}</span>
+        <span class="litiges-causeconseq green-font text-align-right float-left"
+          >{{
+            "ordres-supervision-litiges-descriptionConsequence" | localize
+          }}
+          :&nbsp;</span
+        >
+        <span class="litiges-descriptionConsequence bold-text float-left">{{
+          ds.data.descriptionConsequence
+        }}</span>
         <span class="float-left">&nbsp;-&nbsp;</span>
-        <span class="float-left">{{ "ordres-supervision-litiges-numeroOrdreRemplacement" | localize }} :&nbsp;</span>
+        <span class="float-left"
+          >{{
+            "ordres-supervision-litiges-numeroOrdreRemplacement" | localize
+          }}
+          :&nbsp;</span
+        >
         <span>
           <dx-button
-            [ngClass]="{ 'text-underlined-button': ds.data.societe.id === this.currCompanyId }"
+            [ngClass]="{
+              'text-underlined-button':
+                ds.data.societe.id === this.currCompanyId
+            }"
             text="{{ ds.data.numeroOrdreRemplacement }}"
             [focusStateEnabled]="false"
-            [hint]="ds.data.societe.id === this.currCompanyId ? localization.localize('hint-click-ordre') : ''"
-            (onClick)="onOpenNewOrder(ds)">
+            [hint]="
+              ds.data.societe.id === this.currCompanyId
+                ? localization.localize('hint-click-ordre')
+                : ''
+            "
+            (onClick)="onOpenNewOrder(ds)"
+          >
           </dx-button>
         </span>
-        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-proprietaire-code" | localize }} :&nbsp;</span>
-        <span class="litiges-tiers bold-text">{{ ds.data.proprietaire.code }}</span>
-        <span class="litiges-proprietaire-code">&nbsp;- {{ "ordres-supervision-litiges-fournisseur-code" | localize }} :&nbsp;</span>
-        <span class="litiges-tiers bold-text">{{ ds.data.fournisseur.code }}</span>
+        <span class="litiges-proprietaire-code"
+          >&nbsp;-
+          {{
+            "ordres-supervision-litiges-proprietaire-code" | localize
+          }}
+          :&nbsp;</span
+        >
+        <span class="litiges-tiers bold-text">{{
+          ds.data.proprietaire.code
+        }}</span>
+        <span class="litiges-proprietaire-code"
+          >&nbsp;-
+          {{
+            "ordres-supervision-litiges-fournisseur-code" | localize
+          }}
+          :&nbsp;</span
+        >
+        <span class="litiges-tiers bold-text">{{
+          ds.data.fournisseur.code
+        }}</span>
       </div>
     </div>
   </div>
-
 </dx-data-grid>
 
 <app-litige-cloture-popup
- [infosLitige]="infosLitige"
- ></app-litige-cloture-popup>
+  [infosLitige]="infosLitige"
+  (clotureChanged)="onClotureChanged()"
+></app-litige-cloture-popup>
