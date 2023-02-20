@@ -5,7 +5,7 @@
   class="nolitiges"
 >
   {{ "ordres-litiges-noLitiges" | localize }}
-  <div style="clear:both"></div>
+  <div style="clear: both"></div>
   <dx-button
     type="default"
     class="create-litige-btn"
@@ -13,7 +13,7 @@
     [focusStateEnabled]="false"
     text="{{ 'ordres-litiges-create' | localize }}"
     (onClick)="createLitige()"
-    >
+  >
   </dx-button>
 </div>
 <form
@@ -34,8 +34,8 @@
                   </div>
                   <div class="dx-field-value">
                     <dx-text-box
-                    formControlName="id"
-                    [readOnly]="true"
+                      formControlName="id"
+                      [readOnly]="true"
                     ></dx-text-box>
                   </div>
                 </div>
@@ -49,17 +49,15 @@
                     formGroupName="ordreAvoirClient"
                   >
                     <dx-text-box
-                    formControlName="numero"
-                    [readOnly]="true"
+                      formControlName="numero"
+                      [readOnly]="true"
                     ></dx-text-box>
                   </div>
                 </div>
                 <!-- Avoir fournisseur -->
                 <div class="dx-field field-large">
                   <div class="dx-field-label">
-                    {{
-                      "ordres-litiges-ordreAvoirFournisseur" | localize
-                    }}
+                    {{ "ordres-litiges-ordreAvoirFournisseur" | localize }}
                   </div>
 
                   <div
@@ -69,7 +67,7 @@
                     <dx-text-box
                       formControlName="numero"
                       [readOnly]="true"
-                      ></dx-text-box>
+                    ></dx-text-box>
                   </div>
                 </div>
               </div>
@@ -182,8 +180,8 @@
                 </div>
                 <div class="dx-field-value">
                   <dx-text-box
-                  formControlName="referenceClient"
-                  [readOnly]="true"
+                    formControlName="referenceClient"
+                    [readOnly]="true"
                   ></dx-text-box>
                 </div>
               </div>
@@ -307,13 +305,18 @@
                     </dx-number-box>
                   </div>
                 </div>
-                <br>
+                <br />
                 <dx-button
                   class="btn-frais-annexes"
                   type="default"
                   [disabled]="litigeClosed && noFraisAnnexes"
                   [focusStateEnabled]="false"
-                  text="{{ (litigeClosed ? 'btn-fraisAnnnexes-visualiser' : 'btn-fraisAnnnexes-ajout-visualiser') | localize }}"
+                  text="{{
+                    (litigeClosed
+                      ? 'btn-fraisAnnnexes-visualiser'
+                      : 'btn-fraisAnnnexes-ajout-visualiser'
+                    ) | localize
+                  }}"
                   (onClick)="fraisAnnexes()"
                 ></dx-button>
               </div>
@@ -424,12 +427,12 @@
       (onClick)="cloturer()"
     ></dx-button>
   </div>
-
 </form>
-<div style="clear:both;"></div>
+<div style="clear: both"></div>
 
 <app-litige-cloture-popup
- [infosLitige]="infosLitige"
+  [infosLitige]="infosLitige"
+  (clotureChanged)="onClotureChanged()"
 ></app-litige-cloture-popup>
 
 <app-frais-annexes-litige-popup

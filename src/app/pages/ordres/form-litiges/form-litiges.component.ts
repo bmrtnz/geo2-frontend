@@ -260,4 +260,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   onToggling(toggled: boolean) {
     if (toggled) this.showForm();
   }
+
+  onClotureChanged() {
+    // refresh the form
+    this.showForm();
+  }
 }
