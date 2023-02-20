@@ -20,7 +20,7 @@ import { DxNumberBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { from } from "rxjs";
 import { confirm, alert } from "devextreme/ui/dialog";
-import { mergeAll } from "rxjs/operators";
+import { concatMap, mergeAll } from "rxjs/operators";
 import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/frais-annexes-litige-popup.component";
@@ -170,18 +170,23 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   createLitige() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
-
     if (Statut[this.ordre.statut] !== Statut.ANNULE.toString()) {
       if (this.ordre.factureAvoir.toString() === "FACTURE") {
 
-        // of_sauve_litige();
-        // of_chrono_litige(1)
-        // of_litige_ctl_client_insert()
-
-        this.selectLignesPopup.visible = true;
+        this.litigesService.ofChronoLitige(this.ordre.id).pipe(
+          concatMap(res => this.litigesService.ofLitigeCtlClientInsert(
+            this.currentCompanyService.getCompany().id,
+            this.ordre.id,
+            res.data.ofChronoLitige.data.is_cur_lit_ref,
+          )),
+        )
+          .subscribe({
+            next: res => {
+              this.showForm();
+              this.selectLignesPopup.visible = true;
+            },
+            error: err => notify(err.message, "error", 3000),
+          });
 
       } else {
         notify(this.localization.localize("ordres-litiges-warn-no-facture"), "warning", 3500);
