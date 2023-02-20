@@ -344,4 +344,31 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofLitigeCtlClientInsert(societeCode: string, ordreRef: string, litigeRef: string) {
+    return this.apollo
+      .query<{ ofLitigeCtlClientInsert: FunctionResponse<{ is_cur_lit_ref: Litige["id"] }> }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofLitigeCtlClientInsert",
+              body: functionBody,
+              params: [
+                { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+                { name: "litigeRef", value: "litigeRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "ordreRef", type: "String", isOptionnal: false },
+            { name: "litigeRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { societeCode, ordreRef, litigeRef },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
