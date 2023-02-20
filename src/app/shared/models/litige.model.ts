@@ -5,7 +5,7 @@ import Ordre from "./ordre.model";
 @ModelName("Litige")
 export class Litige extends Model {
   @Field({ asKey: true }) public id?: string;
-  @Field({ model: import("./ordre.model") }) public ordreOrigine?: Ordre;
+  @Field({ model: import("./ordre.model") }) public ordreOrigine?: Partial<Ordre>;
   @Field({ model: import("./ordre.model") }) public ordreAvoirClient?: Ordre;
   @Field({ model: import("./litige-ligne.model") })
   public lignes?: LitigeLigne[];

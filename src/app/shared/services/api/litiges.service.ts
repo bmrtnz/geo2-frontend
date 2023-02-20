@@ -321,4 +321,27 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofChronoLitige(ordreOrigineRef: string) {
+    return this.apollo
+      .query<{ ofChronoLitige: FunctionResponse<{ is_cur_lit_ref: Litige["id"] }> }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofChronoLitige",
+              body: functionBody,
+              params: [
+                { name: "ordreOrigineRef", value: "ordreOrigineRef", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreOrigineRef", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreOrigineRef },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
