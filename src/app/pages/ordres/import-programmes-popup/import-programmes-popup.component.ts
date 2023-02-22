@@ -71,8 +71,14 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     }
   }
 
-  onUploaded(e) {
+  onUploaded(e: { request: XMLHttpRequest }) {
     const DSitems = e.request?.response?.rows;
+
+    if (e.request.status !== 200) return notify(
+      "L'import du programme a échoué",
+      "error",
+      7000
+    );
 
     if (!DSitems?.length) return this.noDataError();
 

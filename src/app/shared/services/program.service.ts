@@ -43,7 +43,7 @@ export class ProgramService {
     aElm.click();
   }
 
-  /** Congifure extra Http request parameters */
+  /** Configure extra Http request parameters */
   public static setupUploadRequest(request: XMLHttpRequest) {
     request.withCredentials = true;
     request.responseType = "json";
