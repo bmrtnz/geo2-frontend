@@ -22,6 +22,7 @@ import {
 } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import { DepotEnvoisService } from "app/shared/services/api/depot-envois.service";
 import notify from "devextreme/ui/notify";
+import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -54,11 +55,9 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
   @ViewChild(PackingListPopupComponent) packingListPopup: PackingListPopupComponent;
 
   constructor(
-    private envoisService: EnvoisService,
-    private currentCompanyService: CurrentCompanyService,
     private gridsService: GridsService,
-    private authService: AuthService,
-    private depotEnvoisService: DepotEnvoisService,
+    private envoisService: EnvoisService,
+    private fluxEnvoisService: FluxEnvoisService,
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
@@ -117,11 +116,7 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
 
   sendAction(e, annulation?) {
 
-    // On récupère ici le code de l'action:
     this.flux = e;
-
-    const societe: Societe = this.currentCompanyService.getCompany();
-    const user = this.authService.currentUser;
 
     // On gère le cas des CMR à part, car c'est un fichier à afficher
     if (this.flux === "(CMR)") {
@@ -133,73 +128,26 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
       return;
     }
 
-    defer(() => {
-      switch (this.flux) {
-        case "ORDRE": {
-          if (annulation) return of({ data: { res: 1 } });
-          return this.envoisService.fConfirmationCommande(this.ordre.id, societe.id, user.nomUtilisateur);
-        }
-        case "DETAIL":
-          return this.envoisService.fDocumentEnvoiDetailsExp(this.ordre.id, societe.id);
-        case "MINI":
-          return this.envoisService.fDocumentEnvoiConfirmationPrixAchat(this.ordre.id);
-        case "FICPAO":
-          return this.envoisService.fDocumentEnvoiFichesPalette(this.ordre.id);
-        case "FICPAN":
-          return this.envoisService.fDocumentEnvoiGenereTraca(this.ordre.id);
-        case "BONLIV":
-          return this.envoisService.fDocumentEnvoiBonLivraison(this.ordre.id);
-        case "PROFOR":
-          return of({ data: { res: 1 } }); // this.envoisService.fDocumentEnvoiProforma(this.ordre.id); // Because nothing to do
-        case "COMINV":
-          return this.envoisService.fDocumentEnvoiCominv(this.ordre.id);
-        case "PACKLIST": {
-          this.myOrdre = this.ordre;
-          this.packingListPopup.visible = true;
-          break;
-        }
-        case "BUYCO":
-          return this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
-        case "DECBOL":
-          return this.envoisService.fDocumentEnvoiDeclarationBollore(this.ordre.id);
-        case "TRACA":
-          return this.pushDepotEnvoi("TRACA", this.ordre.id);
-        case "IMPORD":
-          return this.pushDepotEnvoi("IMPORD", this.ordre.id);
-        case "CUSINV":
-          return of({ data: { res: 1 } }); // Continu to flux selection
-      }
-    })
-      .pipe(
-        map(result => Object.values(result.data)[0]),
-        concatMap(response => {
-          // Some order lines can be deleted
-          this.gridsService.reload("Commande", "SyntheseExpeditions", "DetailExpeditions");
-          if (response.res === FunctionResult.Warning)
-            return this.resultPopup.openAs("WARNING", response.msg);
-          return of(true);
-        }),
-        catchError((err: Error) => this.resultPopup.openAs("ERROR", err.message)),
-        filter(res => res),
-        concatMapTo(this.envoisService
-          .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
-      )
-      .subscribe(res => {
-        const popup = res.data.countBy && this.flux === "ORDRE" && !annulation ? "remplacePopup" : "docsPopup";
-        this.docsPopup.annuleOrdre = annulation;
-        this[popup].visible = true;
-      });
+    if (this.flux === "PACKLIST") {
+      this.myOrdre = this.ordre;
+      this.packingListPopup.visible = true;
+      return;
+    }
+
+    this.fluxEnvoisService.prompt(this.flux, this.ordre.id, this.resultPopup, annulation).pipe(
+      tap(res => {
+        // Some order lines can be deleted
+        this.gridsService.reload("Commande", "SyntheseExpeditions", "DetailExpeditions");
+      }),
+      filter(res => res),
+      concatMapTo(this.envoisService
+        .countBy(`ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`)),
+    ).subscribe(res => {
+      const popup = res.data.countBy && this.flux === "ORDRE" && !annulation ? "remplacePopup" : "docsPopup";
+      this.docsPopup.annuleOrdre = annulation;
+      this[popup].visible = true;
+    });
+
   }
 
-  private pushDepotEnvoi(fluxID: "TRACA" | "IMPORD", ordreID: Ordre["id"]) {
-    this.depotEnvoisService.save({
-      ordre: { id: ordreID },
-      fluxID,
-      dateDepot: new Date().toISOString(),
-      utilisateur: { nomUtilisateur: this.authService.currentUser.nomUtilisateur }
-    }, ["id"]).subscribe({
-      error: err => notify(`Erreur de demande de dépôt pour le flux ${fluxID}`, "error"),
-      next: res => notify(`Demande de dépôt pour le flux ${fluxID} déposée`, "success"),
-    });
-  }
 }

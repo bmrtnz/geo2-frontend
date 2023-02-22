@@ -26,6 +26,7 @@ import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-
 import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import notify from "devextreme/ui/notify";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 
 @Component({
   selector: "app-form-litiges",
@@ -94,6 +95,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     public localization: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
     public litigesLignesService: LitigesLignesService,
+    public envoisService: EnvoisService,
   ) { }
 
   ngOnChanges() {
@@ -217,9 +219,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   avisResolution() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
+    this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
   }
 
   recapInterne() {
