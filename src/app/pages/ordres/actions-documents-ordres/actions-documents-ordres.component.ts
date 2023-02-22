@@ -1,28 +1,20 @@
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { Societe } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
-import { FunctionResult } from "app/shared/services/api/functions.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 import { DxActionSheetComponent, DxPopupComponent } from "devextreme-angular";
-import { environment } from "environments/environment";
-import { defer, of } from "rxjs";
-import { catchError, concatMap, concatMapTo, filter, map, tap } from "rxjs/operators";
+import { concatMapTo, filter, tap } from "rxjs/operators";
+import {
+  ViewDocument,
+  ViewDocumentPopupComponent
+} from "../../../shared/components/view-document-popup/view-document-popup.component";
+import { PackingListPopupComponent } from ".././packing-list-popup/packing-list-popup.component";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
 import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
-import { PackingListPopupComponent } from ".././packing-list-popup/packing-list-popup.component";
-import {
-  ViewDocument,
-  ViewDocumentPopupComponent
-} from "../../../shared/components/view-document-popup/view-document-popup.component";
-import { DepotEnvoisService } from "app/shared/services/api/depot-envois.service";
-import notify from "devextreme/ui/notify";
-import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 
 @Component({
   selector: "app-actions-documents-ordres",

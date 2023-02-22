@@ -5,28 +5,33 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
+import { Flux } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import Litige from "app/shared/models/litige.model";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 import { DxNumberBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
-import { confirm, alert } from "devextreme/ui/dialog";
-import { concatMap, mergeAll } from "rxjs/operators";
+import { concatMap, filter, mergeAll } from "rxjs/operators";
+// tslint:disable-next-line: max-line-length
+import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
+import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
+import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/frais-annexes-litige-popup.component";
-import notify from "devextreme/ui/notify";
-import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
-import { EnvoisService } from "app/shared/services/api/envois.service";
 
 @Component({
   selector: "app-form-litiges",
@@ -87,6 +92,8 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
   @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
   @ViewChild(GestionOperationsPopupComponent, { static: false }) gestionOpPopup: GestionOperationsPopupComponent;
+  @ViewChild(ConfirmationResultPopupComponent) envoisFluxWarningPopup: ConfirmationResultPopupComponent;
+  @ViewChild(DocumentsOrdresPopupComponent) docsPopup: DocumentsOrdresPopupComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -96,6 +103,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     public currentCompanyService: CurrentCompanyService,
     public litigesLignesService: LitigesLignesService,
     public envoisService: EnvoisService,
+    public fluxEnvoisService: FluxEnvoisService,
   ) { }
 
   ngOnChanges() {
@@ -213,13 +221,11 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   incidentLitige() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
+    this.handleFlux("INCLIT");
   }
 
   avisResolution() {
-    this.envoisService.fDocumentEnvoiShipmentBuyco(this.ordre.id);
+    this.handleFlux("RESLIT");
   }
 
   recapInterne() {
@@ -264,5 +270,15 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   onClotureChanged() {
     // refresh the form
     this.showForm();
+  }
+
+  private handleFlux(flux: Flux["id"]) {
+    this.fluxEnvoisService.prompt(flux, this.ordre.id, this.envoisFluxWarningPopup).pipe(
+      filter(res => res),
+    ).subscribe(res => {
+      this.docsPopup.ordre = this.ordre;
+      this.docsPopup.flux = flux;
+      this.docsPopup.visible = true;
+    });
   }
 }
