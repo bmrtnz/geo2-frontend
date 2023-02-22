@@ -167,6 +167,7 @@ import { SelectionLignesLitigePopupComponent } from "./selection-lignes-litige-p
 import { GestionOperationsPopupComponent } from "./gestion-operations-popup/gestion-operations-popup.component";
 import { ForfaitLitigePopupComponent } from "./forfait-litige-popup/forfait-litige-popup.component";
 import { GridForfaitLitigeComponent } from "./forfait-litige-popup/grid-forfait-litige/grid-forfait-litige.component";
+import { GestionLitigesModule } from "./gestion-litiges/gestion-litiges.module";
 
 @NgModule({
   declarations: [
@@ -320,7 +321,8 @@ import { GridForfaitLitigeComponent } from "./forfait-litige-popup/grid-forfait-
     PromptPopupModule,
     ClientsModule,
     EntrepotsModule,
-    ProgramChooserModule
+    ProgramChooserModule,
+    GestionLitigesModule,
   ],
   providers: [
     OrdresIndicatorsService,
