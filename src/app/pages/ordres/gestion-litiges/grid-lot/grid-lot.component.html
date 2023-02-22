@@ -1,0 +1,7 @@
+<dx-data-grid (onToolbarPreparing)="gridConfigHandler($event)">
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [dataType]="column?.dataType"
+  ></dxi-column>
+</dx-data-grid>

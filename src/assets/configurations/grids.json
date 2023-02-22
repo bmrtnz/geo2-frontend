@@ -7211,5 +7211,19 @@
         "visible": false
       }
     ]
+  },
+  "litige-lignes-lot": {
+    "columns": [
+      {
+        "dataField": "id",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "dataField": "ligne.ordreLigne.article.articleDescription.descriptionCourte",
+        "allowEditing": false,
+        "visible": true
+      }
+    ]
   }
 }

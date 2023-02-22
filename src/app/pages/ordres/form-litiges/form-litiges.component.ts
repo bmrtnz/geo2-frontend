@@ -8,7 +8,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { Flux } from "app/shared/models";
+import { Flux, OrdreLigne } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import Litige from "app/shared/models/litige.model";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
@@ -208,10 +208,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   assignLitigeLignes(e) {
-    console.log(e);
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
+    this.modifierLot(e);
   }
 
   saveLitige() {
@@ -241,8 +238,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.selectLignesPopup.visible = true;
   }
 
-  modifierLot() {
+  modifierLot(lignes: Array<OrdreLigne["id"]>) {
     this.gestionOpPopup.visible = true;
+    this.gestionOpPopup.assignLitigeLignes(lignes);
   }
 
   fraisAnnexes() {

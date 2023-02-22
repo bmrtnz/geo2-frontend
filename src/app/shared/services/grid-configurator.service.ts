@@ -138,7 +138,8 @@ export enum Grid {
   LignesGroupageChargements = "lignes-groupage-chargements",
   ImportProgramme = "import-programme",
   PackingList = "packing-list",
-  SelectionLignesCdeLitige = "selection-lignes-litige"
+  SelectionLignesCdeLitige = "selection-lignes-litige",
+  LitigeLignesLot = "litige-lignes-lot",
 }
 
 const extraConfigurations = [

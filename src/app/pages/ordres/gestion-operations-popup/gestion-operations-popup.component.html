@@ -11,144 +11,149 @@
   (onShowing)="onShowing($event)"
   (onShown)="onShown()"
 >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="quitPopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
 
-<div *dxTemplate="let data of 'title'">
-  <div class="title">{{ title }}</div>
-  <dx-button
-    class="close-popup"
-    icon="close"
-    (onClick)="quitPopup()"
-  ></dx-button>
-  <dx-button
-    class="min-max-imize-popup-icon"
-    hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-    icon="material-icons fullscreen_exit"
-    [focusStateEnabled]="false"
-    (onClick)="resizePopup()"
-  ></dx-button>
-</div>
-
-<div *dxTemplate="let data of 'content'">
-  <dx-scroll-view>
-
-    <div class="resp-cau-con-container">
-      <dx-box direction="row">
-        <dxi-item [ratio]="0.7">
-          <div class="gestionOp-top-title-resp">{{ "ordreLitigesLignes-responsableTypeCode" | localize }}</div>
-          <!-- {{ selectedCause }} / {{ selectedConsequence }} / {{ selectedResponsible }} -->
-          <div class="dx-field responsible-box">
-            <div class="dx-field-value">
-              <dx-radio-group
-                #responsibles
-                [items]="responsibleList"
-                [displayExpr]="displayResp"
-                (onValueChanged)="changeResponsible($event)"
-                layout="vertical"
-              >
-              </dx-radio-group>
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="resp-cau-con-container">
+        <dx-box direction="row">
+          <dxi-item [ratio]="0.7">
+            <div class="gestionOp-top-title-resp">
+              {{ "ordreLitigesLignes-responsableTypeCode" | localize }}
             </div>
-          </div>
-        </dxi-item>
-        <dxi-item [ratio]="1.5">
-          <div class="gestionOp-top-titles">{{ "ordres-supervision-litiges-descriptionCause" | localize }}</div>
-          <dx-list
-            #causes
-            class="list-causes"
-            [items]="causeItems"
-            [height]="215"
-            [displayExpr]="displayCapitalize"
-            selectionMode="multiple"
-            selectAllMode="false"
-            [showSelectionControls]="true"
-            noDataText="{{ 'loading-progress' | localize }}"
-            (onSelectionChanged)="onCauseChanged($event)"
-          ></dx-list>
-        </dxi-item>
-        <dxi-item [ratio]="0.07"></dxi-item>
-        <dxi-item [ratio]="1.5">
-          <div class="gestionOp-top-titles">{{ "ordres-supervision-litiges-descriptionConsequence" | localize }}</div>
-          <dx-list
-            #consequences
-            class="list-consequences"
-            [items]="consequenceItems"
-            [height]="215"
-            [displayExpr]="displayCapitalize"
-            selectionMode="multiple"
-            selectAllMode="false"
-            [showSelectionControls]="true"
-            [selectedItemKeys]="['A']"
-            noDataText="{{ 'loading-progress' | localize }}"
-            (onSelectionChanged)="onConsequenceChanged($event)"
-          ></dx-list>
-        </dxi-item>
-        <dxi-item [ratio]="0.07"></dxi-item>
-      </dx-box>
-    </div>
+            <!-- {{ selectedCause }} / {{ selectedConsequence }} / {{ selectedResponsible }} -->
+            <div class="dx-field responsible-box">
+              <div class="dx-field-value">
+                <dx-radio-group
+                  #responsibles
+                  [items]="responsibleList"
+                  [displayExpr]="displayResp"
+                  (onValueChanged)="changeResponsible($event)"
+                  layout="vertical"
+                >
+                </dx-radio-group>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item [ratio]="1.5">
+            <div class="gestionOp-top-titles">
+              {{ "ordres-supervision-litiges-descriptionCause" | localize }}
+            </div>
+            <dx-list
+              #causes
+              class="list-causes"
+              [items]="causeItems"
+              [height]="215"
+              [displayExpr]="displayCapitalize"
+              selectionMode="multiple"
+              selectAllMode="false"
+              [showSelectionControls]="true"
+              noDataText="{{ 'loading-progress' | localize }}"
+              (onSelectionChanged)="onCauseChanged($event)"
+            ></dx-list>
+          </dxi-item>
+          <dxi-item [ratio]="0.07"></dxi-item>
+          <dxi-item [ratio]="1.5">
+            <div class="gestionOp-top-titles">
+              {{
+                "ordres-supervision-litiges-descriptionConsequence" | localize
+              }}
+            </div>
+            <dx-list
+              #consequences
+              class="list-consequences"
+              [items]="consequenceItems"
+              [height]="215"
+              [displayExpr]="displayCapitalize"
+              selectionMode="multiple"
+              selectAllMode="false"
+              [showSelectionControls]="true"
+              [selectedItemKeys]="['A']"
+              noDataText="{{ 'loading-progress' | localize }}"
+              (onSelectionChanged)="onConsequenceChanged($event)"
+            ></dx-list>
+          </dxi-item>
+          <dxi-item [ratio]="0.07"></dxi-item>
+        </dx-box>
+      </div>
 
-    <div class="right-btn-container">
-      <dx-button
-        type="success"
-        text="{{ 'btn-addArticle' | localize }}"
-        [focusStateEnabled]="false"
-        (onClick)="addArticle()"
-      ></dx-button>
-      <dx-button
-        type="normal"
-        text="{{ 'btn-auto' | localize }}"
-        [focusStateEnabled]="false"
-        (onClick)="autoFill()"
-      ></dx-button>
-      <dx-button
-        type="normal"
-        text="{{ 'btn-forfait' | localize }}"
-        [focusStateEnabled]="false"
-        (onClick)="forfait()"
-      ></dx-button>
-      <dx-button
-        type="normal"
-        text="{{ 'btn-reinit' | localize }}"
-        [focusStateEnabled]="false"
-        (onClick)="reInitialize()"
-      ></dx-button>
-      <dx-button
-        type="normal"
-        text="{{ 'btn-fraisAnnexes' | localize }}"
-        [focusStateEnabled]="false"
-        (onClick)="fraisAnnexes()"
-      ></dx-button>
-    </div>
+      <div class="right-btn-container">
+        <dx-button
+          type="success"
+          text="{{ 'btn-addArticle' | localize }}"
+          [focusStateEnabled]="false"
+          (onClick)="addArticle()"
+        ></dx-button>
+        <dx-button
+          type="normal"
+          text="{{ 'btn-auto' | localize }}"
+          [focusStateEnabled]="false"
+          (onClick)="autoFill()"
+        ></dx-button>
+        <dx-button
+          type="normal"
+          text="{{ 'btn-forfait' | localize }}"
+          [focusStateEnabled]="false"
+          (onClick)="forfait()"
+        ></dx-button>
+        <dx-button
+          type="normal"
+          text="{{ 'btn-reinit' | localize }}"
+          [focusStateEnabled]="false"
+          (onClick)="reInitialize()"
+        ></dx-button>
+        <dx-button
+          type="normal"
+          text="{{ 'btn-fraisAnnexes' | localize }}"
+          [focusStateEnabled]="false"
+          (onClick)="fraisAnnexes()"
+        ></dx-button>
+      </div>
 
+      <div style="clear: both"></div>
+      <br />
 
-    <div style="clear:both;"></div>
-    <br>
-
-    <div class="bottom-buttons-container float-left">
-      <dx-button
-        class="big-button createRefactTranspOrder"
-        type="normal"
-        [visible]="(selectedConsequence === 'G')"
-        stylingMode="outlined"
-        text="{{ 'btn-createRefactTranspOrder' | localize }}"
-        (onClick)="createRefactTranspOrder()"
-      ></dx-button>
-      <dx-button
-        class="big-button"
-        type="normal"
-        [visible]="(selectedConsequence === 'B')"
-        stylingMode="outlined"
-        text="{{ 'btn-createReplaceOrder' | localize }}"
-        (onClick)="createReplaceOrder()"
-      ></dx-button>
-      <dx-button
-        class="big-button"
-        type="normal"
-        [visible]="(selectedConsequence === 'B')"
-        stylingMode="outlined"
-        text="{{ 'btn-addToReplaceOrder' | localize }}"
-        (onClick)="addToReplaceOrder()"
-      ></dx-button>
-      <!-- Bouton plus d'actualité - Vu avec Bruno 17-02-2023 -->
-      <!-- <dx-button
+      <div class="bottom-buttons-container float-left">
+        <dx-button
+          class="big-button createRefactTranspOrder"
+          type="normal"
+          [visible]="selectedConsequence === 'G'"
+          stylingMode="outlined"
+          text="{{ 'btn-createRefactTranspOrder' | localize }}"
+          (onClick)="createRefactTranspOrder()"
+        ></dx-button>
+        <dx-button
+          class="big-button"
+          type="normal"
+          [visible]="selectedConsequence === 'B'"
+          stylingMode="outlined"
+          text="{{ 'btn-createReplaceOrder' | localize }}"
+          (onClick)="createReplaceOrder()"
+        ></dx-button>
+        <dx-button
+          class="big-button"
+          type="normal"
+          [visible]="selectedConsequence === 'B'"
+          stylingMode="outlined"
+          text="{{ 'btn-addToReplaceOrder' | localize }}"
+          (onClick)="addToReplaceOrder()"
+        ></dx-button>
+        <!-- Bouton plus d'actualité - Vu avec Bruno 17-02-2023 -->
+        <!-- <dx-button
         class="big-button"
         type="normal"
         [visible]="false"
@@ -156,40 +161,43 @@
         text="{{ 'btn-createRefactOrder' | localize }}"
         (onClick)="createRefactOrder()"
       ></dx-button> -->
+        <div
+          *ngIf="['G', 'B'].includes(selectedConsequence)"
+          class="red-font generated-order"
+        >
+          Ordre généré n°
+        </div>
+        <dx-button
+          class="inactive-item order-number-button"
+          type="normal"
+          [visible]="['G', 'B'].includes(selectedConsequence)"
+          stylingMode="outlined"
+          text=""
+          (onClick)="openOrder()"
+        ></dx-button>
+      </div>
+
+      <app-grid-lot></app-grid-lot>
+
       <div
-        *ngIf="['G', 'B'].includes(selectedConsequence)"
-        class="red-font generated-order"
-      >Ordre généré n°</div>
-      <dx-button
-        class="inactive-item order-number-button"
-        type="normal"
-        [visible]="['G', 'B'].includes(selectedConsequence)"
-        stylingMode="outlined"
-        text=""
-        (onClick)="openOrder()"
-      ></dx-button>
-    </div>
-    <div
-      class="bottom-buttons-container float-right"
-      [ngClass]="{ 'inactive-box': false }"
+        class="bottom-buttons-container float-right"
+        [ngClass]="{ 'inactive-box': false }"
       >
-      <!-- Annuler -->
-      <dx-button
-        type="default"
-        text="{{ 'btn-annuler' | localize }}"
-        (onClick)="quitPopup()"
-      ></dx-button>
-      <!-- Valider -->
-      <dx-button
-        type="default"
-        text="{{ 'btn-valider' | localize }}"
-        (onClick)="validate()"
-      ></dx-button>
-    </div>
-
-  </dx-scroll-view>
-</div>
-
+        <!-- Annuler -->
+        <dx-button
+          type="default"
+          text="{{ 'btn-annuler' | localize }}"
+          (onClick)="quitPopup()"
+        ></dx-button>
+        <!-- Valider -->
+        <dx-button
+          type="default"
+          text="{{ 'btn-valider' | localize }}"
+          (onClick)="validate()"
+        ></dx-button>
+      </div>
+    </dx-scroll-view>
+  </div>
 </dx-popup>
 
 <app-frais-annexes-litige-popup

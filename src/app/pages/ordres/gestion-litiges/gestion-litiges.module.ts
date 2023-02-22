@@ -1,12 +1,14 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-
-
+import { GridLotComponent } from "./grid-lot/grid-lot.component";
+import { DxDataGridModule } from "devextreme-angular";
 
 @NgModule({
-  declarations: [],
+  declarations: [GridLotComponent],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    DxDataGridModule,
+  ],
+  exports: [GridLotComponent],
 })
 export class GestionLitigesModule { }

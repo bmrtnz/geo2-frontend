@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { OrdreLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
@@ -220,8 +221,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.fraisAnnexesPopup.visible = true;
   }
 
-  assignLitigeLignes(e) {
-    console.log(e);
+  assignLitigeLignes(lignes?: Array<OrdreLigne["id"]>) {
+    console.log(lignes);
     //////////////////////////////////////
     // Fonction à implémenter
     //////////////////////////////////////
