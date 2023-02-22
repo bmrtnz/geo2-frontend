@@ -5,12 +5,12 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
 import { from, iif, of, throwError } from "rxjs";
-import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { catchError, concatMap, filter, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
 import { DevisesRefsService } from "./devises-refs.service";
-import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionResult, FunctionsService } from "./functions.service";
 
 export enum Operation {
   All = "allOrdre",
@@ -38,7 +38,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|transporteurDEVCode)$/i;
+  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|prixUnitaireTarifTransport|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
@@ -525,6 +525,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       ordreChunk.incoterm?.id,
       ordreChunk.type?.id,
     ).pipe(
+      // Pas de forfaits, on s'arrete la
+      filter(res => res.data.fReturnForfaitsTrp.res === FunctionResult.OK),
       map(res => ({
         forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
         // default?

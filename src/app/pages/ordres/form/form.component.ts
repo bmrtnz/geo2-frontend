@@ -456,6 +456,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.formGroup.pristine && this.formGroup.valid) {
       this.headerSaving = true;
       const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+
+      // copy value of "transporteurDEVPrixUnitaire"
+      // might be overrided by "forfaits transporteurs" afterward
+      if (!ordre.prixUnitaireTarifTransport)
+        ordre.prixUnitaireTarifTransport = ordre.transporteurDEVPrixUnitaire;
+
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
