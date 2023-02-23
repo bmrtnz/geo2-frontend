@@ -5710,6 +5710,7 @@
     ]
   },
   "ordre-lignes-totaux-detail": {
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
