@@ -15,6 +15,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-logistique.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
@@ -64,6 +65,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
 
   constructor(
     public ordresLogistiquesService: OrdresLogistiquesService,
+    public ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
     private functionsService: FunctionsService,
@@ -225,6 +227,13 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
         this.changeCloture = false;
         this.refresh();
         this.refreshGridLigneDetail.emit(true);
+        // Comptabilisation des retraits
+        this.ordresService.fChgtQteArtRet(this.ordre.id).subscribe({
+          next: () => this.gridsService.reload("Commande"),
+          error: (error: Error) => {
+            notify(error.message.replace("Exception while fetching data (/fChgtQteArtRet) : ", ""), "error", 7000);
+          }
+        });
       },
       error: (error: Error) => {
         this.changeCloture = false;

@@ -317,6 +317,17 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     return Ordre.isCloture(ordre);
   }
 
+
+  /**
+   * Comptabilisation des retraits
+   */
+  public fChgtQteArtRet(ordreRef: string) {
+    return this.functionsService.queryFunction("fChgtQteArtRet", [
+      { name: "ordreRef", type: "String", value: ordreRef }
+    ]);
+  }
+
+
   /**
    * Suppression d'un ordre
    */
