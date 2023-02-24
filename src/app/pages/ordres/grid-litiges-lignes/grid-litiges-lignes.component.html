@@ -1,5 +1,5 @@
 <dx-button
-  style="margin-right: 46px; margin-top: 16px;"
+  style="margin-right: 46px; margin-top: 16px"
   class="grid-grouping-button"
   type="default"
   icon="material-icons menu_open"
@@ -15,6 +15,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [focusedRowEnabled]="true"
   (onContentReady)="sortGrid()"
   (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
   (onToolbarPreparing)="

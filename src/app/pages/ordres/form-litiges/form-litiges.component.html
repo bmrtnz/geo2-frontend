@@ -418,6 +418,7 @@
       type="normal"
       text="{{ 'btn-modifierLot' | localize }}"
       [focusStateEnabled]="false"
+      [disabled]="!selectedLitigeLigneKey?.length"
       (onClick)="modifierLot()"
     ></dx-button>
     <dx-button

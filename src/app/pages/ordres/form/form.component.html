@@ -33,10 +33,12 @@
       >
         {{ dotLitiges }}
       </div>
-      <div *ngIf="!dotLitiges && ordre && gridCommandes?.gridRowsTotal"
+      <div
+        *ngIf="!dotLitiges && ordre && gridCommandes?.gridRowsTotal"
         (click)="onClickCreateLitige()"
         class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
-        title="{{ 'ordres-litiges-create' | localize }}">
+        title="{{ 'ordres-litiges-create' | localize }}"
+      >
         <div class="dx-button-content">
           <i class="dx-icon dx-icon-edit-button-addrow"></i>
         </div>
@@ -181,7 +183,9 @@
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="ordreFacture || !fullOrderNumber || cancelledOrder"
+                  [disabled]="
+                    ordreFacture || !fullOrderNumber || cancelledOrder
+                  "
                   hint="{{ 'hint-cancelorder' | localize }}"
                   text="{{ 'btn-cancelorder' | localize }}"
                   (onClick)="onCancelOrderClick()"
@@ -1151,13 +1155,16 @@
                 >
                   <dxi-item>
                     <app-form-litiges
+                      #formLitiges
                       [ordre]="ordre"
                       [gridCdeHasRows]="!!gridCommandes?.gridRowsTotal"
-                      #formLitiges
+                      [selectedLitigeLigneKey]="
+                        gridLitigesLignes.getFocusedRowKey()
+                      "
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
-                      [hidden]="!dotLitiges"
                       #gridLitigesLignes
+                      [hidden]="!dotLitiges"
                       [ordre]="ordre"
                     >
                     </app-grid-litiges-lignes>

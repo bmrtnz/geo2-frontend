@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { OrdreLigne } from "app/shared/models";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
+import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
@@ -22,6 +24,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public infosLitige: any;
+  @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litigeID: string;
   @Output() public currOrdre: Partial<Ordre>;
   @Output() public updateFrais = new EventEmitter();

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
@@ -14,7 +14,7 @@ import { concatMap, map, tap } from "rxjs/operators";
   templateUrl: "./grid-lot.component.html",
   styleUrls: ["./grid-lot.component.scss"]
 })
-export class GridLotComponent {
+export class GridLotComponent implements OnInit {
 
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
@@ -32,16 +32,11 @@ export class GridLotComponent {
     private gridConfiguratorService: GridConfiguratorService,
   ) { }
 
-  // ngOnInit(): void {
-  //   this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
-  // }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.lot.isFirstChange()) this.fillGrid(this.columns);
-  // }
+  ngOnInit(): void {
+    this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
+  }
 
   onColumnsChange({ current }: { current: GridColumn[] }) {
-    console.log("columns change: ", current.map(c => c.dataField));
     this.columns = of(current);
     this.fillGrid(of(current));
   }
@@ -58,7 +53,6 @@ export class GridLotComponent {
     columns: GridColumn[],
   ) {
     return of(columns).pipe(
-      tap(res => console.log(res)),
       map(c => c.filter(({ visible }) => visible).map(({ dataField }) => dataField)),
       concatMap(fields => this.litigesLignesService.allLitigeLigneFait(litigeID, numeroGroupement, new Set(fields))),
       map(data => new DataSource(data.data.allLitigeLigneFait)),

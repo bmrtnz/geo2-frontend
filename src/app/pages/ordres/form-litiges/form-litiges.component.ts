@@ -10,6 +10,7 @@ import {
 import { FormBuilder } from "@angular/forms";
 import { Flux, OrdreLigne } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
@@ -41,6 +42,7 @@ import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/f
 export class FormLitigesComponent implements OnInit, OnChanges {
   @Input() public ordre: Ordre;
   @Input() public gridCdeHasRows: boolean;
+  @Input() selectedLitigeLigneKey: LitigeLigne["id"];
   @Output() public ordreSelected = new EventEmitter<Litige>();
   @Output() public currOrdre;
   @Output() public infosLitige: any;
@@ -208,7 +210,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   assignLitigeLignes(e) {
-    this.modifierLot(e);
+    this.modifierLot();
   }
 
   saveLitige() {
@@ -238,9 +240,13 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.selectLignesPopup.visible = true;
   }
 
-  modifierLot(lignes: Array<OrdreLigne["id"]>) {
-    this.gestionOpPopup.visible = true;
-    this.gestionOpPopup.assignLitigeLignes(lignes);
+  modifierLot() {
+    this.litigesLignesService
+      .getOne_v2(this.selectedLitigeLigneKey, new Set(["id", "numeroGroupementLitige"]))
+      .subscribe({
+        next: res => this.gestionOpPopup.lot = [this.infosLitige.litige.id, res.data.litigeLigne.numeroGroupementLitige],
+        complete: () => this.gestionOpPopup.visible = true,
+      });
   }
 
   fraisAnnexes() {

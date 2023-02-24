@@ -85,4 +85,8 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   reload() {
     this.dataSource.reload();
   }
+
+  public getFocusedRowKey() {
+    return this.datagrid.focusedRowKey;
+  }
 }
