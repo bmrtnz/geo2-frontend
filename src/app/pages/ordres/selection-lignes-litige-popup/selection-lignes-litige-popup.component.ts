@@ -10,6 +10,8 @@ import { map } from "rxjs/operators";
 import Ordre from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import Litige from "app/shared/models/litige.model";
+import { LitigesService } from "app/shared/services/api/litiges.service";
 
 
 @Component({
@@ -20,6 +22,7 @@ import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.servic
 export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   @Input() ordre: Partial<Ordre>;
+  @Input() litigeID: Litige["id"];
   @Output() selectedLignes = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
@@ -38,6 +41,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   constructor(
     private ordreLignesService: OrdreLignesService,
+    private litigesService: LitigesService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
@@ -129,8 +133,12 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       return;
     }
 
-    this.selectedLignes.emit(this.selectedLignesIds);
-    this.quitPopup();
+    this.litigesService.getOne_v2(this.litigeID, new Set(["numeroVersion"]))
+      .subscribe(res => {
+        this.selectedLignes.emit();
+        this.quitPopup();
+      });
+
   }
 
 }

@@ -443,6 +443,7 @@
 
 <app-selection-lignes-litige-popup
   [ordre]="currOrdre"
+  [litigeID]="infosLitige?.litige.id"
   (selectedLignes)="assignLitigeLignes($event)"
 ></app-selection-lignes-litige-popup>
 
