@@ -24,6 +24,14 @@ export class LitigesService extends ApiService implements APIRead {
     super(apollo, Litige);
   }
 
+  getOne_v2(id: Litige["id"], columns: Set<string>) {
+    return this.apollo
+      .query<{ litige: Litige }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      });
+  }
+
   getDataSource() {
     return new DataSource({
       store: this.createCustomStore({
