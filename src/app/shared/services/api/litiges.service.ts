@@ -379,4 +379,31 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  ofInitLigneLitige(ordreLigneList: string, litigeID: string, numeroLot: string) {
+    return this.apollo
+      .query<{ ofInitLigneLitige: FunctionResponse }>({
+        query: gql(ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofInitLigneLitige",
+              body: functionBody,
+              params: [
+                { name: "ordreLigneList", value: "ordreLigneList", isVariable: true },
+                { name: "litigeID", value: "litigeID", isVariable: true },
+                { name: "numeroLot", value: "numeroLot", isVariable: true },
+              ]
+            }
+          ],
+          [
+            { name: "ordreLigneList", type: "String", isOptionnal: false },
+            { name: "litigeID", type: "String", isOptionnal: false },
+            { name: "numeroLot", type: "String", isOptionnal: false },
+          ],
+        )),
+        variables: { ordreLigneList, litigeID, numeroLot },
+        fetchPolicy: "network-only",
+      });
+  }
+
 }
