@@ -1158,13 +1158,13 @@
                       #formLitiges
                       [ordre]="ordre"
                       [gridCdeHasRows]="!!gridCommandes?.gridRowsTotal"
+                      [grid]="gridLitigesLignes"
                       [selectedLitigeLigneKey]="
                         gridLitigesLignes.getFocusedRowKey()
                       "
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
                       #gridLitigesLignes
-                      [hidden]="!dotLitiges"
                       [ordre]="ordre"
                     >
                     </app-grid-litiges-lignes>

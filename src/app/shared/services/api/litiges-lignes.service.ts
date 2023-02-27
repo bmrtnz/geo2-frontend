@@ -121,7 +121,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
               this.mapLoadOptionsToVariables(options);
             this.listenQuery<Response>(
               query,
-              { variables },
+              { variables, fetchPolicy: "network-only" },
               (res) => {
                 if (res.data && res.data.allLitigeLigne) {
                   resolve(

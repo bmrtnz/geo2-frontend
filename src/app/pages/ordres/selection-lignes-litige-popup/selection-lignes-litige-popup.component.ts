@@ -3,10 +3,10 @@ import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxScrollViewComponent, DxDataGridComponent } from "devextreme-angular";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { from, Observable } from "rxjs";
+import { EMPTY, from, iif, Observable } from "rxjs";
 import { alert } from "devextreme/ui/dialog";
 import { environment } from "environments/environment";
-import { map } from "rxjs/operators";
+import { concatMap, map } from "rxjs/operators";
 import Ordre from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -134,6 +134,11 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     }
 
     this.litigesService.getOne_v2(this.litigeID, new Set(["numeroVersion"]))
+      .pipe(
+        concatMap(res => iif(() => res.data.litige.numeroVersion === 2,
+          this.litigesService.ofInitLigneLitige(this.selectedLignesIds.join(), this.litigeID, "?"),
+          EMPTY)),
+      )
       .subscribe(res => {
         this.selectedLignes.emit();
         this.quitPopup();

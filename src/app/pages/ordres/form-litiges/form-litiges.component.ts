@@ -30,6 +30,7 @@ import { concatMap, filter, mergeAll } from "rxjs/operators";
 import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
+import { GridLitigesLignesComponent } from "../grid-litiges-lignes/grid-litiges-lignes.component";
 import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/frais-annexes-litige-popup.component";
@@ -43,6 +44,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @Input() public ordre: Ordre;
   @Input() public gridCdeHasRows: boolean;
   @Input() selectedLitigeLigneKey: LitigeLigne["id"];
+  @Input() grid: GridLitigesLignesComponent;
   @Output() public ordreSelected = new EventEmitter<Litige>();
   @Output() public currOrdre;
   @Output() public infosLitige: any;
@@ -210,6 +212,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   assignLitigeLignes(e) {
+    this.grid.reload();
     this.modifierLot();
   }
 

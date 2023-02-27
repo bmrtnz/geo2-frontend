@@ -83,7 +83,7 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   }
 
   reload() {
-    this.dataSource.reload();
+    return this.dataSource.reload();
   }
 
   public getFocusedRowKey() {
