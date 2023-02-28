@@ -6,10 +6,12 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
 import { LitigeConsequencesService } from "app/shared/services/api/litige-consequences.service";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
+import { concatMap, map } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridsService } from "../grids.service";
@@ -53,6 +55,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   constructor(
     private localizeService: LocalizationService,
     public causesService: LitigeCausesService,
+    public litigesLignesService: LitigesLignesService,
     public ordresLogistiquesService: OrdresLogistiquesService,
     public fUtils: FormUtilsService,
     public consequencesService: LitigeConsequencesService,
@@ -285,7 +288,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   quitPopup() {
-    this.hidePopup();
+    const [litigeID, numRegroupement] = this.lot;
+    this.litigesLignesService
+      .getList(`litige.id==${litigeID} and numeroGroupementLitige==${numRegroupement}`, ["id"]).pipe(
+        map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
+        concatMap(ids => this.litigesLignesService.deleteAll(ids)),
+      ).subscribe(() => this.hidePopup());
   }
 
 }

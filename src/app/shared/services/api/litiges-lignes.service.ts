@@ -28,6 +28,15 @@ export class LitigesLignesService extends ApiService implements APIRead {
       });
   }
 
+  getList(search: string, columns: Array<string>) {
+    return this.apollo
+      .query<{ allLitigeLigneList: LitigeLigne[] }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "network-only",
+      });
+  }
+
   getDataSource() {
     return new DataSource({
       sort: [{ selector: this.model.getLabelField() }],
@@ -135,6 +144,16 @@ export class LitigesLignesService extends ApiService implements APIRead {
           }),
         byKey: this.byKey(columns),
       }),
+    });
+  }
+
+  deleteAll(ids: Array<LitigeLigne["id"]>) {
+    return this.apollo.mutate({
+      mutation: gql(ApiService.buildGraph("mutation", [{
+        name: "deleteAllLitigeLigne",
+        params: [{ name: "ids", value: "ids", isVariable: true }],
+      }], [{ name: "ids", type: "[String]", isOptionnal: false }])),
+      variables: { ids },
     });
   }
 
