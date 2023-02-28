@@ -74,6 +74,8 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
       );
       this.dataSource.filter([
         ["ordreLigne.ordre.id", "=", this.ordre.id],
+        "and",
+        ["valide", "=", true],
       ]);
     }
   }
