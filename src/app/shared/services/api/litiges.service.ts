@@ -415,6 +415,7 @@ export class LitigesService extends ApiService implements APIRead {
         }
       ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
       variables: { litigeID },
+      fetchPolicy: "network-only",
     });
   }
 }

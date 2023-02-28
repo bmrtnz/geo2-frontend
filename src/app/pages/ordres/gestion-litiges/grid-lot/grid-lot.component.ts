@@ -69,24 +69,21 @@ export class GridLotComponent implements OnInit, OnChanges {
     return of(columns).pipe(
       GridConfiguratorService.getVisible(),
       GridConfiguratorService.getFields(),
-      map(fields => [...fields, "ligne.id", "ligne.numeroGroupementLitige"]),
+      map(fields => [...fields, "ligne.id", "ligne.ordreLigne.id", "ligne.numeroGroupementLitige"]),
       map(fields => this.litigesLignesService
         .allLitigeLigneFaitDatasource(litigeID, numeroGroupement, new Set(fields))),
     );
   }
 
-  /** Mutate grid rows by adding them a `numeroGroupementLitige` */
+  /** Mutate grid rows by adding them a `numeroGroupementLitige` and validity */
   public assignLot(numeroGroupementLitige: LitigeLigne["numeroGroupementLitige"]) {
     const datasource = this.grid.dataSource as DataSource;
-    const store = datasource.store() as CustomStore;
     const items: Array<Partial<LitigeLigneFait>> = datasource.items();
-    store.push(items.map(item => ({
-      type: "update",
-      key: item.ligne.id,
-      data: { ligne: { numeroGroupementLitige } },
-    })));
+
+    // Actual persistence
     return this.litigesLignesService
-      .saveAll(new Set(["id", "numeroGroupementLitige"]), items.map(item => item.ligne))
+      .saveAll(new Set(["id", "numeroGroupementLitige"]), items
+        .map(item => ({ ...item.ligne, valide: true, numeroGroupementLitige })))
       .toPromise();
   }
 

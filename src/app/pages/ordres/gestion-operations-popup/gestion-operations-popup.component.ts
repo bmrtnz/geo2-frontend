@@ -177,7 +177,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.litigesService.genNumLot(this.infosLitige.litige.id).pipe(
       concatMap(res => this.gridLot.assignLot(res.data.genNumLot)),
     ).subscribe({
-      next: res => this.quitPopup(),
+      next: res => {
+        this.quitPopup();
+        this.gridsService.reload("LitigeLigne");
+      },
       error: (err: Error) => notify(err.message, "ERROR", 3500),
     });
   }
