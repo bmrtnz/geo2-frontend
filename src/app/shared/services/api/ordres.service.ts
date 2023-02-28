@@ -1,17 +1,16 @@
 import { Injectable } from "@angular/core";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
-import { OrdreLigne } from "app/shared/models";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
 import { from, iif, of, throwError } from "rxjs";
-import { catchError, concatMap, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import { catchError, concatMap, filter, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
 import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
 import { DevisesRefsService } from "./devises-refs.service";
-import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionResult, FunctionsService } from "./functions.service";
 
 export enum Operation {
   All = "allOrdre",
@@ -39,7 +38,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   /* tslint:disable-next-line */
-  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|transporteurDEVCode)$/i;
+  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|prixUnitaireTarifTransport|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
@@ -182,50 +181,50 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     });
   }
 
-  getSuiviDepartsDatasource(body: Array<string> | Set<string>) {
-    return new DataSource({
-      store: this.createCustomStore({
-        // byKey: this.byKey([...body]),
-        load: options => this.apollo
-          .query<{ allOrdreLigneSuiviDeparts: RelayPage<OrdreLigne> }>({
-            query: gql(ApiService.buildGraph(
-              "query",
-              [
-                {
-                  name: "allOrdreLigneSuiviDeparts",
-                  body: [
-                    "pageInfo.startCursor",
-                    "pageInfo.endCursor",
-                    "pageInfo.hasPreviousPage",
-                    "pageInfo.hasNextPage",
-                    "totalCount",
-                    ...[...body].map(c => `edges.node.${c}`),
-                  ],
-                  params: [
-                    { name: "search", value: "search", isVariable: true },
-                    { name: "pageable", value: "pageable", isVariable: true },
-                    { name: "onlyColisDiff", value: "onlyColisDiff", isVariable: true },
-                  ],
-                },
-              ],
-              [
-                { name: "search", type: "String", isOptionnal: true },
-                { name: "pageable", type: "PaginationInput", isOptionnal: false },
-                { name: "onlyColisDiff", type: "Boolean", isOptionnal: false },
-              ],
-            )),
-            variables: {
-              ...this.persistantVariables,
-              ...this.mapLoadOptionsToVariables(options)
-            },
-          })
-          .pipe(
-            map(res => this.asInstancedListCount(res.data.allOrdreLigneSuiviDeparts, e => new OrdreLigne(e))),
-          )
-          .toPromise(),
-      }),
-    });
-  }
+  // getSuiviDepartsDatasource(body: Array<string> | Set<string>) {
+  //   return new DataSource({
+  //     store: this.createCustomStore({
+  //       // byKey: this.byKey([...body]),
+  //       load: options => this.apollo
+  //         .query<{ allOrdreLigneSuiviDeparts: RelayPage<OrdreLigne> }>({
+  //           query: gql(ApiService.buildGraph(
+  //             "query",
+  //             [
+  //               {
+  //                 name: "allOrdreLigneSuiviDeparts",
+  //                 body: [
+  //                   "pageInfo.startCursor",
+  //                   "pageInfo.endCursor",
+  //                   "pageInfo.hasPreviousPage",
+  //                   "pageInfo.hasNextPage",
+  //                   "totalCount",
+  //                   ...[...body].map(c => `edges.node.${c}`),
+  //                 ],
+  //                 params: [
+  //                   { name: "search", value: "search", isVariable: true },
+  //                   { name: "pageable", value: "pageable", isVariable: true },
+  //                   { name: "onlyColisDiff", value: "onlyColisDiff", isVariable: true },
+  //                 ],
+  //               },
+  //             ],
+  //             [
+  //               { name: "search", type: "String", isOptionnal: true },
+  //               { name: "pageable", type: "PaginationInput", isOptionnal: false },
+  //               { name: "onlyColisDiff", type: "Boolean", isOptionnal: false },
+  //             ],
+  //           )),
+  //           variables: {
+  //             ...this.persistantVariables,
+  //             ...this.mapLoadOptionsToVariables(options)
+  //           },
+  //         })
+  //         .pipe(
+  //           map(res => this.asInstancedListCount(res.data.allOrdreLigneSuiviDeparts, e => new OrdreLigne(e))),
+  //         )
+  //         .toPromise(),
+  //     }),
+  //   });
+  // }
 
   save(variables: OperationVariables & { ordre: Partial<Ordre> }) {
     return this.watchSaveQuery({ variables }, 1, this.queryFilter);
@@ -317,6 +316,17 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     }
     return Ordre.isCloture(ordre);
   }
+
+
+  /**
+   * Comptabilisation des retraits
+   */
+  public fChgtQteArtRet(ordreRef: string) {
+    return this.functionsService.queryFunction("fChgtQteArtRet", [
+      { name: "ordreRef", type: "String", value: ordreRef }
+    ]);
+  }
+
 
   /**
    * Suppression d'un ordre
@@ -526,6 +536,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       ordreChunk.incoterm?.id,
       ordreChunk.type?.id,
     ).pipe(
+      // Pas de forfaits, on s'arrete la
+      filter(res => res.data.fReturnForfaitsTrp.res === FunctionResult.OK),
       map(res => ({
         forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
         // default?
@@ -545,13 +557,16 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
             ? throwError(new Error("Le taux de cette devise n'est pas renseigné"))
             : of({
               transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
+              prixUnitaireTarifTransport: context.trpDevPu,
               transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
+              baseTarifTransport: { id: context.btaCode },
             })),
           catchError((err, catched) => {
             notify(err.message, "warning");
             return of({
               transporteurDEVPrixUnitaire: context.trpDevPu,
               transporteurDEVCode: { id: context.devCode },
+              baseTarifTransport: { id: context.btaCode },
             });
           }),
         ),
@@ -561,6 +576,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       concatMap(data => this.save_v2([
         "transporteurDEVPrixUnitaire",
         "transporteurDEVCode.id",
+        "baseTarifTransport.id",
       ], { ordre: { id: ordreChunk.id, ...data } })),
       map(res => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)),
     );

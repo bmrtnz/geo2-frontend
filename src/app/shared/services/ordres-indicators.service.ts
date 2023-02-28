@@ -438,7 +438,7 @@ export class OrdresIndicatorsService {
       if (instance.id === Indicateur.PlanningDepart) {
         const currDateTime24 = new Date();
         currDateTime24.setHours(23, 59, 59, 999);
-        instance.dataSource = this.ordresService.getSuiviDepartsDatasource(instance.explicitSelection);
+        // instance.dataSource = this.ordresService.getSuiviDepartsDatasource(instance.explicitSelection);
         instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.PlanningDepart);
         instance.filter = [
           ["valide", "=", true],

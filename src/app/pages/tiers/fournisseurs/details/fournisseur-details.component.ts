@@ -496,7 +496,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
                   },
                   error: (err) => {
                     console.log(err);
-                    notify("Echec de la sauvegarde", "error", 3000);
+                    notify("Échec de la sauvegarde", "error", 3000);
                   }
                 });
             });
@@ -552,7 +552,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
         },
         error: (err) => {
           console.log(err);
-          notify("Echec de la sauvegarde", "error", 3000);
+          notify("Échec de la sauvegarde", "error", 3000);
         }
       });
 

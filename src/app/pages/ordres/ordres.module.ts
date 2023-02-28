@@ -70,13 +70,22 @@ import {
   ArticleReservationOrdrePopupComponent,
   ListPipe
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
+import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage-auto-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
 import { DuplicationOrdrePopupComponent } from "./duplication-ordre-popup/duplication-ordre-popup.component";
+import { ForfaitLitigePopupComponent } from "./forfait-litige-popup/forfait-litige-popup.component";
+import { GridForfaitLitigeComponent } from "./forfait-litige-popup/grid-forfait-litige/grid-forfait-litige.component";
 import { FormLitigesComponent } from "./form-litiges/form-litiges.component";
+import { FraisAnnexesLitigePopupComponent } from "./form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
+import {
+  GridFraisAnnexesLitigeComponent
+} from "./form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
 import { FormLogistiqueComponent } from "./form-logistique/form-logistique.component";
 import { FormComponent } from "./form/form.component";
+import { GestionLitigesModule } from "./gestion-litiges/gestion-litiges.module";
+import { GestionOperationsPopupComponent } from "./gestion-operations-popup/gestion-operations-popup.component";
 import { GridAnnuleRemplaceComponent } from "./grid-annule-remplace/grid-annule-remplace.component";
 import { GridChoixEnvoisComponent } from "./grid-choix-envois/grid-choix-envois.component";
 import { GridClientsDepEncoursDetailComponent } from "./grid-clients-dep-encours-detail/grid-clients-dep-encours-detail.component";
@@ -126,6 +135,7 @@ import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modi
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
 import HistoriqueOrdresComponent from "./indicateurs/historique-ordres/historique-ordres.component";
+import { LitigeCloturePopupComponent } from "./indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
 import { LitigesSupervisionComponent } from "./indicateurs/litiges/litiges-supervision.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
 import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/ordres-non-confirmes.component";
@@ -142,10 +152,16 @@ import { SupervisionLivraisonComponent } from "./indicateurs/supervision-livrais
 import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { NouvelOrdreComponent } from "./nouvel-ordre/nouvel-ordre.component";
+import {
+  GridOptionReservationStockComponent
+} from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
+import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-popup.component";
 import { OrdresRoutingModule } from "./ordres-routing.module";
 import { GridPackingListComponent } from "./packing-list-popup/grid-packing-list/grid-packing-list.component";
 import { PackingListPopupComponent } from "./packing-list-popup/packing-list-popup.component";
 import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
+import { SelectionComptePaloxPopupComponent } from "./selection-compte-palox-popup/selection-compte-palox-popup.component";
+import { SelectionLignesLitigePopupComponent } from "./selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import OrdresSuiviComponent from "./suivi/ordres-suivi.component";
 import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-popup.component";
 import { ZoomClientPopupComponent } from "./zoom-client-popup/zoom-client-popup.component";
@@ -153,21 +169,6 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-popup.component";
-import {
-  GridOptionReservationStockComponent
-} from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
-import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
-import { LitigeCloturePopupComponent } from "./indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
-import { FraisAnnexesLitigePopupComponent } from "./form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
-import {
-  GridFraisAnnexesLitigeComponent
-} from "./form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
-import { SelectionLignesLitigePopupComponent } from "./selection-lignes-litige-popup/selection-lignes-litige-popup.component";
-import { GestionOperationsPopupComponent } from "./gestion-operations-popup/gestion-operations-popup.component";
-import { ForfaitLitigePopupComponent } from "./forfait-litige-popup/forfait-litige-popup.component";
-import { GridForfaitLitigeComponent } from "./forfait-litige-popup/grid-forfait-litige/grid-forfait-litige.component";
-import { GestionLitigesModule } from "./gestion-litiges/gestion-litiges.module";
 
 @NgModule({
   declarations: [
@@ -271,7 +272,8 @@ import { GestionLitigesModule } from "./gestion-litiges/gestion-litiges.module";
     SelectionLignesLitigePopupComponent,
     GestionOperationsPopupComponent,
     ForfaitLitigePopupComponent,
-    GridForfaitLitigeComponent
+    GridForfaitLitigeComponent,
+    SelectionComptePaloxPopupComponent,
   ],
   imports: [
     OrdresRoutingModule,

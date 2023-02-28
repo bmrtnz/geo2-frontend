@@ -38,7 +38,7 @@
   <br />
   <app-grid-choix-envois
     *ngIf="visible"
-    [ordreID]="ordre.id"
+    [ordre]="currOrdre"
     [fluxID]="flux"
     [annuleOrdre]="annuleOrdre"
   ></app-grid-choix-envois>

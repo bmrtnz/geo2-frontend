@@ -4,7 +4,7 @@ import { BaseTarif, CodePromo, Fournisseur, TypePalette } from "app/shared/model
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
-import { FournisseursService, LocalizationService } from "app/shared/services";
+import { AuthService, FournisseursService, LocalizationService } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
 import { CodesPromoService } from "app/shared/services/api/codes-promo.service";
@@ -61,6 +61,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     private gridsService: GridsService,
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
+    private authService: AuthService,
   ) {
     self = this;
     this.constructorFeatures();
@@ -251,7 +252,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     await this.grid.instance.saveEditData();
     this.grid.instance.endCustomLoading();
     this.transporteurChange.emit();
-    setTimeout(() => this.reindexRows(), 1000);
+    setTimeout(() => {
+      this.reindexRows();
+      this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+    }, 1000);
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
@@ -269,7 +273,19 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     const change = this.changes.shift();
 
     if (change.type === "remove") {
-      return this.ordreLignesService.remove(change.key)
+      return this.ordreLignesService
+        .updateField(
+          "fournisseur",
+          null,
+          change.key,
+          this.currentCompanyService.getCompany().id,
+          ["id", "fournisseur.id"]).toPromise()
+        .then(() => this.functionsService
+          .onChangeFouCode(change.key,
+            this.currentCompanyService.getCompany().id,
+            this.authService.currentUser.nomUtilisateur)
+          .toPromise())
+        .then(() => this.ordreLignesService.remove(change.key))
         .then(() => store.remove(change.key))
         .then(() => {
           store.push([change]);

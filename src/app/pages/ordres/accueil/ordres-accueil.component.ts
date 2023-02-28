@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   OnDestroy,
@@ -7,6 +6,7 @@ import {
   Output,
   ViewChild
 } from "@angular/core";
+import { Secteur } from "app/shared/models";
 import { AuthService } from "app/shared/services";
 import { IndicateursService } from "app/shared/services/api/indicateurs.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -17,7 +17,6 @@ import {
 } from "app/shared/services/ordres-indicators.service";
 import { Program } from "app/shared/services/program.service";
 import { DxSelectBoxComponent, DxTagBoxComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
 import { from, Observable, Subscription } from "rxjs";
 import {
   filter,
@@ -36,7 +35,7 @@ import { TabContext } from "../root/root.component";
   templateUrl: "./ordres-accueil.component.html",
   styleUrls: ["./ordres-accueil.component.scss"],
 })
-export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   @Output() public programChosen: any;
 
@@ -47,7 +46,7 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
-  secteursSource: DataSource;
+  secteurs: Array<Partial<Secteur>>;
 
   public programs: any[];
 
@@ -83,27 +82,13 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
     this.setupSecteursDatasource();
   }
 
-  ngAfterViewInit() {
-    // if (!this.authService.isAdmin) {
-    //   const secteur = this.authService.currentUser.secteurCommercial;
-    //   this.secteurInput.value = secteur;
-    //   this.indicateursService.secteur = secteur.id;
-    // }
-    this.loadIndicators();
-  }
-
   ngOnDestroy() {
     this.indicatorsSubscription.unsubscribe();
   }
 
   onValueChanged(e) {
-    if (!e.event) return; // We check that this change is coming from the user
-    this.indicateursService.secteur = e.value?.id;
+    this.indicateursService.secteur = e.value;
     this.loadIndicators();
-  }
-
-  setCalculatedSecteur(secteur) {
-    this.secteurInput.value = { id: secteur };
   }
 
   displayExpr(data) {
@@ -165,8 +150,8 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private setupSecteursDatasource() {
-    this.secteursSource = this.secteursService.getDataSource();
-    this.secteursSource.filter([
+    const ds = this.secteursService.getDataSource();
+    ds.filter([
       ["valide", "=", true],
       "and",
       [
@@ -175,6 +160,13 @@ export class OrdresAccueilComponent implements OnInit, AfterViewInit, OnDestroy 
         this.currentCompanyService.getCompany().id,
       ],
     ]);
+    ds.load().then(res => {
+      this.secteurs = res;
+      // Assign user secteur by default (when not admin)
+      this.secteurInput.value = !this.authService.isAdmin
+        ? this.authService.currentUser.secteurCommercial?.id
+        : "%"; // will default to wildcard
+    });
   }
 
   private loadIndicators() {

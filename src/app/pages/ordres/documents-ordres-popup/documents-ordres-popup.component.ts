@@ -17,6 +17,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   @Input() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
   @Output() public annuleOrdre: boolean;
+  @Output() public currOrdre: Partial<Ordre>;
 
   visible: boolean;
   closeConfirm = false;
@@ -34,6 +35,7 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.setTitle();
+    this.currOrdre = this.ordre;
   }
 
   setTitle() {

@@ -50,13 +50,8 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   onClickUpload() {
     const chooseFileButton = document.querySelector(".import-programme-popup .dx-fileuploader-button") as HTMLElement;
     if (this.programID === "tesco") {
-      confirm(
-        this.localizeService.localize("entrepot-import-programme"),
-        this.title
-      ).then(ent => {
-        this.customUploadData = this.programService.buildCustomData(ent);
-        chooseFileButton.click();
-      });
+      this.customUploadData = this.programService.buildCustomData(false);
+      chooseFileButton.click();
     } else {
       chooseFileButton.click();
     }
@@ -76,8 +71,14 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     }
   }
 
-  onUploaded(e) {
+  onUploaded(e: { request: XMLHttpRequest }) {
     const DSitems = e.request?.response?.rows;
+
+    if (e.request.status !== 200) return notify(
+      "L'import du programme a échoué",
+      "error",
+      7000
+    );
 
     if (!DSitems?.length) return this.noDataError();
 

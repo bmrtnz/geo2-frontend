@@ -165,6 +165,23 @@ export class EnvoisService extends ApiService implements APIRead {
     }).pipe(take(1));
   }
 
+  public countBy(search: string) {
+    return this.apollo.query<{ countBy: number }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "countBy",
+          params: [
+            { name: "search", value: "search", isVariable: true },
+          ],
+        },
+      ], [
+        { name: "search", type: "String", isOptionnal: true },
+      ])),
+      variables: { search },
+      fetchPolicy: "network-only",
+    });
+  }
+
   public countByOrdreAndFlux(
     ordre: { id: string } & Partial<Ordre>,
     flux: { id: string } & Partial<Flux>,
@@ -281,23 +298,6 @@ export class EnvoisService extends ApiService implements APIRead {
     return this.functionsService.queryFunction("fDocumentEnvoiDeclarationBollore", [
       { name: "ordreRef", type: "String", value: ordreRef }
     ]);
-  }
-
-  public countBy(search: string) {
-    return this.apollo.query<{ countBy: number }>({
-      query: gql(ApiService.buildGraph("query", [
-        {
-          name: "countBy",
-          params: [
-            { name: "search", value: "search", isVariable: true },
-          ],
-        },
-      ], [
-        { name: "search", type: "String", isOptionnal: true },
-      ])),
-      variables: { search },
-      fetchPolicy: "network-only",
-    });
   }
 
   public deleteTempEnvois(allEnvois: Array<Partial<Envois>>) {

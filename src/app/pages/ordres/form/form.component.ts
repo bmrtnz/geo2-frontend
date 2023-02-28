@@ -64,6 +64,7 @@ import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { RouteParam, TabChangeData, TabContext, TAB_ORDRE_CREATE_ID } from "../root/root.component";
+import { SelectionComptePaloxPopupComponent } from "../selection-compte-palox-popup/selection-compte-palox-popup.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
@@ -346,6 +347,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(FormLitigesComponent) formLitiges: FormLitigesComponent;
   @ViewChild("litigesBtn", { read: ElementRef }) litigesBtn: ElementRef;
   @ViewChild(GestionOperationsPopupComponent) gestionOpPopup: GestionOperationsPopupComponent;
+  @ViewChild(SelectionComptePaloxPopupComponent) comptePaloxPopup: SelectionComptePaloxPopupComponent;
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -436,6 +438,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formGroup
         .get("transporteurDEVPrixUnitaire")
         .setValue(res.transporteurDEVPrixUnitaire);
+      this.formGroup
+        .get("baseTarifTransport")
+        .setValue(res.baseTarifTransport);
     },
     );
   }
@@ -471,6 +476,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.formGroup.pristine && this.formGroup.valid) {
       this.headerSaving = true;
       const ordre = this.formUtils.extractDirty(this.formGroup.controls, Ordre.getKeyField());
+
+      // copy value of "transporteurDEVPrixUnitaire"
+      // might be overrided by "forfaits transporteurs" afterward
+      if (!ordre.prixUnitaireTarifTransport)
+        ordre.prixUnitaireTarifTransport = ordre.transporteurDEVPrixUnitaire;
+
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
@@ -1133,6 +1144,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (!fraisUnite) fraisUnite = "";
+    if (!fraisPU) return "";
 
     return "Frais client " + fraisPU + " " + fraisUnite + " " + messFraisPlateforme;
 
@@ -1239,9 +1251,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log(message);
           notify(this.messageFormat(message), "error", 7000);
         },
-        next: () => this.refreshHeader()
+        next: (result) => {
+          if (result.res === 2 && result.msg.includes("il n'y a pas de client pallox"))
+            return (this.comptePaloxPopup.visible = true);
+          this.refreshHeader();
+        }
       });
 
+  }
+
+  public afterSelectPaloxAccounts(e) {
+    if (e) return this.bonAFacturer();
+    notify(this.localization.localize("text-popup-abandon-BAF"), "warning", 7000);
   }
 
   public refreshTransporteur() {

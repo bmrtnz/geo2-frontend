@@ -128,8 +128,8 @@ export class ArticlesListComponent implements OnInit, NestedMain {
 
   onCellPrepared(e) {
     // Best expression for emballage display
-    if (e.rowType === "data" && e.column.dataField === "emballage.emballage.description") {
-      e.cellElement.textContent = e.data.emballage.emballage.id + " - " + e.value;
+    if (e.rowType === "data" && e.column.dataField === "emballage.emballage.id") {
+      e.cellElement.textContent = e.value + " - " + e.data.emballage.emballage.description;
     }
   }
 

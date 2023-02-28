@@ -456,7 +456,7 @@ export class FunctionsService {
    */
   public onChangeFouCode =
     (ordreLigneRef: string, societeCode: string, username: string) => this.apollo
-      .watchQuery<{ onChangeFouCode: FunctionResponse }>({
+      .query<{ onChangeFouCode: FunctionResponse }>({
         query: gql(ApiService.buildGraph(
           "query",
           [

@@ -723,7 +723,7 @@ export class ClientDetailsComponent
                   error: (err) => {
                     console.log(err);
                     notify(
-                      "Echec de la sauvegarde",
+                      "Échec de la sauvegarde",
                       "error",
                       3000,
                     );
@@ -786,7 +786,7 @@ export class ClientDetailsComponent
           // e.data.saveClient.certifications;
           this.formGroup.markAsPristine();
         },
-        error: () => notify("Echec de la sauvegarde", "error", 3000),
+        error: () => notify("Échec de la sauvegarde", "error", 3000),
       });
   }
 

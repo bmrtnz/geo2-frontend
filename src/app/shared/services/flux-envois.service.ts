@@ -76,14 +76,13 @@ export class FluxEnvoisService {
 
   }
 
-
   /** Submit 'envoi' request in DB */
   private pushDepotEnvoi(fluxID: "TRACA" | "IMPORD", ordreID: Ordre["id"]) {
     this.depotEnvoisService.save({
       ordre: { id: ordreID },
       fluxID,
       dateDepot: new Date().toISOString(),
-      utilisateur: { nomUtilisateur: this.authService.currentUser.nomUtilisateur }
+      mailUtilisateur: this.authService.currentUser.email,
     }, ["id"]).subscribe({
       error: err => notify(`Erreur de demande de dépôt pour le flux ${fluxID}`, "error"),
       next: res => notify(`Demande de dépôt pour le flux ${fluxID} déposée`, "success"),
