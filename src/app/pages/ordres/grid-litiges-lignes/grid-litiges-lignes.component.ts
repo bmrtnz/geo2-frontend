@@ -91,6 +91,6 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   }
 
   public getFocusedRowKey() {
-    return this.datagrid.focusedRowKey;
+    return this.datagrid.instance?.totalCount() ? this.datagrid.focusedRowKey : null;
   }
 }

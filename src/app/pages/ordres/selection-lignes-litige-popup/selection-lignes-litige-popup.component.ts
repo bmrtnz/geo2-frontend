@@ -110,7 +110,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     e.component.content().parentNode.classList.add("selection-compte-palox-popup");
     // Clear temps litige lignes
     this.litigesLignesService
-      .getList(`litige.id==${this.litigeID} and numeroGroupementLitige==?`, ["id"]).pipe(
+      .getList(`litige.id==${this.litigeID} and numeroGroupementLitige=isnull=null and valide==false`, ["id"]).pipe(
         map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
         concatMap(ids => this.litigesLignesService.deleteAll(ids)),
       ).subscribe();
@@ -144,7 +144,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     this.litigesService.getOne_v2(this.litigeID, new Set(["numeroVersion"]))
       .pipe(
         concatMap(res => iif(() => res.data.litige.numeroVersion === 2,
-          this.litigesService.ofInitLigneLitige(this.selectedLignesIds.join(), this.litigeID, "?"),
+          this.litigesService.ofInitLigneLitige(this.selectedLignesIds.join(), this.litigeID, ""),
           EMPTY)),
       )
       .subscribe(res => {

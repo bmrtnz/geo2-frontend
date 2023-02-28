@@ -24,8 +24,8 @@ import { DxNumberBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
-import { concatMap, filter, mergeAll } from "rxjs/operators";
+import { from, iif, of } from "rxjs";
+import { concatMap, filter, map, mergeAll } from "rxjs/operators";
 // tslint:disable-next-line: max-line-length
 import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
@@ -244,10 +244,13 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   modifierLot() {
-    this.litigesLignesService
-      .getOne_v2(this.selectedLitigeLigneKey, new Set(["id", "numeroGroupementLitige"]))
+    iif(() => !!this.selectedLitigeLigneKey,
+      this.litigesLignesService
+        .getOne_v2(this.selectedLitigeLigneKey, new Set(["id", "numeroGroupementLitige"]))
+        .pipe(map(res => res.data.litigeLigne.numeroGroupementLitige)),
+      of(""))
       .subscribe({
-        next: res => this.gestionOpPopup.lot = [this.infosLitige.litige.id, res.data.litigeLigne.numeroGroupementLitige],
+        next: numRegroupement => this.gestionOpPopup.lot = [this.infosLitige.litige.id, numRegroupement],
         complete: () => this.gestionOpPopup.visible = true,
       });
   }
