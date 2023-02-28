@@ -406,4 +406,15 @@ export class LitigesService extends ApiService implements APIRead {
       });
   }
 
+  genNumLot(litigeID: string) {
+    return this.apollo.query<{ genNumLot: string }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "genNumLot",
+          params: [{ name: "litigeID", value: "litigeID", isVariable: true }],
+        }
+      ], [{ name: "litigeID", type: "String", isOptionnal: false }])),
+      variables: { litigeID },
+    });
+  }
 }
