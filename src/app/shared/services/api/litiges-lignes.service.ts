@@ -176,6 +176,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
 
   allLitigeLigneFait(litigeID: string, numeroLigne: string, body: Set<string>) {
     return this.apollo.query<{ allLitigeLigneFait: LitigeLigneFait[] }>({
+      fetchPolicy: "network-only",
       query: gql(ApiService.buildGraph("query", [
         {
           name: "allLitigeLigneFait",

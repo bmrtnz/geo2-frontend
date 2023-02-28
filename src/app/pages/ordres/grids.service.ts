@@ -7,7 +7,9 @@ type OrdreGridId =
   | "DetailExpeditions"
   | "CommandesEdi"
   | "GroupageChargement"
-  | "OrdreMarge";
+  | "OrdreMarge"
+  | "LitigeLigne"
+  | "LitigeLignesLot";
 
 /**
  * Helper service to perform actions on datagrids

@@ -58,7 +58,9 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
     );
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.gridsService.register("LitigeLigne", this.datagrid);
+  }
 
   sortGrid() {
     // this.datagrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);

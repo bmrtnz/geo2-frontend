@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from "@angular/core";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
@@ -7,14 +7,15 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { Observable, of } from "rxjs";
-import { concatMap, map, tap } from "rxjs/operators";
+import { concatMap, filter, map, tap } from "rxjs/operators";
+import { GridsService } from "../../grids.service";
 
 @Component({
   selector: "app-grid-lot",
   templateUrl: "./grid-lot.component.html",
   styleUrls: ["./grid-lot.component.scss"]
 })
-export class GridLotComponent implements OnInit {
+export class GridLotComponent implements OnInit, OnChanges {
 
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
@@ -30,10 +31,19 @@ export class GridLotComponent implements OnInit {
   constructor(
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
-  ) { }
+    private gridsService: GridsService,
+  ) {
+    this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
+  }
 
   ngOnInit(): void {
-    this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
+    this.gridsService.register("LitigeLignesLot", this.grid);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.lot.currentValue !== changes.lot.previousValue && this.grid) {
+      this.fillGrid();
+    }
   }
 
   onColumnsChange({ current }: { current: GridColumn[] }) {
@@ -41,8 +51,9 @@ export class GridLotComponent implements OnInit {
     this.fillGrid(of(current));
   }
 
-  async fillGrid(columns: Observable<GridColumn[]>) {
-    this.grid.dataSource = await columns.pipe(
+  async fillGrid(columns?: Observable<GridColumn[]>) {
+    this.grid.dataSource = await (columns ?? this.columns).pipe(
+      filter(() => !!this.lot),
       concatMap(c => this.fetchDatasource(...this.lot, c)),
     ).toPromise();
   }

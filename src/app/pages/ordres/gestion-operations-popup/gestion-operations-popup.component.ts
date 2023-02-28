@@ -288,6 +288,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   quitPopup() {
+    this.lot = null;
     this.hidePopup();
   }
 
