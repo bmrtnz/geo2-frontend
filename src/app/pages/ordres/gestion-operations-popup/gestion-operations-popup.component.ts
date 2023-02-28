@@ -288,12 +288,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   quitPopup() {
-    const [litigeID, numRegroupement] = this.lot;
-    this.litigesLignesService
-      .getList(`litige.id==${litigeID} and numeroGroupementLitige==${numRegroupement}`, ["id"]).pipe(
-        map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
-        concatMap(ids => this.litigesLignesService.deleteAll(ids)),
-      ).subscribe(() => this.hidePopup());
+    this.hidePopup();
   }
 
 }

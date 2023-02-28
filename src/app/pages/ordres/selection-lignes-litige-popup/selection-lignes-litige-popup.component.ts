@@ -12,6 +12,7 @@ import notify from "devextreme/ui/notify";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import Litige from "app/shared/models/litige.model";
 import { LitigesService } from "app/shared/services/api/litiges.service";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 
 
 @Component({
@@ -42,6 +43,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   constructor(
     private ordreLignesService: OrdreLignesService,
     private litigesService: LitigesService,
+    private litigesLignesService: LitigesLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
@@ -106,6 +108,12 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("selection-compte-palox-popup");
+    // Clear temps litige lignes
+    this.litigesLignesService
+      .getList(`litige.id==${this.litigeID} and numeroGroupementLitige==?`, ["id"]).pipe(
+        map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
+        concatMap(ids => this.litigesLignesService.deleteAll(ids)),
+      ).subscribe();
   }
 
   onShown() {
