@@ -7,13 +7,15 @@ import { LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
 import { LitigeConsequencesService } from "app/shared/services/api/litige-consequences.service";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
+import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { concatMap, map } from "rxjs/operators";
+import { concatMap, tap } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
+import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
 import { GridsService } from "../grids.service";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
@@ -30,7 +32,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @Output() public litigeID: string;
   @Output() public currOrdre: Partial<Ordre>;
   @Output() public updateFrais = new EventEmitter();
-
 
   public visible: boolean;
   public causeItems: any[];
@@ -51,11 +52,13 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
   @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
   @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
+  @ViewChild(GridLotComponent) private gridLot: GridLotComponent;
 
   constructor(
     private localizeService: LocalizationService,
     public causesService: LitigeCausesService,
     public litigesLignesService: LitigesLignesService,
+    public litigesService: LitigesService,
     public ordresLogistiquesService: OrdresLogistiquesService,
     public fUtils: FormUtilsService,
     public consequencesService: LitigeConsequencesService,
@@ -171,7 +174,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
     /////////////////////////////////
     //  Validation
     /////////////////////////////////
-    this.quitPopup();
+    this.litigesService.genNumLot(this.infosLitige.litige.id).pipe(
+      concatMap(res => this.gridLot.assignLot(res.data.genNumLot)),
+    ).subscribe({
+      next: res => this.quitPopup(),
+      error: (err: Error) => notify(err.message, "ERROR", 3500),
+    });
   }
 
   createRefactTranspOrder() {

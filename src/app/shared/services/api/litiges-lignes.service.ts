@@ -5,10 +5,12 @@ import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigneForfait from "app/shared/models/litige-ligne-forfait.model";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { take } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+import { FormUtilsService } from "../form-utils.service";
 
 @Injectable({
   providedIn: "root",
@@ -16,7 +18,7 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
 export class LitigesLignesService extends ApiService implements APIRead {
   listRegexp = /.*\.(?:id)$/i;
 
-  constructor(apollo: Apollo) {
+  constructor(apollo: Apollo, private formUtils: FormUtilsService) {
     super(apollo, LitigeLigne);
   }
 
@@ -208,6 +210,36 @@ export class LitigesLignesService extends ApiService implements APIRead {
         { name: "litigeID", type: "String", isOptionnal: false },
       ])),
       variables: { litigeID },
+    });
+  }
+
+  save(body: Set<string>, litigeLigne: Partial<LitigeLigne>) {
+    return this.apollo.mutate<{ saveLitigeLigne: Partial<LitigeLigne> }>({
+      mutation: gql(this.buildSaveGraph([...body])),
+      variables: { litigeLigne },
+    });
+  }
+
+  saveAll(body: Set<string>, allLitigeLigne: Array<Partial<LitigeLigne>>) {
+    return this.apollo.mutate<{ saveAllLitigeLigne: Array<Partial<LitigeLigne>> }>({
+      mutation: gql(this.buildSaveAllGraph([...body])),
+      variables: { allLitigeLigne },
+    });
+  }
+
+  allLitigeLigneFaitDatasource(litigeID: string, numeroLigne: string, body: Set<string>) {
+    return new DataSource({
+      reshapeOnPush: true,
+      store: new CustomStore({
+        key: "ligne.id",
+        load: (options: LoadOptions) => this
+          .allLitigeLigneFait(litigeID, numeroLigne, body).pipe(
+            map(res => JSON.parse(JSON.stringify(res.data.allLitigeLigneFait))
+              .map(i => this.formUtils.cleanTypenames(i))),
+          ).toPromise(),
+        update: (key, values) => this.save(body, values).toPromise(),
+        byKey: key => this.getOne_v2(key, body).toPromise(),
+      }),
     });
   }
 

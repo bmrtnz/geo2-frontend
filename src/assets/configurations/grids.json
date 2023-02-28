@@ -7215,7 +7215,7 @@
   "litige-lignes-lot": {
     "columns": [
       {
-        "dataField": "id",
+        "dataField": "ligne.id",
         "allowEditing": false,
         "visible": false
       },
