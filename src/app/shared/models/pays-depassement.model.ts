@@ -1,10 +1,13 @@
 import { Personne } from ".";
 import { Field, Model, ModelName } from "./model";
+import Pays from "./pays.model";
+import Secteur from "./secteur.model";
 
 @ModelName("PaysDepassement")
 export class PaysDepassement extends Model {
   @Field({ asKey: true }) public id: string;
-  @Field({ model: import("./pays.model") }) public pays: PaysDepassement;
+  @Field({ model: import("./pays.model") }) public pays: Pays;
+  @Field({ model: import("./secteur.model") }) public secteur: Secteur;
   @Field({
     allowSorting: false,
     allowHeaderFiltering: false,
