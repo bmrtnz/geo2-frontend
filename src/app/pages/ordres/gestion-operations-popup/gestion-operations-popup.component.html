@@ -205,12 +205,6 @@
   (updateTotalFraisLitige)="updateFrais.emit()"
 ></app-frais-annexes-litige-popup>
 
-<app-selection-lignes-litige-popup
-  [ordre]="currOrdre"
-  [litigeID]="infosLitige?.litige.id"
-  (selectedLignes)="assignLitigeLignes($event)"
-></app-selection-lignes-litige-popup>
-
 <app-forfait-litige-popup
   [infosLitige]="infosLitige"
 ></app-forfait-litige-popup>

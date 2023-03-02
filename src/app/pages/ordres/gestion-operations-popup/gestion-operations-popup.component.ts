@@ -28,7 +28,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public infosLitige: any;
-  @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
+  @Output() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litigeID: string;
   @Output() public currOrdre: Partial<Ordre>;
   @Output() public updateFrais = new EventEmitter();
@@ -174,10 +174,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
     /////////////////////////////////
     //  Validation
     /////////////////////////////////
-    this.litigesService.genNumLot(this.infosLitige.litige.id).pipe(
-      concatMap(res => this.gridLot.assignLot(res.data.genNumLot)),
-    ).subscribe({
-      next: res => {
+    this.gridLot.assignLot().subscribe({
+      complete: () => {
         this.quitPopup();
         this.gridsService.reload("LitigeLigne");
       },
@@ -237,14 +235,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.litigeID = this.infosLitige.litige.id;
     this.fraisAnnexesPopup.visible = true;
   }
-
-  assignLitigeLignes(lignes?: Array<OrdreLigne["id"]>) {
-    console.log(lignes);
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
-  }
-
 
   checkEmptyCauseConseq() {
     const texts = [];

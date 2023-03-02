@@ -212,8 +212,8 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   assignLitigeLignes(e) {
-    this.grid.reload();
-    this.modifierLot();
+    this.gestionOpPopup.lot = [this.infosLitige.litige.id, null];
+    this.gestionOpPopup.visible = true;
   }
 
   saveLitige() {
