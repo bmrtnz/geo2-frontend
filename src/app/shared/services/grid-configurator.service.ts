@@ -312,6 +312,7 @@ export class GridConfiguratorService {
       id: GridsConfigsService.getCacheID({
         grid,
         utilisateur: this.authService.currentUser,
+        societe: this.currentCompanyService.getCompany(),
       }),
       fields: {
         config: (current) => ({
