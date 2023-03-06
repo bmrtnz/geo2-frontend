@@ -7263,6 +7263,11 @@
         "dataField": "ligne.ordreLigne.article.articleDescription.descriptionCourte",
         "allowEditing": false,
         "visible": true
+      },
+      {
+        "dataField": "ligne.numeroGroupementLitige",
+        "allowEditing": true,
+        "visible": true
       }
     ]
   },

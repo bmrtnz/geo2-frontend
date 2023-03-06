@@ -229,7 +229,6 @@ export class LitigesLignesService extends ApiService implements APIRead {
 
   allLitigeLigneFaitDatasource(litigeID: string, numeroLigne: string, body: Set<string>) {
     return new DataSource({
-      reshapeOnPush: true,
       store: new CustomStore({
         key: "ligne.id",
         load: (options: LoadOptions) => this

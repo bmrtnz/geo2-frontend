@@ -12,7 +12,8 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { concatMap, tap } from "rxjs/operators";
+import { EMPTY, iif, Observable, zip } from "rxjs";
+import { concatMap, delay, map, tap, timeout } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -174,8 +175,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
     /////////////////////////////////
     //  Validation
     /////////////////////////////////
-    this.gridLot.assignLot().subscribe({
-      complete: () => {
+    this.gridLot.persist().subscribe({
+      next: () => {
         this.quitPopup();
         this.gridsService.reload("LitigeLigne");
       },
@@ -286,6 +287,25 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.responsibleList.filter(r => r.id === "transpApproche")[0].visible = true;
         });
     }
+
+    iif(() => !!this.lot[1], EMPTY, this.createLot())
+      .pipe(
+        concatMap(data => this.gridLot.updateLot(data)),
+      )
+      .subscribe({
+        error: (err: Error) => notify(err.message, "ERROR", 3500),
+      });
+  }
+
+  private createLot(): Observable<Partial<LitigeLigne>> {
+    return zip(
+      this.litigesService.genNumLot(this.infosLitige.litige.id),
+    ).pipe(
+      map(([genLot]) => ({
+        numeroGroupementLitige: genLot.data.genNumLot,
+        valide: true,
+      })),
+    );
   }
 
   quitPopup() {

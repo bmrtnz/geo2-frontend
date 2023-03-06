@@ -1,8 +1,13 @@
 <dx-data-grid (onToolbarPreparing)="gridConfigHandler($event)">
+  <dxo-editing
+    [allowUpdating]="true"
+    [mode]="'batch'"
+  ></dxo-editing>
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [dataType]="column?.dataType"
     [allowEditing]="column?.allowEditing"
+    [visible]="column?.visible"
   ></dxi-column>
 </dx-data-grid>
