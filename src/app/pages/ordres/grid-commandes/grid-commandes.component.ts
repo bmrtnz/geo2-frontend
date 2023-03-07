@@ -27,7 +27,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, filter, finalize, first, last, map, takeWhile } from "rxjs/operators";
+import { concatMap, concatMapTo, filter, finalize, first, last, map, takeWhile, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -621,7 +621,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
             // newData.fournisseur = fournisseur;
             const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
-            self.grid.instance.cellValue(rowIndex, "fournisseur.id", fournisseur.id);
+            self.grid.instance.cellValue(rowIndex, "fournisseur.id", fournisseur?.id);
 
             // On force la bonne valeur pour l'affichage au focus
             const ds = self.grid.dataSource as DataSource;
@@ -858,7 +858,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
 
   private async bindFournisseurSource(dxFilter?: any[]) {
     const filters: any[] = [["valide", "=", true]];
-    if (dxFilter) filters.push("and", dxFilter);
+    if (dxFilter && dxFilter.length) filters.push("and", dxFilter);
 
     GridConfiguratorService
       .bindLookupColumnSource(this.grid.instance, "fournisseur.id", await this.fournisseursService
