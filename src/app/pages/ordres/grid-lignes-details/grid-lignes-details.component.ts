@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewC
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
+import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
@@ -30,6 +31,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   public dataSource: DataSource;
   public typePaletteSource: DataSource;
   public paletteInterSource: DataSource;
+  public venteUniteSource: DataSource;
+  public achatUniteSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -51,6 +54,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     public articlesService: ArticlesService,
     public typePaletteService: TypesPaletteService,
     public paletteInterService: TypesPaletteService,
+    public venteUniteService: BasesTarifService,
+    public achatUniteService: BasesTarifService,
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public formUtilsService: FormUtilsService,
@@ -63,7 +68,9 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
     this.itemsWithSelectBox = [
       "typePalette",
-      "paletteInter"
+      "paletteInter",
+      "venteUnite",
+      "achatUnite",
     ];
   }
 
@@ -73,6 +80,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
       ["valide", "=", true],
     ]);
     this.paletteInterSource = this.typePaletteSource;
+    this.venteUniteSource = this.venteUniteService.getDataSource_v2(["id", "description"]);
+    this.achatUniteSource = this.venteUniteSource;
     this.enableFilters();
     this.gridsService.register("DetailExpeditions", this.datagrid);
   }
