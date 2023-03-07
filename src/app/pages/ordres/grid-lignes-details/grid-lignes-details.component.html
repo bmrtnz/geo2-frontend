@@ -100,7 +100,7 @@
     </dx-select-box>
   </div>
 
-  <div *dxTemplate="let cell of 'modifAutoBtnTemplate'">
+  <div *dxTemplate="let cell of 'modifBtnTemplate'">
     <dx-button
       class="small-detail-exp-button modif"
       type="default"
@@ -110,6 +110,9 @@
       (onClick)="modifDetailExp(cell)"
     >
     </dx-button>
+  </div>
+
+  <div *dxTemplate="let cell of 'autoBtnTemplate'">
     <dx-button
       class="small-detail-exp-button auto"
       type="default"

@@ -2983,11 +2983,20 @@
         "visible": true
       },
       {
+        "visibleIndex": 4,
+        "dataField": "article.matierePremiere.typeVente.id",
+        "width": 60,
+        "allowEditing": false,
+        "editCellTemplate": "modifBtnTemplate",
+        "showInColumnChooser": false,
+        "visible": true
+      },
+      {
         "visibleIndex": 5,
         "dataField": "article.matierePremiere.variete.id",
         "width": 60,
         "allowEditing": false,
-        "editCellTemplate": "modifAutoBtnTemplate",
+        "editCellTemplate": "autoBtnTemplate",
         "showInColumnChooser": false,
         "visible": true
       },
@@ -3051,8 +3060,9 @@
       },
       {
         "visibleIndex": 20,
-        "dataField": "venteUnite.id",
+        "dataField": "venteUnite",
         "dataType": "string",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {
@@ -3065,8 +3075,9 @@
       },
       {
         "visibleIndex": 24,
-        "dataField": "achatUnite.id",
+        "dataField": "achatUnite",
         "dataType": "string",
+        "editCellTemplate": "selectBoxEditTemplate",
         "visible": true
       },
       {
