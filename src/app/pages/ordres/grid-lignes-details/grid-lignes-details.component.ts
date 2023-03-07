@@ -294,7 +294,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
 
   showModifButton(cell) {
     const data = cell.data;
-    const show = data.logistique.expedieStation && (
+    const show = /*data.logistique.expedieStation && */ (
       data.ordre.client.modificationDetail ||
       data.fournisseur.indicateurModificationDetail ||
       (data.fournisseur.indicateurModificationDetail && data.article.emballage.emballage.groupe.id === "PALOX") ||
