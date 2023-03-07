@@ -1,4 +1,7 @@
-<dx-data-grid (onToolbarPreparing)="gridConfigHandler($event)">
+<dx-data-grid
+  [repaintChangesOnly]="true"
+  (onToolbarPreparing)="gridConfigHandler($event)"
+>
   <dxo-editing
     [allowUpdating]="true"
     [mode]="'batch'"

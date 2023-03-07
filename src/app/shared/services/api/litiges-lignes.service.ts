@@ -16,11 +16,11 @@ import { FormUtilsService } from "../form-utils.service";
   providedIn: "root",
 })
 export class LitigesLignesService extends ApiService implements APIRead {
-  listRegexp = /.*\.(?:id)$/i;
 
   constructor(apollo: Apollo, private formUtils: FormUtilsService) {
     super(apollo, LitigeLigne);
   }
+  listRegexp = /.*\.(?:id)$/i;
 
   getOne_v2(id: LitigeLigne["id"], columns: Set<string>) {
     return this.apollo
@@ -228,6 +228,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
   }
 
   allLitigeLigneFaitDatasource(litigeID: string, numeroLigne: string, body: Set<string>) {
+    const llBody = new Set([...body].map(field => field.replace("ligne.", "")));
     return new DataSource({
       store: new CustomStore({
         key: "ligne.id",
@@ -236,8 +237,13 @@ export class LitigesLignesService extends ApiService implements APIRead {
             map(res => JSON.parse(JSON.stringify(res.data.allLitigeLigneFait))
               .map(i => this.formUtils.cleanTypenames(i))),
           ).toPromise(),
-        update: (key, values) => this.save(body, values).toPromise(),
-        byKey: key => this.getOne_v2(key, body).toPromise(),
+        update: (key, values) => {
+          return this.save(
+            llBody,
+            { id: key, ...values.ligne },
+          ).toPromise();
+        },
+        byKey: key => this.getOne_v2(key, llBody).toPromise(),
       }),
     });
   }

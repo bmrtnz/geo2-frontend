@@ -12,8 +12,8 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { EMPTY, iif, Observable, zip } from "rxjs";
-import { concatMap, delay, map, tap, timeout } from "rxjs/operators";
+import { EMPTY, iif, Observable, of, throwError, zip } from "rxjs";
+import { catchError, concatMap, concatMapTo, delay, filter, map, tap, timeout } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -172,16 +172,17 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   validate() {
-    /////////////////////////////////
-    //  Validation
-    /////////////////////////////////
-    this.gridLot.persist().subscribe({
-      next: () => {
-        this.quitPopup();
-        this.gridsService.reload("LitigeLigne");
-      },
-      error: (err: Error) => notify(err.message, "ERROR", 3500),
-    });
+    this.mutateLot().pipe(
+      concatMap(data => this.gridLot.updateLot(data)),
+      concatMapTo(this.gridLot.persist()),
+    )
+      .subscribe({
+        next: () => {
+          this.quitPopup();
+          this.gridsService.reload("LitigeLigne");
+        },
+        error: (err: Error) => notify(err.message, "ERROR", 3500),
+      });
   }
 
   createRefactTranspOrder() {
@@ -297,14 +298,31 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
-  private createLot(): Observable<Partial<LitigeLigne>> {
+  /** Update temporary rows with numero lot and validity */
+  private createLot() {
     return zip(
       this.litigesService.genNumLot(this.infosLitige.litige.id),
     ).pipe(
       map(([genLot]) => ({
         numeroGroupementLitige: genLot.data.genNumLot,
         valide: true,
-      })),
+      } as Partial<LitigeLigne>)),
+    );
+  }
+
+  private mutateLot() {
+    return zip(
+      of(this.responsibles.value.typeTiers),
+      of(this.causes.selectedItems[0]),
+      of(this.consequences.selectedItems[0]),
+    ).pipe(
+      map(([responsableTypeCode, cause, consequence]) => ({
+        responsableTypeCode,
+        cause: { id: cause.id },
+        consequence: { id: consequence.id },
+      } as Partial<LitigeLigne>)),
+      catchError(res => throwError(
+        new Error("La sélection du responsable, de la cause et de la conséquence est obligatoire"))), // invalid inputs
     );
   }
 

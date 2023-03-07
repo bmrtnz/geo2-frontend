@@ -7268,6 +7268,24 @@
         "dataField": "ligne.numeroGroupementLitige",
         "allowEditing": true,
         "visible": true
+      },
+      {
+        "dataField": "ligne.responsableTypeCode",
+        "allowEditing": true,
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ligne.cause.id",
+        "allowEditing": true,
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ligne.consequence.id",
+        "allowEditing": true,
+        "visible": false,
+        "showInColumnChooser": false
       }
     ]
   },

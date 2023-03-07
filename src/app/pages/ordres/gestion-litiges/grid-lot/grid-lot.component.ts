@@ -8,8 +8,8 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import { from, interval, Observable, of } from "rxjs";
-import { concatMap, filter, map, mapTo, skipWhile, takeUntil, takeWhile, tap } from "rxjs/operators";
+import { defer, from, interval, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, filter, map, mapTo, mergeMap, skipWhile, takeUntil, takeWhile, tap, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
 @Component({
@@ -80,25 +80,28 @@ export class GridLotComponent implements OnInit, OnChanges {
     );
   }
 
-  /** Met a jour l'ensemble des lignes du lot avec les données fournies */
+  /** Met a jour l'ensemble des lignes de la grille (le lot) avec les données fournies */
   public updateLot(data: Partial<LitigeLigne>) {
-    return interval(1000)
+    return interval(100)
       .pipe(
-        mapTo(this.grid?.dataSource as DataSource),
-        takeWhile(datasource => !datasource, true),
-        filter(datasource => !!datasource),
-        tap(datasource => (datasource.store() as CustomStore)
-          .push(datasource.items().map(llf => ({
-            type: "update",
-            key: llf.ligne.id,
-            data: { ligne: data },
-          })))),
+        concatMapTo(defer(() => of(this.grid?.dataSource as DataSource))),
+        takeWhile(datasource => !datasource?.items()?.length, true),
+        filter(datasource => !!datasource?.items()?.length),
+        concatMap(datasource => {
+          return Promise.all((datasource.items() as Partial<LitigeLigneFait>[]).map(item => {
+            // console.log(item.ligne.id, { ligne: data });
+            // TODO dont use update as it will persist instantly
+            // What we want at this moment is only updating the grid
+            return (datasource.store() as CustomStore).update(item.ligne.id, data);
+          }));
+        }),
+        timeout(10000),
       );
   }
 
   /** Persist grid changes */
   public persist() {
-    return from(this.grid.instance.saveEditData());
+    return defer(() => this.grid.instance.saveEditData());
   }
 
 }
