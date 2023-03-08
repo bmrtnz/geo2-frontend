@@ -2,8 +2,9 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div class="content-block"
-  *ngIf="!clientId"
+  <div
+    class="content-block"
+    *ngIf="!clientId"
   >
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
@@ -58,7 +59,12 @@
         [ratio]="1"
         [visible]="!createMode"
       >
-        <h4 class="entity-id" *ngIf="!clientId">N°&nbsp;{{ client?.id }}</h4>
+        <h4
+          class="entity-id"
+          *ngIf="!clientId"
+        >
+          N°&nbsp;{{ client?.id }}
+        </h4>
         <dx-button
           *ngIf="!clientId"
           height="auto"
@@ -325,7 +331,9 @@
                       <div class="dx-field-value">
                         <dx-check-box
                           formControlName="usageInterne"
-                          [readOnly]="readOnlyMode || !authService.currentUser.adminClient"
+                          [readOnly]="
+                            readOnlyMode || !authService.currentUser.adminClient
+                          "
                           (onValueChanged)="onUsageInterneChange($event)"
                         >
                           <dx-validator
@@ -831,40 +839,6 @@
                   </div>
                 </div>
 
-                <!-- Regime Tva -->
-                <div class="dx-field field-large">
-                  <div class="dx-field-label">
-                    {{ "tiers-clients-regimeTva" | localize }}
-                  </div>
-                  <div class="dx-field-value">
-                    <dx-select-box
-                      formControlName="regimeTva"
-                      [readOnly]="readOnlyMode"
-                      [dataSource]="regimesTva"
-                      [displayExpr]="displayIDBefore"
-                      [searchExpr]="['id']"
-                      (onValueChanged)="mandatoryUEVAT($event)"
-                      itemTemplate="items"
-                      >
-                      <div *dxTemplate="let data of 'items'">
-                        <div
-                          [title]="hintRegimeTva(data)"
-                          [ngClass]="{ 'not-valid': !data.valide }"
-                        >
-                          {{ displayIDBefore(data) }}
-                        </div>
-                      </div>
-                      <dx-validator
-                        name="{{ 'tiers-clients-regimeTva' | localize }}"
-                      >
-                        <dxi-validation-rule
-                          type="required"
-                        ></dxi-validation-rule>
-                      </dx-validator>
-                    </dx-select-box>
-                  </div>
-                </div>
-
                 <!-- Délai bon à facturer -->
                 <div class="dx-field field-large">
                   <div class="dx-field-label">
@@ -1161,6 +1135,41 @@
                     </dx-text-box>
                   </div>
                 </div>
+
+                <!-- Regime Tva -->
+                <div class="dx-field field-large">
+                  <div class="dx-field-label">
+                    {{ "tiers-clients-regimeTva" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-select-box
+                      formControlName="regimeTva"
+                      [readOnly]="readOnlyMode"
+                      [dataSource]="regimesTva"
+                      [displayExpr]="displayIDBefore"
+                      [searchExpr]="['id']"
+                      (onValueChanged)="mandatoryUEVAT($event)"
+                      itemTemplate="items"
+                    >
+                      <div *dxTemplate="let data of 'items'">
+                        <div
+                          [title]="hintRegimeTva(data)"
+                          [ngClass]="{ 'not-valid': !data.valide }"
+                        >
+                          {{ displayIDBefore(data) }}
+                        </div>
+                      </div>
+                      <dx-validator
+                        name="{{ 'tiers-clients-regimeTva' | localize }}"
+                      >
+                        <dxi-validation-rule
+                          type="required"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
+                  </div>
+                </div>
+
                 <!-- Siret -->
                 <div class="dx-field field-large">
                   <div class="dx-field-label">
@@ -2075,10 +2084,7 @@
   [readOnlyMode]="true"
 >
 </app-order-history-popup>
-<app-encours-client-popup
-  [client]="client"
->
-</app-encours-client-popup>
+<app-encours-client-popup [client]="client"> </app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
   [subTitle]="client?.code"
