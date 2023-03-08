@@ -322,7 +322,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         consequence: { id: consequence.id },
       } as Partial<LitigeLigne>)),
       catchError(res => throwError(
-        new Error("La sélection du responsable, de la cause et de la conséquence est obligatoire"))), // invalid inputs
+        new Error(this.localizeService.localize("mutate-lot-invalid-inputs")))), // invalid inputs
     );
   }
 
