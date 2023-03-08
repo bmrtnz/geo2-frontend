@@ -1,5 +1,6 @@
 <dx-data-grid
   [repaintChangesOnly]="true"
+  [dataSource]="dataSource"
   (onToolbarPreparing)="gridConfigHandler($event)"
 >
   <dxo-editing
@@ -12,5 +13,6 @@
     [dataType]="column?.dataType"
     [allowEditing]="column?.allowEditing"
     [visible]="column?.visible"
+    [showInColumnChooser]="column.showInColumnChooser"
   ></dxi-column>
 </dx-data-grid>

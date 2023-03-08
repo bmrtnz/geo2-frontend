@@ -55,6 +55,12 @@ export type GridConfig = {
   };
 };
 
+export type ColumnsChangeSelection = {
+  fresh?: GridColumn[];
+  current: GridColumn[];
+  previous?: GridColumn[];
+};
+
 export type AutoConfig = {
   component: dxDataGrid;
   toolbarOptions: dxToolbarOptions;
@@ -63,11 +69,7 @@ export type AutoConfig = {
   autoStateStoring: boolean;
   autoColumnChooser: boolean;
   onConfigReload?: (state: GridConfig) => void;
-  onColumnsChange?: (selection: {
-    fresh?: GridColumn[];
-    current: GridColumn[];
-    previous?: GridColumn[];
-  }) => void;
+  onColumnsChange?: (selection: ColumnsChangeSelection) => void;
 };
 
 export enum Grid {
@@ -458,6 +460,7 @@ export class GridConfiguratorService {
     this.configureToolbar(grid, arguments[1]);
 
     const columnsChangeEmitter = new EventEmitter();
+    /* Deactivating because of globals side effects
     component.option().onOptionChanged = (event) => {
       // Allows to keep the page static when sorting a column
       // Deep testing required as all grids are involved
@@ -467,6 +470,7 @@ export class GridConfiguratorService {
       // }
       columnsChangeEmitter.emit(event);
     };
+    */
     columnsChangeEmitter
       .pipe(
         filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value?.length),

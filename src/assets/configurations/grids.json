@@ -7262,41 +7262,45 @@
     "columns": [
       {
         "dataField": "ligne.id",
-        "allowEditing": false,
-        "visible": false
+        "visible": false,
+        "allowEditing": false
       },
       {
         "dataField": "ligne.ordreLigne.id",
-        "allowEditing": false,
-        "visible": false
+        "visible": false,
+        "allowEditing": false
       },
       {
         "dataField": "ligne.ordreLigne.article.articleDescription.descriptionCourte",
-        "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "allowEditing": false
       },
       {
         "dataField": "ligne.numeroGroupementLitige",
-        "allowEditing": true,
-        "visible": true
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.valide",
+        "visible": false,
+        "allowEditing": false
       },
       {
         "dataField": "ligne.responsableTypeCode",
-        "allowEditing": true,
         "visible": false,
-        "showInColumnChooser": false
+        "allowEditing": false
       },
       {
-        "dataField": "ligne.cause.id",
-        "allowEditing": true,
+        "dataField": "ligne.cause",
         "visible": false,
-        "showInColumnChooser": false
+        "showInColumnChooser": false,
+        "allowEditing": false
       },
       {
-        "dataField": "ligne.consequence.id",
-        "allowEditing": true,
+        "dataField": "ligne.consequence",
         "visible": false,
-        "showInColumnChooser": false
+        "showInColumnChooser": false,
+        "allowEditing": false
       }
     ]
   },

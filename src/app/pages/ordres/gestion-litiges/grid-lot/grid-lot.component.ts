@@ -3,13 +3,13 @@ import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
-import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { defer, from, interval, Observable, of } from "rxjs";
-import { concatMap, concatMapTo, filter, map, mapTo, mergeMap, skipWhile, takeUntil, takeWhile, tap, timeout } from "rxjs/operators";
+import { concatMap, concatMapTo, delay, filter, map, mapTo, mergeMap, skipWhile, takeUntil, takeWhile, tap, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
 @Component({
@@ -23,6 +23,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
+  public dataSource: DataSource;
   public columns: Observable<GridColumn[]>;
   public gridConfigHandler = event =>
     this.gridConfiguratorService.init(Grid.LitigeLignesLot, {
@@ -35,35 +36,35 @@ export class GridLotComponent implements OnInit, OnChanges {
     private gridConfiguratorService: GridConfiguratorService,
     private gridsService: GridsService,
   ) {
-    this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
   }
 
   ngOnInit(): void {
+    this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
     this.gridsService.register("LitigeLignesLot", this.grid);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.lot.currentValue !== changes.lot.previousValue && this.grid) {
-      this.fillGrid();
+    if (changes.lot.currentValue !== changes.lot.previousValue) {
+      this.fillGrid(this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot));
     }
   }
 
-  private onColumnsChange({ current }: { current: GridColumn[] }) {
+  private onColumnsChange({ current }: ColumnsChangeSelection) {
     this.columns = of(current);
     this.fillGrid(of(current));
   }
 
-  private async fillGrid(columns?: Observable<GridColumn[]>) {
-    this.grid.dataSource = await (columns ?? this.columns).pipe(
+  private async fillGrid(columns: Observable<GridColumn[]>) {
+    this.dataSource = await (columns).pipe(
       filter(() => !!this.lot),
-      concatMap(c => this.fetchDatasource(...this.lot, c)),
+      concatMap(resolvedColumns => this.fetchDatasource(resolvedColumns, ...this.lot)),
     ).toPromise();
   }
 
   private fetchDatasource(
-    litigeID: Litige["id"],
-    numeroGroupement: LitigeLigne["numeroGroupementLitige"],
     columns: GridColumn[],
+    litigeID: Litige["id"],
+    numeroGroupement?: LitigeLigne["numeroGroupementLitige"],
   ) {
     return of(columns).pipe(
       GridConfiguratorService.getVisible(),
@@ -72,9 +73,17 @@ export class GridLotComponent implements OnInit, OnChanges {
         ...fields,
         "ligne.id",
         "ligne.litige.id",
-        "ligne.ordreLigne.id",
-        "ligne.numeroGroupementLitige",
       ]),
+      map(fields =>
+        // upgrade fields that require sub selections
+        fields.map(field => {
+          if (field === "ligne.cause")
+            return "ligne.cause.id";
+          if (field === "ligne.consequence")
+            return "ligne.consequence.id";
+          return field;
+        })
+      ),
       map(fields => this.litigesLignesService
         .allLitigeLigneFaitDatasource(litigeID, numeroGroupement ?? "", new Set(fields))),
     );
@@ -88,12 +97,13 @@ export class GridLotComponent implements OnInit, OnChanges {
         takeWhile(datasource => !datasource?.items()?.length, true),
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
-          return Promise.all((datasource.items() as Partial<LitigeLigneFait>[]).map(item => {
-            // console.log(item.ligne.id, { ligne: data });
-            // TODO dont use update as it will persist instantly
-            // What we want at this moment is only updating the grid
-            return (datasource.store() as CustomStore).update(item.ligne.id, data);
-          }));
+          // On met à jour les champs de maniere lente et sequentiel pour ne pas vexer DX
+          (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
+            Object.entries(data).forEach(([field, value]) => {
+              this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
+            });
+          });
+          return Promise.resolve();
         }),
         timeout(10000),
       );
