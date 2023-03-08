@@ -122,6 +122,9 @@ export class OrdresSuiviComponent implements AfterViewInit {
       ? "="
       : "contains";
 
+    // La recherche par numero d'ordre doit fonctionner avec des valeurs partielles (_12345)
+    if (criteria === "numero") value = value.padStart(6, "0");
+
     this.filter = [
       ["valide", "=", true],
       "and",
