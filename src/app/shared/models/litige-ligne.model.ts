@@ -13,7 +13,7 @@ export class LitigeLigne extends Model {
   @Field({ model: import("./litige-cause.model") })
   public cause?: LitigeCause;
   @Field({ model: import("./litige-consequence.model") })
-  public consequence?: LitigeCause;
+  public consequence?: LitigeConsequence;
   @Field() public consequenceLitigeCode?: string;
   @Field() public responsableTypeCode?: string;
   @Field() public tiersCode?: string;
