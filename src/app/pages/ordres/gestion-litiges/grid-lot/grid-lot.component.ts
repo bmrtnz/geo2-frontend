@@ -97,7 +97,6 @@ export class GridLotComponent implements OnInit, OnChanges {
         takeWhile(datasource => !datasource?.items()?.length, true),
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
-          // On met à jour les champs de maniere lente et sequentiel pour ne pas vexer DX
           (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
             Object.entries(data).forEach(([field, value]) => {
               this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
