@@ -6,10 +6,9 @@ import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.ser
 import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
-import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import { defer, from, interval, Observable, of } from "rxjs";
-import { concatMap, concatMapTo, delay, filter, map, mapTo, mergeMap, skipWhile, takeUntil, takeWhile, tap, timeout } from "rxjs/operators";
+import { defer, interval, Observable, of } from "rxjs";
+import { concatMap, concatMapTo, filter, map, takeWhile, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
 @Component({
@@ -111,6 +110,11 @@ export class GridLotComponent implements OnInit, OnChanges {
   /** Persist grid changes */
   public persist() {
     return defer(() => this.grid.instance.saveEditData());
+  }
+
+  /** Reloads grid data and repaints data rows, wrapper around `dxDataGrid.refresh` */
+  public refresh() {
+    return this.grid.instance.refresh();
   }
 
 }

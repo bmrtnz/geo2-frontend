@@ -1,18 +1,19 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
+import Litige from "app/shared/models/litige.model";
+import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxScrollViewComponent, DxDataGridComponent } from "devextreme-angular";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
+import { LitigesService } from "app/shared/services/api/litiges.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { EMPTY, from, iif, Observable } from "rxjs";
+import { DxDataGridComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 import { alert } from "devextreme/ui/dialog";
-import { environment } from "environments/environment";
-import { concatMap, map } from "rxjs/operators";
-import Ordre from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import Litige from "app/shared/models/litige.model";
-import { LitigesService } from "app/shared/services/api/litiges.service";
-import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
+import { environment } from "environments/environment";
+import { EMPTY, from, iif, Observable } from "rxjs";
+import { concatMap, map } from "rxjs/operators";
 
 
 @Component({
@@ -24,6 +25,8 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   @Input() ordre: Partial<Ordre>;
   @Input() litigeID: Litige["id"];
+  @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
+  @Input() tempRowsCleaning = true;
   @Output() selectedLignes = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
@@ -109,11 +112,12 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   onShowing(e) {
     e.component.content().parentNode.classList.add("selection-compte-palox-popup");
     // Clear temps litige lignes
-    this.litigesLignesService
-      .getList(`litige.id==${this.litigeID} and numeroGroupementLitige=isnull=null and valide==false`, ["id"]).pipe(
-        map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
-        concatMap(ids => this.litigesLignesService.deleteAll(ids)),
-      ).subscribe();
+    if (this.tempRowsCleaning)
+      this.litigesLignesService
+        .getList(`litige.id==${this.litigeID} and numeroGroupementLitige=isnull=null and valide==false`, ["id"]).pipe(
+          map(res => res.data.allLitigeLigneList.map(ligne => ligne.id)),
+          concatMap(ids => this.litigesLignesService.deleteAll(ids)),
+        ).subscribe();
   }
 
   onShown() {
@@ -144,11 +148,11 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     this.litigesService.getOne_v2(this.litigeID, new Set(["numeroVersion"]))
       .pipe(
         concatMap(res => iif(() => res.data.litige.numeroVersion === 2,
-          this.litigesService.ofInitLigneLitige(this.selectedLignesIds.join(), this.litigeID, ""),
+          this.litigesService.ofInitLigneLitige(this.selectedLignesIds.join(), this.litigeID, this.lot?.[1] ?? ""),
           EMPTY)),
       )
       .subscribe(res => {
-        this.selectedLignes.emit();
+        this.selectedLignes.emit(this.selectedLignesIds);
         this.quitPopup();
       });
 

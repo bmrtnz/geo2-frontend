@@ -95,7 +95,7 @@
           type="success"
           text="{{ 'btn-addArticle' | localize }}"
           [focusStateEnabled]="false"
-          (onClick)="addArticle()"
+          (onClick)="openArticleAdder()"
         ></dx-button>
         <dx-button
           type="normal"
@@ -207,3 +207,12 @@
 <app-forfait-litige-popup
   [infosLitige]="infosLitige"
 ></app-forfait-litige-popup>
+
+<!-- Ajout d'article au lot -->
+<app-selection-lignes-litige-popup
+  [ordre]="ordre"
+  [litigeID]="infosLitige?.litige.id"
+  [lot]="lot"
+  [tempRowsCleaning]="false"
+  (selectedLignes)="pushLitigeLignes($event)"
+></app-selection-lignes-litige-popup>

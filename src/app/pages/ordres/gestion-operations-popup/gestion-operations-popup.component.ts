@@ -11,7 +11,7 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { EMPTY, iif, of, throwError, zip } from "rxjs";
+import { EMPTY, from, iif, of, throwError, zip } from "rxjs";
 import { catchError, concatMap, concatMapTo, map, tap } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
@@ -219,8 +219,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
     /////////////////////////////////
   }
 
-  addArticle() {
-    // Geo1 : Ouverture de la fenêtre w_litige_pick_ordre_ordlig_v2
+  openArticleAdder() {
+    this.selectLignesPopup.visible = true;
+  }
+
+  pushLitigeLignes(event) {
+    from(this.gridLot.refresh())
+      .pipe(
+        concatMapTo(this.setupLotCreation()),
+        concatMap(data => this.gridLot.updateLot(data))
+      )
+      .subscribe({
+        error: (err: Error) => notify(err.message, "ERROR", 3500),
+      });
   }
 
   autoFill() {
@@ -307,7 +318,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       this.syncResponsableInput();
     }
 
-    iif(() => !!this.lot[1], EMPTY, this.createLot())
+    iif(() => !!this.lot[1], EMPTY, this.setupLotCreation())
       .pipe(
         concatMap(data => this.gridLot.updateLot(data)),
       )
@@ -317,12 +328,13 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   /** Update temporary rows with numero lot and validity */
-  private createLot() {
+  private setupLotCreation() {
     return zip(
       this.litigesService.genNumLot(this.infosLitige.litige.id),
     ).pipe(
-      map(([genLot]) => ({
-        numeroGroupementLitige: genLot.data.genNumLot,
+      map(([genLot]) => genLot.data.genNumLot),
+      map(numeroGroupementLitige => ({
+        numeroGroupementLitige,
         valide: true,
       } as Partial<LitigeLigne>)),
     );
