@@ -7276,6 +7276,76 @@
         "allowEditing": false
       },
       {
+        "dataField": "ligne.ordreLigne.proprietaireMarchandise.code",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.ordreLigne.fournisseur.code",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.ordreLigne.nombrePalettesExpediees",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.ordreLigne.nombreColisExpedies",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.ordreLigne.poidsNetExpedie",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.clientIndicateurForfait",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.responsableIndicateurForfait",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.clientQuantite",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.responsableQuantite",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.clientUniteFactureCode",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.responsableUniteFactureCode",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.clientPrixUnitaire",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.responsablePrixUnitaire",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.deviseCode",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
         "dataField": "ligne.numeroGroupementLitige",
         "visible": true,
         "allowEditing": false

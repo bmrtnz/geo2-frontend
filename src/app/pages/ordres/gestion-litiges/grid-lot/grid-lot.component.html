@@ -2,6 +2,7 @@
   [repaintChangesOnly]="true"
   [dataSource]="dataSource"
   (onToolbarPreparing)="gridConfigHandler($event)"
+  (onCellPrepared)="onCellPrepared($event)"
 >
   <dxo-editing
     [allowUpdating]="true"

@@ -117,4 +117,16 @@ export class GridLotComponent implements OnInit, OnChanges {
     return this.grid.instance.refresh();
   }
 
+  public onCellPrepared(event) {
+    if (event.rowType !== "data") return;
+
+    if (event.column.dataField.includes(".client")) {
+      event.cellElement.classList.add("client-cell");
+    }
+
+    if (event.column.dataField.includes(".responsable")) {
+      event.cellElement.classList.add("responsable-cell");
+    }
+  }
+
 }

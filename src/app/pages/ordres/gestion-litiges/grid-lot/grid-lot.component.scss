@@ -1,0 +1,11 @@
+@import "~themes/generated/variables.base";
+
+::ng-deep {
+  .client-cell {
+    background: $base-danger;
+  }
+
+  .responsable-cell {
+    background: $base-success;
+  }
+}
