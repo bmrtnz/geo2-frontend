@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { OrdreLigne } from "app/shared/models";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -12,8 +11,8 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { EMPTY, iif, Observable, of, throwError, zip } from "rxjs";
-import { catchError, concatMap, concatMapTo, delay, filter, map, tap, timeout } from "rxjs/operators";
+import { EMPTY, iif, of, throwError, zip } from "rxjs";
+import { catchError, concatMap, concatMapTo, map, tap } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -115,12 +114,21 @@ export class GestionOperationsPopupComponent implements OnChanges {
     const causeFilter = `valide == true and typeTier == ${tiers}`;
     const conseqFilter = `valide == true`;
     this.causesService.getList(["id", "description"], causeFilter)
+      .pipe(
+        tap(res => {
+          this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
+          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+        }),
+        concatMapTo(this.fetchRestoreInfo()),
+      )
       .subscribe((res) => {
-        this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
-        this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+        if (res?.cause?.id) {
+          const itemIndex = this.causeItems.findIndex(r => r.id === res.cause.id);
+          this.causes.instance.selectItem(itemIndex);
+        }
       });
-    this.consequencesService.getList(["id", "description"], conseqFilter)
-      .subscribe((res) => {
+    this.consequencesService.getList(["id", "description"], conseqFilter).pipe(
+      tap((res) => {
         this.consequenceItems = JSON.parse(JSON.stringify(res.data.allLitigeConsequenceList));
         this.consequenceItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
 
@@ -136,6 +144,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
         if (["transporteur", "transpApproche"].includes(this.selectedResponsible))
           this.consequenceItems.filter(c => c.id === "G")[0].visible = false;
 
+      }),
+      concatMapTo(this.fetchRestoreInfo()),
+    )
+      .subscribe((res) => {
+        if (res?.consequence?.id) {
+          const itemIndex = this.consequenceItems.findIndex(r => r.id === res.consequence.id);
+          this.consequences.instance.selectItem(itemIndex);
+        }
       });
   }
 
@@ -277,7 +293,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   onShown() {
-    if (this.ordre?.id) {
+    if (!this.lot[1]) { // lot creation
       this.firstShown = true;
       this.responsibles.value = this.responsibleList[0];
       // Is there a transporteur approche? Then show corresponding radio btn
@@ -287,6 +303,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
           if (res.data.countOrdreLogistique)
             this.responsibleList.filter(r => r.id === "transpApproche")[0].visible = true;
         });
+    } else { // lot mutation
+      this.syncResponsableInput();
     }
 
     iif(() => !!this.lot[1], EMPTY, this.createLot())
@@ -329,6 +347,24 @@ export class GestionOperationsPopupComponent implements OnChanges {
   quitPopup() {
     this.lot = null;
     this.hidePopup();
+  }
+
+  private syncResponsableInput() {
+    this.fetchRestoreInfo().subscribe(res => {
+      if (res?.responsableTypeCode)
+        this.responsibles.value = this.responsibleList
+          .find(r => r.typeTiers === res.responsableTypeCode);
+    });
+  }
+
+  // assuming we have an existing lot
+  private fetchRestoreInfo() {
+    const [litigeID, lotNum] = this.lot;
+    return this.litigesLignesService.getList(
+      `litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`,
+      ["responsableTypeCode", "cause.id", "consequence.id"]).pipe(
+        map(res => res.data.allLitigeLigneList[0]),
+      );
   }
 
 }
