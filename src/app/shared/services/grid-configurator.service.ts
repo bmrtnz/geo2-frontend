@@ -165,6 +165,7 @@ const extraConfigurations = [
   "searchTimeout",
   "calculateSortValue",
   "filterOperations",
+  "virtual",
 ];
 
 @Injectable({
@@ -229,6 +230,15 @@ export class GridConfiguratorService {
   static getFields() {
     return map((columns: GridColumn[]) =>
       columns.map((column) => column.dataField),
+    );
+  }
+
+  /**
+   * Grid configuration observable mapper to filter out virtual fields
+   */
+  static filterNonVirtual() {
+    return map((columns: GridColumn[]) =>
+      columns.filter((column) => !column.virtual),
     );
   }
 
