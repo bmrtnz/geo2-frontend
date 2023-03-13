@@ -22,6 +22,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
+  /** Fields processed by `byCellTemplate` */
   public readonly maxByStore = {
     "ligne.responsableNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
     "ligne.responsableNombreColis": "ligne.ordreLigne.nombreColisExpedies",
@@ -73,6 +74,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     numeroGroupement?: LitigeLigne["numeroGroupementLitige"],
   ) {
     return of(columns).pipe(
+      GridConfiguratorService.filterNonVirtual(),
       GridConfiguratorService.getVisible(),
       GridConfiguratorService.getFields(),
       map(fields => [
@@ -137,6 +139,14 @@ export class GridLotComponent implements OnInit, OnChanges {
     // if (event.column.dataField.includes(".responsable")) {
     //   event.cellElement.classList.add("responsable-cell");
     // }
+  }
+
+  public calculateClientAvoir(rowData: Partial<LitigeLigneFait>) {
+    return rowData.ligne.clientQuantite * rowData.ligne.clientPrixUnitaire;
+  }
+
+  public calculateResponsableAvoir(rowData: Partial<LitigeLigneFait>) {
+    return rowData.ligne.responsableQuantite * rowData.ligne.responsablePrixUnitaire;
   }
 
 }

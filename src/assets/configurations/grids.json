@@ -7276,6 +7276,11 @@
         "allowEditing": false
       },
       {
+        "dataField": "ligne.ordreLigne.article.id",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
         "dataField": "ligne.ordreLigne.proprietaireMarchandise.code",
         "visible": true,
         "allowEditing": false
@@ -7336,12 +7341,12 @@
       {
         "dataField": "ligne.clientPrixUnitaire",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": true
       },
       {
         "dataField": "ligne.responsablePrixUnitaire",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": true
       },
       {
         "dataField": "ligne.deviseCode",
@@ -7349,8 +7354,22 @@
         "allowEditing": false
       },
       {
-        "dataField": "ligne.numeroGroupementLitige",
+        "dataField": "clientAvoir",
         "visible": true,
+        "allowEditing": false,
+        "calculateCellValue": "calculateClientAvoir",
+        "virtual": true
+      },
+      {
+        "dataField": "responsableAvoir",
+        "visible": true,
+        "allowEditing": false,
+        "calculateCellValue": "calculateResponsableAvoir",
+        "virtual": true
+      },
+      {
+        "dataField": "ligne.numeroGroupementLitige",
+        "visible": false,
         "allowEditing": false
       },
       {
