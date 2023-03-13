@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
+import { LocalizePipe } from "app/shared/pipes";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
@@ -42,6 +43,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
     private gridsService: GridsService,
+    private localize: LocalizePipe,
   ) {
   }
 
@@ -147,6 +149,10 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public calculateResponsableAvoir(rowData: Partial<LitigeLigneFait>) {
     return rowData.ligne.responsableQuantite * rowData.ligne.responsablePrixUnitaire;
+  }
+
+  public calculateCaption(column: GridColumn) {
+    return column.dataField.split(".").pop();
   }
 
 }
