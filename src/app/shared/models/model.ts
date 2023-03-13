@@ -336,13 +336,11 @@ export abstract class Model {
 
   /**
    * Fetch value from context by path
-   * @param path attribute path
+   * @param path attribute path with chunks separated by dots
    * @param context model instance
    */
-  static fetchValue(path: string[], context) {
-    return path.length && context
-      ? Model.fetchValue(path, context?.[path.shift()])
-      : context;
+  static fetchValue(path: string[], context: {}) {
+    return context.reach(path);
   }
 
   /**

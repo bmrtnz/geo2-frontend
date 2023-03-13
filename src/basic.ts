@@ -19,6 +19,14 @@ declare global {
     ucFirst(): string;
     lcFirst(): string;
   }
+
+  interface Object {
+    /**
+     * Try to reach value by path
+     * @param path path chunks
+     */
+    reach: (path: string[]) => any;
+  }
 }
 
 String.prototype.ucFirst = function () {
@@ -28,6 +36,14 @@ String.prototype.ucFirst = function () {
 String.prototype.lcFirst = function () {
   return this.charAt(0).toLowerCase() + this.slice(1);
 };
+
+Object.defineProperty(Object.prototype, "reach", {
+  value(path: string[]) {
+    return path.length && this
+      ? this.reach(path, this?.[path.shift()])
+      : this;
+  }
+});
 
 /**
  * @see GridBaseColumn
