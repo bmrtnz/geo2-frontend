@@ -7368,6 +7368,21 @@
         "virtual": true
       },
       {
+        "dataField": "ligne.ordreLigne.ordre.devise.id",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.deviseCode",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.commentaireResponsable",
+        "visible": true,
+        "allowEditing": true
+      },
+      {
         "dataField": "ligne.numeroGroupementLitige",
         "visible": false,
         "allowEditing": false
