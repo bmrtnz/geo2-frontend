@@ -7,6 +7,6 @@ import { version } from "../../../../package.json";
 })
 export class VersionService {
   getLabel() {
-    return environment.production ? `v ${version}` : "version de développement";
+    return environment.production ? `v ${version}` : `version de développement ( ${version} )`;
   }
 }
