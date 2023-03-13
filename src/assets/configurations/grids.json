@@ -7286,19 +7286,22 @@
         "allowEditing": false
       },
       {
-        "dataField": "ligne.ordreLigne.nombrePalettesExpediees",
+        "dataField": "ligne.responsableNombrePalettes",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": true,
+        "cellTemplate": "byCellTemplate"
       },
       {
-        "dataField": "ligne.ordreLigne.nombreColisExpedies",
+        "dataField": "ligne.responsableNombreColis",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": true,
+        "cellTemplate": "byCellTemplate"
       },
       {
-        "dataField": "ligne.ordreLigne.poidsNetExpedie",
+        "dataField": "ligne.responsablePoidsNet",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": true,
+        "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientIndicateurForfait",

@@ -22,6 +22,13 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
+  public readonly maxByStore = {
+    "ligne.responsableNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
+    "ligne.responsableNombreColis": "ligne.ordreLigne.nombreColisExpedies",
+    "ligne.responsablePoidsNet": "ligne.ordreLigne.poidsNetExpedie",
+  };
+
+
   public dataSource: DataSource;
   public columns: Observable<GridColumn[]>;
   public gridConfigHandler = event =>
@@ -72,6 +79,9 @@ export class GridLotComponent implements OnInit, OnChanges {
         ...fields,
         "ligne.id",
         "ligne.litige.id",
+        "ligne.ordreLigne.nombrePalettesExpediees",
+        "ligne.ordreLigne.nombreColisExpedies",
+        "ligne.ordreLigne.poidsNetExpedie",
       ]),
       map(fields =>
         // upgrade fields that require sub selections
@@ -120,13 +130,13 @@ export class GridLotComponent implements OnInit, OnChanges {
   public onCellPrepared(event) {
     if (event.rowType !== "data") return;
 
-    if (event.column.dataField.includes(".client")) {
-      event.cellElement.classList.add("client-cell");
-    }
+    // if (event.column.dataField.includes(".client")) {
+    //   event.cellElement.classList.add("client-cell");
+    // }
 
-    if (event.column.dataField.includes(".responsable")) {
-      event.cellElement.classList.add("responsable-cell");
-    }
+    // if (event.column.dataField.includes(".responsable")) {
+    //   event.cellElement.classList.add("responsable-cell");
+    // }
   }
 
 }

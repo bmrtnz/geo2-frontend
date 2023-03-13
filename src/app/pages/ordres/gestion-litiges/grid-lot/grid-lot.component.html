@@ -15,5 +15,12 @@
     [allowEditing]="column?.allowEditing"
     [visible]="column?.visible"
     [showInColumnChooser]="column.showInColumnChooser"
+    [cellTemplate]="column?.cellTemplate"
+    [width]="'auto'"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'byCellTemplate'">
+    {{ cell.value }} /
+    {{ cell.data.reach(maxByStore[cell.column.dataField].split(".")) }}
+  </div>
 </dx-data-grid>
