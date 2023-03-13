@@ -21,6 +21,34 @@
     [width]="'auto'"
   ></dxi-column>
 
+  <dxo-summary [recalculateWhileEditing]="true">
+    <dxi-total-item
+      column="ligne.responsableNombrePalettes"
+      summaryType="sum"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="ligne.responsableNombreColis"
+      summaryType="sum"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="ligne.responsablePoidsNet"
+      summaryType="sum"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="clientAvoir"
+      summaryType="sum"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      column="responsableAvoir"
+      summaryType="sum"
+    >
+    </dxi-total-item>
+  </dxo-summary>
+
   <div *dxTemplate="let cell of 'byCellTemplate'">
     {{ cell.value }} /
     {{ cell.data.reach(maxByStore[cell.column.dataField].split(".")) }}
