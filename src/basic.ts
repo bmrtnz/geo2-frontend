@@ -25,7 +25,7 @@ declare global {
      * Try to reach value by path
      * @param path path chunks
      */
-    reach: (path: string[]) => any;
+    reach: (path: string[], context?: {}) => any;
   }
 }
 
@@ -38,10 +38,11 @@ String.prototype.lcFirst = function () {
 };
 
 Object.defineProperty(Object.prototype, "reach", {
-  value(path: string[]) {
-    return path.length && this
-      ? this.reach(path, this?.[path.shift()])
-      : this;
+  value(path: string[], context?: {}) {
+    if (!context) context = this;
+    return path.length && context
+      ? context.reach(path, context?.[path.shift()])
+      : context;
   }
 });
 
