@@ -1,10 +1,6 @@
 @import "~themes/generated/variables.base";
 
 ::ng-deep {
-  .hidden {
-    display: none;
-  }
-
   .client-cell {
     color: $base-danger;
 
