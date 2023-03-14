@@ -2,7 +2,6 @@
   [repaintChangesOnly]="true"
   [dataSource]="dataSource"
   (onToolbarPreparing)="gridConfigHandler($event)"
-  (onCellPrepared)="onCellPrepared($event)"
 >
   <dxo-editing
     [allowUpdating]="true"
@@ -18,7 +17,7 @@
     [showInColumnChooser]="column.showInColumnChooser"
     [cellTemplate]="column?.cellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
-    [width]="'auto'"
+    [width]="column?.width !== undefined ? column.width : 'auto'"
   ></dxi-column>
 
   <dxo-summary [recalculateWhileEditing]="true">
@@ -51,6 +50,14 @@
 
   <div *dxTemplate="let cell of 'byCellTemplate'">
     {{ cell.value }} /
-    {{ cell.data.reach(maxByStore[cell.column.dataField].split(".")) }}
+    {{ cell.data.reach(byTemplateConfig[cell.column.dataField].split(".")) }}
   </div>
+
+  <ng-container *dxTemplate="let cell of 'mergeCellsTemplate'">
+    <div
+      *ngIf="cell?.cellElement"
+      class="merged"
+      [innerHTML]="cell | mergeSiblingColumns"
+    ></div>
+  </ng-container>
 </dx-data-grid>

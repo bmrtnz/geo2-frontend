@@ -1,11 +1,50 @@
 @import "~themes/generated/variables.base";
 
 ::ng-deep {
+  .hidden {
+    display: none;
+  }
+
   .client-cell {
-    background: $base-danger;
+    color: $base-danger;
+
+    .dx-checkbox-icon {
+      border-color: $base-danger;
+    }
+
+    .dx-checkbox.dx-checkbox-checked {
+      .dx-checkbox-icon {
+        background-color: $base-danger;
+      }
+    }
+
   }
 
   .responsable-cell {
-    background: $base-success;
+    color: $base-success;
+
+    .dx-checkbox-icon {
+      border-color: $base-success;
+    }
+
+    .dx-checkbox.dx-checkbox-checked {
+      .dx-checkbox-icon {
+        background-color: $base-success;
+      }
+    }
+
+  }
+
+  td {
+    .merged {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      >div {
+        padding: 5px;
+        line-height: normal;
+      }
+    }
   }
 }

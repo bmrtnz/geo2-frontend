@@ -7311,53 +7311,122 @@
       {
         "dataField": "ligne.clientIndicateurForfait",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "indicateurForfait",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "ligne.responsableIndicateurForfait",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "ligne.clientQuantite",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "quantite",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "ligne.responsableQuantite",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "ligne.clientUniteFactureCode",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "uniteFactureCode",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "ligne.responsableUniteFactureCode",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "ligne.clientPrixUnitaire",
         "visible": true,
-        "allowEditing": true
+        "allowEditing": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "prixUnitaire",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "ligne.responsablePrixUnitaire",
         "visible": true,
-        "allowEditing": true
+        "allowEditing": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "ligne.deviseCode",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "devise",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
+      },
+      {
+        "dataField": "ligne.ordreLigne.ordre.devise.id",
+        "visible": true,
+        "allowEditing": false,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "clientAvoir",
         "visible": true,
         "allowEditing": false,
         "calculateCellValue": "calculateClientAvoir",
+        "virtual": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "avoir",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
       {
@@ -7365,17 +7434,9 @@
         "visible": true,
         "allowEditing": false,
         "calculateCellValue": "calculateResponsableAvoir",
-        "virtual": true
-      },
-      {
-        "dataField": "ligne.ordreLigne.ordre.devise.id",
-        "visible": true,
-        "allowEditing": false
-      },
-      {
-        "dataField": "ligne.deviseCode",
-        "visible": true,
-        "allowEditing": false
+        "virtual": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "ligne.commentaireResponsable",

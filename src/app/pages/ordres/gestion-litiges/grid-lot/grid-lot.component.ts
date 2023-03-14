@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -8,6 +8,7 @@ import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/share
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import { defer, interval, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, map, takeWhile, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
@@ -24,11 +25,21 @@ export class GridLotComponent implements OnInit, OnChanges {
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
   /** Fields processed by `byCellTemplate` */
-  public readonly maxByStore = {
+  public readonly byTemplateConfig = {
     "ligne.responsableNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
     "ligne.responsableNombreColis": "ligne.ordreLigne.nombreColisExpedies",
     "ligne.responsablePoidsNet": "ligne.ordreLigne.poidsNetExpedie",
   };
+
+  /** Fields processed by `mergeCellTemplate` */
+  // public readonly duoTemplateConfig: Record<string, [string, string]> = {
+  //   indicateurForfait: ["ligne.clientIndicateurForfait", "ligne.responsableIndicateurForfait"],
+  //   quantite: ["ligne.clientQuantite", "ligne.responsableQuantite"],
+  //   uniteFactureCode: ["ligne.clientUniteFactureCode", "ligne.responsableUniteFactureCode"],
+  //   prixUnitaire: ["ligne.clientPrixUnitaire", "ligne.responsablePrixUnitaire"],
+  //   devise: ["ligne.deviseCode", "ligne.ordreLigne.ordre.devise.id"],
+  //   avoir: ["clientAvoir", "responsableAvoir"],
+  // };
 
 
   public dataSource: DataSource;
@@ -131,18 +142,6 @@ export class GridLotComponent implements OnInit, OnChanges {
     return this.grid.instance.refresh();
   }
 
-  public onCellPrepared(event) {
-    if (event.rowType !== "data") return;
-
-    // if (event.column.dataField.includes(".client")) {
-    //   event.cellElement.classList.add("client-cell");
-    // }
-
-    // if (event.column.dataField.includes(".responsable")) {
-    //   event.cellElement.classList.add("responsable-cell");
-    // }
-  }
-
   public calculateClientAvoir(rowData: Partial<LitigeLigneFait>) {
     return rowData.ligne.clientQuantite * rowData.ligne.clientPrixUnitaire;
   }
@@ -155,4 +154,24 @@ export class GridLotComponent implements OnInit, OnChanges {
     return column.dataField.split(".").pop();
   }
 
+}
+
+@Pipe({ name: "mergeSiblingColumns" })
+export class MergeSiblingColumnsPipe implements PipeTransform {
+  transform(input: { cellElement: HTMLElement, columnIndex: number, component: dxDataGrid, element: HTMLElement }) {
+
+    const htmlStructure = Object.entries({
+      client: input.cellElement.previousElementSibling,
+      responsable: input.cellElement.nextElementSibling
+    })
+      .map(([key, target]) => {
+        const containerElm = document.createElement("div");
+        containerElm.classList.add(`${key}-cell`);
+        containerElm.innerHTML += target.innerHTML;
+        return containerElm;
+      });
+
+    return htmlStructure
+      .reduce((accumulator, current) => accumulator + current.outerHTML, "");
+  }
 }
