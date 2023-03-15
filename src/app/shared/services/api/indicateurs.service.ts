@@ -8,6 +8,7 @@ export enum Indicateur {
   ClientsDepassementEncours = "ClientsDepassementEncours",
   OrdresNonConfirmes = "OrdresNonConfirmes",
   PlanningDepart = "PlanningDepart",
+  LitigeOuvert = "LitigeOuvert",
 }
 
 export type IndicateurCount = { count: number, secteur?: string };

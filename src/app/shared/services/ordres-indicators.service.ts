@@ -208,9 +208,9 @@ const indicators: Indicator[] = [
     ),
   },
   {
-    id: "Litiges",
+    id: Indicateur.LitigeOuvert,
     enabled: true,
-    withCount: false,
+    withCount: true,
     parameter: "Litiges",
     subParameter: "en cours",
     tileBkg: "#EE6265",
@@ -421,18 +421,19 @@ export class OrdresIndicatorsService {
       }
 
       // Litiges
-      // if (instance.id === "Litiges") {
-      //   // Model LitigeLigne
-      //   instance.filter = [["valide", "=", true]];
-      //   if (this.authService.currentUser.limitationSecteur) {
-      //     instance.filter.push("and");
-      //     instance.filter.push([
-      //       "litige.ordreOrigine.secteurCommercial.id",
-      //       "=",
-      //       this.authService.currentUser.secteurCommercial.id,
-      //     ]);
-      //   }
-      // }
+      if (instance.id === Indicateur.LitigeOuvert) {
+        // // Model LitigeLigne
+        // instance.filter = [["valide", "=", true]];
+        // if (this.authService.currentUser.limitationSecteur) {
+        //   instance.filter.push("and");
+        //   instance.filter.push([
+        //     "litige.ordreOrigine.secteurCommercial.id",
+        //     "=",
+        //     this.authService.currentUser.secteurCommercial.id,
+        //   ]);
+        // }
+        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.LitigeOuvert);
+      }
 
       // Planning departs
       if (instance.id === Indicateur.PlanningDepart) {
