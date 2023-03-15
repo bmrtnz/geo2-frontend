@@ -165,10 +165,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.causes.selectedItems.length) this.causes.selectedItemKeys.shift();
     this.selectedCause = e.addedItems[0]?.id;
 
-    // Filter Regularisation
-    this.consequenceItems.filter(c => c.id === "I")[0].visible = false;
-    if (["W61", "C53", "F37", "T41"].includes(this.selectedCause)) {
-      this.consequenceItems.filter(c => c.id === "I")[0].visible = true;
+    if (this.consequenceItems.length) {
+      // Filter Regularisation
+      this.consequenceItems.filter(c => c.id === "I")[0].visible = false;
+      if (["W61", "C53", "F37", "T41"].includes(this.selectedCause)) {
+        this.consequenceItems.filter(c => c.id === "I")[0].visible = true;
+      }
     }
   }
   onConsequenceChanged(e) {
