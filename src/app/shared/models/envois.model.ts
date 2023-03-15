@@ -28,6 +28,7 @@ export class Envois extends Model {
   @Field() public nomContact: string;
   @Field() public nombreTentatives: number;
   @Field() public numeroAcces1: string;
+  @Field() public numeroAcces2: string;
   @Field() public numeroOrdre: string;
   @Field({ model: import("./ordre.model") }) public ordre: Ordre;
   @Field({ model: import("./type-tiers.model") }) public typeTiers: TypeTiers;

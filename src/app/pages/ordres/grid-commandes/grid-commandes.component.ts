@@ -234,7 +234,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
       const saveInterval = setInterval(() => {
         if (!this.grid.instance.hasEditData()) {
           clearInterval(saveInterval);
-          this.functionsService.fCalculMarge(this.ordreID).subscribe({
+          this.functionsService.fCalculMargePrevi(this.ordreID, this.currentCompanyService.getCompany().id).subscribe({
             error: ({ message }: Error) => console.log(message),
             complete: () => this.gridsService.reload("OrdreMarge"),
           });

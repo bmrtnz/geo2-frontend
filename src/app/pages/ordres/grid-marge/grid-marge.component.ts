@@ -4,6 +4,7 @@ import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -37,7 +38,8 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
     public gridConfiguratorService: GridConfiguratorService,
     private gridsService: GridsService,
     private functionsService: FunctionsService,
-    public localizeService: LocalizationService
+    public localizeService: LocalizationService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
     this.columns = from(this.gridConfig).pipe(map(config => config.columns));
@@ -115,7 +117,7 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
   onToggling(toggled: boolean) {
 
     if (toggled && this?.ordre?.id) {
-      this.functionsService.fCalculMarge(this.ordre.id).subscribe({
+      this.functionsService.fCalculMargePrevi(this.ordre.id, this.currentCompanyService.getCompany().id).subscribe({
         error: ({ message }: Error) => console.log(message),
         complete: () => this.enableFilters(),
       });
