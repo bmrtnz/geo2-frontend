@@ -11,7 +11,7 @@ import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { GridColumn } from "basic";
+import { GridColumn, ONE_DAY } from "basic";
 import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -275,13 +275,29 @@ export class PlanningDepartComponent implements AfterViewInit {
     const fin = new Date(this.dateMax.value);
     const deltaDate = fin < deb;
 
+    // Remove negative offset
     if (deltaDate) {
+
+      // When date start input changed
       if (e.element.classList.contains("dateStart")) {
         this.dateMax.value = deb;
-      } else {
-        this.dateMin.value = fin;
+        // Set time for correct value on view
+        this.dateMax.value = new Date((this.dateMax.value as Date).setUTCHours(22, 59, 59));
+        // Adapt to 24h periode
+        this.dateMax.value = new Date(this.dateMax.value.valueOf() + ONE_DAY);
       }
+
+      // When date end input changed
+      if (e.element.classList.contains("dateEnd")) {
+        this.dateMin.value = fin;
+        // Set time for correct value on view
+        this.dateMin.value = new Date((this.dateMin.value as Date).setUTCHours(23, 0, 0));
+        // Adapt to 24h periode
+        this.dateMin.value = new Date(this.dateMin.value.valueOf() - ONE_DAY);
+      }
+
     }
+
     this.periodeSB.value = null;
   }
 
