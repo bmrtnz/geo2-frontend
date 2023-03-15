@@ -154,7 +154,7 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   public calculateCaption(column: GridColumn) {
-    return column.dataField.split(".").pop();
+    return this.localize.transform(`${Grid.LitigeLignesLot}-${column.dataField.split(".").pop()}`);
   }
 
 }

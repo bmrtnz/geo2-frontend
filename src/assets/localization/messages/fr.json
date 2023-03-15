@@ -1739,6 +1739,17 @@
     "selectionLignesCde-ordreLigne-libelleDLV": "DLUO / Best before",
     "selectionLignesCde-ordreLigne-ordreLigne-id": "Id ligne cde",
     "selectionLignesCde-ordreLigne-totalNombreColis": "Total nbre colis",
-    "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire"
+    "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire",
+    "litige-lignes-lot-descriptionCourte": "Produit",
+    "litige-lignes-lot-responsableNombrePalettes": "Nb pal.",
+    "litige-lignes-lot-responsableNombreColis": "Nb colis",
+    "litige-lignes-lot-responsablePoidsNet": "Pds net (en kg)",
+    "litige-lignes-lot-indicateurForfait": "Forfait",
+    "litige-lignes-lot-quantite": "Quantité",
+    "litige-lignes-lot-uniteFactureCode": "Unité",
+    "litige-lignes-lot-prixUnitaire": "P.U.",
+    "litige-lignes-lot-devise": "Devise",
+    "litige-lignes-lot-avoir": "Avoir",
+    "litige-lignes-lot-commentaireResponsable": "Commentaires au responsable"
   }
 }
