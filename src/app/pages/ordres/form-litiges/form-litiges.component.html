@@ -305,6 +305,20 @@
                     </dx-number-box>
                   </div>
                 </div>
+                <br />
+                <dx-button
+                  class="btn-frais-annexes"
+                  type="default"
+                  [disabled]="litigeClosed && noFraisAnnexes"
+                  [focusStateEnabled]="false"
+                  text="{{
+                    (litigeClosed
+                      ? 'btn-fraisAnnnexes-visualiser'
+                      : 'btn-fraisAnnnexes-ajout-visualiser'
+                    ) | localize
+                  }}"
+                  (onClick)="fraisAnnexes()"
+                ></dx-button>
               </div>
             </div>
           </dxi-item>
@@ -367,6 +381,52 @@
       </dxi-item>
       <dxi-item [ratio]="0.4"></dxi-item>
     </dx-box>
+  </div>
+
+  <div class="litige-btn-container">
+    <dx-button
+      type="default"
+      text="{{ 'btn-saveLitige' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="saveLitige()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-incidentLitige' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="incidentLitige()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-avisResolution' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="avisResolution()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-recapInterne' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="recapInterne()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-creerLot' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="creerLot()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-modifierLot' | localize }}"
+      [focusStateEnabled]="false"
+      [disabled]="!selectedLitigeLigneKey?.length"
+      (onClick)="modifierLot()"
+    ></dx-button>
+    <dx-button
+      type="success"
+      text="{{ 'btn-close' | localize }}"
+      [focusStateEnabled]="false"
+      (onClick)="cloturer()"
+    ></dx-button>
   </div>
 </form>
 <div style="clear: both"></div>
