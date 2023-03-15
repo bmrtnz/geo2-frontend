@@ -132,7 +132,11 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
     this.fournisseurs = this.fournisseursService.getDataSource_v2(["id", "code", "raisonSocial"]);
     this.fournisseurs.filter(["valide", "=", true]);
-    if (bureauAchat) this.fournisseurs.filter(["bureauAchat.id", "=", bureauAchat.id]);
+    if (bureauAchat) this.fournisseurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["bureauAchat.id", "=", bureauAchat.id],
+    ]);
   }
 
   validOrAll(e) {
