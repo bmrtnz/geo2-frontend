@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import LitigeSupervision from "app/shared/models/litige-supervision.model";
+import Litige from "app/shared/models/litige.model";
 import { Role } from "app/shared/models/personne.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { LitigesService } from "app/shared/services/api/litiges.service";
@@ -11,14 +13,13 @@ import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/g
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
-import { alert, confirm } from "devextreme/ui/dialog";
+import { confirm } from "devextreme/ui/dialog";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
-import { LitigeCloturePopupComponent } from "./litige-cloture-popup/litige-cloture-popup.component";
+import { ClotureTarget, LitigeCloturePopupComponent } from "./litige-cloture-popup/litige-cloture-popup.component";
 
 enum InputField {
   codeSecteur = "secteur",
@@ -284,8 +285,16 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
   }
 
-  public onClotureChanged() {
-    this.datagrid.instance.refresh();
+  public onClotureChanged([litigeID, clotureTarget]: [Litige["id"], ClotureTarget]) {
+    const ds = (this.datagrid.dataSource as Partial<LitigeSupervision>[]);
+    const index = ds.findIndex(({ litige }) => litige.id === litigeID);
+    if (index >= 0) {
+      ds[index] = {
+        ...ds[index],
+        clientClos: [ClotureTarget.Client, ClotureTarget.Both].includes(clotureTarget),
+        fournisseurClos: [ClotureTarget.Responsable, ClotureTarget.Both].includes(clotureTarget),
+      };
+    }
   }
 
 }

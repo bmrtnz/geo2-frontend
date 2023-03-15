@@ -296,9 +296,7 @@
         </span>
         <span class="litiges-proprietaire-code"
           >&nbsp;-
-          {{
-            "ordres-supervision-litiges-proprietaire-code" | localize
-          }}
+          {{ "ordres-supervision-litiges-proprietaire-code" | localize }}
           :&nbsp;</span
         >
         <span class="litiges-tiers bold-text">{{
@@ -306,9 +304,7 @@
         }}</span>
         <span class="litiges-proprietaire-code"
           >&nbsp;-
-          {{
-            "ordres-supervision-litiges-fournisseur-code" | localize
-          }}
+          {{ "ordres-supervision-litiges-fournisseur-code" | localize }}
           :&nbsp;</span
         >
         <span class="litiges-tiers bold-text">{{
@@ -321,5 +317,5 @@
 
 <app-litige-cloture-popup
   [infosLitige]="infosLitige"
-  (clotureChanged)="onClotureChanged()"
+  (clotureChanged)="onClotureChanged($event)"
 ></app-litige-cloture-popup>
