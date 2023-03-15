@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import LitigeAPayer from "app/shared/models/litige-a-payer.model";
+import LitigeSupervision from "app/shared/models/litige-supervision.model";
+import Litige from "app/shared/models/litige.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import Litige from "app/shared/models/litige.model";
+import { map } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import LitigeSupervision from "app/shared/models/litige-supervision.model";
-import LitigeAPayer from "app/shared/models/litige-a-payer.model";
 import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
-import { OrdreLigne } from "app/shared/models";
 
 export type ClotureResponse = FunctionResponse<{ triggered_prompt: string }>;
 
@@ -152,7 +152,16 @@ export class LitigesService extends ApiService implements APIRead {
         ],
       )),
       variables: { code, type },
-    });
+      fetchPolicy: "network-only",
+    }).pipe(map(res => {
+      // clone data to allow mutations
+      return {
+        ...res,
+        data: {
+          allSupervisionLitige: JSON.parse(JSON.stringify(res.data.allSupervisionLitige)),
+        }
+      };
+    }));
   }
 
   getLitigesAPayer(litigeID: string, body: Set<string>) {
