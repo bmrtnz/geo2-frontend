@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } 
 import {
   ConfirmationResultPopupComponent
 } from "app/pages/ordres/actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
+import Litige from "app/shared/models/litige.model";
 import { LocalizationService } from "app/shared/services";
 import { FunctionResult } from "app/shared/services/api/functions.service";
 import { ClotureResponse, LitigesService } from "app/shared/services/api/litiges.service";
@@ -11,6 +12,12 @@ import notify from "devextreme/ui/notify";
 import { Observable, of } from "rxjs";
 import { concatMap, filter, map, tap } from "rxjs/operators";
 
+/** Litige cloture possible targets */
+export enum ClotureTarget {
+  Client = "Client",
+  Responsable = "Responsable",
+  Both = "Client ET Responsable",
+}
 
 @Component({
   selector: "app-litige-cloture-popup",
@@ -20,7 +27,7 @@ import { concatMap, filter, map, tap } from "rxjs/operators";
 export class LitigeCloturePopupComponent implements OnInit, OnChanges {
 
   @Input() public infosLitige: any;
-  @Output() public clotureChanged = new EventEmitter();
+  @Output() public clotureChanged = new EventEmitter<[Litige["id"], ClotureTarget]>();
 
   visible: boolean;
   titleStart: string;
@@ -40,7 +47,7 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
     private litigesService: LitigesService,
     private currentCompanyService: CurrentCompanyService
   ) {
-    this.choices = ["Client", "Responsable", "Client ET Responsable"];
+    this.choices = Object.keys(ClotureTarget);
   }
 
   ngOnInit() {
@@ -96,7 +103,7 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
   doCloture() {
     return this.validateCloture().subscribe({
       error: (err: Error) => notify(err.message, "ERROR", 3500),
-      next: r => this.clotureChanged.emit(),
+      next: r => this.clotureChanged.emit([this.infosLitige.litige.id, ClotureTarget[this.selected]]),
     });
   }
 
