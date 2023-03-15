@@ -7262,8 +7262,7 @@
     "columns": [
       {
         "dataField": "ligne.id",
-        "visible": false,
-        "allowEditing": false
+        "visible": false
       },
       {
         "dataField": "ligne.ordreLigne.id",
@@ -7273,22 +7272,8 @@
       {
         "dataField": "ligne.ordreLigne.article.articleDescription.descriptionCourte",
         "visible": true,
-        "allowEditing": false
-      },
-      {
-        "dataField": "ligne.ordreLigne.article.id",
-        "visible": true,
-        "allowEditing": false
-      },
-      {
-        "dataField": "ligne.ordreLigne.proprietaireMarchandise.code",
-        "visible": true,
-        "allowEditing": false
-      },
-      {
-        "dataField": "ligne.ordreLigne.fournisseur.code",
-        "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "cellTemplate": "extendedCellTemplate"
       },
       {
         "dataField": "ligne.responsableNombrePalettes",

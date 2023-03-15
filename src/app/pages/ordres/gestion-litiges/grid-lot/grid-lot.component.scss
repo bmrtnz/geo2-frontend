@@ -42,5 +42,16 @@
         line-height: normal;
       }
     }
+
+    .extra {
+      // display: flex;
+      // flex-direction: column;
+      // align-items: center;
+
+      >div {
+        padding: 5px;
+        line-height: normal;
+      }
+    }
   }
 }

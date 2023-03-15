@@ -48,6 +48,24 @@
     </dxi-total-item>
   </dxo-summary>
 
+  <div
+    *dxTemplate="let cell of 'extendedCellTemplate'"
+    class="extra"
+  >
+    <div class="current-value">
+      {{ cell.value }}
+    </div>
+    <div class="diff">
+      {{ cell.data.reach("ligne.ordreLigne.article.id".split(".")) }}
+      {{
+        cell.data.reach(
+          "ligne.ordreLigne.proprietaireMarchandise.code".split(".")
+        )
+      }}
+      {{ cell.data.reach("ligne.ordreLigne.fournisseur.code".split(".")) }}
+    </div>
+  </div>
+
   <div *dxTemplate="let cell of 'byCellTemplate'">
     {{ cell.value }} /
     {{ cell.data.reach(byTemplateConfig[cell.column.dataField].split(".")) }}
