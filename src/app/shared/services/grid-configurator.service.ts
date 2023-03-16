@@ -470,17 +470,18 @@ export class GridConfiguratorService {
     this.configureToolbar(grid, arguments[1]);
 
     const columnsChangeEmitter = new EventEmitter();
-    /* Deactivating because of globals side effects
-    component.option().onOptionChanged = (event) => {
-      // Allows to keep the page static when sorting a column
-      // Deep testing required as all grids are involved
-      // if (event.fullName.endsWith("sortOrder")) {
-      //   event.component.option("pageIndex", 0);
-      //   event.component.option("focusedRowIndex", -1);
-      // }
-      columnsChangeEmitter.emit(event);
-    };
-    */
+
+    if (grid === Grid.LignesCommandes)
+      component.option().onOptionChanged = (event) => {
+        // Allows to keep the page static when sorting a column
+        // Deep testing required as all grids are involved
+        // if (event.fullName.endsWith("sortOrder")) {
+        //   event.component.option("pageIndex", 0);
+        //   event.component.option("focusedRowIndex", -1);
+        // }
+        columnsChangeEmitter.emit(event);
+      };
+
     columnsChangeEmitter
       .pipe(
         filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value?.length),
