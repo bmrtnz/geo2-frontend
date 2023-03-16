@@ -27,7 +27,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
-import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile } from "rxjs/operators";
+import { concatMap, concatMapTo, debounceTime, filter, finalize, first, last, map, takeWhile, tap } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
 import { ArticleReservationOrdrePopupComponent } from "../article-reservation-ordre-popup/article-reservation-ordre-popup.component";
@@ -79,6 +79,21 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     indicateurStock: true,
     zoom: true,
   };
+
+  private readonly lookupDisplayFields = [
+    "proprietaireMarchandise.id",
+    "proprietaireMarchandise.code",
+    "proprietaireMarchandise.raisonSocial",
+    "fournisseur.id",
+    "fournisseur.code",
+    "fournisseur.raisonSocial",
+    "venteUnite.description",
+    "codePromo.description",
+    "achatUnite.description",
+    "typePalette.description",
+    "paletteInter.description",
+    "fraisUnite.description",
+  ];
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
@@ -327,7 +342,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
               value,
               change.key,
               this.currentCompanyService.getCompany().id,
-              ["id", ...fields],
+              ["id", ...fields, ...this.lookupDisplayFields],
             )),
             first(),
           )
@@ -375,18 +390,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
             ...fields,
 
             // lookup display
-            "proprietaireMarchandise.id",
-            "proprietaireMarchandise.code",
-            "proprietaireMarchandise.raisonSocial",
-            "fournisseur.id",
-            "fournisseur.code",
-            "fournisseur.raisonSocial",
-            "venteUnite.description",
-            "codePromo.description",
-            "achatUnite.description",
-            "typePalette.description",
-            "paletteInter.description",
-            "fraisUnite.description",
+            ...this.lookupDisplayFields,
 
             // extra features
             ...this.FEATURE.columnCertifications ? ["listeCertifications"] : [],

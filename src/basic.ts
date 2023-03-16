@@ -39,9 +39,9 @@ String.prototype.lcFirst = function () {
 
 Object.defineProperty(Object.prototype, "reach", {
   value(path: string[], context?: {}) {
-    if (!context) context = this;
-    return path.length && context
-      ? context.reach(path, context?.[path.shift()])
+    if (context === undefined) context = this;
+    return path.length
+      ? context?.reach(path, context?.[path.shift()])
       : context;
   }
 });
