@@ -7332,7 +7332,7 @@
         "cellTemplate": "byCellTemplate"
       },
       {
-        "dataField": "ligne.responsablePoidsNet",
+        "dataField": "ligne.clientPoidsNet",
         "visible": true,
         "allowEditing": true,
         "cellTemplate": "byCellTemplate"
@@ -7361,21 +7361,21 @@
       {
         "dataField": "ligne.clientQuantite",
         "visible": true,
-        "allowEditing": false,
+        "allowEditing": true,
         "showInColumnChooser": false,
         "width": 0
       },
       {
         "dataField": "quantite",
         "visible": true,
-        "allowEditing": false,
+        "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
       {
         "dataField": "ligne.responsableQuantite",
         "visible": true,
-        "allowEditing": false,
+        "allowEditing": true,
         "showInColumnChooser": false,
         "width": 0
       },

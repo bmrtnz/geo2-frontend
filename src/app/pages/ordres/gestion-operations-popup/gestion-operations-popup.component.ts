@@ -12,7 +12,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, of, throwError, zip } from "rxjs";
-import { catchError, concatMap, concatMapTo, map, tap } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, map, mergeMap, tap, toArray } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -239,9 +239,36 @@ export class GestionOperationsPopupComponent implements OnChanges {
   autoFill() {
 
     if (this.checkEmptyCauseConseq()) return;
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
+
+    const [litigeID, lotNum] = this.lot;
+    this.litigesLignesService.getList(
+      `litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`,
+      [
+        "id",
+        "ordreLigne.nombrePalettesExpediees",
+        "ordreLigne.nombreColisExpedies",
+        "ordreLigne.poidsNetExpedie",
+        "ordreLigne.venteQuantite",
+        "ordreLigne.achatQuantite",
+      ]).pipe(
+        mergeMap(res => res.data.allLitigeLigneList),
+        map(res => ({
+          id: res.id,
+          clientNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+          responsableNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+          clientNombreColisReclamation: res.ordreLigne.nombreColisExpedies,
+          responsableNombreColis: res.ordreLigne.nombreColisExpedies,
+          clientPoidsNet: res.ordreLigne.poidsNetExpedie,
+          clientQuantite: res.ordreLigne.venteQuantite,
+          responsableQuantite: res.ordreLigne.achatQuantite,
+        } as LitigeLigne)),
+        toArray(),
+        concatMap(data => this.gridLot.updateLot(data)),
+      )
+      .subscribe({
+        error: (err: Error) => notify(err.message, "ERROR", 3500),
+      });
+
   }
 
   forfait() {

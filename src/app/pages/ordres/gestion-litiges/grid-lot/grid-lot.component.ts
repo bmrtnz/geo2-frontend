@@ -28,19 +28,8 @@ export class GridLotComponent implements OnInit, OnChanges {
   public readonly byTemplateConfig = {
     "ligne.responsableNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
     "ligne.responsableNombreColis": "ligne.ordreLigne.nombreColisExpedies",
-    "ligne.responsablePoidsNet": "ligne.ordreLigne.poidsNetExpedie",
+    "ligne.clientPoidsNet": "ligne.ordreLigne.poidsNetExpedie",
   };
-
-  /** Fields processed by `mergeCellTemplate` */
-  // public readonly duoTemplateConfig: Record<string, [string, string]> = {
-  //   indicateurForfait: ["ligne.clientIndicateurForfait", "ligne.responsableIndicateurForfait"],
-  //   quantite: ["ligne.clientQuantite", "ligne.responsableQuantite"],
-  //   uniteFactureCode: ["ligne.clientUniteFactureCode", "ligne.responsableUniteFactureCode"],
-  //   prixUnitaire: ["ligne.clientPrixUnitaire", "ligne.responsablePrixUnitaire"],
-  //   devise: ["ligne.deviseCode", "ligne.ordreLigne.ordre.devise.id"],
-  //   avoir: ["clientAvoir", "responsableAvoir"],
-  // };
-
 
   public dataSource: DataSource;
   public columns: Observable<GridColumn[]>;
@@ -117,7 +106,7 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   /** Met a jour l'ensemble des lignes de la grille (le lot) avec les données fournies */
-  public updateLot(data: Partial<LitigeLigne>) {
+  public updateLot(data: Partial<LitigeLigne> | Partial<LitigeLigne>[]) {
     return interval(100)
       .pipe(
         concatMapTo(defer(() => of(this.grid?.dataSource as DataSource))),
@@ -125,9 +114,15 @@ export class GridLotComponent implements OnInit, OnChanges {
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
           (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
-            Object.entries(data).forEach(([field, value]) => {
-              this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
-            });
+            if (Array.isArray(data)) {
+              const index = data.findIndex(row => row.id === item.ligne.id);
+              Object.entries(data[index]).forEach(([field, value]) => {
+                this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
+              });
+            } else
+              Object.entries(data).forEach(([field, value]) => {
+                this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
+              });
           });
           return Promise.resolve();
         }),
