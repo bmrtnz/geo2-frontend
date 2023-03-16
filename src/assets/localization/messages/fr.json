@@ -1743,7 +1743,7 @@
     "litige-lignes-lot-descriptionCourte": "Produit",
     "litige-lignes-lot-responsableNombrePalettes": "Nb pal.",
     "litige-lignes-lot-responsableNombreColis": "Nb colis",
-    "litige-lignes-lot-responsablePoidsNet": "Pds net (en kg)",
+    "litige-lignes-lot-clientPoidsNet": "Pds net (en kg)",
     "litige-lignes-lot-indicateurForfait": "Forfait",
     "litige-lignes-lot-quantite": "Quantité",
     "litige-lignes-lot-uniteFactureCode": "Unité",
