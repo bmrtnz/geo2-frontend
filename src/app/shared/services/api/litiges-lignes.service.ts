@@ -248,4 +248,24 @@ export class LitigesLignesService extends ApiService implements APIRead {
     });
   }
 
+  allLitigeLigneForfaitDatasource(litigeID: string, body: Set<string>) {
+    return new DataSource({
+      store: new CustomStore({
+        key: "id",
+        load: (options: LoadOptions) => this
+          .allLitigeLigneForfait(litigeID, body).pipe(
+            map(res => JSON.parse(JSON.stringify(res.data.allLitigeLigneForfait))
+              .map(i => this.formUtils.cleanTypenames(i))),
+          ).toPromise(),
+        update: (key, values) => {
+          return this.save(
+            body,
+            { id: key, ...values.ligne },
+          ).toPromise();
+        },
+        byKey: key => this.getOne_v2(key, body).toPromise(),
+      }),
+    });
+  }
+
 }

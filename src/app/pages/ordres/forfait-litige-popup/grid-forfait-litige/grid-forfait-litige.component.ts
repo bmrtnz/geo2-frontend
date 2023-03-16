@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresFraisLitigeService } from "app/shared/services/api/ordres-frais-litige.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -36,7 +37,7 @@ export class GridForfaitLitigeComponent {
   @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
 
   constructor(
-    private ordresFraisLitigeService: OrdresFraisLitigeService,
+    private litigesLignesService: LitigesLignesService,
     private litigesService: LitigesService,
     public gridConfiguratorService: GridConfiguratorService,
     public transporteursService: TransporteursService,
@@ -57,10 +58,10 @@ export class GridForfaitLitigeComponent {
       const fields = this.columns.pipe(map(columns => columns.map(column => {
         return column.dataField;
       })));
-      this.dataSource = this.ordresFraisLitigeService.getDataSource_v2(
-        await fields.toPromise(),
+      this.dataSource = this.litigesLignesService.allLitigeLigneForfaitDatasource(
+        this.infosLitige.litige.id,
+        new Set(await fields.toPromise()),
       );
-      this.dataSource.filter(["litige.id", "=", this.infosLitige.litige.id]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
 

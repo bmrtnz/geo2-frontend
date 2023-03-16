@@ -7238,23 +7238,67 @@
     "pageSize": 1000,
     "columns": [
       {
-        "visibleIndex": 0,
         "dataField": "id",
         "sortOrder": "desc",
         "allowEditing": false,
         "visible": false
       },
       {
-        "visibleIndex": 6,
-        "dataField": "description",
-        "allowEditing": true,
+        "dataField": "article.articleDescription.descriptionCourte",
+        "allowEditing": false,
         "visible": true
       },
       {
-        "dataField": "litige.id",
-        "showInColumnChooser": true,
+        "dataField": "clientPrixUnitaire",
         "allowEditing": false,
-        "visible": false
+        "visible": true
+      },
+      {
+        "dataField": "responsablePrixUnitaire",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "clientUniteFactureCode",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "responsableUniteFactureCode",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "clientUniteDeviseCode",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "deviseCode",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "clientQuantite",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "responsableQuantite",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "forfaitClient",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
+        "dataField": "forfaitResponsable",
+        "allowEditing": true,
+        "visible": true,
+        "fixed": true,
+        "fixedPosition": "right"
       }
     ]
   },
