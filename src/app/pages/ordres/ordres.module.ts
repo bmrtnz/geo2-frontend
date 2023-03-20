@@ -1,6 +1,7 @@
 import { DatePipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CustomCellTemplatesModule } from "app/custom-cell-templates/custom-cell-templates.module";
 import { ButtonLoaderModule } from "app/shared/components/button-loader/button-loader.component";
 import { EditingAlertModule } from "app/shared/components/editing-alert/editing-alert.component";
 import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
@@ -325,6 +326,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     EntrepotsModule,
     ProgramChooserModule,
     GestionLitigesModule,
+    CustomCellTemplatesModule,
   ],
   providers: [
     OrdresIndicatorsService,

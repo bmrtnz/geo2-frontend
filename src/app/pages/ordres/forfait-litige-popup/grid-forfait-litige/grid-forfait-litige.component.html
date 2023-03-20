@@ -60,7 +60,6 @@
     [dataType]="column?.dataType"
     [showEditorAlways]="false"
     [cssClass]="column.cssClass"
-    [width]="column.width"
     [allowEditing]="column.allowEditing"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [format]="column.format"
@@ -70,6 +69,8 @@
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
+    [cellTemplate]="column?.cellTemplate"
+    [width]="column?.width !== undefined ? column.width : 'auto'"
   >
     <dxi-validation-rule
       *ngIf="['forfait'].includes(column.dataField)"
@@ -82,4 +83,5 @@
       message="{{ 'MontantNonNul' | localize }}"
     ></dxi-validation-rule>
   </dxi-column>
+  <app-merged-dxgrid-cell-template></app-merged-dxgrid-cell-template>
 </dx-data-grid>

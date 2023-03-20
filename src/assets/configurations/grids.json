@@ -7251,54 +7251,107 @@
       {
         "dataField": "clientPrixUnitaire",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "prixUnitaire",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "responsablePrixUnitaire",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "clientUniteFactureCode",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "uniteFactureCode",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "responsableUniteFactureCode",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "clientUniteDeviseCode",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "devise",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "deviseCode",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "clientQuantite",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "quantite",
+        "visible": true,
+        "allowEditing": false,
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "responsableQuantite",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
       },
       {
         "dataField": "forfaitClient",
+        "allowEditing": true,
+        "visible": true,
+        "showInColumnChooser": false,
+        "width": 0
+      },
+      {
+        "dataField": "forfait",
+        "visible": true,
         "allowEditing": false,
-        "visible": true
+        "cellTemplate": "mergeCellsTemplate",
+        "virtual": true
       },
       {
         "dataField": "forfaitResponsable",
         "allowEditing": true,
         "visible": true,
-        "fixed": true,
-        "fixedPosition": "right"
+        "showInColumnChooser": false,
+        "width": 0
       }
     ]
   },

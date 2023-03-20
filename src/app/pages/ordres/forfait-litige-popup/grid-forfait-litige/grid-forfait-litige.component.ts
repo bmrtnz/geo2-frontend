@@ -55,9 +55,12 @@ export class GridForfaitLitigeComponent {
 
   async enableFilters() {
     if (this.infosLitige) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return column.dataField;
-      })));
+      const fields = this.columns
+        .pipe(
+          GridConfiguratorService.filterNonVirtual(),
+          map(columns => columns.map(column => {
+            return column.dataField;
+          })));
       this.dataSource = this.litigesLignesService.allLitigeLigneForfaitDatasource(
         this.infosLitige.litige.id,
         new Set(await fields.toPromise()),
