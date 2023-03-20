@@ -123,6 +123,9 @@ export class GridLotComponent implements OnInit, OnChanges {
               Object.entries(data).forEach(([field, value]) => {
                 this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
               });
+            // Refresh dynamic virtual/custom fields bound values
+            this.grid.instance.cellValue(rowIndex, `quantite`, null);
+            this.grid.instance.cellValue(rowIndex, `avoir`, null);
           });
           return Promise.resolve();
         }),

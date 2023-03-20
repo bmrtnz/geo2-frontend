@@ -7368,7 +7368,7 @@
       {
         "dataField": "quantite",
         "visible": true,
-        "allowEditing": true,
+        "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
