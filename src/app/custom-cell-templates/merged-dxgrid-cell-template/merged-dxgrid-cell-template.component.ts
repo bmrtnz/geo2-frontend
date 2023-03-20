@@ -16,9 +16,8 @@ export class MergeSiblingColumnsPipe implements PipeTransform {
       client: input.cellElement.previousElementSibling,
       responsable: input.cellElement.nextElementSibling
     })
-      .map(([key, target]) => {
+      .map(([, target]) => {
         const containerElm = document.createElement("div");
-        containerElm.classList.add(`${key}-cell`);
         containerElm.innerHTML += target.innerHTML;
         return containerElm;
       });
