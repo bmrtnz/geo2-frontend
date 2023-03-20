@@ -1,0 +1,7 @@
+<ng-container *dxTemplate="let cell of 'mergeCellsTemplate'">
+  <div
+    *ngIf="cell?.cellElement"
+    class="merged"
+    [innerHTML]="cell | mergeSiblingColumns"
+  ></div>
+</ng-container>

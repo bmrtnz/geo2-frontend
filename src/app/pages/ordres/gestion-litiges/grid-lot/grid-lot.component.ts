@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -8,7 +8,6 @@ import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/share
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import dxDataGrid from "devextreme/ui/data_grid";
 import { defer, interval, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, map, takeWhile, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
@@ -157,22 +156,3 @@ export class GridLotComponent implements OnInit, OnChanges {
 
 }
 
-@Pipe({ name: "mergeSiblingColumns" })
-export class MergeSiblingColumnsPipe implements PipeTransform {
-  transform(input: { cellElement: HTMLElement, columnIndex: number, component: dxDataGrid, element: HTMLElement }) {
-
-    const htmlStructure = Object.entries({
-      client: input.cellElement.previousElementSibling,
-      responsable: input.cellElement.nextElementSibling
-    })
-      .map(([key, target]) => {
-        const containerElm = document.createElement("div");
-        containerElm.classList.add(`${key}-cell`);
-        containerElm.innerHTML += target.innerHTML;
-        return containerElm;
-      });
-
-    return htmlStructure
-      .reduce((accumulator, current) => accumulator + current.outerHTML, "");
-  }
-}

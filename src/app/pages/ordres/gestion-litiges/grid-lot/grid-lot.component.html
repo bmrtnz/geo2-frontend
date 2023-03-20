@@ -77,11 +77,5 @@
     {{ cell.data.reach(byTemplateConfig[cell.column.dataField].split(".")) }}
   </div>
 
-  <ng-container *dxTemplate="let cell of 'mergeCellsTemplate'">
-    <div
-      *ngIf="cell?.cellElement"
-      class="merged"
-      [innerHTML]="cell | mergeSiblingColumns"
-    ></div>
-  </ng-container>
+  <app-merged-dxgrid-cell-template></app-merged-dxgrid-cell-template>
 </dx-data-grid>
