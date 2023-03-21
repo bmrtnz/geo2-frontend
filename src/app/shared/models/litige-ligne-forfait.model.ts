@@ -5,6 +5,7 @@ import { Field, Model, ModelName } from "./model";
 export class LitigeLigneForfait extends Model {
   @Field({ asKey: true }) public id: string;
   @Field({ model: import("./article.model") }) public article: Article;
+  @Field() public numeroGroupementLitige: string;
   @Field() public clientPrixUnitaire: number;
   @Field() public clientQuantite: number;
   @Field() public clientUniteFactureCode: string;
