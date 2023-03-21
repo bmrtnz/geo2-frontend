@@ -82,6 +82,8 @@ export class GridLotComponent implements OnInit, OnChanges {
         ...fields,
         "ligne.id",
         "ligne.litige.id",
+        "ligne.ordreLigne.article.id",
+        "ligne.ordreLigne.article.articleDescription.id",
         "ligne.ordreLigne.nombrePalettesExpediees",
         "ligne.ordreLigne.nombreColisExpedies",
         "ligne.ordreLigne.poidsNetExpedie",
