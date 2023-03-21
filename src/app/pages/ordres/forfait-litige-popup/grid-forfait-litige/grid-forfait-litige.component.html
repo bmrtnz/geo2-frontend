@@ -71,6 +71,7 @@
     [showInColumnChooser]="column.showInColumnChooser"
     [cellTemplate]="column?.cellTemplate"
     [width]="column?.width !== undefined ? column.width : 'auto'"
+    [calculateCellValue]="this[column?.calculateCellValue]"
   >
     <dxi-validation-rule
       *ngIf="['forfait'].includes(column.dataField)"

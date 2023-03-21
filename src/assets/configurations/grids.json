@@ -7149,6 +7149,11 @@
         "cssClass": "medium-horiz-padding text-align-center number-column"
       },
       {
+        "dataField": "ordreLigne.article.articleDescription.id",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
         "visibleIndex": 4,
         "dataField": "ordreLigne.article.articleDescription.descriptionReferenceLongue",
         "cssClass": "no-padding",
@@ -7244,6 +7249,12 @@
         "visible": false
       },
       {
+        "dataField": "article.articleDescription.id",
+        "allowEditing": false,
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
         "dataField": "article.articleDescription.descriptionCourte",
         "allowEditing": false,
         "visible": true
@@ -7337,13 +7348,15 @@
         "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
+        "calculateCellValue": "calculateForfaitClient",
         "width": 0
       },
       {
         "dataField": "forfait",
         "visible": true,
-        "allowEditing": false,
+        "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
+        "editCellTemplate": "mergeEditCellsTemplate",
         "virtual": true
       },
       {
@@ -7351,6 +7364,7 @@
         "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
+        "calculateCellValue": "calculateForfaitResponsable",
         "width": 0
       }
     ]

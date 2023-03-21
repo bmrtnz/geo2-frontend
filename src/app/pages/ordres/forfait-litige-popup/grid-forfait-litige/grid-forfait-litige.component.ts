@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import LitigeLigneForfait from "app/shared/models/litige-ligne-forfait.model";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
@@ -113,6 +114,18 @@ export class GridForfaitLitigeComponent {
         notify(error.message, "error", 7000);
       },
     });
+  }
+
+  public calculateForfaitClient(rowData: Partial<LitigeLigneForfait>) {
+    if (rowData.clientQuantite === 1 && rowData.clientUniteFactureCode === "UNITE")
+      return rowData.clientPrixUnitaire;
+    return 666;
+  }
+
+  public calculateForfaitResponsable(rowData: Partial<LitigeLigneForfait>) {
+    if (rowData.responsableQuantite === 1 && rowData.responsableUniteFactureCode === "UNITE")
+      return rowData.responsablePrixUnitaire;
+    return 666;
   }
 
 }
