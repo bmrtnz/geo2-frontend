@@ -1,7 +1,21 @@
+<!-- "merge" cell template -->
 <ng-container *dxTemplate="let cell of 'mergeCellsTemplate'">
   <div
     *ngIf="cell?.cellElement"
     class="merged"
     [innerHTML]="cell | mergeSiblingColumns"
   ></div>
+</ng-container>
+
+<!-- "merge" edit cell template -->
+<ng-container *dxTemplate="let cell of 'mergeEditCellsTemplate'">
+  <div
+    *ngIf="cell?.cellElement"
+    class="merged"
+  >
+    <dx-text-box
+      [value]="cell | mergeEditSiblingColumns: 'previous'"
+    ></dx-text-box>
+    <dx-text-box [value]="cell | mergeEditSiblingColumns: 'next'"></dx-text-box>
+  </div>
 </ng-container>
