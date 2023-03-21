@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
+import Litige from "app/shared/models/litige.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
 import { GridForfaitLitigeComponent } from "./grid-forfait-litige/grid-forfait-litige.component";
@@ -12,6 +14,7 @@ import { GridForfaitLitigeComponent } from "./grid-forfait-litige/grid-forfait-l
 export class ForfaitLitigePopupComponent implements OnChanges {
 
   @Input() public infosLitige: any;
+  @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litige: any;
 
   public visible: boolean;

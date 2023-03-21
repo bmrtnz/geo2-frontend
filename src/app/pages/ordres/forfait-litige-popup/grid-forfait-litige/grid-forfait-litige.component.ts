@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import LitigeLigneForfait from "app/shared/models/litige-ligne-forfait.model";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
+import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
@@ -24,6 +26,7 @@ export class GridForfaitLitigeComponent {
 
   @Input() public ordre: Ordre;
   @Input() public infosLitige: any;
+  @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public totalFraisSaved = new EventEmitter();
 
 
@@ -56,6 +59,7 @@ export class GridForfaitLitigeComponent {
 
   async enableFilters() {
     if (this.infosLitige) {
+      const [litigeID, lotNum] = this.lot;
       const fields = this.columns
         .pipe(
           GridConfiguratorService.filterNonVirtual(),
@@ -64,8 +68,11 @@ export class GridForfaitLitigeComponent {
           })));
       this.dataSource = this.litigesLignesService.allLitigeLigneForfaitDatasource(
         this.infosLitige.litige.id,
-        new Set(await fields.toPromise()),
+        new Set(["numeroGroupementLitige", ...await fields.toPromise()]),
       );
+      this.dataSource.filter([
+        ["numeroGroupementLitige", lotNum ? "=" : "=isnull=", lotNum]
+      ]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
 
