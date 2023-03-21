@@ -242,7 +242,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService.getList(
-      `litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`,
+      `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="}${lotNum}`,
       [
         "id",
         "ordreLigne.nombrePalettesExpediees",
