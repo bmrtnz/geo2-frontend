@@ -135,17 +135,15 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       });
   }
 
-  onRowUpdated(event) {
-    this.ar.setReason(event.data.codeTiers, event.data.commentairesAvancement);
-  }
-
   public done() {
     const selection: Array<Partial<Envois>> = this.dataGrid.instance.getSelectedRowsData();
     if (!selection.every(envoi => envoi.commentairesAvancement))
       return throwError(Error("Le motif d'annulation est obligatoire pour les envois sélectionnés"));
     this.dataGrid.instance.getVisibleRows()
-      .filter(row => !row.isSelected)
-      .forEach(c => this.ar.pushIgnoredTier(c.data.codeTiers));
+      .forEach(row => {
+        if (row.isSelected) this.ar.setReason(row.data.codeTiers, row.data.commentairesAvancement);
+        else this.ar.pushIgnoredTier(row.data.codeTiers);
+      });
     return of(selection);
   }
 
