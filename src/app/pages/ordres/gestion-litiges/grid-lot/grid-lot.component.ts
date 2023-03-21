@@ -114,6 +114,7 @@ export class GridLotComponent implements OnInit, OnChanges {
         takeWhile(datasource => !datasource?.items()?.length, true),
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
+          this.grid.instance.cancelEditData();
           (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
             if (Array.isArray(data)) {
               const index = data.findIndex(row => row.id === item.ligne.id);
