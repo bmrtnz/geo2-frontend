@@ -1,12 +1,13 @@
 <dx-data-grid
+  #grid
   class="dx-card wide-card grid-forfait-litige"
   [showBorders]="false"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   (onInitNewRow)="onInitNewRow($event)"
-  (onSaved)="onSaved()"
   (onCellPrepared)="onCellPrepared($event)"
+  (onSaving)="onSaving($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       '',
@@ -29,7 +30,7 @@
     *ngIf="!this.infosLitige?.fournisseurClos || !this.infosLitige?.clientClos"
     [selectTextOnEditStart]="true"
     [allowUpdating]="true"
-    [mode]="'cell'"
+    [mode]="'batch'"
   ></dxo-editing>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdreForfaitLitige"
@@ -65,6 +66,7 @@
     [format]="column.format"
     [editorOptions]="column.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
+    [setCellValue]="this[column?.setCellValue]"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "

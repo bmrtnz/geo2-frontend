@@ -1,5 +1,6 @@
 import { Component, Pipe, PipeTransform, SecurityContext } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
+import { DxTextBoxComponent } from "devextreme-angular";
 import dxDataGrid from "devextreme/ui/data_grid";
 
 @Component({
@@ -7,7 +8,35 @@ import dxDataGrid from "devextreme/ui/data_grid";
   templateUrl: "./merged-dxgrid-cell-template.component.html",
   styleUrls: ["./merged-dxgrid-cell-template.component.scss"]
 })
-export class MergedDxgridCellTemplateComponent { }
+export class MergedDxgridCellTemplateComponent {
+  public onKeyDownFromFirst(event, inputNext: DxTextBoxComponent) {
+    if (event.event.originalEvent.key === "Tab") {
+      event.event.preventDefault();
+      event.event.stopImmediatePropagation();
+      inputNext.instance.focus();
+    }
+  }
+  public onKeyDownFromLast(event) {
+    if (event.event.originalEvent.key === "Tab") {
+      event.event.stopImmediatePropagation();
+      return event.event.preventDefault();
+    }
+  }
+
+  public onValueChanged(
+    event,
+    cell: {
+      columnIndex: number,
+      rowIndex: number,
+      component: dxDataGrid,
+    },
+    sibling: "previous" | "next") {
+    const columnIndex = cell.columnIndex + (sibling === "previous" ? -1 : 1);
+    // restore forfait / taux
+    cell.component.cellValue(cell.rowIndex, columnIndex, event.value);
+    cell.component.cellValue(cell.rowIndex, cell.columnIndex, "whatever");
+  }
+}
 
 @Pipe({ name: "mergeSiblingColumns" })
 export class MergeSiblingColumnsPipe implements PipeTransform {
@@ -49,6 +78,7 @@ export class MergeEditSiblingColumnsPipe implements PipeTransform {
     },
     sibling: "previous" | "next") {
     const columnIndex = input.columnIndex + (sibling === "previous" ? -1 : 1);
-    return input.component.cellValue(input.rowIndex, columnIndex);
+    const value = input.component.cellValue(input.rowIndex, columnIndex);
+    return value;
   }
 }

@@ -408,6 +408,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
       );
   }
 
+  forfaitChanged(event) {
+    this.gridLot.updateLot(event).subscribe({
+      error: (err: Error) => notify(err.message, "ERROR", 3500),
+    });
+  }
+
 }
 
 

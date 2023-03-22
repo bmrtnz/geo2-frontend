@@ -18,6 +18,7 @@ export class LitigeLigneForfait extends Model {
   @Field() public deviseCode: string;
   @Field() public forfaitClient: number;
   @Field() public forfaitResponsable: number;
+  @Field() public taux?: number;
 }
 
 export default LitigeLigneForfait;

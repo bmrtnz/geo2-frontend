@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import { LocalizationService } from "app/shared/services";
@@ -16,6 +16,7 @@ export class ForfaitLitigePopupComponent implements OnChanges {
   @Input() public infosLitige: any;
   @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litige: any;
+  @Output() public done = new EventEmitter<Partial<LitigeLigne>[]>();
 
   public visible: boolean;
   public title: string;
@@ -49,8 +50,10 @@ export class ForfaitLitigePopupComponent implements OnChanges {
   }
 
   hidePopup() {
-    this.datagridComponent.datagrid.dataSource = null;
-    this.popup.visible = false;
+    this.datagridComponent.datagrid.instance.saveEditData().then(() => {
+      this.datagridComponent.datagrid.dataSource = null;
+      this.popup.visible = false;
+    });
   }
 
   exitPopup() {
@@ -62,6 +65,11 @@ export class ForfaitLitigePopupComponent implements OnChanges {
 
   resizePopup() {
     this.popupFullscreen = !this.popupFullscreen;
+  }
+
+  // Forwarding event
+  gridDone(event) {
+    this.done.emit(event);
   }
 
 }

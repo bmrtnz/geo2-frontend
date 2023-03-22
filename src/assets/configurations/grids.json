@@ -7255,13 +7255,13 @@
         "showInColumnChooser": false
       },
       {
-        "dataField": "article.articleDescription.descriptionCourte",
+        "dataField": "article.articleDescription.descriptionLongue",
         "allowEditing": false,
         "visible": true
       },
       {
         "dataField": "clientPrixUnitaire",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
@@ -7275,14 +7275,14 @@
       },
       {
         "dataField": "responsablePrixUnitaire",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
       },
       {
         "dataField": "clientUniteFactureCode",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
@@ -7296,14 +7296,14 @@
       },
       {
         "dataField": "responsableUniteFactureCode",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
       },
       {
         "dataField": "clientUniteDeviseCode",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
@@ -7317,14 +7317,14 @@
       },
       {
         "dataField": "deviseCode",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
       },
       {
         "dataField": "clientQuantite",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
@@ -7338,7 +7338,7 @@
       },
       {
         "dataField": "responsableQuantite",
-        "allowEditing": false,
+        "allowEditing": true,
         "visible": true,
         "showInColumnChooser": false,
         "width": 0
@@ -7357,6 +7357,8 @@
         "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "editCellTemplate": "mergeEditCellsTemplate",
+        "calculateCellValue": "calculateForfait",
+        "setCellValue": "calcValue",
         "virtual": true
       },
       {
@@ -7366,6 +7368,15 @@
         "showInColumnChooser": false,
         "calculateCellValue": "calculateForfaitResponsable",
         "width": 0
+      },
+      {
+        "dataField": "taux",
+        "allowEditing": true,
+        "showInColumnChooser": false,
+        "visible": true,
+        "datatype": "number",
+        "setCellValue": "calcTaux",
+        "calculateCellValue": "calculateTaux"
       }
     ]
   },
@@ -7381,7 +7392,7 @@
         "allowEditing": false
       },
       {
-        "dataField": "ligne.ordreLigne.article.articleDescription.descriptionCourte",
+        "dataField": "ligne.ordreLigne.article.articleDescription.descriptionLongue",
         "visible": true,
         "allowEditing": false,
         "cellTemplate": "extendedCellTemplate"

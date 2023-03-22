@@ -210,6 +210,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
         { name: "litigeID", type: "String", isOptionnal: false },
       ])),
       variables: { litigeID },
+      fetchPolicy: "network-only",
     });
   }
 
@@ -260,7 +261,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
         update: (key, values) => {
           return this.save(
             body,
-            { id: key, ...values.ligne },
+            { id: key, ...values },
           ).toPromise();
         },
         byKey: key => this.getOne_v2(key, body).toPromise(),

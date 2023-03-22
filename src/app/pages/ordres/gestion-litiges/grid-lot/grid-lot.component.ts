@@ -114,20 +114,18 @@ export class GridLotComponent implements OnInit, OnChanges {
         takeWhile(datasource => !datasource?.items()?.length, true),
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
-          this.grid.instance.cancelEditData();
           (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
             if (Array.isArray(data)) {
               const index = data.findIndex(row => row.id === item.ligne.id);
-              Object.entries(data[index]).forEach(([field, value]) => {
-                this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
-              });
+              if (index >= 0) {
+                Object.entries(data[index]).forEach(([field, value]) => {
+                  this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
+                });
+              }
             } else
               Object.entries(data).forEach(([field, value]) => {
                 this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
               });
-            // Refresh dynamic virtual/custom fields bound values
-            this.grid.instance.cellValue(rowIndex, `quantite`, null);
-            this.grid.instance.cellValue(rowIndex, `avoir`, null);
           });
           return Promise.resolve();
         }),

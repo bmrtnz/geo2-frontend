@@ -6,13 +6,11 @@ import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
-import { OrdresFraisLitigeService } from "app/shared/services/api/ordres-frais-litige.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import { GridColumn } from "basic";
+import { Change, GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -27,7 +25,7 @@ export class GridForfaitLitigeComponent {
   @Input() public ordre: Ordre;
   @Input() public infosLitige: any;
   @Input() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
-  @Output() public totalFraisSaved = new EventEmitter();
+  @Output() public done = new EventEmitter<Partial<LitigeLigne>[]>();
 
 
   public dataSource: DataSource;
@@ -111,28 +109,78 @@ export class GridForfaitLitigeComponent {
     }
   }
 
-  onSaved() {
-    const litige = { id: this.infosLitige.litige.id, fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant") };
-    // Saving total
-    this.litigesService.save(new Set(["id"]), litige).subscribe({
-      next: () => this.totalFraisSaved.emit(),
-      error: (error: Error) => {
-        console.log(error);
-        notify(error.message, "error", 7000);
-      },
-    });
-  }
-
   public calculateForfaitClient(rowData: Partial<LitigeLigneForfait>) {
+    if (rowData.forfaitClient) return rowData.forfaitClient;
     if (rowData.clientQuantite === 1 && rowData.clientUniteFactureCode === "UNITE")
       return rowData.clientPrixUnitaire;
-    return 666;
+    return rowData.forfaitClient;
   }
 
   public calculateForfaitResponsable(rowData: Partial<LitigeLigneForfait>) {
+    if (rowData.forfaitResponsable) return rowData.forfaitResponsable;
     if (rowData.responsableQuantite === 1 && rowData.responsableUniteFactureCode === "UNITE")
       return rowData.responsablePrixUnitaire;
-    return 666;
+    return rowData.forfaitResponsable;
+  }
+
+  public calculateForfait(e) {
+    // Make forfait <> null
+    return 1;
+  }
+
+  public calculateTaux(e) {
+    return e.taux ?? 1;
+  }
+
+  public calcTaux(newData, value, currentRowData) {
+    newData.taux = value;
+    if (currentRowData.forfaitResponsable)
+      newData.responsablePrixUnitaire = currentRowData.forfaitResponsable * value;
+  }
+
+  public calcValue(newData, value, currentRowData) {
+
+    if (currentRowData.forfaitClient) {
+      newData.clientPrixUnitaire = currentRowData.forfaitClient;
+      newData.clientQuantite = 1;
+      newData.clientUniteFactureCode = "UNITE";
+    }
+
+    if (currentRowData.forfaitResponsable) {
+      newData.responsablePrixUnitaire = currentRowData.forfaitResponsable * (currentRowData.taux ?? 1);
+      newData.devisePrixUnitaire = currentRowData.forfaitResponsable;
+      newData.responsableQuantite = 1;
+      newData.responsableUniteFactureCode = "UNITE";
+    }
+
+    newData.prixUnitaire = 666;
+    newData.quantite = 69;
+    newData.uniteFactureCode = "YOHO";
+  }
+
+  public onSaving(event: {
+    changes: Array<Change<LitigeLigneForfait>>,
+    cancel: boolean,
+    promise: Promise<void>,
+  }) {
+    event.cancel = true;
+    this.done.emit(event.changes.map(change => ({
+      id: change.key,
+      ...change.data.forfaitClient ? {
+        clientPrixUnitaire: change.data.clientPrixUnitaire,
+        clientQuantite: change.data.clientQuantite,
+        clientUniteFactureCode: change.data.clientUniteFactureCode,
+        clientIndicateurForfait: true,
+      } : {},
+      ...change.data.forfaitResponsable ? {
+        responsablePrixUnitaire: change.data.responsablePrixUnitaire,
+        devisePrixUnitaire: change.data.forfaitResponsable,
+        responsableQuantite: change.data.responsableQuantite,
+        responsableUniteFactureCode: change.data.responsableUniteFactureCode,
+        responsableIndicateurForfait: true,
+      } : {},
+      envoisIncident: false,
+    })));
   }
 
 }

@@ -207,6 +207,7 @@
 <app-forfait-litige-popup
   [infosLitige]="infosLitige"
   [lot]="lot"
+  (done)="forfaitChanged($event)"
 ></app-forfait-litige-popup>
 
 <!-- Ajout d'article au lot -->
