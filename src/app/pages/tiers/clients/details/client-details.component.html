@@ -2,16 +2,17 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div
-    class="content-block"
-    *ngIf="!clientId"
-  >
+  <div class="content-block">
     <h2>
-      <span *ngIf="createMode === true">{{ "create" | localize }}</span>
-      {{ "tiers-clients-details-title" | localize
-      }}<span class="red-font"> {{ preSaisie | localize }}</span>
+      <ng-container *ngIf="!clientId; else emptyLabel">
+        <span *ngIf="createMode === true">{{ "create" | localize }}</span>
+        {{ "tiers-clients-details-title" | localize
+        }}<span class="red-font"> {{ preSaisie | localize }}</span>
+      </ng-container>
+      <ng-template #emptyLabel>&nbsp;</ng-template>
       <div class="right">
         <dx-button
+          *ngIf="!clientId"
           class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
@@ -19,6 +20,7 @@
           [useSubmitBehavior]="true"
         ></dx-button>
         <dx-button
+          *ngIf="!clientId"
           class="upperButton"
           type="default"
           text="{{ 'btn-modifier' | localize }}"
@@ -26,6 +28,7 @@
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
         <dx-button
+          *ngIf="!clientId"
           class="upperButton"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
@@ -33,6 +36,7 @@
           (onClick)="onCancel()"
         ></dx-button>
         <dx-button
+          *ngIf="!clientId"
           class="upperButton"
           type="success"
           [visible]="!createMode"
