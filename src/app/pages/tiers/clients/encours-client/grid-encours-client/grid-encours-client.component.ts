@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Client } from "app/shared/models";
 import { AuthService, ClientsService } from "app/shared/services";
@@ -11,7 +11,6 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -232,26 +231,20 @@ export class GridEncoursClientComponent implements OnChanges {
     if (!this.readyToRefresh) this.datagrid.instance.beginCustomLoading("");
   }
 
+  calculateMontantEuroValue(rowData) {
+    // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
+    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    return rowData.cfcSens === "C" ? null : montant;
+  }
+
+  calculateMontantDeviseValue(rowData) {
+    // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
+    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    return rowData.cfcSens === "C" ? montant : null;
+  }
+
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
-      let montant = e.data.cfcMontantDevise ?? e.data.cfcMontantEuros;
-      montant = this.gridUtilsService.numberWithSpaces(montant);
-      if (e.data.cfcSens === "C") {
-        if (e.column.dataField === "cfcMontantEuros") {
-          e.cellElement.innerText = "";
-        }
-        if (e.column.dataField === "cfcMontantDevise") {
-          e.cellElement.textContent = montant;
-        }
-      } else {
-        if (e.column.dataField === "cfcMontantDevise") {
-          e.cellElement.innerText = "";
-        }
-        if (e.column.dataField === "cfcMontantEuros") {
-          e.cellElement.textContent = montant;
-        }
-      }
       // Expired date
       if (e.column.dataField === "cfcDateEcheance") {
         if (this.today > e.value) e.cellElement.classList.add("expired-date");
@@ -259,30 +252,6 @@ export class GridEncoursClientComponent implements OnChanges {
       // DEV
       if (e.column.dataField === "devise.id") {
         if (e.value === "FRF") e.cellElement.innerText = "";
-      }
-    }
-    // Setting total debit & credit info
-    if (e.rowType === "totalFooter") {
-      if (["cfcIntitule", "cfcMontantEuros", "cfcMontantDevise"].includes(e.column.dataField))
-        e.cellElement.classList.add("encours-total-text");
-
-      if (e.column.dataField === "cfcIntitule" && (this.sumCredit || this.sumDebit)) {
-        e.cellElement.innerText = "Total client :";
-        e.cellElement.classList.add("text-align-right");
-      }
-      if (e.column.dataField === "cfcMontantEuros") {
-        if (this.sumDebit) {
-          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumDebit);
-        } else {
-          e.cellElement.innerText = "";
-        }
-      }
-      if (e.column.dataField === "cfcMontantDevise") {
-        if (this.sumCredit) {
-          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumCredit);
-        } else {
-          e.cellElement.innerText = "";
-        }
       }
     }
   }
@@ -339,6 +308,15 @@ export class GridEncoursClientComponent implements OnChanges {
       ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
         (data.raisonSocial ? data.raisonSocial : data.description)))
       : null;
+  }
+
+  calcCaption(column: GridColumn) {
+    let localized = this.localizeService
+      .localize("encoursClient-" + column.dataField?.split(".").join("-")) ||
+      column.name;
+    if (["cfcMontantEuros", "cfcMontantDevise"].includes(column.dataField))
+      localized += ` ${this.deviseTodisplay()}`;
+    return localized;
   }
 
 }

@@ -7,82 +7,83 @@ import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
-    Grid,
-    GridConfiguratorService
+  Grid,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import { Observable, of } from "rxjs";
-import {BrowserService} from "../../../../shared/services/browser.service";
+import { BrowserService } from "../../../../shared/services/browser.service";
 
 @Component({
-    selector: "app-clients-list",
-    templateUrl: "./clients-list.component.html",
-    styleUrls: ["./clients-list.component.scss"],
+  selector: "app-clients-list",
+  templateUrl: "./clients-list.component.html",
+  styleUrls: ["./clients-list.component.scss"],
 })
 export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
-    readonly gridID = Grid.Client;
-    contentReadyEvent = new EventEmitter<any>();
-    apiService: ApiService;
-    @ViewChild(DxDataGridComponent, { static: true })
-    dataGrid: DxDataGridComponent;
-    public columns: Observable<GridColumn[]>;
+  readonly gridID = Grid.Client;
+  contentReadyEvent = new EventEmitter<any>();
+  apiService: ApiService;
+  @ViewChild(DxDataGridComponent, { static: true })
+  dataGrid: DxDataGridComponent;
+  public columns: Observable<GridColumn[]>;
 
-    public gridConfigHandler = (event) =>
-        this.gridConfiguratorService.init(this.gridID, {
-            ...event,
-            onColumnsChange: this.onColumnsChange.bind(this),
-        })
+  public gridConfigHandler = (event) =>
+    this.gridConfiguratorService.init(this.gridID, {
+      ...event,
+      onColumnsChange: this.onColumnsChange.bind(this),
+    })
 
-    constructor(
-        public clientsService: ClientsService,
-        public gridService: GridsConfigsService,
-        public localizeService: LocalizationService,
-        public currentCompanyService: CurrentCompanyService,
-        private router: Router,
-        private gridConfiguratorService: GridConfiguratorService,
-        public gridRowStyleService: GridRowStyleService,
-        public browserService: BrowserService
-    ) {
-        this.apiService = this.clientsService;
-    }
+  constructor(
+    public clientsService: ClientsService,
+    public gridService: GridsConfigsService,
+    public localizeService: LocalizationService,
+    public currentCompanyService: CurrentCompanyService,
+    private router: Router,
+    private gridConfiguratorService: GridConfiguratorService,
+    public gridRowStyleService: GridRowStyleService,
+    public browserService: BrowserService
+  ) {
+    this.apiService = this.clientsService;
+  }
 
-    ngOnInit() {
-        this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    }
+  ngOnInit() {
+    this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+    this.columns.subscribe(columns => this.updateData(columns));
+  }
 
-    private updateData(columns: GridColumn[]) {
-        of(columns)
-            .pipe(
-                GridConfiguratorService.getVisible(),
-                GridConfiguratorService.getFields(),
-            )
-            .subscribe((fields) => {
-                this.dataGrid.dataSource = this.clientsService.getDataSource_v2(
-                    [Client.getKeyField() as string, ...fields],
-                );
-                this.dataGrid.dataSource.filter([
-                    "societe.id",
-                    "=",
-                    this.currentCompanyService.getCompany().id,
-                ]);
-            });
-    }
+  private updateData(columns: GridColumn[]) {
+    of(columns)
+      .pipe(
+        GridConfiguratorService.getVisible(),
+        GridConfiguratorService.getFields(),
+      )
+      .subscribe((fields) => {
+        this.dataGrid.dataSource = this.clientsService.getDataSource_v2(
+          [Client.getKeyField() as string, ...fields],
+        );
+        this.dataGrid.dataSource.filter([
+          "societe.id",
+          "=",
+          this.currentCompanyService.getCompany().id,
+        ]);
+      });
+  }
 
-    onColumnsChange({ current }: { current: GridColumn[] }) {
-        this.updateData(current);
-    }
+  onColumnsChange({ current }: { current: GridColumn[] }) {
+    this.updateData(current);
+  }
 
-    onRowDblClick(event) {
-        this.router.navigate([`/pages/tiers/clients/${event.data.id}`]);
-    }
+  onRowDblClick(event) {
+    this.router.navigate([`/pages/tiers/clients/${event.data.id}`]);
+  }
 
-    onCreate() {
-        this.router.navigate([`/pages/tiers/clients/create`]);
-    }
+  onCreate() {
+    this.router.navigate([`/pages/tiers/clients/create`]);
+  }
 
-    onRowPrepared(e) {
-        this.gridRowStyleService.applyGridRowStyle(e);
-    }
+  onRowPrepared(e) {
+    this.gridRowStyleService.applyGridRowStyle(e);
+  }
 }

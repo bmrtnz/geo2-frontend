@@ -64,7 +64,7 @@
   <dx-button
     class="refresh"
     [visible]="false"
-    [class]="(toRefresh && readyToRefresh) ? '' : 'inactive-button'"
+    [class]="toRefresh && readyToRefresh ? '' : 'inactive-button'"
     type="default"
     text="{{ 'btn-refresh' | localize }}"
     (onClick)="enableFilters()"
@@ -109,7 +109,10 @@
       </div>
     </dxi-item>
     <dxi-item [ratio]="3.5">
-      <div class="dx-field" [ngClass]="{ 'noopacity': !depassement }">
+      <div
+        class="dx-field"
+        [ngClass]="{ noopacity: !depassement }"
+      >
         <div class="dx-field-label red-font bold-text">
           {{ "depassement" | localize }}
         </div>
@@ -128,7 +131,10 @@
       </div>
     </dxi-item>
     <dxi-item [ratio]="3.5">
-      <div class="dx-field" [ngClass]="{ 'noopacity': !retard }">
+      <div
+        class="dx-field"
+        [ngClass]="{ noopacity: !retard }"
+      >
         <div class="dx-field-label red-font bold-text">
           {{ "retard" | localize }}
         </div>
@@ -207,10 +213,7 @@
     [dataField]="column.dataField"
     [visible]="false"
     [width]="column.width"
-    [caption]="
-      ('encoursClient-' + column.dataField?.split('.').join('-')
-        | localize) || column.name
-    "
+    [caption]="calcCaption(column)"
     [cellTemplate]="column.cellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
     [fixed]="column.fixed"
@@ -220,19 +223,29 @@
     allowSearch="false"
     [allowHeaderFiltering]="false"
     [showInColumnChooser]="column?.showInColumnChooser"
+    [calculateCellValue]="this[column?.calculateCellValue]"
+    [format]="column?.format"
   >
   </dxi-column>
 
-  <div *dxTemplate="let cell of 'creditDebitDevTemplate'">
-    <div>
-      {{ "encoursClient-" + cell.column.dataField | localize }} {{ deviseTodisplay() }}
-    </div>
-  </div>
-
   <dxo-summary>
-    <dxi-total-item column="cfcMontantEuros"></dxi-total-item>
-    <dxi-total-item column="cfcMontantDevise"></dxi-total-item>
+    <dxi-total-item
+      column="cfcMontantEuros"
+      [summaryType]="'sum'"
+      displayFormat="{{ 'encours-clients-total' | localize }}: {0}"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
+    ></dxi-total-item>
+    <dxi-total-item
+      column="cfcMontantDevise"
+      [summaryType]="'sum'"
+      displayFormat="{0}"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
+    ></dxi-total-item>
   </dxo-summary>
-
 </dx-data-grid>
-

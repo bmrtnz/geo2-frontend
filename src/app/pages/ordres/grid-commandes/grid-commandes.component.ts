@@ -178,7 +178,10 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
         takeWhile(event => event.component.columnCount() <= 5, true),
         last(),
       )
-      .subscribe(event => this.bindSources(event.component));
+      .subscribe(event => {
+        this.update();
+        this.bindSources(event.component);
+      });
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
   }

@@ -4128,6 +4128,7 @@
         "dataField": "nomPersonne",
         "dataType": "string",
         "groupIndex": 0,
+        "sortIndex": 0,
         "visible": true
       },
       {
@@ -4141,6 +4142,7 @@
         "dataField": "litige.id",
         "dataType": "string",
         "groupIndex": 1,
+        "sortIndex": 2,
         "visible": true
       },
       {
@@ -4149,6 +4151,8 @@
         "cssClass": "red-font bold-text",
         "format": "#",
         "width": 60,
+        "sortIndex": 1,
+        "sortOrder": "desc",
         "visible": true
       },
       {
@@ -4157,7 +4161,6 @@
         "dataType": "date",
         "cssClass": "multi-line-header",
         "format": "dd-MM-yyyy",
-        "width": 85,
         "visible": true
       },
       {
@@ -4165,7 +4168,6 @@
         "dataField": "societe.id",
         "dataType": "string",
         "cssClass": "no-padding text-align-center",
-        "width": 75,
         "visible": true
       },
       {
@@ -4173,7 +4175,6 @@
         "dataField": "numeroOrdre",
         "dataType": "string",
         "cssClass": "no-padding",
-        "width": 70,
         "visible": true
       },
       {
@@ -4181,7 +4182,6 @@
         "dataField": "clientClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
-        "width": 70,
         "visible": true
       },
       {
@@ -4193,7 +4193,6 @@
           "precision": 2
         },
         "cssClass": "no-padding bold-text",
-        "width": 70,
         "visible": true
       },
       {
@@ -4201,7 +4200,6 @@
         "dataField": "fournisseurClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
-        "width": 67,
         "visible": true
       },
       {
@@ -4213,14 +4211,12 @@
           "precision": 2
         },
         "cssClass": "no-padding bold-text",
-        "width": 70,
         "visible": true
       },
       {
         "visibleIndex": 23,
         "dataField": "id",
         "dataType": "string",
-        "width": 90,
         "visible": true,
         "showInColumnChooser": false
       },
@@ -6693,15 +6689,23 @@
       {
         "visibleIndex": 4,
         "dataField": "cfcMontantEuros",
-        "headerCellTemplate": "creditDebitDevTemplate",
         "class": "no-padding",
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateMontantEuroValue",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 6,
         "dataField": "cfcMontantDevise",
-        "headerCellTemplate": "creditDebitDevTemplate",
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateMontantDeviseValue",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 8,
