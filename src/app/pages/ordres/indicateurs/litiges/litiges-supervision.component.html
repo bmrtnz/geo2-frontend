@@ -205,7 +205,7 @@
     [dataField]="column.dataField"
     [cssClass]="column.cssClass"
     [format]="column.format"
-    [width]="column.width"
+    [width]="column?.width || 'auto'"
     [caption]="
       ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-')
         | localize) || column.name
