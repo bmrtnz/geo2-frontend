@@ -4128,6 +4128,7 @@
         "dataField": "nomPersonne",
         "dataType": "string",
         "groupIndex": 0,
+        "sortIndex": 0,
         "visible": true
       },
       {
@@ -4141,6 +4142,7 @@
         "dataField": "litige.id",
         "dataType": "string",
         "groupIndex": 1,
+        "sortIndex": 2,
         "visible": true
       },
       {
@@ -4149,6 +4151,8 @@
         "cssClass": "red-font bold-text",
         "format": "#",
         "width": 60,
+        "sortIndex": 1,
+        "sortOrder": "desc",
         "visible": true
       },
       {
