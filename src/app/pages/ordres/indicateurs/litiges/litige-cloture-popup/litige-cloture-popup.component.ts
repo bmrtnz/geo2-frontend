@@ -47,7 +47,7 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
     private litigesService: LitigesService,
     private currentCompanyService: CurrentCompanyService
   ) {
-    this.choices = Object.keys(ClotureTarget);
+    this.choices = Object.values(ClotureTarget);
   }
 
   ngOnInit() {
