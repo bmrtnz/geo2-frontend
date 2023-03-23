@@ -4148,7 +4148,6 @@
         "dataField": "delai",
         "cssClass": "red-font bold-text",
         "format": "#",
-        "width": 60,
         "visible": true
       },
       {
@@ -4157,7 +4156,6 @@
         "dataType": "date",
         "cssClass": "multi-line-header",
         "format": "dd-MM-yyyy",
-        "width": 85,
         "visible": true
       },
       {
@@ -4165,7 +4163,6 @@
         "dataField": "societe.id",
         "dataType": "string",
         "cssClass": "no-padding text-align-center",
-        "width": 75,
         "visible": true
       },
       {
@@ -4173,7 +4170,6 @@
         "dataField": "numeroOrdre",
         "dataType": "string",
         "cssClass": "no-padding",
-        "width": 70,
         "visible": true
       },
       {
@@ -4181,7 +4177,6 @@
         "dataField": "clientClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
-        "width": 70,
         "visible": true
       },
       {
@@ -4193,7 +4188,6 @@
           "precision": 2
         },
         "cssClass": "no-padding bold-text",
-        "width": 70,
         "visible": true
       },
       {
@@ -4201,7 +4195,6 @@
         "dataField": "fournisseurClos",
         "dataType": "boolean",
         "cssClass": "multi-line-header",
-        "width": 67,
         "visible": true
       },
       {
@@ -4213,14 +4206,12 @@
           "precision": 2
         },
         "cssClass": "no-padding bold-text",
-        "width": 70,
         "visible": true
       },
       {
         "visibleIndex": 23,
         "dataField": "id",
         "dataType": "string",
-        "width": 90,
         "visible": true,
         "showInColumnChooser": false
       },
