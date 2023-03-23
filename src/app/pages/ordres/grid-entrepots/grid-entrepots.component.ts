@@ -49,6 +49,7 @@ export class GridEntrepotsComponent
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+    this.columns.subscribe(columns => this.updateData(columns));
     // this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
     // this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
     // const visibleFields = from(this.gridConfig)

@@ -52,6 +52,7 @@ export class GridHistoriqueEntrepotsComponent
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
+    this.columns.subscribe(columns => this.updateData(columns));
   }
 
   onColumnsChange({ current }: { current: GridColumn[] }) {

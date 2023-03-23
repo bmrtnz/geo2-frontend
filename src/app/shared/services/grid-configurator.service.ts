@@ -471,21 +471,6 @@ export class GridConfiguratorService {
 
     const columnsChangeEmitter = new EventEmitter();
 
-    if ([
-      Grid.LignesCommandes,
-      Grid.OrdreHistoriqueEntrepot,
-      Grid.OrdreEntrepot,
-    ].includes(grid))
-      component.option().onOptionChanged = (event) => {
-        // Allows to keep the page static when sorting a column
-        // Deep testing required as all grids are involved
-        // if (event.fullName.endsWith("sortOrder")) {
-        //   event.component.option("pageIndex", 0);
-        //   event.component.option("focusedRowIndex", -1);
-        // }
-        columnsChangeEmitter.emit(event);
-      };
-
     columnsChangeEmitter
       .pipe(
         filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value?.length),
