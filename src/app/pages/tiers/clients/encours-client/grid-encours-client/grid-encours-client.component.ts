@@ -11,6 +11,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -232,26 +233,20 @@ export class GridEncoursClientComponent implements OnChanges {
     if (!this.readyToRefresh) this.datagrid.instance.beginCustomLoading("");
   }
 
+  calculateMontantEuroValue(rowData) {
+    // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
+    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    return rowData.cfcSens === "C" ? null : montant;
+  }
+
+  calculateMontantDeviseValue(rowData) {
+    // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
+    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    return rowData.cfcSens === "C" ? montant : null;
+  }
+
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
-      let montant = e.data.cfcMontantDevise ?? e.data.cfcMontantEuros;
-      montant = this.gridUtilsService.numberWithSpaces(montant);
-      if (e.data.cfcSens === "C") {
-        if (e.column.dataField === "cfcMontantEuros") {
-          e.cellElement.innerText = "";
-        }
-        if (e.column.dataField === "cfcMontantDevise") {
-          e.cellElement.textContent = montant;
-        }
-      } else {
-        if (e.column.dataField === "cfcMontantDevise") {
-          e.cellElement.innerText = "";
-        }
-        if (e.column.dataField === "cfcMontantEuros") {
-          e.cellElement.textContent = montant;
-        }
-      }
       // Expired date
       if (e.column.dataField === "cfcDateEcheance") {
         if (this.today > e.value) e.cellElement.classList.add("expired-date");

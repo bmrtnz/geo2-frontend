@@ -166,6 +166,7 @@ const extraConfigurations = [
   "calculateSortValue",
   "filterOperations",
   "virtual",
+  "customizeText",
 ];
 
 @Injectable({

@@ -6695,13 +6695,23 @@
         "dataField": "cfcMontantEuros",
         "headerCellTemplate": "creditDebitDevTemplate",
         "class": "no-padding",
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateMontantEuroValue",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 6,
         "dataField": "cfcMontantDevise",
         "headerCellTemplate": "creditDebitDevTemplate",
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateMontantDeviseValue",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        }
       },
       {
         "visibleIndex": 8,
