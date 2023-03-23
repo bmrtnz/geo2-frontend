@@ -214,6 +214,7 @@ interface GridColumn {
   setCellValue?: string;
   customizeText?: string;
   virtual?: boolean;
+  formatter?: string;
 
 }
 

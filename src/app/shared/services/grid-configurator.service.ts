@@ -167,6 +167,7 @@ const extraConfigurations = [
   "filterOperations",
   "virtual",
   "customizeText",
+  "formatter",
 ];
 
 @Injectable({

@@ -7487,7 +7487,8 @@
         "visible": true,
         "allowEditing": true,
         "showInColumnChooser": false,
-        "width": 0
+        "width": 0,
+        "formatter": "formatToClientCurrency"
       },
       {
         "dataField": "prixUnitaire",
@@ -7501,24 +7502,18 @@
         "visible": true,
         "allowEditing": true,
         "showInColumnChooser": false,
-        "width": 0
+        "width": 0,
+        "formatter": "formatToResponsableCurrency"
       },
       {
-        "dataField": "ligne.deviseCode",
+        "dataField": "ligne.ordreLigne.ordre.devise.id",
         "visible": true,
         "allowEditing": false,
         "showInColumnChooser": false,
         "width": 0
       },
       {
-        "dataField": "devise",
-        "visible": true,
-        "allowEditing": false,
-        "cellTemplate": "mergeCellsTemplate",
-        "virtual": true
-      },
-      {
-        "dataField": "ligne.ordreLigne.ordre.devise.id",
+        "dataField": "ligne.deviseCode",
         "visible": true,
         "allowEditing": false,
         "showInColumnChooser": false,
@@ -7531,7 +7526,8 @@
         "calculateCellValue": "calculateClientAvoir",
         "virtual": true,
         "showInColumnChooser": false,
-        "width": 0
+        "width": 0,
+        "formatter": "formatToClientCurrency"
       },
       {
         "dataField": "avoir",
@@ -7547,7 +7543,8 @@
         "calculateCellValue": "calculateResponsableAvoir",
         "virtual": true,
         "showInColumnChooser": false,
-        "width": 0
+        "width": 0,
+        "formatter": "formatToResponsableCurrency"
       },
       {
         "dataField": "ligne.commentaireResponsable",

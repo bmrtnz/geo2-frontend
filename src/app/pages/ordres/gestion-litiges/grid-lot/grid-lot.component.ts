@@ -6,18 +6,30 @@ import { LocalizePipe } from "app/shared/pipes";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import DevExpress from "devextreme";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { formatNumber } from "devextreme/localization";
 import { defer, interval, Observable, of } from "rxjs";
 import { concatMap, concatMapTo, filter, map, takeWhile, timeout } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
+let self: GridLotComponent;
 @Component({
   selector: "app-grid-lot",
   templateUrl: "./grid-lot.component.html",
   styleUrls: ["./grid-lot.component.scss"]
 })
 export class GridLotComponent implements OnInit, OnChanges {
+
+  constructor(
+    private litigesLignesService: LitigesLignesService,
+    private gridConfiguratorService: GridConfiguratorService,
+    private gridsService: GridsService,
+    private localize: LocalizePipe,
+  ) {
+    self = this;
+  }
 
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
@@ -37,14 +49,6 @@ export class GridLotComponent implements OnInit, OnChanges {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
     })
-
-  constructor(
-    private litigesLignesService: LitigesLignesService,
-    private gridConfiguratorService: GridConfiguratorService,
-    private gridsService: GridsService,
-    private localize: LocalizePipe,
-  ) {
-  }
 
   ngOnInit(): void {
     this.columns = this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot);
@@ -153,6 +157,24 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public calculateCaption(column: GridColumn) {
     return this.localize.transform(`${Grid.LitigeLignesLot}-${column.dataField.split(".").pop()}`);
+  }
+
+  public formatToClientCurrency(value) {
+    const currency = (self.grid?.dataSource as DataSource)?.items()?.[0].ligne.ordreLigne.ordre.devise.id;
+    return formatNumber(value, {
+      type: "currency",
+      precision: 2,
+      currency
+    } as DevExpress.ui.format);
+  }
+
+  public formatToResponsableCurrency(value) {
+    const currency = (self.grid?.dataSource as DataSource)?.items()?.[0].ligne.deviseCode;
+    return formatNumber(value, {
+      type: "currency",
+      precision: 2,
+      currency
+    } as DevExpress.ui.format);
   }
 
 }

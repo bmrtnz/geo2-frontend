@@ -17,7 +17,12 @@
     [cellTemplate]="column?.cellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
     [width]="column?.width !== undefined ? column.width : 'auto'"
-  ></dxi-column>
+  >
+    <dxo-format
+      *ngIf="column?.formatter"
+      [formatter]="this[column?.formatter]"
+    ></dxo-format>
+  </dxi-column>
 
   <dxo-summary [recalculateWhileEditing]="true">
     <dxi-total-item
@@ -42,6 +47,7 @@
       showInColumn="avoir"
       cssClass="client-cell"
     >
+      <dxo-value-format [formatter]="formatToClientCurrency"></dxo-value-format>
     </dxi-total-item>
     <dxi-total-item
       column="responsableAvoir"
@@ -50,6 +56,9 @@
       showInColumn="avoir"
       cssClass="responsable-cell"
     >
+      <dxo-value-format
+        [formatter]="formatToResponsableCurrency"
+      ></dxo-value-format>
     </dxi-total-item>
   </dxo-summary>
 
