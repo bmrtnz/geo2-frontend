@@ -284,9 +284,32 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   reInitialize() {
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
+    const [litigeID, lotNum] = this.lot;
+    this.litigesLignesService.getList(
+      `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="}${lotNum}`,
+      [
+        "id",
+        "ordreLigne.venteUnite.id",
+        "ordreLigne.achatUnite.id",
+        "ordreLigne.ventePrixUnitaire",
+        "ordreLigne.achatPrixUnitaire",
+        "ordreLigne.achatDevisePrixUnitaire",
+      ]).pipe(
+        mergeMap(res => res.data.allLitigeLigneList),
+        map(res => ({
+          id: res.id,
+          clientUniteFactureCode: res.ordreLigne.venteUnite?.id ?? null,
+          responsableUniteFactureCode: res.ordreLigne.achatUnite?.id ?? null,
+          clientPrixUnitaire: res.ordreLigne.ventePrixUnitaire,
+          responsablePrixUnitaire: res.ordreLigne.achatPrixUnitaire,
+          devisePrixUnitaire: res.ordreLigne.achatDevisePrixUnitaire,
+        } as LitigeLigne)),
+        toArray(),
+        concatMap(data => this.gridLot.updateLot(data)),
+      )
+      .subscribe({
+        error: (err: Error) => notify(err.message, "ERROR", 3500),
+      });
   }
 
   fraisAnnexes() {
