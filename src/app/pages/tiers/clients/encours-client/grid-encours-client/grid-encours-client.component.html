@@ -213,10 +213,7 @@
     [dataField]="column.dataField"
     [visible]="false"
     [width]="column.width"
-    [caption]="
-      ('encoursClient-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
-    "
+    [caption]="calcCaption(column)"
     [cellTemplate]="column.cellTemplate"
     [headerCellTemplate]="column.headerCellTemplate"
     [fixed]="column.fixed"
@@ -230,13 +227,6 @@
     [format]="column?.format"
   >
   </dxi-column>
-
-  <div *dxTemplate="let cell of 'creditDebitDevTemplate'">
-    <div>
-      {{ "encoursClient-" + cell.column.dataField | localize }}
-      {{ deviseTodisplay() }}
-    </div>
-  </div>
 
   <dxo-summary>
     <dxi-total-item column="cfcMontantEuros"></dxi-total-item>

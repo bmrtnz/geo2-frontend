@@ -6693,7 +6693,6 @@
       {
         "visibleIndex": 4,
         "dataField": "cfcMontantEuros",
-        "headerCellTemplate": "creditDebitDevTemplate",
         "class": "no-padding",
         "visible": true,
         "calculateCellValue": "calculateMontantEuroValue",
@@ -6705,7 +6704,6 @@
       {
         "visibleIndex": 6,
         "dataField": "cfcMontantDevise",
-        "headerCellTemplate": "creditDebitDevTemplate",
         "visible": true,
         "calculateCellValue": "calculateMontantDeviseValue",
         "format": {

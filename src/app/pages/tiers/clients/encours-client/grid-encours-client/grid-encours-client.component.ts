@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Client } from "app/shared/models";
 import { AuthService, ClientsService } from "app/shared/services";
@@ -11,8 +11,6 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import dxDataGrid from "devextreme/ui/data_grid";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -334,6 +332,15 @@ export class GridEncoursClientComponent implements OnChanges {
       ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
         (data.raisonSocial ? data.raisonSocial : data.description)))
       : null;
+  }
+
+  calcCaption(column: GridColumn) {
+    let localized = this.localizeService
+      .localize("encoursClient-" + column.dataField?.split(".").join("-")) ||
+      column.name;
+    if (["cfcMontantEuros", "cfcMontantDevise"].includes(column.dataField))
+      localized += ` ${this.deviseTodisplay()}`;
+    return localized;
   }
 
 }
