@@ -229,7 +229,23 @@
   </dxi-column>
 
   <dxo-summary>
-    <dxi-total-item column="cfcMontantEuros"></dxi-total-item>
-    <dxi-total-item column="cfcMontantDevise"></dxi-total-item>
+    <dxi-total-item
+      column="cfcMontantEuros"
+      [summaryType]="'sum'"
+      displayFormat="{{ 'encours-clients-total' | localize }}: {0}"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
+    ></dxi-total-item>
+    <dxi-total-item
+      column="cfcMontantDevise"
+      [summaryType]="'sum'"
+      displayFormat="{0}"
+      [valueFormat]="{
+        type: 'fixedPoint',
+        precision: 2
+      }"
+    ></dxi-total-item>
   </dxo-summary>
 </dx-data-grid>

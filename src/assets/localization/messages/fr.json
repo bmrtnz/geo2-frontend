@@ -1726,6 +1726,7 @@
     "encours-clients-entrepots-code": "Entrepôt",
     "encours-clients-secteur-id": "Secteur",
     "encours-clients-commercial-id": "Comm.",
+    "encours-clients-total": "Total client",
     "selectionLignesCde-ordreLigne-numero": "N°",
     "selectionLignesCde-ordreLigne-article-id": "Réf. art.",
     "selectionLignesCde-ordreLigne-article-articleDescription-descriptionReferenceLongue": "Produit",

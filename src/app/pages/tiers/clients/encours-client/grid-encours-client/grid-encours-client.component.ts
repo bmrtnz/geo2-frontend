@@ -254,30 +254,6 @@ export class GridEncoursClientComponent implements OnChanges {
         if (e.value === "FRF") e.cellElement.innerText = "";
       }
     }
-    // Setting total debit & credit info
-    if (e.rowType === "totalFooter") {
-      if (["cfcIntitule", "cfcMontantEuros", "cfcMontantDevise"].includes(e.column.dataField))
-        e.cellElement.classList.add("encours-total-text");
-
-      if (e.column.dataField === "cfcIntitule" && (this.sumCredit || this.sumDebit)) {
-        e.cellElement.innerText = "Total client :";
-        e.cellElement.classList.add("text-align-right");
-      }
-      if (e.column.dataField === "cfcMontantEuros") {
-        if (this.sumDebit) {
-          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumDebit);
-        } else {
-          e.cellElement.innerText = "";
-        }
-      }
-      if (e.column.dataField === "cfcMontantDevise") {
-        if (this.sumCredit) {
-          e.cellElement.textContent = this.gridUtilsService.numberWithSpaces(this.sumCredit);
-        } else {
-          e.cellElement.innerText = "";
-        }
-      }
-    }
   }
 
   onCellDblClick(e) {
