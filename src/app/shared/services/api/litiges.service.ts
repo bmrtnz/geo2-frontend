@@ -427,4 +427,32 @@ export class LitigesService extends ApiService implements APIRead {
       fetchPolicy: "network-only",
     });
   }
+
+  fCreeOrdreRefacturationTransporteur(
+    ordRefOrigine: string,
+    montIndemn: number,
+    socCode: string,
+    username: string
+  ) {
+    return this.apollo.query<{ ls_ord_ref_refacturer: string }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "fCreeOrdreRefacturationTransporteur",
+          params: [
+            { name: "ordRefOrigine", value: "ordRefOrigine", isVariable: true },
+            { name: "montIndemn", value: "montIndemn", isVariable: true },
+            { name: "socCode", value: "socCode", isVariable: true },
+            { name: "username", value: "username", isVariable: true },
+          ],
+        }
+      ], [
+        { name: "ordRefOrigine", type: "String", isOptionnal: false },
+        { name: "montIndemn", type: "Float", isOptionnal: false },
+        { name: "socCode", type: "String", isOptionnal: false },
+        { name: "username", type: "String", isOptionnal: false },
+      ])),
+      variables: { ordRefOrigine, montIndemn, socCode, username },
+      fetchPolicy: "network-only",
+    });
+  }
 }
