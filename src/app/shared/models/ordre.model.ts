@@ -172,6 +172,7 @@ export class Ordre extends Model {
   @Field() public secteurCode: string;
   @Field() public numeroContainer: string;
   @Field() public descriptifRegroupement: string;
+  @Field() public aBloquer?: boolean;
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
