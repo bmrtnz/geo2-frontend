@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -7,6 +8,7 @@ import { LitigeCausesService } from "app/shared/services/api/litige-causes.servi
 import { LitigeConsequencesService } from "app/shared/services/api/litige-consequences.service";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -56,6 +58,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
   @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
   @ViewChild(GridLotComponent) private gridLot: GridLotComponent;
+  @ViewChild(ChooseEntrepotPopupComponent) private chooseEntrepotPopup: ChooseEntrepotPopupComponent;
 
   constructor(
     private localizeService: LocalizationService,
@@ -70,6 +73,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     private currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     private tabContext: TabContext,
+    private ordreLignesService: OrdreLignesService,
 
   ) {
     this.responsibleList = [
@@ -186,12 +190,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.selectedConsequence = e.addedItems[0]?.id;
   }
 
-  createRefactOrder() {
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
-  }
-
   openOrder() {
     this.tabContext.openOrdre(this.ordreGenRef, this.ordre.campagne.id);
     this.hidePopup();
@@ -239,13 +237,53 @@ export class GestionOperationsPopupComponent implements OnChanges {
         this.authService.currentUser.nomUtilisateur)
       .toPromise();
 
-    this.ordreGenRef = refacturationResponse.data.ls_ord_ref_refacturer;
+    // Fetch numero of newly created ordre for view
+    const ordreRefact = await this.ordresService
+      .getOne_v2(refacturationResponse.data.ls_ord_ref_refacturer, new Set(["numero"]))
+      .pipe(map(res => res.data.ordre))
+      .toPromise();
+    this.ordreGenRef = ordreRefact.numero;
   }
 
   createReplaceOrder() {
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
+    let ordreReplaceID: Ordre["id"];
+    this.chooseEntrepotPopup.prompt().pipe(
+      concatMap(entrepotID => this.ordresService
+        .fCreeOrdreReplacement(
+          this.ordre.id,
+          entrepotID,
+          this.authService.currentUser.nomUtilisateur,
+          this.currentCompanyService.getCompany().id,
+        )),
+      map(replacementResponse => replacementResponse.data.fCreeOrdreReplacement.data.ls_ord_ref_replace),
+      tap(refReplace => { ordreReplaceID = refReplace; }),
+      concatMap(() => {
+        const [litigeID, lotNum] = this.lot;
+        return this.litigesLignesService.getList(
+          `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="}${lotNum}`,
+          ["id", "ordreLigne.id"]);
+      }),
+      map(res => res.data.allLitigeLigneList),
+      concatMap(lignes => {
+        return Promise.all(lignes.map(ligne =>
+          this.ordreLignesService.fCreeOrdreReplacementLigne(
+            ligne.id,
+            ordreReplaceID,
+            this.ordre.id,
+            ligne.ordreLigne.id,
+            this.currentCompanyService.getCompany().id,
+          ).toPromise()
+        ));
+      }),
+      // Fetch numero of newly created ordre for view
+      concatMap(() => this.ordresService
+        .getOne_v2(ordreReplaceID, new Set(["numero"]))
+        .pipe(map(res => res.data.ordre))),
+    ).subscribe({
+      next: ordreReplace => { this.ordreGenRef = ordreReplace.numero; },
+      error: (error: Error) => notify(error.message, "ERROR", 3500)
+    });
+
   }
 
   addToReplaceOrder() {

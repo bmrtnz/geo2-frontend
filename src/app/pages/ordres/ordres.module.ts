@@ -44,6 +44,7 @@ import {
   DxValidationGroupModule,
   DxValidatorModule
 } from "devextreme-angular";
+import { ChooseEntrepotPopupModule } from "../../shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 import { ArticlesModule } from "../articles/articles.module";
 import { ClientsModule } from "../tiers/clients/clients.module";
@@ -276,6 +277,15 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     GridForfaitLitigeComponent,
     SelectionComptePaloxPopupComponent,
   ],
+  providers: [
+    OrdresIndicatorsService,
+    DatePipe,
+    LocalizePipe,
+    ListPipe,
+    TabContext,
+    OrdresTabsPersistGuard,
+    GridsService,
+  ],
   imports: [
     OrdresRoutingModule,
     SharedModule,
@@ -327,15 +337,7 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     ProgramChooserModule,
     GestionLitigesModule,
     CustomCellTemplatesModule,
-  ],
-  providers: [
-    OrdresIndicatorsService,
-    DatePipe,
-    LocalizePipe,
-    ListPipe,
-    TabContext,
-    OrdresTabsPersistGuard,
-    GridsService,
-  ],
+    ChooseEntrepotPopupModule
+  ]
 })
 export class OrdresModule { }

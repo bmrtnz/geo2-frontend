@@ -132,7 +132,6 @@
           [visible]="selectedConsequence === 'G'"
           stylingMode="outlined"
           text="{{ 'btn-createRefactTranspOrder' | localize }}"
-          [disabled]="!!ordreGenRef"
           (onClick)="createRefactTranspOrder()"
         ></dx-button>
         <dx-button
@@ -140,7 +139,6 @@
           type="normal"
           [visible]="selectedConsequence === 'B'"
           stylingMode="outlined"
-          [disabled]="!!ordreGenRef"
           text="{{ 'btn-createReplaceOrder' | localize }}"
           (onClick)="createReplaceOrder()"
         ></dx-button>
@@ -149,7 +147,6 @@
           type="normal"
           [visible]="selectedConsequence === 'B'"
           stylingMode="outlined"
-          [disabled]="!!ordreGenRef"
           text="{{ 'btn-addToReplaceOrder' | localize }}"
           (onClick)="addToReplaceOrder()"
         ></dx-button>
@@ -220,3 +217,5 @@
   [tempRowsCleaning]="false"
   (selectedLignes)="pushLitigeLignes($event)"
 ></app-selection-lignes-litige-popup>
+
+<app-choose-entrepot-popup></app-choose-entrepot-popup>
