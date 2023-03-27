@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
+import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -59,6 +60,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
   @ViewChild(GridLotComponent) private gridLot: GridLotComponent;
   @ViewChild(ChooseEntrepotPopupComponent) private chooseEntrepotPopup: ChooseEntrepotPopupComponent;
+  @ViewChild(ChooseOrdrePopupComponent) private chooseOrdrePopup: ChooseOrdrePopupComponent;
 
   constructor(
     private localizeService: LocalizationService,
@@ -287,9 +289,42 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   addToReplaceOrder() {
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
+    let ordreReplace: Partial<Ordre>;
+    this.chooseOrdrePopup.prompt().pipe(
+      concatMap(ordreID => this.ordresService
+        .getOne_v2(ordreID, new Set(["id", "bonAFacturer", "aBloquer", "numero"]))),
+      map(res => res.data.ordre),
+      concatMap(ordre => {
+        ordreReplace = ordre;
+        if (ordre.aBloquer || ordre.bonAFacturer) {
+          if (ordre.bonAFacturer)
+            return throwError(new Error(this.localizeService.localize("replace-order-denied")));
+          return EMPTY;
+        }
+        return of(ordre);
+      }),
+      concatMap(() => {
+        const [litigeID, lotNum] = this.lot;
+        return this.litigesLignesService.getList(
+          `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="}${lotNum}`,
+          ["id", "ordreLigne.id"]);
+      }),
+      map(res => res.data.allLitigeLigneList),
+      concatMap(lignes => {
+        return Promise.all(lignes.map(ligne =>
+          this.ordreLignesService.fCreeOrdreReplacementLigne(
+            ligne.id,
+            ordreReplace.id,
+            this.ordre.id,
+            ligne.ordreLigne.id,
+            this.currentCompanyService.getCompany().id,
+          ).toPromise()
+        ));
+      }),
+    ).subscribe({
+      next: () => { this.ordreGenRef = ordreReplace.numero; },
+      error: (error: Error) => notify(error.message, "ERROR", 3500)
+    });
   }
 
   openArticleAdder() {

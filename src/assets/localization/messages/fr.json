@@ -1760,6 +1760,7 @@
     "no-associated-client-to-transporteur-contact": "Il n'existe pas de compte client associé à ce transporteur, veuillez contacter le service ADV",
     "select-this-entrep": "Sélectionner cet entrepôt",
     "choose-entrep": "Choix d'entrepôt",
-    "choose-ordre": "Choix d'ordre"
+    "choose-ordre": "Choix d'ordre",
+    "replace-order-denied": "Ordre en bon à facturer ou délai dépassé, ajout de ligne impossible"
   }
 }

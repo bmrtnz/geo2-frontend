@@ -5,7 +5,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { SharedModule } from "app/shared/shared.module";
 import { DxPopupComponent, DxPopupModule, DxScrollViewModule } from "devextreme-angular";
 import { EMPTY, of } from "rxjs";
-import { concatMap, first } from "rxjs/operators";
+import { concatMap, finalize, first, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-choose-ordre-popup",
@@ -21,7 +21,8 @@ export class ChooseOrdrePopupComponent {
   public prompt() {
     this.popup.visible = true;
     return this.choosed.pipe(
-      concatMap(res => res ? of(res) : EMPTY),
+      first(),
+      finalize(() => this.popup.visible = false),
     );
   }
 
