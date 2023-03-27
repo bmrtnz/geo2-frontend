@@ -5,6 +5,7 @@ import {
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
@@ -45,9 +46,6 @@ import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
-import {
-  ConfirmationResultPopupComponent
-} from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { AjoutArticlesHistoPopupComponent } from "../ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "../ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "../ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";

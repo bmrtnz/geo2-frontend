@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
-import { DxPopupComponent } from "devextreme-angular";
+import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, NgModule, Output, ViewChild } from "@angular/core";
+import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
+import { DxPopupComponent, DxPopupModule } from "devextreme-angular";
+import { DxiToolbarItemModule } from "devextreme-angular/ui/nested";
 import { take, tap } from "rxjs/operators";
 
 type MessageState = "ERROR" | "WARNING";
@@ -53,3 +56,14 @@ export class ConfirmationResultPopupComponent {
   }
 
 }
+
+@NgModule({
+  imports: [
+    CommonModule,
+    DxPopupModule,
+    DxiToolbarItemModule,
+  ],
+  declarations: [ConfirmationResultPopupComponent],
+  exports: [ConfirmationResultPopupComponent],
+})
+export class ConfirmationResultPopupModule { }

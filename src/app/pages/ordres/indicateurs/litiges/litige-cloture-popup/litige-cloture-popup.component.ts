@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
-import {
-  ConfirmationResultPopupComponent
-} from "app/pages/ordres/actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import Litige from "app/shared/models/litige.model";
 import { LocalizationService } from "app/shared/services";
 import { FunctionResult } from "app/shared/services/api/functions.service";

@@ -2,15 +2,22 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  NgModule,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { SharedModule } from "app/shared/shared.module";
 import {
   DxAutocompleteComponent,
+  DxAutocompleteModule,
+  DxBoxModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
   DxSelectBoxComponent,
+  DxSelectBoxModule,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { filter } from "rxjs/operators";
@@ -157,3 +164,21 @@ export class OrdresSuiviComponent implements AfterViewInit {
 }
 
 export default OrdresSuiviComponent;
+
+@NgModule({
+  imports: [
+    SharedModule,
+    DxBoxModule,
+    DxSelectBoxModule,
+    DxAutocompleteModule,
+    DxCheckBoxModule,
+    DxDataGridModule,
+  ],
+  declarations: [
+    OrdresSuiviComponent,
+    GridSuiviComponent,
+    GridHistoriqueComponent,
+  ],
+  exports: [OrdresSuiviComponent],
+})
+export class OrdresSuiviModule { }

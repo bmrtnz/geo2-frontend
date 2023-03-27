@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
@@ -14,7 +15,6 @@ import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documen
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
-import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/confirmation-result-popup.component";
 
 @Component({
   selector: "app-actions-documents-ordres",

@@ -8,6 +8,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { Flux, OrdreLigne } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
@@ -27,7 +28,6 @@ import notify from "devextreme/ui/notify";
 import { from, iif, of } from "rxjs";
 import { concatMap, filter, map, mergeAll } from "rxjs/operators";
 // tslint:disable-next-line: max-line-length
-import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { GridLitigesLignesComponent } from "../grid-litiges-lignes/grid-litiges-lignes.component";

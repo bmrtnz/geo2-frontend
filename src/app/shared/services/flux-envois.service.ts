@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 // tslint:disable-next-line: max-line-length
-import { ConfirmationResultPopupComponent } from "app/pages/ordres/actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { GridsService } from "app/pages/ordres/grids.service";
 import notify from "devextreme/ui/notify";
 import { defer, of } from "rxjs";
 import { catchError, concatMap, map } from "rxjs/operators";
 import { AuthService } from ".";
+import { ConfirmationResultPopupComponent } from "../components/confirmation-result-popup/confirmation-result-popup.component";
 import { Flux, Societe } from "../models";
 import { Ordre } from "../models/ordre.model";
 import { DepotEnvoisService } from "./api/depot-envois.service";
