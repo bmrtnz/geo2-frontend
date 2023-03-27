@@ -118,7 +118,7 @@ export class GridLotComponent implements OnInit, OnChanges {
         takeWhile(datasource => !datasource?.items()?.length, true),
         filter(datasource => !!datasource?.items()?.length),
         concatMap(datasource => {
-          (datasource.items() as Partial<LitigeLigneFait>[]).forEach((item, rowIndex) => {
+          this.getItems(datasource).forEach((item, rowIndex) => {
             if (Array.isArray(data)) {
               const index = data.findIndex(row => row.id === item.ligne.id);
               if (index >= 0) {
@@ -179,6 +179,10 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public getTotalSummaries(summaryItemName: string) {
     return this.grid.instance.getTotalSummaryValue(summaryItemName);
+  }
+
+  public getItems(datasource: DataSource = (this.grid.dataSource as DataSource)) {
+    return (datasource.items() as Partial<LitigeLigneFait>[]);
   }
 
 }

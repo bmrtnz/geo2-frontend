@@ -7388,7 +7388,8 @@
     "columns": [
       {
         "dataField": "ligne.id",
-        "visible": false
+        "visible": false,
+        "allowEditing": false
       },
       {
         "dataField": "ligne.ordreLigne.id",
