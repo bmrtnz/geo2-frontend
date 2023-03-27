@@ -19,6 +19,7 @@ import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-lit
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
 import { GridsService } from "../grids.service";
+import { TabContext } from "../root/root.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
 @Component({
@@ -68,6 +69,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     private ordresService: OrdresService,
     private currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
+    private tabContext: TabContext,
 
   ) {
     this.responsibleList = [
@@ -191,7 +193,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   openOrder() {
-    // Appel tab
+    this.tabContext.openOrdre(this.ordreGenRef, this.ordre.campagne.id);
+    this.hidePopup();
   }
 
   validate() {
