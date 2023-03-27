@@ -438,6 +438,7 @@ export class LitigesService extends ApiService implements APIRead {
       query: gql(ApiService.buildGraph("query", [
         {
           name: "fCreeOrdreRefacturationTransporteur",
+          body: functionBody,
           params: [
             { name: "ordRefOrigine", value: "ordRefOrigine", isVariable: true },
             { name: "montIndemn", value: "montIndemn", isVariable: true },
