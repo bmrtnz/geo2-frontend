@@ -20,6 +20,7 @@ import { ordre } from "assets/configurations/grids.json";
 import { TabContext } from "../root/root.component";
 import { GridColumn } from "basic";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import Campagne from "app/shared/models/campagne.model";
 
 @Component({
   selector: "app-grid-suivi",
@@ -27,7 +28,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
   styleUrls: ["./grid-suivi.component.scss"],
 })
 export class GridSuiviComponent implements OnInit, AfterViewInit {
-  @Output() public ordreSelected = new EventEmitter<Ordre>();
+  @Output() public ordreSelected = new EventEmitter<Ordre["id"]>();
   @Input() public filter: [];
   @ViewChild(DxDataGridComponent, { static: false })
   suivigrid: DxDataGridComponent;

@@ -53,10 +53,11 @@
 <app-grid-suivi
   [filter]="filter"
   *ngIf="showGridResults"
-  (ordreSelected)="tabContext.openOrdre($event.numero, $event.campagne.id)"
+  (ordreSelected)="handleOrdreSelection($event)"
 ></app-grid-suivi>
-
+<br />
 <div class="histo-container">
-  <h2>{{ "ordres-suivi-historiqueordres" | localize }}</h2>
-  <app-grid-historique></app-grid-historique>
+  <app-grid-historique
+    (ordreSelected)="handleOrdreSelection($event)"
+  ></app-grid-historique>
 </div>

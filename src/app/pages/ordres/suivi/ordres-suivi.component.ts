@@ -2,12 +2,16 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  Input,
   NgModule,
+  Output,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
+import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { SharedModule } from "app/shared/shared.module";
 import {
@@ -20,7 +24,7 @@ import {
   DxSelectBoxModule,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { filter } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { GridHistoriqueComponent } from "../grid-historique/grid-historique.component";
 import { GridSuiviComponent } from "../grid-suivi/grid-suivi.component";
 import { RouteParam, TabContext } from "../root/root.component";
@@ -34,6 +38,15 @@ let self;
 })
 export class OrdresSuiviComponent implements AfterViewInit {
   readonly INDICATOR_ID = "SuiviDesOrdres";
+
+  /**
+   * Mode configurating what to do when `double-clicking` a grid row (for compatibility)
+   * - `open` will open the selected ordre in a new tab (default)
+   * - `emit` will emit the selected ordre key from the `onRowSelected` `EventEmiter`
+   * @see onRowSelected
+   */
+  @Input() public rowSelectionEventMode: "emit" | "open" = "open";
+  @Output() public whenRowSelected = new EventEmitter<Ordre["id"]>();
 
   searchItems: any;
   filter: any;
@@ -62,6 +75,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     private authService: AuthService,
     public tabContext: TabContext,
     private route: ActivatedRoute,
+    private ordresService: OrdresService,
   ) {
     self = this;
     this.searchItems = [
@@ -160,6 +174,16 @@ export class OrdresSuiviComponent implements AfterViewInit {
         this.showGridResults = true;
       }
     }, 1);
+  }
+
+  protected handleOrdreSelection(ordreID: Ordre["id"]) {
+    if (this.rowSelectionEventMode === "open")
+      this.ordresService.getOne_v2(ordreID, new Set(["numero", "campagne.id"]))
+        .pipe(map(res => res.data.ordre))
+        .subscribe(ordre => this.tabContext.openOrdre(ordre.numero, ordre.campagne.id));
+    if (this.rowSelectionEventMode === "emit")
+      this.whenRowSelected.emit(ordreID);
+
   }
 }
 

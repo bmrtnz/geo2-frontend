@@ -9,9 +9,7 @@
   [allowColumnReordering]="true"
   [noDataText]="'aucun-ordre' | localize"
   (onCellPrepared)="onCellPrepared($event)"
-  (onRowDblClick)="
-    tabContext.openOrdre($event.data.numero, $event.data.campagne.id)
-  "
+  (onRowDblClick)="ordreSelected.emit($event.data.id)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Résultat(s) de recherche',

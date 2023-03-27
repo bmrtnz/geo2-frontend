@@ -1,5 +1,6 @@
-import { Component, ViewChild } from "@angular/core";
-import { Statut } from "app/shared/models/ordre.model";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import Campagne from "app/shared/models/campagne.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -21,6 +22,8 @@ import { TabContext } from "../root/root.component";
 export class GridHistoriqueComponent {
   @ViewChild(DxDataGridComponent, { static: true })
   histoGrid: DxDataGridComponent;
+
+  @Output() public ordreSelected = new EventEmitter<Ordre["id"]>();
 
   readonly INDICATOR_NAME = "Historique";
 

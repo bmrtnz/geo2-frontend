@@ -7,12 +7,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  (onRowDblClick)="
-    tabContext.openOrdre(
-      $event.data.ordre.numero,
-      $event.data.ordre.campagne.id
-    )
-  "
+  (onRowDblClick)="ordreSelected.emit($event.data.ordre.id)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Derniers ordres ouverts',
