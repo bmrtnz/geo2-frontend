@@ -5,7 +5,7 @@ import {
   Input,
   NgModule,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
@@ -21,7 +21,7 @@ import {
   DxCheckBoxModule,
   DxDataGridModule,
   DxSelectBoxComponent,
-  DxSelectBoxModule,
+  DxSelectBoxModule
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { filter, map } from "rxjs/operators";

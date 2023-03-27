@@ -1,0 +1,16 @@
+<dx-popup
+  [title]="'choose-ordre' | localize"
+  [width]="'auto'"
+  [height]="'auto'"
+  [maxWidth]="'80vw'"
+  [showCloseButton]="true"
+  (onShowing)="onShowing()"
+  (onHiding)="choosed.emit()"
+>
+  <dx-scroll-view [height]="'80vh'">
+    <app-ordres-suivi
+      [rowSelectionEventMode]="'emit'"
+      (whenRowSelected)="choosed.emit($event)"
+    ></app-ordres-suivi>
+  </dx-scroll-view>
+</dx-popup>

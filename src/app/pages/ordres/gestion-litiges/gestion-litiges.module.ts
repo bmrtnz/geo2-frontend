@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { CustomCellTemplatesModule } from "app/custom-cell-templates/custom-cell-templates.module";
 import { ChooseEntrepotPopupModule } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
+import { ChooseOrdrePopupModule } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
 import { ConfirmationResultPopupModule } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { SharedModule } from "app/shared/shared.module";
 import {
@@ -49,6 +50,7 @@ import { GridLotComponent } from "./grid-lot/grid-lot.component";
     FormsModule,
     CustomCellTemplatesModule,
     ChooseEntrepotPopupModule,
+    ChooseOrdrePopupModule,
     ConfirmationResultPopupModule,
     DxDataGridModule,
     DxBoxModule,

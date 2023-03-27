@@ -1759,6 +1759,7 @@
     "litige-lignes-lot-commentaireResponsable": "Commentaires au responsable",
     "no-associated-client-to-transporteur-contact": "Il n'existe pas de compte client associé à ce transporteur, veuillez contacter le service ADV",
     "select-this-entrep": "Sélectionner cet entrepôt",
-    "choose-entrep": "Choix d'entrepôt"
+    "choose-entrep": "Choix d'entrepôt",
+    "choose-ordre": "Choix d'ordre"
   }
 }
