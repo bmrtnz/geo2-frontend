@@ -1,0 +1,68 @@
+<dx-popup
+  [title]="'choose-entrep' | localize"
+  [width]="'auto'"
+  [height]="'auto'"
+  [showCloseButton]="false"
+  (onHidden)="onHidden()"
+>
+  <!-- select button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+  >
+    <dx-button
+      [icon]="'exportselected'"
+      [text]="'select-this-entrep' | localize"
+      [disabled]="!entrepotInput?.selectedItem"
+      [stylingMode]="'contained'"
+      (onClick)="onSelectClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+
+  <!-- cancel button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+  >
+    <dx-button
+      [icon]="'back'"
+      [text]="'btn-annuler' | localize"
+      (onClick)="onCancelClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+  <div *dxTemplate="let data of 'content'">
+    <div class="inputs">
+      <!-- société input -->
+      <div class="field">
+        <div class="label">{{ "auth-societe" | localize | titlecase }}</div>
+        <div class="value">
+          <dx-select-box
+            #societeInput
+            [dataSource]="societesSource"
+            [valueExpr]="'id'"
+            [displayExpr]="'raisonSocial'"
+            [searchExpr]="['id', 'raisonSocial']"
+            (onSelectionChanged)="onSocieteSelectionChanged()"
+          ></dx-select-box>
+        </div>
+      </div>
+
+      <!-- entrepot input -->
+      <div class="field">
+        <div class="label">{{ "entrepot" | localize | titlecase }}</div>
+        <div class="value">
+          <dx-select-box
+            #entrepotInput
+            [dataSource]="entrepotsSource"
+            [valueExpr]="'id'"
+            [displayExpr]="'code'"
+            [searchExpr]="['id', 'code', 'raisonSocial']"
+            [disabled]="!societeInput?.selectedItem"
+          ></dx-select-box>
+        </div>
+      </div>
+    </div>
+  </div>
+</dx-popup>
