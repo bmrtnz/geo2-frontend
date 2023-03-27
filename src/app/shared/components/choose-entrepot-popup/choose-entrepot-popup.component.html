@@ -44,6 +44,7 @@
             [valueExpr]="'id'"
             [displayExpr]="'raisonSocial'"
             [searchExpr]="['id', 'raisonSocial']"
+            [searchMode]="'contains'"
             (onSelectionChanged)="onSocieteSelectionChanged()"
           ></dx-select-box>
         </div>
@@ -59,6 +60,7 @@
             [valueExpr]="'id'"
             [displayExpr]="'code'"
             [searchExpr]="['id', 'code', 'raisonSocial']"
+            [searchMode]="'contains'"
             [disabled]="!societeInput?.selectedItem"
           ></dx-select-box>
         </div>
