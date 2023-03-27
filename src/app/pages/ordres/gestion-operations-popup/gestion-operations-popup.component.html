@@ -132,6 +132,7 @@
           [visible]="selectedConsequence === 'G'"
           stylingMode="outlined"
           text="{{ 'btn-createRefactTranspOrder' | localize }}"
+          [disabled]="!!ordreGenRef"
           (onClick)="createRefactTranspOrder()"
         ></dx-button>
         <dx-button
@@ -139,6 +140,7 @@
           type="normal"
           [visible]="selectedConsequence === 'B'"
           stylingMode="outlined"
+          [disabled]="!!ordreGenRef"
           text="{{ 'btn-createReplaceOrder' | localize }}"
           (onClick)="createReplaceOrder()"
         ></dx-button>
@@ -147,18 +149,19 @@
           type="normal"
           [visible]="selectedConsequence === 'B'"
           stylingMode="outlined"
+          [disabled]="!!ordreGenRef"
           text="{{ 'btn-addToReplaceOrder' | localize }}"
           (onClick)="addToReplaceOrder()"
         ></dx-button>
         <!-- Bouton plus d'actualité - Vu avec Bruno 17-02-2023 -->
         <!-- <dx-button
-        class="big-button"
-        type="normal"
-        [visible]="false"
-        stylingMode="outlined"
-        text="{{ 'btn-createRefactOrder' | localize }}"
-        (onClick)="createRefactOrder()"
-      ></dx-button> -->
+          class="big-button"
+          type="normal"
+          [visible]="false"
+          stylingMode="outlined"
+          text="{{ 'btn-createRefactOrder' | localize }}"
+          (onClick)="createRefactOrder()"
+          ></dx-button> -->
         <div
           *ngIf="['G', 'B'].includes(selectedConsequence)"
           class="red-font generated-order"
@@ -170,7 +173,7 @@
           type="normal"
           [visible]="['G', 'B'].includes(selectedConsequence)"
           stylingMode="outlined"
-          text=""
+          [text]="ordreGenRef"
           (onClick)="openOrder()"
         ></dx-button>
       </div>

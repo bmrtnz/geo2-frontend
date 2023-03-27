@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@a
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { LitigeCausesService } from "app/shared/services/api/litige-causes.service";
 import { LitigeConsequencesService } from "app/shared/services/api/litige-consequences.service";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
@@ -43,12 +45,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public title: string;
   public popupFullscreen = false;
   public firstShown: boolean;
+  public ordreGenRef: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
   @ViewChild("consequences", { static: false }) consequences: DxListComponent;
   @ViewChild("responsibles", { static: false }) responsibles: DxRadioGroupComponent;
-
   @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
   @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
   @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
@@ -63,6 +65,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
     public fUtils: FormUtilsService,
     public consequencesService: LitigeConsequencesService,
     public gridsService: GridsService,
+    private ordresService: OrdresService,
+    private currentCompanyService: CurrentCompanyService,
+    private authService: AuthService,
 
   ) {
     this.responsibleList = [
@@ -119,7 +124,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
           this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
         }),
-        concatMapTo(this.fetchRestoreInfo()),
+        concatMapTo(this.fetchLotInfo()),
       )
       .subscribe((res) => {
         if (res?.cause?.id) {
@@ -145,7 +150,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.consequenceItems.filter(c => c.id === "G")[0].visible = false;
 
       }),
-      concatMapTo(this.fetchRestoreInfo()),
+      concatMapTo(this.fetchLotInfo()),
     )
       .subscribe((res) => {
         if (res?.consequence?.id) {
@@ -203,10 +208,35 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
-  createRefactTranspOrder() {
-    /////////////////////////////////
-    //  Fonction
-    /////////////////////////////////
+  async createRefactTranspOrder() {
+    await this.gridLot.persist();
+    const ordre = await this.ordresService
+      .getOne_v2(this.ordre.id, new Set([
+        "id",
+        "transporteur.clientRaisonSocial.id",
+        "devise.id",
+        "tauxDevise",
+      ]))
+      .pipe(map(res => res.data.ordre))
+      .toPromise();
+
+    if (!ordre.transporteur.clientRaisonSocial?.id)
+      return notify(this.localizeService.localize("no-associated-client-to-transporteur-contact"), "ERROR", 3500);
+
+    let totalAvoirClient = this.gridLot.getTotalSummaries("clientAvoir");
+
+    if (ordre.devise.id !== "EUR")
+      totalAvoirClient *= ordre.tauxDevise;
+
+    const refacturationResponse = await this.litigesService
+      .fCreeOrdreRefacturationTransporteur(
+        ordre.id,
+        totalAvoirClient,
+        this.currentCompanyService.getCompany().id,
+        this.authService.currentUser.nomUtilisateur)
+      .toPromise();
+
+    this.ordreGenRef = refacturationResponse.data.ls_ord_ref_refacturer;
   }
 
   createReplaceOrder() {
@@ -367,7 +397,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.responsibleList.filter(r => r.id === "transpApproche")[0].visible = true;
         });
     } else { // lot mutation
-      this.syncResponsableInput();
+      this.fetchLotInfo().subscribe(res => {
+        // sync inputs
+        if (res?.responsableTypeCode)
+          this.responsibles.value = this.responsibleList
+            .find(r => r.typeTiers === res.responsableTypeCode);
+        if (res?.numeroOrdreReplacement)
+          this.ordreGenRef = res?.numeroOrdreReplacement;
+      });
+
     }
 
     iif(() => !!this.lot[1], EMPTY, this.setupLotCreation())
@@ -413,20 +451,17 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.hidePopup();
   }
 
-  private syncResponsableInput() {
-    this.fetchRestoreInfo().subscribe(res => {
-      if (res?.responsableTypeCode)
-        this.responsibles.value = this.responsibleList
-          .find(r => r.typeTiers === res.responsableTypeCode);
-    });
-  }
-
   // assuming we have an existing lot
-  private fetchRestoreInfo() {
+  private fetchLotInfo() {
     const [litigeID, lotNum] = this.lot;
     return this.litigesLignesService.getList(
       `litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`,
-      ["responsableTypeCode", "cause.id", "consequence.id"]).pipe(
+      [
+        "responsableTypeCode",
+        "cause.id",
+        "consequence.id",
+        "numeroOrdreReplacement",
+      ]).pipe(
         map(res => res.data.allLitigeLigneList[0]),
       );
   }

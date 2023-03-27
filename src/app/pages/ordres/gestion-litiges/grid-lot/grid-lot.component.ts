@@ -177,5 +177,9 @@ export class GridLotComponent implements OnInit, OnChanges {
     } as DevExpress.ui.format);
   }
 
+  public getTotalSummaries(summaryItemName: string) {
+    return this.grid.instance.getTotalSummaryValue(summaryItemName);
+  }
+
 }
 

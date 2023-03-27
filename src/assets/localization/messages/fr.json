@@ -1756,6 +1756,7 @@
     "litige-lignes-lot-prixUnitaire": "P.U.",
     "litige-lignes-lot-devise": "Devise",
     "litige-lignes-lot-avoir": "Avoir",
-    "litige-lignes-lot-commentaireResponsable": "Commentaires au responsable"
+    "litige-lignes-lot-commentaireResponsable": "Commentaires au responsable",
+    "no-associated-client-to-transporteur-contact": "Il n'existe pas de compte client associé à ce transporteur, veuillez contacter le service ADV"
   }
 }
