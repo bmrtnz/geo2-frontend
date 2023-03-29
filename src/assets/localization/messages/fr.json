@@ -1771,6 +1771,7 @@
     "prompt-create-litige-linked-orders": "Voulez-vous confirmer la création des litiges pour les autres ordres avec le même code chargement ?",
     "done-create-litige-linked-orders": "Création des litiges pour les ordres liés terminée",
     "continu": "continuer",
-    "back": "retour"
+    "back": "retour",
+    "litige-save-success": "Sauvegarde du litige réalisée avec succès"
   }
 }

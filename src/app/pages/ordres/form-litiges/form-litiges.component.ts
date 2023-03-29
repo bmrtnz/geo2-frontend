@@ -217,9 +217,22 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   saveLitige() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
+    const persistedFields = [
+      "id",
+      "referenceClient",
+      "commentairesInternes",
+    ];
+    this.litigesService.save(
+      new Set(persistedFields),
+      {
+        id: this.infosLitige.litige.id,
+        ...persistedFields
+          .map(field => ({ [field]: this.formGroup.get(field).value }))
+          .reduce((acm, crt) => ({ ...acm, ...crt })),
+      }).subscribe({
+        complete: () => notify(this.localization.localize("litige-save-success"), "success", 3500),
+        error: err => notify(err.message, "error", 3000),
+      });
   }
 
   incidentLitige() {
