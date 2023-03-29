@@ -166,15 +166,17 @@ export class FormLitigesComponent implements OnInit, OnChanges {
               const totaux: LitigeLigneTotaux & {
                 resultat?: number;
               } = result.data.litigeLigneTotaux;
-              if (totaux) totaux.resultat =
-                totaux.avoirFournisseur -
-                totaux.avoirClient -
-                totaux.fraisAnnexes;
-              this.devise = totaux.devise.id;
-              this.resultat.value = totaux.resultat;
-              if (totaux.totalMontantRistourne)
-                this.totalMontantRistourne = true;
-              this.formGroup.patchValue(totaux);
+              if (totaux) {
+                totaux.resultat =
+                  totaux.avoirFournisseur -
+                  totaux.avoirClient -
+                  totaux.fraisAnnexes;
+                this.devise = totaux.devise.id;
+                this.resultat.value = totaux.resultat;
+                if (totaux.totalMontantRistourne)
+                  this.totalMontantRistourne = true;
+                this.formGroup.patchValue(totaux);
+              }
             });
         } else {
           this.noLitiges = true;
