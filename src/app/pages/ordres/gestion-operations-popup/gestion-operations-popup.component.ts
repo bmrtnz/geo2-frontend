@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -17,8 +18,8 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { EMPTY, from, iif, of, throwError, zip } from "rxjs";
-import { catchError, concatMap, concatMapTo, map, mergeMap, tap, toArray } from "rxjs/operators";
+import { combineLatest, EMPTY, forkJoin, from, iif, of, throwError, zip } from "rxjs";
+import { catchError, concatMap, concatMapTo, filter, map, mapTo, mergeMap, tap, toArray } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -62,6 +63,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild(GridLotComponent) private gridLot: GridLotComponent;
   @ViewChild(ChooseEntrepotPopupComponent) private chooseEntrepotPopup: ChooseEntrepotPopupComponent;
   @ViewChild(ChooseOrdrePopupComponent) private chooseOrdrePopup: ChooseOrdrePopupComponent;
+  @ViewChild(ConfirmationResultPopupComponent) private confirmPopup: ConfirmationResultPopupComponent;
 
   constructor(
     private localizeService: LocalizationService,
@@ -202,6 +204,20 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.mutateLot().pipe(
       concatMap(data => this.gridLot.updateLot(data)),
       concatMap(rows => this.gridLot.validate(rows)),
+      concatMapTo(forkJoin({
+        countCauseConseq: this.litigesService.countCauseConseq(this.ordre.id),
+        countLinkedOrders: this.litigesService.countLinkedOrders(this.ordre.id),
+      })),
+      concatMap(({ countCauseConseq, countLinkedOrders }) => {
+        const nbOrdre = countLinkedOrders.data.countLinkedOrders;
+        const { cause, consequence } = countCauseConseq.data.countCauseConseq;
+        if (nbOrdre > 0 && cause === 1 && consequence === 1) {
+          return this.confirmPopup
+            .openAs("WARNING", this.localizeService.localize("prompt-create-litige-linked-orders"))
+            .pipe(concatMap(res => res ? this.createLinkedOrders() : of(null)));
+        }
+        return of(null);
+      }),
       concatMapTo(this.gridLot.persist()),
     )
       .subscribe({
@@ -550,6 +566,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
     });
   }
 
+  private createLinkedOrders() {
+    return this.litigesService.fCreateLitigeLinkedOrders(this.ordre.id).pipe(
+      tap(res => notify(this.localizeService.localize("done-create-litige-linked-orders"), "SUCCESS", 3500)),
+    );
+  }
 }
 
 

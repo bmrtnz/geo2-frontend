@@ -1767,6 +1767,10 @@
     "lot-litlig-poids-reclam-greater-exped-error": "Le poids de la ligne {0} est superieur au poids restant",
     "prompt-fix": "Voulez-vous corrriger ?",
     "prompt-continu": "Voulez-vous continuer ?",
-    "validation-canceled": "Validation annulée"
+    "validation-canceled": "Validation annulée",
+    "prompt-create-litige-linked-orders": "Voulez-vous confirmer la création des litiges pour les autres ordres avec le même code chargement ?",
+    "done-create-litige-linked-orders": "Création des litiges pour les ordres liés terminée",
+    "continu": "continuer",
+    "back": "retour"
   }
 }
