@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, NgModule, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, NgModule, OnInit, Output, ViewChild } from "@angular/core";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
+import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxPopupModule } from "devextreme-angular";
 import { DxiToolbarItemModule } from "devextreme-angular/ui/nested";
 import { take, tap } from "rxjs/operators";
@@ -12,28 +13,39 @@ type MessageState = "ERROR" | "WARNING";
   templateUrl: "./confirmation-result-popup.component.html",
   styleUrls: ["./confirmation-result-popup.component.scss"]
 })
-export class ConfirmationResultPopupComponent {
+export class ConfirmationResultPopupComponent implements OnInit {
 
   public content: string;
   public state: MessageState = "WARNING";
-  public continueButtonOptions = {
-    text: "Continuer",
-    stylingMode: "outlined",
-    type: "danger",
-    onClick: () => this.advance.emit(true),
-  };
-  public backButtonOptions = {
-    text: "Retour",
-    stylingMode: "contained",
-    onClick: () => this.advance.emit(false),
-  };
+
+  @Input() public continuTextKey = "continu";
+  @Input() public backTextKey = "back";
+
+  public continueButtonOptions;
+  public backButtonOptions;
 
   /** Emitted on user action (cancel, continue) */
   @Output() public advance = new EventEmitter<boolean>();
 
   @ViewChild(DxPopupComponent) popup: DxPopupComponent;
 
-  constructor() { }
+  constructor(
+    private localization: LocalizationService,
+  ) { }
+
+  ngOnInit() {
+    this.continueButtonOptions = {
+      text: this.localization.localize(this.continuTextKey),
+      stylingMode: "outlined",
+      type: "danger",
+      onClick: () => this.advance.emit(true),
+    };
+    this.backButtonOptions = {
+      text: this.localization.localize(this.backTextKey),
+      stylingMode: "contained",
+      onClick: () => this.advance.emit(false),
+    };
+  }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("confirmation-result-popup");
