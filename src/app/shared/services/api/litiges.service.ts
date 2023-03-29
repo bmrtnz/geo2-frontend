@@ -458,10 +458,11 @@ export class LitigesService extends ApiService implements APIRead {
   }
 
   countCauseConseq(ordreID: string) {
-    return this.apollo.query<{ countCauseConseq: [number, number] }>({
+    return this.apollo.query<{ countCauseConseq: { cause: number, consequence: number } }>({
       query: gql(ApiService.buildGraph("query", [
         {
           name: "countCauseConseq",
+          body: ["cause", "consequence"],
           params: [{ name: "ordreID", value: "ordreID", isVariable: true }],
         }
       ], [{ name: "ordreID", type: "String", isOptionnal: false }])),
