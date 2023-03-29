@@ -231,7 +231,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
         ...persistedFields
           .map(field => ({ [field]: this.formGroup.get(field).value }))
           .reduce((acm, crt) => ({ ...acm, ...crt })),
-      }).subscribe({
+      }).pipe(
+        concatMap(res => this.litigesService.ofSauveLitige(res.data.saveLitige.id)),
+      ).subscribe({
         complete: () => notify(this.localization.localize("litige-save-success"), "success", 3500),
         error: err => notify(err.message, "error", 3000),
       });
