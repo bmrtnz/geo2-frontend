@@ -18,6 +18,7 @@ import {
   DxPopupModule,
   DxRadioGroupModule,
   DxScrollViewModule,
+  DxSelectBoxModule,
   DxTextBoxModule
 } from "devextreme-angular";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
@@ -64,6 +65,7 @@ import { GridLotComponent } from "./grid-lot/grid-lot.component";
     DxListModule,
     DxScrollViewModule,
     DxRadioGroupModule,
+    DxSelectBoxModule,
   ],
   exports: [
     GestionOperationsPopupComponent,
