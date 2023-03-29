@@ -7403,13 +7403,13 @@
         "cellTemplate": "extendedCellTemplate"
       },
       {
-        "dataField": "ligne.responsableNombrePalettes",
+        "dataField": "ligne.clientNombrePalettes",
         "visible": true,
         "allowEditing": true,
         "cellTemplate": "byCellTemplate"
       },
       {
-        "dataField": "ligne.responsableNombreColis",
+        "dataField": "ligne.clientNombreColisReclamation",
         "visible": true,
         "allowEditing": true,
         "cellTemplate": "byCellTemplate"

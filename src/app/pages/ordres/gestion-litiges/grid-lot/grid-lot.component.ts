@@ -1,4 +1,6 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
+import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -8,10 +10,11 @@ import { ColumnsChangeSelection, Grid, GridConfiguratorService } from "app/share
 import { GridColumn } from "basic";
 import DevExpress from "devextreme";
 import { DxDataGridComponent } from "devextreme-angular";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { formatNumber } from "devextreme/localization";
-import { defer, interval, Observable, of } from "rxjs";
-import { concatMap, concatMapTo, filter, map, takeWhile, timeout } from "rxjs/operators";
+import { defer, EMPTY, from, interval, Observable, of, throwError } from "rxjs";
+import { concatMap, concatMapTo, filter, map, mergeMap, takeWhile, tap, timeout, toArray } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
 let self: GridLotComponent;
@@ -34,11 +37,12 @@ export class GridLotComponent implements OnInit, OnChanges {
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild(ConfirmationResultPopupComponent) private confirmPopup: ConfirmationResultPopupComponent;
 
   /** Fields processed by `byCellTemplate` */
   public readonly byTemplateConfig = {
-    "ligne.responsableNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
-    "ligne.responsableNombreColis": "ligne.ordreLigne.nombreColisExpedies",
+    "ligne.clientNombrePalettes": "ligne.ordreLigne.nombrePalettesExpediees",
+    "ligne.clientNombreColisReclamation": "ligne.ordreLigne.nombreColisExpedies",
     "ligne.clientPoidsNet": "ligne.ordreLigne.poidsNetExpedie",
   };
 
@@ -86,6 +90,8 @@ export class GridLotComponent implements OnInit, OnChanges {
         ...fields,
         "ligne.id",
         "ligne.litige.id",
+        "ligne.clientNombrePalettes",
+        "ligne.clientNombreColisReclamation",
         "ligne.ordreLigne.article.id",
         "ligne.ordreLigne.article.articleDescription.id",
         "ligne.ordreLigne.nombrePalettesExpediees",
@@ -134,7 +140,7 @@ export class GridLotComponent implements OnInit, OnChanges {
                 this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
               });
           });
-          return Promise.resolve();
+          return Promise.resolve(this.getItems(datasource));
         }),
         timeout(10000),
       );
@@ -186,6 +192,41 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public getItems(datasource: DataSource = (this.grid.dataSource as DataSource)) {
     return (datasource.items() as Partial<LitigeLigneFait>[]);
+  }
+
+  /** Get a `litige-ligne` row value with a changed state */
+  private getChanged(field: string, key: LitigeLigne["id"]) {
+    return this.grid.editing.changes
+      .find(change => change.key === key)
+      ?.data.ligne?.[field];
+  }
+
+  public validate(rows: Array<Partial<LitigeLigneFait>>) {
+    return from(rows).pipe(
+      mergeMap(row => {
+        const changed = this.getChanged("clientNombreColisReclamation", row.ligne.id);
+        if (changed && changed > row.ligne.ordreLigne.nombreColisExpedies)
+          return throwError(Error(this.localize.transform("lot-litlig-col-reclam-greater-exped-error", rows.indexOf(row) + 1)));
+        return of(row);
+      }),
+      mergeMap(row => {
+        const changed = this.getChanged("clientNombrePalettes", row.ligne.id);
+        if (changed && changed > row.ligne.ordreLigne.nombrePalettesExpediees) {
+          let content = this.localize.transform("lot-litlig-pal-reclam-greater-exped-error", rows.indexOf(row) + 1);
+          content += "<br>" + this.localize.transform("prompt-continu");
+          return this.confirmPopup.openAs("WARNING", content)
+            .pipe(concatMap(res => res ? of(row) : throwError(Error(this.localize.transform("validation-canceled")))));
+        }
+        return of(row);
+      }),
+      mergeMap(row => {
+        const changed = this.getChanged("clientPoidsNet", row.ligne.id);
+        if (changed && changed > row.ligne.ordreLigne.poidsNetExpedie)
+          return throwError(Error(this.localize.transform("lot-litlig-poids-reclam-greater-exped-error", rows.indexOf(row) + 1)));
+        return of(row);
+      }),
+      toArray(),
+    );
   }
 
 }

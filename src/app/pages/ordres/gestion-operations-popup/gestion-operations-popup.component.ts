@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
+import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -200,6 +201,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   validate() {
     this.mutateLot().pipe(
       concatMap(data => this.gridLot.updateLot(data)),
+      concatMap(rows => this.gridLot.validate(rows)),
       concatMapTo(this.gridLot.persist()),
     )
       .subscribe({
