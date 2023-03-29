@@ -231,15 +231,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   recapInterne() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
+    this.fluxEnvoisService.pushDepotEnvoi("RECINT", this.ordre.id);
   }
 
   creerLot() {
-    //////////////////////////////////////
-    // Fonction à implémenter
-    //////////////////////////////////////
     this.selectLignesPopup.visible = true;
   }
 

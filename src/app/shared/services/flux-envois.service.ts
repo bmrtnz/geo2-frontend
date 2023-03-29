@@ -77,7 +77,7 @@ export class FluxEnvoisService {
   }
 
   /** Submit 'envoi' request in DB */
-  private pushDepotEnvoi(fluxID: "TRACA" | "IMPORD", ordreID: Ordre["id"]) {
+  public pushDepotEnvoi(fluxID: "TRACA" | "IMPORD" | "RECINT", ordreID: Ordre["id"]) {
     this.depotEnvoisService.save({
       ordre: { id: ordreID },
       fluxID,
