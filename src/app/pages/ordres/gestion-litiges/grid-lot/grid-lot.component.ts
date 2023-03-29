@@ -110,7 +110,10 @@ export class GridLotComponent implements OnInit, OnChanges {
     );
   }
 
-  /** Met a jour l'ensemble des lignes de la grille (le lot) avec les données fournies */
+  /**
+   * Met a jour l'ensemble des lignes de la grille (le lot) avec les données en parametre
+   * Si une seule ligne est fournie, les données seront clonées dans toutes les lignes du lot
+   */
   public updateLot(data: Partial<LitigeLigne> | Partial<LitigeLigne>[]) {
     return interval(100)
       .pipe(
