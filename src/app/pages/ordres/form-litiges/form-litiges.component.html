@@ -436,7 +436,7 @@
 
 <app-frais-annexes-litige-popup
   [infosLitige]="infosLitige"
-  (updateTotalFraisLitige)="showForm()"
+  (updateTotalFraisLitige)="loadForm()"
 ></app-frais-annexes-litige-popup>
 
 <app-selection-lignes-litige-popup
@@ -448,7 +448,7 @@
 <app-gestion-operations-popup
   [ordre]="currOrdre"
   [infosLitige]="infosLitige"
-  (updateFrais)="showForm()"
+  (whenUpdated)="loadForm()"
 ></app-gestion-operations-popup>
 
 <app-confirmation-result-popup></app-confirmation-result-popup>

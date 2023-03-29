@@ -144,7 +144,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     ];
   }
 
-  showForm() {
+  loadForm() {
     if (this.ordre?.id) {
       const ds = this.litigesService.getDataSource_v2(this.columns);
       ds.filter(["ordreOrigine.id", "=", this.ordre.id]);
@@ -198,7 +198,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
         )
           .subscribe({
             next: res => {
-              this.showForm();
+              this.loadForm();
               this.selectLignesPopup.visible = true;
             },
             error: err => notify(err.message, "error", 3000),
@@ -234,6 +234,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       }).pipe(
         concatMap(res => this.litigesService.ofSauveLitige(res.data.saveLitige.id)),
       ).subscribe({
+        next: () => this.loadForm(),
         complete: () => notify(this.localization.localize("litige-save-success"), "success", 3500),
         error: err => notify(err.message, "error", 3000),
       });
@@ -289,12 +290,12 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   onToggling(toggled: boolean) {
-    if (toggled) this.showForm();
+    if (toggled) this.loadForm();
   }
 
   onClotureChanged() {
     // refresh the form
-    this.showForm();
+    this.loadForm();
   }
 
   private handleFlux(flux: Flux["id"]) {

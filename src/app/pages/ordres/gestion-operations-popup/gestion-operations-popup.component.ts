@@ -39,7 +39,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @Output() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litigeID: string;
   @Output() public currOrdre: Partial<Ordre>;
-  @Output() public updateFrais = new EventEmitter();
+  @Output() public whenUpdated = new EventEmitter();
 
   public visible: boolean;
   public causeItems: any[];
@@ -223,6 +223,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .subscribe({
         next: () => {
           this.quitPopup();
+          this.whenUpdated.emit();
           this.gridsService.reload("LitigeLigne");
         },
         error: (err: Error) => notify(err.message, "ERROR", 3500),
