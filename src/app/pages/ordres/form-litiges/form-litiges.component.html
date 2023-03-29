@@ -66,6 +66,7 @@
                     formGroupName="ordreAvoirFournisseur"
                   >
                     <dx-text-box
+                      #ordreAvoirFourni
                       formControlName="numero"
                       [readOnly]="true"
                     ></dx-text-box>
@@ -398,6 +399,7 @@
       text="{{ 'btn-avisResolution' | localize }}"
       [focusStateEnabled]="false"
       (onClick)="avisResolution()"
+      [disabled]="!ordreAvoirFourni.value"
     ></dx-button>
     <dx-button
       type="normal"
