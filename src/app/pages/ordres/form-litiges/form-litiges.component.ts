@@ -240,14 +240,17 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   incidentLitige() {
+    this.saveLitige();
     this.handleFlux("INCLIT");
   }
 
   avisResolution() {
+    this.saveLitige();
     this.handleFlux("RESLIT");
   }
 
   recapInterne() {
+    this.saveLitige();
     this.fluxEnvoisService.pushDepotEnvoi("RECINT", this.ordre.id);
   }
 
