@@ -469,4 +469,17 @@ export class LitigesService extends ApiService implements APIRead {
       fetchPolicy: "network-only",
     });
   }
+
+  countLinkedOrders(ordreID: string) {
+    return this.apollo.query<{ countLinkedOrders: number }>({
+      query: gql(ApiService.buildGraph("query", [
+        {
+          name: "countLinkedOrders",
+          params: [{ name: "ordreID", value: "ordreID", isVariable: true }],
+        }
+      ], [{ name: "ordreID", type: "String", isOptionnal: false }])),
+      variables: { ordreID },
+      fetchPolicy: "network-only",
+    });
+  }
 }
