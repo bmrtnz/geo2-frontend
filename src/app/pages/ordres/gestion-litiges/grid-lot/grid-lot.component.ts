@@ -169,7 +169,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public formatToClientCurrency(value) {
     const items = (self.grid?.dataSource as DataSource)?.items();
-    if (!items.length) return value;
+    if (!items.length) return value.toString();
     const currency = items?.[0].ligne.ordreLigne.ordre.devise.id;
     return formatNumber(value, {
       type: "currency",
@@ -180,7 +180,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public formatToResponsableCurrency(value) {
     const items = (self.grid?.dataSource as DataSource)?.items();
-    if (!items.length) return value;
+    if (!items.length) return value.toString();
     const currency = items?.[0].ligne.deviseCode;
     return formatNumber(value, {
       type: "currency",
