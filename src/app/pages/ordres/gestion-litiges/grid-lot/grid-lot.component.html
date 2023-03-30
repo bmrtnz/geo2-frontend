@@ -28,17 +28,20 @@
 
   <dxo-summary [recalculateWhileEditing]="true">
     <dxi-total-item
-      column="ligne.responsableNombrePalettes"
+      displayFormat="Quantités totales &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {0}"
+      column="ligne.clientNombrePalettes"
       summaryType="sum"
     >
     </dxi-total-item>
     <dxi-total-item
-      column="ligne.responsableNombreColis"
+      displayFormat="{0}"
+      column="ligne.clientNombreColisReclamation"
       summaryType="sum"
     >
     </dxi-total-item>
     <dxi-total-item
-      column="ligne.responsablePoidsNet"
+      displayFormat="{0}"
+      column="ligne.clientPoidsNet"
       summaryType="sum"
     >
     </dxi-total-item>
