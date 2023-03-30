@@ -7253,6 +7253,14 @@
         "visible": false
       },
       {
+        "dataField": "numero",
+        "allowEditing": false,
+        "visible": false,
+        "showInColumnChooser": false,
+        "sortIndex": 0,
+        "sortOrder": "asc"
+      },
+      {
         "dataField": "article.articleDescription.id",
         "allowEditing": false,
         "visible": false,
