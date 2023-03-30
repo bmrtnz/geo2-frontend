@@ -9,7 +9,7 @@
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
-    [caption]="calculateCaption(column)"
+    [caption]="calculateCaption(column) || column.name"
     [dataType]="column?.dataType"
     [allowEditing]="column?.allowEditing"
     [visible]="column?.visible"
