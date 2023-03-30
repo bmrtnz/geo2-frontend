@@ -1165,6 +1165,7 @@
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
                       #gridLitigesLignes
+                      [hidden]="!formLitiges.infosLitige"
                       [ordre]="ordre"
                     >
                     </app-grid-litiges-lignes>
