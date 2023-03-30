@@ -17,6 +17,8 @@
     [cellTemplate]="column?.cellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
     [width]="column?.width !== undefined ? column.width : 'auto'"
+    [sortOrder]="column?.sortOrder"
+    [sortIndex]="column?.sortIndex"
   >
     <dxo-format
       *ngIf="column?.formatter"

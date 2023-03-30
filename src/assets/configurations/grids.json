@@ -7397,6 +7397,14 @@
         "allowEditing": false
       },
       {
+        "dataField": "ligne.ordreLigne.numero",
+        "sortIndex": 0,
+        "sortOrder": "asc",
+        "showInColumnChooser": false,
+        "visible": false,
+        "allowEditing": false
+      },
+      {
         "dataField": "ligne.ordreLigne.article.articleDescription.descriptionLongue",
         "visible": true,
         "allowEditing": false,
