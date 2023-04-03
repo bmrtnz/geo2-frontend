@@ -48,6 +48,29 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public dataSource: DataSource;
   public columns: Observable<GridColumn[]>;
+
+  private static calcAvoirRemise(ligne: Partial<LitigeLigne>) {
+    let tarif = 0;
+
+    if (ligne.clientUniteFactureCode === "COLIS")
+      tarif = ligne.clientPrixUnitaire * ligne.clientNombreColisReclamation;
+    if (ligne.clientUniteFactureCode === "PAL")
+      tarif = ligne.clientPrixUnitaire * ligne.clientNombrePalettes;
+    if (ligne.clientUniteFactureCode === "KILO")
+      tarif = ligne.clientPrixUnitaire * ligne.clientPoidsNet;
+    if (ligne.clientUniteFactureCode === "TONNE")
+      tarif = ligne.clientPrixUnitaire * ligne.clientPoidsNet / 1000;
+    tarif = ligne.clientPrixUnitaire * ligne.clientQuantite;
+
+    if (ligne.ordreLigne.ristourne)
+      if (ligne.ordreLigne.article.normalisation.produitMdd)
+        tarif *= (100 - ligne.ordreLigne.ordre.remiseSurFactureMDDTaux) / 100;
+      else
+        tarif *= (100 - ligne.ordreLigne.ordre.tauxRemiseFacture) / 100;
+
+    return tarif;
+  }
+
   public gridConfigHandler = event =>
     this.gridConfiguratorService.init(Grid.LitigeLignesLot, {
       ...event,
@@ -92,6 +115,7 @@ export class GridLotComponent implements OnInit, OnChanges {
         "ligne.litige.id",
         "ligne.clientNombrePalettes",
         "ligne.clientNombreColisReclamation",
+        "ligne.responsablePoidsNet",
         "ligne.ordreLigne.numero",
         "ligne.ordreLigne.article.id",
         "ligne.ordreLigne.article.articleDescription.id",
@@ -100,6 +124,11 @@ export class GridLotComponent implements OnInit, OnChanges {
         "ligne.ordreLigne.poidsNetExpedie",
         "ligne.ordreLigne.proprietaireMarchandise.code",
         "ligne.ordreLigne.fournisseur.code",
+        // mandatory for "avoir remise" calculation
+        "ligne.ordreLigne.ristourne",
+        "ligne.ordreLigne.article.normalisation.produitMdd",
+        "ligne.ordreLigne.ordre.tauxRemiseFacture",
+        "ligne.ordreLigne.ordre.remiseSurFactureMDDTaux",
       ]),
       map(fields =>
         // upgrade fields that require sub selections
@@ -157,11 +186,11 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   public calculateClientAvoir(rowData: Partial<LitigeLigneFait>) {
-    return rowData.ligne.clientQuantite * rowData.ligne.clientPrixUnitaire;
+    return rowData.ligne.clientPrixUnitaire * rowData.ligne.clientQuantite;
   }
 
   public calculateResponsableAvoir(rowData: Partial<LitigeLigneFait>) {
-    return rowData.ligne.responsableQuantite * rowData.ligne.responsablePrixUnitaire;
+    return rowData.ligne.responsablePrixUnitaire * rowData.ligne.responsableQuantite;
   }
 
   public calculateCaption(column: GridColumn) {
@@ -233,5 +262,23 @@ export class GridLotComponent implements OnInit, OnChanges {
     );
   }
 
+  protected calculateCustomSummary(options) {
+    if (options.name === "avoirRemise") {
+      switch (options.summaryProcess) {
+        case "start":
+          // Initializing "totalValue" here
+          options.totalValue = 0;
+          break;
+        case "calculate":
+          options.totalValue += GridLotComponent.calcAvoirRemise(options.value.ligne);
+          // Modifying "totalValue" here
+          break;
+        // case "finalize":
+        //   console.log("finalize", options.value);
+        //   // Assigning the final value to "totalValue" here
+        //   break;
+      }
+    }
+  }
 }
 

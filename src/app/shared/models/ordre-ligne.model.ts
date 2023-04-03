@@ -85,6 +85,7 @@ export class OrdreLigne extends Model {
   @Field() public valide?: boolean;
   @Field({ model: import("./stock-mouvement.model") }) public mouvement?: StockMouvement;
   @Field() public nombreReservationsSurStock?: number;
+  @Field() public ristourne?: boolean;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");

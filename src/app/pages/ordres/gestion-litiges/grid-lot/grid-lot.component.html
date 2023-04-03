@@ -26,7 +26,10 @@
     ></dxo-format>
   </dxi-column>
 
-  <dxo-summary [recalculateWhileEditing]="true">
+  <dxo-summary
+    [recalculateWhileEditing]="true"
+    [calculateCustomSummary]="calculateCustomSummary"
+  >
     <dxi-total-item
       displayFormat="Quantités totales &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {0}"
       column="ligne.clientNombrePalettes"
@@ -50,6 +53,15 @@
       summaryType="sum"
       displayFormat="Avoir au client: {0}"
       showInColumn="avoir"
+      cssClass="client-cell"
+    >
+      <dxo-value-format [formatter]="formatToClientCurrency"></dxo-value-format>
+    </dxi-total-item>
+    <dxi-total-item
+      name="avoirRemise"
+      summaryType="custom"
+      displayFormat="Avoir remisé: {0}"
+      showInColumn="ligne.commentaireResponsable"
       cssClass="client-cell"
     >
       <dxo-value-format [formatter]="formatToClientCurrency"></dxo-value-format>
