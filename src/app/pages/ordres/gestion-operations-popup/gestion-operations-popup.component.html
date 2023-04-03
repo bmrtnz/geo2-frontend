@@ -170,7 +170,7 @@
           type="normal"
           [visible]="['G', 'B'].includes(selectedConsequence)"
           stylingMode="outlined"
-          [text]="ordreGenRef"
+          [text]="ordreGenNumero"
           (onClick)="openOrder()"
         ></dx-button>
       </div>
@@ -200,7 +200,7 @@
 
 <app-frais-annexes-litige-popup
   [infosLitige]="infosLitige"
-  (updateTotalFraisLitige)="updateFrais.emit()"
+  (updateTotalFraisLitige)="whenUpdated.emit()"
 ></app-frais-annexes-litige-popup>
 
 <app-forfait-litige-popup

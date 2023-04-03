@@ -434,7 +434,7 @@ export class LitigesService extends ApiService implements APIRead {
     socCode: string,
     username: string
   ) {
-    return this.apollo.query<{ ls_ord_ref_refacturer: string }>({
+    return this.apollo.query<{ fCreeOrdreRefacturationTransporteur: FunctionResponse<{ ls_ord_ref_refacturer: string }> }>({
       query: gql(ApiService.buildGraph("query", [
         {
           name: "fCreeOrdreRefacturationTransporteur",

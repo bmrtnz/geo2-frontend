@@ -7594,6 +7594,18 @@
         "visible": false,
         "showInColumnChooser": false,
         "allowEditing": false
+      },
+      {
+        "dataField": "ligne.ordreReferenceRemplacement",
+        "visible": false,
+        "showInColumnChooser": false,
+        "allowEditing": false
+      },
+      {
+        "dataField": "ligne.numeroOrdreReplacement",
+        "visible": false,
+        "showInColumnChooser": false,
+        "allowEditing": false
       }
     ]
   },

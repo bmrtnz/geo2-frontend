@@ -19,7 +19,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { combineLatest, EMPTY, forkJoin, from, iif, of, throwError, zip } from "rxjs";
-import { catchError, concatMap, concatMapTo, filter, map, mapTo, mergeMap, tap, toArray } from "rxjs/operators";
+import { catchError, concatMap, concatMapTo, filter, first, map, mapTo, mergeMap, tap, toArray } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
 import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component";
@@ -51,7 +51,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public title: string;
   public popupFullscreen = false;
   public firstShown: boolean;
-  public ordreGenRef: string;
+  public ordreGenNumero: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
@@ -196,7 +196,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   openOrder() {
-    this.tabContext.openOrdre(this.ordreGenRef, this.ordre.campagne.id);
+    this.tabContext.openOrdre(this.ordreGenNumero, this.ordre.campagne.id);
     this.hidePopup();
   }
 
@@ -258,12 +258,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
         this.authService.currentUser.nomUtilisateur)
       .toPromise();
 
+    const ordreRefactRef = refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data.ls_ord_ref_refacturer;
+
     // Fetch numero of newly created ordre for view
-    const ordreRefact = await this.ordresService
-      .getOne_v2(refacturationResponse.data.ls_ord_ref_refacturer, new Set(["numero"]))
-      .pipe(map(res => res.data.ordre))
-      .toPromise();
-    this.ordreGenRef = ordreRefact.numero;
+    await this.registerOrdreRep(ordreRefactRef).toPromise();
   }
 
   createReplaceOrder() {
@@ -297,11 +295,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
         ));
       }),
       // Fetch numero of newly created ordre for view
-      concatMap(() => this.ordresService
-        .getOne_v2(ordreReplaceID, new Set(["numero"]))
-        .pipe(map(res => res.data.ordre))),
+      concatMap(() => this.registerOrdreRep(ordreReplaceID))
     ).subscribe({
-      next: ordreReplace => { this.ordreGenRef = ordreReplace.numero; },
       error: (error: Error) => notify(error.message, "ERROR", 3500)
     });
 
@@ -340,8 +335,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
           ).toPromise()
         ));
       }),
+      concatMap(() => this.registerOrdreRep(ordreReplace.id))
     ).subscribe({
-      next: () => { this.ordreGenRef = ordreReplace.numero; },
       error: (error: Error) => notify(error.message, "ERROR", 3500)
     });
   }
@@ -498,7 +493,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.responsibles.value = this.responsibleList
             .find(r => r.typeTiers === res.responsableTypeCode);
         if (res?.numeroOrdreReplacement)
-          this.ordreGenRef = res?.numeroOrdreReplacement;
+          this.ordreGenNumero = res?.numeroOrdreReplacement;
       });
 
     }
@@ -571,6 +566,21 @@ export class GestionOperationsPopupComponent implements OnChanges {
     return this.litigesService.fCreateLitigeLinkedOrders(this.ordre.id).pipe(
       tap(res => notify(this.localizeService.localize("done-create-litige-linked-orders"), "SUCCESS", 3500)),
     );
+  }
+
+  private registerOrdreRep(ordreID: Ordre["id"]) {
+    return this.ordresService
+      .getOne_v2(ordreID, new Set(["id", "numero"]))
+      .pipe(
+        map(res => res.data.ordre),
+        concatMap(data => {
+          this.ordreGenNumero = data.numero;
+          return this.gridLot.updateLot({
+            ordreReferenceRemplacement: data.id,
+            numeroOrdreReplacement: data.numero,
+          });
+        }),
+      );
   }
 }
 
