@@ -7566,7 +7566,8 @@
       {
         "dataField": "ligne.commentaireResponsable",
         "visible": true,
-        "allowEditing": true
+        "allowEditing": true,
+        "headerCellTemplate": "copyFillHeaderCellTemplate"
       },
       {
         "dataField": "ligne.numeroGroupementLitige",

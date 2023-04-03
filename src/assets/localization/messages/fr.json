@@ -1774,6 +1774,7 @@
     "back": "retour",
     "litige-save-success": "Sauvegarde du litige réalisée avec succès",
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
-    "report": "reporter"
+    "report": "reporter",
+    "associated-docs": "Documents associés"
   }
 }
