@@ -39,7 +39,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @Output() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
   @Output() public litigeID: string;
   @Output() public currOrdre: Partial<Ordre>;
-  @Output() public whenUpdated = new EventEmitter();
+  /** Indicate when data is validated and if data had mutations */
+  @Output() public whenUpdated = new EventEmitter<boolean>();
 
   public visible: boolean;
   public causeItems: any[];
@@ -221,9 +222,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
       concatMapTo(this.gridLot.persist()),
     )
       .subscribe({
-        next: () => {
+        next: dataMutated => {
           this.quitPopup();
-          this.whenUpdated.emit();
+          this.whenUpdated.emit(dataMutated);
           this.gridsService.reload("LitigeLigne");
         },
         error: (err: Error) => notify(err.message, "ERROR", 3500),

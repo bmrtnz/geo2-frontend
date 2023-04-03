@@ -177,7 +177,9 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   /** Persist grid changes */
   public persist() {
-    return defer(() => this.grid.instance.saveEditData());
+    const hasEditData = this.grid.instance.hasEditData();
+    return defer(() => this.grid.instance.saveEditData())
+      .pipe(concatMapTo(of(hasEditData)));
   }
 
   /** Reloads grid data and repaints data rows, wrapper around `dxDataGrid.refresh` */

@@ -313,4 +313,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   protected openAssociatedDocsPopup() {
     this.fileManagerComponent.visible = true;
   }
+
+  protected whenUpdated(dataMutated) {
+    this.loadForm();
+    if (dataMutated) this.incidentLitige();
+  }
 }

@@ -455,7 +455,7 @@
 <app-gestion-operations-popup
   [ordre]="currOrdre"
   [infosLitige]="infosLitige"
-  (whenUpdated)="loadForm()"
+  (whenUpdated)="whenUpdated($event)"
 ></app-gestion-operations-popup>
 
 <app-confirmation-result-popup></app-confirmation-result-popup>
