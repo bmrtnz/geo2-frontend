@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
+import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { Flux, OrdreLigne } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
@@ -98,6 +99,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @ViewChild(GestionOperationsPopupComponent, { static: false }) gestionOpPopup: GestionOperationsPopupComponent;
   @ViewChild(ConfirmationResultPopupComponent) envoisFluxWarningPopup: ConfirmationResultPopupComponent;
   @ViewChild(DocumentsOrdresPopupComponent) docsPopup: DocumentsOrdresPopupComponent;
+  @ViewChild(FileManagerComponent) fileManagerComponent: FileManagerComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -306,5 +308,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       this.docsPopup.flux = flux;
       this.docsPopup.visible = true;
     });
+  }
+
+  protected openAssociatedDocsPopup() {
+    this.fileManagerComponent.visible = true;
   }
 }

@@ -409,6 +409,13 @@
     ></dx-button>
     <dx-button
       type="normal"
+      text="{{ 'associated-docs' | localize }}"
+      [focusStateEnabled]="false"
+      [height]="'auto'"
+      (onClick)="openAssociatedDocsPopup()"
+    ></dx-button>
+    <dx-button
+      type="normal"
       text="{{ 'btn-creerLot' | localize }}"
       [focusStateEnabled]="false"
       (onClick)="creerLot()"
@@ -453,3 +460,9 @@
 
 <app-confirmation-result-popup></app-confirmation-result-popup>
 <app-documents-ordres-popup></app-documents-ordres-popup>
+<app-file-manager-popup
+  key="litiges"
+  [subTitle]="infosLitige?.litige.id"
+  [id]="infosLitige?.litige.id"
+  *ngIf="infosLitige?.litige.id"
+></app-file-manager-popup>
