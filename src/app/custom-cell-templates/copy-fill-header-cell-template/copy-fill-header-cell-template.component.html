@@ -1,0 +1,12 @@
+<!-- "copyFill" header cell template -->
+<ng-container *dxTemplate="let data of 'copyFillHeaderCellTemplate'">
+  <div class="header-container">
+    <span>{{ data.column.caption }}</span>
+    <dx-button
+      icon="arrowdown"
+      [text]="'report' | localize"
+      [hint]="'duplicate-first-column-value-to-all-rows' | localize"
+      (onClick)="onReportClick($event, data)"
+    ></dx-button>
+  </div>
+</ng-container>

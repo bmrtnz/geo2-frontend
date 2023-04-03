@@ -1,0 +1,14 @@
+.header-container {
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep .dx-button {
+    font-size: small;
+    height: initial;
+    margin-top: 5px;
+
+    >.dx-button-content {
+      padding: 0 !important;
+    }
+  }
+}
