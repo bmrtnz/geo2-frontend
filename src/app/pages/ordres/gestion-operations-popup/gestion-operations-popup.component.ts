@@ -348,8 +348,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
   pushLitigeLignes(event) {
     from(this.gridLot.refresh())
       .pipe(
-        concatMapTo(this.setupLotCreation()),
-        concatMap(data => this.gridLot.updateLot(data))
+        concatMapTo(this.setupLot()),
+        concatMap(data => this.gridLot.updateLot(data)),
       )
       .subscribe({
         error: (err: Error) => notify(err.message, "ERROR", 3500),
@@ -498,7 +498,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     }
 
-    iif(() => !!this.lot[1], EMPTY, this.setupLotCreation())
+    iif(() => !!this.lot[1], EMPTY, this.setupLot())
       .pipe(
         concatMap(data => this.gridLot.updateLot(data)),
       )
@@ -507,14 +507,26 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
-  /** Update temporary rows with numero lot and validity */
-  private setupLotCreation() {
+  /** Update temporary rows with `numero lot`, `ordre replacement` and `validity` */
+  private setupLot() {
+    const fetchLot = iif(
+      () => !!this?.lot[1],
+      of(this.lot[1]),
+      this.litigesService
+        .genNumLot(this.infosLitige.litige.id)
+        .pipe(map((genLot) => genLot.data.genNumLot)));
+
+    const fetchOrdreRep = this.fetchLotInfo()
+      .pipe(map(res => [res.ordreReferenceRemplacement, res.numeroOrdreReplacement]));
+
     return zip(
-      this.litigesService.genNumLot(this.infosLitige.litige.id),
+      fetchLot,
+      fetchOrdreRep,
     ).pipe(
-      map(([genLot]) => genLot.data.genNumLot),
-      map(numeroGroupementLitige => ({
+      map(([numeroGroupementLitige, [ordreReferenceRemplacement, numeroOrdreReplacement]]) => ({
         numeroGroupementLitige,
+        ordreReferenceRemplacement,
+        numeroOrdreReplacement,
         valide: true,
       } as Partial<LitigeLigne>)),
     );
@@ -550,6 +562,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         "responsableTypeCode",
         "cause.id",
         "consequence.id",
+        "ordreReferenceRemplacement",
         "numeroOrdreReplacement",
       ]).pipe(
         map(res => res.data.allLitigeLigneList[0]),
