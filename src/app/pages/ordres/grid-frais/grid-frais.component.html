@@ -71,6 +71,7 @@
     [format]="column.format"
     [editorOptions]="column.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "

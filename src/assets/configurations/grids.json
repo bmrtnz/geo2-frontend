@@ -6338,6 +6338,11 @@
         "visible": true
       },
       {
+        "dataField": "achatDevisePrixUnitaire",
+        "allowEditing": false,
+        "visible": false
+      },
+      {
         "dataField": "devise",
         "editCellTemplate": "selectBoxTemplate",
         "width": 120,
@@ -6346,7 +6351,8 @@
       {
         "dataField": "montant",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateMontant"
       },
       {
         "dataField": "deviseTaux",
@@ -6368,7 +6374,8 @@
       {
         "dataField": "montantTotal",
         "visible": true,
-        "allowEditing": false
+        "allowEditing": false,
+        "calculateCellValue": "calculateMontantTotal"
       },
       {
         "dataField": "codePlus",

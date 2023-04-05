@@ -1,4 +1,5 @@
 import { Component, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, EntrepotsService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
 import { DevisesService } from "app/shared/services/api/devises.service";
@@ -283,5 +284,13 @@ export class GridFraisComponent implements ToggledGrid {
 
   onToggling(toggled: boolean) {
     toggled && this?.ordre?.id ? this.enableFilters() : (this.dataSource = null);
+  }
+
+  public calculateMontant(entity: Partial<OrdreFrais>) {
+    return entity.achatQuantite * entity.achatDevisePrixUnitaire;
+  }
+
+  public calculateMontantTotal(entity: Partial<OrdreFrais>) {
+    return entity.achatQuantite * entity.achatPrixUnitaire;
   }
 }
