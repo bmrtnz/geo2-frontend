@@ -304,6 +304,8 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.fluxEnvoisService.prompt(flux, this.ordre.id, this.envoisFluxWarningPopup).pipe(
       filter(res => res),
     ).subscribe(res => {
+      this.docsPopup.setTitle();
+      this.docsPopup.titleEnd = `${this.ordre.numero} - ${this.localization.localize("tiers-contacts-flux")} ${flux}`;
       this.docsPopup.ordre = this.ordre;
       this.docsPopup.flux = flux;
       this.docsPopup.visible = true;
