@@ -6317,7 +6317,6 @@
   "ordre-frais": {
     "columns": [
       {
-        "visibleIndex": 0,
         "dataField": "id",
         "sortOrder": "desc",
         "allowEditing": false,
@@ -6325,25 +6324,31 @@
         "visible": false
       },
       {
-        "visibleIndex": 2,
         "dataField": "frais",
         "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
-        "visibleIndex": 4,
-        "dataField": "montant",
+        "dataField": "achatQuantite",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "dataField": "achatPrixUnitaire",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
         "dataField": "devise",
         "editCellTemplate": "selectBoxTemplate",
         "width": 120,
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "dataField": "montant",
+        "allowEditing": false,
+        "visible": true
+      },
+      {
         "dataField": "deviseTaux",
         "dataType": "number",
         "format": {
@@ -6361,23 +6366,18 @@
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "dataField": "montantTotal",
+        "visible": true,
+        "allowEditing": false
+      },
+      {
         "dataField": "codePlus",
         "editCellTemplate": "customSelectBoxTemplate",
         "visible": true
       },
       {
-        "visibleIndex": 12,
         "dataField": "description",
         "visible": true
-      },
-      {
-        "visibleIndex": 14,
-        "dataField": "montantTotal",
-        "visible": true,
-        "fixed": true,
-        "allowEditing": false,
-        "fixedPosition": "right"
       }
     ]
   },
