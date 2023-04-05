@@ -1174,7 +1174,7 @@
       },
       {
         "visibleIndex": 22,
-        "dataField": "matierePremiere.type.id",
+        "dataField": "matierePremiere.type.code",
         "dataType": "string",
         "visible": false,
         "showInColumnChooser": true
