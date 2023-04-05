@@ -16,11 +16,11 @@ import { concatMap, first } from "rxjs/operators";
 export class ChooseEntrepotPopupComponent implements OnInit {
 
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
-  @ViewChild("entrepotInput") protected entrepotInput: DxSelectBoxComponent;
-  @ViewChild("societeInput") protected societeInput: DxSelectBoxComponent;
+  @ViewChild("entrepotInput") public entrepotInput: DxSelectBoxComponent;
+  @ViewChild("societeInput") public societeInput: DxSelectBoxComponent;
   private choosed = new EventEmitter<Entrepot["id"]>();
-  protected societesSource: DataSource;
-  protected entrepotsSource: DataSource;
+  public societesSource: DataSource;
+  public entrepotsSource: DataSource;
 
   constructor(
     private societesService: SocietesService,
@@ -42,17 +42,17 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     );
   }
 
-  protected onSelectClick() {
+  public onSelectClick() {
     this.popup.visible = false;
     this.choosed.emit(this.entrepotInput.value);
   }
 
-  protected onCancelClick() {
+  public onCancelClick() {
     this.popup.visible = false;
     this.choosed.emit();
   }
 
-  protected onSocieteSelectionChanged() {
+  public onSocieteSelectionChanged() {
     this.entrepotInput.instance.reset();
     // re-requesting the datasource, otherwise, the next filter won't be applied
     this.entrepotsSource = this.entrepotsService
@@ -64,7 +64,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     ]);
   }
 
-  protected onHidden() {
+  public onHidden() {
     this.entrepotInput.instance.reset();
   }
 

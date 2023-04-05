@@ -7,7 +7,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
   styleUrls: ["./copy-fill-header-cell-template.component.scss"]
 })
 export class CopyFillHeaderCellTemplateComponent {
-  protected onReportClick({ event }, columnData: {
+  public onReportClick({ event }, columnData: {
     component: dxDataGrid,
     columnIndex: number,
   }) {

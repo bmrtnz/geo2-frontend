@@ -264,7 +264,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     );
   }
 
-  protected calculateCustomSummary(options) {
+  public calculateCustomSummary(options) {
     if (options.name === "avoirRemise") {
       switch (options.summaryProcess) {
         case "start":

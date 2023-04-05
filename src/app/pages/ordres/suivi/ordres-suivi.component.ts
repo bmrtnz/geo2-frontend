@@ -176,7 +176,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     }, 1);
   }
 
-  protected handleOrdreSelection(ordreID: Ordre["id"]) {
+  public handleOrdreSelection(ordreID: Ordre["id"]) {
     if (this.rowSelectionEventMode === "open")
       this.ordresService.getOne_v2(ordreID, new Set(["numero", "campagne.id"]))
         .pipe(map(res => res.data.ordre))

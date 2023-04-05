@@ -310,11 +310,11 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     });
   }
 
-  protected openAssociatedDocsPopup() {
+  public openAssociatedDocsPopup() {
     this.fileManagerComponent.visible = true;
   }
 
-  protected whenUpdated(dataMutated) {
+  public whenUpdated(dataMutated) {
     this.loadForm();
     if (dataMutated) this.incidentLitige();
   }

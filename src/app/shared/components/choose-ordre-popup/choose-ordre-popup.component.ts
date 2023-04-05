@@ -15,7 +15,7 @@ import { concatMap, finalize, first, tap } from "rxjs/operators";
 export class ChooseOrdrePopupComponent {
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
   @ViewChild(OrdresSuiviComponent) private suiviComponent: OrdresSuiviComponent;
-  protected choosed = new EventEmitter<Ordre["id"]>();
+  public choosed = new EventEmitter<Ordre["id"]>();
 
   /** Present the popup */
   public prompt() {
@@ -26,7 +26,7 @@ export class ChooseOrdrePopupComponent {
     );
   }
 
-  protected onShowing() {
+  public onShowing() {
     this.suiviComponent.histoGrid.reload();
   }
 
