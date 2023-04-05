@@ -2,6 +2,7 @@
 
 @mixin cell($color) {
   color: $color;
+  font-weight: 500;
 
   .dx-checkbox-icon {
     border-color: $color;
@@ -30,10 +31,10 @@
   }
 
   .client-cell {
-    @include cell($base-danger);
+    @include cell(darken($base-danger, 10%));
   }
 
   .responsable-cell {
-    @include cell($base-success);
+    @include cell(darken($base-success, 20%));
   }
 }
