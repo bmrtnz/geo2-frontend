@@ -518,7 +518,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         .pipe(map((genLot) => genLot.data.genNumLot)));
 
     const fetchOrdreRep = this.fetchLotInfo()
-      .pipe(map(res => [res.ordreReferenceRemplacement, res.numeroOrdreReplacement]));
+      .pipe(map(res => [res?.ordreReferenceRemplacement, res?.numeroOrdreReplacement]));
 
     return zip(
       fetchLot,
