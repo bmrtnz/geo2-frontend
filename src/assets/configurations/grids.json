@@ -6335,7 +6335,8 @@
       {
         "dataField": "achatPrixUnitaire",
         "allowEditing": false,
-        "visible": true
+        "visible": true,
+        "calculateCellValue": "calculateAchatPU"
       },
       {
         "dataField": "achatDevisePrixUnitaire",

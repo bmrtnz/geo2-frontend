@@ -286,6 +286,10 @@ export class GridFraisComponent implements ToggledGrid {
     toggled && this?.ordre?.id ? this.enableFilters() : (this.dataSource = null);
   }
 
+  public calculateAchatPU(entity: Partial<OrdreFrais>) {
+    return entity.achatDevisePrixUnitaire * entity.deviseTaux;
+  }
+
   public calculateMontant(entity: Partial<OrdreFrais>) {
     return entity.achatQuantite * entity.achatDevisePrixUnitaire;
   }
