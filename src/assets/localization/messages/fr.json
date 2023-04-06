@@ -1490,6 +1490,8 @@
     "ordreFrais-codePlus": "Fournisseur",
     "ordreFrais-description": "Description",
     "ordreFrais-montantTotal": "Montant",
+    "ordreFrais-achatQuantite": "Achat Qté",
+    "ordreFrais-achatPrixUnitaire": "PU Achat",
     "ordreForfaitLitige-article-description-descriptionCourte": "Description",
     "ordreForfaitLitige-ventePrixUnitaire": "P.U.",
     "ordreForfaitLitige-venteUnite-id": "Unité",
