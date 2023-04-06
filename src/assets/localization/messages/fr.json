@@ -1740,6 +1740,8 @@
     "selectionLignesCde-ordreLigne-libelleDLV": "DLUO / Best before",
     "selectionLignesCde-ordreLigne-ordreLigne-id": "Id ligne cde",
     "selectionLignesCde-ordreLigne-totalNombreColis": "Total nbre colis",
-    "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire"
+    "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire",
+    "btn-duplicate": "Dupliquer",
+    "hint-client-duplicate": "Dupliquer le client"
   }
 }

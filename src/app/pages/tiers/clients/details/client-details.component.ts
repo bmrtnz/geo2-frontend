@@ -959,4 +959,6 @@ export class ClientDetailsComponent
       ]),
     ];
   }
+
+  public onDuplicateClick() { }
 }

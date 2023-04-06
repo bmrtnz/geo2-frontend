@@ -28,6 +28,14 @@
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
         <dx-button
+          class="upperButton"
+          [visible]="!createMode"
+          type="default"
+          hint="{{ 'hint-client-duplicate' | localize }}"
+          (onClick)="onDuplicateClick()"
+          text="{{ 'btn-duplicate' | localize }}"
+        ></dx-button>
+        <dx-button
           *ngIf="!clientId"
           class="upperButton"
           type="normal"
