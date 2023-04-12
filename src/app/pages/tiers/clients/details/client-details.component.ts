@@ -52,11 +52,12 @@ import {
   Client,
   Role,
 } from "../../../../shared/models";
-import { AuthService, ClientsService } from "../../../../shared/services";
+import { AuthService, ClientsService, LocalizationService } from "../../../../shared/services";
 import { client as clientsGridConfig } from "assets/configurations/grids.json";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
 import { EncoursClientPopupComponent } from "../encours-client/encours-client-popup.component";
+import { DuplicationPopupComponent } from "../duplication-popup/duplication-popup.component";
 
 const PREORDRE = "PREORDRE";
 
@@ -272,6 +273,7 @@ export class ClientDetailsComponent
   @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
+  @ViewChild(DuplicationPopupComponent) duplicationPopup: DuplicationPopupComponent;
   editing = false;
 
   client: Client;
@@ -335,6 +337,7 @@ export class ClientDetailsComponent
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
+    public localizationService: LocalizationService,
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -960,5 +963,10 @@ export class ClientDetailsComponent
     ];
   }
 
-  public onDuplicateClick() { }
+  public onDuplicateClick() {
+    return this.duplicationPopup.prompt().subscribe({
+      error: (err: Error) => notify(err.message, "error", 3500),
+      complete: () => notify(this.localizationService.localize("copy-done"), "success", 3500),
+    });
+  }
 }

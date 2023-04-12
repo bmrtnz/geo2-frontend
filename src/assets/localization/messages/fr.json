@@ -1742,6 +1742,11 @@
     "selectionLignesCde-ordreLigne-totalNombreColis": "Total nbre colis",
     "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire",
     "btn-duplicate": "Dupliquer",
-    "hint-client-duplicate": "Dupliquer le client"
+    "hint-client-duplicate": "Dupliquer le client",
+    "duplicate-client": "Duplication client {0}",
+    "copy-contacts": "Copier les contacts",
+    "copy-entreps": "Copier les entrepôts",
+    "copy-entreps-contacts": "Copier les contacts des entrepôts",
+    "copy-done": "Duplication terminée"
   }
 }
