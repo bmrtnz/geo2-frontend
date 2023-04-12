@@ -955,15 +955,23 @@ export abstract class ApiService implements OnDestroy {
     search?: string,
     params: Partial<LookupStore> = {},
   ) {
+    const keyField = this.model.getKeyField() as string;
+    const labelField = this.model.getLabelField() as string;
+    const body = [
+      keyField,
+      labelField,
+      ...columns,
+    ];
+    const fetchPolicy = "cache-first";
     return {
       paginate: true,
-      sort: [{ selector: "id" }],
+      sort: [{ selector: keyField }],
       store: this.createCustomStore({
         load: options => this.apollo
           .query<{ [key: string]: RelayPage<T> }>({
-            query: gql(this.buildGetPageGraph(columns)),
+            query: gql(this.buildGetPageGraph(body)),
             variables: this.mergeVariables(this.mapLoadOptionsToVariables(options), { search }),
-            fetchPolicy: "cache-first",
+            fetchPolicy,
           })
           .pipe(
             map(res => res.data[`all${this.model.name}`].edges.map(({ node }) => node)),
@@ -971,9 +979,9 @@ export abstract class ApiService implements OnDestroy {
           .toPromise(),
         byKey: id => this.apollo
           .query<{ [key: string]: T }>({
-            query: gql(this.buildGetOneGraph(columns)),
+            query: gql(this.buildGetOneGraph(body)),
             variables: { id },
-            fetchPolicy: "cache-first",
+            fetchPolicy,
           })
           .pipe(map(res => res.data[this.model.name.lcFirst()]))
           .toPromise(),
