@@ -130,11 +130,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.consequenceItems = [];
     const causeFilter = `valide == true and typeTier == ${tiers}`;
     const conseqFilter = `valide == true`;
-    this.causesService.getList(["id", "description"], causeFilter)
+    this.causesService.getList(["id", "description", "numeroTri"], causeFilter)
       .pipe(
         tap(res => {
           this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
-          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.numeroTri) > this.fUtils.noDiacritics(b.numeroTri) ? 1 : 0);
         }),
         concatMapTo(this.fetchLotInfo()),
       )
