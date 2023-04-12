@@ -302,7 +302,20 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/planning-maritime/planning-maritime.component"
     ),
-  }
+  },
+  {
+    id: Indicateur.DelarationFraude,
+    enabled: true,
+    withCount: false,
+    parameter: "Déclaration",
+    subParameter: "fraude",
+    tileBkg: "#a34527",
+    indicatorIcon: "material-icons warning",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/declaration-fraude/declaration-fraude.component"
+    ),
+  },
 ].map((indicator) => ({ ...indicator, loading: false }));
 
 
