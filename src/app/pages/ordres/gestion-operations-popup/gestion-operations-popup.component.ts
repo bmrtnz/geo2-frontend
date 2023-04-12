@@ -468,7 +468,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   displayCapitalize(data) {
-    return data ? data.id + " - " + data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
+    return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
     // return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
