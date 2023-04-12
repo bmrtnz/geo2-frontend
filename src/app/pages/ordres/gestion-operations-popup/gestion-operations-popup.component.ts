@@ -154,7 +154,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
         // Firstly on "Retour station"
         if (this.firstShown) {
-          this.consequences.selectedItems = [this.consequenceItems.filter(c => c.id === "A")[0]];
           this.firstShown = false;
         }
         // Filter indemnisation
