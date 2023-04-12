@@ -1,4 +1,4 @@
-import { Component, EventEmitter, NgModule, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, NgModule, OnInit, ViewChild } from "@angular/core";
 import { Entrepot } from "app/shared/models";
 import { EntrepotsService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
@@ -21,6 +21,8 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   private choosed = new EventEmitter<Entrepot["id"]>();
   public societesSource: DataSource;
   public entrepotsSource: DataSource;
+
+  @Input() entrepotsFilter;
 
   constructor(
     private societesService: SocietesService,
@@ -61,6 +63,10 @@ export class ChooseEntrepotPopupComponent implements OnInit {
       ["valide", "=", true],
       "and",
       ["societe.id", "=", this.societeInput.value],
+      ...this.entrepotsFilter ? [
+        "and",
+        this.entrepotsFilter,
+      ] : [],
     ]);
   }
 
