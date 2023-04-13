@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, NgModule, OnInit, ViewChild } from "@angular/core";
 import { Entrepot } from "app/shared/models";
-import { EntrepotsService } from "app/shared/services";
+import { ClientsService, EntrepotsService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { SharedModule } from "app/shared/shared.module";
 import { DxButtonModule, DxPopupComponent, DxPopupModule, DxSelectBoxComponent, DxSelectBoxModule } from "devextreme-angular";
@@ -17,21 +17,23 @@ export class ChooseEntrepotPopupComponent implements OnInit {
 
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
   @ViewChild("entrepotInput") public entrepotInput: DxSelectBoxComponent;
+  @ViewChild("clientInput") public clientInput: DxSelectBoxComponent;
   @ViewChild("societeInput") public societeInput: DxSelectBoxComponent;
   private choosed = new EventEmitter<Entrepot["id"]>();
   public societesSource: DataSource;
   public entrepotsSource: DataSource;
-
-  @Input() entrepotsFilter;
+  public clientsSource: DataSource;
 
   constructor(
     private societesService: SocietesService,
     private entrepotsService: EntrepotsService,
+    private clientsService: ClientsService,
   ) { }
 
   ngOnInit() {
     this.societesSource = this.societesService.getDataSource();
     this.societesSource.filter(["valide", "=", true]);
+    this.clientsSource = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
     this.entrepotsSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
   }
 
@@ -55,6 +57,18 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   }
 
   public onSocieteSelectionChanged() {
+    this.clientInput.instance.reset();
+    // re-requesting the datasource, otherwise, the next filter won't be applied
+    this.clientsSource = this.clientsService
+      .getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.clientsSource.filter([
+      ["valide", "=", true],
+      "and",
+      ["societe.id", "=", this.societeInput.value],
+    ]);
+  }
+
+  public onClientSelectionChanged() {
     this.entrepotInput.instance.reset();
     // re-requesting the datasource, otherwise, the next filter won't be applied
     this.entrepotsSource = this.entrepotsService
@@ -62,11 +76,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     this.entrepotsSource.filter([
       ["valide", "=", true],
       "and",
-      ["societe.id", "=", this.societeInput.value],
-      ...this.entrepotsFilter ? [
-        "and",
-        this.entrepotsFilter,
-      ] : [],
+      ["client.id", "=", this.clientInput.value],
     ]);
   }
 

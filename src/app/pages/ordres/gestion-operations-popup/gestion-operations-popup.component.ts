@@ -267,7 +267,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   createReplaceOrder() {
     let ordreReplaceID: Ordre["id"];
-    this.chooseEntrepotPopup.entrepotsFilter = ["client.id", "=", this.ordre.client.id];
     this.chooseEntrepotPopup.prompt().pipe(
       concatMap(entrepotID => this.ordresService
         .fCreeOrdreReplacement(
