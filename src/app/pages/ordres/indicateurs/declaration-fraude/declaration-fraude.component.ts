@@ -14,18 +14,19 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 export class DeclarationFraudeComponent {
 
   public preFilterData: {
-    secteur?: Secteur["id"],
-    client?: Client["id"],
-    entrepot?: Entrepot["id"],
-    transport?: Transporteur["id"],
-    bureauAchat?: BureauAchat["id"],
-    fourni?: Fournisseur["id"],
-    dateDebut?: Date,
-    dateFin?: Date,
+    secteur?: Partial<Secteur>,
+    client?: Partial<Client>,
+    entrepot?: Partial<Entrepot>,
+    transporteur?: Partial<Transporteur>,
+    bureauAchat?: Partial<BureauAchat>,
+    fournisseur?: Partial<Fournisseur>,
+    dateDepartPrevue?: Date,
+    dateLivraisonPrevue?: Date,
+    dateModification?: Date,
     periode?,
   } = {
-      dateDebut: this.dateManagementService.startOfDay(),
-      dateFin: this.dateManagementService.endOfDay(),
+      dateDepartPrevue: this.dateManagementService.startOfDay(),
+      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
     };
 
   public periodes: string[];
@@ -73,8 +74,8 @@ export class DeclarationFraudeComponent {
 
     const datePeriod = this.dateManagementService.getDates(e);
 
-    this.preFilterData.dateDebut = datePeriod.dateDebut;
-    this.preFilterData.dateFin = datePeriod.dateFin;
+    this.preFilterData.dateDepartPrevue = datePeriod.dateDebut;
+    this.preFilterData.dateLivraisonPrevue = datePeriod.dateFin;
   }
 
 
@@ -83,15 +84,15 @@ export class DeclarationFraudeComponent {
     if (!e.event) return;
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = this.preFilterData.dateDebut;
-    const fin = this.preFilterData.dateFin;
+    const deb = this.preFilterData.dateDepartPrevue;
+    const fin = this.preFilterData.dateLivraisonPrevue;
     const deltaDate = fin < deb;
 
     if (deltaDate) {
       if (e.element.classList.contains("dateStart")) {
-        this.preFilterData.dateFin = this.dateManagementService.endOfDay(deb);
+        this.preFilterData.dateLivraisonPrevue = this.dateManagementService.endOfDay(deb);
       } else {
-        this.preFilterData.dateDebut = this.dateManagementService.startOfDay(fin);
+        this.preFilterData.dateDepartPrevue = this.dateManagementService.startOfDay(fin);
       }
     }
     this.preFilterData.periode = null;

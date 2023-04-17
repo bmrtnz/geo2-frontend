@@ -34,7 +34,7 @@
       }"
     ></dxi-item>
     <dxi-item
-      dataField="transport"
+      dataField="transporteur"
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: transportLookupStore,
@@ -50,7 +50,7 @@
       }"
     ></dxi-item>
     <dxi-item
-      dataField="fourni"
+      dataField="fourniseur"
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: fournisseurLookupStore,
@@ -62,28 +62,29 @@
     itemType="group"
     [colCount]="4"
   >
+    <dxi-item name="periode">
+      <dxo-label [text]="'Période'"></dxo-label>
+      <div *dxTemplate>
+        <dx-select-box
+          [items]="periodes"
+          [value]="periodes[1]"
+          (onValueChanged)="setDates($event)"
+        ></dx-select-box>
+      </div>
+    </dxi-item>
     <dxi-item
-      dataField="periode"
-      editorType="dxSelectBox"
-      [editorOptions]="{
-        items: periodes,
-        value: periodes[1],
-        onValueChanged: setDates.bind(this)
-      }"
-    ></dxi-item>
-    <dxi-item
-      dataField="dateDebut"
+      dataField="dateDepartPrevue"
       editorType="dxDateBox"
       [editorOptions]="{
-        displayFormat: 'dd-MM-yy  HH:mm',
+        displayFormat: 'dd-MM-yy',
         onValueChanged: manualDate.bind(this)
       }"
     ></dxi-item>
     <dxi-item
-      dataField="dateFin"
+      dataField="dateLivraisonPrevue"
       editorType="dxDateBox"
       [editorOptions]="{
-        displayFormat: 'dd-MM-yy  HH:mm',
+        displayFormat: 'dd-MM-yy',
         onValueChanged: manualDate.bind(this)
       }"
     ></dxi-item>
@@ -93,6 +94,20 @@
       [buttonOptions]="{
         text: 'btn-launch' | localize,
         onClick: applyPrefilter.bind(this)
+      }"
+    ></dxi-item>
+  </dxi-item>
+  <dxi-item
+    itemType="group"
+    [colCount]="2"
+  >
+    <dxo-label [text]="'Filtrer les ordres modifiés depuis : '"></dxo-label>
+    <dxi-item
+      name="dateModification"
+      editorType="dxDateBox"
+      [editorOptions]="{
+        displayFormat: 'dd/MM/yy  HH:mm',
+        showClearButton: true
       }"
     ></dxi-item>
   </dxi-item>
