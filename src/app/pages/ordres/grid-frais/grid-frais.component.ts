@@ -166,7 +166,7 @@ export class GridFraisComponent implements ToggledGrid {
 
     if (cell.setValue) {
       if (typeof event.value === "object" && cell.column.dataField === "codePlus") {
-        valueToSave = this.displayCodeBefore(event.value);
+        valueToSave = event.value.code;
       } else {
         valueToSave = event.value;
       }
