@@ -17,6 +17,7 @@
     [cellTemplate]="column?.cellTemplate"
     [headerCellTemplate]="column?.headerCellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
+    [setCellValue]="setCellValue"
     [width]="column?.width !== undefined ? column.width : 'auto'"
     [sortOrder]="column?.sortOrder"
     [sortIndex]="column?.sortIndex"

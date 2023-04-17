@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
+import { BaseTarif } from "app/shared/models";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -13,6 +14,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { formatNumber } from "devextreme/localization";
+import dxDataGrid from "devextreme/ui/data_grid";
 import { defer, EMPTY, from, interval, Observable, of, throwError } from "rxjs";
 import { concatMap, concatMapTo, filter, map, mergeMap, takeWhile, tap, timeout, toArray } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
@@ -69,6 +71,75 @@ export class GridLotComponent implements OnInit, OnChanges {
         tarif *= (100 - ligne.ordreLigne.ordre.tauxRemiseFacture) / 100;
 
     return tarif;
+  }
+
+  private static calculateQuantite(baseTarif: BaseTarif["id"], ligne: Partial<LitigeLigne>) {
+    if (baseTarif === "PAL")
+      return ligne.clientNombrePalettes;
+    if (baseTarif === "COL")
+      return ligne.clientNombreColisReclamation;
+    if (baseTarif === "KILO")
+      return ligne.clientPoidsNet;
+    if (baseTarif === "TONNE")
+      return ligne.clientPoidsNet / 1_000;
+    if (baseTarif === "CAMION")
+      return 0;
+    if (baseTarif === "FORFAIT")
+      return 1;
+    const nbPiece = ligne.ordreLigne.article.emballage.uniteParColis ?? 1;
+    return ligne.clientNombreColisReclamation * nbPiece;
+  }
+
+  private static setClientQuantite(
+    newData: Partial<LitigeLigneFait>,
+    value: any,
+    rowData: Partial<LitigeLigneFait>,
+  ) {
+    const baseTarif = rowData.ligne.clientIndicateurForfait
+      ? "UNITE"
+      : rowData.ligne.clientUniteFactureCode;
+    if (!newData?.ligne) newData.ligne = {};
+    newData.ligne.clientQuantite = GridLotComponent
+      .calculateQuantite(baseTarif, { ...rowData.ligne, ...newData.ligne });
+  }
+
+  private static setResponsableQuantite(
+    newData: Partial<LitigeLigneFait>,
+    value: any,
+    rowData: Partial<LitigeLigneFait>,
+  ) {
+    if (!rowData.ligne.litige.ordreAvoirFournisseur?.id)
+      return;
+
+    const baseTarif = rowData.ligne.responsableIndicateurForfait
+      ? "UNITE"
+      : rowData.ligne.responsableUniteFactureCode;
+    if (!newData?.ligne) newData.ligne = {};
+    const latestData = { ...rowData.ligne, ...newData.ligne };
+    if (
+      rowData.ligne.litige.responsableTiers === "F"
+      || ["A", "B"].includes(rowData.ligne.litige.consequenceLitigeCode)
+      || rowData.ligne.litige.causeLitigeCode === "W64"
+    ) {
+      newData.ligne.responsableNombrePalettes = latestData.clientNombrePalettes;
+      newData.ligne.responsableNombreColis = latestData.clientNombreColisReclamation;
+      newData.ligne.responsablePoidsNet = latestData.clientPoidsNet;
+      newData.ligne.responsableQuantite = GridLotComponent.calculateQuantite(baseTarif, latestData);
+    } else {
+      newData.ligne.responsableNombrePalettes = 0;
+      newData.ligne.responsableNombreColis = 0;
+      newData.ligne.responsablePoidsNet = 0;
+      newData.ligne.responsableQuantite = 0;
+    }
+  }
+
+  private static setQuantite(
+    newData,
+    value,
+    rowData,
+  ) {
+    GridLotComponent.setClientQuantite(newData, value, rowData);
+    GridLotComponent.setResponsableQuantite(newData, value, rowData);
   }
 
   public gridConfigHandler = event =>
@@ -129,6 +200,10 @@ export class GridLotComponent implements OnInit, OnChanges {
         "ligne.ordreLigne.article.normalisation.produitMdd",
         "ligne.ordreLigne.ordre.tauxRemiseFacture",
         "ligne.ordreLigne.ordre.remiseSurFactureMDDTaux",
+        // mandatory for "quantite" calculation
+        "ligne.ordreLigne.article.emballage.uniteParColis",
+        "ligne.litige.ordreAvoirFournisseur.id",
+        "ligne.litige.responsableTiers",
       ]),
       map(fields =>
         // upgrade fields that require sub selections
@@ -275,12 +350,19 @@ export class GridLotComponent implements OnInit, OnChanges {
           options.totalValue += GridLotComponent.calcAvoirRemise(options.value.ligne);
           // Modifying "totalValue" here
           break;
-        // case "finalize":
-        //   console.log("finalize", options.value);
-        //   // Assigning the final value to "totalValue" here
-        //   break;
       }
     }
   }
+
+  public setCellValue(
+    newData: Partial<LitigeLigneFait>,
+    value: any,
+    rowData: Partial<LitigeLigneFait>,
+  ) {
+    const context: any = this;
+    context.defaultSetCellValue(newData, value, rowData);
+    GridLotComponent.setQuantite(newData, value, rowData);
+  }
+
 }
 
