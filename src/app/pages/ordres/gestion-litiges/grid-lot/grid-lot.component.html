@@ -32,7 +32,13 @@
     [calculateCustomSummary]="calculateCustomSummary"
   >
     <dxi-total-item
-      displayFormat="Quantités totales &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {0}"
+      displayFormat="Quantités totales"
+      column="ligne.ordreLigne.article.articleDescription.descriptionLongue"
+      [alignment]="'right'"
+    >
+    </dxi-total-item>
+    <dxi-total-item
+      displayFormat="{0}"
       column="ligne.clientNombrePalettes"
       summaryType="sum"
     >
