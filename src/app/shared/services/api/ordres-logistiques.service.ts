@@ -146,4 +146,11 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
       fetchPolicy: "no-cache",
     });
   }
+
+  saveAll(body: Set<string>, allOrdreLogistique: Array<Partial<OrdreLogistique>>) {
+    return this.apollo.mutate<{ saveAllOrdreLogistique: Array<Partial<OrdreLogistique>> }>({
+      mutation: gql(this.buildSaveAllGraph([...body])),
+      variables: { allOrdreLogistique },
+    });
+  }
 }

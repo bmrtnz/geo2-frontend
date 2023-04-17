@@ -7,6 +7,7 @@ import { EntityCellTemplateModule } from "app/shared/components/entity-cell-temp
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
 import { ProgramChooserModule } from "app/shared/components/program-chooser/program-chooser.component";
+import { QuestionPopupModule } from "app/shared/components/question-popup/question-popup.component";
 import { ViewDocumentPopupModule } from "app/shared/components/view-document-popup/view-document-popup.component";
 import { OrdresTabsPersistGuard } from "app/shared/guards/ordres-tabs-persist.guard";
 import { LocalizePipe } from "app/shared/pipes";
@@ -327,6 +328,7 @@ import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/dec
     EntrepotsModule,
     ProgramChooserModule,
     GestionLitigesModule,
+    QuestionPopupModule,
   ],
   providers: [
     OrdresIndicatorsService,
