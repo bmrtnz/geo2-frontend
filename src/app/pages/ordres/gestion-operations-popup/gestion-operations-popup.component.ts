@@ -130,11 +130,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.consequenceItems = [];
     const causeFilter = `valide == true and typeTier == ${tiers}`;
     const conseqFilter = `valide == true`;
-    this.causesService.getList(["id", "description"], causeFilter)
+    this.causesService.getList(["id", "description", "numeroTri"], causeFilter)
       .pipe(
         tap(res => {
           this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
-          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.numeroTri) > this.fUtils.noDiacritics(b.numeroTri) ? 1 : 0);
         }),
         concatMapTo(this.fetchLotInfo()),
       )
@@ -154,7 +154,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
         // Firstly on "Retour station"
         if (this.firstShown) {
-          this.consequences.selectedItems = [this.consequenceItems.filter(c => c.id === "A")[0]];
           this.firstShown = false;
         }
         // Filter indemnisation
@@ -468,7 +467,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   displayCapitalize(data) {
-    return data ? data.id + " - " + data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
+    return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
     // return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
