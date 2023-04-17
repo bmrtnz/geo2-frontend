@@ -3965,6 +3965,11 @@
         "dataField": "numeroContainer",
         "dataType": "string",
         "visible": false
+      },
+      {
+        "dataField": "dateCreation",
+        "visible": false,
+        "sortOrder": "desc"
       }
     ]
   },

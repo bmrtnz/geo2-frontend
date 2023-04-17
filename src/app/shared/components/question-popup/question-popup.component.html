@@ -1,0 +1,35 @@
+<dx-popup
+  [width]="600"
+  [height]="'auto'"
+  [showTitle]="false"
+  [showCloseButton]="false"
+  [closeOnOutsideClick]="false"
+>
+  <!-- select button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+  >
+    <dx-button
+      [text]="'trueText' | localize"
+      [stylingMode]="'contained'"
+      (onClick)="onSelectClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+
+  <!-- cancel button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+  >
+    <dx-button
+      [text]="'falseText' | localize"
+      (onClick)="onCancelClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+  <div *dxTemplate="let data of 'content'">
+    {{ question }}
+  </div>
+</dx-popup>

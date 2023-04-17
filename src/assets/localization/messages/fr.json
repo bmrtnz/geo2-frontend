@@ -1775,6 +1775,7 @@
     "litige-save-success": "Sauvegarde du litige réalisée avec succès",
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
     "report": "reporter",
-    "associated-docs": "Documents associés"
+    "associated-docs": "Documents associés",
+    "ordre-date-depart-mutate": "Date de départ de l'ordre modifiée, on modifie aussi les dates de départ station/ lieu de passage à quai (logistique départ) ?"
   }
 }

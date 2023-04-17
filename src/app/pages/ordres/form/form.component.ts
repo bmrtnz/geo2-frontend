@@ -8,6 +8,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
+import { QuestionPopupComponent } from "app/shared/components/question-popup/question-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
 import {
@@ -25,6 +26,7 @@ import { InstructionsService } from "app/shared/services/api/instructions.servic
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
+import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { PortsService } from "app/shared/services/api/ports.service";
@@ -34,7 +36,7 @@ import { TypesCamionService } from "app/shared/services/api/types-camion.service
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { DxAccordionComponent, DxButtonComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxAccordionComponent, DxCheckBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
@@ -58,6 +60,7 @@ import { GridCommandesComponent } from "../grid-commandes/grid-commandes.compone
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
+import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
@@ -130,6 +133,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private localization: LocalizationService,
     public gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
+    public ordresLogistiquesService: OrdresLogistiquesService,
   ) {
     this.handleTabChange()
       .subscribe(event => {
@@ -346,6 +350,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("litigesBtn", { read: ElementRef }) litigesBtn: ElementRef;
   @ViewChild(GestionOperationsPopupComponent) gestionOpPopup: GestionOperationsPopupComponent;
   @ViewChild(SelectionComptePaloxPopupComponent) comptePaloxPopup: SelectionComptePaloxPopupComponent;
+  @ViewChild("dateDepartMutationPopup") dateDepartMutationPopup: QuestionPopupComponent;
+  @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -491,6 +497,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
           this.addLinkedOrders();
+
+          // ordre date depart has been mutated
+          if (ordre.dateDepartPrevue)
+            this.dateDepartMutationPopup
+              .prompt(this.localization.localize("ordre-date-depart-mutate"))
+              .subscribe(result => result && this.updateLogistiquesDates(ordre.dateDepartPrevue));
+
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -1354,6 +1367,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   onClickCreateLitige() {
     this.litigesBtn.nativeElement.click();
     this.formLitiges.createLitige();
+  }
+
+  private updateLogistiquesDates(date: Date) {
+    this.ordresService.getOne_v2(this.ordre.id, new Set(["id", "logistiques.id"]))
+      .pipe(
+        concatMap(res => {
+          const logistiques = [];
+          res.data.ordre.logistiques.forEach(logistique => logistiques.push({
+            id: logistique.id,
+            dateDepartPrevueFournisseur: date,
+            dateDepartPrevueGroupage: date,
+          }));
+          return this.ordresLogistiquesService.saveAll(new Set(["id"]), logistiques);
+        }),
+      ).subscribe(() => this.gridLogistiques.refresh());
   }
 
 }
