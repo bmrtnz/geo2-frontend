@@ -398,6 +398,9 @@ export class OrdresIndicatorsService {
 
       // Ordres non confirmés
       if (instance.id === Indicateur.OrdresNonConfirmes) {
+        const minDate = new Date();
+        minDate.setMonth(minDate.getMonth() - 6);
+
         instance.dataSource = this.ordresService.getDataSource_v2(instance.explicitSelection);
         instance.filter = [
           ...instance.filter,
@@ -409,7 +412,7 @@ export class OrdresIndicatorsService {
           [
             "dateCreation",
             ">=",
-            this.datePipe.transform(Date.now(), "yyyy-MM-dd"),
+            this.datePipe.transform(minDate, "yyyy-MM-dd"),
           ],
           "and",
           // Bien plus rapide que le filtre demandé sur l'indicateur 'avoir'
