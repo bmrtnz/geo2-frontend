@@ -50,6 +50,23 @@
         </div>
       </div>
 
+      <!-- client input -->
+      <div class="field">
+        <div class="label">{{ "client" | localize | titlecase }}</div>
+        <div class="value">
+          <dx-select-box
+            #clientInput
+            [dataSource]="clientsSource"
+            [valueExpr]="'id'"
+            [displayExpr]="'code'"
+            [searchExpr]="['id', 'code', 'raisonSocial']"
+            [searchMode]="'contains'"
+            [disabled]="!societeInput?.selectedItem"
+            (onSelectionChanged)="onClientSelectionChanged()"
+          ></dx-select-box>
+        </div>
+      </div>
+
       <!-- entrepot input -->
       <div class="field">
         <div class="label">{{ "entrepot" | localize | titlecase }}</div>
@@ -61,7 +78,7 @@
             [displayExpr]="'code'"
             [searchExpr]="['id', 'code', 'raisonSocial']"
             [searchMode]="'contains'"
-            [disabled]="!societeInput?.selectedItem"
+            [disabled]="!clientInput?.selectedItem"
           ></dx-select-box>
         </div>
       </div>
