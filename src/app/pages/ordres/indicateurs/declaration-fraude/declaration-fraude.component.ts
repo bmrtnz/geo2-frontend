@@ -1,10 +1,15 @@
-import { Component, OnInit } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { BureauAchat, Client, Entrepot, Fournisseur, Secteur, Transporteur } from "app/shared/models";
 import { ClientsService, EntrepotsService, FournisseursService, TransporteursService } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { DxFormComponent } from "devextreme-angular";
+import ArrayStore from "devextreme/data/array_store";
+import DataSource from "devextreme/data/data_source";
 
 @Component({
   selector: "app-declaration-fraude",
@@ -30,6 +35,8 @@ export class DeclarationFraudeComponent {
     };
 
   public periodes: string[];
+  public dataSource: DataSource;
+  @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
 
   public secteurLookupStore = this.secteursService
     .getLookupStore(["id"], "valide==true");
@@ -45,14 +52,16 @@ export class DeclarationFraudeComponent {
     .getLookupStore(["id", "code"], `valide==true`);
 
   constructor(
-    public currentCompanyService: CurrentCompanyService,
-    public secteursService: SecteursService,
-    public clientsService: ClientsService,
-    public entrepotsService: EntrepotsService,
-    public transporteursService: TransporteursService,
-    public bureauxAchatService: BureauxAchatService,
-    public fournisseursService: FournisseursService,
+    private currentCompanyService: CurrentCompanyService,
+    private ordresService: OrdresService,
+    private secteursService: SecteursService,
+    private clientsService: ClientsService,
+    private entrepotsService: EntrepotsService,
+    private transporteursService: TransporteursService,
+    private bureauxAchatService: BureauxAchatService,
+    private fournisseursService: FournisseursService,
     private dateManagementService: DateManagementService,
+    private datePipe: DatePipe,
   ) {
     [
       this.clientLookupStore,
@@ -64,8 +73,31 @@ export class DeclarationFraudeComponent {
     this.periodes = this.dateManagementService.periods();
   }
 
+
   public applyPrefilter(event) {
-    console.log(this.preFilterData);
+    if (!this.dxForm.instance.validate().isValid) return;
+
+    this.ordresService.allDeclarationFraude(
+      new Set([
+        "id",
+      ]),
+      this.preFilterData?.secteur?.id,
+      this.currentCompanyService.getCompany().id,
+      this.datePipe.transform(this.preFilterData?.dateDepartPrevue, "yyyy-MM-dd"),
+      this.datePipe.transform(this.preFilterData?.dateLivraisonPrevue, "yyyy-MM-dd"),
+      this.datePipe.transform(this.preFilterData?.dateModification, "yyyy-MM-ddTHH:mm:ss"),
+      this.preFilterData?.client?.id,
+      this.preFilterData?.transporteur?.id,
+      this.preFilterData?.fournisseur?.code,
+      this.preFilterData?.bureauAchat?.id,
+      this.preFilterData?.entrepot?.id,
+    ).subscribe(res => {
+      this.dataSource = new DataSource({
+        store: new ArrayStore({
+          data: res,
+        }),
+      });
+    });
   }
 
   setDates(e) {

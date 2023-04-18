@@ -10,6 +10,7 @@
     <dxi-item
       dataField="secteur"
       editorType="dxLookup"
+      [isRequired]="true"
       [editorOptions]="{
         dataSource: secteurLookupStore,
         displayExpr: 'id',
@@ -60,7 +61,7 @@
   </dxi-item>
   <dxi-item
     itemType="group"
-    [colCount]="4"
+    [colCount]="3"
   >
     <dxi-item name="periode">
       <dxo-label [text]="'Période'"></dxo-label>
@@ -75,6 +76,7 @@
     <dxi-item
       dataField="dateDepartPrevue"
       editorType="dxDateBox"
+      [isRequired]="true"
       [editorOptions]="{
         displayFormat: 'dd-MM-yy',
         onValueChanged: manualDate.bind(this)
@@ -83,17 +85,10 @@
     <dxi-item
       dataField="dateLivraisonPrevue"
       editorType="dxDateBox"
+      [isRequired]="true"
       [editorOptions]="{
         displayFormat: 'dd-MM-yy',
         onValueChanged: manualDate.bind(this)
-      }"
-    ></dxi-item>
-    <dxi-item
-      itemType="button"
-      verticalAlignment="center"
-      [buttonOptions]="{
-        text: 'btn-launch' | localize,
-        onClick: applyPrefilter.bind(this)
       }"
     ></dxi-item>
   </dxi-item>
@@ -103,14 +98,27 @@
   >
     <dxo-label [text]="'Filtrer les ordres modifiés depuis : '"></dxo-label>
     <dxi-item
-      name="dateModification"
+      dataField="dateModification"
       editorType="dxDateBox"
       [editorOptions]="{
         displayFormat: 'dd/MM/yy  HH:mm',
         showClearButton: true
       }"
+    >
+      <dxo-label [visible]="false"></dxo-label>
+    </dxi-item>
+    <dxi-item
+      itemType="button"
+      verticalAlignment="center"
+      [buttonOptions]="{
+        type: 'default',
+        text: 'btn-launch' | localize,
+        onClick: applyPrefilter.bind(this)
+      }"
     ></dxi-item>
   </dxi-item>
 </dx-form>
 <br />
-<dx-data-grid></dx-data-grid>
+<dx-data-grid [dataSource]="dataSource">
+  <dxi-column [dataField]="'id'"></dxi-column>
+</dx-data-grid>
