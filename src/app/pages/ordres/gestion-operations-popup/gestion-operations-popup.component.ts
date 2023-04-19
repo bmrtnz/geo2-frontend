@@ -179,6 +179,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     // reset selected consequence
     this.consequences.instance.unselectAll();
   }
+
   onConsequenceChanged(e) {
     // Only one item can be selected at once
     if (this.consequences.selectedItems.length) this.consequences.selectedItemKeys.shift();
