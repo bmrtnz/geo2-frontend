@@ -134,7 +134,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .pipe(
         tap(res => {
           this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
-          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.numeroTri) > this.fUtils.noDiacritics(b.numeroTri) ? 1 : 0);
+          this.causeItems.sort((a, b) => a.numeroTri - b.numeroTri);
         }),
         concatMapTo(this.fetchLotInfo()),
       )
