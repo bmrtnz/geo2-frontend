@@ -136,14 +136,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
           this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.numeroTri) > this.fUtils.noDiacritics(b.numeroTri) ? 1 : 0);
         }),
-        concatMapTo(this.fetchLotInfo()),
       )
-      .subscribe((res) => {
-        if (res?.cause?.id) {
-          const itemIndex = this.causeItems.findIndex(r => r.id === res.cause.id);
-          this.causes.instance.selectItem(itemIndex);
-        }
-      });
+      .subscribe();
     this.consequencesService.getList(["id", "description"], conseqFilter).pipe(
       tap((res) => {
         this.consequenceItems = JSON.parse(JSON.stringify(res.data.allLitigeConsequenceList));
@@ -161,14 +155,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.consequenceItems.filter(c => c.id === "G")[0].visible = false;
 
       }),
-      concatMapTo(this.fetchLotInfo()),
     )
-      .subscribe((res) => {
-        if (res?.consequence?.id) {
-          const itemIndex = this.consequenceItems.findIndex(r => r.id === res.consequence.id);
-          this.consequences.instance.selectItem(itemIndex);
-        }
-      });
+      .subscribe();
   }
 
   changeResponsible(e) {
@@ -188,6 +176,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
         this.consequenceItems.filter(c => c.id === "I")[0].visible = true;
       }
     }
+    // reset selected consequence
+    this.consequences.instance.unselectAll();
   }
   onConsequenceChanged(e) {
     // Only one item can be selected at once
@@ -498,11 +488,24 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     }
 
-    iif(() => !!this.lot[1], EMPTY, this.setupLot())
+    iif(() => !!this.lot[1], of({}), this.setupLot())
       .pipe(
         concatMap(data => this.gridLot.updateLot(data)),
+        concatMapTo(this.fetchLotInfo()),
       )
       .subscribe({
+        next: res => {
+          if (res?.cause?.id) {
+            const itemIndex = this.causeItems.findIndex(r => r.id === res.cause.id);
+            this.causes.instance.selectItem(itemIndex);
+            this.causes.instance.scrollToItem(itemIndex);
+          }
+          if (res?.consequence?.id) {
+            const itemIndex = this.consequenceItems.findIndex(r => r.id === res.consequence.id);
+            this.consequences.instance.selectItem(itemIndex);
+            this.consequences.instance.scrollToItem(itemIndex);
+          }
+        },
         error: (err: Error) => notify(err.message, "ERROR", 3500),
       });
   }
