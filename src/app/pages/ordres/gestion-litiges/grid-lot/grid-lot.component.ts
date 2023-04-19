@@ -108,7 +108,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>,
   ) {
-    if (!rowData.ligne.litige.ordreAvoirFournisseur?.id)
+    if (rowData.ligne.litige.ordreAvoirFournisseur?.id)
       return;
 
     const baseTarif = rowData.ligne.responsableIndicateurForfait
