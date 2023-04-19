@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@a
 import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
+import LitigeCause from "app/shared/models/litige-cause.model";
+import LitigeConsequence from "app/shared/models/litige-consequence.model";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -41,6 +43,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @Output() public currOrdre: Partial<Ordre>;
   /** Indicate when data is validated and if data had mutations */
   @Output() public whenUpdated = new EventEmitter<boolean>();
+  @Output() public headerData: {
+    responsable?: Litige["responsableTiersCode"],
+    cause?: LitigeCause["id"],
+    consequence?: LitigeConsequence["id"],
+  } = {};
 
   public visible: boolean;
   public causeItems: any[];
@@ -162,6 +169,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   changeResponsible(e) {
     this.selectedResponsible = e.value?.id;
     if (e.value) this.updateCauseConseq(e.value.typeTiers);
+    this.headerData.responsable = e.value.typeTiers;
   }
 
   onCauseChanged(e) {
@@ -178,12 +186,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
     }
     // reset selected consequence
     this.consequences.instance.unselectAll();
+    this.headerData.cause = this.selectedCause;
   }
 
   onConsequenceChanged(e) {
     // Only one item can be selected at once
     if (this.consequences.selectedItems.length) this.consequences.selectedItemKeys.shift();
     this.selectedConsequence = e.addedItems[0]?.id;
+    this.headerData.consequence = this.selectedConsequence;
   }
 
   openOrder() {

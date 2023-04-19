@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { BaseTarif } from "app/shared/models";
+import LitigeCause from "app/shared/models/litige-cause.model";
+import LitigeConsequence from "app/shared/models/litige-consequence.model";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -35,6 +37,11 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     self = this;
   }
+  @Input() headerData: {
+    responsable?: Litige["responsableTiersCode"],
+    cause?: LitigeCause["id"],
+    consequence?: LitigeConsequence["id"],
+  };
 
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
@@ -90,7 +97,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     return ligne.clientNombreColisReclamation * nbPiece;
   }
 
-  private static setClientQuantite(
+  private setClientQuantite(
     newData: Partial<LitigeLigneFait>,
     value: any,
     rowData: Partial<LitigeLigneFait>,
@@ -103,7 +110,7 @@ export class GridLotComponent implements OnInit, OnChanges {
       .calculateQuantite(baseTarif, { ...rowData.ligne, ...newData.ligne });
   }
 
-  private static setResponsableQuantite(
+  private setResponsableQuantite(
     newData: Partial<LitigeLigneFait>,
     value: any,
     rowData: Partial<LitigeLigneFait>,
@@ -117,9 +124,9 @@ export class GridLotComponent implements OnInit, OnChanges {
     if (!newData?.ligne) newData.ligne = {};
     const latestData = { ...rowData.ligne, ...newData.ligne };
     if (
-      rowData.ligne.litige.responsableTiers === "F"
-      || ["A", "B"].includes(rowData.ligne.litige.consequenceLitigeCode)
-      || rowData.ligne.litige.causeLitigeCode === "W64"
+      this.headerData?.responsable === "F"
+      || ["A", "B"].includes(this.headerData?.consequence)
+      || this.headerData?.cause === "W64"
     ) {
       newData.ligne.responsableNombrePalettes = latestData.clientNombrePalettes;
       newData.ligne.responsableNombreColis = latestData.clientNombreColisReclamation;
@@ -133,13 +140,13 @@ export class GridLotComponent implements OnInit, OnChanges {
     }
   }
 
-  private static setQuantite(
+  private setQuantite(
     newData,
     value,
     rowData,
   ) {
-    GridLotComponent.setClientQuantite(newData, value, rowData);
-    GridLotComponent.setResponsableQuantite(newData, value, rowData);
+    this.setClientQuantite(newData, value, rowData);
+    this.setResponsableQuantite(newData, value, rowData);
   }
 
   public gridConfigHandler = event =>
@@ -241,6 +248,7 @@ export class GridLotComponent implements OnInit, OnChanges {
               }
             } else
               Object.entries(data).forEach(([field, value]) => {
+                console.log(rowIndex, `ligne.${field}`, value);
                 this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
               });
           });
@@ -361,7 +369,7 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     const context: any = this;
     context.defaultSetCellValue(newData, value, rowData);
-    GridLotComponent.setQuantite(newData, value, rowData);
+    self.setQuantite(newData, value, rowData);
   }
 
 }
