@@ -125,7 +125,7 @@
   (onCellPrepared)="onCellPrepared($event)"
 >
   <dxo-grouping></dxo-grouping>
-  <!-- <dxo-export></dxo-export> -->
+  <dxo-export [enabled]="true"></dxo-export>
   <dxi-column
     [dataField]="'dateDepartPrevueFournisseur'"
     [groupIndex]="0"
