@@ -11,6 +11,8 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { DxFormComponent } from "devextreme-angular";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
+import { of } from "rxjs";
+import { concatMap } from "rxjs/operators";
 
 @Component({
   selector: "app-declaration-fraude",
@@ -18,43 +20,6 @@ import DataSource from "devextreme/data/data_source";
   styleUrls: ["./declaration-fraude.component.scss"]
 })
 export class DeclarationFraudeComponent {
-
-  public preFilterData: {
-    secteur?: Partial<Secteur>,
-    client?: Partial<Client>,
-    entrepot?: Partial<Entrepot>,
-    transporteur?: Partial<Transporteur>,
-    bureauAchat?: Partial<BureauAchat>,
-    fournisseur?: Partial<Fournisseur>,
-    dateDepartPrevue?: Date,
-    dateLivraisonPrevue?: Date,
-    dateModification?: Date,
-    periode?,
-  } = {
-      // dateDepartPrevue: this.dateManagementService.startOfDay(),
-      // dateLivraisonPrevue: this.dateManagementService.endOfDay(),
-      secteur: { id: "F" },
-      client: { id: "007728" },
-      dateDepartPrevue: new Date(Date.parse("2022-01-01")),
-      dateLivraisonPrevue: new Date(Date.parse("2022-04-01")),
-    };
-
-  public periodes: string[];
-  public dataSource: DataSource;
-  @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
-
-  public secteurLookupStore = this.secteursService
-    .getLookupStore(["id"], "valide==true");
-  public clientLookupStore = this.clientsService
-    .getLookupStore(["id", "code"], `valide==true and societe.id == ${this.currentCompanyService.getCompany().id}`);
-  public entrepotLookupStore = this.entrepotsService
-    .getLookupStore(["id", "code"], `valide==true and societe.id == ${this.currentCompanyService.getCompany().id}`);
-  public transportLookupStore = this.transporteursService
-    .getLookupStore(["id"], `valide==true`);
-  public bureauAchatLookupStore = this.bureauxAchatService
-    .getLookupStore(["id"], `valide==true`);
-  public fournisseurLookupStore = this.fournisseursService
-    .getLookupStore(["id", "code"], `valide==true`);
 
   constructor(
     private currentCompanyService: CurrentCompanyService,
@@ -78,6 +43,62 @@ export class DeclarationFraudeComponent {
     this.periodes = this.dateManagementService.periods();
   }
 
+  public preFilterData: {
+    secteur?: Partial<Secteur>,
+    client?: Partial<Client>,
+    entrepot?: Partial<Entrepot>,
+    transporteur?: Partial<Transporteur>,
+    bureauAchat?: Partial<BureauAchat>,
+    fournisseur?: Partial<Fournisseur>,
+    dateDepartPrevue?: Date,
+    dateLivraisonPrevue?: Date,
+    dateModification?: Date,
+    periode?,
+  } = {
+      // dateDepartPrevue: this.dateManagementService.startOfDay(),
+      // dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      secteur: { id: "F" },
+      client: { id: "006784" },
+      dateDepartPrevue: new Date(Date.parse("2023-04-20")),
+      dateLivraisonPrevue: new Date(Date.parse("2023-04-22")),
+      dateModification: new Date(Date.parse("2023-04-20")),
+    };
+
+  public periodes: string[];
+  public dataSource: DataSource;
+  @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
+
+  public secteurLookupStore = this.secteursService
+    .getLookupStore(["id"], "valide==true");
+  public clientLookupStore = this.clientsService
+    .getLookupStore(["id", "code"], `valide==true and societe.id == ${this.currentCompanyService.getCompany().id}`);
+  public entrepotLookupStore = this.entrepotsService
+    .getLookupStore(["id", "code"], `valide==true and societe.id == ${this.currentCompanyService.getCompany().id}`);
+  public transportLookupStore = this.transporteursService
+    .getLookupStore(["id"], `valide==true`);
+  public bureauAchatLookupStore = this.bureauxAchatService
+    .getLookupStore(["id"], `valide==true`);
+  public fournisseurLookupStore = this.fournisseursService
+    .getLookupStore(["id", "code"], `valide==true`);
+
+  private static handleCalibres(data: Partial<DeclarationFraude>[]) {
+    const isCalibreOpening = (r1: Partial<DeclarationFraude>, r2: Partial<DeclarationFraude>) =>
+      r1.varieteCode === r2.varieteCode
+      && r1.fournisseurCode === r2.fournisseurCode;
+
+    return data.map(row => {
+      // La ligne fait elle partie d'une ouverture de calibre ?
+      if (data.filter(r => isCalibreOpening(r, row)).length > 1) {
+        const commande = data.find(r => r.nombreColisCommandes);
+        // La ligne a t'elle un plus gros calibre ?
+        return !data.find(r => r.poidsNetClient > row.poidsNetClient)
+          ? { ...row, nombrePalettesCommandees: commande.nombrePalettesCommandees, nombreColisCommandes: commande.nombreColisCommandes }
+          : { ...row, nombreColisCommandes: 0, nombrePalettesCommandees: 0 };
+      }
+
+      return row;
+    });
+  }
 
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
@@ -113,6 +134,8 @@ export class DeclarationFraudeComponent {
       this.preFilterData?.fournisseur?.code,
       this.preFilterData?.bureauAchat?.id,
       this.preFilterData?.entrepot?.id,
+    ).pipe(
+      concatMap(res => of(DeclarationFraudeComponent.handleCalibres(res))),
     ).subscribe(res => {
       this.dataSource = new DataSource({
         store: new ArrayStore({
