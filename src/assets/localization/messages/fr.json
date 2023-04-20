@@ -1743,7 +1743,7 @@
     "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire",
     "ordre-date-depart-mutate": "Date de départ de l'ordre modifiée, on modifie aussi les dates de départ station/ lieu de passage à quai (logistique départ) ?",
     "fraude-depart-station": "Départs de station du",
-    "fraude-total-variete-station": "Total par Variété/Station",
+    "fraude-total-variete-station": "Total par Variété/Station:",
     "order": "ordre",
     "fraude-column-fournisseurCode": "Fournisseur",
     "fraude-column-dateDepartPrevue": "Départ",

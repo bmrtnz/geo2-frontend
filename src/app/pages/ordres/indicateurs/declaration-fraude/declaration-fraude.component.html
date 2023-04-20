@@ -128,7 +128,7 @@
 <dx-data-grid
   [dataSource]="dataSource"
   [width]="'100%'"
-  (onCellPrepared)="onCellPrepared($event)"
+  (onRowPrepared)="onRowPrepared($event)"
 >
   <dxo-grouping></dxo-grouping>
   <dxo-export [enabled]="true"></dxo-export>
@@ -197,6 +197,7 @@
     [caption]="'fraude-column-incotermCode' | localize"
     [width]="'auto'"
   ></dxi-column>
+
   <dxo-summary [recalculateWhileEditing]="true">
     <dxi-group-item
       [showInColumn]="'nombrePalettesCommandees'"

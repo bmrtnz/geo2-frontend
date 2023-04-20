@@ -57,6 +57,7 @@ export class DeclarationFraudeComponent {
   } = {
       // dateDepartPrevue: this.dateManagementService.startOfDay(),
       // dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      // TODO VIRER CA
       secteur: { id: "F" },
       client: { id: "006784" },
       dateDepartPrevue: new Date(Date.parse("2023-04-20")),
@@ -175,15 +176,15 @@ export class DeclarationFraudeComponent {
     this.preFilterData.periode = null;
   }
 
-  onCellPrepared(event) {
+  onRowPrepared(event) {
     // hide `groupFooter` rows values with `groupIndex=0`
     // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
-    if (event.rowType === "groupFooter" && event.row.groupIndex !== 2)
-      event.cellElement.textContent = "";
+    if (event.rowType === "groupFooter" && event.groupIndex !== 2)
+      event.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
-    if (event.rowType === "group" && event.row.groupIndex === 0)
-      event.cellElement.classList.add("justified-row");
+    if (event.rowType === "group" && event.groupIndex === 0)
+      event.rowElement.classList.add("justified-row");
   }
 
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
