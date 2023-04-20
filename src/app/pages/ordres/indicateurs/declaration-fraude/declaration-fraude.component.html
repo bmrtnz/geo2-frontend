@@ -23,6 +23,7 @@
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: clientLookupStore,
+        showClearButton: true,
         displayExpr: 'code'
       }"
     ></dxi-item>
@@ -31,6 +32,7 @@
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: entrepotLookupStore,
+        showClearButton: true,
         displayExpr: 'code'
       }"
     ></dxi-item>
@@ -39,6 +41,7 @@
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: transportLookupStore,
+        showClearButton: true,
         displayExpr: 'id'
       }"
     ></dxi-item>
@@ -47,6 +50,7 @@
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: bureauAchatLookupStore,
+        showClearButton: true,
         displayExpr: 'id'
       }"
     ></dxi-item>
@@ -55,6 +59,7 @@
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: fournisseurLookupStore,
+        showClearButton: true,
         displayExpr: 'code'
       }"
     ></dxi-item>
@@ -122,6 +127,7 @@
 <br />
 <dx-data-grid
   [dataSource]="dataSource"
+  [width]="'100%'"
   (onCellPrepared)="onCellPrepared($event)"
 >
   <dxo-grouping></dxo-grouping>
@@ -131,54 +137,65 @@
     [groupIndex]="0"
     [dataType]="'date'"
     [groupCellTemplate]="'groupDPFTemplate'"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'numeroOrdre'"
     [groupIndex]="1"
     [groupCellTemplate]="'groupOrdreTemplate'"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'fournisseurCode'"
     [caption]="'fraude-column-fournisseurCode' | localize"
     [groupIndex]="2"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'dateDepartPrevue'"
     [caption]="'fraude-column-dateDepartPrevue' | localize"
     [dataType]="'date'"
     [format]="'dd/MM'"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'dateDepartPrevueFournisseur'"
     [caption]="'fraude-column-dateDepartPrevueFournisseur' | localize"
     [dataType]="'date'"
     [format]="'dd/MM'"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'nombrePalettesCommandees'"
     [caption]="'fraude-column-nombrePalettesCommandees' | localize"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'nombreColisCommandes'"
     [caption]="'fraude-column-nombreColisCommandes' | localize"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'poidsNet'"
     [caption]="'fraude-column-poidsNet' | localize"
     [calculateCellValue]="calculatePoidsNetValue"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'articleDescription'"
     [caption]="'fraude-column-articleDescription' | localize"
     [calculateCellValue]="calculateArticleValue"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'pays'"
     [calculateCellValue]="calculatePaysValue"
+    [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'incotermCode'"
     [caption]="'fraude-column-incotermCode' | localize"
+    [width]="'auto'"
   ></dxi-column>
   <dxo-summary [recalculateWhileEditing]="true">
     <dxi-group-item
