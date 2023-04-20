@@ -2,6 +2,7 @@
 <dx-form
   [(formData)]="preFilterData"
   labelLocation="left"
+  (onFieldDataChanged)="onFieldDataChanged()"
 >
   <dxi-item
     itemType="group"
@@ -125,15 +126,29 @@
   </dxi-item>
 </dx-form>
 <br />
+<div class="labels">
+  <span>{{ this.resumeLabel }}</span>
+  <span>{{ this.etatLabel }}</span>
+</div>
+<br />
 <dx-data-grid
   [dataSource]="dataSource"
   [width]="'100%'"
   (onRowPrepared)="onRowPrepared($event)"
+  (onExporting)="onExporting($event)"
 >
   <dxo-grouping></dxo-grouping>
-  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+  <dxo-export
+    [enabled]="true"
+    [fileName]="
+      ('declaration-fraude' | localize) + '-' + (now | date: 'shortDate')
+    "
+  ></dxo-export>
+
   <dxi-column
     [dataField]="'dateDepartPrevueFournisseur'"
+    [name]="'dateDepartPrevueFournisseurHead'"
     [groupIndex]="0"
     [dataType]="'date'"
     [groupCellTemplate]="'groupDPFTemplate'"

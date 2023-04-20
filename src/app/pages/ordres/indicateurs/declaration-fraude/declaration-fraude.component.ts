@@ -2,7 +2,7 @@ import { DatePipe } from "@angular/common";
 import { Component, ViewChild } from "@angular/core";
 import { BureauAchat, Client, Entrepot, Fournisseur, Secteur, Transporteur } from "app/shared/models";
 import DeclarationFraude from "app/shared/models/declaration-fraude.model";
-import { ClientsService, EntrepotsService, FournisseursService, TransporteursService } from "app/shared/services";
+import { ClientsService, EntrepotsService, FournisseursService, LocalizationService, TransporteursService } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -32,6 +32,7 @@ export class DeclarationFraudeComponent {
     private fournisseursService: FournisseursService,
     private dateManagementService: DateManagementService,
     private datePipe: DatePipe,
+    private localizer: LocalizationService,
   ) {
     [
       this.clientLookupStore,
@@ -67,6 +68,9 @@ export class DeclarationFraudeComponent {
 
   public periodes: string[];
   public dataSource: DataSource;
+  public now: number = Date.now();
+  public resumeLabel: string;
+  public etatLabel: string;
   @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
 
   public secteurLookupStore = this.secteursService
@@ -101,8 +105,20 @@ export class DeclarationFraudeComponent {
     });
   }
 
+  onFieldDataChanged() {
+    this.resumeLabel = this.localizer.localize(
+      "fraude-grid-title",
+      this.preFilterData.dateDepartPrevue.toLocaleDateString(),
+      this.preFilterData.dateLivraisonPrevue.toLocaleDateString(),
+      this.preFilterData.secteur.id,
+      this.currentCompanyService.getCompany().id,
+    );
+  }
+
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
+
+    this.etatLabel = `${this.localizer.localize("state-from")} ${new Date().toLocaleString()}`;
 
     this.ordresService.allDeclarationFraude(
       new Set([
@@ -197,6 +213,10 @@ export class DeclarationFraudeComponent {
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {
     return `${rowData.paysCode} - ${rowData.paysDescription}`;
+  }
+
+  onExporting(event) {
+    console.log(event);
   }
 
 }
