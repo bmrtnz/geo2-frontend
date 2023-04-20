@@ -78,7 +78,7 @@
       editorType="dxDateBox"
       [isRequired]="true"
       [editorOptions]="{
-        displayFormat: 'dd-MM-yy',
+        displayFormat: 'dd/MM/yyyy',
         onValueChanged: manualDate.bind(this)
       }"
     ></dxi-item>
@@ -87,7 +87,7 @@
       editorType="dxDateBox"
       [isRequired]="true"
       [editorOptions]="{
-        displayFormat: 'dd-MM-yy',
+        displayFormat: 'dd/MM/yyyy',
         onValueChanged: manualDate.bind(this)
       }"
     ></dxi-item>
@@ -101,8 +101,9 @@
       dataField="dateModification"
       editorType="dxDateBox"
       [editorOptions]="{
-        displayFormat: 'dd/MM/yy  HH:mm',
-        showClearButton: true
+        displayFormat: 'dd/MM/yyyy HH:mm',
+        showClearButton: true,
+        type: 'datetime'
       }"
     >
       <dxo-label [visible]="false"></dxo-label>
@@ -119,6 +120,114 @@
   </dxi-item>
 </dx-form>
 <br />
-<dx-data-grid [dataSource]="dataSource">
-  <dxi-column [dataField]="'id'"></dxi-column>
+<dx-data-grid
+  [dataSource]="dataSource"
+  (onCellPrepared)="onCellPrepared($event)"
+>
+  <dxo-grouping></dxo-grouping>
+  <!-- <dxo-export></dxo-export> -->
+  <dxi-column
+    [dataField]="'dateDepartPrevueFournisseur'"
+    [groupIndex]="0"
+    [dataType]="'date'"
+    [groupCellTemplate]="'groupDPFTemplate'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'numeroOrdre'"
+    [groupIndex]="1"
+    [groupCellTemplate]="'groupOrdreTemplate'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'fournisseurCode'"
+    [caption]="'fraude-column-fournisseurCode' | localize"
+    [groupIndex]="2"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'dateDepartPrevue'"
+    [caption]="'fraude-column-dateDepartPrevue' | localize"
+    [dataType]="'date'"
+    [format]="'dd/MM'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'dateDepartPrevueFournisseur'"
+    [caption]="'fraude-column-dateDepartPrevueFournisseur' | localize"
+    [dataType]="'date'"
+    [format]="'dd/MM'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'nombrePalettesCommandees'"
+    [caption]="'fraude-column-nombrePalettesCommandees' | localize"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'nombreColisCommandes'"
+    [caption]="'fraude-column-nombreColisCommandes' | localize"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'poidsNet'"
+    [caption]="'fraude-column-poidsNet' | localize"
+    [calculateCellValue]="calculatePoidsNetValue"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'articleDescription'"
+    [caption]="'fraude-column-articleDescription' | localize"
+    [calculateCellValue]="calculateArticleValue"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'pays'"
+    [calculateCellValue]="calculatePaysValue"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'incotermCode'"
+    [caption]="'fraude-column-incotermCode' | localize"
+  ></dxi-column>
+  <dxo-summary [recalculateWhileEditing]="true">
+    <dxi-group-item
+      [showInColumn]="'nombrePalettesCommandees'"
+      [displayFormat]="'fraude-total-variete-station' | localize"
+      [showInGroupFooter]="true"
+    ></dxi-group-item>
+    <dxi-group-item
+      column="nombreColisCommandes"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-group-item
+      column="poidsNet"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+  </dxo-summary>
+
+  <div *dxTemplate="let data of 'groupDPFTemplate'">
+    <div>
+      {{ "fraude-depart-station" | localize }}
+      {{ data.value | date: "dd/MM/yyyy" }}
+    </div>
+  </div>
+
+  <div *dxTemplate="let data of 'groupOrdreTemplate'">
+    <div>
+      <span>{{ "order" | localize | titlecase }} : </span>
+      {{ data.value }}
+      <span>{{ "client" | localize | titlecase }} : </span>
+      <span
+        >{{ data.data.items[0].items[0].clientCode }} /
+        {{ data.data.items[0].items[0].fournisseurCode }}</span
+      >
+      <span>
+        - Ref: ({{
+          data.data.items[0].items[0].dateModification
+            | date: "dd/MM/yyyy hh:mm:ss"
+        }})
+      </span>
+      <span>
+        {{ "transporteur" | localize | titlecase }}:
+        {{ data.data.items[0].items[0].transporteurCode }}</span
+      >
+    </div>
+  </div>
 </dx-data-grid>

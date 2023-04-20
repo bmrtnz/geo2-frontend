@@ -1,6 +1,7 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { BureauAchat, Client, Entrepot, Fournisseur, Secteur, Transporteur } from "app/shared/models";
+import DeclarationFraude from "app/shared/models/declaration-fraude.model";
 import { ClientsService, EntrepotsService, FournisseursService, TransporteursService } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -30,8 +31,12 @@ export class DeclarationFraudeComponent {
     dateModification?: Date,
     periode?,
   } = {
-      dateDepartPrevue: this.dateManagementService.startOfDay(),
-      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      // dateDepartPrevue: this.dateManagementService.startOfDay(),
+      // dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      secteur: { id: "F" },
+      client: { id: "007728" },
+      dateDepartPrevue: new Date(Date.parse("2022-01-01")),
+      dateLivraisonPrevue: new Date(Date.parse("2022-04-01")),
     };
 
   public periodes: string[];
@@ -80,6 +85,23 @@ export class DeclarationFraudeComponent {
     this.ordresService.allDeclarationFraude(
       new Set([
         "id",
+        "numeroOrdre",
+        "dateDepartPrevueFournisseur",
+        "clientCode",
+        "fournisseurCode",
+        "dateDepartPrevue",
+        "nombrePalettesCommandees",
+        "nombreColisCommandes",
+        "origineDescription",
+        "paysCode",
+        "paysDescription",
+        "incotermCode",
+        "varieteCode",
+        "colisCode",
+        "poidsNetClient",
+        "origineDescription",
+        "transporteurCode",
+        "dateModification",
       ]),
       this.preFilterData?.secteur?.id,
       this.currentCompanyService.getCompany().id,
@@ -128,6 +150,29 @@ export class DeclarationFraudeComponent {
       }
     }
     this.preFilterData.periode = null;
+  }
+
+  onCellPrepared(event) {
+    // hide `groupFooter` rows values with `groupIndex=0`
+    // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
+    if (event.rowType === "groupFooter" && event.row.groupIndex !== 2)
+      event.cellElement.textContent = "";
+
+    // add custom style to main group row
+    if (event.rowType === "group" && event.row.groupIndex === 0)
+      event.cellElement.classList.add("justified-row");
+  }
+
+  calculateArticleValue(rowData: Partial<DeclarationFraude>) {
+    return `${rowData.varieteCode} ${rowData.colisCode} ${rowData.poidsNetClient}kg ${rowData.origineDescription}`;
+  }
+
+  calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {
+    return rowData.nombreColisCommandes * rowData.poidsNetClient;
+  }
+
+  calculatePaysValue(rowData: Partial<DeclarationFraude>) {
+    return `${rowData.paysCode} - ${rowData.paysDescription}`;
   }
 
 }
