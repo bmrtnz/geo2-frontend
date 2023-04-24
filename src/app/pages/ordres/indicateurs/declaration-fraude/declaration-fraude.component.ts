@@ -11,6 +11,10 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { DxFormComponent } from "devextreme-angular";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
+import { exportDataGrid } from "devextreme/excel_exporter";
+import dxDataGrid from "devextreme/ui/data_grid";
+import { Workbook } from "exceljs";
+import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap } from "rxjs/operators";
 
@@ -215,8 +219,25 @@ export class DeclarationFraudeComponent {
     return `${rowData.paysCode} - ${rowData.paysDescription}`;
   }
 
-  onExporting(event) {
-    console.log(event);
+  onExporting(event: { component: dxDataGrid, cancel: boolean }) {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet();
+    const redundantRows = event.component.getVisibleRows()
+      .filter(r => r.rowType === "groupFooter" && r.groupIndex !== 2)
+      .map(r => r.rowIndex);
+    exportDataGrid({
+      component: event.component,
+      worksheet,
+    }).then(() => {
+      const offset = 2;
+      redundantRows.forEach((r, i) => workbook.getWorksheet(1).spliceRows(r - i + offset, 1));
+      workbook.xlsx.writeBuffer()
+        .then((buffer: BlobPart) => {
+          const name = `${this.localizer.localize("declaration-fraude")} - ${new Date().toLocaleDateString()}`;
+          saveAs(new Blob([buffer], { type: "application/octet-stream" }), `${name}.xlsx`);
+        });
+    });
+    event.cancel = true;
   }
 
 }

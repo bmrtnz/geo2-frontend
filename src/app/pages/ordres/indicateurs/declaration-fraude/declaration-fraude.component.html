@@ -139,12 +139,8 @@
 >
   <dxo-grouping></dxo-grouping>
   <dxo-load-panel [enabled]="true"></dxo-load-panel>
-  <dxo-export
-    [enabled]="true"
-    [fileName]="
-      ('declaration-fraude' | localize) + '-' + (now | date: 'shortDate')
-    "
-  ></dxo-export>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-paging [enabled]="false"></dxo-paging>
 
   <dxi-column
     [dataField]="'dateDepartPrevueFournisseur'"
