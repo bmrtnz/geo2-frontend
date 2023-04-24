@@ -26,7 +26,7 @@ import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { from, iif, of } from "rxjs";
 import { concatMap, filter, map, mergeAll } from "rxjs/operators";
-// tslint:disable-next-line: max-line-length
+// eslint-disable-next-line max-len
 import { ConfirmationResultPopupComponent } from "../actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";

@@ -29,7 +29,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
   templateUrl: "./modification-list.component.html",
   styleUrls: ["./modification-list.component.scss"],
 })
-export class ModificationListComponent implements OnInit, OnChanges {
+export class ModificationListComponent implements OnChanges {
   @Input() entite: string;
   @Input() entiteID: string;
   @Output() modifs: any;
@@ -45,8 +45,6 @@ export class ModificationListComponent implements OnInit, OnChanges {
     public modificationsService: ModificationsService,
     public validationService: ValidationService,
   ) { }
-
-  ngOnInit() { }
 
   ngOnChanges() {
     this.modifs = [];

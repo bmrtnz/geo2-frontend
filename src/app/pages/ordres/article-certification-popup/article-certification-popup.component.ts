@@ -18,7 +18,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./article-certification-popup.component.html",
   styleUrls: ["./article-certification-popup.component.scss"]
 })
-export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
+export class ArticleCertificationPopupComponent implements OnChanges {
 
   @Input() public ordre: Ordre;
   @Input() public ordreLigne: OrdreLigne;
@@ -46,9 +46,6 @@ export class ArticleCertificationPopupComponent implements OnInit, OnChanges {
     private certificationsService: CertificationsService,
   ) {
     this.certifications = [];
-  }
-
-  ngOnInit() {
   }
 
   ngOnChanges() {

@@ -13,7 +13,7 @@ import { PartialObserver } from "rxjs";
   templateUrl: "./modif-detail-lignes-popup.component.html",
   styleUrls: ["./modif-detail-lignes-popup.component.scss"]
 })
-export class ModifDetailLignesPopupComponent implements OnChanges {
+export class ModifDetailLignesPopupComponent {
 
 
   @Input() public ligneDetail: any;
@@ -31,9 +31,6 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     private historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     private functionsService: FunctionsService
   ) { }
-
-  ngOnChanges() {
-  }
 
   public handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {

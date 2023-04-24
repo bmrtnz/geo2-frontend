@@ -26,7 +26,7 @@ export const navigation = [
         ],
     },
     {
-        /* tslint:disable-next-line max-line-length */
+        /* eslint-disable-next-line  max-len */
         html: "<i class=\"dx-icon dx-icon-box\"></i><div>Articles</div><div class=\"countArticle toValidate-indicator display-none\"></div>",
         path: "pages/nested/n/(articles/list)",
     },

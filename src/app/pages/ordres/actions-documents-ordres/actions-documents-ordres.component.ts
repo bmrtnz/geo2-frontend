@@ -21,7 +21,7 @@ import { ConfirmationResultPopupComponent } from "./confirmation-result-popup/co
   templateUrl: "./actions-documents-ordres.component.html",
   styleUrls: ["./actions-documents-ordres.component.scss"]
 })
-export class ActionsDocumentsOrdresComponent implements OnInit {
+export class ActionsDocumentsOrdresComponent {
 
   @Input() public ordre: Ordre;
   @Input() public gridEnvois: GridEnvoisComponent;
@@ -81,9 +81,6 @@ export class ActionsDocumentsOrdresComponent implements OnInit {
     });
     // if (this.orderConfirmationOnly) this.actionsFlux = this.actionsFlux.filter(flux => flux.id === "ORDRE");
     // console.log(this.orderConfirmationOnly, this.actionsFlux);
-  }
-
-  ngOnInit(): void {
   }
 
   showFluxDoxOtherBtns(e) {

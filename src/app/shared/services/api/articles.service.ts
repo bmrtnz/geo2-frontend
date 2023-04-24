@@ -14,7 +14,7 @@ import { mergeMap, take, takeUntil } from "rxjs/operators";
 
 export class ArticlesService extends ApiService implements APIRead {
 
-  /* tslint:disable-next-line max-line-length */
+  /* eslint-disable-next-line  max-len */
   fieldsFilter = /.\.*(?:id|description|espece|variete|blueWhaleStock|type|modeCulture|valide|commentaire|userModification|dateModification|preSaisie)$/i;
 
   constructor(

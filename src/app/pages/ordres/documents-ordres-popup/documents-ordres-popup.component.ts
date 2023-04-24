@@ -11,7 +11,7 @@ import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
   templateUrl: "./documents-ordres-popup.component.html",
   styleUrls: ["./documents-ordres-popup.component.scss"]
 })
-export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
+export class DocumentsOrdresPopupComponent implements OnChanges {
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public flux: string;
@@ -29,9 +29,6 @@ export class DocumentsOrdresPopupComponent implements OnInit, OnChanges {
   constructor(
     public localizeService: LocalizationService,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   ngOnChanges() {
     this.setTitle();

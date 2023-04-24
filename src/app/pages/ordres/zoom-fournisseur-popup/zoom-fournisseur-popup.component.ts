@@ -9,7 +9,7 @@ import { DxScrollViewComponent } from "devextreme-angular";
   styleUrls: ["./zoom-fournisseur-popup.component.scss"]
 })
 
-export class ZoomFournisseurPopupComponent implements AfterViewInit {
+export class ZoomFournisseurPopupComponent {
 
   @Input() public fournisseurLigneId: string;
   @Input() public fournisseurCode: string;
@@ -21,9 +21,6 @@ export class ZoomFournisseurPopupComponent implements AfterViewInit {
   constructor(
     private localizeService: LocalizationService
   ) { }
-
-  ngAfterViewInit() {
-  }
 
   setTitle(fournisseur) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);

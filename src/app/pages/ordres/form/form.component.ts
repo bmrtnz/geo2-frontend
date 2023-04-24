@@ -41,7 +41,7 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, defer, Observable, of, Subject } from "rxjs";
-// tslint:disable-next-line: max-line-length
+// eslint-disable-next-line max-len
 import { catchError, concatMap, concatMapTo, debounceTime, filter, first, map, startWith, switchMap, takeUntil, takeWhile } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";

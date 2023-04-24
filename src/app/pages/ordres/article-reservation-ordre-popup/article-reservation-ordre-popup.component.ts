@@ -1,4 +1,4 @@
-// tslint:disable-next-line: max-line-length
+// eslint-disable-next-line max-len
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, SimpleChanges, ViewChild } from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";

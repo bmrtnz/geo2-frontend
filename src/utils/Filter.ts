@@ -1,4 +1,4 @@
-// tslint:disable semicolon
+// eslint-disable  semi, @typescript-eslint/semi, @typescript-eslint/member-delimiter-style
 
 // Api::Filter
 type LogicalOperator = "and" | "or";

@@ -33,7 +33,7 @@ import { map } from "rxjs/operators";
   templateUrl: "./grid-cq-photos.component.html",
   styleUrls: ["./grid-cq-photos.component.scss"]
 })
-export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
+export class GridCqPhotosComponent implements OnChanges {
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -76,9 +76,6 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     this.currentImgComment = "";
     this.currentImgPath = "";
     this.enableFilters();
-  }
-
-  ngAfterViewInit() {
   }
 
   async enableFilters() {

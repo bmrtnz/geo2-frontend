@@ -26,7 +26,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
   templateUrl: "./grid-suivi.component.html",
   styleUrls: ["./grid-suivi.component.scss"],
 })
-export class GridSuiviComponent implements OnInit, AfterViewInit {
+export class GridSuiviComponent implements AfterViewInit {
   @Output() public ordreSelected = new EventEmitter<Ordre>();
   @Input() public filter: [];
   @ViewChild(DxDataGridComponent, { static: false })
@@ -49,8 +49,6 @@ export class GridSuiviComponent implements OnInit, AfterViewInit {
       this.detailedFields.map((property) => property.dataField),
     );
   }
-
-  ngOnInit() { }
 
   ngAfterViewInit() {
     this.enableFilters();

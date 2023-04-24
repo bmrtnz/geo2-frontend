@@ -7,7 +7,7 @@ import { DxScrollViewComponent } from "devextreme-angular";
   templateUrl: "./zoom-client-article-popup.component.html",
   styleUrls: ["./zoom-client-article-popup.component.scss"]
 })
-export class ZoomClientArticlePopupComponent implements AfterViewInit, OnChanges {
+export class ZoomClientArticlePopupComponent implements OnChanges {
 
   @Input() public articleLigneId: string;
 
@@ -18,9 +18,6 @@ export class ZoomClientArticlePopupComponent implements AfterViewInit, OnChanges
   constructor(
     private localizeService: LocalizationService
   ) { }
-
-  ngAfterViewInit() {
-  }
 
   ngOnChanges() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);

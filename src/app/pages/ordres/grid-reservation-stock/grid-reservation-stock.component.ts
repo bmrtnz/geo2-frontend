@@ -115,7 +115,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     const fournisseur = event.data.fournisseurCode;
     const proprietaire = event.data.proprietaireCode;
     let desc =
-      // tslint:disable-next-line: max-line-length
+      // eslint-disable-next-line max-len
       `Ordre ${this.ordreLigneInfo.ordre.numero}/${this.ordreLigneInfo.ordre.entrepot.code} (${this.authService.currentUser.nomUtilisateur})`;
     desc = desc.substring(0, 35); // Database limitation
     this.ordreLignesService.getOne_v2(this.ordreLigneInfo.id, ["ordre.id"])
@@ -150,7 +150,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   private alertNegativeReservation(quantiteDisponible: number, fournisseur: string) {
     return defer(() => of(quantiteDisponible - this.ordreLigneInfo.nombreColisCommandes)).pipe(
       concatMap(prediction => prediction < 0
-        // tslint:disable-next-line: max-line-length
+        // eslint-disable-next-line max-len
         ? confirm(`le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, voulez-vous quand même déstocker ?`, "Attention")
         : of(true)),
       filter(result => !!result),

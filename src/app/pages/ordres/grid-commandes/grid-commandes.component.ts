@@ -322,7 +322,7 @@ export class GridCommandesComponent implements OnInit, OnChanges, AfterViewInit 
     if (change.type === "update")
       return new Promise(async (rsv, rjt) => {
 
-        /* tslint:disable-next-line:prefer-const */
+        /* eslint-disable-next-line prefer-const */
         let [name, value] = Object.entries(change.data)[0];
 
         if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))

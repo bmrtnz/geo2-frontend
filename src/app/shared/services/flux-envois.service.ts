@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-// tslint:disable-next-line: max-line-length
+// eslint-disable-next-line max-len
 import { ConfirmationResultPopupComponent } from "app/pages/ordres/actions-documents-ordres/confirmation-result-popup/confirmation-result-popup.component";
 import { GridsService } from "app/pages/ordres/grids.service";
 import notify from "devextreme/ui/notify";

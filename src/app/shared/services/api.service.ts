@@ -601,7 +601,7 @@ export abstract class ApiService implements OnDestroy {
         if (typeof node?.[0] === "object") {
           currentFilter[index] = `(${next(node, negate).join(" ")})`;
         } else {
-          /* tslint:disable-next-line:prefer-const */
+          /* eslint-disable-next-line prefer-const */
           let [selector, operator, value] = node;
           const dxOperator = operator;
           operator = this.mapOperator(operator, negate);

@@ -26,7 +26,7 @@ const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
   templateUrl: "./grid-modif-commande-edi.component.html",
   styleUrls: ["./grid-modif-commande-edi.component.scss"]
 })
-export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterViewInit {
+export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
   public readonly env = environment;
 
   public columnChooser = environment.columnChooser;
@@ -71,9 +71,6 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges, AfterVi
 
   ngOnChanges() {
     if (this.ordreEdiId) this.enableFilters();
-  }
-
-  ngAfterViewInit() {
   }
 
   enableFilters() {

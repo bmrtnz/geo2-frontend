@@ -32,7 +32,7 @@ import {
   templateUrl: "./grid-envois.component.html",
   styleUrls: ["./grid-envois.component.scss"],
 })
-export class GridEnvoisComponent implements OnInit, ToggledGrid {
+export class GridEnvoisComponent implements ToggledGrid {
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -61,8 +61,6 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
       map((config) => config.columns),
     );
   }
-
-  ngOnInit() { }
 
   async enableFilters() {
     if (this?.ordre?.id) {

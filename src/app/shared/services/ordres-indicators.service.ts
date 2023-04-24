@@ -122,7 +122,7 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component"
     ),
-    /* tslint:disable-next-line max-line-length */
+    /* eslint-disable-next-line  max-len */
     explicitSelection: ["id", "pays.description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
   },
   {
@@ -137,9 +137,9 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component"
     ),
-    // tslint:disable-next-line: max-line-length
+    // eslint-disable-next-line max-len
     explicitSelection: ["id", "numero", "referenceClient", "codeChargement", "dateDepartPrevue", "dateLivraisonPrevue", "codeClient", "codeAlphaEntrepot", "dateCreation", "type.id", "client.raisonSocial", "secteurCommercial.id", "entrepot.raisonSocial", "campagne.id", "numeroContainer"],
-    /* tslint:disable-next-line max-line-length */
+    /* eslint-disable-next-line  max-len */
     select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|totalNombrePalettesCommandees|secteurCommercial\.id|codeChargement|entrepot\.raisonSocial|campagne\.id|numeroContainer)$/,
   },
   {

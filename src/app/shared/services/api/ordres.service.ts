@@ -37,7 +37,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     super(apollo, Ordre);
   }
 
-  /* tslint:disable-next-line */
+  /* eslint-disable-next-line */
   queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|prixUnitaireTarifTransport|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };

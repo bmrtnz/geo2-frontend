@@ -8,7 +8,7 @@ import { CodifsDevalexpService } from "app/shared/services/api/codifs-devalexp.s
   templateUrl: "./choix-raison-decloture-popup.component.html",
   styleUrls: ["./choix-raison-decloture-popup.component.scss"]
 })
-export class ChoixRaisonDecloturePopupComponent implements OnInit {
+export class ChoixRaisonDecloturePopupComponent {
 
   @Output() public reasonChosen = new EventEmitter();
 
@@ -22,9 +22,6 @@ export class ChoixRaisonDecloturePopupComponent implements OnInit {
   constructor(
     public codifsDevalexpService: CodifsDevalexpService
   ) { }
-
-  ngOnInit() {
-  }
 
   onShowing(e) {
     this.dataSource = this.codifsDevalexpService.getDataSource_v2(["id", "description"]);

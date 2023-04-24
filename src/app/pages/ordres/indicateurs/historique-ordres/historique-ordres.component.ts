@@ -6,14 +6,11 @@ import { AuthService } from "app/shared/services";
   templateUrl: "./historique-ordres.component.html",
   styleUrls: ["./historique-ordres.component.scss"]
 })
-export class HistoriqueOrdresComponent implements OnInit {
+export class HistoriqueOrdresComponent {
 
   constructor(
     public authService: AuthService,
   ) { }
-
-  ngOnInit(): void {
-  }
 
 }
 

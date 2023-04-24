@@ -48,7 +48,7 @@ import { switchMap } from "rxjs/operators";
   templateUrl: "./article-details.component.html",
   styleUrls: ["./article-details.component.scss"],
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges, AfterViewInit {
+export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
 
   @Input() public articleLigneId: string;
 
@@ -231,9 +231,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
       )
       .subscribe(res => this.afterLoadInitForm(res));
 
-  }
-
-  ngAfterViewInit(): void {
   }
 
   ngOnChanges() {

@@ -510,7 +510,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
 
   saveData(fournisseur, validModif?) {
 
-    /* tslint:disable-next-line max-line-length */
+    /* eslint-disable-next-line  max-len */
     const certifications = this.formGroup.get("certifications").dirty && this.mapCertificationsForSave(this.formGroup.get("certifications").value);
 
     ((fournisseur.valide !== undefined && ((this.fournisseur.valide !== fournisseur.valide) || validModif) && !this.createMode) ?

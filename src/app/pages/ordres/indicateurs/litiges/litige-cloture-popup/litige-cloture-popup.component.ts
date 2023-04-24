@@ -24,7 +24,7 @@ export enum ClotureTarget {
   templateUrl: "./litige-cloture-popup.component.html",
   styleUrls: ["./litige-cloture-popup.component.scss"]
 })
-export class LitigeCloturePopupComponent implements OnInit, OnChanges {
+export class LitigeCloturePopupComponent implements OnChanges {
 
   @Input() public infosLitige: any;
   @Output() public clotureChanged = new EventEmitter<[Litige["id"], ClotureTarget]>();
@@ -48,9 +48,6 @@ export class LitigeCloturePopupComponent implements OnInit, OnChanges {
     private currentCompanyService: CurrentCompanyService
   ) {
     this.choices = Object.values(ClotureTarget);
-  }
-
-  ngOnInit() {
   }
 
   ngOnChanges() {

@@ -12,7 +12,7 @@ import { take } from "rxjs/operators";
   templateUrl: "./ajout-etape-logistique-popup.component.html",
   styleUrls: ["./ajout-etape-logistique-popup.component.scss"]
 })
-export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
+export class AjoutEtapeLogistiquePopupComponent {
 
   @Input() public lieuxGroupage: string[];
   @Input() public ligneId: string;
@@ -31,9 +31,6 @@ export class AjoutEtapeLogistiquePopupComponent implements OnChanges {
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private functionsService: FunctionsService,
   ) { }
-
-  ngOnChanges() {
-  }
 
   cancelClick() {
     this.visible = false;
