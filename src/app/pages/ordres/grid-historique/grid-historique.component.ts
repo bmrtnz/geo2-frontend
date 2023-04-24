@@ -6,7 +6,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { historique } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -38,7 +38,7 @@ export class GridHistoriqueComponent {
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext,
   ) {
-    this.detailedFields = historique.columns as GridColumn[];
+    this.detailedFields = gridsConfig.historique.columns as GridColumn[];
     this.dataSource = mruOrdresService.getHeadListDataSource(
       this.detailedFields.map((property) => property.dataField),
     );

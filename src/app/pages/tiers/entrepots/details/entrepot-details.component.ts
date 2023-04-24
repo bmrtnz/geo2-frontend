@@ -19,7 +19,7 @@ import { TypesCamionService } from "app/shared/services/api/types-camion.service
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { entrepot as entrepotsGridConfig } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { tap } from "rxjs/operators";
@@ -434,7 +434,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils
       .extractDirty(this.formGroup.controls, Entrepot.getKeyField());
-    const gridFields = entrepotsGridConfig.columns
+    const gridFields = gridsConfig.entrepot.columns
       .map(({ dataField }) => dataField);
 
     return [

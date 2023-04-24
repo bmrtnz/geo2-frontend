@@ -36,7 +36,7 @@ import { TypesService } from "app/shared/services/api/types.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { article as articlesGridConfig } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import { DxAccordionComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -490,7 +490,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
       Article.getKeyField(),
     );
 
-    const gridFields = articlesGridConfig.columns.map(
+    const gridFields = gridsConfig.article.columns.map(
       ({ dataField }) => dataField,
     );
 

@@ -25,7 +25,7 @@ import { PaysService } from "app/shared/services/api/pays.service";
 import { RegimesTvaService } from "app/shared/services/api/regimes-tva.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import * as gridsConfig from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { tap } from "rxjs/operators";

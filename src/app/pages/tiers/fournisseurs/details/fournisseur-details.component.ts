@@ -28,7 +28,7 @@ import { RegimesTvaService } from "app/shared/services/api/regimes-tva.service";
 import { TypesFournisseurService } from "app/shared/services/api/types-fournisseur.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { fournisseur as fournisseursGridConfig } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import { DxAccordionComponent, DxCheckBoxComponent, DxValidatorComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
@@ -640,7 +640,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils
       .extractDirty(this.formGroup.controls, Fournisseur.getKeyField());
-    const gridFields = fournisseursGridConfig.columns
+    const gridFields = gridsConfig.fournisseur.columns
       .map(({ dataField }) => dataField);
 
     return [...new Set([

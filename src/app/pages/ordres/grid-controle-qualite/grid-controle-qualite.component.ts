@@ -3,7 +3,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
-import * as gridConfig from "assets/configurations/grids.json";
+import gridConfig from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import { DxButtonComponent, DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";

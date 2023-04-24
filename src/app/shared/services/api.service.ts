@@ -237,7 +237,7 @@ export abstract class ApiService implements OnDestroy {
    */
   public asInstancedListCount<T = any>(
     relayPage: RelayPage<T>,
-    mapper = (v: Record<string, any>) => new this.model(v) as T
+    mapper = (v: Record<string, any>) => new (this.model as any)(v) as T
   ) {
     return {
       data: this.asList<T>(relayPage).map(mapper),

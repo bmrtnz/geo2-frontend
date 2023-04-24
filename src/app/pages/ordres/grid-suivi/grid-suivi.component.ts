@@ -16,7 +16,7 @@ import { LocalizationService } from "app/shared/services/localization.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { ordre } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import { TabContext } from "../root/root.component";
 import { GridColumn } from "basic";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -44,7 +44,7 @@ export class GridSuiviComponent implements AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext,
   ) {
-    this.detailedFields = ordre.columns as GridColumn[];
+    this.detailedFields = gridsConfig.ordre.columns as GridColumn[];
     this.dataSource = ordresService.getDataSource_v2(
       this.detailedFields.map((property) => property.dataField),
     );

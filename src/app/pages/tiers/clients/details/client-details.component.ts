@@ -53,7 +53,7 @@ import {
   Role,
 } from "../../../../shared/models";
 import { AuthService, ClientsService } from "../../../../shared/services";
-import { client as clientsGridConfig } from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
 import { EncoursClientPopupComponent } from "../encours-client/encours-client-popup.component";
@@ -938,7 +938,7 @@ export class ClientDetailsComponent
       Client.getKeyField(),
     );
 
-    const gridFields = clientsGridConfig.columns.map(
+    const gridFields = gridsConfig.client.columns.map(
       ({ dataField }) => dataField,
     );
 
