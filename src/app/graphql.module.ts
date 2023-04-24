@@ -6,7 +6,7 @@ import {
   StoreObject
 } from "@apollo/client/core";
 import { onError } from "@apollo/client/link/error";
-import { APOLLO_OPTIONS } from "apollo-angular";
+import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
 import { environment } from "../environments/environment";
 import { GridConfig } from "./shared/models";
@@ -54,6 +54,9 @@ export function createApollo(httpLink: HttpLink) {
 }
 
 @NgModule({
+  imports: [
+    ApolloModule
+  ],
   providers: [
     {
       provide: APOLLO_OPTIONS,
