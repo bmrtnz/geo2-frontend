@@ -32,7 +32,7 @@ export class ArticlesService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>, fetchPol?) {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: this.model.getLabelField() as string }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

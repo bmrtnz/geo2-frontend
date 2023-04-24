@@ -18,7 +18,7 @@ export class GroupesEmballageService extends ApiService implements APIRead {
 
     getDataSource() {
         return new DataSource({
-            sort: [{ selector: this.model.getLabelField() }],
+            sort: [{ selector: this.model.getLabelField() as string }],
             store: this.createCustomStore({
                 key: ["id", "especeId"],
                 load: (options: LoadOptions) =>
@@ -81,7 +81,7 @@ export class GroupesEmballageService extends ApiService implements APIRead {
 
     getDistinctDataSource(columns: Array<string>) {
         return new DataSource({
-            sort: [{ selector: this.model.getKeyField() }],
+            sort: [{ selector: this.model.getKeyField() as string }],
             store: this.createCustomStore({
                 key: ["id", "especeId"],
                 load: (options: LoadOptions) =>

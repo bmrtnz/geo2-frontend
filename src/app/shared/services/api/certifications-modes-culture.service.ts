@@ -32,9 +32,9 @@ export class CertificationsModesCultureService extends ApiService implements API
   getDataSource_v2(columns: Array<string>, pageSize?) {
     return new DataSource({
       sort: [
-        { selector: this.model.getKeyField() }
+        { selector: this.model.getKeyField() as string }
       ],
-      pageSize : pageSize ? pageSize : 20,
+      pageSize: pageSize ? pageSize : 20,
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 

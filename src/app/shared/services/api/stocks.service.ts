@@ -4,7 +4,7 @@ import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import ArrayStore from "devextreme/data/array_store";
-import DataSource from "devextreme/data/data_source";
+import DataSource from 'devextreme/data/data_source';
 import { LoadOptions } from "devextreme/data/load_options";
 import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
@@ -181,7 +181,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
           data: data.allLigneReservationList,
           key: "id",
         }),
-        remove: key => this.stockMouvementsService.deleteStockMouvement(key).toPromise(),
+        remove: key => this.stockMouvementsService.deleteStockMouvement(key).toPromise() as Promise<any>,
       })));
   }
 

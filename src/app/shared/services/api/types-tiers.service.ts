@@ -28,7 +28,7 @@ export class TypesTiersService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>, pageSize?) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       pageSize: pageSize ? pageSize : 20,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>

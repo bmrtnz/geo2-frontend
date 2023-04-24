@@ -2,11 +2,11 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
-import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { AuthService } from "app/shared/services";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
+import DataSource from 'devextreme/data/data_source';
 
 @Injectable({
   providedIn: "root",
@@ -55,7 +55,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
               },
             );
           }),
-        byKey: this.byKey,
+        byKey: this.byKey as any,
       }),
     });
   }
@@ -134,7 +134,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
 
   private byKey(columns: Array<string>) {
     return (key) =>
-      new Promise(async (resolve) => {
+      new Promise<any>(async (resolve) => {
         const query = await this.buildGetOne_v2(columns);
         type Response = { MRUEntrepot: MRUEntrepot };
         const variables = { id: key };
@@ -147,7 +147,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

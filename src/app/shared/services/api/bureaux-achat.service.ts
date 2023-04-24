@@ -17,7 +17,7 @@ export class BureauxAchatService extends ApiService implements APIRead {
 
   getDataSource() {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -90,7 +90,7 @@ export class BureauxAchatService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string> | Set<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getKeyField() }],
+      sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

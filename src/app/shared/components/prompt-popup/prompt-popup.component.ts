@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, NgModule, Output, ViewChild } from "@angular/core";
+import { FormsModule, NgForm } from "@angular/forms";
 import {
   DxButtonModule,
   DxPopupComponent,
   DxPopupModule,
-  DxTextBoxComponent,
-  DxTextBoxModule,
-  DxSelectBoxModule,
-  DxValidatorComponent, DxValidatorModule, DxSelectBoxComponent
-} from "devextreme-angular";
-import { FormsModule, NgForm } from "@angular/forms";
-import {PatternRule, RangeRule, RequiredRule} from "devextreme/ui/validation_rules";
-import { SharedModule } from "../../shared.module";
 
-type RulesArrayType = (RangeRule | RequiredRule | PatternRule)[];
+
+
+  DxSelectBoxComponent, DxSelectBoxModule, DxTextBoxComponent,
+  DxTextBoxModule,
+
+  DxValidatorComponent, DxValidatorModule
+} from "devextreme-angular";
+import { SharedModule } from "../../shared.module";
 
 @Component({
   selector: "app-prompt-popup",
@@ -38,7 +38,7 @@ export class PromptPopupComponent {
   @Output() whenHiding = new EventEmitter<any>();
   @Output() whenShown = new EventEmitter<any>();
 
-  commentValidationRules: RulesArrayType;
+  commentValidationRules;
   validText: string;
   cancelText: string;
   commentMaxLength: number;
@@ -64,7 +64,7 @@ export class PromptPopupComponent {
   }
 
   setValidationRules() {
-    const rules: RulesArrayType = [
+    const rules: any = [
       { type: "required" },
       { type: "stringLength", min: this.commentMinLength ?? 1 },
       { type: "stringLength", max: this.commentMaxLength ?? 512 }

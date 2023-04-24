@@ -3,6 +3,7 @@ import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariable
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
+import { BaseGroupDescriptor, GroupDescriptor } from 'devextreme/data';
 import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
@@ -702,7 +703,7 @@ export abstract class ApiService implements OnDestroy {
     // Sort
     if (options.sort)
       variables.pageable.sort = {
-        orders: options.sort
+        orders: (options.sort as Array<any>)
           .map(({ selector: property, desc }) => ({
             property,
             direction: desc ? Direction.DESC : Direction.ASC
@@ -711,7 +712,7 @@ export abstract class ApiService implements OnDestroy {
 
     // totalSummary
     if (options.totalSummary)
-      variables.summary = options.totalSummary
+      variables.summary = (options.totalSummary as Array<any>)
         .map(({ selector, summaryType }) => ({
           selector,
           summaryType: SummaryType[summaryType],
@@ -823,7 +824,7 @@ export abstract class ApiService implements OnDestroy {
     const done = new Subject();
 
     // API only support one field
-    const field = options.group.length ? options.group[0].selector : options.group.selector;
+    const field = Array.isArray(options.group) ? (options.group[0] as BaseGroupDescriptor<T>).selector : (options.group as BaseGroupDescriptor<T>).selector;
     const distinctQuery = this.buildDistinct();
 
     // Full filter fix

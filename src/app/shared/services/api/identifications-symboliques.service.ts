@@ -20,7 +20,7 @@ export class IdentificationsSymboliquesService
 
     getDataSource() {
         return new DataSource({
-            sort: [{ selector: this.model.getKeyField() }],
+            sort: [{ selector: this.model.getKeyField() as string }],
             store: this.createCustomStore({
                 key: ["id", "especeId"],
                 load: (options: LoadOptions) =>

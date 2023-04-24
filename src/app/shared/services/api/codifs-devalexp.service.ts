@@ -32,7 +32,7 @@ export class CodifsDevalexpService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
-        { selector: this.model.getKeyField() }
+        { selector: this.model.getKeyField() as string }
       ],
       pageSize: 200,
       store: this.createCustomStore({

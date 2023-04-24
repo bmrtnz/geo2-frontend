@@ -97,7 +97,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   getDataSource(indicator?: Operation, depth = 2, qFilter = this.queryFilter) {
     return new DataSource({
       sort: [
-        { selector: this.model.getLabelField() }
+        { selector: this.model.getLabelField() as string }
       ],
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {

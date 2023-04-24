@@ -37,7 +37,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       mutation: gql(this.buildDeleteGraph()),
       variables: { id },
       fetchPolicy: "no-cache",
-    }).toPromise()
+    }).toPromise<any>()
 
   constructor(
     apollo: Apollo,

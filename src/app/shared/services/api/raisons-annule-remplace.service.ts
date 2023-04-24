@@ -28,7 +28,7 @@ export class RaisonsAnnuleRemplaceService extends ApiService implements APIRead 
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getKeyField() }],
+      sort: [{ selector: this.model.getKeyField() as string }],
       pageSize: 100,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>

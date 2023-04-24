@@ -162,7 +162,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             if (options.group) {
 
               // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
-              if (options.group.find(({ selector }) => selector === "ordre.statut"))
+              if ((options.group as Array<any>).find(({ selector }) => selector === "ordre.statut"))
                 return resolve({
                   data: StatutKeys.map(key => ({ key })) as DistinctInfo[],
                   totalCount: 0,

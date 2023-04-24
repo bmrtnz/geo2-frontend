@@ -32,9 +32,9 @@ export class DepartementsService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [
-        { selector: this.model.getKeyField() }
+        { selector: this.model.getKeyField() as string }
       ],
-      pageSize : 200,
+      pageSize: 200,
       store: this.createCustomStore({
         load: (options: LoadOptions) => new Promise(async (resolve) => {
 

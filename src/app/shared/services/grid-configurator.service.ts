@@ -6,7 +6,7 @@ import {
   DxoColumnChooserComponent,
   DxoStateStoringComponent
 } from "devextreme-angular/ui/nested";
-import dxDataGrid from "devextreme/ui/data_grid";
+import dxDataGrid, { ColumnChooser, StateStoring } from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
@@ -534,7 +534,7 @@ export class GridConfiguratorService {
    * @param grid Targeted grid config id
    */
   private autoConfigureStateStoring(
-    state: DxoStateStoringComponent,
+    state: StateStoring,
     grid: Grid,
   ) {
     state.enabled = true;
@@ -549,7 +549,7 @@ export class GridConfiguratorService {
    * @param chooser DX ColumnChooser component
    * @param grid Targeted grid config id
    */
-  private autoConfigureColumnChooser(chooser: DxoColumnChooserComponent) {
+  private autoConfigureColumnChooser(chooser: ColumnChooser) {
     chooser.enabled = true;
     chooser.mode = "select";
     chooser.title = this.localizationService.localize("columnChooser");

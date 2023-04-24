@@ -135,7 +135,7 @@ export class DocumentsNumService extends ApiService {
       store: this.createCustomStore({
         key: ["ordreNumero", "typeDocument", "anneeCreation"],
         load: (options: LoadOptions) =>
-          iif(() => options.group,
+          iif(() => !!options.group,
             this.apollo
               .query<{ distinct: RelayPage<DistinctInfo>, totalCount: number, totalPage: number }>({
                 query: gql(this.buildDistinctGraph()),

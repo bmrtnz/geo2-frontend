@@ -17,7 +17,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
 
   getDataSource(depth = 1, filter = this.listRegexp) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -133,7 +133,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise();
+          return this.watchDeleteQuery({ variables }).toPromise<any>() as Promise<any>;
         },
       }),
     });
