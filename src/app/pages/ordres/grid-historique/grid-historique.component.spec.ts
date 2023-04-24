@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ApolloTestingModule } from "apollo-angular/testing";
 import Utilisateur from "app/shared/models/utilisateur.model";
@@ -15,7 +15,7 @@ describe("GridHistoriqueComponent", () => {
     let mockCurrentCompanyService;
     let mockAuthService;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         mockCurrentCompanyService = jasmine.createSpyObj(["getCompany"]);
         mockCurrentCompanyService.getCompany.and.returnValue({
             id: "SA",

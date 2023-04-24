@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { PushHistoryPopupComponent } from "./push-history-popup.component";
 
@@ -6,7 +6,7 @@ describe("PromptPopupComponent", () => {
     let component: PushHistoryPopupComponent;
     let fixture: ComponentFixture<PushHistoryPopupComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [PushHistoryPopupComponent],
         }).compileComponents();

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -8,7 +8,7 @@ describe("GridNavigatorComponent", () => {
     let component: GridNavigatorComponent;
     let fixture: ComponentFixture<GridNavigatorComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [GridNavigatorComponent],
             imports: [RouterTestingModule],

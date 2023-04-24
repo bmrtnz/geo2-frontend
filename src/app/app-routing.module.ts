@@ -25,6 +25,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {
       enableTracing: environment.debugRouting,
       onSameUrlNavigation: "reload",
+      relativeLinkResolution: "legacy"
     }),
     SharedModule,
   ],

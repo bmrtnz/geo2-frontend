@@ -137,9 +137,9 @@ export class AuthService {
 
   public createLoginRedirectURLTree(redirect: string) {
     return this.router.createUrlTree(["/profile/login"], {
-      skipLocationChange: true,
+      /* Removed unsupported properties by Angular migration: skipLocationChange. */
       queryParamsHandling: "merge",
-      queryParams: { redirect },
+      queryParams: { redirect }
     });
   }
 
