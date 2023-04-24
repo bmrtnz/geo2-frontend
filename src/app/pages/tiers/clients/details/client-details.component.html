@@ -796,7 +796,7 @@
                       [readOnly]="
                         readOnlyMode ||
                         (formGroup.get('secteur').value
-                          ? formGroup.get('secteur').value.id == 'F'
+                          ? formGroup.get('secteur').value.id === 'F'
                           : false)
                       "
                     >
