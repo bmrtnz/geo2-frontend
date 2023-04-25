@@ -1,17 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 // App style
-@import "~scss/font";
-@import "~scss/icons";
+@import "scss/font";
+@import "scss/icons";
 
 // Dx style customisation
-@import "~scss/dx/base";
-@import "~scss/dx/datagrid";
-@import "~scss/dx/form";
-@import "~scss/dx/accordion";
+@import "scss/dx/base";
+@import "scss/dx/datagrid";
+@import "scss/dx/form";
+@import "scss/dx/accordion";
 
 
 .img-responsive {

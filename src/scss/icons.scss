@@ -1,7 +1,7 @@
 $material-design-icons-class-icons-generate-codepoints: true;
 $material-design-icons-font-directory-path: "~material-design-icons-iconfont/dist/fonts/";
 
-@import "~material-design-icons-iconfont/src/material-design-icons";
+@import "material-design-icons-iconfont/src/material-design-icons";
 
 /* Rules for sizing the icon. */
 .material-icons.sm {
@@ -41,7 +41,7 @@ $material-design-icons-font-directory-path: "~material-design-icons-iconfont/dis
 .dx-field-value-with-icon {
   display: flex;
 
-  & > :first-child {
+  &> :first-child {
     flex-grow: 2;
   }
 }
