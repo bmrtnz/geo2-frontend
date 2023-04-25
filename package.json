@@ -26,7 +26,7 @@
     "e2e:no-serve": "ng e2e --devServerTarget=",
     "e2e:headless": "ng e2e --configuration=headless",
     "build-themes": "devextreme build",
-    "postinstall": "npm run build-themes && ngcc",
+    "postinstall": "npm run build-themes",
     "devx": "devextreme",
     "prepare": "husky install"
   },
