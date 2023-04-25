@@ -54,6 +54,106 @@ export type TabPanelItem = dxTabPanelItem & {
 
 export type TabChangeData = { status: "in" | "out", item: Partial<TabPanelItem> };
 
+@Injectable()
+export class TabContext {
+
+  private componentRef: RootComponent;
+  public onTabChange: ConnectableObservable<TabChangeData>;
+
+  constructor(
+    private route: ActivatedRoute,
+    private localization: LocalizationService,
+    private router: Router,
+    private currentCompanyService: CurrentCompanyService,
+  ) { }
+
+  public registerComponent(instance: RootComponent) {
+    this.componentRef = instance;
+    this.onTabChange = this.componentRef.tabChangeEvent
+      .pipe(
+        publish(),
+        refCount(),
+      ) as ConnectableObservable<TabChangeData>;
+  }
+
+  /**
+   * Return tab panel selected item
+   */
+  public getSelectedItem() {
+    return this.componentRef.route.paramMap
+      .pipe(
+        share(),
+        map(params => {
+          const selected = params.get(RouteParam.TabID);
+          return this.componentRef.items.find(item => item.id === selected);
+        }),
+      );
+  }
+
+  /**
+   * Push and select ordre in tab panel by routing
+   * @param numero Ordre numero
+   * @param campagne Campagne id
+   * @param toastInfo Shows toast by default, false it not desired
+   */
+  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
+    if (!numero) return;
+    toastInfo = (toastInfo === undefined) ? true : toastInfo;
+    if (toastInfo) notify(this.localization.localize("ouverture-ordre").replace("&NO", numero), "info", 1500);
+    const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
+    return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+  }
+
+  /**
+   * Push and select ordre in tab panel by routing
+   * @param numero Ordre numero
+   * @param campagne Campagne id
+   */
+  public closeOrdre(numero: string, campagne?: string) {
+    const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
+    return this.mutate("CLOSE", TabType.Ordre, `${campagneID}-${numero}`);
+  }
+
+  /**
+   * Push and select indicator in tab panel by routing
+   * @param id Indicator id
+   */
+  public openIndicator(id: string) {
+    return this.mutate("OPEN", TabType.Indicator, id);
+  }
+
+  private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
+    const previous = this.componentRef.route.snapshot.paramMap.get(RouteParam.TabID);
+    const alter = (params: ParamMap) => action === "OPEN"
+      ? new Set([...params.getAll(tabType), id])
+      : new Set([...params.getAll(tabType)].filter(v => v !== id));
+
+    this.route.queryParamMap
+      .pipe(
+        first(),
+        switchMap(params => this.router
+          .navigate(["pages/ordres", id],
+            {
+              queryParams: {
+                [tabType]: [...alter(params)],
+              },
+              queryParamsHandling: "merge",
+              state: { [PREVIOUS_STATE]: previous },
+            })
+        )
+      ).subscribe();
+  }
+
+  public parseTabID(tabID: string): [string, string?] {
+    let campagneID;
+    let numero = tabID;
+    if (tabID.match(/\d+-\w+/))
+      [campagneID, numero] = tabID.split("-");
+    return [numero, campagneID];
+  }
+
+}
+
 @Component({
   selector: "app-root",
   templateUrl: "./root.component.html",
@@ -366,102 +466,3 @@ export class RootComponent implements OnInit, OnDestroy {
 })
 export class LoadingTabComponent { }
 
-@Injectable()
-export class TabContext {
-
-  private componentRef: RootComponent;
-  public onTabChange: ConnectableObservable<TabChangeData>;
-
-  constructor(
-    private route: ActivatedRoute,
-    private localization: LocalizationService,
-    private router: Router,
-    private currentCompanyService: CurrentCompanyService,
-  ) { }
-
-  public registerComponent(instance: RootComponent) {
-    this.componentRef = instance;
-    this.onTabChange = this.componentRef.tabChangeEvent
-      .pipe(
-        publish(),
-        refCount(),
-      ) as ConnectableObservable<TabChangeData>;
-  }
-
-  /**
-   * Return tab panel selected item
-   */
-  public getSelectedItem() {
-    return this.componentRef.route.paramMap
-      .pipe(
-        share(),
-        map(params => {
-          const selected = params.get(RouteParam.TabID);
-          return this.componentRef.items.find(item => item.id === selected);
-        }),
-      );
-  }
-
-  /**
-   * Push and select ordre in tab panel by routing
-   * @param numero Ordre numero
-   * @param campagne Campagne id
-   * @param toastInfo Shows toast by default, false it not desired
-   */
-  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
-    if (!numero) return;
-    toastInfo = (toastInfo === undefined) ? true : toastInfo;
-    if (toastInfo) notify(this.localization.localize("ouverture-ordre").replace("&NO", numero), "info", 1500);
-    const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
-    return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
-  }
-
-  /**
-   * Push and select ordre in tab panel by routing
-   * @param numero Ordre numero
-   * @param campagne Campagne id
-   */
-  public closeOrdre(numero: string, campagne?: string) {
-    const campagneID = campagne ?? this.currentCompanyService.getCompany().campagne.id;
-    return this.mutate("CLOSE", TabType.Ordre, `${campagneID}-${numero}`);
-  }
-
-  /**
-   * Push and select indicator in tab panel by routing
-   * @param id Indicator id
-   */
-  public openIndicator(id: string) {
-    return this.mutate("OPEN", TabType.Indicator, id);
-  }
-
-  private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
-    const previous = this.componentRef.route.snapshot.paramMap.get(RouteParam.TabID);
-    const alter = (params: ParamMap) => action === "OPEN"
-      ? new Set([...params.getAll(tabType), id])
-      : new Set([...params.getAll(tabType)].filter(v => v !== id));
-
-    this.route.queryParamMap
-      .pipe(
-        first(),
-        switchMap(params => this.router
-          .navigate(["pages/ordres", id],
-            {
-              queryParams: {
-                [tabType]: [...alter(params)],
-              },
-              queryParamsHandling: "merge",
-              state: { [PREVIOUS_STATE]: previous },
-            })
-        )
-      ).subscribe();
-  }
-
-  public parseTabID(tabID: string): [string, string?] {
-    let campagneID;
-    let numero = tabID;
-    if (tabID.match(/\d+-\w+/))
-      [campagneID, numero] = tabID.split("-");
-    return [numero, campagneID];
-  }
-
-}

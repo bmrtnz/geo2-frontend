@@ -17,6 +17,17 @@ type ColumnSettings = {
 };
 export type ColumnsSettings = Record<string, ColumnSettings>;
 
+@Injectable()
+export class CellDisplayStore {
+  private store: Record<string, Record<string, any>> = {};
+  public set(cell: Cell, value: any) {
+    this.store[cell.key] = { [cell.column.name]: value };
+  }
+  public get(cell: Cell) {
+    return this.store[cell.key]?.[cell.column.name];
+  }
+}
+
 @Component({
   selector: "app-entity-cell-template",
   templateUrl: "./entity-cell-template.component.html",
@@ -99,17 +110,6 @@ export class CellDisplayPipe implements PipeTransform {
 
   transform(cell: Cell) {
     return this.store.get(cell) ?? cell.displayValue;
-  }
-}
-
-@Injectable()
-export class CellDisplayStore {
-  private store: Record<string, Record<string, any>> = {};
-  public set(cell: Cell, value: any) {
-    this.store[cell.key] = { [cell.column.name]: value };
-  }
-  public get(cell: Cell) {
-    return this.store[cell.key]?.[cell.column.name];
   }
 }
 
