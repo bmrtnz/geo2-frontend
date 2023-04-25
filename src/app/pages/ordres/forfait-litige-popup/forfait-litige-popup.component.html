@@ -4,14 +4,13 @@
   [fullScreen]="this.popupFullscreen"
   width="800"
   height="auto"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
   [resizeEnabled]="true"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}&nbsp;</div>
     <dx-button
@@ -28,11 +27,9 @@
     ></dx-button>
   </div>
 
-  <app-grid-forfait-litige
-   [infosLitige]="litige"
-  ></app-grid-forfait-litige>
+  <app-grid-forfait-litige [infosLitige]="litige"></app-grid-forfait-litige>
 
-  <br>
+  <br />
 
   <div class="popup-buttons-container">
     <dx-button
@@ -40,6 +37,6 @@
       [disabled]="datagridComponent?.datagrid?.instance?.hasEditData()"
       text="ok"
       (onClick)="hidePopup()"
-      ></dx-button>
-    </div>
+    ></dx-button>
+  </div>
 </dx-popup>

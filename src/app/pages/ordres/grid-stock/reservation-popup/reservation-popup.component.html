@@ -5,7 +5,7 @@
   [title]="'Déstockage de stock : ' + rowData?.stockArticle?.articleID"
   (onHidden)="onHidden()"
   (onShown)="onShowing()"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
     <form [formGroup]="formGroup">

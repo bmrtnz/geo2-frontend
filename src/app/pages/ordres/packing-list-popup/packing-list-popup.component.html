@@ -9,9 +9,8 @@
   (onHidden)="onHidden()"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
-  [closeOnOutsideClick]="false"
+  [hideOnOutsideClick]="false"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}&nbsp;</div>
     <dx-button
@@ -32,16 +31,23 @@
     <dx-scroll-view>
       <div class="packing-list-content-container">
         <div class="dx-field entrepot-field">
-          <div class="dx-field-label text-align-right">{{ 'packing-list-ordres-entrepot' | localize }}</div>
+          <div class="dx-field-label text-align-right">
+            {{ "packing-list-ordres-entrepot" | localize }}
+          </div>
           <div class="dx-field-value entrepot-textvalue">
-            <dx-text-box #entrepot [disabled]="true"></dx-text-box>
+            <dx-text-box
+              #entrepot
+              [disabled]="true"
+            ></dx-text-box>
           </div>
         </div>
 
         <div class="inputs-container date-inputs">
           <!-- Date de départ prévue -->
           <div class="dx-field">
-            <div class="dx-field-label text-align-right">{{ 'packing-list-date-depart-prevue' | localize }}</div>
+            <div class="dx-field-label text-align-right">
+              {{ "packing-list-date-depart-prevue" | localize }}
+            </div>
             <div class="dx-field-value">
               <dx-date-box
                 #dateDep
@@ -49,7 +55,7 @@
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
                 valueChangeEvent="keyup"
-                >
+              >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dx-validator>
@@ -58,7 +64,9 @@
           </div>
           <!-- Date de livraison prévue -->
           <div class="dx-field">
-            <div class="dx-field-label text-align-right">{{ 'packing-list-date-arrivee-prevue' | localize }}</div>
+            <div class="dx-field-label text-align-right">
+              {{ "packing-list-date-arrivee-prevue" | localize }}
+            </div>
             <div class="dx-field-value">
               <dx-date-box
                 #dateArr
@@ -66,7 +74,7 @@
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
                 valueChangeEvent="keyup"
-                >
+              >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dx-validator>
@@ -75,7 +83,9 @@
           </div>
           <!-- Date d'impressione -->
           <div class="dx-field">
-            <div class="dx-field-label text-align-right">{{ 'packing-list-date-impression' | localize }}</div>
+            <div class="dx-field-label text-align-right">
+              {{ "packing-list-date-impression" | localize }}
+            </div>
             <div class="dx-field-value">
               <dx-date-box
                 #dateImp
@@ -83,7 +93,7 @@
                 dateSerializationFormat="yyyy-MM-dd"
                 type="date"
                 valueChangeEvent="keyup"
-                >
+              >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dx-validator>
@@ -95,12 +105,14 @@
         <div class="inputs-container">
           <!-- PO -->
           <div class="dx-field">
-            <div class="dx-field-label text-align-right">{{ 'packing-list-PO' | localize }}</div>
+            <div class="dx-field-label text-align-right">
+              {{ "packing-list-PO" | localize }}
+            </div>
             <div class="dx-field-value">
               <dx-text-box
                 #PO
                 valueChangeEvent="keyup"
-                >
+              >
                 <dx-validator>
                   <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dx-validator>
@@ -111,11 +123,15 @@
           <!-- Switch Client / Entrepôt -->
           <dx-box>
             <dxi-item ratio="0.29">
-              <div class="switch-label text-align-right">{{ 'packing-list-facture' | localize }}</div>
+              <div class="switch-label text-align-right">
+                {{ "packing-list-facture" | localize }}
+              </div>
             </dxi-item>
             <dxi-item ratio="0.7">
               <div class="dx-field departLivraison-switch">
-                <div class="dx-field-label dx-field-label-left text-align-right">
+                <div
+                  class="dx-field-label dx-field-label-left text-align-right"
+                >
                   {{ "tiers-client" | localize }}
                 </div>
                 <div class="dx-field-value">
@@ -125,7 +141,9 @@
                     [switchedOffText]=""
                   ></dx-switch>
                 </div>
-                <div class="dx-field-label dx-field-label-right text-align-left">
+                <div
+                  class="dx-field-label dx-field-label-right text-align-left"
+                >
                   {{ "tiers-entrepot" | localize }}
                 </div>
               </div>
@@ -133,15 +151,15 @@
           </dx-box>
         </div>
 
-        <div style="clear:both"></div>
+        <div style="clear: both"></div>
 
         <app-grid-packing-list
           [ordreId]="ordreId"
           [entrepotId]="ordre?.entrepot.id"
           (selectedOrders)="selectedOrderIds($event)"
         ></app-grid-packing-list>
-        <br>
-        <br>
+        <br />
+        <br />
         <div class="popup-action">
           <dx-button
             text="{{ 'btn-annuler' | localize }}"
@@ -159,4 +177,3 @@
     </dx-scroll-view>
   </div>
 </dx-popup>
-

@@ -1,7 +1,7 @@
 <dx-popup
   [showTitle]="true"
   [title]="this.document?.title"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="this.visible"
   (onHidden)="this.onClose()"
   [fullScreen]="this.fullScreen"

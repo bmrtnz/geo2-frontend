@@ -2,7 +2,7 @@
   [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
@@ -24,7 +24,7 @@
       [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
-    <div style="clear:both"></div>
+    <div style="clear: both"></div>
     <div class="title-plus">{{ titlePlus }}</div>
   </div>
 

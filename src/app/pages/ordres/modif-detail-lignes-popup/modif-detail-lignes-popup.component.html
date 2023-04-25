@@ -1,7 +1,7 @@
 <dx-popup
   [showTitle]="true"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   title="Modification détail expédition"
   [width]="'auto'"
@@ -11,58 +11,90 @@
   [resizeEnabled]="true"
 >
   <div *dxTemplate="let data of 'content'">
-
-    <form
-    #form="ngForm">
+    <form #form="ngForm">
       <div class="textbox-left">
         <span class="popup-detail-expediteur-title">Expéditeur :</span>
-        <br><br>
+        <br /><br />
         <span class="popup-detail-article-title">Desc. :</span>
       </div>
       <div class="textbox-right">
-        <span class="popup-detail-expediteur">&nbsp;{{ ligneDetail?.fournisseur?.code }}</span>
-        <br><br>
+        <span class="popup-detail-expediteur"
+          >&nbsp;{{ ligneDetail?.fournisseur?.code }}</span
+        >
+        <br /><br />
         <span class="popup-detail-article">&nbsp;{{ articleDesc }}</span>
       </div>
-      <br>
-      <div style="clear:both"></div>
-      <br>
+      <br />
+      <div style="clear: both"></div>
+      <br />
       <div class="textbox-left">
         <div class="header-form-modif-popup">Actuel</div>
-        <div style="clear:both"></div>
+        <div style="clear: both"></div>
         <div class="dx-field">
           <div class="dx-field-label">Nb Pal</div>
-          <dx-text-box value="{{ ligneDetail?.nombrePalettesExpediees}}" [readOnly]="true"></dx-text-box>
+          <dx-text-box
+            value="{{ ligneDetail?.nombrePalettesExpediees }}"
+            [readOnly]="true"
+          ></dx-text-box>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Nb Col</div>
-          <dx-text-box value="{{ ligneDetail?.nombreColisExpedies}}" [readOnly]="true"></dx-text-box>
+          <dx-text-box
+            value="{{ ligneDetail?.nombreColisExpedies }}"
+            [readOnly]="true"
+          ></dx-text-box>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Poids brut*</div>
-          <dx-text-box value="{{ ligneDetail?.poidsBrutExpedie }}" [readOnly]="true"></dx-text-box>
+          <dx-text-box
+            value="{{ ligneDetail?.poidsBrutExpedie }}"
+            [readOnly]="true"
+          ></dx-text-box>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Poids net*</div>
-          <dx-text-box value="{{ ligneDetail?.poidsNetExpedie }}" [readOnly]="true"></dx-text-box>
+          <dx-text-box
+            value="{{ ligneDetail?.poidsNetExpedie }}"
+            [readOnly]="true"
+          ></dx-text-box>
         </div>
       </div>
 
       <div class="textbox-right">
         <div class="header-form-modif-popup">Remplacé par**</div>
-        <div style="clear:both"></div>
-        <dx-number-box ngModel name="nombrePalettesExpedieesApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="nombreColisExpediesApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="poidsBrutExpedieApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
-        <dx-number-box ngModel name="poidsNetExpedieApres" (onValueChanged)="onValueChanged($event)" valueChangeEvent="keyup"></dx-number-box>
+        <div style="clear: both"></div>
+        <dx-number-box
+          ngModel
+          name="nombrePalettesExpedieesApres"
+          (onValueChanged)="onValueChanged($event)"
+          valueChangeEvent="keyup"
+        ></dx-number-box>
+        <dx-number-box
+          ngModel
+          name="nombreColisExpediesApres"
+          (onValueChanged)="onValueChanged($event)"
+          valueChangeEvent="keyup"
+        ></dx-number-box>
+        <dx-number-box
+          ngModel
+          name="poidsBrutExpedieApres"
+          (onValueChanged)="onValueChanged($event)"
+          valueChangeEvent="keyup"
+        ></dx-number-box>
+        <dx-number-box
+          ngModel
+          name="poidsNetExpedieApres"
+          (onValueChanged)="onValueChanged($event)"
+          valueChangeEvent="keyup"
+        ></dx-number-box>
       </div>
-      <div style="clear:both"></div>
-      <br>
+      <div style="clear: both"></div>
+      <br />
       <div class="textbox-left">
         <div>* En kilo</div>
         <div>** Ne saisir que les valeurs à modifier</div>
       </div>
-      <div style="clear:both"></div>
+      <div style="clear: both"></div>
 
       <div class="popup-buttons-container">
         <dx-button

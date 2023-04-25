@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   width="400"
   height="500"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   title="Quelle(s) certification(s) ?"
   [focusStateEnabled]="false"
@@ -21,8 +21,12 @@
     ></dx-list>
   </div>
 
-  <div class="mode-culture-info" [ngClass]="{ 'visibility-hidden': !modeCultureInfo }">
-    {{ "articles-matierePremiere-modeCulture" | localize }} : {{ modeCultureInfo }}
+  <div
+    class="mode-culture-info"
+    [ngClass]="{ 'visibility-hidden': !modeCultureInfo }"
+  >
+    {{ "articles-matierePremiere-modeCulture" | localize }} :
+    {{ modeCultureInfo }}
   </div>
 
   <dx-button
@@ -31,5 +35,4 @@
     text="Valider"
     (onClick)="saveCertification()"
   ></dx-button>
-
 </dx-popup>

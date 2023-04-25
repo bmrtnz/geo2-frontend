@@ -2,7 +2,7 @@
   [showTitle]="true"
   [dragEnabled]="true"
   [width]="1140"
-  [closeOnOutsideClick]="false"
+  [hideOnOutsideClick]="false"
   [shading]="false"
   [(visible)]="visible"
   title="{{ 'ordre-edi-modification' | localize }}"
@@ -10,7 +10,6 @@
   (onShowing)="onShowing($event)"
   [resizeEnabled]="true"
 >
-
   <app-grid-modif-commande-edi
     [ordreEdiId]="ordreEdiId"
     [ordreId]="ordreId"
