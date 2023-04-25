@@ -1,35 +1,40 @@
 {
-  "items": [
-    {
-      "key": "@toolbar-bg",
-      "value": "rgba(0, 117, 156, 1)"
-    },
-    {
-      "key": "@base-accent",
-      "value": "rgba(0, 117, 156, 1)"
-    },
-    {
-      "key": "@base-text-color",
-      "value": "rgba(255, 255, 255, 1)"
-    },
-    {
-      "key": "@base-success",
-      "value": "rgba(143, 196, 89, 1)"
-    },
-    {
-      "key": "@base-danger",
-      "value": "rgba(255, 50, 90, 1)"
-    },
-    {
-      "key": "@base-border-radius",
-      "value": "6px"
-    }
-  ],
-  "baseTheme": "material.blue.dark",
-  "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
-  "outputColorScheme": "additional",
-  "outputFormat": "scss",
-  "makeSwatch": true,
-  "base": false,
-  "widgets": ["treeview", "navbar", "toolbar"]
+    "items": [
+        {
+            "key": "$toolbar-bg",
+            "value": "rgba(0, 117, 156, 1)"
+        },
+        {
+            "key": "$base-accent",
+            "value": "rgba(0, 117, 156, 1)"
+        },
+        {
+            "key": "$base-text-color",
+            "value": "rgba(255, 255, 255, 1)"
+        },
+        {
+            "key": "$base-success",
+            "value": "rgba(143, 196, 89, 1)"
+        },
+        {
+            "key": "$base-danger",
+            "value": "rgba(255, 50, 90, 1)"
+        },
+        {
+            "key": "$base-border-radius",
+            "value": "6px"
+        }
+    ],
+    "baseTheme": "material.blue.dark",
+    "assetsBasePath": "../../../node_modules/devextreme/dist/css/",
+    "outputColorScheme": "additional",
+    "outputFormat": "scss",
+    "makeSwatch": true,
+    "base": false,
+    "widgets": [
+        "Toolbar",
+        "TreeView"
+    ],
+    "version": "22.2.5",
+    "removeExternalResources": false
 }
