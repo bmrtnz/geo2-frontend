@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { alert } from "devextreme/ui/dialog";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, EntrepotsService, LocalizationService } from "app/shared/services";
@@ -39,7 +39,7 @@ export class DuplicationOrdrePopupComponent {
       { name: "portArrivee", checked: false },
       { name: "incoterm", checked: false },
     ];
-    this.itemsToKeep.map(item => this.formGroup.addControl(item.name, new FormControl()));
+    this.itemsToKeep.map(item => this.formGroup.addControl(item.name, new UntypedFormControl()));
   }
 
   @Input() ordre: Ordre;
@@ -50,10 +50,10 @@ export class DuplicationOrdrePopupComponent {
   public activateEntrepot: boolean;
   public entrepotDS: DataSource;
   public showModify: boolean;
-  public formGroup = new FormGroup({
-    dateDepartPrevue: new FormControl(),
-    dateLivraisonPrevue: new FormControl(),
-    entrepot: new FormControl(),
+  public formGroup = new UntypedFormGroup({
+    dateDepartPrevue: new UntypedFormControl(),
+    dateLivraisonPrevue: new UntypedFormControl(),
+    entrepot: new UntypedFormControl(),
   });
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;

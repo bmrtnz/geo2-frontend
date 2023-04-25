@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { AuthService, LocalizationService, FournisseursService, ArticlesService } from "app/shared/services";
 import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
@@ -58,13 +58,13 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   public fournisseurs: DataSource;
   public bureauxAchat: DataSource;
 
-  public formGroup = new FormGroup({
-    bureauAchat: new FormControl(),
-    secteurCommercial: new FormControl(),
-    fournisseur: new FormControl(),
-    from: new FormControl(this.dateManagementService.startOfDay()),
-    to: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    bureauAchat: new UntypedFormControl(),
+    secteurCommercial: new UntypedFormControl(),
+    fournisseur: new UntypedFormControl(),
+    from: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    to: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

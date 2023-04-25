@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
 import Ordre, { Statut } from "app/shared/models/ordre.model";
@@ -76,15 +76,15 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
 
-  public formGroup = new FormGroup({
-    secteurCode: new FormControl(),
-    clientCode: new FormControl(),
-    entrepotCode: new FormControl(),
-    codeCommercial: new FormControl(),
-    codeAssistante: new FormControl(),
-    dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    dateMax: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    secteurCode: new UntypedFormControl(),
+    clientCode: new UntypedFormControl(),
+    entrepotCode: new UntypedFormControl(),
+    codeCommercial: new UntypedFormControl(),
+    codeAssistante: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

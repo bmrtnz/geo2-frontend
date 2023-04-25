@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
@@ -156,7 +156,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   client: Client;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,

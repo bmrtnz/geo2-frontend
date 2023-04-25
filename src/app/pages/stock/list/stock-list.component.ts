@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -68,7 +68,7 @@ export class StockListComponent implements OnInit {
         public clientsService: ClientsService,
         public currentCompanyService: CurrentCompanyService,
         public secteursService: SecteursService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private router: Router,
         public gridConfiguratorService: GridConfiguratorService,
     ) {}

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Apollo } from "apollo-angular";
 import {
   ApolloTestingController,
@@ -92,10 +92,10 @@ describe("ApiService", () => {
   it("should handle `extractDirty()`", () => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const formUtils: FormUtilsService = TestBed.inject(FormUtilsService);
-    const formGroup = new FormGroup({
-      id: new FormControl(),
-      description: new FormControl(),
-      valide: new FormControl(false),
+    const formGroup = new UntypedFormGroup({
+      id: new UntypedFormControl(),
+      description: new UntypedFormControl(),
+      valide: new UntypedFormControl(false),
     });
 
     // Marking controls as dirty manually

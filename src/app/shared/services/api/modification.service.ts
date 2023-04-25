@@ -10,7 +10,7 @@ import DataSource from "devextreme/data/data_source";
 import { AuthService } from "../auth.service";
 import notify from "devextreme/ui/notify";
 import { Router } from "@angular/router";
-import { AbstractControl, AbstractControlDirective, AbstractControlOptions, FormGroup } from "@angular/forms";
+import { AbstractControl, AbstractControlDirective, AbstractControlOptions, UntypedFormGroup } from "@angular/forms";
 import { from, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
@@ -75,7 +75,7 @@ export class ModificationsService extends ApiService implements APIRead {
         return val ? val : this.notSet;
     }
 
-    saveModifications(modelName, entityObject, fGroup: FormGroup, traductionKey) {
+    saveModifications(modelName, entityObject, fGroup: UntypedFormGroup, traductionKey) {
 
         const listeModifications: Partial<ModificationCorps>[] =
             Object.entries(fGroup.controls).filter(([, control]) => control.dirty && control.value !== null).map(([key, control]) => {

@@ -5,7 +5,7 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { fixObservableSubclass } from "@apollo/client/utilities";
 import { alert } from "devextreme/ui/dialog";
 import { Role } from "app/shared/models";
@@ -80,14 +80,14 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   public commercial: DataSource;
   public entrepot: DataSource;
   public fournisseur: DataSource;
-  public formGroup = new FormGroup({
-    entrepot: new FormControl(),
-    fournisseur: new FormControl(),
-    commercial: new FormControl(),
-    dateMaxMouvements: new FormControl(
+  public formGroup = new UntypedFormGroup({
+    entrepot: new UntypedFormControl(),
+    fournisseur: new UntypedFormControl(),
+    commercial: new UntypedFormControl(),
+    dateMaxMouvements: new UntypedFormControl(
       this.dateManagementService.startOfDay(),
     ),
-  } as Inputs<FormControl>);
+  } as Inputs<UntypedFormControl>);
 
   private datasources: DataSource[] = [];
   public toRefresh: boolean;

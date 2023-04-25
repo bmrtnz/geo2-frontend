@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Statut } from "app/shared/models/ordre.model";
 import { AuthService, ClientsService, EntrepotsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -69,14 +69,14 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public hintNotValid: string;
   public periodes: string[];
   toRefresh: boolean;
-  public formGroup = new FormGroup({
-    valide: new FormControl(),
-    dateMin: new FormControl(),
-    dateMax: new FormControl(),
-    secteur: new FormControl(),
-    client: new FormControl(),
-    entrepot: new FormControl()
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    valide: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(),
+    dateMax: new UntypedFormControl(),
+    secteur: new UntypedFormControl(),
+    client: new UntypedFormControl(),
+    entrepot: new UntypedFormControl()
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public ordreLignesService: OrdreLignesService,

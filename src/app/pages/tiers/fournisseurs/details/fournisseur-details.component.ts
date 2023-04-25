@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { CertificationDatePopupComponent } from "app/shared/components/certification-date-popup/certification-date-popup.component";
@@ -218,7 +218,7 @@ export class FournisseurDetailsComponent implements OnInit, AfterViewInit, OnCha
   CCexists = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     private fournisseursService: FournisseursService,
     private bureauxAchatService: BureauxAchatService,

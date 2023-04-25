@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import LitigeSupervision from "app/shared/models/litige-supervision.model";
 import Litige from "app/shared/models/litige.model";
 import { Role } from "app/shared/models/personne.model";
@@ -61,11 +61,11 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
 
-  public formGroup = new FormGroup({
-    codeSecteur: new FormControl(),
-    codeCommercial: new FormControl(),
-    codeAssistante: new FormControl()
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    codeSecteur: new UntypedFormControl(),
+    codeCommercial: new UntypedFormControl(),
+    codeAssistante: new UntypedFormControl()
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

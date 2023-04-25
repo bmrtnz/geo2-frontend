@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { LocalizePipe } from "app/shared/pipes";
 import { LocalizationService } from "app/shared/services";
 import { PlanningMaritimeService, PlanningSide } from "app/shared/services/api/planning-maritime.service";
@@ -40,10 +40,10 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
-  public formGroup = new FormGroup({
-    dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    dateMax: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

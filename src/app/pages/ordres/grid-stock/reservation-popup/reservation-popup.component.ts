@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import { LocalizationService } from "app/shared/services";
@@ -31,7 +31,7 @@ export class ReservationPopupComponent {
   });
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private stocksService: StocksService,
     public localizeService: LocalizationService,
     private currentCompanyService: CurrentCompanyService,

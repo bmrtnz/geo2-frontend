@@ -113,8 +113,7 @@
                 }
               ]
             },
-            "dev": {
-            }
+            "dev": {}
           },
           "defaultConfiguration": ""
         },
@@ -185,8 +184,9 @@
       }
     }
   },
-  "defaultProject": "geo2",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

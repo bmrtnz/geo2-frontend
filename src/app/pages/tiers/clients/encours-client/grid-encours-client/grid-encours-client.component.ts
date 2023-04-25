@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Client } from "app/shared/models";
 import { AuthService, ClientsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -51,14 +51,14 @@ export class GridEncoursClientComponent implements OnChanges {
   private requiredFields: string[];
   private sumDebit: number;
   private sumCredit: number;
-  public formGroup = new FormGroup({
-    client: new FormControl(),
-    secteur: new FormControl(),
-    encoursTotal: new FormControl(),
-    encoursAutorise: new FormControl(),
-    encoursDepassement: new FormControl(),
-    encoursRetard: new FormControl()
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    client: new UntypedFormControl(),
+    secteur: new UntypedFormControl(),
+    encoursTotal: new UntypedFormControl(),
+    encoursAutorise: new UntypedFormControl(),
+    encoursDepassement: new UntypedFormControl(),
+    encoursRetard: new UntypedFormControl()
+  } as Inputs<UntypedFormControl>);
   public deviseSociete: string;
   public deviseEncours: string;
   public deviseClient: string;

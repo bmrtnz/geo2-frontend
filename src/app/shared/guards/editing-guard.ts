@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import {
     ActivatedRouteSnapshot,
     CanDeactivate,
@@ -11,7 +11,7 @@ import { EditingAlertComponent } from "../components/editing-alert/editing-alert
 export interface Editable {
     editing: boolean;
     alertComponent: EditingAlertComponent;
-    formGroup: FormGroup;
+    formGroup: UntypedFormGroup;
 }
 
 @Injectable()

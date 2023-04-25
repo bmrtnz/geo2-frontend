@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, NgForm } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -71,12 +71,12 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
   public bureauxAchat: DataSource;
-  public formGroup = new FormGroup({
-    bureauAchat: new FormControl(),
-    transporteur: new FormControl(),
-    from: new FormControl(this.dateManagementService.startOfDay()),
-    to: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    bureauAchat: new UntypedFormControl(),
+    transporteur: new UntypedFormControl(),
+    from: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    to: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

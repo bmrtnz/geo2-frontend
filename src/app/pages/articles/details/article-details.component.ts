@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, ViewChild, ViewChildren } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
@@ -210,7 +210,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     private identificationsSymboliquesService: IdentificationsSymboliquesService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     public authService: AuthService,
     private localization: LocalizationService,

@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
@@ -95,7 +95,7 @@ export class LieuxPassageAQuaiDetailsComponent
   preSaisie: string;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,

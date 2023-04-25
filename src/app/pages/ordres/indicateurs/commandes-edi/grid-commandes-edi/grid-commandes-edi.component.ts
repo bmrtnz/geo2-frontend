@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import { Role } from "app/shared/models/personne.model";
 import { alert, confirm } from "devextreme/ui/dialog";
@@ -80,13 +80,13 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @ViewChild(ModifCommandeEdiPopupComponent, { static: false }) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
   @ViewChild(VisualiserOrdresPopupComponent, { static: false }) visuCdeEdiPopup: VisualiserOrdresPopupComponent;
 
-  public formGroup = new FormGroup({
-    clientCode: new FormControl(),
-    codeAssistante: new FormControl(),
-    codeCommercial: new FormControl(),
-    dateMin: new FormControl(this.dateMgtService.startOfDay()),
-    dateMax: new FormControl(this.dateMgtService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    clientCode: new UntypedFormControl(),
+    codeAssistante: new UntypedFormControl(),
+    codeCommercial: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(this.dateMgtService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateMgtService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,

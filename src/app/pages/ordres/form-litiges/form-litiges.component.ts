@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild
 } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { Flux, OrdreLigne } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
@@ -100,7 +100,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @ViewChild(DocumentsOrdresPopupComponent) docsPopup: DocumentsOrdresPopupComponent;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public litigesService: LitigesService,
     public ordresService: OrdresService,
     public localization: LocalizationService,

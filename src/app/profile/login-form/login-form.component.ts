@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
@@ -19,7 +19,7 @@ import { catchError, concatMap } from "rxjs/operators";
   styleUrls: ["./login-form.component.scss"],
 })
 export class LoginFormComponent implements OnInit, AfterViewInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   societe: DataSource;
   companiesLoading = false;
   @ViewChild("submitButton", { static: false })
@@ -30,7 +30,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
 
   constructor(
     private authService: AuthService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public currentCompanyService: CurrentCompanyService,
     private societesService: SocietesService,
     private router: Router,
