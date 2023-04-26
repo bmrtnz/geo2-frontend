@@ -10,11 +10,10 @@ import {
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
-import { BaseGroupDescriptor, GroupDescriptor } from "devextreme/data";
+import { LoadOptions, BaseGroupDescriptor } from "devextreme/data";
 import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import { LoadOptions } from "devextreme/data/load_options";
 import { from, Observable, Subject } from "rxjs";
 import { filter, map, mergeMap, take, takeUntil } from "rxjs/operators";
 
