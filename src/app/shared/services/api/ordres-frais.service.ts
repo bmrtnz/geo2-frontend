@@ -127,7 +127,7 @@ export class OrdresFraisService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise<any>();
+          return this.watchDeleteQuery({ variables }).toPromise() as unknown as PromiseLike<void>;
         },
       }),
     });

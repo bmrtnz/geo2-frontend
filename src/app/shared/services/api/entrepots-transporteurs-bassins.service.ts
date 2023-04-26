@@ -94,7 +94,7 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
         remove: id => this.apollo.mutate({
           mutation: gql(this.buildDeleteGraph("BigDecimal")),
           variables: { id },
-        }).toPromise<any>()
+        }).toPromise() as unknown as PromiseLike<void>
       },
       ),
     });

@@ -37,7 +37,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
       mutation: gql(this.buildDeleteGraph()),
       variables: { id },
       fetchPolicy: "no-cache",
-    }).toPromise<any>()
+    }).toPromise()
 
   constructor(
     apollo: Apollo,
@@ -147,7 +147,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }
@@ -194,7 +194,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }
@@ -418,7 +418,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }

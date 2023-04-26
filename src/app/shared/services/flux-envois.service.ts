@@ -53,9 +53,9 @@ export class FluxEnvoisService {
         case "DECBOL":
           return this.envoisService.fDocumentEnvoiDeclarationBollore(ordreID);
         case "TRACA":
-          return this.pushDepotEnvoi("TRACA", ordreID);
+          return this.pushDepotEnvoi("TRACA", ordreID), of(null);
         case "IMPORD":
-          return this.pushDepotEnvoi("IMPORD", ordreID);
+          return this.pushDepotEnvoi("IMPORD", ordreID), of(null);
         // "CUSINV" | "PROFOR" | "RESLIT" | "INCLIT"
         // No initialization phase, continuing to flux selection
         default:
@@ -64,7 +64,7 @@ export class FluxEnvoisService {
     })
       .pipe(
         map(result => Object.values(result.data)[0]),
-        concatMap(response => {
+        concatMap((response: any) => {
 
           if (response.res === FunctionResult.Warning)
             return outputPopup.openAs("WARNING", response.msg);

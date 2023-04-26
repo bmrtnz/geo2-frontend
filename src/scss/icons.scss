@@ -41,7 +41,7 @@ $material-design-icons-font-directory-path: "~material-design-icons-iconfont/dis
 .dx-field-value-with-icon {
   display: flex;
 
-  &> :first-child {
+  & > :first-child {
     flex-grow: 2;
   }
 }

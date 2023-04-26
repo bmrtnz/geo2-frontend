@@ -133,7 +133,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise<any>() as Promise<any>;
+          return this.watchDeleteQuery({ variables }).toPromise() as Promise<any>;
         },
       }),
     });

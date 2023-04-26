@@ -741,6 +741,7 @@ export abstract class ApiService implements OnDestroy {
    * @param query GraphQL query
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
+   ** @deprecated Use `Apollo` api in combination with `@see Api.buildGraph`
    */
   public listenQuery<T>(
     query: string,
@@ -771,6 +772,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo WatchQueryOptions
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
+   *    * @deprecated Use `Apollo` api in combination with `@see buildGetOneGraph`
    */
   public watchGetOneQuery<T>(
     options: Partial<WatchQueryOptions<OperationVariables>>,
@@ -796,6 +798,9 @@ export abstract class ApiService implements OnDestroy {
     return done;
   }
 
+  /**
+   * @deprecated Use `Apollo` api in combination with `@see buildCountGraph`
+   */
   public watchCountQuery<R>(search?: string) {
     return from(this.buildCount())
       .pipe(
@@ -816,6 +821,7 @@ export abstract class ApiService implements OnDestroy {
    * Utility method to listen for distinct query request
    * @param options Apollo WatchQueryOptions
    * @param cbk Callback called each time data is received
+   * @deprecated Use `Apollo` api in combination with `@see buildDistinctGraph`
    */
   public loadDistinctQuery<T = { distinct: RelayPage<DistinctInfo>, totalCount: number, totalPage: number }>(
     options: Partial<LoadOptions>,
@@ -892,6 +898,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo MutationOptions
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
+   * @deprecated Use `Apollo` api in combination with `@see buildSaveGraph`
    */
   public watchSaveQuery_v2(
     options: Partial<MutationOptions>,
@@ -914,6 +921,7 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo MutationOptions
    * @param depth Query fields depth
    * @param fieldsFilter Query fields filter
+   * @deprecated Use `Apollo` api in combination with `@see buildSaveAllGraph`
    */
   public watchSaveAllQuery(
     options: Partial<MutationOptions>,
@@ -935,6 +943,7 @@ export abstract class ApiService implements OnDestroy {
   /**
    * Utility method to listen for `delete()` query
    * @param options Apollo MutationOptions
+   * @deprecated Use `Apollo` api in combination with `@see buildDeleteGraph`
    */
   public watchDeleteQuery(
     options: Partial<MutationOptions>,
