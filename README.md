@@ -1,4 +1,7 @@
+[![status-badge](http://192.168.2.162/api/badges/Microtec/geo2-frontend/status.svg)](http://192.168.2.162/Microtec/geo2-frontend)
+
 # Geo2
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.23.
 
 ## Development server

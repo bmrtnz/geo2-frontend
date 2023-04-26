@@ -1,0 +1,41 @@
+# Package the project for specified environments
+
+matrix:
+  PLATFORM:
+    - linux/amd64
+  TARGET_ENV:
+    - webdev
+    - bwdev
+    - production
+  NODE_VERSION:
+    - 18
+
+platform: ${PLATFORM}
+
+when:
+  event: tag
+  branch: [master, next, "#ci"]
+
+pipeline:
+  - name: build image ${TARGET_ENV} ${CI_COMMIT_TAG}
+    image: docker:latest
+    # Shared host Docker socket
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build --build-arg env=${TARGET_ENV} -t geo2-frontend:${TARGET_ENV}-${CI_COMMIT_TAG} .
+  # share-images: TODO registry
+  - name: build archive ${TARGET_ENV} ${CI_COMMIT_TAG}
+    image: node:18
+    commands:
+      - npm ci
+      - npx ng build --configuration=${TARGET_ENV}
+      - node script/archive ./dist/geo2-${TARGET_ENV}-${CI_COMMIT_TAG}.tar.gz ./dist/geo2/
+  - name: release ${TARGET_ENV} ${CI_COMMIT_TAG}
+    image: woodpeckerci/plugin-gitea-release
+    settings:
+      base_url: https://git.microtec.fr
+      files:
+        - "dist/geo2-${TARGET_ENV}-${CI_COMMIT_TAG}.tar.gz"
+      api_key:
+        from_secret: GITEA_API_TOKEN
