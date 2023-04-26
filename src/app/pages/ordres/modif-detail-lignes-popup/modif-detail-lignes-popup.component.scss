@@ -2,79 +2,76 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-
 ::ng-deep .modif-detail-lignes-popup {
+  .header-form-modif-popup {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-size: 12px;
+    background-color: $base-accent;
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+
+  .dx-field-label {
+    width: 50% !important;
+  }
+
+  .dx-numberbox,
+  .dx-textbox {
+    width: 30%;
+  }
+
+  .textbox-left {
+    margin-left: 20px;
+    float: left;
+
+    .dx-field {
+      margin-bottom: 0;
+    }
 
     .header-form-modif-popup {
-        position: relative;
-        display: inline-block;
-        color: white;
-        font-size: 12px;
-        background-color: $base-accent;
-        border-radius: 3px;
-        padding: 2px 7px;
+      left: 130px;
+    }
+  }
+
+  .textbox-right {
+    float: left;
+
+    .dx-numberbox {
+      width: 45%;
     }
 
-    .dx-field-label {
-        width: 50% !important;
+    .header-form-modif-popup {
+      float: left;
     }
+  }
 
-    .dx-numberbox,
-    .dx-textbox {
-        width: 30%;
+  .popup-detail-expediteur-title,
+  .popup-detail-article-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right !important;
+    color: $base-accent;
+    float: right;
+  }
+
+  .popup-detail-expediteur,
+  .popup-article-expediteur {
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
+  }
+
+  .popup-buttons-container {
+    display: inline-block;
+    position: relative;
+    margin-top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
     }
-
-    .textbox-left {
-        margin-left: 20px;
-        float: left;
-
-        .dx-field {
-            margin-bottom: 0;
-        }
-
-        .header-form-modif-popup {
-            left: 130px;
-        }
-    }
-
-    .textbox-right {
-        float: left;
-
-        .dx-numberbox {
-            width: 45%;
-        }
-
-        .header-form-modif-popup {
-            float: left;
-        }
-    }
-
-    .popup-detail-expediteur-title,
-    .popup-detail-article-title {
-        font-size: 16px;
-        font-weight: bold;
-        text-align: right !important;
-        color: $base-accent;
-        float: right;
-    }
-
-    .popup-detail-expediteur,
-    .popup-article-expediteur {
-        font-size: 16px;
-        font-weight: normal;
-        color: black;
-    }
-
-    .popup-buttons-container {
-        display: inline-block;
-        position: relative;
-        margin-top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-
-        .dx-button {
-            margin: 5px;
-        }
-    }
-
+  }
 }

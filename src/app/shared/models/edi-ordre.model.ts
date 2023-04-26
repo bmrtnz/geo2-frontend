@@ -6,18 +6,17 @@ import { Secteur } from "./secteur.model";
 
 export enum statusGEO {
   Traité = "TRAITE",
-  NonTraité = "NON_TRAITE"
+  NonTraité = "NON_TRAITE",
 }
 
 export enum status {
   Création = "CREATION",
   Modification = "UPDATE",
-  Suppression = "DELETE"
+  Suppression = "DELETE",
 }
 
 @ModelName("EdiOrdre")
 export class EdiOrdre extends Model {
-
   @Field({ asKey: true }) public id?: number;
   @Field({ model: import("./client.model") }) public client?: Client;
   @Field() public lfCommandePar?: string;

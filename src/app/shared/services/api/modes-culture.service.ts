@@ -7,15 +7,12 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
 import { OperationVariables } from "@apollo/client/core";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ModesCultureService extends ApiService implements APIRead {
-
   listRegexp = /.\.*(?:id|description)$/i;
 
-  constructor(
-    apollo: Apollo,
-  ) {
+  constructor(apollo: Apollo) {
     super(apollo, ModeCulture);
     this.gqlKeyType = "Int";
   }
@@ -31,36 +28,35 @@ export class ModesCultureService extends ApiService implements APIRead {
    */
   getDataSource() {
     return new DataSource({
-      sort: [
-        { selector: this.model.getLabelField() as string }
-      ],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            const query = await this.buildGetAll(1, this.listRegexp);
+            type Response = { allModeCulture: RelayPage<ModeCulture> };
+            const variables = this.mapLoadOptionsToVariables(options);
+
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allModeCulture)
+                resolve(this.asInstancedListCount(res.data.allModeCulture));
             });
-
-          const query = await this.buildGetAll(1, this.listRegexp);
-          type Response = { allModeCulture: RelayPage<ModeCulture> };
-          const variables = this.mapLoadOptionsToVariables(options);
-
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allModeCulture)
-              resolve(this.asInstancedListCount(res.data.allModeCulture));
-          });
-        }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne();
-          type Response = { modeCulture: ModeCulture };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.modeCulture)
-              resolve(new ModeCulture(res.data.modeCulture));
-          });
-        }),
+          }),
+        byKey: (key) =>
+          new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { modeCulture: ModeCulture };
+            const variables = { id: key };
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.modeCulture)
+                resolve(new ModeCulture(res.data.modeCulture));
+            });
+          }),
       }),
     });
   }
@@ -71,7 +67,7 @@ export class ModesCultureService extends ApiService implements APIRead {
         const query = await this.buildGetOne_v2(columns);
         type Response = { modeCulture: ModeCulture };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
+        this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.modeCulture)
             resolve(new ModeCulture(res.data.modeCulture));
         });
@@ -80,30 +76,27 @@ export class ModesCultureService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [
-        { selector: this.model.getKeyField() as string }
-      ],
+      sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            type Response = { allModeCulture: RelayPage<ModeCulture> };
+            const query = await this.buildGetAll_v2(columns);
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allModeCulture) {
+                resolve(this.asInstancedListCount(res.data.allModeCulture));
+              }
             });
-
-          type Response = { allModeCulture: RelayPage<ModeCulture> };
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allModeCulture) {
-              resolve(this.asInstancedListCount(res.data.allModeCulture));
-            }
-          });
-        }),
+          }),
         byKey: this.byKey(columns),
       }),
     });
   }
-
 }

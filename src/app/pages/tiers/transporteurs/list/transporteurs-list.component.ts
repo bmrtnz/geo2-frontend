@@ -1,4 +1,11 @@
-import { Component, EventEmitter, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import { NestedMain } from "app/pages/nested/nested.component";
 import { ApiService } from "app/shared/services/api.service";
@@ -33,7 +40,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     this.gridConfiguratorService.init(this.gridID, {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public transporteursService: TransporteursService,
@@ -49,21 +56,20 @@ export class TransporteursListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   private updateData(columns: GridColumn[]) {
     of(columns)
       .pipe(
         GridConfiguratorService.getVisible(),
-        GridConfiguratorService.getFields(),
+        GridConfiguratorService.getFields()
       )
       .subscribe((fields) => {
-        this.dataGrid.dataSource =
-          this.transporteursService.getDataSource_v2([
-            Transporteur.getKeyField() as string,
-            ...fields,
-          ]);
+        this.dataGrid.dataSource = this.transporteursService.getDataSource_v2([
+          Transporteur.getKeyField() as string,
+          ...fields,
+        ]);
       });
   }
 

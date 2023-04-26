@@ -5,7 +5,11 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { RegimeTva } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
-import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
+import {
+  functionBody,
+  FunctionResponse,
+  FunctionsService,
+} from "./functions.service";
 
 @Injectable({
   providedIn: "root",
@@ -13,10 +17,7 @@ import { functionBody, FunctionResponse, FunctionsService } from "./functions.se
 export class RegimesTvaService extends ApiService implements APIRead {
   listRegexp = /.*\.(?:id|description)$/i;
 
-  constructor(
-    apollo: Apollo,
-    private functionsService: FunctionsService,
-  ) {
+  constructor(apollo: Apollo, private functionsService: FunctionsService) {
     super(apollo, RegimeTva);
   }
 
@@ -29,57 +30,36 @@ export class RegimesTvaService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll(1, this.listRegexp);
             type Response = { allRegimeTva: RelayPage<RegimeTva> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allRegimeTva)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allRegimeTva,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allRegimeTva)
+                resolve(this.asInstancedListCount(res.data.allRegimeTva));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
-            const query = await this.buildGetOne(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetOne(1, this.listRegexp);
             type Response = { regimeTva: RegimeTva };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.regimeTva)
-                  resolve(new RegimeTva(res.data.regimeTva));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.regimeTva)
+                resolve(new RegimeTva(res.data.regimeTva));
+            });
           }),
       }),
     });
   }
 
   public ofInitRegimeTva(ordRef: Ordre["id"], tvrCode: string) {
-    return this.apollo
-      .query<{ ofInitRegimeTva: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ ofInitRegimeTva: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -88,16 +68,17 @@ export class RegimesTvaService extends ApiService implements APIRead {
               params: [
                 { name: "ordRef", value: "ordRef", isVariable: true },
                 { name: "tvrCode", value: "tvrCode", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "ordRef", type: "String", isOptionnal: false },
             { name: "tvrCode", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordRef, tvrCode },
-        fetchPolicy: "network-only",
-      });
+          ]
+        )
+      ),
+      variables: { ordRef, tvrCode },
+      fetchPolicy: "network-only",
+    });
   }
 }

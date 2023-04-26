@@ -43,8 +43,8 @@ export class ModificationListComponent implements OnChanges {
     public authService: AuthService,
     private dateManagementService: DateManagementService,
     public modificationsService: ModificationsService,
-    public validationService: ValidationService,
-  ) { }
+    public validationService: ValidationService
+  ) {}
 
   ngOnChanges() {
     this.modifs = [];
@@ -80,15 +80,15 @@ export class ModificationListComponent implements OnChanges {
           liste.sort(
             (a, b) =>
               new Date(b.dateModification).getTime() -
-              new Date(a.dateModification).getTime(),
+              new Date(a.dateModification).getTime()
           );
           this.modifs = liste;
           this.modifs.map(
             (result) =>
               (result.dateModification =
                 this.dateManagementService.friendlyDate(
-                  result.dateModification,
-                )),
+                  result.dateModification
+                ))
           );
         }
       });
@@ -101,9 +101,7 @@ export class ModificationListComponent implements OnChanges {
       id: modifID,
       statut: true,
     };
-    this.modificationsService.save_v2([
-      "id",
-    ], { modification }).subscribe({
+    this.modificationsService.save_v2(["id"], { modification }).subscribe({
       next: (e) => {
         this.modifs = this.modifs.filter((res) => res.id !== modifID);
         // Show red badges (unvalidated forms)
@@ -112,11 +110,7 @@ export class ModificationListComponent implements OnChanges {
         notify("Suppression demande effectuée !", "success", 3000);
       },
       error: () =>
-        notify(
-          "Erreur lors de la demande de suppression",
-          "error",
-          3000,
-        ),
+        notify("Erreur lors de la demande de suppression", "error", 3000),
     });
   }
 }
@@ -134,4 +128,4 @@ export class ModificationListComponent implements OnChanges {
   declarations: [ModificationListComponent],
   exports: [ModificationListComponent],
 })
-export class ModificationListModule { }
+export class ModificationListModule {}

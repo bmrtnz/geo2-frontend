@@ -1,4 +1,3 @@
-
 <dx-button
   class="download-all float-right"
   type="success"
@@ -7,9 +6,9 @@
   (onClick)="downloadAllPhotos()"
 ></dx-button>
 
-<div style="clear:both"></div>
+<div style="clear: both"></div>
 
-<br>
+<br />
 
 <dx-data-grid
   class="dx-card wide-card"
@@ -110,9 +109,13 @@
   </div>
 </dx-data-grid>
 
-<br>
+<br />
 <div class="photo-container">
-  <img class="cq-image" src="{{ currentImgPath }}" title="{{ currentImgComment }}">
+  <img
+    class="cq-image"
+    src="{{ currentImgPath }}"
+    title="{{ currentImgComment }}"
+  />
 </div>
 
 <app-prompt-popup

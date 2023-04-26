@@ -56,7 +56,7 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
   readonly INDICATOR_NAME = "PlanningTransporteursApproche";
 
   private indicator = this.ordresIndicatorsService.getIndicatorByName(
-    this.INDICATOR_NAME,
+    this.INDICATOR_NAME
   );
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
@@ -88,16 +88,16 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
     public dateManagementService: DateManagementService,
     private ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
-    private formUtils: FormUtilsService,
+    private formUtils: FormUtilsService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.PlanningTransporteurs,
+      Grid.PlanningTransporteurs
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
-    this.transporteursDataSource =
-      this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+    this.transporteursDataSource = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
     this.periodes = this.dateManagementService.periods();
     this.bureauxAchat = bureauxAchatService.getDataSource_v2([
       "id",
@@ -112,7 +112,7 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
 
   async ngOnInit() {
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
 
     this.ordresDataSource = this.ordresService
@@ -147,12 +147,12 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 

@@ -1,5 +1,4 @@
 ::ng-deep .destockage-auto-popup {
-
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 
@@ -23,9 +22,8 @@
   }
 
   .dx-popup-content {
-
     .destockage-auto-content-container {
-      background: #FFF !important;
+      background: #fff !important;
       padding: 0 15px 0 2px;
 
       .erreurs-switch {
@@ -42,7 +40,7 @@
           }
 
           .dx-switch-container::before {
-            background-color: rgba(255, 50, 90, .5);
+            background-color: rgba(255, 50, 90, 0.5);
           }
         }
 
@@ -69,14 +67,13 @@
             text-align: left !important;
           }
         }
-
       }
 
       .grid-destockage-auto {
         max-height: 400px;
 
         .dx-toolbar-after {
-          background-color: #FFF;
+          background-color: #fff;
         }
 
         .cursor-pointer {
@@ -100,6 +97,5 @@
       left: 50%;
       transform: translateX(-50%);
     }
-
   }
 }

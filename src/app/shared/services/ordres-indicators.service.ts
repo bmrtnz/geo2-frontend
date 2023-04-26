@@ -7,15 +7,14 @@ import { dxButtonOptions } from "devextreme/ui/button";
 import { Observable } from "rxjs";
 import { Model, ModelFieldOptions } from "../models/model";
 import Ordre from "../models/ordre.model";
-import { Indicateur, IndicateurCountResponse, IndicateursService } from "./api/indicateurs.service";
 import {
-  OrdresService
-} from "./api/ordres.service";
+  Indicateur,
+  IndicateurCountResponse,
+  IndicateursService,
+} from "./api/indicateurs.service";
+import { OrdresService } from "./api/ordres.service";
 import { PaysDepassementService } from "./api/pays-depassement.service";
-import {
-
-  PaysService
-} from "./api/pays.service";
+import { PaysService } from "./api/pays.service";
 import { AuthService } from "./auth.service";
 import { CurrentCompanyService } from "./current-company.service";
 
@@ -54,9 +53,8 @@ export class Indicator implements dxButtonOptions {
   component?: Promise<any>;
   detailedFields?:
     | Observable<
-      | ModelFieldOptions<typeof Model>
-      | ModelFieldOptions<typeof Model>[]
-    >
+        ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
+      >
     | GridColumn[];
   constructor(args) {
     Object.assign(this, args);
@@ -68,7 +66,7 @@ export class Indicator implements dxButtonOptions {
     return JSON.parse(
       JSON.stringify(this.filter)
         .replace("valide", "ordre.valide")
-        .replace("societe", "ordre.societe"),
+        .replace("societe", "ordre.societe")
     );
   }
 }
@@ -123,7 +121,22 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/clients-dep-encours/clients-dep-encours.component"
     ),
     /* eslint-disable-next-line  max-len */
-    explicitSelection: ["id", "pays.description", "clientsSommeAgrement", "clientsSommeEnCoursTemporaire", "clientsSommeEnCoursBlueWhale", "clientsSommeAutorise", "clientsSommeDepassement", "clientsSommeEnCoursActuel", "clientsSommeEnCoursNonEchu", "clientsSommeEnCours1a30", "clientsSommeEnCours31a60", "clientsSommeEnCours61a90", "clientsSommeEnCours90Plus", "clientsSommeAlerteCoface"]
+    explicitSelection: [
+      "id",
+      "pays.description",
+      "clientsSommeAgrement",
+      "clientsSommeEnCoursTemporaire",
+      "clientsSommeEnCoursBlueWhale",
+      "clientsSommeAutorise",
+      "clientsSommeDepassement",
+      "clientsSommeEnCoursActuel",
+      "clientsSommeEnCoursNonEchu",
+      "clientsSommeEnCours1a30",
+      "clientsSommeEnCours31a60",
+      "clientsSommeEnCours61a90",
+      "clientsSommeEnCours90Plus",
+      "clientsSommeAlerteCoface",
+    ],
   },
   {
     id: Indicateur.OrdresNonConfirmes,
@@ -138,9 +151,26 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component"
     ),
     // eslint-disable-next-line max-len
-    explicitSelection: ["id", "numero", "referenceClient", "codeChargement", "dateDepartPrevue", "dateLivraisonPrevue", "codeClient", "codeAlphaEntrepot", "dateCreation", "type.id", "client.raisonSocial", "secteurCommercial.id", "entrepot.raisonSocial", "campagne.id", "numeroContainer"],
+    explicitSelection: [
+      "id",
+      "numero",
+      "referenceClient",
+      "codeChargement",
+      "dateDepartPrevue",
+      "dateLivraisonPrevue",
+      "codeClient",
+      "codeAlphaEntrepot",
+      "dateCreation",
+      "type.id",
+      "client.raisonSocial",
+      "secteurCommercial.id",
+      "entrepot.raisonSocial",
+      "campagne.id",
+      "numeroContainer",
+    ],
     /* eslint-disable-next-line  max-len */
-    select: /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|totalNombrePalettesCommandees|secteurCommercial\.id|codeChargement|entrepot\.raisonSocial|campagne\.id|numeroContainer)$/,
+    select:
+      /^(?:numero|referenceClient|dateDepartPrevue|dateLivraisonPrevue|codeClient|codeAlphaEntrepot|totalNombrePalettesCommandees|secteurCommercial\.id|codeChargement|entrepot\.raisonSocial|campagne\.id|numeroContainer)$/,
   },
   {
     id: "PlanningTransporteurs",
@@ -264,7 +294,7 @@ const indicators: Indicator[] = [
       "ordre.referenceClient",
       "ordre.transporteur.id",
       "ordre.codeChargement",
-      "ordre.userModification"
+      "ordre.userModification",
     ],
   },
   {
@@ -302,10 +332,8 @@ const indicators: Indicator[] = [
     component: import(
       "../../pages/ordres/indicateurs/planning-maritime/planning-maritime.component"
     ),
-  }
+  },
 ].map((indicator) => ({ ...indicator, loading: false }));
-
-
 
 @Injectable()
 export class OrdresIndicatorsService {
@@ -318,7 +346,7 @@ export class OrdresIndicatorsService {
     private ordresService: OrdresService,
     private paysService: PaysService,
     private paysDepassementService: PaysDepassementService,
-    private indicateursService: IndicateursService,
+    private indicateursService: IndicateursService
   ) {
     this.updateIndicators();
   }
@@ -352,20 +380,14 @@ export class OrdresIndicatorsService {
           "and",
           ["client.usageInterne", "<>", true],
           "and",
-          [
-            "dateLivraisonPrevue",
-            ">=",
-            this.getFormatedDate(Date.now()),
-          ],
+          ["dateLivraisonPrevue", ">=", this.getFormatedDate(Date.now())],
           "and",
           [
             "dateLivraisonPrevue",
             "<",
             this.datePipe.transform(
-              new Date()
-                .setDate(new Date().getDate() + 1)
-                .valueOf(),
-              "yyyy-MM-dd",
+              new Date().setDate(new Date().getDate() + 1).valueOf(),
+              "yyyy-MM-dd"
             ),
           ],
         ];
@@ -373,12 +395,11 @@ export class OrdresIndicatorsService {
 
       // Ordres clients depassement en cours
       if (instance.id === Indicateur.ClientsDepassementEncours) {
-        instance.detailedFields =
-          this.paysService.model.getDetailedFields(
-            1,
-            instance.regExpSelection,
-            { forceFilter: true },
-          );
+        instance.detailedFields = this.paysService.model.getDetailedFields(
+          1,
+          instance.regExpSelection,
+          { forceFilter: true }
+        );
         instance.filter = [
           ["valide", "=", true],
           "and",
@@ -392,8 +413,13 @@ export class OrdresIndicatorsService {
           "and",
           ["clients.valide", "=", true],
         ];
-        instance.dataSource = this.paysService.getDistinctListDataSource(instance.explicitSelection, instance.filter);
-        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.ClientsDepassementEncours);
+        instance.dataSource = this.paysService.getDistinctListDataSource(
+          instance.explicitSelection,
+          instance.filter
+        );
+        instance.fetchCount = this.indicateursService.countByIndicators(
+          Indicateur.ClientsDepassementEncours
+        );
       }
 
       // Ordres non confirmés
@@ -401,7 +427,9 @@ export class OrdresIndicatorsService {
         const minDate = new Date();
         minDate.setMonth(minDate.getMonth() - 6);
 
-        instance.dataSource = this.ordresService.getDataSource_v2(instance.explicitSelection);
+        instance.dataSource = this.ordresService.getDataSource_v2(
+          instance.explicitSelection
+        );
         instance.filter = [
           ...instance.filter,
           "and",
@@ -420,7 +448,9 @@ export class OrdresIndicatorsService {
           ["id", "<", "800000"],
           // ["factureAvoir", "=", FactureAvoir.AVOIR],
         ];
-        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.OrdresNonConfirmes);
+        instance.fetchCount = this.indicateursService.countByIndicators(
+          Indicateur.OrdresNonConfirmes
+        );
       }
 
       // Litiges
@@ -435,7 +465,9 @@ export class OrdresIndicatorsService {
         //     this.authService.currentUser.secteurCommercial.id,
         //   ]);
         // }
-        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.LitigeOuvert);
+        instance.fetchCount = this.indicateursService.countByIndicators(
+          Indicateur.LitigeOuvert
+        );
       }
 
       // Planning departs
@@ -443,7 +475,9 @@ export class OrdresIndicatorsService {
         const currDateTime24 = new Date();
         currDateTime24.setHours(23, 59, 59, 999);
         // instance.dataSource = this.ordresService.getSuiviDepartsDatasource(instance.explicitSelection);
-        instance.fetchCount = this.indicateursService.countByIndicators(Indicateur.PlanningDepart);
+        instance.fetchCount = this.indicateursService.countByIndicators(
+          Indicateur.PlanningDepart
+        );
         instance.filter = [
           ["valide", "=", true],
           "and",
@@ -459,10 +493,9 @@ export class OrdresIndicatorsService {
       if (instance.id === "PlanningTransporteurs") {
         // Need to see all companies (Léa/Stéphane 01-12-2021)
         instance.filter = [["valide", "=", true]];
-        instance.detailedFields =
-          grids["planning-transporteurs"].columns;
+        instance.detailedFields = grids["planning-transporteurs"].columns;
         instance.dataSource = this.ordresService.getDataSource_v2(
-          instance.detailedFields.map((field) => field.dataField),
+          instance.detailedFields.map((field) => field.dataField)
         );
       }
 
@@ -501,8 +534,8 @@ export class OrdresIndicatorsService {
 
   public getCounts() {
     const indicatorsID = this.getIndicators()
-      .filter(i => i.withCount)
-      .map(i => i.id as Indicateur);
+      .filter((i) => i.withCount)
+      .map((i) => i.id as Indicateur);
     return this.indicateursService.countByIndicators(...indicatorsID);
   }
 }

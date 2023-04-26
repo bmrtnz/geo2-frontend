@@ -21,46 +21,29 @@ export class OrdresFraisService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll(depth, filter);
             type Response = {
               allOrdreFrais: RelayPage<OrdreFrais>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allOrdreFrais)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allOrdreFrais,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allOrdreFrais)
+                resolve(this.asInstancedListCount(res.data.allOrdreFrais));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne(depth, filter);
             type Response = { ordreFrais: OrdreFrais };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.ordreFrais)
-                  resolve(
-                    new OrdreFrais(res.data.ordreFrais),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.ordreFrais)
+                resolve(new OrdreFrais(res.data.ordreFrais));
+            });
           }),
       }),
     });
@@ -88,32 +71,25 @@ export class OrdresFraisService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allOrdreFrais: RelayPage<OrdreFrais>;
             };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
             this.listenQuery<Response>(
               query,
               {
                 variables,
-                fetchPolicy: "network-only" // to work with editable dx-grid
+                fetchPolicy: "network-only", // to work with editable dx-grid
               },
               (res) => {
                 if (res.data && res.data.allOrdreFrais) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allOrdreFrais,
-                    ),
-                  );
+                  resolve(this.asInstancedListCount(res.data.allOrdreFrais));
                 }
-              },
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -127,7 +103,9 @@ export class OrdresFraisService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise() as unknown as PromiseLike<void>;
+          return this.watchDeleteQuery({
+            variables,
+          }).toPromise() as unknown as PromiseLike<void>;
         },
       }),
     });

@@ -3,10 +3,12 @@ import { environment } from "environments/environment";
 import packageData from "../../../../package.json";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class VersionService {
   getLabel() {
-    return environment.production ? `v ${packageData.version}` : `version de développement ( ${packageData.version} )`;
+    return environment.production
+      ? `v ${packageData.version}`
+      : `version de développement ( ${packageData.version} )`;
   }
 }

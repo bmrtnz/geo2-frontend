@@ -1,4 +1,3 @@
-
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxScrollViewComponent } from "devextreme-angular";
@@ -6,21 +5,18 @@ import { DxScrollViewComponent } from "devextreme-angular";
 @Component({
   selector: "app-zoom-transporteur-popup",
   templateUrl: "./zoom-transporteur-popup.component.html",
-  styleUrls: ["./zoom-transporteur-popup.component.scss"]
+  styleUrls: ["./zoom-transporteur-popup.component.scss"],
 })
-
 export class ZoomTransporteurPopupComponent implements OnChanges {
-
   @Input() public transporteurLigneId: string;
   @Input() public transporteurTitle: string;
 
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
-  constructor(
-    private localizeService: LocalizationService
-  ) { }
+  constructor(private localizeService: LocalizationService) {}
 
   ngOnChanges() {
     if (!this.transporteurLigneId) return;
@@ -29,15 +25,15 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize("zoom-" + (this.transporteurTitle ?? "transporteur"))
-      + " "
-      + this.transporteurLigneId;
+    this.title =
+      this.localizeService.localize(
+        "zoom-" + (this.transporteurTitle ?? "transporteur")
+      ) +
+      " " +
+      this.transporteurLigneId;
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("zoom-transporteur-popup");
   }
-
 }
-
-

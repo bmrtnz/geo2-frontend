@@ -2,7 +2,6 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .option-stock-popup {
-
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 
@@ -18,14 +17,12 @@
       top: 13px;
       float: right;
     }
-
   }
 
   .dx-popup-content {
-
     padding-top: 10px;
     font-size: 15px;
-    background: #FFF;
+    background: #fff;
 
     .option-stock-content-container {
       padding: 0 15px 0 2px;
@@ -36,7 +33,7 @@
 
       .dx-texteditor {
         &.stock-resa-log {
-          border: 1px dashed #CCC;
+          border: 1px dashed #ccc;
           padding: 0 10px;
 
           &:before {
@@ -84,6 +81,5 @@
         }
       }
     }
-
   }
 }

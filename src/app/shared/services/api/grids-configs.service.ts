@@ -14,7 +14,8 @@ import { Grid } from "../grid-configurator.service";
 })
 export class GridsConfigsService
   extends ApiService
-  implements APIRead, APIPersist {
+  implements APIRead, APIPersist
+{
   fieldsFilter = /.*/i;
 
   constructor(apollo: Apollo) {
@@ -38,7 +39,7 @@ export class GridsConfigsService
               name: "id",
               value: "id",
               isVariable: true,
-            }
+            },
           ],
         },
       ],
@@ -48,29 +49,31 @@ export class GridsConfigsService
           type: "GeoGridConfigKeyInput",
           isOptionnal: false,
         },
-      ],
+      ]
     );
   }
 
   fetchUserGrid(user: Utilisateur, grid: Grid, societe: Societe) {
     return this.apollo
       .watchQuery<{ gridConfig: GridConfig }>({
-        query: gql(this.getOneGraph([
-          "grid",
-          "config",
-          "utilisateur.nomUtilisateur",
-          "societe.id",
-        ])),
+        query: gql(
+          this.getOneGraph([
+            "grid",
+            "config",
+            "utilisateur.nomUtilisateur",
+            "societe.id",
+          ])
+        ),
         fetchPolicy: "cache-and-network",
         variables: {
           id: {
             utilisateur: user.nomUtilisateur,
             grid,
             societe: societe.id,
-          }
+          },
         },
-      }).valueChanges
-      .pipe(takeWhile((res) => res.loading, true));
+      })
+      .valueChanges.pipe(takeWhile((res) => res.loading, true));
   }
 
   getDataSource() {
@@ -82,33 +85,19 @@ export class GridsConfigsService
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.fieldsFilter,
-            );
+            const query = await this.buildGetAll(1, this.fieldsFilter);
             type Response = {
               allGridConfig: RelayPage<GridConfig>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allGridConfig)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allGridConfig,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allGridConfig)
+                resolve(this.asInstancedListCount(res.data.allGridConfig));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
@@ -120,10 +109,8 @@ export class GridsConfigsService
               { variables, fetchPolicy: "cache-and-network" },
               (res) => {
                 if (res.data && res.data.gridConfig)
-                  resolve(
-                    new GridConfig(res.data.gridConfig),
-                  );
-              },
+                  resolve(new GridConfig(res.data.gridConfig));
+              }
             );
           }),
       }),

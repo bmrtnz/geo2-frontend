@@ -29,7 +29,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     this.gridConfiguratorService.init(this.gridID, {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
@@ -37,21 +37,21 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     public localizeService: LocalizationService,
     private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
-    public gridRowStyleService: GridRowStyleService,
+    public gridRowStyleService: GridRowStyleService
   ) {
     this.apiService = this.lieuxPassageAQuaiService;
   }
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   private updateData(columns: GridColumn[]) {
     of(columns)
       .pipe(
         GridConfiguratorService.getVisible(),
-        GridConfiguratorService.getFields(),
+        GridConfiguratorService.getFields()
       )
       .subscribe((fields) => {
         this.dataGrid.dataSource =

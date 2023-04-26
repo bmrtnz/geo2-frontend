@@ -35,28 +35,17 @@ export class LitigeCausesService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allLitigeCause: RelayPage<LitigeCause> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allLitigeCause) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allLitigeCause,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allLitigeCause) {
+                resolve(this.asInstancedListCount(res.data.allLitigeCause));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -64,11 +53,9 @@ export class LitigeCausesService extends ApiService implements APIRead {
   }
 
   public getList(columns: Array<string>, search?: string) {
-    return this.apollo
-      .query<{ allLitigeCauseList: Partial<LitigeCause>[] }>({
-        query: gql(this.buildGetListGraph(columns)),
-        variables: { search }
-      });
+    return this.apollo.query<{ allLitigeCauseList: Partial<LitigeCause>[] }>({
+      query: gql(this.buildGetListGraph(columns)),
+      variables: { search },
+    });
   }
 }
-

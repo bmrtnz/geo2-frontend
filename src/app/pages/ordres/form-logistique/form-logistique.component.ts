@@ -6,6 +6,5 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./form-logistique.component.scss"],
 })
 export class FormLogistiqueComponent {
-  constructor() { }
-
+  constructor() {}
 }

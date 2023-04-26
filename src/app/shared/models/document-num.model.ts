@@ -4,7 +4,6 @@ import OrdreLigne from "./ordre-ligne.model";
 
 @ModelName("DocumentNum")
 export class DocumentNum extends Model {
-
   @Field({ asKey: true })
   ordreNumero: string;
 

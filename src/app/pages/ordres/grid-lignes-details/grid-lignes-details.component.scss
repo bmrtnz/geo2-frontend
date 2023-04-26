@@ -3,14 +3,12 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-ordre-ligne-detail {
-
   .dx-data-row .move-right input {
     text-align: right !important;
     padding-right: 7px !important;
   }
 
   .dx-row-focused {
-
     .bio-article {
       color: #39970e !important;
     }
@@ -22,7 +20,6 @@
   }
 
   .dx-header-row {
-
     .headerCellBtnTemplate {
       padding-top: 5px !important;
       padding-bottom: 5px !important;
@@ -48,7 +45,6 @@
   }
 
   .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
-
     input,
     div {
       color: #fff;
@@ -59,7 +55,7 @@
     background: rgba(51, 145, 176, 0.26);
   }
 
-  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type) {
+  .dx-row-focused.dx-data-row > td:not(.dx-focused):not(:first-of-type) {
     color: #000;
     background-color: transparent !important;
   }
@@ -68,7 +64,7 @@
     text-align: center !important;
   }
 
-  .dx-row-focused.dx-data-row>td {
+  .dx-row-focused.dx-data-row > td {
     // border-bottom-color: #e0e0e0 !important;
     border-bottom-color: $base-accent !important;
   }
@@ -109,11 +105,10 @@
       background-color: $BW-green-dark !important;
     }
   }
-
 }
 
 ::ng-deep .bold-grey-light {
-  background-color: #EEE;
+  background-color: #eee;
 
   input {
     font-weight: bold;

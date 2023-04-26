@@ -36,28 +36,17 @@ export class TypesTiersService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allTypeTiers: RelayPage<TypeTiers> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allTypeTiers) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allTypeTiers,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allTypeTiers) {
+                resolve(this.asInstancedListCount(res.data.allTypeTiers));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),

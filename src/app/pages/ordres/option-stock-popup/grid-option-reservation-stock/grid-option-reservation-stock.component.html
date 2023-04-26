@@ -1,19 +1,22 @@
-
 <div class="stock-info">{{ stockInfo }}</div>
 <div class="stock-info-boxes">
   <!-- Comm -->
   <div class="dx-field dx-field-stock-comm">
-    <div class="dx-field-label">{{ 'tiers-clients-details-groupe-commentaires' | localize }}</div>
+    <div class="dx-field-label">
+      {{ "tiers-clients-details-groupe-commentaires" | localize }}
+    </div>
     <div class="dx-field-value">
-      <dx-text-box #comBox [showClearButton]="true"
-        >
+      <dx-text-box
+        #comBox
+        [showClearButton]="true"
+      >
       </dx-text-box>
     </div>
   </div>
 
   <!-- Quantité -->
   <div class="dx-field dx-field-stock-qte">
-    <div class="dx-field-label">{{ 'quantite' | localize }}</div>
+    <div class="dx-field-label">{{ "quantite" | localize }}</div>
     <div class="dx-field-value">
       <dx-number-box
         #qteBox
@@ -24,7 +27,10 @@
         valueChangeEvent="keyup"
       >
         <dx-validator>
-          <dxi-validation-rule *ngIf="!!stockInfo" type="required"></dxi-validation-rule>
+          <dxi-validation-rule
+            *ngIf="!!stockInfo"
+            type="required"
+          ></dxi-validation-rule>
         </dx-validator>
       </dx-number-box>
     </div>
@@ -39,9 +45,8 @@
     [disabled]="!stockInfo"
     (onClick)="onClickReservation()"
   ></dx-button>
-
 </div>
-<div style="clear:both"></div>
+<div style="clear: both"></div>
 
 <div class="grid-option-reservation-stock">
   <dx-button

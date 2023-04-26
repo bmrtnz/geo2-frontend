@@ -17,8 +17,9 @@ import { FormUtilsService } from "./shared/services/form-utils.service";
 })
 export class AppComponent {
   @HostBinding("class") get getClass() {
-    const classes = Object.keys(this.screen.sizes)
-      .filter((cl) => this.screen.sizes[cl]);
+    const classes = Object.keys(this.screen.sizes).filter(
+      (cl) => this.screen.sizes[cl]
+    );
 
     if (environment.production) {
       classes.push("production");
@@ -39,16 +40,10 @@ export class AppComponent {
       const context2 = context.closest(".dx-datagrid-column-chooser");
       if (!context2) {
         document
-          .querySelectorAll(
-            ".dx-datagrid-column-chooser .dx-closebutton",
-          )
+          .querySelectorAll(".dx-datagrid-column-chooser .dx-closebutton")
           .forEach((btn) => {
             const closeBtn = btn as HTMLElement;
-            if (
-              this.isVisible(
-                closeBtn.closest(".dx-datagrid-column-chooser"),
-              )
-            )
+            if (this.isVisible(closeBtn.closest(".dx-datagrid-column-chooser")))
               closeBtn.click();
           });
       }
@@ -74,30 +69,30 @@ export class AppComponent {
       options: {
         searchMode: "startswith",
         searchEnabled: true,
-        onFocusIn: this.formUtilsService.selectTextOnFocusIn
-      }
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
     });
     // The below lookup part seems not to work...
     dxLookup.defaultOptions({
       options: {
         searchMode: "startswith",
-        searchEnabled: true
-      }
+        searchEnabled: true,
+      },
     });
     dxNumberBox.defaultOptions({
       options: {
-        onFocusIn: this.formUtilsService.selectTextOnFocusIn
-      }
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
     });
     dxTextBox.defaultOptions({
       options: {
-        onFocusIn: this.formUtilsService.selectTextOnFocusIn
-      }
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
     });
     dxDateBox.defaultOptions({
       options: {
         useMaskBehavior: true,
-      }
+      },
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
     dxDataGrid.defaultOptions({
@@ -106,7 +101,7 @@ export class AppComponent {
         columnFixing: { enabled: true },
         commonColumnSettings: {
           trueText: this.localization.localize("trueText"),
-          falseText: this.localization.localize("falseText")
+          falseText: this.localization.localize("falseText"),
         },
         pager: {
           showPageSizeSelector: true,
@@ -121,7 +116,7 @@ export class AppComponent {
           enterKeyDirection: "column",
           editOnKeyPress: true,
         }*/
-      }
+      },
     });
   }
 }

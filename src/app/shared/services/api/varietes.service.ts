@@ -25,31 +25,17 @@ export class VarietesService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll(1, this.listRegexp);
             type Response = { allVariete: RelayPage<Variete> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allVariete)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allVariete,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allVariete)
+                resolve(this.asInstancedListCount(res.data.allVariete));
+            });
           }),
         byKey: this.byKey(["id", "description"]),
       }),
@@ -71,23 +57,16 @@ export class VarietesService extends ApiService implements APIRead {
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-
             type Response = { allDistinctVariete: RelayPage<Variete> };
-            const query = await this.buildDistinctQuery(columns.map(c => `edges.node.${c}`));
-            const variables = this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allDistinctVariete) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allDistinctVariete,
-                    ),
-                  );
-                }
-              },
+            const query = await this.buildDistinctQuery(
+              columns.map((c) => `edges.node.${c}`)
             );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allDistinctVariete) {
+                resolve(this.asInstancedListCount(res.data.allDistinctVariete));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -95,15 +74,16 @@ export class VarietesService extends ApiService implements APIRead {
   }
 
   private byKey(columns: Array<string>) {
-    return id =>
+    return (id) =>
       new Promise(async (resolve) => {
         const variables = { id };
-        const res = await this.apollo.query<{ variete: Variete }>({
-          query: gql(this.buildGetOneGraph(columns)),
-          variables,
-        }).toPromise();
+        const res = await this.apollo
+          .query<{ variete: Variete }>({
+            query: gql(this.buildGetOneGraph(columns)),
+            variables,
+          })
+          .toPromise();
         resolve(new Variete(res.data.variete));
       });
   }
-
 }

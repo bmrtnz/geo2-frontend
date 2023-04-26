@@ -10,7 +10,11 @@ import { EMPTY, from, of, zip } from "rxjs";
 import { catchError, concatMap, filter, first, map } from "rxjs/operators";
 import { APICount, APIRead, ApiService } from "../api.service";
 import { LocalizationService } from "../localization.service";
-import { functionBody, FunctionResponse, FunctionResult } from "./functions.service";
+import {
+  functionBody,
+  FunctionResponse,
+  FunctionResult,
+} from "./functions.service";
 
 export type CountResponse = { countOrdreBaf: number };
 
@@ -19,18 +23,18 @@ export type CountResponse = { countOrdreBaf: number };
 })
 export class OrdresBafService
   extends ApiService
-  implements APIRead, APICount<CountResponse> {
-  constructor(
-    apollo: Apollo,
-    public localizationService: LocalizationService,
-  ) {
+  implements APIRead, APICount<CountResponse>
+{
+  constructor(apollo: Apollo, public localizationService: LocalizationService) {
     super(apollo, OrdreBaf);
   }
 
   public persistantVariables: Record<string, any> = {};
 
   private fBonAFacturerMain = this.buildFBonAFacturer("fBonAFacturer");
-  private fBonAFacturerPrepare = this.buildFBonAFacturer("fBonAFacturerPrepare");
+  private fBonAFacturerPrepare = this.buildFBonAFacturer(
+    "fBonAFacturerPrepare"
+  );
 
   setPersisantVariables(params = this.persistantVariables) {
     this.persistantVariables = params;
@@ -54,7 +58,7 @@ export class OrdresBafService
                 if (res.data && res.data.fAfficheBaf) {
                   resolve(res.data.fAfficheBaf);
                 }
-              },
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -132,60 +136,93 @@ export class OrdresBafService
         { name: "dateMax", type: "LocalDate", isOptionnal: false },
         { name: "codeAssistante", type: "String", isOptionnal: true },
         { name: "codeCommercial", type: "String", isOptionnal: true },
-      ],
+      ]
     );
   }
-
 
   /**
    * Mise en Bon à facturer - f_bon_a_facturer
    */
-  private buildFBonAFacturer(queryName: "fBonAFacturer" | "fBonAFacturerPrepare") {
-    return (ordreRef: string, socCode: string) => this.apollo
-      .query<{ [queryName: string]: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: queryName,
-              body: functionBody,
-              params: [
-                { name: "ordreRef", value: "ordreRef", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true }
-              ]
-            }
-          ],
-          [
-            { name: "ordreRef", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false }
-          ],
-        )),
+  private buildFBonAFacturer(
+    queryName: "fBonAFacturer" | "fBonAFacturerPrepare"
+  ) {
+    return (ordreRef: string, socCode: string) =>
+      this.apollo.query<{ [queryName: string]: FunctionResponse }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: queryName,
+                body: functionBody,
+                params: [
+                  { name: "ordreRef", value: "ordreRef", isVariable: true },
+                  { name: "socCode", value: "socCode", isVariable: true },
+                ],
+              },
+            ],
+            [
+              { name: "ordreRef", type: "String", isOptionnal: false },
+              { name: "socCode", type: "String", isOptionnal: false },
+            ]
+          )
+        ),
         variables: { ordreRef, socCode },
         fetchPolicy: "network-only",
       });
   }
 
-  public fBonAFacturer(ordreRefs: Array<Ordre["id"]>, societeCode: Societe["id"], noWarning?) {
+  public fBonAFacturer(
+    ordreRefs: Array<Ordre["id"]>,
+    societeCode: Societe["id"],
+    noWarning?
+  ) {
     return from(ordreRefs).pipe(
-      concatMap(ordreRef => zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))),
-      catchError((err: Error) => (alert(this.messageFormat(err.message), "Erreur Mise en bon à facturer"), EMPTY)),
-      map(([ref, res]) => [ref, res.data.fBonAFacturerPrepare] as [string, FunctionResponse<Record<string, any>>]),
-      concatMap(([ref, result]) => zip(
-        of(ref), ((result.res === FunctionResult.Warning) && !noWarning) ? confirm(this.messageFormat(result.msg), "Attention") : of(true)
-      )),
+      concatMap((ordreRef) =>
+        zip(of(ordreRef), this.fBonAFacturerPrepare(ordreRef, societeCode))
+      ),
+      catchError(
+        (err: Error) => (
+          alert(
+            this.messageFormat(err.message),
+            "Erreur Mise en bon à facturer"
+          ),
+          EMPTY
+        )
+      ),
+      map(
+        ([ref, res]) =>
+          [ref, res.data.fBonAFacturerPrepare] as [
+            string,
+            FunctionResponse<Record<string, any>>
+          ]
+      ),
+      concatMap(([ref, result]) =>
+        zip(
+          of(ref),
+          result.res === FunctionResult.Warning && !noWarning
+            ? confirm(this.messageFormat(result.msg), "Attention")
+            : of(true)
+        )
+      ),
       filter(([, choice]) => choice),
-      concatMap(([ref]) => zip(of(ref), this.fBonAFacturerMain(ref, societeCode))),
-      map(([ordre, res]) => ({ ...res.data.fBonAFacturer, data: { ...res.data.fBonAFacturer.data, ordre } })),
+      concatMap(([ref]) =>
+        zip(of(ref), this.fBonAFacturerMain(ref, societeCode))
+      ),
+      map(([ordre, res]) => ({
+        ...res.data.fBonAFacturer,
+        data: { ...res.data.fBonAFacturer.data, ordre },
+      }))
     );
   }
 
   /**
    * Retourne l'indicateur BAF pour un id d'ordre donné
    */
-  public fControlBaf =
-    (ordreRef: string, societeCode: string) => this.apollo
-      .query<{ fControlBaf: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  public fControlBaf = (ordreRef: string, societeCode: string) =>
+    this.apollo.query<{ fControlBaf: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -194,21 +231,28 @@ export class OrdresBafService
               params: [
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
                 { name: "societeCode", value: "societeCode", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "ordreRef", type: "String", isOptionnal: false },
             { name: "societeCode", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreRef, societeCode },
-        fetchPolicy: "network-only",
-      })
+          ]
+        )
+      ),
+      variables: { ordreRef, societeCode },
+      fetchPolicy: "network-only",
+    });
 
   private messageFormat(mess) {
-    mess = mess.replaceAll("%%%", this.localizationService.localize("blocking"));
-    mess = mess.replace("Exception while fetching data (/fBonAFacturerPrepare) : ", "");
+    mess = mess.replaceAll(
+      "%%%",
+      this.localizationService.localize("blocking")
+    );
+    mess = mess.replace(
+      "Exception while fetching data (/fBonAFacturerPrepare) : ",
+      ""
+    );
     mess = mess.replaceAll("(", "<br>(");
     mess = mess.replaceAll(/(?:\\[r])+/g, "<br><br>");
     mess = mess.replaceAll(/(?:\~r\~n)+/g, "");
@@ -216,5 +260,4 @@ export class OrdresBafService
     if (mess.substring(0, 4) === "<br>") mess = mess.substring(4);
     return mess;
   }
-
 }

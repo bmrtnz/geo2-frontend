@@ -8,16 +8,14 @@ import {
   DxDataGridModule,
   DxDrawerModule,
   DxFormModule,
-  DxListModule
+  DxListModule,
 } from "devextreme-angular";
 import { SideNavOuterToolbarModule, SingleCardModule } from "../layouts";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { PagesComponent } from "./pages.component";
 
 @NgModule({
-  declarations: [
-    PagesComponent,
-  ],
+  declarations: [PagesComponent],
   imports: [
     PagesRoutingModule,
     CommonModule,
@@ -33,4 +31,4 @@ import { PagesComponent } from "./pages.component";
     FooterModule,
   ],
 })
-export class PagesModule { }
+export class PagesModule {}

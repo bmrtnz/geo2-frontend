@@ -112,8 +112,8 @@ export class PaysDepassement extends Model {
     format: { type: "currency", precision: 2 },
     currency: "EUR",
   })
-  @Field({ model: import("./personne.model") }) public commercial: Personne;
-
+  @Field({ model: import("./personne.model") })
+  public commercial: Personne;
 }
 
 export default PaysDepassement;

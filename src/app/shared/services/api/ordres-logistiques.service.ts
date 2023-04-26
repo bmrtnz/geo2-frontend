@@ -24,9 +24,7 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             // const query = await this.buildGetAll(depth, filter);
@@ -34,21 +32,12 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
             type Response = {
               allOrdreLogistique: RelayPage<OrdreLogistique>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allOrdreLogistique)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allOrdreLogistique,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allOrdreLogistique)
+                resolve(this.asInstancedListCount(res.data.allOrdreLogistique));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
@@ -56,18 +45,10 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
             const query = await this.buildGetOne(depth);
             type Response = { ordreLogistique: OrdreLogistique };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.ordreLogistique)
-                  resolve(
-                    new OrdreLogistique(
-                      res.data.ordreLogistique,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.ordreLogistique)
+                resolve(new OrdreLogistique(res.data.ordreLogistique));
+            });
           }),
       }),
     });
@@ -94,17 +75,14 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allOrdreLogistique: RelayPage<OrdreLogistique>;
             };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
             this.listenQuery<Response>(
               query,
               {
@@ -114,12 +92,10 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
               (res) => {
                 if (res.data && res.data.allOrdreLogistique) {
                   resolve(
-                    this.asInstancedListCount(
-                      res.data.allOrdreLogistique,
-                    ),
+                    this.asInstancedListCount(res.data.allOrdreLogistique)
                   );
                 }
-              },
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -133,7 +109,9 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise() as Promise<any>;
+          return this.watchDeleteQuery({
+            variables,
+          }).toPromise() as Promise<any>;
         },
       }),
     });
@@ -147,8 +125,13 @@ export class OrdresLogistiquesService extends ApiService implements APIRead {
     });
   }
 
-  saveAll(body: Set<string>, allOrdreLogistique: Array<Partial<OrdreLogistique>>) {
-    return this.apollo.mutate<{ saveAllOrdreLogistique: Array<Partial<OrdreLogistique>> }>({
+  saveAll(
+    body: Set<string>,
+    allOrdreLogistique: Array<Partial<OrdreLogistique>>
+  ) {
+    return this.apollo.mutate<{
+      saveAllOrdreLogistique: Array<Partial<OrdreLogistique>>;
+    }>({
       mutation: gql(this.buildSaveAllGraph([...body])),
       variables: { allOrdreLogistique },
     });

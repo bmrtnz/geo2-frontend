@@ -36,11 +36,11 @@ export class GridHistoriqueComponent {
     private authService: AuthService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
-    public tabContext: TabContext,
+    public tabContext: TabContext
   ) {
     this.detailedFields = gridsConfig.historique.columns as GridColumn[];
     this.dataSource = mruOrdresService.getHeadListDataSource(
-      this.detailedFields.map((property) => property.dataField),
+      this.detailedFields.map((property) => property.dataField)
     );
   }
 
@@ -65,9 +65,7 @@ export class GridHistoriqueComponent {
     if (e.column.dataField === "ordre.sommeColisCommandes") {
       if (e.data?.ordre.sommeColisCommandes > 0) {
         e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          e.data.ordre.sommeColisExpedies;
+          e.cellElement.innerText + "/" + e.data.ordre.sommeColisExpedies;
       }
     }
   }

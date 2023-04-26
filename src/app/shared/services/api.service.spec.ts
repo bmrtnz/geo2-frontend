@@ -56,7 +56,7 @@ describe("ApiService", () => {
     TestBed.configureTestingModule({
       providers: [TestApiService],
       imports: [ApolloTestingModule],
-    }),
+    })
   );
 
   it("should be created", () => {
@@ -73,9 +73,7 @@ describe("ApiService", () => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const listCount = service.asListCount(mockRelayPage);
     expect(listCount.totalCount).toEqual(mockRelayPage.totalCount);
-    expect(listCount.data).toEqual(
-      mockRelayPage.edges.map(({ node }) => node),
-    );
+    expect(listCount.data).toEqual(mockRelayPage.edges.map(({ node }) => node));
   });
 
   it("should handle `asInstancedListCount()`", () => {
@@ -84,7 +82,7 @@ describe("ApiService", () => {
       service.asInstancedListCount<Test>(mockRelayPage);
     expect(instancedListCount.totalCount).toEqual(mockRelayPage.totalCount);
     expect(instancedListCount.data).toEqual(
-      mockRelayPage.edges.map(({ node }) => new Test(node)),
+      mockRelayPage.edges.map(({ node }) => new Test(node))
     );
     expect(instancedListCount.data[0]).toEqual(jasmine.any(Test));
   });
@@ -113,7 +111,7 @@ describe("ApiService", () => {
   it("should handle `locatePage()`", (done) => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const controller: ApolloTestingController = TestBed.inject(
-      ApolloTestingController,
+      ApolloTestingController
     );
 
     service
@@ -155,37 +153,37 @@ describe("ApiService", () => {
     const service: TestApiService = TestBed.inject(TestApiService);
 
     expect(service.mapDXFilterToRSQL(["valide", "=", "true"])).toEqual(
-      "valide==\"true\"",
+      'valide=="true"'
     );
     expect(service.mapDXFilterToRSQL(["valide", "<>", "true"])).toEqual(
-      "valide!=\"true\"",
+      'valide!="true"'
     );
     expect(
-      service.mapDXFilterToRSQL(["description", "contains", "one"]),
-    ).toEqual("description=ilike=\"%one%\"");
+      service.mapDXFilterToRSQL(["description", "contains", "one"])
+    ).toEqual('description=ilike="%one%"');
     expect(
-      service.mapDXFilterToRSQL(["description", "notcontains", "one"]),
-    ).toEqual("description=inotlike=\"%one%\"");
+      service.mapDXFilterToRSQL(["description", "notcontains", "one"])
+    ).toEqual('description=inotlike="%one%"');
     expect(
-      service.mapDXFilterToRSQL(["description", "startswith", "one"]),
-    ).toEqual("description=ilike=\"one%\"");
+      service.mapDXFilterToRSQL(["description", "startswith", "one"])
+    ).toEqual('description=ilike="one%"');
     expect(
-      service.mapDXFilterToRSQL(["description", "endswith", "one"]),
-    ).toEqual("description=ilike=\"%one\"");
+      service.mapDXFilterToRSQL(["description", "endswith", "one"])
+    ).toEqual('description=ilike="%one"');
     expect(
       service.mapDXFilterToRSQL([
         ["valide", "=", "true"],
         "and",
         ["id", "=", "002"],
-      ]),
-    ).toEqual("valide==\"true\" and id==\"002\"");
+      ])
+    ).toEqual('valide=="true" and id=="002"');
     expect(
       service.mapDXFilterToRSQL([
         ["description", "contains", "one"],
         "or",
         ["description", "contains", "two"],
-      ]),
-    ).toEqual("description=ilike=\"%one%\" or description=ilike=\"%two%\"");
+      ])
+    ).toEqual('description=ilike="%one%" or description=ilike="%two%"');
   });
 
   it("should handle `mapLoadOptionsToVariables()`", () => {
@@ -197,9 +195,7 @@ describe("ApiService", () => {
     };
     const variables = service.mapLoadOptionsToVariables(options);
 
-    expect(variables.pageable.pageNumber).toEqual(
-      options.skip / options.take,
-    );
+    expect(variables.pageable.pageNumber).toEqual(options.skip / options.take);
     expect(variables.pageable.pageSize).toEqual(options.take);
     expect(variables.search).toEqual("");
     expect(variables.pageable.sort.orders).toEqual([
@@ -211,18 +207,18 @@ describe("ApiService", () => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const merged = service.mergeVariables(
       { search: "valide==true" },
-      { search: "description=ilike=\"%one%\"" },
+      { search: 'description=ilike="%one%"' }
     );
 
     expect(merged.search).toEqual(
-      "(valide==true) and (description=ilike=\"%one%\")",
+      '(valide==true) and (description=ilike="%one%")'
     );
   });
 
   it("should handle `listenQuery()`", (done) => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const controller: ApolloTestingController = TestBed.inject(
-      ApolloTestingController,
+      ApolloTestingController
     );
     const query = `
       query Test($id: Int!) {
@@ -240,15 +236,14 @@ describe("ApiService", () => {
         expect(res.data.test.id).toEqual("002");
         expect(res.data.test.valide).toEqual(false);
         done();
-      },
+      }
     );
 
     const operation = controller.expectOne("Test");
     expect(operation.operation.variables.id).toEqual("002");
     operation.flush({
       data: {
-        test: mockRelayPage.edges.find(({ node }) => node.id === "002")
-          .node,
+        test: mockRelayPage.edges.find(({ node }) => node.id === "002").node,
       },
     });
     controller.verify();
@@ -279,7 +274,7 @@ describe("ApiService", () => {
   it("should handle `loadDistinctQuery()`", (done) => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const controller: ApolloTestingController = TestBed.inject(
-      ApolloTestingController,
+      ApolloTestingController
     );
     const options: LoadOptions = {
       group: { selector: "id" },
@@ -342,7 +337,7 @@ describe("ApiService", () => {
   it("should handle `watchDeleteQuery()`", (done) => {
     const service: TestApiService = TestBed.inject(TestApiService);
     const controller: ApolloTestingController = TestBed.inject(
-      ApolloTestingController,
+      ApolloTestingController
     );
     const variables = { test: { id: "001" } };
 

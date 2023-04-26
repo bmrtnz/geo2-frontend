@@ -10,59 +10,59 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import notify from "devextreme/ui/notify";
 
 @Component({
-    selector: "app-company-chooser-panel",
-    templateUrl: "company-chooser.component.html",
-    styleUrls: ["./company-chooser.component.scss"],
+  selector: "app-company-chooser-panel",
+  templateUrl: "company-chooser.component.html",
+  styleUrls: ["./company-chooser.component.scss"],
 })
 export class CompanyChooserComponent implements OnInit {
-    @Input()
-    companyItems: DataSource;
+  @Input()
+  companyItems: DataSource;
 
-    @Input()
-    menuMode: string;
+  @Input()
+  menuMode: string;
 
-    societe: {};
+  societe: {};
 
-    constructor(
-        private router: Router,
-        public currentCompanyService: CurrentCompanyService,
-    ) { }
+  constructor(
+    private router: Router,
+    public currentCompanyService: CurrentCompanyService
+  ) {}
 
-    ngOnInit() {
-        // Session storage
-        const data = this.currentCompanyService.getCompany();
-        if (data !== null) {
-            this.societe = data.raisonSocial;
+  ngOnInit() {
+    // Session storage
+    const data = this.currentCompanyService.getCompany();
+    if (data !== null) {
+      this.societe = data.raisonSocial;
+    } else {
+      this.companyItems.load().then((res) => {
+        if (res.length) {
+          this.selectCompany(res[0]);
         } else {
-            this.companyItems.load().then((res) => {
-                if (res.length) {
-                    this.selectCompany(res[0]);
-                } else {
-                    notify("Aucune société liée au compte", "error");
-                }
-            });
+          notify("Aucune société liée au compte", "error");
         }
+      });
+    }
+  }
+
+  selectCompany(e) {
+    if (e.itemData) {
+      e = e.itemData;
     }
 
-    selectCompany(e) {
-        if (e.itemData) {
-            e = e.itemData;
-        }
-
-        const societe = e;
-        // Session storage
-        this.currentCompanyService.setCompany(societe);
-        this.societe = societe.raisonSocial;
-        // Back home (to avoid non consistent data)
-        this.router.navigate([`/**`]);
-        // // Force destroy views, so data will be valid
-        // return window.location.reload();
-    }
+    const societe = e;
+    // Session storage
+    this.currentCompanyService.setCompany(societe);
+    this.societe = societe.raisonSocial;
+    // Back home (to avoid non consistent data)
+    this.router.navigate([`/**`]);
+    // // Force destroy views, so data will be valid
+    // return window.location.reload();
+  }
 }
 
 @NgModule({
-    imports: [DxListModule, DxContextMenuModule, CommonModule],
-    declarations: [CompanyChooserComponent],
-    exports: [CompanyChooserComponent],
+  imports: [DxListModule, DxContextMenuModule, CommonModule],
+  declarations: [CompanyChooserComponent],
+  exports: [CompanyChooserComponent],
 })
-export class CompanyChooserModule { }
+export class CompanyChooserModule {}

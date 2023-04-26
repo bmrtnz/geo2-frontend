@@ -10,7 +10,8 @@ import { APIRead, ApiService } from "../api.service";
 })
 export class PlanningTransporteursService
   extends ApiService
-  implements APIRead {
+  implements APIRead
+{
   readonly operation = "allPlanningTransporteurs";
 
   constructor(apollo: Apollo) {
@@ -28,28 +29,20 @@ export class PlanningTransporteursService
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            const query = await this.buildList(
-              columns,
-              this.operation,
-            );
+            const query = await this.buildList(columns, this.operation);
             type Response = {
               [operation: string]: PlanningTransporteur[];
             };
 
             const variables = this.persistantVariables;
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data[this.operation]) {
-                  resolve({
-                    data: res.data[this.operation],
-                    totalCount:
-                      res.data[this.operation].length,
-                  });
-                }
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data[this.operation]) {
+                resolve({
+                  data: res.data[this.operation],
+                  totalCount: res.data[this.operation].length,
+                });
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -64,11 +57,7 @@ export class PlanningTransporteursService
         const variables = { id: key };
         this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.planningTransporteur)
-            resolve(
-              new PlanningTransporteur(
-                res.data.planningTransporteur,
-              ),
-            );
+            resolve(new PlanningTransporteur(res.data.planningTransporteur));
         });
       });
   }

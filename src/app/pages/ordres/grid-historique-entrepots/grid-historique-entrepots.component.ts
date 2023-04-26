@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { Entrepot } from "app/shared/models";
 import { AuthService } from "app/shared/services";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
@@ -24,13 +30,15 @@ import notify from "devextreme/ui/notify";
   styleUrls: ["./grid-historique-entrepots.component.scss"],
 })
 export class GridHistoriqueEntrepotsComponent
-  implements OnInit, SingleSelection<MRUEntrepot> {
+  implements OnInit, SingleSelection<MRUEntrepot>
+{
   readonly gridID = Grid.OrdreHistoriqueEntrepot;
 
   @Output() public pulseButton = new EventEmitter();
   @Output() public hideCreateButton = new EventEmitter();
 
-  @ViewChild(DxDataGridComponent, { static: false }) public grid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: false })
+  public grid: DxDataGridComponent;
 
   public columns: Observable<GridColumn[]>;
   public gridConfigHandler = (event) =>
@@ -38,7 +46,7 @@ export class GridHistoriqueEntrepotsComponent
       ...event,
       title: "Liste des entrepôts",
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public mruEntrepotsService: MruEntrepotsService,
@@ -47,12 +55,12 @@ export class GridHistoriqueEntrepotsComponent
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
-    public tabContext: TabContext,
-  ) { }
+    public tabContext: TabContext
+  ) {}
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   onColumnsChange({ current }: { current: GridColumn[] }) {
@@ -69,16 +77,12 @@ export class GridHistoriqueEntrepotsComponent
             `entrepot.${Entrepot.getKeyField()}`,
             `entrepot.${Entrepot.getLabelField()}`,
             ...fields,
-          ]),
-        ),
+          ])
+        )
       )
       .subscribe((datasource) => {
         const filters = [
-          [
-            "societe.id",
-            "=",
-            this.currentCompanyService.getCompany().id,
-          ],
+          ["societe.id", "=", this.currentCompanyService.getCompany().id],
           "and",
           ["entrepot.valide", "=", true],
           "and",
@@ -118,38 +122,44 @@ export class GridHistoriqueEntrepotsComponent
     const selected = e.component.getSelectedRowKeys();
     this.hideCreateButton.emit(selected?.length > 1);
     if (selected.length === 1) {
-      e.component.option("focusedRowIndex", e.component.getRowIndexByKey(selected[0]));
+      e.component.option(
+        "focusedRowIndex",
+        e.component.getRowIndexByKey(selected[0])
+      );
     }
   }
 
   deleteItem() {
-    this.grid?.instance.getSelectedRowsData().map(data => {
+    this.grid?.instance.getSelectedRowsData().map((data) => {
       this.mruEntrepotsService.deleteOne(data.entrepot.id).subscribe({
-        next: async res => {
+        next: async (res) => {
           notify(this.localizeService.localize("delete-done"), "success", 2000);
           this.refreshGrid();
         },
         error: (err) => {
           console.log(err);
           notify(this.localizeService.localize("delete-error"), "error", 2000);
-        }
+        },
       });
     });
   }
 
   async deleteAllItems() {
-    if (await confirm(
-      this.localizeService.localize("text-popup-supprimer-favoris"),
-      this.localizeService.localize("text-popup-title-favoris"))) {
+    if (
+      await confirm(
+        this.localizeService.localize("text-popup-supprimer-favoris"),
+        this.localizeService.localize("text-popup-title-favoris")
+      )
+    ) {
       this.mruEntrepotsService.deleteAll().subscribe({
-        next: res => {
+        next: (res) => {
           notify(this.localizeService.localize("delete-done"), "success", 2000);
           this.refreshGrid();
         },
         error: (err) => {
           console.log(err);
           notify(this.localizeService.localize("delete-error"), "error", 2000);
-        }
+        },
       });
     }
   }
@@ -158,5 +168,4 @@ export class GridHistoriqueEntrepotsComponent
     this.grid.instance.refresh();
     this.grid.instance.clearSelection();
   }
-
 }

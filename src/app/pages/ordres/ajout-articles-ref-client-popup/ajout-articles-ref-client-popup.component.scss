@@ -2,7 +2,6 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .app-ajout-articles-ref-client-popup {
-
   .max-tags {
     input {
       display: none !important;
@@ -44,9 +43,8 @@
   }
 
   .dx-popup-content {
-
     .ajout-art-manu-content-container {
-      background: #FFF !important;
+      background: #fff !important;
       padding: 0 15px 0 2px;
 
       .articles-title {
@@ -67,6 +65,5 @@
       //   margin-right: 15px;
       // }
     }
-
   }
 }

@@ -11,12 +11,11 @@ import { FormUtilsService } from "../form-utils.service";
 @Injectable({
   providedIn: "root",
 })
-export class EntrepotsTransporteursBassinsService extends ApiService implements APIRead {
-
-  constructor(
-    apollo: Apollo,
-    private formUtils: FormUtilsService,
-  ) {
+export class EntrepotsTransporteursBassinsService
+  extends ApiService
+  implements APIRead
+{
+  constructor(apollo: Apollo, private formUtils: FormUtilsService) {
     super(apollo, EntrepotTransporteurBassin);
   }
 
@@ -34,7 +33,6 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
@@ -42,66 +40,97 @@ export class EntrepotsTransporteursBassinsService extends ApiService implements 
               });
 
             const query = await this.buildGetAll_v2(columns);
-            type Response = { allEntrepotTransporteurBassin: RelayPage<EntrepotTransporteurBassin> };
+            type Response = {
+              allEntrepotTransporteurBassin: RelayPage<EntrepotTransporteurBassin>;
+            };
             const variables = this.mapLoadOptionsToVariables(options);
 
             this.listenQuery<Response>(
               query,
               { variables, fetchPolicy: "network-only" },
-              res => {
+              (res) => {
                 if (res.data && res.data.allEntrepotTransporteurBassin)
                   resolve(
                     // map to mutable object by serializing & deserializing apollo data
-                    JSON.parse(JSON.stringify(this.asInstancedListCount(
-                      res.data.allEntrepotTransporteurBassin,
-                    )))
+                    JSON.parse(
+                      JSON.stringify(
+                        this.asInstancedListCount(
+                          res.data.allEntrepotTransporteurBassin
+                        )
+                      )
+                    )
                   );
-              },
+              }
             );
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne_v2(columns);
-            type Response = { entrepotTransporteurBassin: EntrepotTransporteurBassin };
+            type Response = {
+              entrepotTransporteurBassin: EntrepotTransporteurBassin;
+            };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              res => {
-                if (res.data && res.data.entrepotTransporteurBassin)
-                  resolve(new EntrepotTransporteurBassin(res.data.entrepotTransporteurBassin));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.entrepotTransporteurBassin)
+                resolve(
+                  new EntrepotTransporteurBassin(
+                    res.data.entrepotTransporteurBassin
+                  )
+                );
+            });
           }),
-        insert: values =>
-          this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
-            mutation: gql(this.buildSaveGraph(["id", ...this.formUtils.extractPaths(values)])),
-            variables: { entrepotTransporteurBassin: { id: null, ...this.formUtils.cleanTypenames(values) } },
-          })
-            .pipe(
-              map(res => res.data.saveEntrepotTransporteurBassin),
-            )
+        insert: (values) =>
+          this.apollo
+            .mutate<{
+              saveEntrepotTransporteurBassin: EntrepotTransporteurBassin;
+            }>({
+              mutation: gql(
+                this.buildSaveGraph([
+                  "id",
+                  ...this.formUtils.extractPaths(values),
+                ])
+              ),
+              variables: {
+                entrepotTransporteurBassin: {
+                  id: null,
+                  ...this.formUtils.cleanTypenames(values),
+                },
+              },
+            })
+            .pipe(map((res) => res.data.saveEntrepotTransporteurBassin))
             .toPromise(),
         update: (id, values) =>
-          this.apollo.mutate<{ saveEntrepotTransporteurBassin: EntrepotTransporteurBassin }>({
-            mutation: gql(this.buildSaveGraph(["id", ...this.formUtils.extractPaths(values)])),
-            variables: { entrepotTransporteurBassin: { id, ...this.formUtils.cleanTypenames(values) } },
-          })
-            .pipe(
-              map(res => res.data.saveEntrepotTransporteurBassin),
-            )
+          this.apollo
+            .mutate<{
+              saveEntrepotTransporteurBassin: EntrepotTransporteurBassin;
+            }>({
+              mutation: gql(
+                this.buildSaveGraph([
+                  "id",
+                  ...this.formUtils.extractPaths(values),
+                ])
+              ),
+              variables: {
+                entrepotTransporteurBassin: {
+                  id,
+                  ...this.formUtils.cleanTypenames(values),
+                },
+              },
+            })
+            .pipe(map((res) => res.data.saveEntrepotTransporteurBassin))
             .toPromise(),
-        remove: id => this.apollo.mutate({
-          mutation: gql(this.buildDeleteGraph("BigDecimal")),
-          variables: { id },
-        }).toPromise() as unknown as PromiseLike<void>
-      },
-      ),
+        remove: (id) =>
+          this.apollo
+            .mutate({
+              mutation: gql(this.buildDeleteGraph("BigDecimal")),
+              variables: { id },
+            })
+            .toPromise() as unknown as PromiseLike<void>,
+      }),
     });
   }
 
   save_v2(columns: Array<string>, variables: OperationVariables) {
     return this.watchSaveQuery_v2({ variables }, columns);
   }
-
 }

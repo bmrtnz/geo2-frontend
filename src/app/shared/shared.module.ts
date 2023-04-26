@@ -7,12 +7,7 @@ import { LocalizePipe } from "./pipes";
 import { EvalDisplayPipe } from "./services/grid-configurator.service";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   declarations: [LocalizePipe, EvalDisplayPipe],
   exports: [CommonModule, LocalizePipe, EvalDisplayPipe],
 })
@@ -27,7 +22,7 @@ export class SharedModule {
             getChooserColumns(loadAllColumns) {
               const result = this.callBase(loadAllColumns);
               return result.sort((column1, column2) =>
-                column1.caption?.localeCompare(column2.caption),
+                column1.caption?.localeCompare(column2.caption)
               );
             },
           },

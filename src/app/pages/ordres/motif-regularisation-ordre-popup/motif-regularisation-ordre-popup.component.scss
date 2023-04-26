@@ -3,7 +3,6 @@
 @import "scss/variables.scss";
 
 ::ng-deep .motif-regularisation-ordre-popup {
-
   .radio-group-popup {
     height: 40px;
     margin-top: -7px;
@@ -23,7 +22,7 @@
     }
   }
 
-  .dx-field-value:not(.dx-widget)>.dx-checkbox {
+  .dx-field-value:not(.dx-widget) > .dx-checkbox {
     margin: 0 !important;
   }
 

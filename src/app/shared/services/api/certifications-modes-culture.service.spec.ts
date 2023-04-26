@@ -6,7 +6,9 @@ describe("CertificationsModesCultureService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it("should be created", () => {
-    const service: CertificationsModesCultureService = TestBed.get(CertificationsModesCultureService);
+    const service: CertificationsModesCultureService = TestBed.get(
+      CertificationsModesCultureService
+    );
     expect(service).toBeTruthy();
   });
 });

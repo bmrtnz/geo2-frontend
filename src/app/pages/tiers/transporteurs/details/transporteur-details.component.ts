@@ -42,8 +42,8 @@ import { switchMap, tap } from "rxjs/operators";
   styleUrls: ["./transporteur-details.component.scss"],
 })
 export class TransporteurDetailsComponent
-  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
-
+  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable
+{
   @Input() public transporteurLigneId: string;
 
   formGroup = this.fb.group({
@@ -79,17 +79,24 @@ export class TransporteurDetailsComponent
     "adresse3",
     "codePostal",
     "ville",
-    "pays.id", "pays.description",
-    "regimeTva.id", "regimeTva.description",
+    "pays.id",
+    "pays.description",
+    "regimeTva.id",
+    "regimeTva.description",
     "nbJourEcheance",
     "echeanceLe",
-    "moyenPaiement.id", "moyenPaiement.description",
+    "moyenPaiement.id",
+    "moyenPaiement.description",
     "tvaCee",
-    "clientRaisonSocial.id", "clientRaisonSocial.raisonSocial",
-    "basePaiement.id", "basePaiement.description",
+    "clientRaisonSocial.id",
+    "clientRaisonSocial.raisonSocial",
+    "basePaiement.id",
+    "basePaiement.description",
     "compteComptable",
-    "langue.id", "langue.description",
-    "devise.id", "devise.description",
+    "langue.id",
+    "langue.description",
+    "devise.id",
+    "devise.description",
     "lieuFonctionEan",
     "historique.id",
     "historique.commentaire",
@@ -152,7 +159,7 @@ export class TransporteurDetailsComponent
     private clientsService: ClientsService,
     private router: Router,
     private route: ActivatedRoute,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -178,7 +185,6 @@ export class TransporteurDetailsComponent
   }
 
   ngOnInit() {
-
     this.pays = this.paysService.getDataSource_v2(["id", "description"]);
     this.pays.filter(["valide", "=", "true"]);
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -189,11 +195,15 @@ export class TransporteurDetailsComponent
     this.moyensPaiement.filter(["valide", "=", "true"]);
     this.basesPaiement = this.basesPaiementService.getDataSource();
     this.basesPaiement.filter(["valide", "=", "true"]);
-    this.clientsRaisonSocial = this.clientsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+    this.clientsRaisonSocial = this.clientsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+    ]);
     this.clientsRaisonSocial.filter([
       ["valide", "=", "true"],
       "and",
-      ["typeClient.id", "=", "TRANSP"]
+      ["typeClient.id", "=", "TRANSP"],
     ]);
 
     if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
@@ -207,41 +217,33 @@ export class TransporteurDetailsComponent
         this.createMode = url[url.length - 1].path === "create";
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.transporteursService.getOne_v2(params.id, this.inheritedFields)
-            .subscribe((res) =>
-              this.afterLoadInitForm(res)
-            );
+          this.transporteursService
+            .getOne_v2(params.id, this.inheritedFields)
+            .subscribe((res) => this.afterLoadInitForm(res));
         } else {
           this.transporteur = new Transporteur({});
           this.contentReadyEvent.emit();
         }
       });
-
   }
 
   ngOnChanges() {
-
     // Zoom transporteur mode when clicking on an order logistic row for e.g.
     if (this.transporteurLigneId) {
       this.formGroup.reset();
       this.preSaisie = "";
 
-      this.transporteursService.getOne_v2(this.transporteurLigneId, this.inheritedFields)
-        .subscribe((res) =>
-          this.afterLoadInitForm(res)
-        );
+      this.transporteursService
+        .getOne_v2(this.transporteurLigneId, this.inheritedFields)
+        .subscribe((res) => this.afterLoadInitForm(res));
     }
-
   }
 
   afterLoadInitForm(res) {
     this.transporteur = res.data.transporteur;
     this.formGroup.patchValue(this.transporteur);
     this.contentReadyEvent.emit();
-    this.preSaisie =
-      this.transporteur.preSaisie === true
-        ? "preSaisie"
-        : "";
+    this.preSaisie = this.transporteur.preSaisie === true ? "preSaisie" : "";
   }
 
   checkCode(params) {
@@ -264,7 +266,7 @@ export class TransporteurDetailsComponent
     transporteursSource
       .load()
       .then((res) =>
-        res.length ? (this.CCexists = true) : (this.CCexists = false),
+        res.length ? (this.CCexists = true) : (this.CCexists = false)
       );
   }
 
@@ -272,7 +274,7 @@ export class TransporteurDetailsComponent
     if (this.editing && e.value === null) {
       this.formUtils.setIdToNull(
         this.formGroup,
-        e.element.attributes.formcontrolname.nodeValue,
+        e.element.attributes.formcontrolname.nodeValue
       );
     }
   }
@@ -307,12 +309,12 @@ export class TransporteurDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -324,16 +326,14 @@ export class TransporteurDetailsComponent
     if (!this.formGroup.pristine && this.formGroup.valid) {
       let transporteur = this.formUtils.extractDirty(
         this.formGroup.controls,
-        Transporteur.getKeyField(),
+        Transporteur.getKeyField()
       );
 
       if (this.createMode) {
         this.infoComponent.visible = true;
         this.infoComponent.doNavigate.subscribe((res) => {
           if (res) {
-            transporteur.id = this.formGroup
-              .get("id")
-              .value.toUpperCase();
+            transporteur.id = this.formGroup.get("id").value.toUpperCase();
             // Ici on fait rien pour le moment l'id est deja dans l'object lieupassageaquai
             // Avoir pour les valeur par defaut (qui sont not null dans la base)
             transporteur.preSaisie = true;
@@ -358,7 +358,7 @@ export class TransporteurDetailsComponent
               Transporteur.name,
               this.transporteur,
               this.formGroup,
-              "tiers-transporteurs-",
+              "tiers-transporteurs-"
             )
             .subscribe((e) => {
               this.modifListe.refreshList();
@@ -378,29 +378,27 @@ export class TransporteurDetailsComponent
   }
 
   saveData(transporteur) {
-
     (transporteur.valide !== undefined &&
-      (this.transporteur.valide !== transporteur.valide /*|| validModif*/) &&
-      !this.createMode
+    this.transporteur.valide !== transporteur.valide /*|| validModif*/ &&
+    !this.createMode
       ? this.validatePopup.present(HistoryType.TRANSPORTEUR, {
-        transporteur: { id: transporteur.id },
-        valide: transporteur.valide
-      })
+          transporteur: { id: transporteur.id },
+          valide: transporteur.valide,
+        })
       : of(undefined)
     )
       .pipe(
         switchMap((_) =>
-          this.transporteursService
-            .save_v2(this.getDirtyFieldsPath(), { transporteur })
-        ))
+          this.transporteursService.save_v2(this.getDirtyFieldsPath(), {
+            transporteur,
+          })
+        )
+      )
       .subscribe({
         next: (e) => {
           this.resetModifUserIds();
 
-          if (
-            this.createMode ||
-            this.authService.currentUser.adminClient
-          )
+          if (this.createMode || this.authService.currentUser.adminClient)
             notify("Sauvegardé", "success", 3000);
           this.refreshGrid.emit();
           // Show red badges (unvalidated forms)
@@ -415,10 +413,9 @@ export class TransporteurDetailsComponent
             this.editing = false;
           }
           this.formGroup.markAsPristine();
-          this.transporteursService.getOne_v2(this.transporteur.id, this.inheritedFields)
-            .subscribe((res) =>
-              this.afterLoadInitForm(res)
-            );
+          this.transporteursService
+            .getOne_v2(this.transporteur.id, this.inheritedFields)
+            .subscribe((res) => this.afterLoadInitForm(res));
         },
         error: () => notify("Échec de la sauvegarde", "error", 3000),
       });
@@ -477,21 +474,21 @@ export class TransporteurDetailsComponent
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils.extractDirty(
       this.formGroup.controls,
-      Transporteur.getKeyField(),
+      Transporteur.getKeyField()
     );
     const gridFields = gridsConfig.transporteur.columns.map(
-      ({ dataField }) => dataField,
+      ({ dataField }) => dataField
     );
 
     return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];
   }
 
   addModificationUserIds(userIdFromModifList) {
-    if (!this.modifUserIds.includes(userIdFromModifList)) this.modifUserIds.push(userIdFromModifList);
+    if (!this.modifUserIds.includes(userIdFromModifList))
+      this.modifUserIds.push(userIdFromModifList);
   }
 
   resetModifUserIds() {
     this.modifUserIds = [];
   }
-
 }

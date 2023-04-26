@@ -4,7 +4,6 @@ import Stock from "./stock.model";
 
 @ModelName("StockReservation")
 export class StockReservation extends StockQuantite {
-
   @Field({ asKey: true })
   id: number;
 

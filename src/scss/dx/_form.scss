@@ -2,7 +2,6 @@
 
 // Form group
 .dx-form-group {
-
   // Form group caption color
   & .dx-form-group-caption {
     color: $base-accent;
@@ -22,7 +21,7 @@
   }
 
   // Fix dx-field with inner dx-box
-  &>.dx-box {
+  & > .dx-box {
     width: 100%;
   }
 }
@@ -34,21 +33,21 @@
  * Small : 20/80
  */
 .dx-field:not(.field-large) {
-  &>.dx-field-label {
+  & > .dx-field-label {
     width: 30%;
   }
 
-  &>.dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
+  & > .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
     width: 70%;
   }
 }
 
 .dx-field.field-small {
-  &>.dx-field-label {
+  & > .dx-field-label {
     width: 20%;
   }
 
-  &>.dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
+  & > .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button) {
     width: 80%;
   }
 }

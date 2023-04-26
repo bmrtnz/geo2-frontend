@@ -10,45 +10,45 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { GridHistoriqueComponent } from "./grid-historique.component";
 
 describe("GridHistoriqueComponent", () => {
-    let component: GridHistoriqueComponent;
-    let fixture: ComponentFixture<GridHistoriqueComponent>;
-    let mockCurrentCompanyService;
-    let mockAuthService;
+  let component: GridHistoriqueComponent;
+  let fixture: ComponentFixture<GridHistoriqueComponent>;
+  let mockCurrentCompanyService;
+  let mockAuthService;
 
-    beforeEach(waitForAsync(() => {
-        mockCurrentCompanyService = jasmine.createSpyObj(["getCompany"]);
-        mockCurrentCompanyService.getCompany.and.returnValue({
-            id: "SA",
-            raisonSocial: "Blue Whale S.A.S.",
-        });
-        mockAuthService = jasmine.createSpyObj(["currentUser"]);
-        mockAuthService.currentUser.and.returnValue({
-            nomUtilisateur: "nomTest",
-        } as Utilisateur);
-        TestBed.configureTestingModule({
-            declarations: [GridHistoriqueComponent, LocalizePipe],
-            providers: [
-                { provide: AuthService, useValue: mockAuthService },
-                {
-                    provide: CurrentCompanyService,
-                    useValue: mockCurrentCompanyService,
-                },
-            ],
-            imports: [
-                RouterTestingModule,
-                HttpClientTestingModule,
-                ApolloTestingModule,
-            ],
-        }).compileComponents();
-    }));
-
-    beforeEach(() => {
-        fixture = TestBed.createComponent(GridHistoriqueComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+  beforeEach(waitForAsync(() => {
+    mockCurrentCompanyService = jasmine.createSpyObj(["getCompany"]);
+    mockCurrentCompanyService.getCompany.and.returnValue({
+      id: "SA",
+      raisonSocial: "Blue Whale S.A.S.",
     });
+    mockAuthService = jasmine.createSpyObj(["currentUser"]);
+    mockAuthService.currentUser.and.returnValue({
+      nomUtilisateur: "nomTest",
+    } as Utilisateur);
+    TestBed.configureTestingModule({
+      declarations: [GridHistoriqueComponent, LocalizePipe],
+      providers: [
+        { provide: AuthService, useValue: mockAuthService },
+        {
+          provide: CurrentCompanyService,
+          useValue: mockCurrentCompanyService,
+        },
+      ],
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+        ApolloTestingModule,
+      ],
+    }).compileComponents();
+  }));
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GridHistoriqueComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it("should create", () => {
+    expect(component).toBeTruthy();
+  });
 });

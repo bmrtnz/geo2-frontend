@@ -2,10 +2,17 @@ import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { LocalizePipe } from "app/shared/pipes";
 import { LocalizationService } from "app/shared/services";
-import { PlanningMaritimeService, PlanningSide } from "app/shared/services/api/planning-maritime.service";
+import {
+  PlanningMaritimeService,
+  PlanningSide,
+} from "app/shared/services/api/planning-maritime.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -15,18 +22,19 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 
-enum FormInput { dateMin, dateMax }
+enum FormInput {
+  dateMin,
+  dateMax,
+}
 
 type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 
 @Component({
   selector: "app-planning-maritime",
   templateUrl: "./planning-maritime.component.html",
-  styleUrls: ["./planning-maritime.component.scss"]
+  styleUrls: ["./planning-maritime.component.scss"],
 })
-
 export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
-
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
   public titleElement: HTMLInputElement;
@@ -53,14 +61,12 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
     private localizePipe: LocalizePipe,
-    public tabContext: TabContext,
+    public tabContext: TabContext
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.PlanningMaritime,
+      Grid.PlanningMaritime
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.dateColumns = ["dateDepartPrevueFournisseur", "dateLivraisonPrevue"];
     this.periodes = this.dateManagementService.periods();
     this.currCompanyId = this.currentCompanyService.getCompany().id;
@@ -71,14 +77,13 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.titleElement = this.datagrid.instance.$element()[0].querySelector(
-      ".dx-toolbar .dx-placeholder",
-    ) as HTMLInputElement;
+    this.titleElement = this.datagrid.instance
+      .$element()[0]
+      .querySelector(".dx-toolbar .dx-placeholder") as HTMLInputElement;
     this.enableFilters();
   }
 
   async enableFilters() {
-
     if (this.datagrid) {
       this.datagrid.dataSource = null;
     } else {
@@ -86,21 +91,20 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     }
 
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
 
     const values: Inputs = { ...this.formGroup.value };
 
-    this.ordresDataSource =
-      this.planningMaritimeService.getDataSource(
-        {
-          societeCode: this.currentCompanyService.getCompany().id,
-          dateMin: values.dateMin,
-          dateMax: values.dateMax
-        },
-        new Set(await fields.toPromise()),
-        this.side,
-      );
+    this.ordresDataSource = this.planningMaritimeService.getDataSource(
+      {
+        societeCode: this.currentCompanyService.getCompany().id,
+        dateMin: values.dateMin,
+        dateMax: values.dateMax,
+      },
+      new Set(await fields.toPromise()),
+      this.side
+    );
     this.datagrid.dataSource = this.ordresDataSource;
     this.datagrid.dataSource.load().then(() => this.updateTitleAndColumns());
   }
@@ -108,15 +112,31 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
   updateTitleAndColumns() {
     const values: Inputs = { ...this.formGroup.value };
     if (this.titleElement)
-      this.titleElement.innerHTML = this.gridUtilsService
-        .customGridPlanningTitle(`grid-situation-${this.side.toLowerCase()}-maritime-title`, values.dateMin, values.dateMax);
+      this.titleElement.innerHTML =
+        this.gridUtilsService.customGridPlanningTitle(
+          `grid-situation-${this.side.toLowerCase()}-maritime-title`,
+          values.dateMin,
+          values.dateMax
+        );
     if (this.datagrid) {
       const dep = this.side === PlanningSide.Depart;
       this.datagrid.instance.columnOption(this.dateColumns[0], "visible", dep);
-      this.datagrid.instance.columnOption(this.dateColumns[0], "sortIndex", dep ? 0 : null);
+      this.datagrid.instance.columnOption(
+        this.dateColumns[0],
+        "sortIndex",
+        dep ? 0 : null
+      );
       this.datagrid.instance.columnOption(this.dateColumns[1], "visible", !dep);
-      this.datagrid.instance.columnOption("heureDepartPrevueFournisseur", "visible", dep);
-      this.datagrid.instance.columnOption(this.dateColumns[1], "sortIndex", !dep ? 0 : null);
+      this.datagrid.instance.columnOption(
+        "heureDepartPrevueFournisseur",
+        "visible",
+        dep
+      );
+      this.datagrid.instance.columnOption(
+        this.dateColumns[1],
+        "sortIndex",
+        !dep ? 0 : null
+      );
     }
   }
 
@@ -127,13 +147,15 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
 
   onContentReady(e) {
     // To override a SaveGridConfig side effect
-    if (this.side === PlanningSide.Depart && !this.datagrid.instance.columnOption(this.dateColumns[0], "visible"))
+    if (
+      this.side === PlanningSide.Depart &&
+      !this.datagrid.instance.columnOption(this.dateColumns[0], "visible")
+    )
       this.updateTitleAndColumns();
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-
       // Higlight important column
       if (this.dateColumns.includes(e.column.dataField))
         e.cellElement.classList.add("grey-normal-maritime");
@@ -145,7 +167,6 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       // No palette
       if (e.column.dataField === "nombrePalettesCommandees" && !e.value)
         e.cellElement.classList.add("bold-text");
-
     }
   }
 
@@ -156,11 +177,14 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "data" && e.data.ordre?.societe?.id === this.currCompanyId) {
+    if (
+      e.rowType === "data" &&
+      e.data.ordre?.societe?.id === this.currCompanyId
+    ) {
       e.rowElement.classList.add("cursor-pointer");
       e.rowElement.setAttribute(
         "title",
-        this.localizePipe.transform("hint-dblClick-ordre"),
+        this.localizePipe.transform("hint-dblClick-ordre")
       );
     }
   }
@@ -202,7 +226,6 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       dateMax: datePeriod.dateFin,
     });
   }
-
 }
 
 export default PlanningMaritimeComponent;

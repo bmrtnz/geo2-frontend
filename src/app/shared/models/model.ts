@@ -4,7 +4,7 @@ import {
   MonoTypeOperatorFunction,
   Observable,
   of,
-  OperatorFunction
+  OperatorFunction,
 } from "rxjs";
 import {
   concatAll,
@@ -14,7 +14,7 @@ import {
   mergeMap,
   reduce,
   takeWhile,
-  toArray
+  toArray,
 } from "rxjs/operators";
 
 export type ModelFieldOptions<T = typeof Model> = {
@@ -39,38 +39,40 @@ const DEFAULT_FILTER = /.*/;
  */
 export const Field =
   (options: ModelFieldOptions = {}) =>
-    (target: any, key: string | symbol) => {
-      Object.defineProperty(target, "fields", {
-        value: {
-          ...target.fields,
-          [key]: options,
-        },
-        writable: true,
-      });
-    };
+  (target: any, key: string | symbol) => {
+    Object.defineProperty(target, "fields", {
+      value: {
+        ...target.fields,
+        [key]: options,
+      },
+      writable: true,
+    });
+  };
 
 /**
  * Base abstract class for model definition
  */
 export abstract class Model {
-
   /**
    * It takes a raw entity and assigns it to the model's fields
    * @param rawEntity - The raw entity that is being converted to a model.
    * @param options
    * @param options.deepFetch - Fetch submodels as needed
    */
-  constructor(rawEntity = {}, options: { deepFetch: boolean } = { deepFetch: false }) {
+  constructor(
+    rawEntity = {},
+    options: { deepFetch: boolean } = { deepFetch: false }
+  ) {
     const fieldsEntries = Object.entries<ModelFieldOptions>(
-      this.constructor.prototype.fields,
+      this.constructor.prototype.fields
     );
 
     const assignField = (field: string, fieldOptions: ModelFieldOptions) => {
       this[field] =
         rawEntity[field].length !== undefined
           ? rawEntity[field].map(
-            (e) => new (fieldOptions.fetchedModel as any)(e),
-          )
+              (e) => new (fieldOptions.fetchedModel as any)(e)
+            )
           : new (fieldOptions.fetchedModel as any)(rawEntity[field]);
     };
 
@@ -97,7 +99,7 @@ export abstract class Model {
    */
   static getListFields(
     depth = 1,
-    prefix?: string,
+    prefix?: string
   ): Observable<string | string[]> {
     const getFieldName = (property: string) =>
       prefix ? `${prefix}.${property}` : property;
@@ -109,7 +111,7 @@ export abstract class Model {
         return options.fetchedModel
           ? options.fetchedModel.getListFields(depth - 1, fieldName)
           : of(fieldName);
-      }),
+      })
     );
   }
 
@@ -122,21 +124,19 @@ export abstract class Model {
     depth = 1,
     fieldFilter = DEFAULT_FILTER,
     prefix?: string,
-    config?: { noList?: boolean; forceFilter?: boolean },
+    config?: { noList?: boolean; forceFilter?: boolean }
   ): Observable<string> {
     return from(Object.entries(this.getFields())).pipe(
       this.fetchMapModel(),
       filter(([propertyName, options]) => {
-        const path = prefix
-          ? `${prefix}.${propertyName}`
-          : propertyName;
+        const path = prefix ? `${prefix}.${propertyName}` : propertyName;
 
         // Disable requesting list fields
         if (config && config.noList) {
           const type = Reflect.getMetadata(
             "design:type",
             this.prototype,
-            propertyName,
+            propertyName
           );
           if (type && type.name === "Array") return false;
         }
@@ -146,8 +146,7 @@ export abstract class Model {
 
           return !!options.fetchedModel;
         } else {
-          if (depth > 0 && fieldFilter && fieldFilter.test(path))
-            return true;
+          if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
           if (options.fetchedModel && depth > 0) return true;
 
           return options.asKey || options.asLabel;
@@ -156,18 +155,16 @@ export abstract class Model {
       this.takeToLastField(depth),
       concatMap(([propertyName, options]) => {
         if (!options.fetchedModel) return of(propertyName);
-        const path = prefix
-          ? `${prefix}.${propertyName}`
-          : propertyName;
+        const path = prefix ? `${prefix}.${propertyName}` : propertyName;
         return options.fetchedModel
           .getGQLFields(depth - 1, fieldFilter, path, config)
           .pipe(
             map((res) => {
               if (res !== "") return `${propertyName} {${res}}`;
-            }),
+            })
           );
       }),
-      reduce((acc, crt) => `${acc} ${crt}`),
+      reduce((acc, crt) => `${acc} ${crt}`)
     );
   }
 
@@ -185,7 +182,9 @@ export abstract class Model {
    *   }
    * }
    */
-  static getGQLObservable(columns: Array<string> | Set<string> = []): Observable<string> {
+  static getGQLObservable(
+    columns: Array<string> | Set<string> = []
+  ): Observable<string> {
     return of(Model.getGQL(columns).toGraphQL());
   }
   static getGQL(columns: Array<string> | Set<string> = []) {
@@ -196,7 +195,7 @@ export abstract class Model {
     }
 
     columns
-      .filter(c => c)
+      .filter((c) => c)
       .sort()
       .forEach((value) => {
         const strings = value.split(".");
@@ -229,7 +228,7 @@ export abstract class Model {
   static getDetailedFields(
     depth = 1,
     fieldFilter = DEFAULT_FILTER,
-    opt?: { forceFilter?: boolean; prefix?: string },
+    opt?: { forceFilter?: boolean; prefix?: string }
   ): Observable<ModelFieldOptions[]> {
     enum DXDataType {
       "String" = "string",
@@ -244,12 +243,9 @@ export abstract class Model {
       this.fetchMapModel(),
       filter(([name, options]) => {
         const path = opt?.prefix ? `${opt?.prefix}.${name}` : name;
-        if (depth > 0 && fieldFilter && fieldFilter.test(path))
-          return true;
+        if (depth > 0 && fieldFilter && fieldFilter.test(path)) return true;
         if (options.fetchedModel && depth > 0) return true;
-        return opt?.forceFilter
-          ? false
-          : options.asKey || options.asLabel;
+        return opt?.forceFilter ? false : options.asKey || options.asLabel;
       }),
       this.takeToLastField(depth),
       concatMap(([name, options]) => {
@@ -264,7 +260,7 @@ export abstract class Model {
         const type = Reflect.getMetadata(
           "design:type",
           this.prototype,
-          name,
+          name
         ).name;
         if (options.fetchedModel) {
           const descriptor =
@@ -280,7 +276,7 @@ export abstract class Model {
           ...options,
         }) as Observable<ModelFieldOptions>;
       }),
-      toArray(),
+      toArray()
     );
   }
 
@@ -291,7 +287,7 @@ export abstract class Model {
    */
   private static getFieldsWithAttribute(
     attribute: string,
-    value?: any,
+    value?: any
   ): string[] {
     return Object.entries(this.getFields())
       .filter(([, options]) => {
@@ -350,7 +346,10 @@ export abstract class Model {
     FieldDescriptor,
     FieldDescriptor
   > {
-    return mergeMap(async ([fieldName, options]) => [fieldName, await this.fetchModel(options)] as FieldDescriptor);
+    return mergeMap(
+      async ([fieldName, options]) =>
+        [fieldName, await this.fetchModel(options)] as FieldDescriptor
+    );
   }
 
   private static async fetchModel(options: ModelFieldOptions<typeof Model>) {
@@ -366,7 +365,7 @@ export abstract class Model {
    * @param currentDepth Current field depth
    */
   private static takeToLastField(
-    currentDepth: number,
+    currentDepth: number
   ): MonoTypeOperatorFunction<FieldDescriptor> {
     return takeWhile(([propertyName]) => {
       const isLastProperty =

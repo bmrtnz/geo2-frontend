@@ -6,25 +6,34 @@ import { NestedGuard } from "app/shared/guards/nested-guard";
 const routes: Routes = [
   {
     path: "clients",
-    loadChildren: () => import("./clients/clients.module").then(m => m.ClientsModule),
+    loadChildren: () =>
+      import("./clients/clients.module").then((m) => m.ClientsModule),
   },
   {
     path: "fournisseurs",
-    loadChildren: () => import("./fournisseurs/fournisseurs.module").then(m => m.FournisseursModule),
+    loadChildren: () =>
+      import("./fournisseurs/fournisseurs.module").then(
+        (m) => m.FournisseursModule
+      ),
   },
   {
     path: "transporteurs",
     loadChildren: () =>
-      import("./transporteurs/transporteurs.module").then(m => m.TransporteursModule),
+      import("./transporteurs/transporteurs.module").then(
+        (m) => m.TransporteursModule
+      ),
   },
   {
     path: "lieux-passage-a-quai",
     loadChildren: () =>
-      import("./lieux-passage-a-quai/lieux-passage-a-quai.module").then(m => m.LieuxPassageAQuaiModule),
+      import("./lieux-passage-a-quai/lieux-passage-a-quai.module").then(
+        (m) => m.LieuxPassageAQuaiModule
+      ),
   },
   {
     path: "entrepots",
-    loadChildren: () => import("./entrepots/entrepots.module").then(m => m.EntrepotsModule),
+    loadChildren: () =>
+      import("./entrepots/entrepots.module").then((m) => m.EntrepotsModule),
   },
   {
     path: "contacts/:codeTiers/:typeTiers",
@@ -37,4 +46,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TiersRoutingModule { }
+export class TiersRoutingModule {}

@@ -4,8 +4,8 @@ import { Field, ModelName } from "./model";
 
 @ModelName("HistoriqueFournisseur")
 export class HistoriqueFournisseur extends Historique {
-    @Field({ model: import("./fournisseur.model") })
-    public fournisseur: Fournisseur;
+  @Field({ model: import("./fournisseur.model") })
+  public fournisseur: Fournisseur;
 }
 
 export default HistoriqueFournisseur;

@@ -1,7 +1,6 @@
 // Var
 @import "themes/generated/variables.base";
 
-
 ::ng-deep .order-histo-popup {
   max-width: 1320px;
 
@@ -32,14 +31,13 @@
 
   .dx-popup-content {
     .ajout-art-histo-content-container {
-      background: #FFF !important;
+      background: #fff !important;
       padding: 0 15px 0 2px;
 
       .valid-field {
         display: none;
       }
     }
-
   }
 
   .articles-valid-button,
@@ -57,5 +55,4 @@
   .pulse {
     animation: pulse 0.5s;
   }
-
 }

@@ -7,10 +7,9 @@ import notify from "devextreme/ui/notify";
 @Component({
   selector: "app-button-marge-previ",
   templateUrl: "./button-marge-previ.component.html",
-  styleUrls: ["./button-marge-previ.component.scss"]
+  styleUrls: ["./button-marge-previ.component.scss"],
 })
 export class ButtonMargePreviComponent {
-
   public marginText: string;
   @Input() private ordreID: string;
   @ViewChild("smallMarginLoader", { static: false })
@@ -18,16 +17,19 @@ export class ButtonMargePreviComponent {
 
   constructor(
     private functionsService: FunctionsService,
-    private currentCompanyService: CurrentCompanyService,
-  ) { }
+    private currentCompanyService: CurrentCompanyService
+  ) {}
 
   calculMargePrev() {
-
     this.smallMarginLoader.visible = true;
     this.marginText = "";
-    this.functionsService.fCalculMargePrevi(this.ordreID, this.currentCompanyService.getCompany().id)
+    this.functionsService
+      .fCalculMargePrevi(
+        this.ordreID,
+        this.currentCompanyService.getCompany().id
+      )
       .subscribe({
-        next: res => {
+        next: (res) => {
           let margin = res.data.fCalculMargePrevi.data.result;
           this.smallMarginLoader.visible = false;
           if (margin === null) margin = 0;
@@ -37,8 +39,7 @@ export class ButtonMargePreviComponent {
           this.smallMarginLoader.visible = false;
           notify({ message }, "error", 7000);
           console.log(message);
-        }
+        },
       });
   }
-
 }

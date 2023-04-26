@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import LitigeSupervision from "app/shared/models/litige-supervision.model";
 import Litige from "app/shared/models/litige.model";
@@ -9,7 +15,11 @@ import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -19,18 +29,21 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
-import { ClotureTarget, LitigeCloturePopupComponent } from "./litige-cloture-popup/litige-cloture-popup.component";
+import {
+  ClotureTarget,
+  LitigeCloturePopupComponent,
+} from "./litige-cloture-popup/litige-cloture-popup.component";
 
 enum InputField {
   codeSecteur = "secteur",
   codeCommercial = "commercial",
-  codeAssistante = "assistante"
+  codeAssistante = "assistante",
 }
 
 enum searchType {
   codeSecteur = "SECTEUR",
   codeCommercial = "C",
-  codeAssistante = "A"
+  codeAssistante = "A",
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -41,7 +54,6 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   styleUrls: ["./litiges-supervision.component.scss"],
 })
 export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
-
   @Output() public infosLitige;
 
   public ordresDataSource: DataSource;
@@ -59,12 +71,13 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public currCompanyId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
+  @ViewChild(LitigeCloturePopupComponent, { static: false })
+  cloturePopup: LitigeCloturePopupComponent;
 
   public formGroup = new UntypedFormGroup({
     codeSecteur: new UntypedFormControl(),
     codeCommercial: new UntypedFormControl(),
-    codeAssistante: new UntypedFormControl()
+    codeAssistante: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -77,24 +90,18 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     public dateManagementService: DateManagementService,
     public litigesService: LitigesService,
     public authService: AuthService,
-    private tabContext: TabContext,
+    private tabContext: TabContext
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.Litiges,
+      Grid.Litiges
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
 
     this.secteurs = this.secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.commerciaux = this.personnesService.getDataSource_v2([
       "id",
@@ -123,7 +130,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
     this.fields = await fields.toPromise();
   }
@@ -144,17 +151,16 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   enableFilters() {
-
     this.toRefresh = false;
     this.datagrid.dataSource = null;
 
@@ -163,16 +169,17 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     };
 
     this.datagrid.instance.beginCustomLoading("");
-    this.litigesService.allSupervisionLitige(
-      this.typeFiltrage,
-      this.codeFiltrage,
-      new Set(this.fields)
-    ).subscribe((res) => {
-      this.datagrid.dataSource = res.data.allSupervisionLitige;
-      this.datagrid.instance.refresh();
-      this.datagrid.instance.endCustomLoading();
-    });
-
+    this.litigesService
+      .allSupervisionLitige(
+        this.typeFiltrage,
+        this.codeFiltrage,
+        new Set(this.fields)
+      )
+      .subscribe((res) => {
+        this.datagrid.dataSource = res.data.allSupervisionLitige;
+        this.datagrid.instance.refresh();
+        this.datagrid.instance.endCustomLoading();
+      });
   }
 
   onFieldValueChange(e?) {
@@ -198,9 +205,12 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (e.summaryItems[0]?.column === "id") {
         this.infosLitige = e.data?.items[0];
         if (!this.infosLitige?.litige?.fraisAnnexes) {
-          if (await confirm(
-            this.localization.localize("ask-cloture-frais-zero"),
-            this.localization.localize("btn-close"))) {
+          if (
+            await confirm(
+              this.localization.localize("ask-cloture-frais-zero"),
+              this.localization.localize("btn-close")
+            )
+          ) {
             this.cloturePopup.visible = true;
           }
         } else {
@@ -209,29 +219,39 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       }
     }
     if (e.rowType !== "data") return;
-    const sameCompany = (e.data.societe.id === this.currCompanyId);
-    if (e.column.dataField === "numeroOrdre" && e.data.numeroOrdre && sameCompany)
-      this.tabContext.openOrdre(e.data.numeroOrdre, e.data.litige.ordreOrigine.campagne.id);
+    const sameCompany = e.data.societe.id === this.currCompanyId;
+    if (
+      e.column.dataField === "numeroOrdre" &&
+      e.data.numeroOrdre &&
+      sameCompany
+    )
+      this.tabContext.openOrdre(
+        e.data.numeroOrdre,
+        e.data.litige.ordreOrigine.campagne.id
+      );
   }
 
   onOpenNewOrder(ds) {
-    const sameCompany = (ds.data.societe.id === this.currentCompanyService.getCompany().id);
+    const sameCompany =
+      ds.data.societe.id === this.currentCompanyService.getCompany().id;
     console.log(ds.data.numeroOrdre, sameCompany);
     if (ds.data.numeroOrdre && sameCompany)
-      this.tabContext.openOrdre(ds.data.numeroOrdreRemplacement, ds.data.litige.ordreOrigine.campagne.id);
+      this.tabContext.openOrdre(
+        ds.data.numeroOrdreRemplacement,
+        ds.data.litige.ordreOrigine.campagne.id
+      );
   }
 
   onCellPrepared(e) {
     const field = e.column.dataField;
     if (e.rowType === "data") {
-
       // Adjust numero ordre cell info/style
       if (field === "numeroOrdre") {
         if (e.data.societe.id === this.currCompanyId) {
           e.cellElement.classList.add("text-underlined");
           e.cellElement.setAttribute(
             "title",
-            this.localization.localize("hint-click-ordre"),
+            this.localization.localize("hint-click-ordre")
           );
         }
       }
@@ -240,7 +260,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (["clientClos", "fournisseurClos", "id"].includes(field)) {
         e.cellElement.classList.add("visibility-hidden");
       }
-
     }
 
     if (e.rowType === "group") {
@@ -252,8 +271,9 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
           if (!data[0]) return;
           data = data[0].items ?? data[0].collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent =
-            `Commercial(e) : ${data[0].prenomPersonne} ${data[0].nomPersonne.toUpperCase()}`;
+          e.cellElement.textContent = `Commercial(e) : ${
+            data[0].prenomPersonne
+          } ${data[0].nomPersonne.toUpperCase()}`;
         }
       }
       if (e.column.dataField === "litige.id") {
@@ -265,11 +285,14 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
         }
       }
 
-      if (["clientClos", "fournisseurClos"].includes(e.summaryItems[0]?.column)) {
+      if (
+        ["clientClos", "fournisseurClos"].includes(e.summaryItems[0]?.column)
+      ) {
         // Showing cloture checkboxes in group header
         // Not the cleanest way to do things! but no Dx native solution
-        e.cellElement.innerHTML =
-          `<div class='dx-datagrid-checkbox-size dx-checkbox ${e.summaryItems[0].value ? "dx-checkbox-checked" : ""}
+        e.cellElement.innerHTML = `<div class='dx-datagrid-checkbox-size dx-checkbox ${
+          e.summaryItems[0].value ? "dx-checkbox-checked" : ""
+        }
          dx-state-readonly dx-widget'>
         <input type="hidden" value="${!!e.summaryItems[0].value}">
         <div class='dx-checkbox-container'>
@@ -277,27 +300,32 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       }
       if (e.summaryItems[0]?.column === "id") {
         // Showing cloture button in group header
-        e.cellElement.innerHTML =
-          `<div class="cloture-button">${this.localization.localize("btn-close")}</div>`;
+        e.cellElement.innerHTML = `<div class="cloture-button">${this.localization.localize(
+          "btn-close"
+        )}</div>`;
       }
-
     }
-
   }
 
-  public onClotureChanged([litigeID, clotureTarget]: [Litige["id"], ClotureTarget]) {
-    const ds = (this.datagrid.dataSource as Partial<LitigeSupervision>[]);
+  public onClotureChanged([litigeID, clotureTarget]: [
+    Litige["id"],
+    ClotureTarget
+  ]) {
+    const ds = this.datagrid.dataSource as Partial<LitigeSupervision>[];
     const index = ds.findIndex(({ litige }) => litige.id === litigeID);
     if (index >= 0) {
       ds[index] = {
         ...ds[index],
-        clientClos: [ClotureTarget.Client, ClotureTarget.Both].includes(clotureTarget),
-        fournisseurClos: [ClotureTarget.Responsable, ClotureTarget.Both].includes(clotureTarget),
+        clientClos: [ClotureTarget.Client, ClotureTarget.Both].includes(
+          clotureTarget
+        ),
+        fournisseurClos: [
+          ClotureTarget.Responsable,
+          ClotureTarget.Both,
+        ].includes(clotureTarget),
       };
     }
   }
-
 }
 
 export default LitigesSupervisionComponent;
-

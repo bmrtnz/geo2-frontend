@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ModeCulture } from "app/shared/models";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -16,10 +24,9 @@ import { GridsService } from "../grids.service";
 @Component({
   selector: "app-article-certification-popup",
   templateUrl: "./article-certification-popup.component.html",
-  styleUrls: ["./article-certification-popup.component.scss"]
+  styleUrls: ["./article-certification-popup.component.scss"],
 })
 export class ArticleCertificationPopupComponent implements OnChanges {
-
   @Input() public ordre: Ordre;
   @Input() public ordreLigne: OrdreLigne;
   @Output() public changeLigne = new EventEmitter<Partial<OrdreLigne>>();
@@ -43,7 +50,7 @@ export class ArticleCertificationPopupComponent implements OnChanges {
     public OrdreLigneService: OrdreLignesService,
     private modesCultureService: ModesCultureService,
     public gridsService: GridsService,
-    private certificationsService: CertificationsService,
+    private certificationsService: CertificationsService
   ) {
     this.certifications = [];
   }
@@ -54,28 +61,40 @@ export class ArticleCertificationPopupComponent implements OnChanges {
   }
 
   displayNumeroBefore(data) {
-    return data ?
-      (data.numero ? (data.numero.length === 1 ? "0" + data.numero : data.numero)
-        + " - " + data.libelle : data.libelle)
+    return data
+      ? data.numero
+        ? (data.numero.length === 1 ? "0" + data.numero : data.numero) +
+          " - " +
+          data.libelle
+        : data.libelle
       : null;
   }
 
   onShowing(e) {
-
-    e.component.content().parentNode.classList.add("article-certification-popup");
+    e.component
+      .content()
+      .parentNode.classList.add("article-certification-popup");
     this.certlist.selectedItemKeys = null;
     this.newCertification = this.certification;
 
     // Retrieves article mode de culture
-    this.OrdreLigneService
-      .getOne_v2(this.ordreLigne.id, [
-        "article.matierePremiere.modeCulture.id",
-        "ordre.client.certifications.id"
-      ])
+    this.OrdreLigneService.getOne_v2(this.ordreLigne.id, [
+      "article.matierePremiere.modeCulture.id",
+      "ordre.client.certifications.id",
+    ])
       .pipe(
-        concatMap(res => this.modesCultureService
-          .getOne(res.data.ordreLigne.article.matierePremiere.modeCulture.id)
-          .pipe(map(r => [res.data.ordreLigne, r.data.modeCulture] as [Partial<OrdreLigne>, Partial<ModeCulture>]))
+        concatMap((res) =>
+          this.modesCultureService
+            .getOne(res.data.ordreLigne.article.matierePremiere.modeCulture.id)
+            .pipe(
+              map(
+                (r) =>
+                  [res.data.ordreLigne, r.data.modeCulture] as [
+                    Partial<OrdreLigne>,
+                    Partial<ModeCulture>
+                  ]
+              )
+            )
         )
       )
       .subscribe(([ol, modeCulture]) => {
@@ -87,20 +106,27 @@ export class ArticleCertificationPopupComponent implements OnChanges {
           ["maskTiers", "startswith", "1"],
         ]);
         // Retrieves all certs
-        this.certDataSource.load().then(certs => {
+        this.certDataSource.load().then((certs) => {
           if (this.alreadyLoaded) return;
           this.alreadyLoaded = true;
           if (certs) {
-            certs.map(cert => {
+            certs.map((cert) => {
               // BIO (12) must be locked
-              this.certifications.push({ text: this.formatCert(cert), disabled: cert.id === 12 });
-              if (this.certification?.split(",").includes(cert.id.toString())) this.selectLastCertAdded();
+              this.certifications.push({
+                text: this.formatCert(cert),
+                disabled: cert.id === 12,
+              });
+              if (this.certification?.split(",").includes(cert.id.toString()))
+                this.selectLastCertAdded();
             });
           }
           if (!this.certification) {
-            ol.ordre.client.certifications.map(certClt => {
-              this.certifications.map(cert => {
-                if (certClt.certification.id === parseInt(cert.text.split("-")[0], 10)) {
+            ol.ordre.client.certifications.map((certClt) => {
+              this.certifications.map((cert) => {
+                if (
+                  certClt.certification.id ===
+                  parseInt(cert.text.split("-")[0], 10)
+                ) {
                   this.certlist.selectedItemKeys.push(cert);
                 }
               });
@@ -129,28 +155,36 @@ export class ArticleCertificationPopupComponent implements OnChanges {
   }
 
   saveCertification() {
-
     const list = [];
-    this.certlist.selectedItemKeys.map(cert => list.push(parseInt(cert.text.split("-")[0], 10)));
+    this.certlist.selectedItemKeys.map((cert) =>
+      list.push(parseInt(cert.text.split("-")[0], 10))
+    );
     this.newCertification = list.join(",");
 
-    const ordreLigne = { id: this.ordreLigne.id, listeCertifications: this.newCertification };
+    const ordreLigne = {
+      id: this.ordreLigne.id,
+      listeCertifications: this.newCertification,
+    };
     this.OrdreLigneService.save_v2(["id", "listeCertifications"], {
       ordreLigne,
-    })
-      .subscribe({
-        next: () => {
-          notify(this.localizeService.localize("articles-save-certification"), "success", 2000);
-          this.update.emit(); // Deep grid refresh
-        },
-        error: (err) => {
-          console.log(err);
-          notify(this.localizeService.localize("articles-save-certification-error"), "error", 2000);
-        }
-      });
+    }).subscribe({
+      next: () => {
+        notify(
+          this.localizeService.localize("articles-save-certification"),
+          "success",
+          2000
+        );
+        this.update.emit(); // Deep grid refresh
+      },
+      error: (err) => {
+        console.log(err);
+        notify(
+          this.localizeService.localize("articles-save-certification-error"),
+          "error",
+          2000
+        );
+      },
+    });
     this.hidePopup();
   }
-
 }
-
-

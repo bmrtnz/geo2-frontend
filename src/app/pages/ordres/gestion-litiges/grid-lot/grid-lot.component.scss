@@ -13,7 +13,6 @@
         background-color: $base-danger;
       }
     }
-
   }
 
   .responsable-cell {
@@ -28,7 +27,6 @@
         background-color: $base-success;
       }
     }
-
   }
 
   td {
@@ -37,7 +35,7 @@
       flex-direction: column;
       align-items: center;
 
-      >div {
+      > div {
         padding: 5px;
         line-height: normal;
       }

@@ -3,14 +3,12 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .form-ordres-page {
-
-
   .top-grid-cde-buttons {
     position: absolute;
     right: 289px;
     margin-top: 9px;
     z-index: 1;
-    background: #EEE;
+    background: #eee;
 
     .dx-button,
     app-actions-documents-ordres .flux-docs-buttons-container {
@@ -35,7 +33,7 @@
   .desc-regroup {
     display: inline-block;
     margin-top: 5px;
-    background: #5D484D;
+    background: #5d484d;
     color: white;
     padding: 0 8px 2px 8px;
     height: 17px;
@@ -91,7 +89,6 @@
         border-radius: 0;
       }
     }
-
   }
 
   .duplicateBUKSA-btn {
@@ -106,7 +103,7 @@
     height: 27px;
     min-width: 30px;
     width: 30px;
-    border-left: 1px dotted #FFF;
+    border-left: 1px dotted #fff;
 
     .dx-button-content {
       padding: 0 !important;
@@ -232,10 +229,8 @@
         font-size: 13px;
         color: #00759c;
       }
-
     }
   }
-
 
   .upperButtons-container {
     float: right;
@@ -309,13 +304,13 @@ dx-button[type="normal"] {
 //   Lignes cloturées
 ::ng-deep .dx-row.dx-data-row {
   & {
-    &.sent-highlight-datagrid-row>td {
+    &.sent-highlight-datagrid-row > td {
       background: #66ff66;
     }
   }
 
   &.dx-row-focused {
-    &.sent-highlight-datagrid-row>td {
+    &.sent-highlight-datagrid-row > td {
       color: #66ff66;
     }
 
@@ -496,7 +491,7 @@ dx-button[type="normal"] {
     font-size: 14px;
   }
 
-  .dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
+  .dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
     margin-top: 3px !important;
   }
 
@@ -513,7 +508,7 @@ dx-button[type="normal"] {
     }
 
     &::after {
-      border-bottom: 1px solid rgba(0, 0, 0, .15);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
     }
 
     &.dx-state-readonly::after {
@@ -530,9 +525,8 @@ dx-button[type="normal"] {
     top: 2px;
     padding: 0 10px 2px 10px;
     background-color: #ff325a !important;
-    color: #FFF;
+    color: #fff;
     text-align: center;
     font-size: 20px;
   }
-
 }

@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { CommandeEdi, MaskModif } from "app/shared/models/commande-edi.model";
 import { statusGEO } from "app/shared/models/edi-ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -7,7 +16,9 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { GridsService } from "../../../grids.service";
 import { alert } from "devextreme/ui/dialog";
 import {
-  Grid, GridConfig, GridConfiguratorService
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -24,7 +35,7 @@ const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
 @Component({
   selector: "app-grid-modif-commande-edi",
   templateUrl: "./grid-modif-commande-edi.component.html",
-  styleUrls: ["./grid-modif-commande-edi.component.scss"]
+  styleUrls: ["./grid-modif-commande-edi.component.scss"],
 })
 export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
   public readonly env = environment;
@@ -51,21 +62,18 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
     private dateMgtService: DateManagementService,
     public gridsService: GridsService,
     private localization: LocalizationService,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.ModifCommandeEdi,
+      Grid.ModifCommandeEdi
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.gridTitle = "";
-
   }
 
   async ngOnInit() {
     this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
   }
 
@@ -74,7 +82,6 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
   }
 
   enableFilters() {
-
     const requiredFields = [
       "id",
       "eanProduitClient",
@@ -110,29 +117,30 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
       "ordre.id",
       "ordre.numero",
       "ordre.campagne.id",
-      "ordre."
+      "ordre.",
     ];
 
     this.datagrid.dataSource = null;
     this.datagrid.instance.beginCustomLoading("");
-    this.ordresEdiService.allCommandeEdi(
-      this.ordreEdiId,
-      this.authService.currentUser.secteurCommercial.id,
-      ALL,
-      ALL,
-      ALL,
-      ALL,
-      ALL,
-      new Date(1980, 1, 1),
-      new Date(2100, 1, 1),
-      requiredFields
-    ).subscribe((res) => {
-      this.datagrid.dataSource = res.data.allCommandeEdi;
-      this.datagrid.instance.option("focusedRowIndex", 0); // Focus on group row
-      this.datagrid.instance.refresh();
-      this.datagrid.instance.endCustomLoading();
-    });
-
+    this.ordresEdiService
+      .allCommandeEdi(
+        this.ordreEdiId,
+        this.authService.currentUser.secteurCommercial.id,
+        ALL,
+        ALL,
+        ALL,
+        ALL,
+        ALL,
+        new Date(1980, 1, 1),
+        new Date(2100, 1, 1),
+        requiredFields
+      )
+      .subscribe((res) => {
+        this.datagrid.dataSource = res.data.allCommandeEdi;
+        this.datagrid.instance.option("focusedRowIndex", 0); // Focus on group row
+        this.datagrid.instance.refresh();
+        this.datagrid.instance.endCustomLoading();
+      });
   }
 
   onCellPrepared(e) {
@@ -149,19 +157,23 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
         // Fill left text of the group row
         // ref cmd clt - raison soc clt - raison soc entrep - Version date - Livraison
         let leftTextContent =
-          data.refCmdClient + " - " +
-          (data.client.raisonSocial ?? "");
-        if (data.entrepot?.raisonSocial) leftTextContent += " / " + data.entrepot.raisonSocial + " ";
+          data.refCmdClient + " - " + (data.client.raisonSocial ?? "");
+        if (data.entrepot?.raisonSocial)
+          leftTextContent += " / " + data.entrepot.raisonSocial + " ";
         leftTextContent += " - Version " + (data.version ?? "");
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
 
         // Fill right text of the group row
         e.cellElement.childNodes[0].children[2].innerText =
-          "Livraison : " + this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ?? "";
+          "Livraison : " +
+            this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
+          "";
 
         // Fill indicator button text and sets its bck depending on the status
         e.cellElement.childNodes[0].children[0].innerHTML = data.status;
-        e.cellElement.childNodes[0].children[0].classList.add(`info-${data.status}`);
+        e.cellElement.childNodes[0].children[0].classList.add(
+          `info-${data.status}`
+        );
       }
     }
     if (e.rowType === "data") {
@@ -170,66 +182,73 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
         e.cellElement.classList.add("white-text");
       }
       // Tooltip Descript. article
-      if (field === "libelleProduit") e.cellElement.title = e.data.libelleProduit ?? "";
+      if (field === "libelleProduit")
+        e.cellElement.title = e.data.libelleProduit ?? "";
 
       // Identify modified fields vs mask e.g. "000000001", See MaskModif for details
       if (e.data.masqueLigne) {
         e.data.masqueLigne.split("").map((item, index) => {
-          if (MaskModif[field] === (index + 1) && item === "1") e.cellElement.classList.add("red-font");
+          if (MaskModif[field] === index + 1 && item === "1")
+            e.cellElement.classList.add("red-font");
         });
       }
       // Identify ope marketing prices
-      if (e.data.operationMarketing === "PRP" && field === "prixVente") e.cellElement.classList.add("green-font");
-
+      if (e.data.operationMarketing === "PRP" && field === "prixVente")
+        e.cellElement.classList.add("green-font");
     }
     if (e.rowType === "header") {
       // Change first column header text status => modif
-      if (field === "status") e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
-      if (field === "status") e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
+      if (field === "status")
+        e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
+      if (field === "status")
+        e.cellElement.innerHTML = this.localization.localize("ordresEdi-modif");
     }
-
   }
 
   onEdiCellClick(e) {
     if (!e?.data) return;
     const ordre = e.data.ordre;
     // Should be replaced by a order already focused check in root-component
-    if (this.openedOrders?.includes(`${ordre.campagne.id}-${ordre.numero}`)) return;
+    if (this.openedOrders?.includes(`${ordre.campagne.id}-${ordre.numero}`))
+      return;
     this.openedOrders.push(`${ordre.campagne.id}-${ordre.numero}`);
     if (ordre) this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 
   onCompleteOrderEdiClick() {
-
     // Sauvegarde of_sauve_ordre
-    this.ordresService.ofSauveOrdre(this.ordreId)
-      .subscribe({
-        error: (error: Error) => {
-          alert(this.messageFormat(error.message), this.localization.localize("ordre-cloture-ordre-edi"));
-        }
-      });
+    this.ordresService.ofSauveOrdre(this.ordreId).subscribe({
+      error: (error: Error) => {
+        alert(
+          this.messageFormat(error.message),
+          this.localization.localize("ordre-cloture-ordre-edi")
+        );
+      },
+    });
 
     // Sauvegarde Statut ordre EDI
     const ediOrdre = { id: this.ordreEdiId, statusGEO: statusGEO.Traité };
     this.ordresEdiService.save_v2(["id", "statusGEO"], { ediOrdre }).subscribe({
       next: () => {
         this.clotureOrdreEdi.emit();
-        notify(this.localization.localize("ordre-edi-cloture"), "success", 7000);
+        notify(
+          this.localization.localize("ordre-edi-cloture"),
+          "success",
+          7000
+        );
       },
       error: (err) => {
         notify("Erreur sauvegarde statut Geo ordre EDI", "error", 3000);
         console.log(err);
-      }
+      },
     });
   }
 
   private messageFormat(mess) {
-    mess = mess
-      .replace("Exception while fetching data (/ofSauveOrdre) : ", "");
+    mess = mess.replace("Exception while fetching data (/ofSauveOrdre) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
-
 }
 
 export default GridModifCommandeEdiComponent;

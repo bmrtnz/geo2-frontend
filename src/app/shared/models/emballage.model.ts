@@ -22,8 +22,10 @@ export class Emballage extends Model {
   @Field({ dataType: "datetime" }) public dateModification: string;
   @Field() public descriptionTechnique: string;
   @Field() public dimension: string;
-  @Field({ model: import("./pre-emballage.model") }) public preEmballage: PreEmballage;
-  @Field({ model: import("./groupe-emballage.model") }) public groupe: GroupeEmballage;
+  @Field({ model: import("./pre-emballage.model") })
+  public preEmballage: PreEmballage;
+  @Field({ model: import("./groupe-emballage.model") })
+  public groupe: GroupeEmballage;
   @Field() public especeEmballee: string;
   @Field() public idSymbolique: string;
   @Field({ model: import("./marque.model") }) public marque: Marque;
@@ -50,6 +52,7 @@ export class Emballage extends Model {
   @Field() public yh: number;
   @Field() public zb: number;
   @Field() public zh: number;
-  @Field({ model: import("./stock-article-age.model") }) public stocksAge: StockArticleAge[];
+  @Field({ model: import("./stock-article-age.model") })
+  public stocksAge: StockArticleAge[];
 }
 export default Emballage;

@@ -1,16 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
 import { GridFraisAnnexesLitigeComponent } from "./grid-frais-annexes-litige/grid-frais-annexes-litige.component";
 
-
 @Component({
   selector: "app-frais-annexes-litige-popup",
   templateUrl: "./frais-annexes-litige-popup.component.html",
-  styleUrls: ["./frais-annexes-litige-popup.component.scss"]
+  styleUrls: ["./frais-annexes-litige-popup.component.scss"],
 })
 export class FraisAnnexesLitigePopupComponent implements OnChanges {
-
   @Input() public infosLitige: any;
   @Output() public litige: any;
   @Output() public updateTotalFraisLitige = new EventEmitter();
@@ -20,13 +26,11 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   public titleEnd: string;
   public popupFullscreen = false;
 
-
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(GridFraisAnnexesLitigeComponent, { static: false }) datagridComponent: GridFraisAnnexesLitigeComponent;
+  @ViewChild(GridFraisAnnexesLitigeComponent, { static: false })
+  datagridComponent: GridFraisAnnexesLitigeComponent;
 
-  constructor(
-    private localizeService: LocalizationService
-  ) { }
+  constructor(private localizeService: LocalizationService) {}
 
   ngOnChanges() {
     if (this.infosLitige) {
@@ -36,12 +40,16 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.titleStart = this.localizeService.localize("title-frais-annexes-litiges-popup");
+    this.titleStart = this.localizeService.localize(
+      "title-frais-annexes-litiges-popup"
+    );
     this.titleEnd = "n° " + this.infosLitige.litige.id;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("frais-annexes-litige-popup");
+    e.component
+      .content()
+      .parentNode.classList.add("frais-annexes-litige-popup");
   }
 
   onShown(e) {
@@ -67,8 +75,4 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   updateTotalFrais() {
     this.updateTotalFraisLitige.emit();
   }
-
 }
-
-
-

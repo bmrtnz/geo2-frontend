@@ -8,24 +8,23 @@
 }
 
 ::ng-deep .dx-row.dx-data-row {
-
   //   Valide/pré-saisie
   & {
-    &.highlight-datagrid-row>td {
+    &.highlight-datagrid-row > td {
       background: #eee;
     }
 
-    &.tovalidate-datagrid-row>td {
+    &.tovalidate-datagrid-row > td {
       color: #ff325a;
     }
   }
 
   &.dx-row-focused {
-    &.highlight-datagrid-row>td {
+    &.highlight-datagrid-row > td {
       color: #ccc;
     }
 
-    &.tovalidate-datagrid-row>td {
+    &.tovalidate-datagrid-row > td {
       color: #ff325a;
     }
   }

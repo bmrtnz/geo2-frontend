@@ -4,7 +4,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import { Secteur } from "app/shared/models";
 import { AuthService } from "app/shared/services";
@@ -13,7 +13,7 @@ import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Indicator,
-  OrdresIndicatorsService
+  OrdresIndicatorsService,
 } from "app/shared/services/ordres-indicators.service";
 import { Program } from "app/shared/services/program.service";
 import { DxSelectBoxComponent, DxTagBoxComponent } from "devextreme-angular";
@@ -24,7 +24,7 @@ import {
   mergeMap,
   startWith,
   switchMap,
-  tap
+  tap,
 } from "rxjs/operators";
 import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
 import { CommandesEdiComponent } from "../indicateurs/commandes-edi/commandes-edi.component";
@@ -36,7 +36,6 @@ import { TabContext } from "../root/root.component";
   styleUrls: ["./ordres-accueil.component.scss"],
 })
 export class OrdresAccueilComponent implements OnInit, OnDestroy {
-
   @Output() public programChosen: any;
 
   indicators: (Indicator & any)[];
@@ -51,9 +50,12 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   public programs: any[];
 
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
-  @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
-  @ViewChild(CommandesEdiComponent, { static: false }) cdesEDI: CommandesEdiComponent;
-  @ViewChild(ImportProgrammesPopupComponent, { static: false }) importProgPopup: ImportProgrammesPopupComponent;
+  @ViewChild(CommandesEdiComponent, { static: false })
+  cdesEdiPopup: CommandesEdiComponent;
+  @ViewChild(CommandesEdiComponent, { static: false })
+  cdesEDI: CommandesEdiComponent;
+  @ViewChild(ImportProgrammesPopupComponent, { static: false })
+  importProgPopup: ImportProgrammesPopupComponent;
   @ViewChild(DxSelectBoxComponent) secteurInput: DxSelectBoxComponent;
 
   constructor(
@@ -62,20 +64,17 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
-    private secteursService: SecteursService,
-  ) { }
+    private secteursService: SecteursService
+  ) {}
 
   ngOnInit() {
-
     this.programs = [];
-    Object.keys(Program).map(prog => {
-      this.programs.push(
-        {
-          id: Program[prog],
-          name: prog,
-          text: prog
-        }
-      );
+    Object.keys(Program).map((prog) => {
+      this.programs.push({
+        id: Program[prog],
+        name: prog,
+        text: prog,
+      });
     });
 
     this.configureIndicator();
@@ -132,9 +131,11 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     const loadIndicators = (config: { selection: string[] }) => {
       this.loadedIndicators = config.selection;
       // We remove old (named) indicators that don't exist anymore but were saved
-      this.loadedIndicators = this.loadedIndicators.filter(ind => this.ordresIndicatorsService.getIndicatorByName(ind));
+      this.loadedIndicators = this.loadedIndicators.filter((ind) =>
+        this.ordresIndicatorsService.getIndicatorByName(ind)
+      );
       this.indicators = this.loadedIndicators.map((id) =>
-        this.ordresIndicatorsService.getIndicatorByName(id),
+        this.ordresIndicatorsService.getIndicatorByName(id)
       );
     };
 
@@ -145,7 +146,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
         selection: this.ordresIndicatorsService
           .getIndicators()
           .map(({ id }) => id),
-      },
+      }
     );
   }
 
@@ -154,13 +155,9 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     ds.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
-    ds.load().then(res => {
+    ds.load().then((res) => {
       this.secteurs = res;
       // Assign user secteur by default (when not admin)
       this.secteurInput.value = !this.authService.isAdmin
@@ -171,21 +168,19 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   private loadIndicators() {
     const selectIndicators = this.indicatorsChange.pipe(
-      startWith(this.loadedIndicators),
+      startWith(this.loadedIndicators)
     );
     this.indicatorsSubscription = selectIndicators
       .pipe(
         tap((_) => (this.indicators = [])),
         switchMap((ids) => from(ids)),
-        map((id) =>
-          this.ordresIndicatorsService.getIndicatorByName(id),
-        ),
+        map((id) => this.ordresIndicatorsService.getIndicatorByName(id)),
         map(
           (indicator) =>
             new Indicator({
               ...indicator,
               loading: !!indicator?.withCount,
-            }),
+            })
         ),
         tap((indicator) => this.indicators.push(indicator)),
         filter((indicator) => indicator.loading),
@@ -199,15 +194,15 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
               map(({ count, secteur }) => {
                 // if (secteur) this.setCalculatedSecteur(secteur);
                 return count;
-              }),
+              })
             )
             .toPromise();
           return [indicator.id, countResponse] as [string, string];
-        }),
+        })
       )
       .subscribe(([id, value]) => {
         const index = this.indicators.findIndex(
-          (indicator) => id === indicator.id,
+          (indicator) => id === indicator.id
         );
         if (index >= 0) {
           this.indicators[index].number = value;

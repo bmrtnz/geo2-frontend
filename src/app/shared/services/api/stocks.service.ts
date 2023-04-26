@@ -4,7 +4,7 @@ import LigneReservation from "app/shared/models/ligne-reservation.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import ArrayStore from "devextreme/data/array_store";
-import DataSource from 'devextreme/data/data_source';
+import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { map } from "rxjs/operators";
 import { Stock } from "../../models/stock.model";
@@ -18,7 +18,10 @@ import { StockMouvementsService } from "./stock-mouvements.service";
 export class StocksService extends ApiService implements APIRead, APIDistinct {
   fieldsFilter = /.*\.(?:id|raisonSocial|description)$/i;
 
-  constructor(apollo: Apollo, private stockMouvementsService: StockMouvementsService) {
+  constructor(
+    apollo: Apollo,
+    private stockMouvementsService: StockMouvementsService
+  ) {
     super(apollo, Stock);
   }
 
@@ -30,42 +33,27 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll();
             type Response = { allStock: RelayPage<Stock> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allStock)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allStock,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allStock)
+                resolve(this.asInstancedListCount(res.data.allStock));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne();
             type Response = { stock: Stock };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.stock)
-                  resolve(new Stock(res.data.stock));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.stock)
+                resolve(new Stock(res.data.stock));
+            });
           }),
       }),
     });
@@ -79,9 +67,9 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     emballage?: string,
     bureauAchat?: string
   ) {
-    return this.apollo
-      .query<{ allStockArticleList: StockArticle[] }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allStockArticleList: StockArticle[] }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -104,13 +92,20 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             { name: "modeCulture", type: "String", isOptionnal: true },
             { name: "emballage", type: "String", isOptionnal: true },
             { name: "bureauAchat", type: "String", isOptionnal: true },
-          ],
-        )),
-        variables: { espece, variete, origine, modeCulture, emballage, bureauAchat },
-        fetchPolicy: "network-only",
-      });
+          ]
+        )
+      ),
+      variables: {
+        espece,
+        variete,
+        origine,
+        modeCulture,
+        emballage,
+        bureauAchat,
+      },
+      fetchPolicy: "network-only",
+    });
   }
-
 
   /** Query fetching stock by article */
   allStockReservationList(article: string) {
@@ -118,43 +113,44 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     columns.delete("stock");
     columns.add("stock.id");
     columns.add("stock.statutStock");
-    return this.apollo
-      .query<{ allStockReservationList: StockReservation[] }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allStockReservationList: StockReservation[] }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
               name: `allStockReservationList`,
               body: columns,
-              params: [
-                { name: "article", value: "article", isVariable: true },
-              ],
+              params: [{ name: "article", value: "article", isVariable: true }],
             },
           ],
-          [
-            { name: "article", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { article },
-        fetchPolicy: "network-only",
-      });
+          [{ name: "article", type: "String", isOptionnal: false }]
+        )
+      ),
+      variables: { article },
+      fetchPolicy: "network-only",
+    });
   }
 
   public getStockReservationDatasource(article: string) {
-    return this.allStockReservationList(article)
-      .pipe(map(({ data }) => new DataSource({
-        store: new ArrayStore({
-          data: data.allStockReservationList,
-          key: "id",
-        }),
-      })));
+    return this.allStockReservationList(article).pipe(
+      map(
+        ({ data }) =>
+          new DataSource({
+            store: new ArrayStore({
+              data: data.allStockReservationList,
+              key: "id",
+            }),
+          })
+      )
+    );
   }
 
   /** Query fetching reservations by ordre-ligne */
   allLigneReservationList(ordreLigne: string) {
-    return this.apollo
-      .query<{ allLigneReservationList: LigneReservation[] }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allLigneReservationList: LigneReservation[] }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -165,30 +161,43 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
               ],
             },
           ],
-          [
-            { name: "ordreLigne", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreLigne },
-        fetchPolicy: "network-only",
-      });
+          [{ name: "ordreLigne", type: "String", isOptionnal: false }]
+        )
+      ),
+      variables: { ordreLigne },
+      fetchPolicy: "network-only",
+    });
   }
 
   public getLigneReservationDatasource(ordreLigne: string) {
-    return this.allLigneReservationList(ordreLigne)
-      .pipe(map(({ data }) => new DataSource({
-        store: new ArrayStore({
-          data: data.allLigneReservationList,
-          key: "id",
-        }),
-        remove: key => this.stockMouvementsService.deleteStockMouvement(key).toPromise() as Promise<any>,
-      })));
+    return this.allLigneReservationList(ordreLigne).pipe(
+      map(
+        ({ data }) =>
+          new DataSource({
+            store: new ArrayStore({
+              data: data.allLigneReservationList,
+              key: "id",
+            }),
+            remove: (key) =>
+              this.stockMouvementsService
+                .deleteStockMouvement(key)
+                .toPromise() as Promise<any>,
+          })
+      )
+    );
   }
 
-  reservationStock(ordreId: string, articleId: string, societeId: string, stockId: string, quantite: number, commentaire: string) {
-    return this.apollo
-      .query<{ reservationStock: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  reservationStock(
+    ordreId: string,
+    articleId: string,
+    societeId: string,
+    stockId: string,
+    quantite: number,
+    commentaire: string
+  ) {
+    return this.apollo.query<{ reservationStock: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -201,8 +210,8 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
                 { name: "stockId", value: "stockId", isVariable: true },
                 { name: "quantite", value: "quantite", isVariable: true },
                 { name: "commentaire", value: "commentaire", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "ordreId", type: "String", isOptionnal: false },
@@ -211,17 +220,31 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             { name: "stockId", type: "String", isOptionnal: false },
             { name: "quantite", type: "Int", isOptionnal: false },
             { name: "commentaire", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreId, articleId, societeId, stockId, quantite, commentaire },
-        fetchPolicy: "network-only",
-      });
+          ]
+        )
+      ),
+      variables: {
+        ordreId,
+        articleId,
+        societeId,
+        stockId,
+        quantite,
+        commentaire,
+      },
+      fetchPolicy: "network-only",
+    });
   }
 
-  takeOptionStock(quantite: number, stockId: string, propCode: string, palCode: string, stockDescription: string) {
-    return this.apollo
-      .query<{ takeOptionStock: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  takeOptionStock(
+    quantite: number,
+    stockId: string,
+    propCode: string,
+    palCode: string,
+    stockDescription: string
+  ) {
+    return this.apollo.query<{ takeOptionStock: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -232,9 +255,13 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
                 { name: "stockId", value: "stockId", isVariable: true },
                 { name: "quantite", value: "quantite", isVariable: true },
                 { name: "palCode", value: "palCode", isVariable: true },
-                { name: "stockDescription", value: "stockDescription", isVariable: true },
-              ]
-            }
+                {
+                  name: "stockDescription",
+                  value: "stockDescription",
+                  isVariable: true,
+                },
+              ],
+            },
           ],
           [
             { name: "propCode", type: "String", isOptionnal: false },
@@ -242,15 +269,24 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             { name: "quantite", type: "Int", isOptionnal: false },
             { name: "palCode", type: "String", isOptionnal: false },
             { name: "stockDescription", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { propCode, stockId, quantite, palCode, stockDescription },
-        fetchPolicy: "network-only",
-      });
+          ]
+        )
+      ),
+      variables: { propCode, stockId, quantite, palCode, stockDescription },
+      fetchPolicy: "network-only",
+    });
   }
 
-  public getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?) {
-    return this.getDistinctDatasource("GeoStock", fieldName, descriptionField, searchExpr);
+  public getDistinctEntityDatasource(
+    fieldName,
+    descriptionField?,
+    searchExpr?
+  ) {
+    return this.getDistinctDatasource(
+      "GeoStock",
+      fieldName,
+      descriptionField,
+      searchExpr
+    );
   }
-
 }

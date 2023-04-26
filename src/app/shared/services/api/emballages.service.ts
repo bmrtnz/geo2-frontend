@@ -26,31 +26,17 @@ export class EmballagesService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll(1, this.listRegexp);
             type Response = { allEmballage: RelayPage<Emballage> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allEmballage)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allEmballage,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allEmballage)
+                resolve(this.asInstancedListCount(res.data.allEmballage));
+            });
           }),
         byKey: this.byKey(["id", "description", "espece.id"]),
       }),
@@ -64,23 +50,18 @@ export class EmballagesService extends ApiService implements APIRead {
         key: ["id", "especeId"],
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-
             type Response = { allDistinctEmballage: RelayPage<Emballage> };
-            const query = await this.buildDistinctQuery(columns.map(c => `edges.node.${c}`));
-            const variables = this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allDistinctEmballage) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allDistinctEmballage,
-                    ),
-                  );
-                }
-              },
+            const query = await this.buildDistinctQuery(
+              columns.map((c) => `edges.node.${c}`)
             );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allDistinctEmballage) {
+                resolve(
+                  this.asInstancedListCount(res.data.allDistinctEmballage)
+                );
+              }
+            });
           }),
         byKey: this.byKey(["id", "description", "espece.id"]),
       }),
@@ -88,16 +69,16 @@ export class EmballagesService extends ApiService implements APIRead {
   }
 
   private byKey(columns: Array<string>) {
-    return key =>
+    return (key) =>
       new Promise(async (resolve) => {
-        const id = key
-          ? { id: key.id, espece: key.especeId || "" }
-          : {};
+        const id = key ? { id: key.id, espece: key.especeId || "" } : {};
         const variables = { id };
-        const res = await this.apollo.query<{ emballage: Emballage }>({
-          query: gql(this.buildGetOneGraph(columns)),
-          variables,
-        }).toPromise();
+        const res = await this.apollo
+          .query<{ emballage: Emballage }>({
+            query: gql(this.buildGetOneGraph(columns)),
+            variables,
+          })
+          .toPromise();
         if (res?.data?.emballage) resolve(new Emballage(res.data.emballage));
       });
   }

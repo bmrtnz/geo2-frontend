@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild, ViewChildren } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -6,7 +16,12 @@ import { EditingAlertComponent } from "app/shared/components/editing-alert/editi
 import { ModificationListComponent } from "app/shared/components/modification-list/modification-list.component";
 import { Editable } from "app/shared/guards/editing-guard";
 import { Entrepot, Role, Client } from "app/shared/models";
-import { AuthService, ClientsService, EntrepotsService, TransporteursService } from "app/shared/services";
+import {
+  AuthService,
+  ClientsService,
+  EntrepotsService,
+  TransporteursService,
+} from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { ModesLivraisonService } from "app/shared/services/api/modes-livraison.service";
@@ -29,10 +44,11 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 @Component({
   selector: "app-entrepot-details",
   templateUrl: "./entrepot-details.component.html",
-  styleUrls: ["./entrepot-details.component.scss"]
+  styleUrls: ["./entrepot-details.component.scss"],
 })
-export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
-
+export class EntrepotDetailsComponent
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
+{
   formGroup = this.fb.group({
     code: [""],
     client: [""],
@@ -72,37 +88,50 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     lieuFonctionEanDepot: [""],
     lieuFonctionEanAcheteur: [""],
     valide: [false],
-    preSaisie: [""]
+    preSaisie: [""],
   });
   readonly inheritedFields = new Set([
     "id",
     "code",
-    "client.id", "client.raisonSocial",
+    "client.id",
+    "client.raisonSocial",
     "raisonSocial",
     "adresse1",
     "adresse2",
     "adresse3",
     "codePostal",
     "ville",
-    "pays.id", "pays.description",
-    "incoterm.id", "incoterm.description",
-    "regimeTva.id", "regimeTva.description",
+    "pays.id",
+    "pays.description",
+    "incoterm.id",
+    "incoterm.description",
+    "regimeTva.id",
+    "regimeTva.description",
     "tvaCee",
     "instructionSecretaireCommercial",
     "instructionLogistique",
-    "typePalette.id", "typePalette.description",
+    "typePalette.id",
+    "typePalette.description",
     "mentionClientSurFacture",
-    "transporteur.id", "transporteur.raisonSocial",
-    "baseTarifTransport.id", "baseTarifTransport.description",
+    "transporteur.id",
+    "transporteur.raisonSocial",
+    "baseTarifTransport.id",
+    "baseTarifTransport.description",
     "prixUnitaireTarifTransport",
-    "typeCamion.id", "typeCamion.description",
-    "transitaire.id", "transitaire.raisonSocial",
-    "baseTarifTransit.id", "baseTarifTransit.description",
+    "typeCamion.id",
+    "typeCamion.description",
+    "transitaire.id",
+    "transitaire.raisonSocial",
+    "baseTarifTransit.id",
+    "baseTarifTransit.description",
     "prixUnitaireTarifTransit",
     "modeLivraison",
-    "langue.id", "langue.description",
-    "commercial.id", "commercial.nomUtilisateur",
-    "assistante.id", "assistante.nomUtilisateur",
+    "langue.id",
+    "langue.description",
+    "commercial.id",
+    "commercial.nomUtilisateur",
+    "assistante.id",
+    "assistante.nomUtilisateur",
     "declarationTransit",
     "controlReferenceClient",
     "declarationEur1",
@@ -115,22 +144,30 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     "lieuFonctionEanAcheteur",
     "valide",
     "preSaisie",
-    "typeTiers"
+    "typeTiers",
   ]);
   readonly inheritedClientFields = new Set([
     "id",
-    "pays.id", "pays.description",
-    "incoterm.id", "incoterm.description",
-    "tvaCee"
+    "pays.id",
+    "pays.description",
+    "incoterm.id",
+    "incoterm.description",
+    "tvaCee",
   ]);
   refreshGrid = new EventEmitter();
   @Input() entrepotId: string;
   @Output() idEntrepot: string;
 
-  helpBtnOptions = { icon: "help", elementAttr: { id: "help-1" }, onClick: () => this.toggleVisible() };
+  helpBtnOptions = {
+    icon: "help",
+    elementAttr: { id: "help-1" },
+    onClick: () => this.toggleVisible(),
+  };
   contentReadyEvent = new EventEmitter<any>();
-  @ViewChild(EditingAlertComponent, { static: true }) alertComponent: EditingAlertComponent;
-  @ViewChild(ModificationListComponent, { static: false }) modifListe: ModificationListComponent;
+  @ViewChild(EditingAlertComponent, { static: true })
+  alertComponent: EditingAlertComponent;
+  @ViewChild(ModificationListComponent, { static: false })
+  modifListe: ModificationListComponent;
   @ViewChildren(DxAccordionComponent) accordion: any;
   editing = false;
 
@@ -175,7 +212,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     public currentCompanyService: CurrentCompanyService,
     private router: Router,
     private route: ActivatedRoute,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -190,21 +227,19 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   ngOnChanges() {
-
     // Zoom entrepot mode
     if (this.entrepotId) {
       this.idEntrepot = this.entrepotId; // Used for bassins grid
       this.formGroup.reset();
-      this.entrepotsService.getOne_v2(this.entrepotId, this.inheritedFields).subscribe((res) => {
-        this.afterLoadInitForm(res);
-      });
+      this.entrepotsService
+        .getOne_v2(this.entrepotId, this.inheritedFields)
+        .subscribe((res) => {
+          this.afterLoadInitForm(res);
+        });
     }
-
   }
 
   ngOnInit() {
-
-
     this.commercial = this.personnesService.getDataSource();
     this.commercial.filter([
       ["valide", "=", true],
@@ -227,7 +262,11 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     this.incoterms.filter(["valide", "=", "true"]);
     this.regimesTva = this.regimesTvaService.getDataSource();
     this.regimesTva.filter(["valide", "=", "true"]);
-    this.transporteurs = this.transporteursService.getDataSource_v2(["id", "raisonSocial", "ville"]);
+    this.transporteurs = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+      "ville",
+    ]);
     this.transporteurs.filter(["valide", "=", "true"]);
     this.basesTarif = this.basesTarifService.getDataSource();
     this.basesTarif.filter(["valide", "=", "true"]);
@@ -239,32 +278,48 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     if (this.entrepotId) return;
 
     this.route.params
-      .pipe(tap(_ => this.formGroup.reset()))
-      .subscribe(params => {
+      .pipe(tap((_) => this.formGroup.reset()))
+      .subscribe((params) => {
         const url = this.route.snapshot.url;
-        this.createMode = url[0].path === "create" || (url[2] ? url[2].path === "create" : false);
+        this.createMode =
+          url[0].path === "create" ||
+          (url[2] ? url[2].path === "create" : false);
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.entrepotsService.getOne_v2(params.id, this.inheritedFields)
-            .subscribe(res => {
+          this.entrepotsService
+            .getOne_v2(params.id, this.inheritedFields)
+            .subscribe((res) => {
               this.afterLoadInitForm(res);
             });
         } else {
           if (this.route.snapshot.params.client !== "null") {
-            this.clientsService.getOne_v2(this.route.snapshot.params.client, this.inheritedClientFields)
-              .subscribe(res => {
+            this.clientsService
+              .getOne_v2(
+                this.route.snapshot.params.client,
+                this.inheritedClientFields
+              )
+              .subscribe((res) => {
                 this.client = res.data.client;
                 if (this.client.incoterm) {
                   // Report incoterm client
-                  this.formGroup.get("incoterm").patchValue(this.client.incoterm);
+                  this.formGroup
+                    .get("incoterm")
+                    .patchValue(this.client.incoterm);
                 }
               });
           }
           // Set current username if commercial
           this.tempData = this.personnesService.getDataSource();
           this.tempData.filter([
-            ["valide", "=", true], "and", ["role", "=", Role.COMMERCIAL],
-            "and", ["nomUtilisateur", "=", this.authService.currentUser.nomUtilisateur]
+            ["valide", "=", true],
+            "and",
+            ["role", "=", Role.COMMERCIAL],
+            "and",
+            [
+              "nomUtilisateur",
+              "=",
+              this.authService.currentUser.nomUtilisateur,
+            ],
           ]);
           this.tempData.load().then((res) => {
             if (res.length) {
@@ -274,8 +329,16 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
           });
           // Set current username if assistant(e)
           this.tempData = this.personnesService.getDataSource();
-          this.tempData.filter([["valide", "=", true], "and", ["role", "=", Role.ASSISTANT],
-            "and", ["nomUtilisateur", "=", this.authService.currentUser.nomUtilisateur]
+          this.tempData.filter([
+            ["valide", "=", true],
+            "and",
+            ["role", "=", Role.ASSISTANT],
+            "and",
+            [
+              "nomUtilisateur",
+              "=",
+              this.authService.currentUser.nomUtilisateur,
+            ],
           ]);
           this.tempData.load().then((res) => {
             if (res.length) {
@@ -286,7 +349,6 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
           this.contentReadyEvent.emit();
         }
       });
-
   }
 
   afterLoadInitForm(res) {
@@ -295,8 +357,9 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     this.formGroup.patchValue(this.entrepot);
     this.contentReadyEvent.emit();
     this.preSaisie = this.entrepot.preSaisie === true ? "preSaisie" : "";
-    this.clientsService.getOne_v2(this.entrepot.client.id, this.inheritedClientFields)
-      .subscribe(result => this.client = result.data.client);
+    this.clientsService
+      .getOne_v2(this.entrepot.client.id, this.inheritedClientFields)
+      .subscribe((result) => (this.client = result.data.client));
   }
 
   ngAfterViewInit(): void {
@@ -311,7 +374,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
 
   openCloseAccordions(action) {
     if (!this.accordion) return;
-    this.accordion.toArray().forEach(element => {
+    this.accordion.toArray().forEach((element) => {
       if (action) {
         element.instance.expandItem(0);
       } else {
@@ -324,7 +387,7 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
     const code = params.value.toUpperCase();
     const entrepotsSource = this.entrepotsService.getDataSource_v2(["code"]);
     entrepotsSource.filter(["code", "=", code]);
-    return entrepotsSource.load().then(res => !(res.length));
+    return entrepotsSource.load().then((res) => !res.length);
   }
 
   onCodeChange(e) {
@@ -354,12 +417,14 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
 
   onNonRequiredSBChange(e) {
     if (this.editing && e.value === null) {
-      this.formUtils.setIdToNull(this.formGroup, e.element.attributes.formcontrolname.nodeValue);
+      this.formUtils.setIdToNull(
+        this.formGroup,
+        e.element.attributes.formcontrolname.nodeValue
+      );
     }
   }
 
   onSubmit() {
-
     if (!this.formGroup.pristine && this.formGroup.valid) {
       // 11-2021: Lea/Stéphane wants to avoid pre-saisie/modifications step
       // if (this.formGroup.get("valide").value !== false || !this.formGroup.get("valide").dirty) {
@@ -370,7 +435,10 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
       this.formGroup.get("preSaisie").markAsDirty();
       this.preSaisie = "";
 
-      const entrepot = this.formUtils.extractDirty(this.formGroup.controls, Entrepot.getKeyField());
+      const entrepot = this.formUtils.extractDirty(
+        this.formGroup.controls,
+        Entrepot.getKeyField()
+      );
 
       if (!this.createMode) {
         entrepot.id = this.entrepot.id;
@@ -379,7 +447,8 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
         entrepot.client = { id: this.route.snapshot.params.client };
       }
 
-      this.entrepotsService.save_v2(this.getDirtyFieldsPath(), { entrepot })
+      this.entrepotsService
+        .save_v2(this.getDirtyFieldsPath(), { entrepot })
         .subscribe({
           next: (e) => {
             this.refreshGrid.emit();
@@ -394,14 +463,16 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
               this.readOnlyMode = true;
             } else {
               this.editing = false;
-              this.router.navigate([`/pages/tiers/entrepots/${e.data.saveEntrepot.id}`]);
+              this.router.navigate([
+                `/pages/tiers/entrepots/${e.data.saveEntrepot.id}`,
+              ]);
             }
-            if (this.entrepot) this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
+            if (this.entrepot)
+              this.entrepot.typeTiers = e.data.saveEntrepot.typeTiers;
           },
           error: () => notify("Échec de la sauvegarde", "error", 3000),
         });
     }
-
   }
 
   onCancel() {
@@ -414,13 +485,21 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   displayIDBefore(data) {
-    return data ? (data.id + " - " +
-      (data.nomUtilisateur ? data.nomUtilisateur :
-        (data.raisonSocial ? data.raisonSocial : data.description))) : null;
+    return data
+      ? data.id +
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
+      : null;
   }
 
   displayEntrepot(data) {
-    return data ? data.id + " - " + data.raisonSocial + " (" + data.ville + ")" : null;
+    return data
+      ? data.id + " - " + data.raisonSocial + " (" + data.ville + ")"
+      : null;
   }
 
   toggleVisible() {
@@ -428,19 +507,20 @@ export class EntrepotDetailsComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   contactsBtnClick() {
-    this.router.navigate([`/pages/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`]);
+    this.router.navigate([
+      `/pages/tiers/contacts/${this.entrepot.code}/${this.entrepot.typeTiers}`,
+    ]);
   }
 
   private getDirtyFieldsPath() {
-    const dirtyFields = this.formUtils
-      .extractDirty(this.formGroup.controls, Entrepot.getKeyField());
-    const gridFields = gridsConfig.entrepot.columns
-      .map(({ dataField }) => dataField);
+    const dirtyFields = this.formUtils.extractDirty(
+      this.formGroup.controls,
+      Entrepot.getKeyField()
+    );
+    const gridFields = gridsConfig.entrepot.columns.map(
+      ({ dataField }) => dataField
+    );
 
-    return [
-      ...this.formUtils.extractPaths(dirtyFields),
-      ...gridFields,
-    ];
+    return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];
   }
-
 }

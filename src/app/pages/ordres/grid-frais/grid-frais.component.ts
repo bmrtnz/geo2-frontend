@@ -1,6 +1,18 @@
-import { Component, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import {
+  Component,
+  Input,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService, EntrepotsService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
+import {
+  AuthService,
+  EntrepotsService,
+  LieuxPassageAQuaiService,
+  LocalizationService,
+  TransporteursService,
+} from "app/shared/services";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { OrdresFraisService } from "app/shared/services/api/ordres-frais.service";
 import { TransitairesService } from "app/shared/services/api/transitaires.service";
@@ -8,7 +20,8 @@ import { TypesFraisService } from "app/shared/services/api/types-frais.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
-  GridConfig, GridConfiguratorService
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -24,7 +37,6 @@ import { ToggledGrid } from "../form/form.component";
   templateUrl: "./grid-frais.component.html",
   styleUrls: ["./grid-frais.component.scss"],
 })
-
 export class GridFraisComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
   // @ViewChild(DxDataGridComponent, { static: true })
@@ -51,7 +63,8 @@ export class GridFraisComponent implements ToggledGrid {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
+  @ViewChildren(DxSelectBoxComponent)
+  selectBoxes: QueryList<DxSelectBoxComponent>;
 
   constructor(
     private ordresFraisService: OrdresFraisService,
@@ -70,45 +83,58 @@ export class GridFraisComponent implements ToggledGrid {
     this.displayDescOnly = this.displayDescOnly.bind(this);
     this.displayCustom = this.displayCustom.bind(this);
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreFrais,
+      Grid.OrdreFrais
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
-    this.itemsWithSelectBox = [
-      "frais",
-      "devise",
-      "codePlus"
-    ];
-    this.descriptionOnlyDisplaySB = [
-      "frais"
-    ];
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+    this.itemsWithSelectBox = ["frais", "devise", "codePlus"];
+    this.descriptionOnlyDisplaySB = ["frais"];
     this.codePlusTransporteurs = [];
     this.codePlusTransitaires = [];
     this.codePlusEntrepots = [];
-    this.fraisSource = this.fraisService.getDataSource_v2(["id", "description"]);
+    this.fraisSource = this.fraisService.getDataSource_v2([
+      "id",
+      "description",
+    ]);
     this.fraisSource.filter(["valide", "=", true]);
-    this.deviseSource = this.deviseService.getDataSource_v2(["id", "description", "taux"]);
+    this.deviseSource = this.deviseService.getDataSource_v2([
+      "id",
+      "description",
+      "taux",
+    ]);
     this.deviseSource.filter(["valide", "=", true]);
     this.initializeFournDataSources();
     this.selectPhase = false;
   }
 
   initializeFournDataSources() {
-    this.transporteurSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transporteurSource = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
     this.transporteurSource.filter(["valide", "=", true]);
-    this.lieuxPassageAQuaiSource = this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"]);
+    this.lieuxPassageAQuaiSource =
+      this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"]);
     this.lieuxPassageAQuaiSource.filter(["valide", "=", true]);
-    this.transitaireSource = this.transitairesService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transitaireSource = this.transitairesService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
     this.transitaireSource.filter(["valide", "=", true]);
-    this.transitaireDouanierSource = this.transitairesService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transitaireDouanierSource = this.transitairesService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
     this.transitaireDouanierSource.filter([
       ["valide", "=", true],
       "and",
-      ["declarantDouanier", "=", true]
+      ["declarantDouanier", "=", true],
     ]);
     if (this?.ordre?.id) {
-      this.entrepotSource = this.entrepotsService.getDataSource_v2(["id", "code", "raisonSocial"]);
+      this.entrepotSource = this.entrepotsService.getDataSource_v2([
+        "id",
+        "code",
+        "raisonSocial",
+      ]);
       const filtersEnt = [
         ["valide", "=", true],
         "and",
@@ -127,10 +153,18 @@ export class GridFraisComponent implements ToggledGrid {
         ["code", "<>", "DIR GB  DURTAL"],
         "and",
         [
-          [["client.secteur.id", "=", "GB"], "and", ["client.secteur.id", "=", this.ordre.secteurCommercial.id]],
+          [
+            ["client.secteur.id", "=", "GB"],
+            "and",
+            ["client.secteur.id", "=", this.ordre.secteurCommercial.id],
+          ],
           "or",
-          [["client.secteur.id", "<>", "GB"], "and", ["client.secteur.id", "=", "F"]]
-        ]
+          [
+            ["client.secteur.id", "<>", "GB"],
+            "and",
+            ["client.secteur.id", "=", "F"],
+          ],
+        ],
       ];
       this.entrepotSource.filter(filtersEnt);
     }
@@ -138,11 +172,15 @@ export class GridFraisComponent implements ToggledGrid {
 
   async enableFilters() {
     if (this?.ordre?.id) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return (this.addKeyToField(column.dataField));
-      })));
+      const fields = this.columns.pipe(
+        map((columns) =>
+          columns.map((column) => {
+            return this.addKeyToField(column.dataField);
+          })
+        )
+      );
       this.dataSource = this.ordresFraisService.getDataSource_v2(
-        await fields.toPromise(),
+        await fields.toPromise()
       );
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
       this.datagrid.dataSource = this.dataSource;
@@ -154,7 +192,7 @@ export class GridFraisComponent implements ToggledGrid {
     e.data.ordre = { id: this.ordre.id };
     e.data.devise = {
       id: this.currentCompanyService.getCompany().devise.id,
-      description: this.currentCompanyService.getCompany().devise.description
+      description: this.currentCompanyService.getCompany().devise.description,
     };
     e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
     setTimeout(() => this.datagrid.instance.saveEditData(), 1);
@@ -165,18 +203,25 @@ export class GridFraisComponent implements ToggledGrid {
     let valueToSave;
 
     if (cell.setValue) {
-      if (typeof event.value === "object" && cell.column.dataField === "codePlus") {
+      if (
+        typeof event.value === "object" &&
+        cell.column.dataField === "codePlus"
+      ) {
         valueToSave = event.value?.code ?? event.value?.id ?? event.value;
       } else {
         valueToSave = event.value;
       }
-      if (cell.column.dataField === "codePlus" && valueToSave !== null) valueToSave = valueToSave.substring(0, 35);
+      if (cell.column.dataField === "codePlus" && valueToSave !== null)
+        valueToSave = valueToSave.substring(0, 35);
 
       switch (cell.column.dataField) {
-
         case "frais": {
           if (cell.data.codePlus)
-            cell.component.cellValue(cell.component.getRowIndexByKey(cell.row.key), "codePlus", null);
+            cell.component.cellValue(
+              cell.component.getRowIndexByKey(cell.row.key),
+              "codePlus",
+              null
+            );
           break;
         }
       }
@@ -186,14 +231,20 @@ export class GridFraisComponent implements ToggledGrid {
 
   onEditingStart(cell) {
     if (!cell.column || !cell.data.deviseTaux) return;
-    if (cell.column.dataField === "codePlus" && !cell.data.frais?.id) cell.cancel = true;
+    if (cell.column.dataField === "codePlus" && !cell.data.frais?.id)
+      cell.cancel = true;
   }
 
   displayCodeBefore(data) {
     if (data && !data.id) return data;
-    return data ?
-      (data.code ? data.code : data.id) + " - " + (data.raisonSocial ? data.raisonSocial :
-        (data.ville ? data.ville : data.description))
+    return data
+      ? (data.code ? data.code : data.id) +
+          " - " +
+          (data.raisonSocial
+            ? data.raisonSocial
+            : data.ville
+            ? data.ville
+            : data.description)
       : null;
   }
 
@@ -214,7 +265,9 @@ export class GridFraisComponent implements ToggledGrid {
   }
 
   capitalize(data) {
-    return data ? data.charAt(0).toUpperCase() + data.slice(1).toLowerCase() : null;
+    return data
+      ? data.charAt(0).toUpperCase() + data.slice(1).toLowerCase()
+      : null;
   }
 
   updateCodePlusDataSource(data) {
@@ -223,12 +276,15 @@ export class GridFraisComponent implements ToggledGrid {
     this.selectPhase = true;
     this.initializeFournDataSources();
     this.selectBoxes
-      .filter(component => component.instance.$element()[0].id === data.id)
-      .map(component => {
-        if (frais === "RAMASS" || frais === "FRET") component.dataSource = this.transporteurSource;
-        if (frais === "DEDIMP" || frais === "DEDEXP") component.dataSource = this.transitaireDouanierSource;
+      .filter((component) => component.instance.$element()[0].id === data.id)
+      .map((component) => {
+        if (frais === "RAMASS" || frais === "FRET")
+          component.dataSource = this.transporteurSource;
+        if (frais === "DEDIMP" || frais === "DEDEXP")
+          component.dataSource = this.transitaireDouanierSource;
         if (frais === "TRANSI") component.dataSource = this.transitaireSource;
-        if (frais === "QUAI") component.dataSource = this.lieuxPassageAQuaiSource;
+        if (frais === "QUAI")
+          component.dataSource = this.lieuxPassageAQuaiSource;
         if (frais === "ENTBWS") component.dataSource = this.entrepotSource;
       });
   }
@@ -259,10 +315,7 @@ export class GridFraisComponent implements ToggledGrid {
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Higlight important columns
-      if ([
-        "deviseTaux",
-        "montantTotal"
-      ].includes(e.column.dataField)) {
+      if (["deviseTaux", "montantTotal"].includes(e.column.dataField)) {
         // Grey background
         e.cellElement.classList.add("grey-light");
       }
@@ -282,6 +335,8 @@ export class GridFraisComponent implements ToggledGrid {
   }
 
   onToggling(toggled: boolean) {
-    toggled && this?.ordre?.id ? this.enableFilters() : (this.dataSource = null);
+    toggled && this?.ordre?.id
+      ? this.enableFilters()
+      : (this.dataSource = null);
   }
 }

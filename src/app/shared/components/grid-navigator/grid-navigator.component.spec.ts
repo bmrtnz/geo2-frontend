@@ -5,23 +5,23 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { GridNavigatorComponent } from "./grid-navigator.component";
 
 describe("GridNavigatorComponent", () => {
-    let component: GridNavigatorComponent;
-    let fixture: ComponentFixture<GridNavigatorComponent>;
+  let component: GridNavigatorComponent;
+  let fixture: ComponentFixture<GridNavigatorComponent>;
 
-    beforeEach(waitForAsync(() => {
-        TestBed.configureTestingModule({
-            declarations: [GridNavigatorComponent],
-            imports: [RouterTestingModule],
-        }).compileComponents();
-    }));
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [GridNavigatorComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
+  }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(GridNavigatorComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GridNavigatorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
-    });
+  it("should create", () => {
+    expect(component).toBeTruthy();
+  });
 });

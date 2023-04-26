@@ -1,10 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  ActivatedRoute,
-
-
-  Router
-} from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import notify from "devextreme/ui/notify";
 import { concatMap, take, tap } from "rxjs/operators";
 import { Utilisateur } from "../models/utilisateur.model";
@@ -47,18 +42,16 @@ export class AuthService {
 
     // Autres accès
     "indicateurVisualisationIncotermFournisseur",
-    "commentaireStock"
+    "commentaireStock",
   ];
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private utilisateursService: UtilisateursService,
-    public currentCompanyService: CurrentCompanyService,
+    public currentCompanyService: CurrentCompanyService
   ) {
-    const stored = window.sessionStorage.getItem(
-      this.CURRENT_USER_STORE_KEY,
-    );
+    const stored = window.sessionStorage.getItem(this.CURRENT_USER_STORE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       this.loggedIn = true;
@@ -75,16 +68,13 @@ export class AuthService {
         concatMap((res) => {
           this.logUser(res.data.utilisateur);
           return this.router.navigateByUrl(redirection);
-        }),
+        })
       );
   }
 
   public logUser(user: Utilisateur) {
     this.setCurrentUser(user);
-    window.localStorage.setItem(
-      this.LAST_USER_STORE_KEY,
-      user.nomUtilisateur,
-    );
+    window.localStorage.setItem(this.LAST_USER_STORE_KEY, user.nomUtilisateur);
     this.loggedIn = true;
   }
 
@@ -97,7 +87,7 @@ export class AuthService {
       " !";
     notify(
       { message: mess, elementAttr: { class: "welcome-message" } },
-      "info",
+      "info"
     );
   }
 
@@ -116,7 +106,7 @@ export class AuthService {
       })
       .pipe(
         take(1),
-        tap((res) => this.setCurrentUser(res.data.saveUtilisateur)),
+        tap((res) => this.setCurrentUser(res.data.saveUtilisateur))
       );
   }
 
@@ -124,7 +114,7 @@ export class AuthService {
     this.currentUser = new Utilisateur({ ...this.currentUser, ...data });
     window.sessionStorage.setItem(
       this.CURRENT_USER_STORE_KEY,
-      JSON.stringify(this.currentUser),
+      JSON.stringify(this.currentUser)
     );
   }
 
@@ -132,14 +122,16 @@ export class AuthService {
     this.loggedIn = false;
     window.sessionStorage.removeItem(this.CURRENT_USER_STORE_KEY);
     if (!this.router.isActive("/profile/login", false))
-      return this.router.navigateByUrl(this.createLoginRedirectURLTree(this.router.url));
+      return this.router.navigateByUrl(
+        this.createLoginRedirectURLTree(this.router.url)
+      );
   }
 
   public createLoginRedirectURLTree(redirect: string) {
     return this.router.createUrlTree(["/profile/login"], {
       /* Removed unsupported properties by Angular migration: skipLocationChange. */
       queryParamsHandling: "merge",
-      queryParams: { redirect }
+      queryParams: { redirect },
     });
   }
 

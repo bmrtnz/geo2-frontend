@@ -54,7 +54,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     public tabContext: TabContext,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     self = this;
     this.searchItems = [
@@ -72,10 +72,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.route.paramMap
       .pipe(
-        filter(
-          (param) =>
-            param.get(RouteParam.TabID) === this.INDICATOR_ID,
-        ),
+        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID)
       )
       .subscribe((_) => {
         this.histoGrid.reload();
@@ -86,9 +83,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   searchDisplayExpr(item) {
     return item
-      ? self.localizeService.localize(
-        "rechOrdres-" + item.split(".").join("-"),
-      )
+      ? self.localizeService.localize("rechOrdres-" + item.split(".").join("-"))
       : null;
   }
 
@@ -137,11 +132,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
     // Current campaing filtering
     if (this.currCampaign.instance.option("value")) {
-      this.filter.push("and", [
-        "campagne.id",
-        "=",
-        this.campagneEnCours.id,
-      ]);
+      this.filter.push("and", ["campagne.id", "=", this.campagneEnCours.id]);
     }
   }
 

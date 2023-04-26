@@ -1,7 +1,12 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService, LieuxPassageAQuaiService, LocalizationService, TransporteursService } from "app/shared/services";
+import {
+  AuthService,
+  LieuxPassageAQuaiService,
+  LocalizationService,
+  TransporteursService,
+} from "app/shared/services";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
@@ -9,7 +14,8 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
-  GridConfig, GridConfiguratorService
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -24,7 +30,6 @@ import { GridCommandesComponent } from "../grid-commandes/grid-commandes.compone
 import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-
 
 @Component({
   selector: "app-grid-logistiques",
@@ -54,10 +59,14 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   @Output() public lieuxGroupage: string[];
   @Output() public ligneId: string;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild(ZoomTransporteurPopupComponent, { static: false }) zoomTransporteurPopup: ZoomTransporteurPopupComponent;
-  @ViewChild(ZoomLieupassageaquaiPopupComponent, { static: false }) zoomLieupassageaquaiPopup: ZoomLieupassageaquaiPopupComponent;
-  @ViewChild(AjoutEtapeLogistiquePopupComponent, { static: false }) ajoutEtapePopup: AjoutEtapeLogistiquePopupComponent;
-  @ViewChild(InfoPopupComponent, { static: false }) infoPopup: InfoPopupComponent;
+  @ViewChild(ZoomTransporteurPopupComponent, { static: false })
+  zoomTransporteurPopup: ZoomTransporteurPopupComponent;
+  @ViewChild(ZoomLieupassageaquaiPopupComponent, { static: false })
+  zoomLieupassageaquaiPopup: ZoomLieupassageaquaiPopupComponent;
+  @ViewChild(AjoutEtapeLogistiquePopupComponent, { static: false })
+  ajoutEtapePopup: AjoutEtapeLogistiquePopupComponent;
+  @ViewChild(InfoPopupComponent, { static: false })
+  infoPopup: InfoPopupComponent;
 
   constructor(
     private ordresLogistiquesService: OrdresLogistiquesService,
@@ -69,48 +78,61 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     public transporteurGroupageService: TransporteursService,
     public authService: AuthService,
     public formUtilsService: FormUtilsService,
-    public localizeService: LocalizationService,
+    public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreLogistique,
+      Grid.OrdreLogistique
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.addStep = this.addStep.bind(this);
     this.itemsWithSelectBox = [
       "transporteurGroupage",
       "groupage",
-      "incotermFournisseur"
+      "incotermFournisseur",
     ];
     this.lieuxGroupage = [];
     this.instructionsList = [];
     this.addStepText = this.localizeService.localize("hint-addStep");
-    this.transporteurGroupageSource = this.transporteurGroupageService.getDataSource_v2(["id", "raisonSocial"]);
+    this.transporteurGroupageSource =
+      this.transporteurGroupageService.getDataSource_v2(["id", "raisonSocial"]);
     this.transporteurGroupageSource.filter(["valide", "=", true]);
-    this.groupageSource = this.groupageService.getDataSource_v2(["id", "ville"]);
+    this.groupageSource = this.groupageService.getDataSource_v2([
+      "id",
+      "ville",
+    ]);
     this.groupageSource.filter(["valide", "=", true]);
-    this.incotermFournisseurSource = this.incotermFournisseurService.getDataSource_v2(["id", "description"]);
+    this.incotermFournisseurSource =
+      this.incotermFournisseurService.getDataSource_v2(["id", "description"]);
     this.incotermFournisseurSource.filter(["valide", "=", true]);
-    this.instructionsService.getDataSource_v2(["id", "description", "valide"]).load().then(res => {
-      res
-        .filter(inst => inst.valide)
-        .map(inst => this.instructionsList.push(inst.description));
-    });
+    this.instructionsService
+      .getDataSource_v2(["id", "description", "valide"])
+      .load()
+      .then((res) => {
+        res
+          .filter((inst) => inst.valide)
+          .map((inst) => this.instructionsList.push(inst.description));
+      });
   }
 
   async enableFilters() {
     if (this?.ordre?.id) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return (this.addKeyToField(column.dataField));
-      })));
+      const fields = this.columns.pipe(
+        map((columns) =>
+          columns.map((column) => {
+            return this.addKeyToField(column.dataField);
+          })
+        )
+      );
       this.dataSource = this.ordresLogistiquesService.getDataSource_v2(
-        await fields.toPromise(),
+        await fields.toPromise()
       );
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
       this.datagrid.dataSource = this.dataSource;
-      this.datagrid.instance
-        .columnOption("incotermFournisseur", "visible", this.authService.currentUser.indicateurVisualisationIncotermFournisseur);
+      this.datagrid.instance.columnOption(
+        "incotermFournisseur",
+        "visible",
+        this.authService.currentUser.indicateurVisualisationIncotermFournisseur
+      );
     } else if (this.datagrid) this.datagrid.dataSource = null;
   }
 
@@ -134,27 +156,30 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   }
 
   setSBInputTitle(className) {
-    document.querySelectorAll("." + className + " input").forEach(sb => {
+    document.querySelectorAll("." + className + " input").forEach((sb) => {
       const inp = sb as HTMLInputElement;
       sb.setAttribute("title", inp.value);
     });
-
   }
 
   onCellClick(e) {
     // Way to avoid Dx Selectbox list to appear when cell is readonly
-    this.SelectBoxPopupWidth = e.cellElement.classList.contains("dx-datagrid-readonly") ? 0 : 400;
+    this.SelectBoxPopupWidth = e.cellElement.classList.contains(
+      "dx-datagrid-readonly"
+    )
+      ? 0
+      : 400;
   }
 
   defineEditTemplate(field) {
-
     let templ;
     if (this.itemsWithSelectBox.includes(field)) templ = "selectBoxTemplate";
     if (
       field === "dateDepartPrevueFournisseur" ||
       field === "dateLivraisonLieuGroupage" ||
       field === "dateDepartPrevueGroupage"
-    ) templ = "datetimeBoxTemplate";
+    )
+      templ = "datetimeBoxTemplate";
     if (field === "codeFournisseur") templ = "simpleElementEditTemplate";
     if (field === "instructions") templ = "customSelectBoxTemplate";
     return templ ? templ : false;
@@ -167,14 +192,23 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
       this.ligneId = e.row.data.id;
       this.ajoutEtapePopup.visible = true;
     } else {
-      notify(this.localizeService.localize("text-groupage-popup"), "warning", 5000);
+      notify(
+        this.localizeService.localize("text-groupage-popup"),
+        "warning",
+        5000
+      );
     }
   }
 
   displayIdBefore(data) {
-    return data ?
-      data.id + " - " + (data.raisonSocial ? data.raisonSocial :
-        (data.ville ? data.ville : data.description))
+    return data
+      ? data.id +
+          " - " +
+          (data.raisonSocial
+            ? data.raisonSocial
+            : data.ville
+            ? data.ville
+            : data.description)
       : null;
   }
 
@@ -195,9 +229,10 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
 
   onContentReady(e) {
     this.lieuxGroupage = [];
-    e.component.getVisibleRows()
-      .filter(row => row.data.groupage?.id !== null)
-      .map(row => {
+    e.component
+      .getVisibleRows()
+      .filter((row) => row.data.groupage?.id !== null)
+      .map((row) => {
         if (!this.lieuxGroupage?.includes(row.data.groupage?.id))
           this.lieuxGroupage.push(row.data.groupage?.id);
       });
@@ -220,12 +255,13 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
         const deleteLink = e.cellElement.querySelector(".dx-link-delete");
         deleteLink?.classList.add("visibility-hidden");
         if (this.gridCommandes.grid.dataSource) {
-          if (!this.gridCommandes.embalExp.includes(e.row.data.codeFournisseur)) {
+          if (
+            !this.gridCommandes.embalExp.includes(e.row.data.codeFournisseur)
+          ) {
             deleteLink?.classList.remove("visibility-hidden");
           }
         }
       }
-
     }
   }
 

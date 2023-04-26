@@ -1,12 +1,26 @@
-
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { Article } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
+import {
+  AuthService,
+  ClientsService,
+  LocalizationService,
+} from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -24,10 +38,9 @@ import { ReservationPopupComponent } from "./reservation-popup/reservation-popup
 @Component({
   selector: "app-grid-stock",
   templateUrl: "./grid-stock.component.html",
-  styleUrls: ["./grid-stock.component.scss"]
+  styleUrls: ["./grid-stock.component.scss"],
 })
 export class GridStockComponent implements OnInit {
-
   @Input() public ordre: Ordre;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
@@ -37,19 +50,25 @@ export class GridStockComponent implements OnInit {
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true })
+  datagrid: DxDataGridComponent;
   @ViewChild("especeSB", { static: false }) especeSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varietesSB: DxSelectBoxComponent;
-  @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
+  @ViewChild("modesCultureSB", { static: false })
+  modesCultureSB: DxSelectBoxComponent;
   @ViewChild("groupesSB") groupesSB: DxSelectBoxComponent;
-  @ViewChild("emballageSB", { static: false }) emballagesSB: DxSelectBoxComponent;
+  @ViewChild("emballageSB", { static: false })
+  emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
-  @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
-  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
-  @ViewChild(ReservationPopupComponent) destockagePopup: ReservationPopupComponent;
+  @ViewChild("bureauAchatSB", { static: false })
+  bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild(ZoomArticlePopupComponent, { static: false })
+  zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(ReservationPopupComponent)
+  destockagePopup: ReservationPopupComponent;
   @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
-  @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
-
+  @ViewChild(PromptPopupComponent, { static: false })
+  promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -78,20 +97,30 @@ export class GridStockComponent implements OnInit {
     private stocksService: StocksService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
-    public gridsService: GridsService,
+    public gridsService: GridsService
   ) {
     this.apiService = this.articlesService;
-    this.especes = this.stocksService.getDistinctEntityDatasource("article.cahierDesCharge.espece.id");
+    this.especes = this.stocksService.getDistinctEntityDatasource(
+      "article.cahierDesCharge.espece.id"
+    );
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
   async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreStock);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.OrdreStock
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
+    this.articles = this.articlesService.getDataSource_v2(
+      await fields.toPromise()
+    );
     this.toRefresh = !this.noEspeceSet;
-    this.gridTitle = this.localizeService.localize("articles-catalogue-preFilter-stock-title");
+    this.gridTitle = this.localizeService.localize(
+      "articles-catalogue-preFilter-stock-title"
+    );
   }
 
   onFilterChange() {
@@ -108,8 +137,16 @@ export class GridStockComponent implements OnInit {
     this.onFilterChange();
 
     // Filtering variete, emballage & origine selectBox list depending on specy
-    if (["espece", "variete", "origine", "emballage.emballage.groupe.id", "emballage", "modeCulture"].includes(dataField)) {
-
+    if (
+      [
+        "espece",
+        "variete",
+        "origine",
+        "emballage.emballage.groupe.id",
+        "emballage",
+        "modeCulture",
+      ].includes(dataField)
+    ) {
       if (["espece"].includes(dataField)) {
         this.varietesSB.value = null;
         this.groupesSB.value = null;
@@ -122,25 +159,58 @@ export class GridStockComponent implements OnInit {
         this.emballagesSB.value = null;
 
       let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value.key}' and quantiteTotale > 0 and valide == true)`;
-      if (this.varietesSB.value) sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
-      if (this.groupesSB.value) sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value.key}'`;
-      if (this.emballagesSB.value) sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
-      if (this.originesSB.value) sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
-      if (this.modesCultureSB.value) sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
+      if (this.varietesSB.value)
+        sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
+      if (this.groupesSB.value)
+        sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value.key}'`;
+      if (this.emballagesSB.value)
+        sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
+      if (this.originesSB.value)
+        sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
+      if (this.modesCultureSB.value)
+        sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
       const dataToLoad = [
-        { var: "varietes", id: "article.matierePremiere.variete.id", desc: "article.matierePremiere.variete.description" },
-        { var: "groupes", id: "article.emballage.emballage.groupe.id", desc: "article.emballage.emballage.groupe.description" },
-        { var: "emballages", id: "article.emballage.emballage.id", desc: "article.emballage.emballage.description" },
-        { var: "origines", id: "article.matierePremiere.origine.id", desc: "article.matierePremiere.origine.description" },
-        { var: "bureauxAchat", id: "fournisseur.bureauAchat.id", desc: "fournisseur.bureauAchat.raisonSocial" },
-        { var: "modesCulture", id: "article.matierePremiere.modeCulture.id", desc: "article.matierePremiere.modeCulture.description" },
+        {
+          var: "varietes",
+          id: "article.matierePremiere.variete.id",
+          desc: "article.matierePremiere.variete.description",
+        },
+        {
+          var: "groupes",
+          id: "article.emballage.emballage.groupe.id",
+          desc: "article.emballage.emballage.groupe.description",
+        },
+        {
+          var: "emballages",
+          id: "article.emballage.emballage.id",
+          desc: "article.emballage.emballage.description",
+        },
+        {
+          var: "origines",
+          id: "article.matierePremiere.origine.id",
+          desc: "article.matierePremiere.origine.description",
+        },
+        {
+          var: "bureauxAchat",
+          id: "fournisseur.bureauAchat.id",
+          desc: "fournisseur.bureauAchat.raisonSocial",
+        },
+        {
+          var: "modesCulture",
+          id: "article.matierePremiere.modeCulture.id",
+          desc: "article.matierePremiere.modeCulture.description",
+        },
       ];
       dataToLoad
-        .filter(data => !this[`${data.var}SB`].value)
-        .forEach(data => {
+        .filter((data) => !this[`${data.var}SB`].value)
+        .forEach((data) => {
           if (data.var === "emballages")
             sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
-          this[data.var] = this.stocksService.getDistinctEntityDatasource(data.id, data.desc, sbFilters);
+          this[data.var] = this.stocksService.getDistinctEntityDatasource(
+            data.id,
+            data.desc,
+            sbFilters
+          );
         });
     }
   }
@@ -152,41 +222,45 @@ export class GridStockComponent implements OnInit {
 
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   refreshArticlesGrid() {
     this.datagrid.instance.beginCustomLoading("");
-    this.stocksService.allStockArticleList(
-      this.especeSB.value?.key,
-      this.varietesSB.value?.key,
-      this.originesSB.value?.key,
-      this.modesCultureSB.value?.key,
-      this.emballagesSB.value?.key,
-      this.bureauxAchatSB.value?.key
-    ).subscribe((res) => {
-      this.datagrid.dataSource = res.data.allStockArticleList;
-      this.datagrid.instance.refresh();
-      this.datagrid.instance.endCustomLoading();
-      this.toRefresh = false;
-    });
+    this.stocksService
+      .allStockArticleList(
+        this.especeSB.value?.key,
+        this.varietesSB.value?.key,
+        this.originesSB.value?.key,
+        this.modesCultureSB.value?.key,
+        this.emballagesSB.value?.key,
+        this.bureauxAchatSB.value?.key
+      )
+      .subscribe((res) => {
+        this.datagrid.dataSource = res.data.allStockArticleList;
+        this.datagrid.instance.refresh();
+        this.datagrid.instance.endCustomLoading();
+        this.toRefresh = false;
+      });
   }
 
   openFilePopup(data) {
-    this.articleLigneId = data.collapsedItems ? data.collapsedItems[0]?.articleID : data.items[0]?.articleID;
+    this.articleLigneId = data.collapsedItems
+      ? data.collapsedItems[0]?.articleID
+      : data.items[0]?.articleID;
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
   openReservationPopup(data) {
     if (!data?.articleID) return;
     this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe(res => {
+    this.articlesService.getOne(data.articleID).subscribe((res) => {
       this.article = res.data.article;
       this.optionPopup.visible = true;
     });
@@ -221,8 +295,12 @@ export class GridStockComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      if (e.column.dataField === "articleDescription" && e.cellElement.textContent) {
-        e.cellElement.title = this.localizeService.localize("hint-dblClick-file");
+      if (
+        e.column.dataField === "articleDescription" &&
+        e.cellElement.textContent
+      ) {
+        e.cellElement.title =
+          this.localizeService.localize("hint-dblClick-file");
         e.cellElement.classList.add("cursor-pointer");
         const data = e.data.items ?? e.data.collapsedItems;
         if (data[0].bio) e.cellElement.classList.add("bio-article");
@@ -251,16 +329,13 @@ export class GridStockComponent implements OnInit {
         }
       }
     }
-
   }
 
   formatListItem(data) {
     if (data?.description)
       return `${data.id.toUpperCase()} - ${data.description?.toUpperCase()}`;
-    if (data?.id)
-      return data.id.toUpperCase();
-    if (data?.key)
-      return data.key.toUpperCase();
+    if (data?.id) return data.id.toUpperCase();
+    if (data?.key) return data.key.toUpperCase();
     return data.toString();
   }
 
@@ -271,10 +346,11 @@ export class GridStockComponent implements OnInit {
 
   validateComment(comment) {
     this.datagrid.instance.beginCustomLoading("");
-    this.stockConsolideService.save({
-      id: this.articleLigneId,
-      commentaire: comment
-    }).subscribe(() => this.refreshArticlesGrid());
+    this.stockConsolideService
+      .save({
+        id: this.articleLigneId,
+        commentaire: comment,
+      })
+      .subscribe(() => this.refreshArticlesGrid());
   }
-
 }

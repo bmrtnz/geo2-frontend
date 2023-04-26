@@ -57,7 +57,6 @@
 
 // Highlight client groups
 ::ng-deep {
-
   .dx-row:not(.dx-row-focused) {
     .group-palox-header {
       background: $BW-orange-dark;
@@ -116,7 +115,7 @@
     top: 1px;
     padding: 10px 0 10px 10px;
     margin-left: 20px;
-    color: #FFF;
+    color: #fff;
     float: right;
   }
 
@@ -127,5 +126,4 @@
     color: rgba(0, 0, 0, 0.7);
     float: right;
   }
-
 }

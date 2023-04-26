@@ -5,12 +5,32 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
 import { from, iif, of, throwError } from "rxjs";
-import { catchError, concatMap, filter, first, map, mergeMap, take, takeUntil } from "rxjs/operators";
+import {
+  catchError,
+  concatMap,
+  filter,
+  first,
+  map,
+  mergeMap,
+  take,
+  takeUntil,
+} from "rxjs/operators";
 import { Ordre } from "../../models/ordre.model";
-import { APICount, APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
+import {
+  APICount,
+  APIPersist,
+  APIRead,
+  ApiService,
+  RelayPage,
+} from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
 import { DevisesRefsService } from "./devises-refs.service";
-import { functionBody, FunctionResponse, FunctionResult, FunctionsService } from "./functions.service";
+import {
+  functionBody,
+  FunctionResponse,
+  FunctionResult,
+  FunctionsService,
+} from "./functions.service";
 
 export enum Operation {
   All = "allOrdre",
@@ -18,27 +38,30 @@ export enum Operation {
   SuiviDeparts = "allOrdreSuiviDeparts",
   PlanningTransporteursApproche = "allOrdrePlanningTransporteursApproche",
   PlanningFournisseurs = "allOrdrePlanningFournisseurs",
-  SupervisionComptesPalox = "allOrdreSupervisionComptesPalox"
+  SupervisionComptesPalox = "allOrdreSupervisionComptesPalox",
 }
 
 export type CountResponse = { countOrdre: number };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
-export class OrdresService extends ApiService implements APIRead, APIPersist, APICount<CountResponse> {
-
+export class OrdresService
+  extends ApiService
+  implements APIRead, APIPersist, APICount<CountResponse>
+{
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
     private devisesRefsService: DevisesRefsService,
-    private currentCompanyService: CurrentCompanyService,
+    private currentCompanyService: CurrentCompanyService
   ) {
     super(apollo, Ordre);
   }
 
   /* eslint-disable-next-line */
-  queryFilter = /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|prixUnitaireTarifTransport|transporteurDEVCode)$/i;
+  queryFilter =
+    /.*(?:id|numero|codeChargement|numeroFacture|marge|codeClient|codeAlphaEntrepot|sommeColisCommandes|sommeColisExpedies|totalNombrePalettesCommandees|referenceClient|nomUtilisateur|raisonSocial|dateLivraisonPrevue|statut|versionDetail|dateDepartPrevue|bonAFacturer|pourcentageMargeBrut|transporteurDEVPrixUnitaire|prixUnitaireTarifTransport|transporteurDEVCode)$/i;
 
   public persistantVariables: Record<string, any> = { onlyColisDiff: false };
 
@@ -53,12 +76,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   getOne_v2(id: string, columns: Array<string> | Set<string>, fetchPol?) {
-    return this.apollo
-      .query<{ ordre: Ordre }>({
-        query: gql(this.buildGetOneGraph(columns)),
-        variables: { id },
-        fetchPolicy: fetchPol ?? "cache-first"
-      });
+    return this.apollo.query<{ ordre: Ordre }>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
+      fetchPolicy: fetchPol ?? "cache-first",
+    });
   }
 
   getOneByNumeroAndSocieteAndCampagne(
@@ -68,9 +90,9 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     body: string[],
     fetchPol?: any
   ) {
-    return this.apollo
-      .query<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ ordreByNumeroAndSocieteAndCampagne: Ordre }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -80,61 +102,64 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
                 { name: "numero", value: "numero", isVariable: true },
                 { name: "societe", value: "societe", isVariable: true },
                 { name: "campagne", value: "campagne", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "numero", type: "String", isOptionnal: false },
             { name: "societe", type: "String", isOptionnal: false },
             { name: "campagne", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { numero, societe, campagne },
-        fetchPolicy: fetchPol ? fetchPol : "cache-first"
-      });
+          ]
+        )
+      ),
+      variables: { numero, societe, campagne },
+      fetchPolicy: fetchPol ? fetchPol : "cache-first",
+    });
   }
 
   getDataSource(indicator?: Operation, depth = 2, qFilter = this.queryFilter) {
     return new DataSource({
-      sort: [
-        { selector: this.model.getLabelField() as string }
-      ],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            let query: string;
+            if (indicator === Operation.SuiviDeparts)
+              query = await this.buildGetAllSuiviDeparts(
+                depth,
+                qFilter,
+                indicator
+              );
+            else query = await this.buildGetAll(depth, qFilter, indicator);
+
+            const key: string = indicator ?? "allOrdre";
+            type Response = { [key: string]: RelayPage<Ordre> };
+            const variables = {
+              ...this.persistantVariables,
+              ...this.mapLoadOptionsToVariables(options),
+            };
+
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data[key])
+                resolve(this.asInstancedListCount(res.data[key]));
             });
-
-          let query: string;
-          if (indicator === Operation.SuiviDeparts)
-            query = await this.buildGetAllSuiviDeparts(depth, qFilter, indicator);
-          else
-            query = await this.buildGetAll(depth, qFilter, indicator);
-
-          const key: string = indicator ?? "allOrdre";
-          type Response = { [key: string]: RelayPage<Ordre> };
-          const variables = {
-            ...this.persistantVariables,
-            ...this.mapLoadOptionsToVariables(options)
-          };
-
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data[key])
-              resolve(this.asInstancedListCount(res.data[key]));
-          });
-        }),
-        byKey: (key) => new Promise(async (resolve) => {
-          const query = await this.buildGetOne();
-          type Response = { ordre: Ordre };
-          const variables = { id: key };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.ordre)
-              resolve(new Ordre(res.data.ordre));
-          });
-        }),
+          }),
+        byKey: (key) =>
+          new Promise(async (resolve) => {
+            const query = await this.buildGetOne();
+            type Response = { ordre: Ordre };
+            const variables = { id: key };
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.ordre)
+                resolve(new Ordre(res.data.ordre));
+            });
+          }),
       }),
     });
   }
@@ -145,9 +170,8 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         const query = await this.buildGetOne_v2(columns);
         type Response = { ordre: Ordre };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
-          if (res.data && res.data.ordre)
-            resolve(new Ordre(res.data.ordre));
+        this.listenQuery<Response>(query, { variables }, (res) => {
+          if (res.data && res.data.ordre) resolve(new Ordre(res.data.ordre));
         });
       });
   }
@@ -155,27 +179,27 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   getDataSource_v2(columns: Array<string>, indicator = Operation.All) {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            const query = await this.buildGetAll_v2(columns, indicator);
+            type Response = { [indicator: string]: RelayPage<Ordre> };
+
+            const variables = {
+              ...this.persistantVariables,
+              ...this.mapLoadOptionsToVariables(options),
+            };
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data[indicator]) {
+                resolve(this.asInstancedListCount(res.data[indicator]));
+              }
             });
-
-          const query = await this.buildGetAll_v2(columns, indicator);
-          type Response = { [indicator: string]: RelayPage<Ordre> };
-
-          const variables = {
-            ...this.persistantVariables,
-            ...this.mapLoadOptionsToVariables(options)
-          };
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data[indicator]) {
-              resolve(this.asInstancedListCount(res.data[indicator]));
-            }
-          });
-        }),
+          }),
         byKey: this.byKey(columns),
       }),
     });
@@ -235,16 +259,17 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   clone(variables: OperationVariables) {
-    return from(this.buildSaveWithClone(1, this.queryFilter))
-      .pipe(
-        takeUntil(this.destroy),
-        mergeMap(query => this.apollo.mutate({
+    return from(this.buildSaveWithClone(1, this.queryFilter)).pipe(
+      takeUntil(this.destroy),
+      mergeMap((query) =>
+        this.apollo.mutate({
           mutation: gql(query),
           fetchPolicy: "no-cache",
           variables,
-        } as MutationOptions)),
-        take(1),
-      );
+        } as MutationOptions)
+      ),
+      take(1)
+    );
   }
 
   protected async buildSaveWithClone(depth?: number, fieldsFilter?: RegExp) {
@@ -257,17 +282,26 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     `;
   }
 
-  protected async buildGetOrdreByNumeroAndSociete(depth?: number, fieldsFilter?: RegExp) {
+  protected async buildGetOrdreByNumeroAndSociete(
+    depth?: number,
+    fieldsFilter?: RegExp
+  ) {
     return `
       query OrdreByNumeroAndSociete($numero: String!, $societe: String!) {
         ordreByNumeroAndSociete(numero:$numero, societe:$societe) {
-          ${await this.model.getGQLFields(depth, fieldsFilter, null, { noList: true }).toPromise()}
+          ${await this.model
+            .getGQLFields(depth, fieldsFilter, null, { noList: true })
+            .toPromise()}
         }
       }
     `;
   }
 
-  protected async buildGetAllSuiviDeparts(depth?: number, regExpFilter?: RegExp, operationName?: string) {
+  protected async buildGetAllSuiviDeparts(
+    depth?: number,
+    regExpFilter?: RegExp,
+    operationName?: string
+  ) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = operation.ucFirst();
     return `
@@ -275,7 +309,9 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
         ${operation}(search:$search, pageable:$pageable, onlyColisDiff:$onlyColisDiff) {
           edges {
             node {
-              ${await this.model.getGQLFields(depth, regExpFilter, null, { noList: true }).toPromise()}
+              ${await this.model
+                .getGQLFields(depth, regExpFilter, null, { noList: true })
+                .toPromise()}
             }
           }
           pageInfo {
@@ -308,34 +344,35 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   async isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) {
-      const chunk = await this
-        .getOne_v2(ordre.id, ["statut"])
-        .pipe(map(res => res.data.ordre))
+      const chunk = await this.getOne_v2(ordre.id, ["statut"])
+        .pipe(map((res) => res.data.ordre))
         .toPromise();
       ordre.statut = chunk.statut;
     }
     return Ordre.isCloture(ordre);
   }
 
-
   /**
    * Comptabilisation des retraits
    */
   public fChgtQteArtRet(ordreRef: string) {
     return this.functionsService.queryFunction("fChgtQteArtRet", [
-      { name: "ordreRef", type: "String", value: ordreRef }
+      { name: "ordreRef", type: "String", value: ordreRef },
     ]);
   }
-
 
   /**
    * Suppression d'un ordre
    */
-  public fSuppressionOrdre(ordreRef: string, commentaire: string, username: string) {
+  public fSuppressionOrdre(
+    ordreRef: string,
+    commentaire: string,
+    username: string
+  ) {
     return this.functionsService.queryFunction("fSuppressionOrdre", [
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "commentaire", type: "String", value: commentaire },
-      { name: "username", type: "String", value: username }
+      { name: "username", type: "String", value: username },
     ]);
   }
 
@@ -344,17 +381,17 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    */
   public fTestAnnuleOrdre(ordreRef: string) {
     return this.functionsService.queryFunction("fTestAnnuleOrdre", [
-      { name: "ordreRef", type: "String", value: ordreRef }
+      { name: "ordreRef", type: "String", value: ordreRef },
     ]);
   }
 
   /**
    * Annulation d'un ordre
    */
-  public fAnnulationOrdre =
-    (motif: string, ordreRef: string) => this.apollo
-      .query<{ fAnnulationOrdre: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  public fAnnulationOrdre = (motif: string, ordreRef: string) =>
+    this.apollo.query<{ fAnnulationOrdre: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -362,27 +399,32 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
               body: functionBody,
               params: [
                 { name: "motif", value: "motif", isVariable: true },
-                { name: "ordreRef", value: "ordreRef", isVariable: true }
-              ]
-            }
+                { name: "ordreRef", value: "ordreRef", isVariable: true },
+              ],
+            },
           ],
           [
             { name: "motif", type: "String", isOptionnal: false },
-            { name: "ordreRef", type: "String", isOptionnal: false }
-          ],
-        )),
-        variables: { motif, ordreRef },
-        fetchPolicy: "network-only",
-      })
+            { name: "ordreRef", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: { motif, ordreRef },
+      fetchPolicy: "network-only",
+    });
 
   /**
    * Création d'un ordre complémentaire
    */
-  public fCreeOrdreComplementaire(ordreRef: string, socCode: string, username: string) {
+  public fCreeOrdreComplementaire(
+    ordreRef: string,
+    socCode: string,
+    username: string
+  ) {
     return this.functionsService.queryFunction("fCreeOrdreComplementaire", [
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "socCode", type: "String", value: socCode },
-      { name: "username", type: "String", value: username }
+      { name: "username", type: "String", value: username },
     ]);
   }
 
@@ -390,7 +432,13 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    * Création d'un ordre de régularisation
    */
   public fCreeOrdreRegularisation(
-    indDetail: boolean, lcaCode: string, listOrlRef: string[], typeReg: string, ordreRef: string, socCode: string, username: string
+    indDetail: boolean,
+    lcaCode: string,
+    listOrlRef: string[],
+    typeReg: string,
+    ordreRef: string,
+    socCode: string,
+    username: string
   ) {
     return this.functionsService.queryFunction("fCreeOrdreRegularisation", [
       { name: "indDetail", type: "Boolean", value: indDetail },
@@ -399,7 +447,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "typeReg", type: "String", value: typeReg },
       { name: "ordreRef", type: "String", value: ordreRef },
       { name: "socCode", type: "String", value: socCode },
-      { name: "username", type: "String", value: username }
+      { name: "username", type: "String", value: username },
     ]);
   }
 
@@ -408,7 +456,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    */
   public ofSauveOrdre(ordRef: string) {
     return this.functionsService.queryFunction("ofSauveOrdre", [
-      { name: "ordRef", type: "String", value: ordRef }
+      { name: "ordRef", type: "String", value: ordRef },
     ]);
   }
 
@@ -416,16 +464,32 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
    * Duplication d'un ordre
    */
   public wDupliqueOrdreOnDuplique(
-    depDate: string, livDate: string, cenRef: string,
-    withCodeChargement: boolean, withFourni: boolean, withAchPu: boolean, withVtePu: boolean, withLibDlv: boolean,
-    withEtdDate: boolean, withEtaDate: boolean, withEtdLocation: boolean, withEtaLocation: boolean, withIncCode: boolean,
-    ordRef: string, socCode: string, user: string
+    depDate: string,
+    livDate: string,
+    cenRef: string,
+    withCodeChargement: boolean,
+    withFourni: boolean,
+    withAchPu: boolean,
+    withVtePu: boolean,
+    withLibDlv: boolean,
+    withEtdDate: boolean,
+    withEtaDate: boolean,
+    withEtdLocation: boolean,
+    withEtaLocation: boolean,
+    withIncCode: boolean,
+    ordRef: string,
+    socCode: string,
+    user: string
   ) {
     return this.functionsService.queryFunction("wDupliqueOrdreOnDuplique", [
       { name: "depDate", type: "LocalDateTime", value: depDate },
       { name: "livDate", type: "LocalDate", value: livDate },
       { name: "cenRef", type: "String", value: cenRef },
-      { name: "withCodeChargement", type: "Boolean", value: withCodeChargement },
+      {
+        name: "withCodeChargement",
+        type: "Boolean",
+        value: withCodeChargement,
+      },
       { name: "withFourni", type: "Boolean", value: withFourni },
       { name: "withAchPu", type: "Boolean", value: withAchPu },
       { name: "withVtePu", type: "Boolean", value: withVtePu },
@@ -437,7 +501,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "withIncCode", type: "Boolean", value: withIncCode },
       { name: "ordRef", type: "String", value: ordRef },
       { name: "socCode", type: "String", value: socCode },
-      { name: "user", type: "String", value: user }
+      { name: "user", type: "String", value: user },
     ]);
   }
 
@@ -446,38 +510,52 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     scoCode: string,
     dateMin: string,
     dateMax: string,
-    nomUtilisateur: string,
+    nomUtilisateur: string
   ) {
     return this.apollo
-      .query<{ fEnvoiBLAuto: FunctionResponse<{ array_ord_ref: Array<string> }> }>({
-        query: gql(ApiService.buildGraph("query", [{
-          name: "fEnvoiBLAuto",
-          body: functionBody,
-          params: [
-            { name: "socCode", value: "socCode", isVariable: true },
-            { name: "scoCode", value: "scoCode", isVariable: true },
-            { name: "dateMin", value: "dateMin", isVariable: true },
-            { name: "dateMax", value: "dateMax", isVariable: true },
-            { name: "nomUtilisateur", value: "nomUtilisateur", isVariable: true },
-          ],
-        }], [
-          { name: "socCode", type: "String", isOptionnal: false },
-          { name: "scoCode", type: "String", isOptionnal: false },
-          { name: "dateMin", type: "LocalDate", isOptionnal: false },
-          { name: "dateMax", type: "LocalDate", isOptionnal: false },
-          { name: "nomUtilisateur", type: "String", isOptionnal: false },
-        ])),
+      .query<{
+        fEnvoiBLAuto: FunctionResponse<{ array_ord_ref: Array<string> }>;
+      }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: "fEnvoiBLAuto",
+                body: functionBody,
+                params: [
+                  { name: "socCode", value: "socCode", isVariable: true },
+                  { name: "scoCode", value: "scoCode", isVariable: true },
+                  { name: "dateMin", value: "dateMin", isVariable: true },
+                  { name: "dateMax", value: "dateMax", isVariable: true },
+                  {
+                    name: "nomUtilisateur",
+                    value: "nomUtilisateur",
+                    isVariable: true,
+                  },
+                ],
+              },
+            ],
+            [
+              { name: "socCode", type: "String", isOptionnal: false },
+              { name: "scoCode", type: "String", isOptionnal: false },
+              { name: "dateMin", type: "LocalDate", isOptionnal: false },
+              { name: "dateMax", type: "LocalDate", isOptionnal: false },
+              { name: "nomUtilisateur", type: "String", isOptionnal: false },
+            ]
+          )
+        ),
         variables: { socCode, scoCode, dateMin, dateMax, nomUtilisateur },
         fetchPolicy: "network-only",
       })
-      .pipe(map(res => res.data.fEnvoiBLAuto));
+      .pipe(map((res) => res.data.fEnvoiBLAuto));
   }
 
   public fnMajOrdreRegroupementV2(
     ordreRef: string,
     socCode: string,
     entrepotGeneric: boolean,
-    nomUtilisateur: string,
+    nomUtilisateur: string
   ) {
     return this.functionsService.queryFunction("fnMajOrdreRegroupementV2", [
       { name: "ordreRef", type: "String", value: ordreRef },
@@ -486,7 +564,12 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
       { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
     ]);
   }
-  public fCreeOrdreReplacement(ordreOriginID: string, entrepotID: string, nomUtilisateur: string, societeID: string) {
+  public fCreeOrdreReplacement(
+    ordreOriginID: string,
+    entrepotID: string,
+    nomUtilisateur: string,
+    societeID: string
+  ) {
     return this.functionsService.queryFunction("fCreeOrdreReplacement", [
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "entrepotID", type: "String", value: entrepotID },
@@ -495,7 +578,11 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ]);
   }
 
-  public fCreeOrdreReedFact(ordreOriginID: string, societeID: string, nomUtilisateur: string) {
+  public fCreeOrdreReedFact(
+    ordreOriginID: string,
+    societeID: string,
+    nomUtilisateur: string
+  ) {
     return this.functionsService.queryFunction("fCreeOrdreReedFact", [
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "societeID", type: "String", value: societeID },
@@ -507,7 +594,7 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
     ordreRef: string,
     socCode: string,
     nomUtilisateur: string,
-    codeRegimeTva: string,
+    codeRegimeTva: string
   ) {
     return this.functionsService.queryFunction("fDuplicationBukSa", [
       { name: "ordreRef", type: "String", value: ordreRef },
@@ -519,10 +606,14 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
 
   public fDelRegroupement(ordreRef: string) {
     return this.functionsService.queryFunction("fDelRegroupement", [
-      { name: "ordreRef", type: "String", value: ordreRef }
+      { name: "ordreRef", type: "String", value: ordreRef },
     ]);
   }
-  public fCreeOrdreReedFactLigne(ordreID: string, ordreOriginID: string, societeID: string) {
+  public fCreeOrdreReedFactLigne(
+    ordreID: string,
+    ordreOriginID: string,
+    societeID: string
+  ) {
     return this.functionsService.queryFunction("fCreeOrdreReedFact", [
       { name: "ordreID", type: "String", value: ordreID },
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
@@ -531,54 +622,77 @@ export class OrdresService extends ApiService implements APIRead, APIPersist, AP
   }
 
   public updateTransporteurPU(ordreChunk: Partial<Ordre>) {
-    return this.functionsService.fReturnForfaitsTrp(
-      ordreChunk.entrepot?.id,
-      ordreChunk.incoterm?.id,
-      ordreChunk.type?.id,
-    ).pipe(
-      // Pas de forfaits, on s'arrete la
-      filter(res => res.data.fReturnForfaitsTrp.res === FunctionResult.OK),
-      map(res => ({
-        forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
-        // default?
-        trpDevPu: res.data.fReturnForfaitsTrp.data.arg_trp_dev_pu,
-        btaCode: res.data.fReturnForfaitsTrp.data.arg_bta_code,
-        devCode: res.data.fReturnForfaitsTrp.data.arg_dev_code,
-      })),
-      // continue if we have `forfaitsTrp` value
-      concatMap(context => iif(
-        () => context.forfaitsTrp > 0,
-        // merge context with associated `deviseRef.taux`
-        this.devisesRefsService.getList(
-          `devise.id==${ordreChunk.transporteurDEVCode.id} and id==${context.devCode}`,
-          ["id", "devise.id", "taux"],
-        ).pipe(
-          concatMap(res => !res.data.allDeviseRefList?.[0].taux
-            ? throwError(new Error("Le taux de cette devise n'est pas renseigné"))
-            : of({
-              transporteurDEVPrixUnitaire: context.trpDevPu / res.data.allDeviseRefList?.[0].taux,
-              prixUnitaireTarifTransport: context.trpDevPu,
-              transporteurDEVCode: { id: res.data.allDeviseRefList?.[0].devise.id ?? context.devCode },
-              baseTarifTransport: { id: context.btaCode },
-            })),
-          catchError((err, catched) => {
-            notify(err.message, "warning");
-            return of({
-              transporteurDEVPrixUnitaire: context.trpDevPu,
-              transporteurDEVCode: { id: context.devCode },
-              baseTarifTransport: { id: context.btaCode },
-            });
-          }),
+    return this.functionsService
+      .fReturnForfaitsTrp(
+        ordreChunk.entrepot?.id,
+        ordreChunk.incoterm?.id,
+        ordreChunk.type?.id
+      )
+      .pipe(
+        // Pas de forfaits, on s'arrete la
+        filter((res) => res.data.fReturnForfaitsTrp.res === FunctionResult.OK),
+        map((res) => ({
+          forfaitsTrp: res.data.fReturnForfaitsTrp.data.li_ret,
+          // default?
+          trpDevPu: res.data.fReturnForfaitsTrp.data.arg_trp_dev_pu,
+          btaCode: res.data.fReturnForfaitsTrp.data.arg_bta_code,
+          devCode: res.data.fReturnForfaitsTrp.data.arg_dev_code,
+        })),
+        // continue if we have `forfaitsTrp` value
+        concatMap((context) =>
+          iif(
+            () => context.forfaitsTrp > 0,
+            // merge context with associated `deviseRef.taux`
+            this.devisesRefsService
+              .getList(
+                `devise.id==${ordreChunk.transporteurDEVCode.id} and id==${context.devCode}`,
+                ["id", "devise.id", "taux"]
+              )
+              .pipe(
+                concatMap((res) =>
+                  !res.data.allDeviseRefList?.[0].taux
+                    ? throwError(
+                        new Error("Le taux de cette devise n'est pas renseigné")
+                      )
+                    : of({
+                        transporteurDEVPrixUnitaire:
+                          context.trpDevPu /
+                          res.data.allDeviseRefList?.[0].taux,
+                        prixUnitaireTarifTransport: context.trpDevPu,
+                        transporteurDEVCode: {
+                          id:
+                            res.data.allDeviseRefList?.[0].devise.id ??
+                            context.devCode,
+                        },
+                        baseTarifTransport: { id: context.btaCode },
+                      })
+                ),
+                catchError((err, catched) => {
+                  notify(err.message, "warning");
+                  return of({
+                    transporteurDEVPrixUnitaire: context.trpDevPu,
+                    transporteurDEVCode: { id: context.devCode },
+                    baseTarifTransport: { id: context.btaCode },
+                  });
+                })
+              ),
+            of({})
+          )
         ),
-        of({}),
-      )),
-      // merge input data
-      concatMap(data => this.save_v2([
-        "transporteurDEVPrixUnitaire",
-        "transporteurDEVCode.id",
-        "baseTarifTransport.id",
-      ], { ordre: { id: ordreChunk.id, ...data } })),
-      map(res => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)),
-    );
+        // merge input data
+        concatMap((data) =>
+          this.save_v2(
+            [
+              "transporteurDEVPrixUnitaire",
+              "transporteurDEVCode.id",
+              "baseTarifTransport.id",
+            ],
+            { ordre: { id: ordreChunk.id, ...data } }
+          )
+        ),
+        map(
+          (res) => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)
+        )
+      );
   }
 }

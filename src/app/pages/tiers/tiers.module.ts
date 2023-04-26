@@ -6,8 +6,8 @@ import { NestedGuard } from "app/shared/guards/nested-guard";
 import { DatePipe } from "@angular/common";
 
 @NgModule({
-    declarations: [],
-    imports: [SharedModule, TiersRoutingModule, ContactsModule],
-    providers: [NestedGuard, DatePipe],
+  declarations: [],
+  imports: [SharedModule, TiersRoutingModule, ContactsModule],
+  providers: [NestedGuard, DatePipe],
 })
 export class TiersModule {}

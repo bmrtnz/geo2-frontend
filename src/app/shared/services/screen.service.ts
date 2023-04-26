@@ -25,15 +25,9 @@ export class ScreenService {
 
   public get sizes() {
     return {
-      "screen-x-small": this.breakpointObserver.isMatched(
-        Breakpoints.XSmall,
-      ),
-      "screen-small": this.breakpointObserver.isMatched(
-        Breakpoints.Small,
-      ),
-      "screen-medium": this.breakpointObserver.isMatched(
-        Breakpoints.Medium,
-      ),
+      "screen-x-small": this.breakpointObserver.isMatched(Breakpoints.XSmall),
+      "screen-small": this.breakpointObserver.isMatched(Breakpoints.Small),
+      "screen-medium": this.breakpointObserver.isMatched(Breakpoints.Medium),
       "screen-large": this.isLargeScreen(),
     };
   }

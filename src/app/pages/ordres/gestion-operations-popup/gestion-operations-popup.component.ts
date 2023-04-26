@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -9,7 +16,11 @@ import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.ser
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { DxListComponent, DxPopupComponent, DxRadioGroupComponent } from "devextreme-angular";
+import {
+  DxListComponent,
+  DxPopupComponent,
+  DxRadioGroupComponent,
+} from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { EMPTY, from, iif, of, throwError, zip } from "rxjs";
 import { catchError, concatMap, concatMapTo, map, tap } from "rxjs/operators";
@@ -22,10 +33,9 @@ import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-
 @Component({
   selector: "app-gestion-operations-popup",
   templateUrl: "./gestion-operations-popup.component.html",
-  styleUrls: ["./gestion-operations-popup.component.scss"]
+  styleUrls: ["./gestion-operations-popup.component.scss"],
 })
 export class GestionOperationsPopupComponent implements OnChanges {
-
   @Input() public ordre: Partial<Ordre>;
   @Input() public infosLitige: any;
   @Output() public lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
@@ -47,11 +57,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
   @ViewChild("consequences", { static: false }) consequences: DxListComponent;
-  @ViewChild("responsibles", { static: false }) responsibles: DxRadioGroupComponent;
+  @ViewChild("responsibles", { static: false })
+  responsibles: DxRadioGroupComponent;
 
-  @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
-  @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
-  @ViewChild(ForfaitLitigePopupComponent, { static: false }) forfaitPopup: ForfaitLitigePopupComponent;
+  @ViewChild(FraisAnnexesLitigePopupComponent, { static: false })
+  fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
+  @ViewChild(SelectionLignesLitigePopupComponent, { static: false })
+  selectLignesPopup: SelectionLignesLitigePopupComponent;
+  @ViewChild(ForfaitLitigePopupComponent, { static: false })
+  forfaitPopup: ForfaitLitigePopupComponent;
   @ViewChild(GridLotComponent) private gridLot: GridLotComponent;
 
   constructor(
@@ -62,8 +76,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     public ordresLogistiquesService: OrdresLogistiquesService,
     public fUtils: FormUtilsService,
     public consequencesService: LitigeConsequencesService,
-    public gridsService: GridsService,
-
+    public gridsService: GridsService
   ) {
     this.responsibleList = [
       {
@@ -95,7 +108,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         disabled: false,
         typeTiers: "W",
         visible: true,
-      }
+      },
     ];
     this.displayResp = this.displayResp.bind(this);
   }
@@ -105,7 +118,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize("title-gestion-operations-popup");
+    this.title = this.localizeService.localize(
+      "title-gestion-operations-popup"
+    );
   }
 
   updateCauseConseq(tiers) {
@@ -113,43 +128,70 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.consequenceItems = [];
     const causeFilter = `valide == true and typeTier == ${tiers}`;
     const conseqFilter = `valide == true`;
-    this.causesService.getList(["id", "description"], causeFilter)
+    this.causesService
+      .getList(["id", "description"], causeFilter)
       .pipe(
-        tap(res => {
-          this.causeItems = JSON.parse(JSON.stringify(res.data.allLitigeCauseList));
-          this.causeItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+        tap((res) => {
+          this.causeItems = JSON.parse(
+            JSON.stringify(res.data.allLitigeCauseList)
+          );
+          this.causeItems.sort((a, b) =>
+            this.fUtils.noDiacritics(a.description) >
+            this.fUtils.noDiacritics(b.description)
+              ? 1
+              : 0
+          );
         }),
-        concatMapTo(this.fetchRestoreInfo()),
+        concatMapTo(this.fetchRestoreInfo())
       )
       .subscribe((res) => {
         if (res?.cause?.id) {
-          const itemIndex = this.causeItems.findIndex(r => r.id === res.cause.id);
+          const itemIndex = this.causeItems.findIndex(
+            (r) => r.id === res.cause.id
+          );
           this.causes.instance.selectItem(itemIndex);
         }
       });
-    this.consequencesService.getList(["id", "description"], conseqFilter).pipe(
-      tap((res) => {
-        this.consequenceItems = JSON.parse(JSON.stringify(res.data.allLitigeConsequenceList));
-        this.consequenceItems.sort((a, b) => this.fUtils.noDiacritics(a.description) > this.fUtils.noDiacritics(b.description) ? 1 : 0);
+    this.consequencesService
+      .getList(["id", "description"], conseqFilter)
+      .pipe(
+        tap((res) => {
+          this.consequenceItems = JSON.parse(
+            JSON.stringify(res.data.allLitigeConsequenceList)
+          );
+          this.consequenceItems.sort((a, b) =>
+            this.fUtils.noDiacritics(a.description) >
+            this.fUtils.noDiacritics(b.description)
+              ? 1
+              : 0
+          );
 
-        // Régularisation is disabled by default but must appear
-        this.consequenceItems.filter(c => c.id === "I")[0].disabled = true;
+          // Régularisation is disabled by default but must appear
+          this.consequenceItems.filter((c) => c.id === "I")[0].disabled = true;
 
-        // Firstly on "Retour station"
-        if (this.firstShown) {
-          this.consequences.selectedItems = [this.consequenceItems.filter(c => c.id === "A")[0]];
-          this.firstShown = false;
-        }
-        // Filter indemnisation
-        if (["transporteur", "transpApproche"].includes(this.selectedResponsible))
-          this.consequenceItems.filter(c => c.id === "G")[0].visible = false;
-
-      }),
-      concatMapTo(this.fetchRestoreInfo()),
-    )
+          // Firstly on "Retour station"
+          if (this.firstShown) {
+            this.consequences.selectedItems = [
+              this.consequenceItems.filter((c) => c.id === "A")[0],
+            ];
+            this.firstShown = false;
+          }
+          // Filter indemnisation
+          if (
+            ["transporteur", "transpApproche"].includes(
+              this.selectedResponsible
+            )
+          )
+            this.consequenceItems.filter((c) => c.id === "G")[0].visible =
+              false;
+        }),
+        concatMapTo(this.fetchRestoreInfo())
+      )
       .subscribe((res) => {
         if (res?.consequence?.id) {
-          const itemIndex = this.consequenceItems.findIndex(r => r.id === res.consequence.id);
+          const itemIndex = this.consequenceItems.findIndex(
+            (r) => r.id === res.consequence.id
+          );
           this.consequences.instance.selectItem(itemIndex);
         }
       });
@@ -166,14 +208,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.selectedCause = e.addedItems[0]?.id;
 
     // Filter Regularisation
-    this.consequenceItems.filter(c => c.id === "I")[0].visible = false;
+    this.consequenceItems.filter((c) => c.id === "I")[0].visible = false;
     if (["W61", "C53", "F37", "T41"].includes(this.selectedCause)) {
-      this.consequenceItems.filter(c => c.id === "I")[0].visible = true;
+      this.consequenceItems.filter((c) => c.id === "I")[0].visible = true;
     }
   }
   onConsequenceChanged(e) {
     // Only one item can be selected at once
-    if (this.consequences.selectedItems.length) this.consequences.selectedItemKeys.shift();
+    if (this.consequences.selectedItems.length)
+      this.consequences.selectedItemKeys.shift();
     this.selectedConsequence = e.addedItems[0]?.id;
   }
 
@@ -188,10 +231,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   validate() {
-    this.mutateLot().pipe(
-      concatMap(data => this.gridLot.updateLot(data)),
-      concatMapTo(this.gridLot.persist()),
-    )
+    this.mutateLot()
+      .pipe(
+        concatMap((data) => this.gridLot.updateLot(data)),
+        concatMapTo(this.gridLot.persist())
+      )
       .subscribe({
         next: () => {
           this.quitPopup();
@@ -227,7 +271,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     from(this.gridLot.refresh())
       .pipe(
         concatMapTo(this.setupLotCreation()),
-        concatMap(data => this.gridLot.updateLot(data))
+        concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
         error: (err: Error) => notify(err.message, "ERROR", 3500),
@@ -235,7 +279,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   autoFill() {
-
     if (this.checkEmptyCauseConseq()) return;
     /////////////////////////////////
     //  Fonction
@@ -243,15 +286,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   forfait() {
-    if (this.responsibles.value?.typeTiers !== "F" && this.selectedConsequence === "B")
+    if (
+      this.responsibles.value?.typeTiers !== "F" &&
+      this.selectedConsequence === "B"
+    )
       return notify(
-        `${this.localizeService.localize("no-possible-saisie-forfait")}`, "warning", 3000
+        `${this.localizeService.localize("no-possible-saisie-forfait")}`,
+        "warning",
+        3000
       );
 
     if (this.checkEmptyCauseConseq()) return;
 
     this.forfaitPopup.visible = true;
-
   }
 
   reInitialize() {
@@ -268,11 +315,17 @@ export class GestionOperationsPopupComponent implements OnChanges {
   checkEmptyCauseConseq() {
     const texts = [];
     let message;
-    if (!this.selectedCause) texts.push(this.localizeService.localize("one-cause"));
-    if (!this.selectedConsequence) texts.push(this.localizeService.localize("one-consequence"));
+    if (!this.selectedCause)
+      texts.push(this.localizeService.localize("one-cause"));
+    if (!this.selectedConsequence)
+      texts.push(this.localizeService.localize("one-consequence"));
     if (texts.length) {
       message = texts.join(" & ");
-      notify(`${this.localizeService.localize("please-select")} ${message}`, "warning", 5000);
+      notify(
+        `${this.localizeService.localize("please-select")} ${message}`,
+        "warning",
+        5000
+      );
       return true;
     }
   }
@@ -291,11 +344,20 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   displayResp(data) {
-    return data ? this.localizeService.localize("gestion-operations-responsable-" + data.id) : null;
+    return data
+      ? this.localizeService.localize(
+          "gestion-operations-responsable-" + data.id
+        )
+      : null;
   }
 
   displayCapitalize(data) {
-    return data ? data.id + " - " + data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
+    return data
+      ? data.id +
+          " - " +
+          data.description.charAt(0).toUpperCase() +
+          data.description.slice(1).toLowerCase()
+      : null;
     // return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
@@ -304,24 +366,28 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   onShown() {
-    if (!this.lot[1]) { // lot creation
+    if (!this.lot[1]) {
+      // lot creation
       this.firstShown = true;
       this.responsibles.value = this.responsibleList[0];
       // Is there a transporteur approche? Then show corresponding radio btn
       this.ordresLogistiquesService
-        .count(`ordre.id == ${this.ordre.id} and transporteurGroupage.id=isnotnull=null`)
+        .count(
+          `ordre.id == ${this.ordre.id} and transporteurGroupage.id=isnotnull=null`
+        )
         .subscribe((res) => {
           if (res.data.countOrdreLogistique)
-            this.responsibleList.filter(r => r.id === "transpApproche")[0].visible = true;
+            this.responsibleList.filter(
+              (r) => r.id === "transpApproche"
+            )[0].visible = true;
         });
-    } else { // lot mutation
+    } else {
+      // lot mutation
       this.syncResponsableInput();
     }
 
     iif(() => !!this.lot[1], EMPTY, this.setupLotCreation())
-      .pipe(
-        concatMap(data => this.gridLot.updateLot(data)),
-      )
+      .pipe(concatMap((data) => this.gridLot.updateLot(data)))
       .subscribe({
         error: (err: Error) => notify(err.message, "ERROR", 3500),
       });
@@ -329,14 +395,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   /** Update temporary rows with numero lot and validity */
   private setupLotCreation() {
-    return zip(
-      this.litigesService.genNumLot(this.infosLitige.litige.id),
-    ).pipe(
+    return zip(this.litigesService.genNumLot(this.infosLitige.litige.id)).pipe(
       map(([genLot]) => genLot.data.genNumLot),
-      map(numeroGroupementLitige => ({
-        numeroGroupementLitige,
-        valide: true,
-      } as Partial<LitigeLigne>)),
+      map(
+        (numeroGroupementLitige) =>
+          ({
+            numeroGroupementLitige,
+            valide: true,
+          } as Partial<LitigeLigne>)
+      )
     );
   }
 
@@ -344,15 +411,21 @@ export class GestionOperationsPopupComponent implements OnChanges {
     return zip(
       of(this.responsibles.value.typeTiers),
       of(this.causes.selectedItems[0]),
-      of(this.consequences.selectedItems[0]),
+      of(this.consequences.selectedItems[0])
     ).pipe(
-      map(([responsableTypeCode, cause, consequence]) => ({
-        responsableTypeCode,
-        cause: { id: cause.id },
-        consequence: { id: consequence.id },
-      } as Partial<LitigeLigne>)),
-      catchError(res => throwError(
-        new Error(this.localizeService.localize("mutate-lot-invalid-inputs")))), // invalid inputs
+      map(
+        ([responsableTypeCode, cause, consequence]) =>
+          ({
+            responsableTypeCode,
+            cause: { id: cause.id },
+            consequence: { id: consequence.id },
+          } as Partial<LitigeLigne>)
+      ),
+      catchError((res) =>
+        throwError(
+          new Error(this.localizeService.localize("mutate-lot-invalid-inputs"))
+        )
+      ) // invalid inputs
     );
   }
 
@@ -362,23 +435,23 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   private syncResponsableInput() {
-    this.fetchRestoreInfo().subscribe(res => {
+    this.fetchRestoreInfo().subscribe((res) => {
       if (res?.responsableTypeCode)
-        this.responsibles.value = this.responsibleList
-          .find(r => r.typeTiers === res.responsableTypeCode);
+        this.responsibles.value = this.responsibleList.find(
+          (r) => r.typeTiers === res.responsableTypeCode
+        );
     });
   }
 
   // assuming we have an existing lot
   private fetchRestoreInfo() {
     const [litigeID, lotNum] = this.lot;
-    return this.litigesLignesService.getList(
-      `litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`,
-      ["responsableTypeCode", "cause.id", "consequence.id"]).pipe(
-        map(res => res.data.allLitigeLigneList[0]),
-      );
+    return this.litigesLignesService
+      .getList(`litige.id==${litigeID} and numeroGroupementLitige==${lotNum}`, [
+        "responsableTypeCode",
+        "cause.id",
+        "consequence.id",
+      ])
+      .pipe(map((res) => res.data.allLitigeLigneList[0]));
   }
-
 }
-
-

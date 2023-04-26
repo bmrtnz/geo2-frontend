@@ -1,9 +1,16 @@
 import { Inject, Injectable, OnDestroy } from "@angular/core";
-import { ApolloQueryResult, FetchResult, gql, MutationOptions, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
+import {
+  ApolloQueryResult,
+  FetchResult,
+  gql,
+  MutationOptions,
+  OperationVariables,
+  WatchQueryOptions,
+} from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
-import { BaseGroupDescriptor, GroupDescriptor } from 'devextreme/data';
+import { BaseGroupDescriptor, GroupDescriptor } from "devextreme/data";
 import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
@@ -25,28 +32,28 @@ const PAGINATION_FIELDS = [
 ];
 
 export type PageInfo = {
-  startCursor?: string
-  endCursor?: string
-  hasPreviousPage?: boolean
-  hasNextPage?: boolean
+  startCursor?: string;
+  endCursor?: string;
+  hasPreviousPage?: boolean;
+  hasNextPage?: boolean;
 };
 
 export type DistinctInfo = {
-  count: number
-  key: string
-  items: DistinctInfo[]
+  count: number;
+  key: string;
+  items: DistinctInfo[];
 };
 
 export type RelayPage<T> = {
-  edges: Edge<T>[]
-  pageInfo: PageInfo
-  totalCount: number
-  summary?: number[]
+  edges: Edge<T>[];
+  pageInfo: PageInfo;
+  totalCount: number;
+  summary?: number[];
 };
 
 export type Edge<T = any> = {
-  node: T,
-  __typename: string,
+  node: T;
+  __typename: string;
 };
 
 export enum Direction {
@@ -55,9 +62,9 @@ export enum Direction {
 }
 
 export type OrderedField = {
-  property: string
-  direction?: Direction
-  ignoreCase?: boolean
+  property: string;
+  direction?: Direction;
+  ignoreCase?: boolean;
 };
 
 export enum SummaryType {
@@ -72,39 +79,42 @@ export type SummaryInput = {
   /**
    * Specifies the column that provides data for a summary item.
    */
-  selector: string,
+  selector: string;
 
   /**
    * Specifies how to aggregate data for the summary item.
    */
-  summaryType: SummaryType | string
+  summaryType: SummaryType | string;
 };
 
 export type Pageable = {
-  pageNumber: number
-  pageSize: number
+  pageNumber: number;
+  pageSize: number;
   sort?: {
-    orders: OrderedField[],
-  }
+    orders: OrderedField[];
+  };
 };
 
 export type RelayPageVariables = OperationVariables & {
-  search?: string
-  pageable: Pageable
-  summary?: SummaryInput[]
+  search?: string;
+  pageable: Pageable;
+  summary?: SummaryInput[];
 };
 
 export type LocateVariables = {
-  pageSize?: number
-  type?: string
-  key: any | any[]
+  pageSize?: number;
+  type?: string;
+  key: any | any[];
 };
 
 export interface APIRead {
   getAll?(columns: string[], variables?: OperationVariables): Observable<any>;
-  getOne?(id: string | number, columns?: Array<string>):
-    Observable<ApolloQueryResult<any>> |
-    Promise<Observable<ApolloQueryResult<any>>>;
+  getOne?(
+    id: string | number,
+    columns?: Array<string>
+  ):
+    | Observable<ApolloQueryResult<any>>
+    | Promise<Observable<ApolloQueryResult<any>>>;
 
   /**
    * @deprecated use getDataSource_v2
@@ -118,15 +128,28 @@ export interface APIRead {
 }
 
 export interface APIPersist {
-  save?(variables: OperationVariables):
-    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
-    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
-  save_v2?(columns: Array<string>, variables: OperationVariables):
-    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
-    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
-  delete?(variables: OperationVariables):
-    Promise<Observable<FetchResult<any, Record<string, any>, Record<string, any>>>> |
-    Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  save?(
+    variables: OperationVariables
+  ):
+    | Promise<
+        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+      >
+    | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  save_v2?(
+    columns: Array<string>,
+    variables: OperationVariables
+  ):
+    | Promise<
+        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+      >
+    | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  delete?(
+    variables: OperationVariables
+  ):
+    | Promise<
+        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+      >
+    | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
 export interface APICount<CountResponse> {
@@ -134,12 +157,15 @@ export interface APICount<CountResponse> {
 }
 
 export interface APIDistinct {
-  getDistinctEntityDatasource(fieldName, descriptionField?, searchExpr?): Observable<DataSource>;
+  getDistinctEntityDatasource(
+    fieldName,
+    descriptionField?,
+    searchExpr?
+  ): Observable<DataSource>;
 }
 
 @Injectable()
 export abstract class ApiService implements OnDestroy {
-
   pageSize = DEFAULT_PAGE_SIZE;
   baseFieldsSize = BASE_FIELDS_SIZE;
   keyField: string | string[];
@@ -150,7 +176,7 @@ export abstract class ApiService implements OnDestroy {
 
   constructor(
     protected apollo: Apollo,
-    @Inject("model") model?: typeof Model & (new () => Model),
+    @Inject("model") model?: typeof Model & (new () => Model)
   ) {
     this.model = model;
     this.keyField = this?.model?.getKeyField() || DEFAULT_KEY;
@@ -170,44 +196,50 @@ export abstract class ApiService implements OnDestroy {
   static buildGraph(
     type: "query" | "mutation",
     operations: {
-      name: string,
-      body?: Array<string> | Set<string>,
-      alias?: string,
-      params?: { name: string, value: any, isVariable: boolean }[],
+      name: string;
+      body?: Array<string> | Set<string>;
+      alias?: string;
+      params?: { name: string; value: any; isVariable: boolean }[];
     }[],
-    variables: { name: string, type: string, isOptionnal: boolean }[] = [],
-    alias = operations?.[0].name.ucFirst(),
+    variables: { name: string; type: string; isOptionnal: boolean }[] = [],
+    alias = operations?.[0].name.ucFirst()
   ) {
-    const mapVariables = vars => vars
-      .map(v => `$${v.name}: ${v.type}${v.isOptionnal ? "" : "!"}`);
+    const mapVariables = (vars) =>
+      vars.map((v) => `$${v.name}: ${v.type}${v.isOptionnal ? "" : "!"}`);
 
-    const mapParams = prms => prms
-      .map(p => `${p.name}: ${p.isVariable ? "$" : ""}${p.value}`);
+    const mapParams = (prms) =>
+      prms.map((p) => `${p.name}: ${p.isVariable ? "$" : ""}${p.value}`);
 
-    const mapPaths = pths => Model.getGQL(pths).toGraphQL();
+    const mapPaths = (pths) => Model.getGQL(pths).toGraphQL();
 
-    const mapOperations = ops => ops
-      .map(o => `${o.alias ? `${o.alias}: ` : ""} ${o.name}
+    const mapOperations = (ops) =>
+      ops.map(
+        (o) => `${o.alias ? `${o.alias}: ` : ""} ${o.name}
       ${o?.params ? `(${mapParams(o.params)})` : ""}
-      ${o?.body ? `{
+      ${
+        o?.body
+          ? `{
         ${mapPaths(o?.body)}
-      }` : ""}`);
+      }`
+          : ""
+      }`
+      );
 
-    return `${type} ${alias}${variables?.length ? `(${mapVariables(variables)})` : ""} { ${mapOperations(operations)} }`;
+    return `${type} ${alias}${
+      variables?.length ? `(${mapVariables(variables)})` : ""
+    } { ${mapOperations(operations)} }`;
   }
 
   static mapForSave(variables: { [key: string]: any }) {
     return Object.entries(variables)
       .flatMap(([key, value]) => {
-        if (value === null)
-          return { [key]: null };
+        if (value === null) return { [key]: null };
         if (typeof value?.id !== "undefined" && value?.id === null)
           return { [key]: null };
-        if (Array.isArray(value))
-          return { [key]: value };
+        if (Array.isArray(value)) return { [key]: value };
         if (typeof value === "object" && value !== null) {
           if (typeof value.length !== "undefined")
-            return { [key]: value.map(v => this.mapForSave(v)) };
+            return { [key]: value.map((v) => this.mapForSave(v)) };
           return { [key]: this.mapForSave(value) };
         }
         return { [key]: value };
@@ -242,12 +274,15 @@ export abstract class ApiService implements OnDestroy {
     return {
       data: this.asList<T>(relayPage).map(mapper),
       totalCount: relayPage.totalCount,
-      ...this.isSummarisedRelayPage(relayPage) ?
-        { summary: (relayPage).summary } : {},
+      ...(this.isSummarisedRelayPage(relayPage)
+        ? { summary: relayPage.summary }
+        : {}),
     };
   }
 
-  public isSummarisedRelayPage<T = any>(relayPage: RelayPage<T>): relayPage is RelayPage<T> {
+  public isSummarisedRelayPage<T = any>(
+    relayPage: RelayPage<T>
+  ): relayPage is RelayPage<T> {
     return relayPage?.summary !== undefined;
   }
 
@@ -268,16 +303,14 @@ export abstract class ApiService implements OnDestroy {
     const pageSize = this.pageSize;
     const query = this.buildLocate();
 
-    return this.
-      query<{ locatePage: number }>(query, {
-        fetchPolicy: "no-cache",
-        variables: { pageSize, type, ...inputVariables },
-      } as WatchQueryOptions<any>)
-      .pipe(
-        takeUntil(this.destroy),
-        map(res => res.data),
-        take(1),
-      );
+    return this.query<{ locatePage: number }>(query, {
+      fetchPolicy: "no-cache",
+      variables: { pageSize, type, ...inputVariables },
+    } as WatchQueryOptions<any>).pipe(
+      takeUntil(this.destroy),
+      map((res) => res.data),
+      take(1)
+    );
   }
 
   /**
@@ -286,13 +319,11 @@ export abstract class ApiService implements OnDestroy {
    * @param options Query options
    */
   protected query<T>(gqlQuery: string, options?: WatchQueryOptions) {
-    return this.apollo
-      .watchQuery<T>({
-        query: gql(gqlQuery),
-        fetchPolicy: "cache-and-network",
-        ...options,
-      })
-      .valueChanges;
+    return this.apollo.watchQuery<T>({
+      query: gql(gqlQuery),
+      fetchPolicy: "cache-and-network",
+      ...options,
+    }).valueChanges;
   }
 
   /**
@@ -303,7 +334,12 @@ export abstract class ApiService implements OnDestroy {
    * @param option Object of configurations
    * @deprecated use buildGetAll_v2
    */
-  protected async buildGetAll(depth?: number, regExpFilter?: RegExp, operationName?: string, option?: { forceFilter?: boolean }) {
+  protected async buildGetAll(
+    depth?: number,
+    regExpFilter?: RegExp,
+    operationName?: string,
+    option?: { forceFilter?: boolean }
+  ) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = operation.ucFirst();
     return `
@@ -311,7 +347,12 @@ export abstract class ApiService implements OnDestroy {
         ${operation}(search:$search, pageable:$pageable) {
           edges {
             node {
-              ${await this.model.getGQLFields(depth, regExpFilter, null, { noList: true, forceFilter: option?.forceFilter }).toPromise()}
+              ${await this.model
+                .getGQLFields(depth, regExpFilter, null, {
+                  noList: true,
+                  forceFilter: option?.forceFilter,
+                })
+                .toPromise()}
             }
           }
           pageInfo {
@@ -351,7 +392,10 @@ export abstract class ApiService implements OnDestroy {
    * @param operationName Name of the operation, default to `all{ModelName}`.
    * @protected
    */
-  protected async buildGetAll_v2(columns: Array<string> | Set<string>, operationName?: string) {
+  protected async buildGetAll_v2(
+    columns: Array<string> | Set<string>,
+    operationName?: string
+  ) {
     const operation = operationName ?? `all${this.model.name}`;
     const alias = operation.ucFirst();
     return `
@@ -421,7 +465,6 @@ export abstract class ApiService implements OnDestroy {
       }
     `;
   }
-
 
   /**
    * Build save query
@@ -563,16 +606,16 @@ export abstract class ApiService implements OnDestroy {
    * @param options DX CustomSource load options
    */
   public mapDXSearchToDXFilter(options: LoadOptions) {
-    return typeof options.searchExpr === "object" ?
-      (options.searchExpr as [])
-        .map(expr => [expr, options.searchOperation, options.searchValue])
-        .join("¤or¤")
-        .split("¤")
-        .map((value: any) => {
-          const mapped = value.split(",");
-          return mapped.length > 1 ? mapped : mapped.shift();
-        }) :
-      [options.searchExpr, options.searchOperation, options.searchValue];
+    return typeof options.searchExpr === "object"
+      ? (options.searchExpr as [])
+          .map((expr) => [expr, options.searchOperation, options.searchValue])
+          .join("¤or¤")
+          .split("¤")
+          .map((value: any) => {
+            const mapped = value.split(",");
+            return mapped.length > 1 ? mapped : mapped.shift();
+          })
+      : [options.searchExpr, options.searchOperation, options.searchValue];
   }
 
   /**
@@ -580,17 +623,16 @@ export abstract class ApiService implements OnDestroy {
    * @param dxFilter DX filters arrays
    */
   public mapDXFilterToRSQL(dxFilter: any[]) {
-
     // Avoid modify original
     let clonedFilter = JSON.parse(JSON.stringify(dxFilter));
 
     // Make filter structure consistant: [string|[]]
-    if (typeof clonedFilter[0] === "string")
-      clonedFilter = [clonedFilter];
+    if (typeof clonedFilter[0] === "string") clonedFilter = [clonedFilter];
 
     const next = (currentFilter: any[], negate = false, index = 0) => {
       let node = currentFilter[index];
-      if (typeof node === "object") { // comparison
+      if (typeof node === "object") {
+        // comparison
 
         // Map negation
         if (node?.[0] === "!") {
@@ -609,33 +651,32 @@ export abstract class ApiService implements OnDestroy {
 
           // Format object
           if (typeof value === "object" && value) {
-            const firstField = Object
-              .entries(value)
+            const firstField = Object.entries(value)
               .filter(([key]) => key !== "__typename")
               .shift();
-            selector = selector !== "this" ? `${selector}.${firstField.shift()}` : firstField.shift();
+            selector =
+              selector !== "this"
+                ? `${selector}.${firstField.shift()}`
+                : firstField.shift();
             value = firstField.shift();
           }
 
           // Map value
           if (selector === "this" && value) {
-            const mappedFilter = Object
-              .entries(value)
+            const mappedFilter = Object.entries(value)
               .filter(([key]) => key !== "__typename")
               .map(([k, v]) => JSON.stringify([k, "=", v]))
               .join(`¤${JSON.stringify("and")}¤`)
               .split("¤")
-              .map(v => JSON.parse(v));
+              .map((v) => JSON.parse(v));
             currentFilter[index] = this.mapDXFilterToRSQL(mappedFilter);
           } else {
-
             if (["contains", "notcontains"].includes(dxOperator))
               value = `%${value}%`;
             if (dxOperator === "startswith") value = `${value}%`;
             if (dxOperator === "endswith") value = `%${value}`;
             value = JSON.stringify(value);
             currentFilter[index] = [selector, operator, value].join("");
-
           }
         }
       } else {
@@ -653,19 +694,32 @@ export abstract class ApiService implements OnDestroy {
    */
   private mapOperator(operator: string, negate = false) {
     switch (operator) {
-      case "=": return negate ? "!=" : "==";
-      case "<>": return negate ? "==" : "!=";
-      case ">": return negate ? "<=" : ">";
-      case "<": return negate ? ">=" : "<";
-      case ">=": return negate ? "<" : ">=";
-      case "<=": return negate ? ">" : "<=";
-      case "contains": return negate ? "=inotlike=" : "=ilike=";
-      case "notcontains": return negate ? "=ilike=" : "=inotlike=";
-      case "in": return negate ? "=notin=" : "=in=";
-      case "startswith": return negate ? "=inotlike=" : "=ilike=";
-      case "endswith": return negate ? "=ilike=" : "=ilike=";
-      case "isnull": return negate ? "=isnotnull=" : "=isnull=";
-      case "isnotnull": return negate ? "=isnull=" : "=isnotnull=";
+      case "=":
+        return negate ? "!=" : "==";
+      case "<>":
+        return negate ? "==" : "!=";
+      case ">":
+        return negate ? "<=" : ">";
+      case "<":
+        return negate ? ">=" : "<";
+      case ">=":
+        return negate ? "<" : ">=";
+      case "<=":
+        return negate ? ">" : "<=";
+      case "contains":
+        return negate ? "=inotlike=" : "=ilike=";
+      case "notcontains":
+        return negate ? "=ilike=" : "=inotlike=";
+      case "in":
+        return negate ? "=notin=" : "=in=";
+      case "startswith":
+        return negate ? "=inotlike=" : "=ilike=";
+      case "endswith":
+        return negate ? "=ilike=" : "=ilike=";
+      case "isnull":
+        return negate ? "=isnotnull=" : "=isnull=";
+      case "isnotnull":
+        return negate ? "=isnull=" : "=isnotnull=";
     }
   }
 
@@ -678,45 +732,51 @@ export abstract class ApiService implements OnDestroy {
     if (operator === "or") return "and";
   }
 
-  public mapLoadOptionsToVariables(options: LoadOptions) {
+  public mapLoadOptionsToVariables(
+    options: LoadOptions & { isLoadingAll?; exportPage?; exportTake? }
+  ) {
     const variables: RelayPageVariables = {
       pageable: {
-        // @ts-ignore
-        pageNumber: options.isLoadingAll ? options.exportPage : options.skip / options.take || 0,
-        // @ts-ignore
-        pageSize: options.isLoadingAll ? options.exportTake : options.take || DEFAULT_PAGE_SIZE,
+        pageNumber: options.isLoadingAll
+          ? options.exportPage
+          : options.skip / options.take || 0,
+        pageSize: options.isLoadingAll
+          ? options.exportTake
+          : options.take || DEFAULT_PAGE_SIZE,
       },
     };
     this.pageSize = options.take;
 
     // Search / filter
     const search = [];
-    if (options.filter) // row/header filters
+    if (options.filter)
+      // row/header filters
       search.push(this.mapDXFilterToRSQL(options.filter));
-    if (options.searchValue) // global search
-      search.push(this
-        .mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options)));
-    variables.search = search
-      .map(v => `(${v})`)
-      .join(" and ");
+    if (options.searchValue)
+      // global search
+      search.push(this.mapDXFilterToRSQL(this.mapDXSearchToDXFilter(options)));
+    variables.search = search.map((v) => `(${v})`).join(" and ");
 
     // Sort
     if (options.sort)
       variables.pageable.sort = {
-        orders: (options.sort as Array<any>)
-          .map(({ selector: property, desc }) => ({
-            property,
-            direction: desc ? Direction.DESC : Direction.ASC
-          } as OrderedField)),
+        orders: (options.sort as Array<any>).map(
+          ({ selector: property, desc }) =>
+            ({
+              property,
+              direction: desc ? Direction.DESC : Direction.ASC,
+            } as OrderedField)
+        ),
       };
 
     // totalSummary
     if (options.totalSummary)
-      variables.summary = (options.totalSummary as Array<any>)
-        .map(({ selector, summaryType }) => ({
+      variables.summary = (options.totalSummary as Array<any>).map(
+        ({ selector, summaryType }) => ({
           selector,
           summaryType: SummaryType[summaryType],
-        }));
+        })
+      );
 
     return variables;
   }
@@ -725,13 +785,15 @@ export abstract class ApiService implements OnDestroy {
    * Merge variables, last item as priority if merge is impossible
    * @param variables Variables list
    */
-  public mergeVariables(...variables: OperationVariables[] | RelayPageVariables[]) {
+  public mergeVariables(
+    ...variables: OperationVariables[] | RelayPageVariables[]
+  ) {
     return variables.reduce((acm, current) => ({
       ...acm,
       ...current,
       search: [acm ? acm.search : "", current ? current.search : ""]
-        .filter(v => v)
-        .map(v => `(${v})`)
+        .filter((v) => v)
+        .map((v) => `(${v})`)
         .join(" and "),
     }));
   }
@@ -745,8 +807,10 @@ export abstract class ApiService implements OnDestroy {
    */
   public listenQuery<T>(
     query: string,
-    options: Partial<WatchQueryOptions<RelayPageVariables | OperationVariables>>,
-    cbk: (res: ApolloQueryResult<T>) => void,
+    options: Partial<
+      WatchQueryOptions<RelayPageVariables | OperationVariables>
+    >,
+    cbk: (res: ApolloQueryResult<T>) => void
   ) {
     const done = new Subject<ApolloQueryResult<T>>();
     this.query<T>(query, {
@@ -755,14 +819,13 @@ export abstract class ApiService implements OnDestroy {
     } as WatchQueryOptions<RelayPageVariables>)
       .pipe(
         takeUntil(this.destroy),
-        filter(res => !!Object.keys(res.data).length),
-        takeUntil(done),
+        filter((res) => !!Object.keys(res.data).length),
+        takeUntil(done)
       )
-      .subscribe(res => {
+      .subscribe((res) => {
         cbk(res);
         done.next(res);
-        if (!res.loading)
-          done.complete();
+        if (!res.loading) done.complete();
       });
     return done;
   }
@@ -777,23 +840,24 @@ export abstract class ApiService implements OnDestroy {
   public watchGetOneQuery<T>(
     options: Partial<WatchQueryOptions<OperationVariables>>,
     depth = 1,
-    fieldsFilter?: RegExp,
+    fieldsFilter?: RegExp
   ) {
     const done = new Subject<ApolloQueryResult<T>>();
     from(this.buildGetOne(depth, fieldsFilter))
       .pipe(
         takeUntil(this.destroy),
         takeUntil(done),
-        mergeMap(query => this.query<T>(query, {
-          fetchPolicy: "cache-and-network",
-          ...options,
-        } as WatchQueryOptions)),
-        filter(res => !!Object.keys(res.data).length),
+        mergeMap((query) =>
+          this.query<T>(query, {
+            fetchPolicy: "cache-and-network",
+            ...options,
+          } as WatchQueryOptions)
+        ),
+        filter((res) => !!Object.keys(res.data).length)
       )
-      .subscribe(res => {
+      .subscribe((res) => {
         done.next(res);
-        if (!res.loading)
-          done.complete();
+        if (!res.loading) done.complete();
       });
     return done;
   }
@@ -802,19 +866,19 @@ export abstract class ApiService implements OnDestroy {
    * @deprecated Use `Apollo` api in combination with `@see buildCountGraph`
    */
   public watchCountQuery<R>(search?: string) {
-    return from(this.buildCount())
-      .pipe(
-        takeUntil(this.destroy),
-        mergeMap(query => this.apollo
-          .watchQuery<R>({
+    return from(this.buildCount()).pipe(
+      takeUntil(this.destroy),
+      mergeMap(
+        (query) =>
+          this.apollo.watchQuery<R>({
             query: gql(query),
             fetchPolicy: "network-only",
             returnPartialData: true,
             variables: { search },
-          })
-          .valueChanges),
-        filter(res => !!Object.keys(res.data).length),
-      );
+          }).valueChanges
+      ),
+      filter((res) => !!Object.keys(res.data).length)
+    );
   }
 
   /**
@@ -823,32 +887,38 @@ export abstract class ApiService implements OnDestroy {
    * @param cbk Callback called each time data is received
    * @deprecated Use `Apollo` api in combination with `@see buildDistinctGraph`
    */
-  public loadDistinctQuery<T = { distinct: RelayPage<DistinctInfo>, totalCount: number, totalPage: number }>(
-    options: Partial<LoadOptions>,
-    cbk: (res: ApolloQueryResult<T>) => void,
-  ) {
+  public loadDistinctQuery<
+    T = {
+      distinct: RelayPage<DistinctInfo>;
+      totalCount: number;
+      totalPage: number;
+    }
+  >(options: Partial<LoadOptions>, cbk: (res: ApolloQueryResult<T>) => void) {
     const done = new Subject();
 
     // API only support one field
-    const field = Array.isArray(options.group) ? (options.group[0] as BaseGroupDescriptor<T>).selector : (options.group as BaseGroupDescriptor<T>).selector;
+    const field = Array.isArray(options.group)
+      ? (options.group[0] as BaseGroupDescriptor<T>).selector
+      : (options.group as BaseGroupDescriptor<T>).selector;
     const distinctQuery = this.buildDistinct();
 
     // Full filter fix
     // Using the full filter ( row + header ) will fail, because it doesn't contain logical operator
     if (options.filter) {
-      const withDepth = options.filter
-        .find(r => typeof r === "object");
-      const withOperator = options.filter
-        .find(r => ["or", "and"].includes(r));
+      const withDepth = options.filter.find((r) => typeof r === "object");
+      const withOperator = options.filter.find((r) =>
+        ["or", "and"].includes(r)
+      );
       if (withDepth && !withOperator)
-        options.filter = options.filter.length > 1 ?
-          [options.filter[0], "and", options.filter[1]] :
-          options.filter;
+        options.filter =
+          options.filter.length > 1
+            ? [options.filter[0], "and", options.filter[1]]
+            : options.filter;
     }
 
     const variables = this.mergeVariables(
       { field },
-      this.mapLoadOptionsToVariables(options),
+      this.mapLoadOptionsToVariables(options)
     );
 
     return this.query<T>(distinctQuery, {
@@ -858,9 +928,9 @@ export abstract class ApiService implements OnDestroy {
       .pipe(
         takeUntil(this.destroy),
         takeUntil(done),
-        filter(res => !!Object.keys(res.data).length),
+        filter((res) => !!Object.keys(res.data).length)
       )
-      .subscribe(res => {
+      .subscribe((res) => {
         cbk(res);
         if (!res.loading) {
           done.next(res);
@@ -879,18 +949,19 @@ export abstract class ApiService implements OnDestroy {
   public watchSaveQuery(
     options: Partial<MutationOptions>,
     depth = 1,
-    fieldsFilter?: RegExp,
+    fieldsFilter?: RegExp
   ) {
-    return from(this.buildSave(depth, fieldsFilter))
-      .pipe(
-        takeUntil(this.destroy),
-        mergeMap(query => this.apollo.mutate({
+    return from(this.buildSave(depth, fieldsFilter)).pipe(
+      takeUntil(this.destroy),
+      mergeMap((query) =>
+        this.apollo.mutate({
           mutation: gql(query),
           ...options,
           variables: ApiService.mapForSave(options.variables),
-        } as MutationOptions)),
-        take(1),
-      );
+        } as MutationOptions)
+      ),
+      take(1)
+    );
   }
 
   /**
@@ -904,16 +975,17 @@ export abstract class ApiService implements OnDestroy {
     options: Partial<MutationOptions>,
     columns: Array<string>
   ) {
-    return from(this.buildSave_v2(columns))
-      .pipe(
-        takeUntil(this.destroy),
-        mergeMap(query => this.apollo.mutate({
+    return from(this.buildSave_v2(columns)).pipe(
+      takeUntil(this.destroy),
+      mergeMap((query) =>
+        this.apollo.mutate({
           mutation: gql(query),
           ...options,
           variables: ApiService.mapForSave(options.variables),
-        } as MutationOptions)),
-        take(1),
-      );
+        } as MutationOptions)
+      ),
+      take(1)
+    );
   }
 
   /**
@@ -926,18 +998,19 @@ export abstract class ApiService implements OnDestroy {
   public watchSaveAllQuery(
     options: Partial<MutationOptions>,
     depth = 1,
-    fieldsFilter?: RegExp,
+    fieldsFilter?: RegExp
   ) {
-    return from(this.buildSaveAll(depth, fieldsFilter))
-      .pipe(
-        takeUntil(this.destroy),
-        mergeMap(query => this.apollo.mutate({
+    return from(this.buildSaveAll(depth, fieldsFilter)).pipe(
+      takeUntil(this.destroy),
+      mergeMap((query) =>
+        this.apollo.mutate({
           mutation: gql(query),
           fetchPolicy: "no-cache",
           ...options,
-        } as MutationOptions)),
-        take(1),
-      );
+        } as MutationOptions)
+      ),
+      take(1)
+    );
   }
 
   /**
@@ -945,48 +1018,51 @@ export abstract class ApiService implements OnDestroy {
    * @param options Apollo MutationOptions
    * @deprecated Use `Apollo` api in combination with `@see buildDeleteGraph`
    */
-  public watchDeleteQuery(
-    options: Partial<MutationOptions>,
-  ) {
-    return this.apollo.mutate({
-      mutation: gql(this.buildDelete()),
-      fetchPolicy: "no-cache",
-      ...options,
-    } as MutationOptions)
-      .pipe(
-        takeUntil(this.destroy),
-        take(1),
-      );
+  public watchDeleteQuery(options: Partial<MutationOptions>) {
+    return this.apollo
+      .mutate({
+        mutation: gql(this.buildDelete()),
+        fetchPolicy: "no-cache",
+        ...options,
+      } as MutationOptions)
+      .pipe(takeUntil(this.destroy), take(1));
   }
 
   /** Build DX LookupStore using paginated/backend queries */
   getLookupStore<T>(
     columns: Array<string>,
     search?: string,
-    params: Partial<LookupStore> = {},
+    params: Partial<LookupStore> = {}
   ) {
     return {
       paginate: true,
       sort: [{ selector: "id" }],
       store: this.createCustomStore({
-        load: options => this.apollo
-          .query<{ [key: string]: RelayPage<T> }>({
-            query: gql(this.buildGetPageGraph(columns)),
-            variables: this.mergeVariables(this.mapLoadOptionsToVariables(options), { search }),
-            fetchPolicy: "cache-first",
-          })
-          .pipe(
-            map(res => res.data[`all${this.model.name}`].edges.map(({ node }) => node)),
-          )
-          .toPromise(),
-        byKey: id => this.apollo
-          .query<{ [key: string]: T }>({
-            query: gql(this.buildGetOneGraph(columns)),
-            variables: { id },
-            fetchPolicy: "cache-first",
-          })
-          .pipe(map(res => res.data[this.model.name.lcFirst()]))
-          .toPromise(),
+        load: (options) =>
+          this.apollo
+            .query<{ [key: string]: RelayPage<T> }>({
+              query: gql(this.buildGetPageGraph(columns)),
+              variables: this.mergeVariables(
+                this.mapLoadOptionsToVariables(options),
+                { search }
+              ),
+              fetchPolicy: "cache-first",
+            })
+            .pipe(
+              map((res) =>
+                res.data[`all${this.model.name}`].edges.map(({ node }) => node)
+              )
+            )
+            .toPromise(),
+        byKey: (id) =>
+          this.apollo
+            .query<{ [key: string]: T }>({
+              query: gql(this.buildGetOneGraph(columns)),
+              variables: { id },
+              fetchPolicy: "cache-first",
+            })
+            .pipe(map((res) => res.data[this.model.name.lcFirst()]))
+            .toPromise(),
       }),
       ...params,
     } as LookupStore;
@@ -996,7 +1072,7 @@ export abstract class ApiService implements OnDestroy {
   async getPreloadedLookupStore<T>(
     columns: Array<string>,
     search?: string,
-    params: Partial<LookupStore> = {},
+    params: Partial<LookupStore> = {}
   ) {
     const data = await this.apollo
       .query<{ [key: string]: Array<T> }>({
@@ -1004,9 +1080,8 @@ export abstract class ApiService implements OnDestroy {
         variables: { search },
         fetchPolicy: "cache-first",
       })
-      .pipe(
-        map(res => res.data[`all${this.model.name}List`]),
-      ).toPromise();
+      .pipe(map((res) => res.data[`all${this.model.name}List`]))
+      .toPromise();
     return {
       paginate: true,
       sort: [{ selector: "id" }],
@@ -1027,10 +1102,22 @@ export abstract class ApiService implements OnDestroy {
         {
           name: this.model.name.lcFirst(),
           body,
-          params: [{ name: this.model.getKeyField().toString(), value: this.model.getKeyField().toString(), isVariable: true }],
+          params: [
+            {
+              name: this.model.getKeyField().toString(),
+              value: this.model.getKeyField().toString(),
+              isVariable: true,
+            },
+          ],
         },
       ],
-      [{ name: this.model.getKeyField().toString(), type: this.gqlKeyType, isOptionnal: false }],
+      [
+        {
+          name: this.model.getKeyField().toString(),
+          type: this.gqlKeyType,
+          isOptionnal: false,
+        },
+      ]
     );
   }
 
@@ -1050,7 +1137,7 @@ export abstract class ApiService implements OnDestroy {
           params: [{ name: "search", value: "search", isVariable: true }],
         },
       ],
-      [{ name: "search", type: "String", isOptionnal: true }],
+      [{ name: "search", type: "String", isOptionnal: true }]
     );
   }
 
@@ -1072,7 +1159,7 @@ export abstract class ApiService implements OnDestroy {
             "pageInfo.hasPreviousPage",
             "pageInfo.hasNextPage",
             "totalCount",
-            ...[...body].map(c => `edges.node.${c}`),
+            ...[...body].map((c) => `edges.node.${c}`),
           ],
           params: [
             { name: "search", value: "search", isVariable: true },
@@ -1083,7 +1170,7 @@ export abstract class ApiService implements OnDestroy {
       [
         { name: "search", type: "String", isOptionnal: true },
         { name: "pageable", type: "PaginationInput", isOptionnal: false },
-      ],
+      ]
     );
   }
 
@@ -1107,7 +1194,7 @@ export abstract class ApiService implements OnDestroy {
             "pageInfo.hasNextPage",
             "totalCount",
             `summary(summaries:$summary, of:"${operationName}")`,
-            ...body.map(c => `edges.node.${c}`),
+            ...body.map((c) => `edges.node.${c}`),
           ],
           params: [
             { name: "search", value: "search", isVariable: true },
@@ -1119,7 +1206,7 @@ export abstract class ApiService implements OnDestroy {
         { name: "search", type: "String", isOptionnal: true },
         { name: "pageable", type: "PaginationInput", isOptionnal: false },
         { name: "summary", type: "[SummaryInput]", isOptionnal: false },
-      ],
+      ]
     );
   }
 
@@ -1129,17 +1216,28 @@ export abstract class ApiService implements OnDestroy {
    * @returns The GraphQL mutation.
    */
   protected buildSaveGraph(body?: Array<string>) {
-
     return ApiService.buildGraph(
       "mutation",
       [
         {
           name: `save${this.model.name}`,
           body,
-          params: [{ name: this.model.name.lcFirst(), value: this.model.name.lcFirst(), isVariable: true }],
+          params: [
+            {
+              name: this.model.name.lcFirst(),
+              value: this.model.name.lcFirst(),
+              isVariable: true,
+            },
+          ],
         },
       ],
-      [{ name: this.model.name.lcFirst(), type: `Geo${this.model.name}Input`, isOptionnal: false }],
+      [
+        {
+          name: this.model.name.lcFirst(),
+          type: `Geo${this.model.name}Input`,
+          isOptionnal: false,
+        },
+      ]
     );
   }
 
@@ -1149,17 +1247,28 @@ export abstract class ApiService implements OnDestroy {
    * @returns The GraphQL mutation.
    */
   protected buildSaveAllGraph(body: Array<string>) {
-
     return ApiService.buildGraph(
       "mutation",
       [
         {
           name: `saveAll${this.model.name}`,
           body,
-          params: [{ name: `all${this.model.name}`, value: `all${this.model.name}`, isVariable: true }],
+          params: [
+            {
+              name: `all${this.model.name}`,
+              value: `all${this.model.name}`,
+              isVariable: true,
+            },
+          ],
         },
       ],
-      [{ name: `all${this.model.name}`, type: `[Geo${this.model.name}Input]`, isOptionnal: false }],
+      [
+        {
+          name: `all${this.model.name}`,
+          type: `[Geo${this.model.name}Input]`,
+          isOptionnal: false,
+        },
+      ]
     );
   }
 
@@ -1171,21 +1280,23 @@ export abstract class ApiService implements OnDestroy {
   protected buildDistinctQuery(body: Array<string>) {
     return ApiService.buildGraph(
       "query",
-      [{
-        name: `allDistinct${this.model.name}`,
-        params: [
-          { name: "search", value: "search", isVariable: true },
-          { name: "pageable", value: "pageable", isVariable: true },
-        ],
-        body: [
-          "pageInfo.startCursor",
-          "pageInfo.endCursor",
-          "pageInfo.hasPreviousPage",
-          "pageInfo.hasNextPage",
-          "totalCount",
-          ...body,
-        ],
-      }],
+      [
+        {
+          name: `allDistinct${this.model.name}`,
+          params: [
+            { name: "search", value: "search", isVariable: true },
+            { name: "pageable", value: "pageable", isVariable: true },
+          ],
+          body: [
+            "pageInfo.startCursor",
+            "pageInfo.endCursor",
+            "pageInfo.hasPreviousPage",
+            "pageInfo.hasNextPage",
+            "totalCount",
+            ...body,
+          ],
+        },
+      ],
       [
         { name: "search", type: "String", isOptionnal: true },
         { name: "pageable", type: "PaginationInput", isOptionnal: false },
@@ -1197,69 +1308,98 @@ export abstract class ApiService implements OnDestroy {
    * Build a mutation that delete an entity by his key
    */
   protected buildDeleteGraph(keyType = "String") {
-    return ApiService.buildGraph("mutation", [{
-      name: `delete${this.model.name}`,
-      params: [
-        { name: "id", value: "id", isVariable: true },
+    return ApiService.buildGraph(
+      "mutation",
+      [
+        {
+          name: `delete${this.model.name}`,
+          params: [{ name: "id", value: "id", isVariable: true }],
+        },
       ],
-    }], [
-      { name: "id", type: keyType, isOptionnal: false },
-    ]);
+      [{ name: "id", type: keyType, isOptionnal: false }]
+    );
   }
 
   /**
    * Build a distinct query graph
    */
   protected buildDistinctGraph(withDescription = false) {
-    const body = [
-      ...PAGINATION_FIELDS,
-      "edges.node.count",
-      "edges.node.key",
-    ];
+    const body = [...PAGINATION_FIELDS, "edges.node.count", "edges.node.key"];
 
     if (withDescription) body.push("edges.node.description");
 
-    return ApiService.buildGraph("query", [{
-      name: `distinct`,
-      body,
-      params: [
-        { name: "field", value: "field", isVariable: true },
-        { name: "descriptionField", value: "descriptionField", isVariable: true },
-        { name: "type", value: "type", isVariable: true },
-        { name: "pageable", value: "pageable", isVariable: true },
-        { name: "search", value: "search", isVariable: true },
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `distinct`,
+          body,
+          params: [
+            { name: "field", value: "field", isVariable: true },
+            {
+              name: "descriptionField",
+              value: "descriptionField",
+              isVariable: true,
+            },
+            { name: "type", value: "type", isVariable: true },
+            { name: "pageable", value: "pageable", isVariable: true },
+            { name: "search", value: "search", isVariable: true },
+          ],
+        },
       ],
-    }], [
-      { name: "field", type: "String", isOptionnal: false },
-      { name: "descriptionField", type: "String", isOptionnal: !withDescription },
-      { name: "type", type: "String", isOptionnal: false },
-      { name: "pageable", type: "PaginationInput", isOptionnal: false },
-      { name: "search", type: "String", isOptionnal: true },
-    ]);
+      [
+        { name: "field", type: "String", isOptionnal: false },
+        {
+          name: "descriptionField",
+          type: "String",
+          isOptionnal: !withDescription,
+        },
+        { name: "type", type: "String", isOptionnal: false },
+        { name: "pageable", type: "PaginationInput", isOptionnal: false },
+        { name: "search", type: "String", isOptionnal: true },
+      ]
+    );
   }
 
-  protected getDistinctDatasource(type, fieldName, descriptionField?, searchExpr?, fetchPol?) {
-    return this.apollo.query<{ distinct: RelayPage<{ count: number, key: string, description: string }> }>({
-      query: gql(this.buildDistinctGraph(descriptionField !== undefined)),
-      variables: {
-        field: fieldName, // E.g. "espece.id"
-        descriptionField: descriptionField ? descriptionField : null,
-        type,
-        search: searchExpr,
-        pageable: {
-          pageNumber: 0,
-          pageSize: 500,
-        } as Pageable,
-      },
-      fetchPolicy: fetchPol,
-    }).pipe(
-      map(res => new DataSource({
-        store: new ArrayStore({
-          data: res.data.distinct.edges,
-        }),
-        key: "key",
-      })),
-    );
+  protected getDistinctDatasource(
+    type,
+    fieldName,
+    descriptionField?,
+    searchExpr?,
+    fetchPol?
+  ) {
+    return this.apollo
+      .query<{
+        distinct: RelayPage<{
+          count: number;
+          key: string;
+          description: string;
+        }>;
+      }>({
+        query: gql(this.buildDistinctGraph(descriptionField !== undefined)),
+        variables: {
+          field: fieldName, // E.g. "espece.id"
+          descriptionField: descriptionField ? descriptionField : null,
+          type,
+          search: searchExpr,
+          pageable: {
+            pageNumber: 0,
+            pageSize: 500,
+          } as Pageable,
+        },
+        fetchPolicy: fetchPol,
+      })
+      .pipe(
+        map(
+          (res) =>
+            new DataSource({
+              store: new ArrayStore({
+                data: res.data.distinct.edges,
+              }),
+              key: "key",
+            })
+        )
+      );
   }
 
   /**
@@ -1276,8 +1416,7 @@ export abstract class ApiService implements OnDestroy {
           params: [{ name: "search", value: "search", isVariable: true }],
         },
       ],
-      [{ name: "search", type: "String", isOptionnal: true }],
+      [{ name: "search", type: "String", isOptionnal: true }]
     );
   }
-
 }

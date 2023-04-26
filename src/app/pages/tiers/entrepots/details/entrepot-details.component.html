@@ -2,8 +2,9 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div class="content-block"
-  *ngIf="!entrepotId"
+  <div
+    class="content-block"
+    *ngIf="!entrepotId"
   >
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
@@ -42,7 +43,12 @@
         [ratio]="1"
         [visible]="!createMode"
       >
-        <h4 class="entity-id" *ngIf="!entrepotId">N°&nbsp;{{ entrepot?.id }}</h4>
+        <h4
+          class="entity-id"
+          *ngIf="!entrepotId"
+        >
+          N°&nbsp;{{ entrepot?.id }}
+        </h4>
         <dx-button
           *ngIf="!entrepotId"
           height="auto"
@@ -190,7 +196,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-raisonSocial' | localize }}"
@@ -221,7 +226,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-adresse1' | localize }}"
@@ -252,7 +256,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-adresse2' | localize }}"
@@ -280,7 +283,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-adresse3' | localize }}"
@@ -308,7 +310,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-codePostal' | localize }}"
@@ -339,7 +340,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-ville' | localize }}"
@@ -401,7 +401,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{
@@ -437,7 +436,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       >
                       <dx-validator
@@ -480,7 +478,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{
@@ -510,7 +507,6 @@
                         style: 'text-transform: uppercase'
                       }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{
@@ -562,7 +558,6 @@
                       [readOnly]="readOnlyMode"
                       [inputAttr]="{ style: 'text-transform: uppercase' }"
                       (onValueChanged)="valueToUpperCase($event)"
-
                     >
                       <dx-validator
                         name="{{ 'tiers-entrepots-tvaCee' | localize }}"
@@ -672,7 +667,6 @@
                       style: 'text-transform: uppercase'
                     }"
                     (onValueChanged)="valueToUpperCase($event)"
-
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-gestionnaireChep' | localize }}"
@@ -701,7 +695,6 @@
                     (onValueChanged)="
                       onChepRefChange($event); valueToUpperCase($event)
                     "
-
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-referenceChep' | localize }}"
@@ -735,7 +728,6 @@
                     (onValueChanged)="
                       valueToUpperCase($event); onIfcoChange($event)
                     "
-
                   >
                     <dx-validator
                       name="{{ 'tiers-entrepots-referenceIfco' | localize }}"
@@ -798,7 +790,6 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-
                       >
                         <dx-validator
                           name="{{
@@ -1037,7 +1028,6 @@
                           style: 'text-transform: uppercase'
                         }"
                         (onValueChanged)="valueToUpperCase($event)"
-
                       >
                         <dx-validator
                           name="{{
@@ -1061,7 +1051,10 @@
         <dx-box direction="row">
           <dxi-item [ratio]="1">
             <!-- Transporteurs par bassins -->
-            <div *ngIf="!createMode" class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings">
+            <div
+              *ngIf="!createMode"
+              class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
+            >
               <span class="dx-form-group-caption">{{
                 "tiers-entrepots-details-groupe-bassins" | localize
               }}</span>

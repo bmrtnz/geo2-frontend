@@ -16,7 +16,7 @@ export class MruOrdresService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
     private currentCompanyService: CurrentCompanyService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     super(apollo, MRUOrdre);
     this.gqlKeyType = "GeoMRUOrdreKeyInput";
@@ -29,9 +29,9 @@ export class MruOrdresService extends ApiService implements APIRead {
         type Response = { MRUOrdre: MRUOrdre };
         const id = key
           ? {
-            utilisateur: key.utilisateur || "",
-            ordre: key.ordre || "",
-          }
+              utilisateur: key.utilisateur || "",
+              ordre: key.ordre || "",
+            }
           : {};
         const variables = { id };
         this.listenQuery<Response>(query, { variables }, (res) => {
@@ -51,27 +51,20 @@ export class MruOrdresService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allMRUOrdre: RelayPage<MRUOrdre> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
             this.listenQuery<Response>(
               query,
               { variables, fetchPolicy: "network-only" },
               (res) => {
                 if (res.data && res.data.allMRUOrdre)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allMRUOrdre,
-                    ),
-                  );
-              },
+                  resolve(this.asInstancedListCount(res.data.allMRUOrdre));
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -108,7 +101,7 @@ export class MruOrdresService extends ApiService implements APIRead {
           type: `GeoMRUOrdreInput`,
           isOptionnal: false,
         },
-      ],
+      ]
     );
   }
 
@@ -147,7 +140,7 @@ export class MruOrdresService extends ApiService implements APIRead {
       ],
       {
         mruOrdre,
-      },
+      }
     ).subscribe({
       error: (err) => console.log("Échec de la sauvegarde MRU", err),
     });
@@ -160,20 +153,21 @@ export class MruOrdresService extends ApiService implements APIRead {
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group) {
-
               // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
-              if ((options.group as Array<any>).find(({ selector }) => selector === "ordre.statut"))
+              if (
+                (options.group as Array<any>).find(
+                  ({ selector }) => selector === "ordre.statut"
+                )
+              )
                 return resolve({
-                  data: StatutKeys.map(key => ({ key })) as DistinctInfo[],
+                  data: StatutKeys.map((key) => ({ key })) as DistinctInfo[],
                   totalCount: 0,
                 });
 
               return this.loadDistinctQuery(options, (res) => {
                 console.log(this.asListCount(res.data.distinct));
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
             }
 
@@ -181,7 +175,7 @@ export class MruOrdresService extends ApiService implements APIRead {
             const query = this.buildHeadList(columns);
             const variables = {
               societe: this.currentCompanyService.getCompany().id,
-              count: options.take ?? 50
+              count: options.take ?? 50,
             };
 
             this.listenQuery<Response>(
@@ -190,7 +184,7 @@ export class MruOrdresService extends ApiService implements APIRead {
               (res) => {
                 if (res.data && res.data.allMRUOrdreHeadList)
                   resolve(res.data.allMRUOrdreHeadList);
-              },
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -210,9 +204,11 @@ export class MruOrdresService extends ApiService implements APIRead {
             { name: "count", value: "count", isVariable: true },
           ],
         },
-      ], [
-      { name: "societe", type: "String", isOptionnal: false },
-      { name: "count", type: "Long", isOptionnal: true },
-    ]);
+      ],
+      [
+        { name: "societe", type: "String", isOptionnal: false },
+        { name: "count", type: "Long", isOptionnal: true },
+      ]
+    );
   }
 }

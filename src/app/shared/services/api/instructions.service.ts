@@ -36,28 +36,17 @@ export class InstructionsService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allInstruction: RelayPage<Instruction> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allInstruction) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allInstruction,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allInstruction) {
+                resolve(this.asInstancedListCount(res.data.allInstruction));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),

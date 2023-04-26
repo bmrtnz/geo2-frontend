@@ -1,5 +1,13 @@
 import { DatePipe } from "@angular/common";
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { EncoursClientPopupComponent } from "app/pages/tiers/clients/encours-client/encours-client-popup.component";
 import { Client } from "app/shared/models";
 import { LocalizePipe } from "app/shared/pipes";
@@ -8,7 +16,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import DataSource from "devextreme/data/data_source";
@@ -36,32 +44,31 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   private gridConfig: Promise<GridConfig>;
   public title: string;
 
-  @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
+  @ViewChild(EncoursClientPopupComponent, { static: false })
+  encoursPopup: EncoursClientPopupComponent;
 
   constructor(
     private localizePipe: LocalizePipe,
     private datePipe: DatePipe,
     private clientsService: ClientsService,
     public gridConfiguratorService: GridConfiguratorService,
-    public currentCompanyService: CurrentCompanyService,
+    public currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.DepassementEncoursClient,
+      Grid.DepassementEncoursClient
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.title = this.localizePipe.transform(
-      "grid-depassement-encours-client-title",
+      "grid-depassement-encours-client-title"
     );
   }
 
   async ngOnChanges() {
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
     this.dataSource = this.clientsService.getDataSource_v2(
-      await fields.toPromise(),
+      await fields.toPromise()
     );
     if (this.dataSource) this.enableFilters();
   }
@@ -71,10 +78,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["pays.id", "=", this.masterRow.data.id],
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
-      ... this.showAllClients ? [] : ["and", ["depassement", ">", 0]],
-      ...(this.secteurId
-        ? ["and", ["secteur.id", "=", this.secteurId]]
-        : []),
+      ...(this.showAllClients ? [] : ["and", ["depassement", ">", 0]]),
+      ...(this.secteurId ? ["and", ["secteur.id", "=", this.secteurId]] : []),
       ...(this.commercialId
         ? ["and", ["commercial.id", "=", this.commercialId]]
         : []),
@@ -82,31 +87,41 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   }
 
   onCellPrepared(event) {
-
     if (event.rowType === "header") {
       let classPrefix;
       switch (event.column.dataField) {
         case "enCoursNonEchu":
-        case "enCours1a30": classPrefix = "green"; break;
-        case "enCours31a60": classPrefix = "yellow"; break;
-        case "enCours61a90": classPrefix = "orange"; break;
-        case "enCours90Plus": classPrefix = "red"; break;
-        case "alerteCoface": classPrefix = "dark-red"; break;
+        case "enCours1a30":
+          classPrefix = "green";
+          break;
+        case "enCours31a60":
+          classPrefix = "yellow";
+          break;
+        case "enCours61a90":
+          classPrefix = "orange";
+          break;
+        case "enCours90Plus":
+          classPrefix = "red";
+          break;
+        case "alerteCoface":
+          classPrefix = "dark-red";
+          break;
       }
-      if (classPrefix) event.cellElement.classList.add(`${classPrefix}-encours`);
+      if (classPrefix)
+        event.cellElement.classList.add(`${classPrefix}-encours`);
     }
 
     if (event.rowType === "data") {
-
       // Highlight some >0 cells
-      if ([
-        "depassement",
-        "enCours61a90",
-        "enCours90Plus",
-        "alerteCoface",
-      ].includes(event.column.dataField))
-        if (event.value > 0)
-          event.cellElement.classList.add("highlight-err");
+      if (
+        [
+          "depassement",
+          "enCours61a90",
+          "enCours90Plus",
+          "alerteCoface",
+        ].includes(event.column.dataField)
+      )
+        if (event.value > 0) event.cellElement.classList.add("highlight-err");
 
       // Formating figures: 1000000 becomes 1 000 000 €
       if (
@@ -136,12 +151,13 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
           (
             event.cellElement as HTMLElement
           ).innerText += ` -> ${this.datePipe.transform(
-            new Date(event.data.enCoursDateLimite),
+            new Date(event.data.enCoursDateLimite)
           )}`;
         if (!event.data.valide)
           (event.cellElement as HTMLElement).classList.add("strike");
         if (event.data.code)
-          event.cellElement.textContent = event.cellElement.textContent + " (" + event.data.code + ")";
+          event.cellElement.textContent =
+            event.cellElement.textContent + " (" + event.data.code + ")";
       }
     }
   }
@@ -150,7 +166,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     if (e.rowType === "data") {
       e.rowElement.classList.add("cursor-pointer");
       e.rowElement.title = this.localizePipe.transform("hint-voir-encours");
-      if (e.data.alerteCoface > 0 || e.data.enCours90Plus > 0) e.rowElement.classList.add("red-row");
+      if (e.data.alerteCoface > 0 || e.data.enCours90Plus > 0)
+        e.rowElement.classList.add("red-row");
     }
   }
 
@@ -161,7 +178,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       devise: { id: e.data.devise.id },
       agrement: e.data.agrement,
       enCoursTemporaire: e.data.enCoursTemporaire,
-      enCoursBlueWhale: e.data.enCoursBlueWhale
+      enCoursBlueWhale: e.data.enCoursBlueWhale,
     };
     this.encoursPopup.visible = true;
   }
@@ -169,5 +186,4 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   openOrder(ordre) {
     this.openEncoursOrder.emit(ordre);
   }
-
 }

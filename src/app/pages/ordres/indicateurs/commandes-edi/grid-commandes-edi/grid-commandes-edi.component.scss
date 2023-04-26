@@ -52,7 +52,7 @@
 }
 
 ::ng-deep .group-back-color {
-  background-color: #FFE7AD !important;
+  background-color: #ffe7ad !important;
 }
 
 ::ng-deep .info-U {
@@ -64,7 +64,6 @@
 }
 
 ::ng-deep .grid-commandes-Edi {
-
   h6 {
     margin: 0;
     float: left;
@@ -76,16 +75,14 @@
   }
 
   .BAFFilterArea {
-
     min-width: 1024px;
 
     .dx-placeholder {
-      color: rgba(0, 0, 0, .87);
+      color: rgba(0, 0, 0, 0.87);
     }
 
     .date-field {
       .dx-field-value {
-
         input {
           padding-right: 0 !important;
         }
@@ -116,5 +113,4 @@
   period-list .dx-list-item {
     padding: 6px 15px;
   }
-
 }

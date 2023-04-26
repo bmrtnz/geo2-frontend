@@ -1,7 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { CommentairesOrdresService } from "app/shared/services/api/commentaires-ordres.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
@@ -35,26 +39,34 @@ export class GridCommentaireOrdreComponent implements ToggledGrid {
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private commentairesOrdresService: CommentairesOrdresService,
-    public gridConfiguratorService: GridConfiguratorService,
+    public gridConfiguratorService: GridConfiguratorService
   ) {
     this.detailedFields = gridConfig["commentaire-ordre"].columns;
   }
 
   async updateGrid() {
-
     if (!this.dataGrid.dataSource) {
-      this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.CommentaireOrdre);
-      this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+      this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+        Grid.CommentaireOrdre
+      );
+      this.columns = from(this.gridConfig).pipe(
+        map((config) => config.columns)
+      );
     }
 
-    const fields = this.columns.pipe(map(columns => columns.map(column => {
-      return column.dataField;
-    })));
-    this.commentaires = this.commentairesOrdresService.getDataSource_v2(await fields.toPromise());
+    const fields = this.columns.pipe(
+      map((columns) =>
+        columns.map((column) => {
+          return column.dataField;
+        })
+      )
+    );
+    this.commentaires = this.commentairesOrdresService.getDataSource_v2(
+      await fields.toPromise()
+    );
     this.commentaires.filter([["ordre.id", "=", this.ordre.id]]);
     this.dataGrid.dataSource = null;
     this.dataGrid.dataSource = this.commentaires;
-
   }
 
   enableFilters() {
@@ -76,7 +88,10 @@ export class GridCommentaireOrdreComponent implements ToggledGrid {
   onCellPrepared(e) {
     // Best expression for date/time
     if (e.rowType === "data" && e.column.dataField === "dateModification") {
-      if (e.value !== "Maintenant") e.cellElement.innerText = this.dateManagementService.friendlyDate(e.value);
+      if (e.value !== "Maintenant")
+        e.cellElement.innerText = this.dateManagementService.friendlyDate(
+          e.value
+        );
     }
   }
 

@@ -1,34 +1,42 @@
-import { Component, EventEmitter, Input, NgModule, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
 import {
   DxButtonModule,
   DxPopupComponent,
   DxPopupModule,
-
-
-
-  DxSelectBoxComponent, DxSelectBoxModule, DxTextBoxComponent,
+  DxSelectBoxComponent,
+  DxSelectBoxModule,
+  DxTextBoxComponent,
   DxTextBoxModule,
-
-  DxValidatorComponent, DxValidatorModule
+  DxValidatorComponent,
+  DxValidatorModule,
 } from "devextreme-angular";
 import { SharedModule } from "../../shared.module";
 
 @Component({
   selector: "app-prompt-popup",
   templateUrl: "./prompt-popup.component.html",
-  styleUrls: ["./prompt-popup.component.scss"]
+  styleUrls: ["./prompt-popup.component.scss"],
 })
 export class PromptPopupComponent {
-
   @ViewChild(DxPopupComponent, { static: false })
   popupComponent: DxPopupComponent;
 
   @ViewChild("commentBox", { static: false }) commentBox: DxTextBoxComponent;
-  @ViewChild("commentSelectBox", { static: false }) commentSelectBox: DxSelectBoxComponent;
+  @ViewChild("commentSelectBox", { static: false })
+  commentSelectBox: DxSelectBoxComponent;
 
-  @ViewChild("validator", { static: false }) commentValidator: DxValidatorComponent;
-  @ViewChild("validatorSB", { static: false }) commentSBValidator: DxValidatorComponent;
+  @ViewChild("validator", { static: false })
+  commentValidator: DxValidatorComponent;
+  @ViewChild("validatorSB", { static: false })
+  commentSBValidator: DxValidatorComponent;
 
   @Input() title = "";
   @Input() purpose = "";
@@ -67,7 +75,7 @@ export class PromptPopupComponent {
     const rules: any = [
       { type: "required" },
       { type: "stringLength", min: this.commentMinLength ?? 1 },
-      { type: "stringLength", max: this.commentMaxLength ?? 512 }
+      { type: "stringLength", max: this.commentMaxLength ?? 512 },
     ];
 
     if (this.commentRegex) {
@@ -94,12 +102,16 @@ export class PromptPopupComponent {
   }
 
   onSubmit(form: NgForm) {
-    if (this.commentValidator.instance.validate().isValid || this.commentSBValidator.instance.validate().isValid) {
-      this.whenValidate.emit(form.value.commentaire || form.value.commentaireSB);
+    if (
+      this.commentValidator.instance.validate().isValid ||
+      this.commentSBValidator.instance.validate().isValid
+    ) {
+      this.whenValidate.emit(
+        form.value.commentaire || form.value.commentaireSB
+      );
       this.popupComponent.instance.hide();
     }
   }
-
 }
 
 @NgModule({
@@ -115,4 +127,4 @@ export class PromptPopupComponent {
   ],
   exports: [PromptPopupComponent],
 })
-export class PromptPopupModule { }
+export class PromptPopupModule {}

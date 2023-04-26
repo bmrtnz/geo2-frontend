@@ -174,7 +174,7 @@
   icon="material-icons menu_open"
   hint="{{ 'btn-grouping' | localize }}"
   (onClick)="gridsService.expandCollapseGroups(this, false)"
-  ></dx-button>
+></dx-button>
 <dx-data-grid
   [height]="450"
   [remoteOperations]="false"
@@ -255,21 +255,21 @@
     <div class="group-text-1"></div>
     <div class="group-text-2 group-back-color"></div>
     <dx-button
-    class="small-action-button"
+      class="small-action-button"
       type="normal"
       [visible]="showModifyEdiButton(cell)"
       (onClick)="OnClickModifyEdiButton(cell.data)"
       text="{{ 'modifier-ordre' | localize }}"
     ></dx-button>
     <dx-button
-    class="small-action-button"
+      class="small-action-button"
       type="normal"
       [visible]="showViewEdiButton(cell)"
       (onClick)="OnClickViewEdiButton(cell.data)"
       text="{{ 'visualiser' | localize }}"
     ></dx-button>
     <dx-button
-    class="small-action-button"
+      class="small-action-button"
       type="normal"
       [visible]="showCreateComplEdiButton(cell)"
       (onClick)="onClickCreateComplEdiButton(cell.data)"
@@ -283,7 +283,6 @@
       text="{{ 'creer-ordre' | localize }}"
     ></dx-button>
   </div>
-
 </dx-data-grid>
 <app-choix-entrepot-commande-edi-popup
   [commandeEdi]="commandeEdi"

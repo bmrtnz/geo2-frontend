@@ -42,11 +42,11 @@ export class GridSuiviComponent implements AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     private dateManagementService: DateManagementService,
     public gridConfiguratorService: GridConfiguratorService,
-    public tabContext: TabContext,
+    public tabContext: TabContext
   ) {
     this.detailedFields = gridsConfig.ordre.columns as GridColumn[];
     this.dataSource = ordresService.getDataSource_v2(
-      this.detailedFields.map((property) => property.dataField),
+      this.detailedFields.map((property) => property.dataField)
     );
   }
 
@@ -82,17 +82,13 @@ export class GridSuiviComponent implements AfterViewInit {
     if (e.column.dataField === "totalNombrePalettesCommandees") {
       if (e.data?.totalNombrePalettesCommandees > 0) {
         e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          e.data.totalNombrePalettesExpediees;
+          e.cellElement.innerText + "/" + e.data.totalNombrePalettesExpediees;
       }
     }
     if (e.column.dataField === "sommeColisCommandes") {
       if (e.data?.sommeColisCommandes > 0) {
         e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          e.data.sommeColisExpedies;
+          e.cellElement.innerText + "/" + e.data.sommeColisExpedies;
       }
     }
   }

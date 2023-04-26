@@ -14,7 +14,6 @@ import { FileManagerService } from "../file-manager.service";
   providedIn: "root",
 })
 export class DocumentsNumService extends ApiService {
-
   constructor(apollo: Apollo, private fm: FileManagerService) {
     super(apollo, DocumentNum);
     this.gqlKeyType = "GeoDocumentNumKeyInput";
@@ -26,31 +25,31 @@ export class DocumentsNumService extends ApiService {
 
   getOne(
     id: {
-      ordreNumero: DocumentNum["ordreNumero"],
-      typeDocument: DocumentNum["typeDocument"],
-      anneeCreation: DocumentNum["anneeCreation"],
+      ordreNumero: DocumentNum["ordreNumero"];
+      typeDocument: DocumentNum["typeDocument"];
+      anneeCreation: DocumentNum["anneeCreation"];
     },
-    body: Set<string>,
+    body: Set<string>
   ) {
     return this.apollo
       .query<{ documentNum: DocumentNum }>({
-        query: gql(ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: this.model.name.lcFirst(),
-              body,
-              params: [{ name: "id", value: "id", isVariable: true }],
-            },
-          ],
-          [{ name: "id", type: this.gqlKeyType, isOptionnal: false }],
-        )),
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: this.model.name.lcFirst(),
+                body,
+                params: [{ name: "id", value: "id", isVariable: true }],
+              },
+            ],
+            [{ name: "id", type: this.gqlKeyType, isOptionnal: false }]
+          )
+        ),
         variables: { id },
         fetchPolicy: "cache-first",
       })
-      .pipe(
-        map(res => res.data.documentNum),
-      );
+      .pipe(map((res) => res.data.documentNum));
   }
 
   getList(body: Set<string>, search?: string) {
@@ -60,9 +59,7 @@ export class DocumentsNumService extends ApiService {
         variables: { search },
         fetchPolicy: "cache-first",
       })
-      .pipe(
-        map(res => res.data.allDocumentNumList),
-      );
+      .pipe(map((res) => res.data.allDocumentNumList));
   }
 
   count(search?: string) {
@@ -72,15 +69,13 @@ export class DocumentsNumService extends ApiService {
         variables: { search },
         fetchPolicy: "cache-first",
       })
-      .pipe(
-        map(res => res.data.countDocumentNum),
-      );
+      .pipe(map((res) => res.data.countDocumentNum));
   }
 
   delete(id: {
-    ordreNumero: DocumentNum["ordreNumero"],
-    typeDocument: DocumentNum["typeDocument"],
-    anneeCreation: DocumentNum["anneeCreation"],
+    ordreNumero: DocumentNum["ordreNumero"];
+    typeDocument: DocumentNum["typeDocument"];
+    anneeCreation: DocumentNum["anneeCreation"];
   }) {
     console.log(id);
     return this.apollo
@@ -88,35 +83,47 @@ export class DocumentsNumService extends ApiService {
         mutation: gql(this.buildDeleteGraph(this.gqlKeyType)),
         variables: { id },
       })
-      .pipe(
-        map(res => res.data.deleteDocumentNum),
-      );
+      .pipe(map((res) => res.data.deleteDocumentNum));
   }
 
   deleteByIdAndOrdreLigneAndTypeDocument(
     id: string,
     ordreLigne: Partial<OrdreLigne>,
-    typeDocument: string,
+    typeDocument: string
   ) {
     return this.apollo
       .mutate<{ deleteByIdAndOrdreLigneAndTypeDocument: boolean }>({
-        mutation: gql(ApiService.buildGraph("mutation", [{
-          name: "deleteByIdAndOrdreLigneAndTypeDocument",
-          params: [
-            { name: "id", value: "id", isVariable: true },
-            { name: "ordreLigne", value: "ordreLigne", isVariable: true },
-            { name: "typeDocument", value: "typeDocument", isVariable: true },
-          ],
-        }], [
-          { name: "id", type: "String", isOptionnal: false },
-          { name: "ordreLigne", type: "GeoOrdreLigneInput", isOptionnal: false },
-          { name: "typeDocument", type: "String", isOptionnal: false },
-        ])),
+        mutation: gql(
+          ApiService.buildGraph(
+            "mutation",
+            [
+              {
+                name: "deleteByIdAndOrdreLigneAndTypeDocument",
+                params: [
+                  { name: "id", value: "id", isVariable: true },
+                  { name: "ordreLigne", value: "ordreLigne", isVariable: true },
+                  {
+                    name: "typeDocument",
+                    value: "typeDocument",
+                    isVariable: true,
+                  },
+                ],
+              },
+            ],
+            [
+              { name: "id", type: "String", isOptionnal: false },
+              {
+                name: "ordreLigne",
+                type: "GeoOrdreLigneInput",
+                isOptionnal: false,
+              },
+              { name: "typeDocument", type: "String", isOptionnal: false },
+            ]
+          )
+        ),
         variables: { id, ordreLigne, typeDocument },
       })
-      .pipe(
-        map(res => res.data.deleteByIdAndOrdreLigneAndTypeDocument),
-      );
+      .pipe(map((res) => res.data.deleteByIdAndOrdreLigneAndTypeDocument));
   }
 
   save(documentNum: Partial<DocumentNum>, body: Set<string>) {
@@ -125,9 +132,7 @@ export class DocumentsNumService extends ApiService {
         mutation: gql(this.buildSaveGraph([...body])),
         variables: { documentNum },
       })
-      .pipe(
-        map(res => res.data.saveDocumentNum),
-      );
+      .pipe(map((res) => res.data.saveDocumentNum));
   }
 
   getDataSource(body: Set<string>) {
@@ -135,24 +140,37 @@ export class DocumentsNumService extends ApiService {
       store: this.createCustomStore({
         key: ["ordreNumero", "typeDocument", "anneeCreation"],
         load: (options: LoadOptions) =>
-          iif(() => !!options.group,
-            this.apollo
-              .query<{ distinct: RelayPage<DistinctInfo>, totalCount: number, totalPage: number }>({
-                query: gql(this.buildDistinctGraph()),
-                variables: this.mapLoadOptionsToVariables(options),
-                fetchPolicy: "cache-first",
-              }),
+          iif(
+            () => !!options.group,
+            this.apollo.query<{
+              distinct: RelayPage<DistinctInfo>;
+              totalCount: number;
+              totalPage: number;
+            }>({
+              query: gql(this.buildDistinctGraph()),
+              variables: this.mapLoadOptionsToVariables(options),
+              fetchPolicy: "cache-first",
+            }),
             this.apollo
               .query<{ allDocumentNum: RelayPage<DocumentNum> }>({
-                query: gql(this.buildGetPageGraph(new Set(["ordreNumero", "typeDocument", "anneeCreation", ...body]))),
+                query: gql(
+                  this.buildGetPageGraph(
+                    new Set([
+                      "ordreNumero",
+                      "typeDocument",
+                      "anneeCreation",
+                      ...body,
+                    ])
+                  )
+                ),
                 variables: this.mapLoadOptionsToVariables(options),
                 fetchPolicy: "cache-first",
               })
               .pipe(
-                map(res => this.asInstancedListCount(res.data.allDocumentNum)),
-              ),
+                map((res) => this.asInstancedListCount(res.data.allDocumentNum))
+              )
           ).toPromise(),
-        byKey: key => this.getOne(key, body).toPromise(),
+        byKey: (key) => this.getOne(key, body).toPromise(),
         update: (key, values) => {
           return this.save({ ...key, ...values }, body).toPromise();
         },
@@ -162,17 +180,22 @@ export class DocumentsNumService extends ApiService {
 
   downloadPhotos(search?: string) {
     const baseArgs = { key: "GEO_CQ_PHOTOS" };
-    return this
-      .getList(new Set(["nomFichier", "anneeCreation", "moisCreation"]), search)
+    return this.getList(
+      new Set(["nomFichier", "anneeCreation", "moisCreation"]),
+      search
+    )
       .pipe(
-        mergeMap(docs => from(docs)),
-        filter(doc => !!doc.nomFichier),
-        map(doc => new FileSystemItem(
-          `${doc.anneeCreation}/${doc.moisCreation}/${doc.nomFichier}`,
-          false,
-        )),
-        toArray(),
+        mergeMap((docs) => from(docs)),
+        filter((doc) => !!doc.nomFichier),
+        map(
+          (doc) =>
+            new FileSystemItem(
+              `${doc.anneeCreation}/${doc.moisCreation}/${doc.nomFichier}`,
+              false
+            )
+        ),
+        toArray()
       )
-      .subscribe(res => this.fm.downloadItems.call({ baseArgs }, res));
+      .subscribe((res) => this.fm.downloadItems.call({ baseArgs }, res));
   }
 }

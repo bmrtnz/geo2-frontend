@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedMain, NestedPart } from "app/pages/nested/nested.component";
 import { ClientsService, LocalizationService } from "app/shared/services";
@@ -38,7 +44,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     this.gridConfiguratorService.init(this.gridID, {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -49,7 +55,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     private router: Router,
     private route: ActivatedRoute,
     private gridConfiguratorService: GridConfiguratorService,
-    public gridRowStyleService: GridRowStyleService,
+    public gridRowStyleService: GridRowStyleService
   ) {
     this.apiService = this.entrepotsService;
   }
@@ -58,14 +64,16 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     // Affichage nom client à côté Entrepôts
     this.clientID = this.route.snapshot.paramMap.get("client");
     if (this.clientID) {
-      this.clientsService.getOne_v2(this.clientID, ["code", "raisonSocial"]).subscribe((res) => {
-        this.clientName = res.data.client.raisonSocial;
-        this.clientCode = res.data.client.code;
-      });
+      this.clientsService
+        .getOne_v2(this.clientID, ["code", "raisonSocial"])
+        .subscribe((res) => {
+          this.clientName = res.data.client.raisonSocial;
+          this.clientCode = res.data.client.code;
+        });
     }
     this.currCompanyID = this.currentCompanyService.getCompany().id;
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   private updateData(columns: GridColumn[]) {
@@ -77,12 +85,11 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
           this.entrepotsService.getDataSource_v2([
             Entrepot.getKeyField() as string,
             ...fields,
-          ]),
-        ),
+          ])
+        )
       )
       .subscribe((datasource) => {
-        if (this.clientID)
-          datasource.filter(["client.id", "=", this.clientID]);
+        if (this.clientID) datasource.filter(["client.id", "=", this.clientID]);
         this.dataGrid.dataSource = datasource;
       });
   }
@@ -95,9 +102,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
     this.router.navigate([`/pages/tiers/entrepots/${e.data.id}`]);
   }
   onCreate() {
-    this.router.navigate([
-      `/pages/tiers/entrepots/create/${this.clientID}`,
-    ]);
+    this.router.navigate([`/pages/tiers/entrepots/create/${this.clientID}`]);
   }
   onRowPrepared(e) {
     this.gridRowStyleService.applyGridRowStyle(e);

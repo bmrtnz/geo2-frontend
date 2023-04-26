@@ -3,9 +3,16 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
-import { OrdreLignesService, SummaryOperation } from "app/shared/services/api/ordres-lignes.service";
+import {
+  OrdreLignesService,
+  SummaryOperation,
+} from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -19,7 +26,7 @@ import { GridsService } from "../grids.service";
 @Component({
   selector: "app-grid-marge",
   templateUrl: "./grid-marge.component.html",
-  styleUrls: ["./grid-marge.component.scss"]
+  styleUrls: ["./grid-marge.component.scss"],
 })
 export class GridMargeComponent implements AfterViewInit, ToggledGrid {
   @Input() public ordre: Ordre;
@@ -39,10 +46,12 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
     private gridsService: GridsService,
     private functionsService: FunctionsService,
     public localizeService: LocalizationService,
-    private currentCompanyService: CurrentCompanyService,
+    private currentCompanyService: CurrentCompanyService
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreMarge);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.OrdreMarge
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngAfterViewInit() {
@@ -50,7 +59,6 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
   }
 
   async enableFilters() {
-
     const summaryInputs: SummaryInput[] = [
       { selector: "totalAchat", summaryType: SummaryType.SUM },
       { selector: "totalCourtage", summaryType: SummaryType.SUM },
@@ -68,44 +76,49 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
     ];
 
     const columns = await this.columns.toPromise();
-    const fields = columns.map(column => column.dataField);
+    const fields = columns.map((column) => column.dataField);
 
-    this.dataSource = this.ordreLignesService
-      .getSummarisedDatasource(SummaryOperation.Marge, fields, summaryInputs);
+    this.dataSource = this.ordreLignesService.getSummarisedDatasource(
+      SummaryOperation.Marge,
+      fields,
+      summaryInputs
+    );
 
-    this.totalItems = summaryInputs
-      .map(({ selector: column, summaryType }, index) => ({
+    this.totalItems = summaryInputs.map(
+      ({ selector: column, summaryType }, index) => ({
         column,
         summaryType,
-        displayFormat: !index ? this.localizeService.localize("totaux") + " : {0}" : "{0}",
-        valueFormat: columns
-          ?.find(({ dataField }) => dataField === column)
+        displayFormat: !index
+          ? this.localizeService.localize("totaux") + " : {0}"
+          : "{0}",
+        valueFormat: columns?.find(({ dataField }) => dataField === column)
           ?.format,
-      }));
+      })
+    );
 
     if (this?.ordre?.id)
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
-
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Higlight important columns
-      if ([
-        "pourcentageMargeBrute",
-        "pourcentageMargeNette"
-      ].includes(e.column.dataField)) {
+      if (
+        ["pourcentageMargeBrute", "pourcentageMargeNette"].includes(
+          e.column.dataField
+        )
+      ) {
         // Bold text
         e.cellElement.classList.add("grey-light");
       }
     }
     if (e.rowType === "totalFooter") {
-      if ([
-        "pourcentageMargeBrute",
-        "pourcentageMargeNette"
-      ].includes(e.column.dataField)) {
-        if (e.cellElement.innerText === "NaN")
-          e.cellElement.innerText = "- %";
+      if (
+        ["pourcentageMargeBrute", "pourcentageMargeNette"].includes(
+          e.column.dataField
+        )
+      ) {
+        if (e.cellElement.innerText === "NaN") e.cellElement.innerText = "- %";
       }
     }
   }
@@ -115,15 +128,18 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
   }
 
   onToggling(toggled: boolean) {
-
     if (toggled && this?.ordre?.id) {
-      this.functionsService.fCalculMargePrevi(this.ordre.id, this.currentCompanyService.getCompany().id).subscribe({
-        error: ({ message }: Error) => console.log(message),
-        complete: () => this.enableFilters(),
-      });
+      this.functionsService
+        .fCalculMargePrevi(
+          this.ordre.id,
+          this.currentCompanyService.getCompany().id
+        )
+        .subscribe({
+          error: ({ message }: Error) => console.log(message),
+          complete: () => this.enableFilters(),
+        });
     } else {
       this.dataSource = null;
     }
-
   }
 }

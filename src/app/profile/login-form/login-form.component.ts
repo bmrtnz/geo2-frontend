@@ -1,5 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
@@ -36,8 +40,8 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private utilisateursService: UtilisateursService,
-    public versionService: VersionService,
-  ) { }
+    public versionService: VersionService
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -64,19 +68,25 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
     const lastUserName = this.authService.lastUsername;
     const userName = this.form.get("nomUtilisateur").value;
 
-    this.route.queryParams.pipe(
-      concatMap(params => this.authService
-        .logIn(userName, this.form.get("password").value, params.redirect)),
-    ).subscribe({
-      next: () => {
-        this.form.patchValue({ password: "" });
-        this.authService.showWelcome();
-        // Different user? Back home to avoid non consistent data
-        if (userName !== lastUserName)
-          this.router.navigate([`/**`]);
-      },
-      error: () => this.authService.loginError(),
-    });
+    this.route.queryParams
+      .pipe(
+        concatMap((params) =>
+          this.authService.logIn(
+            userName,
+            this.form.get("password").value,
+            params.redirect
+          )
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.form.patchValue({ password: "" });
+          this.authService.showWelcome();
+          // Different user? Back home to avoid non consistent data
+          if (userName !== lastUserName) this.router.navigate([`/**`]);
+        },
+        error: () => this.authService.loginError(),
+      });
   }
 
   findAssociatedCompanies() {
@@ -91,17 +101,13 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
       .getOne(
         this.form.get("nomUtilisateur").value,
         this.form.get("password").value,
-        ["perimetre"],
+        ["perimetre"]
       )
       .pipe(
         catchError((err: any) => {
-          notify(
-            "Utilisateur/Mot de passe non reconnus",
-            "error",
-            3000,
-          );
+          notify("Utilisateur/Mot de passe non reconnus", "error", 3000);
           return throwError(err);
-        }),
+        })
       )
       .subscribe((response) => {
         const perimetre = response.data.utilisateur.perimetre;
@@ -126,8 +132,7 @@ export class LoginFormComponent implements OnInit, AfterViewInit {
           this.societe.load().then((res) => {
             this.companiesLoading = false;
             this.showHideSubmitSociete(res.length);
-            if (!res.length)
-              notify("Aucune société disponible", "error", 3000);
+            if (!res.length) notify("Aucune société disponible", "error", 3000);
           });
         } else {
           notify("Aucun périmètre société associé", "error", 3000);

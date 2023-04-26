@@ -71,8 +71,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild("switchEntity", { static: false }) switchEntity: DxSwitchComponent;
-  @ViewChild(AjustDecomptePaloxPopupComponent, { static: false }) ajustDecPopup: AjustDecomptePaloxPopupComponent;
-
+  @ViewChild(AjustDecomptePaloxPopupComponent, { static: false })
+  ajustDecPopup: AjustDecomptePaloxPopupComponent;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>[];
@@ -85,7 +85,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     fournisseur: new UntypedFormControl(),
     commercial: new UntypedFormControl(),
     dateMaxMouvements: new UntypedFormControl(
-      this.dateManagementService.startOfDay(),
+      this.dateManagementService.startOfDay()
     ),
   } as Inputs<UntypedFormControl>);
 
@@ -106,7 +106,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,
-    public currentCompanyService: CurrentCompanyService,
+    public currentCompanyService: CurrentCompanyService
   ) {
     this.validRequiredEntity = {
       client: true,
@@ -122,8 +122,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       [
         ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
         "and",
-        ["client.secteur.id", "=", "PAL"]
-      ]
+        ["client.secteur.id", "=", "PAL"],
+      ],
     ]);
     this.fournisseur = this.fournisseursService.getDataSource_v2([
       "id",
@@ -133,7 +133,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     this.fournisseur.filter([
       ["consignePaloxUdc", "=", true],
       "or",
-      ["consignePaloxSa", "=", true]
+      ["consignePaloxSa", "=", true],
     ]);
     this.commercial = this.personnesService.getDataSource_v2([
       "id",
@@ -160,7 +160,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       .map((g) => from(g).pipe(map((config) => config.columns)));
 
     const fields = this.columns.map((c) =>
-      c.pipe(map((columns) => columns.map((column) => column.dataField))),
+      c.pipe(map((columns) => columns.map((column) => column.dataField)))
     );
 
     this.datasources = await Promise.all(
@@ -172,16 +172,13 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       ].map(async (m, i) =>
         this.supervisionPaloxsService.getListDataSource(
           await fields[i].toPromise(),
-          m,
-        ),
-      ),
+          m
+        )
+      )
     );
 
-    this.formGroup.valueChanges.subscribe((_) => this.toRefresh = true);
-    if (
-      !this.authService.isAdmin &&
-      this.authService.currentUser?.commercial
-    )
+    this.formGroup.valueChanges.subscribe((_) => (this.toRefresh = true));
+    if (!this.authService.isAdmin && this.authService.currentUser?.commercial)
       this.formGroup
         .get("commercial")
         .setValue(this.authService.currentUser.commercial);
@@ -194,8 +191,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       codeSociete: this.currentCompanyService.getCompany().id,
       codeCommercial: values.commercial?.id,
       codeEntrepot: this.switchEntity.value ? null : values.entrepot?.id,
-      codeFournisseur: this.switchEntity.value ? values.fournisseur?.code : null,
-      dateMaxMouvements: this.dateManagementService.endOfDay(values.dateMaxMouvements),
+      codeFournisseur: this.switchEntity.value
+        ? values.fournisseur?.code
+        : null,
+      dateMaxMouvements: this.dateManagementService.endOfDay(
+        values.dateMaxMouvements
+      ),
     });
     const index = this.getActiveGridIndex();
     this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
@@ -218,7 +219,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     //     ["sortie", "<>", 0],
     //   ]
     // ]);
-
   }
 
   onRowDblClick({ data }: { data: Ordre }) {
@@ -229,12 +229,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -263,25 +263,34 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         e.column.dataField === "dateDepartOrdre"
       ) {
         if (e.value)
-          e.cellElement.innerText =
-            this.dateManagementService.formatDate(
-              e.value,
-              "dd-MM-yyyy",
-            );
+          e.cellElement.innerText = this.dateManagementService.formatDate(
+            e.value,
+            "dd-MM-yyyy"
+          );
       }
       if (e.column.dataField === "sommeQuantiteInventaire") {
-        e.cellElement.innerText = e.data.entree - e.data.sortie - e.data.quantiteInventaire;
+        e.cellElement.innerText =
+          e.data.entree - e.data.sortie - e.data.quantiteInventaire;
         e.cellElement.classList.add("bold-text");
       }
     }
 
     // Highlight groups
     if (e.rowType === "group") {
-      if ((this.switchEntity.value ? "codeFournisseur" : ["codeClient"]).includes(e.column.dataField))
+      if (
+        (this.switchEntity.value ? "codeFournisseur" : ["codeClient"]).includes(
+          e.column.dataField
+        )
+      )
         e.cellElement.classList.add("group-palox-header");
       if (e.column.dataField === "codeEmballage")
         e.cellElement.classList.add("subgroup-palox-header");
-      if ((!this.switchEntity.value ? "codeFournisseur" : ["codeClient", "codeEntrepot"]).includes(e.column.dataField))
+      if (
+        (!this.switchEntity.value
+          ? "codeFournisseur"
+          : ["codeClient", "codeEntrepot"]
+        ).includes(e.column.dataField)
+      )
         e.cellElement.classList.add("subgroup2-palox-header");
     }
   }
@@ -292,8 +301,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     data = data.items?.length ? data.items[0] : data.collapsedItems[0];
     const entDS = this.entrepotsService.getDataSource_v2(["id"]);
     entDS.filter(["code", "=", data.codeEntrepot]);
-    await entDS.load().then(res => idEntrepot = res[0]?.id);
-    if (idEntrepot === "" || !idEntrepot) return notify("Erreur ID entrepôt", "error", 3000);
+    await entDS.load().then((res) => (idEntrepot = res[0]?.id));
+    if (idEntrepot === "" || !idEntrepot)
+      return notify("Erreur ID entrepôt", "error", 3000);
     this.info = {
       entrepotId: idEntrepot,
       entrepotCode: data.codeEntrepot,
@@ -301,13 +311,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       codeClient: data.codeClient,
       paloxCode: data.codeEmballage,
       raisonSocialeFournisseur: data.raisonSocialeFournisseur,
-      codeEspece: data.codeEspece
+      codeEspece: data.codeEspece,
     };
     this.ajustDecPopup.show();
   }
 
   onValidatePaloxPopup(e) {
-
     if (this.paloxPopupPurpose === "adjust") {
       // Adjustment
       this.supervisionPaloxsService
@@ -326,11 +335,22 @@ export class SupervisionComptesPaloxComponent implements OnInit {
           next: (result) => {
             const data = result.data.fAjustPalox;
             if (data.res === 2)
-              return alert(data.msg, this.localization.localize("text-popup-ajust-palox"));
+              return alert(
+                data.msg,
+                this.localization.localize("text-popup-ajust-palox")
+              );
             this.enableFilters();
-            notify(this.localization.localize("text-popup-ajust-palox-ok"), "success", 3000);
+            notify(
+              this.localization.localize("text-popup-ajust-palox-ok"),
+              "success",
+              3000
+            );
           },
-          error: (error: Error) => alert(this.messageFormat(error.message), this.localization.localize("text-popup-ajust-palox"))
+          error: (error: Error) =>
+            alert(
+              this.messageFormat(error.message),
+              this.localization.localize("text-popup-ajust-palox")
+            ),
         });
     } else {
       // Inventory
@@ -346,56 +366,111 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         )
         .subscribe({
           next: () => {
-            notify(this.localization.localize("text-popup-inventaire-palox-ok"), "success", 3000);
+            notify(
+              this.localization.localize("text-popup-inventaire-palox-ok"),
+              "success",
+              3000
+            );
             this.enableFilters();
           },
           error: (error: Error) => {
-            alert(this.messageFormat(error.message), this.localization.localize("text-popup-inventaire-palox"));
-          }
+            alert(
+              this.messageFormat(error.message),
+              this.localization.localize("text-popup-inventaire-palox")
+            );
+          },
         });
     }
   }
 
   private messageFormat(mess) {
-    const functionNames = [
-      "fDecomptePalox",
-      "fAjustPalox"
-    ];
-    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    const functionNames = ["fDecomptePalox", "fAjustPalox"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
 
   getInventoryData(e) {
-    if ((!this.switchEntity.value && !this.switchType.value) || (this.switchType.value && this.switchEntity.value)) {
+    if (
+      (!this.switchEntity.value && !this.switchType.value) ||
+      (this.switchType.value && this.switchEntity.value)
+    ) {
       if (e.items?.length)
-        return e.items[0].codeFournisseur + " - " + e.items[0].raisonSocialeFournisseur;
+        return (
+          e.items[0].codeFournisseur +
+          " - " +
+          e.items[0].raisonSocialeFournisseur
+        );
       if (e.collapsedItems?.length)
-        return e.collapsedItems[0].codeFournisseur + " - " + e.collapsedItems[0].raisonSocialeFournisseur;
+        return (
+          e.collapsedItems[0].codeFournisseur +
+          " - " +
+          e.collapsedItems[0].raisonSocialeFournisseur
+        );
     } else {
       if (e.items?.length)
-        return e.items[0].codeEntrepot + " - " + e.items[0].raisonSocialeEntrepot;
+        return (
+          e.items[0].codeEntrepot + " - " + e.items[0].raisonSocialeEntrepot
+        );
       if (e.collapsedItems?.length)
-        return e.collapsedItems[0].codeEntrepot + " - " + e.collapsedItems[0].raisonSocialeEntrepot;
+        return (
+          e.collapsedItems[0].codeEntrepot +
+          " - " +
+          e.collapsedItems[0].raisonSocialeEntrepot
+        );
     }
     return "";
   }
 
   inventoryDate(e) {
-    if ((!this.switchEntity.value && !this.switchType.value) || (this.switchType.value && this.switchEntity.value)) {
+    if (
+      (!this.switchEntity.value && !this.switchType.value) ||
+      (this.switchType.value && this.switchEntity.value)
+    ) {
       if (e.items?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
-          " (" + e.items[0].quantiteInventaire + ")";
+        return (
+          this.dateManagementService.formatDate(
+            e.items[0].dateInventaire,
+            "dd-MM-yyyy"
+          ) +
+          " (" +
+          e.items[0].quantiteInventaire +
+          ")"
+        );
       if (e.collapsedItems?.length)
-        return this.dateManagementService.formatDate(e.collapsedItems[0].dateInventaire, "dd-MM-yyyy") +
-          " (" + e.collapsedItems[0].quantiteInventaire + ")";
+        return (
+          this.dateManagementService.formatDate(
+            e.collapsedItems[0].dateInventaire,
+            "dd-MM-yyyy"
+          ) +
+          " (" +
+          e.collapsedItems[0].quantiteInventaire +
+          ")"
+        );
     } else {
       if (e.items?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
-          " (" + e.items[0].quantiteInventaire + ")";
+        return (
+          this.dateManagementService.formatDate(
+            e.items[0].dateInventaire,
+            "dd-MM-yyyy"
+          ) +
+          " (" +
+          e.items[0].quantiteInventaire +
+          ")"
+        );
       if (e.collapsedItems?.length)
-        return this.dateManagementService.formatDate(e.items[0].dateInventaire, "dd-MM-yyyy") +
-          " (" + e.items[0].quantiteInventaire + ")";
+        return (
+          this.dateManagementService.formatDate(
+            e.items[0].dateInventaire,
+            "dd-MM-yyyy"
+          ) +
+          " (" +
+          e.items[0].quantiteInventaire +
+          ")"
+        );
     }
     return "";
   }
@@ -405,8 +480,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   getSoldeData(e) {
-    if (e.items?.length)
-      return "Solde : " + e.items[0].sommeQuantiteInventaire;
+    if (e.items?.length) return "Solde : " + e.items[0].sommeQuantiteInventaire;
     if (e.collapsedItems?.length)
       return "Solde : " + e.collapsedItems[0].sommeQuantiteInventaire;
   }
@@ -422,10 +496,9 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     const index = this.getActiveGridIndex();
     const datagrid = this.paloxGrids.toArray()[index];
     if (!datagrid) return;
-    datagrid.instance.option(
-      "grouping",
-      { autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll }
-    );
+    datagrid.instance.option("grouping", {
+      autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll,
+    });
   }
 
   public calculateCustomSummary(options) {
@@ -433,12 +506,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       if (options.summaryProcess === "start") {
         options.totalValue = 0;
       } else if (options.summaryProcess === "calculate") {
-        if (!options.totalValue) options.totalValue = options.value.quantiteInventaire;
+        if (!options.totalValue)
+          options.totalValue = options.value.quantiteInventaire;
         options.totalValue += options.value.sortie - options.value.entree;
       }
     }
   }
-
 }
 
 export default SupervisionComptesPaloxComponent;

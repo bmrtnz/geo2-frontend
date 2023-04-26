@@ -1,7 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ClientsService, LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxScrollViewComponent, DxDataGridComponent } from "devextreme-angular";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  DxPopupComponent,
+  DxScrollViewComponent,
+  DxDataGridComponent,
+} from "devextreme-angular";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { from, Observable } from "rxjs";
 import DataSource from "devextreme/data/data_source";
@@ -11,20 +26,19 @@ import Ordre from "app/shared/models/ordre.model";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import notify from "devextreme/ui/notify";
 
-
 @Component({
   selector: "app-selection-compte-palox-popup",
   templateUrl: "./selection-compte-palox-popup.component.html",
-  styleUrls: ["./selection-compte-palox-popup.component.scss"]
+  styleUrls: ["./selection-compte-palox-popup.component.scss"],
 })
 export class SelectionComptePaloxPopupComponent implements OnChanges {
-
   @Input() ordre: Partial<Ordre>;
   @Output() selectedClient = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -42,8 +56,10 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.ComptePalox);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.ComptePalox
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.hintNotValid = this.localizeService.localize("hint-not-valid-client");
   }
 
@@ -66,26 +82,35 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
   }
 
   onRowDblClick(e) {
-    const client = { id: this.ordre.client.id, paloxRaisonSocial: { id: e.data.id } };
-    this.clientsService.save_v2(["paloxRaisonSocial.id"], { client }).subscribe({
-      next: () => this.quitPopup(e.data.id),
-      error: ({ message }: Error) => {
-        notify(`Échec de l'enregistrement du compte Palox : ${message}`, "error", 7000);
-      },
-    });
+    const client = {
+      id: this.ordre.client.id,
+      paloxRaisonSocial: { id: e.data.id },
+    };
+    this.clientsService
+      .save_v2(["paloxRaisonSocial.id"], { client })
+      .subscribe({
+        next: () => this.quitPopup(e.data.id),
+        error: ({ message }: Error) => {
+          notify(
+            `Échec de l'enregistrement du compte Palox : ${message}`,
+            "error",
+            7000
+          );
+        },
+      });
   }
 
   setTitle() {
-    if (this.ordre?.id) this.title =
-      this.localizeService.localize("title-selection-cpte-palox");
+    if (this.ordre?.id)
+      this.title = this.localizeService.localize("title-selection-cpte-palox");
   }
 
   async enableFilters() {
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
     this.dataSource = this.clientsService.getDataSource_v2(
-      await fields.toPromise(),
+      await fields.toPromise()
     );
     this.dataSource.filter([
       ["secteur.id", "=", "PAL"],
@@ -96,7 +121,9 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("selection-compte-palox-popup");
+    e.component
+      .content()
+      .parentNode.classList.add("selection-compte-palox-popup");
   }
 
   onShown() {
@@ -112,5 +139,4 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
     this.selectedClient.emit(errorMessage);
     this.popup.visible = false;
   }
-
 }

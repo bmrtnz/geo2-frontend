@@ -1,9 +1,7 @@
 <div class="content-block">
   <h2>
     {{ "tiers-contacts-title" | localize
-    }}<span
-      *ngIf="!zoomMode"
-    >
+    }}<span *ngIf="!zoomMode">
       - {{ typeTiersLabel | localize }} {{ codeTiers }}</span
     >
   </h2>
@@ -81,9 +79,7 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [allowEditing]="
-        column.name !== 'valide' &&
-        column?.allowEditing !== false &&
-        !zoomMode
+        column.name !== 'valide' && column?.allowEditing !== false && !zoomMode
       "
       [validationRules]="column.validationRules"
       [editCellTemplate]="
@@ -108,7 +104,7 @@
         [readOnly]="
           (cell?.data?.flux?.id === 'FACTUR' &&
             !authService.currentUser.adminClient) ||
-            zoomMode
+          zoomMode
         "
         [dataSource]="this[cell.column.dataField + 'Source']"
         [displayExpr]="

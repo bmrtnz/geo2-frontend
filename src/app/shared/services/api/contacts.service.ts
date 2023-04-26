@@ -22,15 +22,12 @@ export class ContactsService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll_v2(columns);
             type Response = { allContact: RelayPage<Contact> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
             this.listenQuery<Response>(
               query,
@@ -40,12 +37,8 @@ export class ContactsService extends ApiService implements APIRead {
               },
               (res) => {
                 if (res.data && res.data.allContact)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allContact,
-                    ),
-                  );
-              },
+                  resolve(this.asInstancedListCount(res.data.allContact));
+              }
             );
           }),
         byKey: (key) =>
@@ -53,14 +46,10 @@ export class ContactsService extends ApiService implements APIRead {
             const query = await this.buildGetOne_v2(columns);
             type Response = { contact: Contact };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.contact)
-                  resolve(new Contact(res.data.contact));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.contact)
+                resolve(new Contact(res.data.contact));
+            });
           }),
         insert: (values) => {
           const variables = { contact: values };
@@ -72,7 +61,9 @@ export class ContactsService extends ApiService implements APIRead {
         },
         remove: (key) => {
           const variables = { id: key };
-          return this.watchDeleteQuery({ variables }).toPromise() as unknown as PromiseLike<void>;
+          return this.watchDeleteQuery({
+            variables,
+          }).toPromise() as unknown as PromiseLike<void>;
         },
       }),
     });

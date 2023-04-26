@@ -5,7 +5,7 @@ import config from "devextreme/core/config";
   providedIn: "root",
 })
 export class CurrentCompanyService {
-  constructor() { }
+  constructor() {}
 
   getCompany() {
     const data = window.sessionStorage.getItem("companyStorage");
@@ -17,10 +17,7 @@ export class CurrentCompanyService {
   }
 
   setCompany(societe) {
-    window.sessionStorage.setItem(
-      "companyStorage",
-      JSON.stringify(societe),
-    );
+    window.sessionStorage.setItem("companyStorage", JSON.stringify(societe));
     this.initializeLogoAndOthers(societe);
     return;
   }
@@ -33,8 +30,8 @@ export class CurrentCompanyService {
       list.setAttribute(
         "style",
         "background-color: " +
-        this.stringToHexaColor(societe.raisonSocial) +
-        ";",
+          this.stringToHexaColor(societe.raisonSocial) +
+          ";"
       );
     }
   }

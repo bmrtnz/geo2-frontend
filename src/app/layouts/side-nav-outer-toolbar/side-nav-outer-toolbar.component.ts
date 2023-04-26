@@ -49,8 +49,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
   constructor(
     private screen: ScreenService,
     private router: Router,
-    private validationService: ValidationService,
-  ) { }
+    private validationService: ValidationService
+  ) {}
 
   ngOnInit() {
     this.filterMenuItems();
@@ -87,7 +87,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
     }
     // Sticky order scroll buttons
     const orderScrollBtns = document.querySelector(
-      ".tabs-ordres-page .dx-item-selected .form-scrollTo-buttons-container",
+      ".tabs-ordres-page .dx-item-selected .form-scrollTo-buttons-container"
     ) as HTMLElement;
     if (orderScrollBtns) {
       const newPos = topValue > 100 ? topValue - 68 : 32;
@@ -125,7 +125,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
     pointerEvent.preventDefault();
 
-    if (path && this.menuOpened && !(path === "pages/ordres" && this.router.url.includes(path))) {
+    if (
+      path &&
+      this.menuOpened &&
+      !(path === "pages/ordres" && this.router.url.includes(path))
+    ) {
       this.router.navigateByUrl(path);
     }
 
@@ -147,7 +151,10 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
   menuToggle() {
     this.menuOpened = !this.menuOpened;
-    window.localStorage.setItem("HideMainDrawer", !this.menuOpened ? "true" : "false");
+    window.localStorage.setItem(
+      "HideMainDrawer",
+      !this.menuOpened ? "true" : "false"
+    );
   }
 
   navigationClick() {
@@ -176,4 +183,4 @@ export class SideNavOuterToolbarComponent implements OnInit {
   exports: [SideNavOuterToolbarComponent],
   declarations: [SideNavOuterToolbarComponent],
 })
-export class SideNavOuterToolbarModule { }
+export class SideNavOuterToolbarModule {}

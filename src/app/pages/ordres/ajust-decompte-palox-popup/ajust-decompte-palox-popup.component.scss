@@ -1,9 +1,7 @@
 // Var
 @import "themes/generated/variables.base";
 
-
 ::ng-deep .ajust-decompte-palox-popup {
-
   .dx-invalid-message {
     visibility: hidden !important;
   }
@@ -11,7 +9,6 @@
   .dx-state-disabled {
     opacity: 1 !important;
   }
-
 }
 
 .popup-action {
@@ -20,7 +17,7 @@
   left: 50%;
   transform: translateX(-50%);
 
-  &>.dx-button {
+  & > .dx-button {
     margin-left: 10px;
   }
 }

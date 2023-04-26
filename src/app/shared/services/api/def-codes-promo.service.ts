@@ -9,7 +9,6 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
   providedIn: "root",
 })
 export class DefCodesPromoService extends ApiService implements APIRead {
-
   constructor(apollo: Apollo) {
     super(apollo, DefCodePromo);
     this.gqlKeyType = "GeoDefCodePromoIdInput";
@@ -25,28 +24,17 @@ export class DefCodesPromoService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll_v2(columns);
             type Response = { allDefCodePromo: RelayPage<DefCodePromo> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allDefCodePromo)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allDefCodePromo,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allDefCodePromo)
+                resolve(this.asInstancedListCount(res.data.allDefCodePromo));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
@@ -54,20 +42,16 @@ export class DefCodesPromoService extends ApiService implements APIRead {
             type Response = { defCodePromo: DefCodePromo };
             const id = key
               ? {
-                codePromo: key.codePromoId || "",
-                espece: key.especeId || "",
-                variete: key.varieteId || "",
-              }
+                  codePromo: key.codePromoId || "",
+                  espece: key.especeId || "",
+                  variete: key.varieteId || "",
+                }
               : {};
             const variables = { id };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.defCodePromo)
-                  resolve(new DefCodePromo(res.data.defCodePromo));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.defCodePromo)
+                resolve(new DefCodePromo(res.data.defCodePromo));
+            });
           }),
       }),
     });

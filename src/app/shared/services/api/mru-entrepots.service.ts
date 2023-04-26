@@ -6,7 +6,7 @@ import { LoadOptions } from "devextreme/data/load_options";
 import { AuthService } from "app/shared/services";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
-import DataSource from 'devextreme/data/data_source';
+import DataSource from "devextreme/data/data_source";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
     private currentCompanyService: CurrentCompanyService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     super(apollo, MRUEntrepot);
     this.gqlKeyType = "GeoMRUEntrepotKeyInput";
@@ -30,30 +30,19 @@ export class MruEntrepotsService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allMRUEntrepot: RelayPage<MRUEntrepot>;
             };
             const query = await this.buildGetAll(2);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allMRUEntrepot)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allMRUEntrepot,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allMRUEntrepot)
+                resolve(this.asInstancedListCount(res.data.allMRUEntrepot));
+            });
           }),
         byKey: this.byKey as any,
       }),
@@ -89,7 +78,7 @@ export class MruEntrepotsService extends ApiService implements APIRead {
           type: `GeoMRUEntrepotInput`,
           isOptionnal: false,
         },
-      ],
+      ]
     );
   }
 
@@ -100,18 +89,12 @@ export class MruEntrepotsService extends ApiService implements APIRead {
       },
       codeEntrepot: entrepot.code,
       entrepot: { id: entrepot.id },
-      societe: { id: this.currentCompanyService.getCompany().id }
+      societe: { id: this.currentCompanyService.getCompany().id },
     };
 
-    this.save_v2(
-      [
-        "entrepot.id",
-        "utilisateur.nomUtilisateur",
-      ],
-      {
-        mruEntrepot,
-      },
-    ).subscribe({
+    this.save_v2(["entrepot.id", "utilisateur.nomUtilisateur"], {
+      mruEntrepot,
+    }).subscribe({
       error: (err) => console.log("Échec de la sauvegarde MRU Entrepot", err),
     });
   }
@@ -154,29 +137,22 @@ export class MruEntrepotsService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allMRUEntrepot: RelayPage<MRUEntrepot>;
             };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
             this.listenQuery<Response>(
               query,
-              { variables, fetchPolicy: "no-cache", },
+              { variables, fetchPolicy: "no-cache" },
               (res) => {
                 if (res.data && res.data.allMRUEntrepot)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allMRUEntrepot,
-                    ),
-                  );
-              },
+                  resolve(this.asInstancedListCount(res.data.allMRUEntrepot));
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -186,21 +162,33 @@ export class MruEntrepotsService extends ApiService implements APIRead {
 
   deleteOne(entrepotId: string) {
     return this.apollo.mutate({
-      mutation: gql(ApiService.buildGraph("mutation", [{
-        name: "deleteOneMRUEntrepot",
-        params: [{ name: "entrepotId", value: "entrepotId", isVariable: true }],
-      }], [
-        { name: "entrepotId", type: "String", isOptionnal: false },
-      ])),
+      mutation: gql(
+        ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: "deleteOneMRUEntrepot",
+              params: [
+                { name: "entrepotId", value: "entrepotId", isVariable: true },
+              ],
+            },
+          ],
+          [{ name: "entrepotId", type: "String", isOptionnal: false }]
+        )
+      ),
       variables: { entrepotId },
     });
   }
 
   deleteAll() {
     return this.apollo.mutate({
-      mutation: gql(ApiService.buildGraph("mutation", [{
-        name: "deleteAllMRUEntrepot",
-      }])),
+      mutation: gql(
+        ApiService.buildGraph("mutation", [
+          {
+            name: "deleteAllMRUEntrepot",
+          },
+        ])
+      ),
     });
   }
 }

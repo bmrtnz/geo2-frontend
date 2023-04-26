@@ -3,11 +3,10 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-cq-photos {
-
   // Override focus blue color from grid
   .small-CQ-button.download-photos.dx-button.dx-button-success.dx-button-mode-contained.dx-widget.dx-button-has-icon.dx-button-has-text {
     .dx-icon {
-      color: #FFF !important;
+      color: #fff !important;
     }
   }
 
@@ -37,15 +36,13 @@
         margin-right: 2px;
       }
     }
-
   }
-
 }
 
 ::ng-deep .photo-container {
   position: relative;
   max-width: 100%;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 
   img {
     position: relative;

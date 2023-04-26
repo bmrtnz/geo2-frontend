@@ -2,7 +2,6 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-
 ::ng-deep .down-move-button,
 .up-move-button {
   position: absolute;
@@ -16,7 +15,6 @@
 }
 
 ::ng-deep .grid-commandes {
-
   .small-stock-button {
     margin-top: -1px !important;
     pointer-events: none !important;
@@ -34,7 +32,6 @@
   }
 
   .dx-row-focused {
-
     .bio-article {
       color: #39970e !important;
     }
@@ -82,7 +79,6 @@
   }
 
   .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
-
     input,
     div {
       color: #fff;
@@ -106,14 +102,17 @@
     background: rgba(51, 145, 176, 0.26);
   }
 
-  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(.dx-cell-modified) {
+  .dx-row-focused.dx-data-row
+    > td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(
+      .dx-cell-modified
+    ) {
     color: #000;
     background-color: transparent !important;
   }
 
   .dx-row-focused td.dx-command-select {
     .dx-checkbox-icon {
-      border-color: #FFF !important;
+      border-color: #fff !important;
     }
   }
 
@@ -125,14 +124,14 @@
     }
   }
 
-  .dx-row-focused.dx-data-row>td {
+  .dx-row-focused.dx-data-row > td {
     &.dx-cell-modified {
-      background-color: #DBECCA !important;
+      background-color: #dbecca !important;
       color: #000;
     }
 
     &.dx-focused {
-      background-color: #CAE3EB !important;
+      background-color: #cae3eb !important;
     }
   }
 
@@ -140,7 +139,7 @@
     text-align: center !important;
   }
 
-  .dx-row-focused.dx-data-row>td {
+  .dx-row-focused.dx-data-row > td {
     border-bottom-color: $base-accent !important;
   }
 
@@ -180,7 +179,6 @@
       }
     }
   }
-
 }
 
 ::ng-deep .cursor-pointer,
@@ -223,6 +221,5 @@
       border: none;
       float: right;
     }
-
   }
 }

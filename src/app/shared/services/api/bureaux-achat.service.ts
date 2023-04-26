@@ -24,52 +24,29 @@ export class BureauxAchatService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll(1, this.listRegexp);
             type Response = {
               allBureauAchat: RelayPage<BureauAchat>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allBureauAchat)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allBureauAchat,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allBureauAchat)
+                resolve(this.asInstancedListCount(res.data.allBureauAchat));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
-            const query = await this.buildGetOne(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetOne(1, this.listRegexp);
             type Response = { bureauAchat: BureauAchat };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.bureauAchat)
-                  resolve(
-                    new BureauAchat(res.data.bureauAchat),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.bureauAchat)
+                resolve(new BureauAchat(res.data.bureauAchat));
+            });
           }),
       }),
     });
@@ -97,30 +74,19 @@ export class BureauxAchatService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allBureauAchat: RelayPage<BureauAchat>;
             };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allBureauAchat) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allBureauAchat,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allBureauAchat) {
+                resolve(this.asInstancedListCount(res.data.allBureauAchat));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),

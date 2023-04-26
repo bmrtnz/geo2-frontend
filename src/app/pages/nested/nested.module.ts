@@ -13,19 +13,19 @@ import { EntrepotsModule } from "../tiers/entrepots/entrepots.module";
 import { EditingGuard } from "app/shared/guards/editing-guard";
 
 @NgModule({
-    declarations: [NestedComponent],
-    imports: [
-        SharedModule,
-        NestedRoutingModule,
-        GridNavigatorModule,
-        ClientsModule,
-        FournisseursModule,
-        TransporteursModule,
-        LieuxPassageAQuaiModule,
-        ArticlesModule,
-        TiersModule,
-        EntrepotsModule,
-    ],
-    providers: [EditingGuard],
+  declarations: [NestedComponent],
+  imports: [
+    SharedModule,
+    NestedRoutingModule,
+    GridNavigatorModule,
+    ClientsModule,
+    FournisseursModule,
+    TransporteursModule,
+    LieuxPassageAQuaiModule,
+    ArticlesModule,
+    TiersModule,
+    EntrepotsModule,
+  ],
+  providers: [EditingGuard],
 })
 export class NestedModule {}

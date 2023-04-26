@@ -77,7 +77,8 @@ enum descriptDetRegimeTva {
   styleUrls: ["./client-details.component.scss"],
 })
 export class ClientDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
+{
   private requiredFields = ["soumisCtifl"];
 
   preSaisie: string;
@@ -157,7 +158,7 @@ export class ClientDetailsComponent
     nbJourLimiteLitige: [""],
     detailAutomatique: [""],
     venteACommission: [""],
-    usageInterne: [""]
+    usageInterne: [""],
   });
   readonly inheritedFields = new Set([
     "id",
@@ -165,26 +166,33 @@ export class ClientDetailsComponent
     "valide",
     "preSaisie",
     "raisonSocial",
-    "societe.id", "societe.raisonSocial",
-    "secteur.id", "secteur.description",
+    "societe.id",
+    "societe.raisonSocial",
+    "secteur.id",
+    "secteur.description",
     "adresse1",
     "adresse2",
     "adresse3",
     "codePostal",
     "ville",
-    "pays.id", "pays.description",
+    "pays.id",
+    "pays.description",
     "facturationRaisonSocial",
     "facturationAdresse1",
     "facturationAdresse2",
     "facturationAdresse3",
     "facturationCodePostal",
     "facturationVille",
-    "facturationPays.id", "facturationPays.description",
-    "regimeTva.id", "regimeTva.description",
-    "incoterm.id", "incoterm.description",
+    "facturationPays.id",
+    "facturationPays.description",
+    "regimeTva.id",
+    "regimeTva.description",
+    "incoterm.id",
+    "incoterm.description",
     "nbJourEcheance",
     "echeanceLe",
-    "moyenPaiement.id", "moyenPaiement.description",
+    "moyenPaiement.id",
+    "moyenPaiement.description",
     "tvaCee",
     "controlReferenceClient",
     "commentaireHautFacture",
@@ -194,10 +202,13 @@ export class ClientDetailsComponent
     "blocageAvoirEdi",
     "ifco",
     "instructionLogistique",
-    "basePaiement.id", "basePaiement.description",
+    "basePaiement.id",
+    "basePaiement.description",
     "compteComptable",
-    "langue.id", "langue.description",
-    "devise.id", "devise.description",
+    "langue.id",
+    "langue.description",
+    "devise.id",
+    "devise.description",
     "enCoursTemporaire",
     "enCoursBlueWhale",
     "fraisMarketing",
@@ -205,22 +216,31 @@ export class ClientDetailsComponent
     "fraisExcluArticlePasOrigineFrance",
     "tauxRemiseParFacture",
     "tauxRemiseHorsFacture",
-    "commercial.id", "commercial.nomUtilisateur",
-    "assistante.id", "assistante.nomUtilisateur",
+    "commercial.id",
+    "commercial.nomUtilisateur",
+    "assistante.id",
+    "assistante.nomUtilisateur",
     "referenceCoface",
     "agrement",
-    "courtageModeCalcul.id", "courtageModeCalcul.description",
+    "courtageModeCalcul.id",
+    "courtageModeCalcul.description",
     "courtageValeur",
-    "conditionVente.id", "conditionVente.description",
-    "typeClient.id", "typeClient.description",
-    "typeVente.id", "typeVente.description",
-    "groupeClient.id", "groupeClient.description",
-    "paloxRaisonSocial.id", "paloxRaisonSocial.raisonSocial",
+    "conditionVente.id",
+    "conditionVente.description",
+    "typeClient.id",
+    "typeClient.description",
+    "typeVente.id",
+    "typeVente.description",
+    "groupeClient.id",
+    "groupeClient.description",
+    "paloxRaisonSocial.id",
+    "paloxRaisonSocial.raisonSocial",
     "paloxGratuit",
     "consignePalox",
     "releveFactures",
     "identifiantFiscal",
-    "courtier.id", "courtier.raisonSocial",
+    "courtier.id",
+    "courtier.raisonSocial",
     "soumisCtifl",
     "lieuFonctionEan",
     "delaiBonFacturer",
@@ -229,8 +249,11 @@ export class ClientDetailsComponent
     "fraisRamasse",
     "refusCoface",
     "enCoursDateLimite",
-    "certifications.id", "certifications.certification.id", "certifications.certification.description",
-    "fraisMarketingModeCalcul.id", "fraisMarketingModeCalcul.description",
+    "certifications.id",
+    "certifications.certification.id",
+    "certifications.certification.description",
+    "fraisMarketingModeCalcul.id",
+    "fraisMarketingModeCalcul.description",
     "formatDluo",
     "dateDebutIfco",
     "nbJourLimiteLitige",
@@ -241,7 +264,7 @@ export class ClientDetailsComponent
     "historique.valide",
     "historique.userModification",
     "historique.dateModification",
-    "typeTiers"
+    "typeTiers",
   ]);
 
   contentReadyEvent = new EventEmitter<any>();
@@ -268,8 +291,10 @@ export class ClientDetailsComponent
   modifListe: ModificationListComponent;
   @ViewChild(InfoPopupComponent, { static: true })
   infoComponent: InfoPopupComponent;
-  @ViewChild(OrderHistoryPopupComponent, { static: false }) orderHistoPopup: OrderHistoryPopupComponent;
-  @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
+  @ViewChild(OrderHistoryPopupComponent, { static: false })
+  orderHistoPopup: OrderHistoryPopupComponent;
+  @ViewChild(EncoursClientPopupComponent, { static: false })
+  encoursPopup: EncoursClientPopupComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
   editing = false;
@@ -309,7 +334,6 @@ export class ClientDetailsComponent
   couvTemp = false;
   initialFormState: any;
 
-
   constructor(
     private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
@@ -334,7 +358,7 @@ export class ClientDetailsComponent
     public validationService: ValidationService,
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -359,19 +383,18 @@ export class ClientDetailsComponent
   }
 
   ngOnChanges() {
-
     // Zoom client mode
     if (this.clientId) {
       this.formGroup.reset();
-      this.clientsService.getOne_v2(this.clientId, this.inheritedFields).subscribe((res) => {
-        this.afterLoadInitForm(res);
-      });
+      this.clientsService
+        .getOne_v2(this.clientId, this.inheritedFields)
+        .subscribe((res) => {
+          this.afterLoadInitForm(res);
+        });
     }
-
   }
 
   ngOnInit() {
-
     // Load different fields
     this.secteurs = this.secteursService.getDataSource();
     this.commercial = this.personnesService.getDataSource();
@@ -396,11 +419,7 @@ export class ClientDetailsComponent
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.typesClient = this.typesClientService.getDataSource();
     this.typesClient.filter(["valide", "=", "true"]);
@@ -449,9 +468,11 @@ export class ClientDetailsComponent
         this.createMode = url[url.length - 1].path === "create";
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.clientsService.getOne_v2(params.id, this.inheritedFields).subscribe((res) => {
-            this.afterLoadInitForm(res);
-          });
+          this.clientsService
+            .getOne_v2(params.id, this.inheritedFields)
+            .subscribe((res) => {
+              this.afterLoadInitForm(res);
+            });
         } else {
           // Apply default value
           this.client = new Client({
@@ -475,9 +496,7 @@ export class ClientDetailsComponent
           ]);
           this.tempData.load().then((res) => {
             if (res.length) {
-              this.formGroup
-                .get("commercial")
-                .setValue({ id: res[0].id });
+              this.formGroup.get("commercial").setValue({ id: res[0].id });
               this.formGroup.get("commercial").markAsDirty();
             }
           });
@@ -496,41 +515,36 @@ export class ClientDetailsComponent
           ]);
           this.tempData.load().then((res) => {
             if (res.length) {
-              this.formGroup
-                .get("assistante")
-                .setValue({ id: res[0].id });
+              this.formGroup.get("assistante").setValue({ id: res[0].id });
               this.formGroup.get("assistante").markAsDirty();
             }
           });
           // Set condit vente
-          this.formGroup
-            .get("conditionVente")
-            .setValue({ id: "COFREU" });
+          this.formGroup.get("conditionVente").setValue({ id: "COFREU" });
           this.formGroup.get("conditionVente").markAsDirty();
         }
         this.contentReadyEvent.emit();
       });
-
   }
 
   afterLoadInitForm(res) {
-
     this.client = res.data.client;
     // Règle changée Tina 16/09/2022
     // this.freeUEVAT(this.client.secteur, this.client.pays);
-    this.mandatoryUEVAT({ regimeTva: this.client.regimeTva, typeClient: this.client.typeClient });
+    this.mandatoryUEVAT({
+      regimeTva: this.client.regimeTva,
+      typeClient: this.client.typeClient,
+    });
     this.formGroup.get("tvaCee").markAsUntouched(); // Changing 'required' property marks as touched
     const certifications = this.mapCertificationsForDisplay(
-      this.client.certifications,
+      this.client.certifications
     );
     this.formGroup.patchValue({
       ...this.client,
       certifications,
     });
     this.initialFormState = this.formGroup.value; // Saving initial formGroup
-    this.preSaisie =
-      this.client.preSaisie === true ? "preSaisie" : "";
-
+    this.preSaisie = this.client.preSaisie === true ? "preSaisie" : "";
   }
 
   checkCode(params) {
@@ -544,11 +558,17 @@ export class ClientDetailsComponent
   checkCompteComptable(e) {
     const compteComptable = this.valueToUpperCase(e);
     if (!compteComptable) return;
-    const clientsSource = this.clientsService.getDataSource_v2(["id", "compteComptable"]);
+    const clientsSource = this.clientsService.getDataSource_v2([
+      "id",
+      "compteComptable",
+    ]);
     clientsSource.filter(["compteComptable", "=", compteComptable]);
     clientsSource
       .load()
-      .then((res) => this.CCexists = res.length && !(res.filter(r => r.id === this.client.id)?.length)
+      .then(
+        (res) =>
+          (this.CCexists =
+            res.length && !res.filter((r) => r.id === this.client.id)?.length)
       );
   }
 
@@ -571,12 +591,12 @@ export class ClientDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -646,7 +666,8 @@ export class ClientDetailsComponent
   }
 
   addModificationUserIds(userIdFromModifList) {
-    if (!this.modifUserIds.includes(userIdFromModifList)) this.modifUserIds.push(userIdFromModifList);
+    if (!this.modifUserIds.includes(userIdFromModifList))
+      this.modifUserIds.push(userIdFromModifList);
   }
 
   resetModifUserIds() {
@@ -657,7 +678,7 @@ export class ClientDetailsComponent
     if (!this.formGroup.pristine && this.formGroup.valid) {
       let client = this.formUtils.extractDirty(
         this.formGroup.controls,
-        Client.getKeyField(),
+        Client.getKeyField()
       );
 
       if (this.createMode) {
@@ -704,7 +725,7 @@ export class ClientDetailsComponent
               Client.name,
               this.client,
               this.formGroup,
-              "tiers-clients-",
+              "tiers-clients-"
             )
             .subscribe((e) => {
               this.modifListe.refreshList();
@@ -722,11 +743,7 @@ export class ClientDetailsComponent
                   },
                   error: (err) => {
                     console.log(err);
-                    notify(
-                      "Échec de la sauvegarde",
-                      "error",
-                      3000,
-                    );
+                    notify("Échec de la sauvegarde", "error", 3000);
                   },
                 });
             });
@@ -743,12 +760,12 @@ export class ClientDetailsComponent
     );
 
     (client.valide !== undefined &&
-      (this.client.valide !== client.valide || validModif) &&
-      !this.createMode
+    (this.client.valide !== client.valide || validModif) &&
+    !this.createMode
       ? this.validatePopup.present(HistoryType.CLIENT, {
-        client: { id: client.id },
-        valide: client.valide
-      })
+          client: { id: client.id },
+          valide: client.valide,
+        })
       : of(undefined)
     )
       .pipe(
@@ -758,8 +775,8 @@ export class ClientDetailsComponent
               ...client,
               certifications,
             },
-          }),
-        ),
+          })
+        )
       )
       .subscribe({
         next: (e) => {
@@ -821,10 +838,15 @@ export class ClientDetailsComponent
       if (e.value.id === "F") {
         this.formGroup.get("nbJourEcheance").setValue(30);
       }
-      if (e.value.id === "F" && this.currentCompanyService.getCompany().id === "SA") {
+      if (
+        e.value.id === "F" &&
+        this.currentCompanyService.getCompany().id === "SA"
+      ) {
         this.formGroup.get("fraisMarketing").patchValue(1);
         this.formGroup.get("fraisMarketing").markAsDirty();
-        this.formGroup.get("fraisMarketingModeCalcul").patchValue({ id: "PCENT" });
+        this.formGroup
+          .get("fraisMarketingModeCalcul")
+          .patchValue({ id: "PCENT" });
         this.formGroup.get("fraisMarketingModeCalcul").markAsDirty();
       }
     }
@@ -842,12 +864,17 @@ export class ClientDetailsComponent
         this.formGroup.get("code").setValue(PREORDRE + (currentCode ?? ""));
     } else {
       if (currentCode?.substring(0, PREORDRE.length) === PREORDRE)
-        this.formGroup.get("code").setValue(currentCode.replaceAll(PREORDRE, ""));
+        this.formGroup
+          .get("code")
+          .setValue(currentCode.replaceAll(PREORDRE, ""));
     }
   }
 
   onTypeClientChange(e) {
-    this.mandatoryUEVAT({ regimeTva: this.formGroup.get("regimeTva").value, typeClient: e.value });
+    this.mandatoryUEVAT({
+      regimeTva: this.formGroup.get("regimeTva").value,
+      typeClient: e.value,
+    });
   }
 
   onPaysChange(e) {
@@ -870,7 +897,9 @@ export class ClientDetailsComponent
     const typeClient = e?.typeClient?.id;
     // regTVA = E ou G, ou typeClient = ASSOC alors pas d'id tva obligatoire
     this.mandatoryTvaCee =
-      (regime && !["E", "G"].includes(regime) && typeClient !== "ASSOC") ? true : false;
+      regime && !["E", "G"].includes(regime) && typeClient !== "ASSOC"
+        ? true
+        : false;
   }
 
   onCourtierChange(e) {
@@ -888,7 +917,7 @@ export class ClientDetailsComponent
     if (this.editing && e.value === null) {
       this.formUtils.setIdToNull(
         this.formGroup,
-        e.element.attributes.formcontrolname.nodeValue,
+        e.element.attributes.formcontrolname.nodeValue
       );
     }
   }
@@ -896,7 +925,7 @@ export class ClientDetailsComponent
   entrepotsBtnClick() {
     if (!this.client) return;
     this.router.navigateByUrl(
-      `/pages/nested/n/tiers/clients/${this.client.id}/entrepots/list`,
+      `/pages/nested/n/tiers/clients/${this.client.id}/entrepots/list`
     );
   }
 
@@ -908,14 +937,14 @@ export class ClientDetailsComponent
   }
 
   private mapCertificationsForDisplay(
-    certifications: CertificationClient[],
+    certifications: CertificationClient[]
   ): Certification[] {
     if (!certifications || !certifications.length) return [];
     return certifications.map(({ certification }) => certification);
   }
 
   private mapCertificationsForSave(
-    certifications: Certification[],
+    certifications: Certification[]
   ): CertificationClient[] {
     if (!certifications || !certifications.length) return [];
 
@@ -923,7 +952,7 @@ export class ClientDetailsComponent
       const cc =
         this.client.certifications &&
         this.client.certifications.find(
-          ({ certification }) => certification.id === id,
+          ({ certification }) => certification.id === id
         );
       return {
         id: cc ? cc.id : null,
@@ -935,11 +964,11 @@ export class ClientDetailsComponent
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils.extractDirty(
       this.formGroup.controls,
-      Client.getKeyField(),
+      Client.getKeyField()
     );
 
     const gridFields = gridsConfig.client.columns.map(
-      ({ dataField }) => dataField,
+      ({ dataField }) => dataField
     );
 
     return [

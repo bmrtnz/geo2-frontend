@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
@@ -9,10 +16,9 @@ import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 @Component({
   selector: "app-documents-ordres-popup",
   templateUrl: "./documents-ordres-popup.component.html",
-  styleUrls: ["./documents-ordres-popup.component.scss"]
+  styleUrls: ["./documents-ordres-popup.component.scss"],
 })
 export class DocumentsOrdresPopupComponent implements OnChanges {
-
   @Input() public ordre: Partial<Ordre>;
   @Input() public flux: string;
   @Input() public gridEnvois: GridEnvoisComponent;
@@ -24,11 +30,10 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   titleStart: string;
   titleEnd: string;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(GridChoixEnvoisComponent) gridChoixEnvoisComponent: GridChoixEnvoisComponent;
+  @ViewChild(GridChoixEnvoisComponent)
+  gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
-  constructor(
-    public localizeService: LocalizationService,
-  ) { }
+  constructor(public localizeService: LocalizationService) {}
 
   ngOnChanges() {
     this.setTitle();
@@ -38,10 +43,12 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   setTitle() {
     this.titleStart = this.localizeService.localize("documents-ordres");
     if (!this.ordre) return;
-    this.titleEnd = this.ordre.numero + " - "
-      + this.localizeService.localize("tiers-contacts-flux")
-      + " "
-      + this.flux;
+    this.titleEnd =
+      this.ordre.numero +
+      " - " +
+      this.localizeService.localize("tiers-contacts-flux") +
+      " " +
+      this.flux;
   }
 
   async hidePopup() {
@@ -61,7 +68,10 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
     if (!this.closeConfirm) {
       event.cancel = true; // cancel popup hiding
 
-      const result = confirm(this.localizeService.localize("text-popup-annuler-envoi-docs"), "Génération des envois");
+      const result = confirm(
+        this.localizeService.localize("text-popup-annuler-envoi-docs"),
+        "Génération des envois"
+      );
 
       this.closeConfirm = await result;
       if (this.closeConfirm) {
@@ -72,18 +82,16 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   }
 
   goDocuments() {
-    this.gridChoixEnvoisComponent.done()
-      .subscribe({
-        complete: () => {
-          this.closeConfirm = true; // Force close popup without confirmation
-          this.popup.instance.hide();
-          this.gridEnvois.reload();
-        }
-      });
+    this.gridChoixEnvoisComponent.done().subscribe({
+      complete: () => {
+        this.closeConfirm = true; // Force close popup without confirmation
+        this.popup.instance.hide();
+        this.gridEnvois.reload();
+      },
+    });
   }
 
   public async open() {
     await this.popup.instance.show();
   }
-
 }

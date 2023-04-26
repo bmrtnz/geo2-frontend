@@ -4,10 +4,10 @@ import { Field, Model, ModelName } from "./model";
 
 @ModelName("CertificationClient")
 export class CertificationClient extends Model {
-    @Field({ asKey: true }) public id?: number;
-    @Field({ model: import("./client.model") }) public client?: Client;
-    @Field({ model: import("./certification.model") })
-    public certification?: Certification;
+  @Field({ asKey: true }) public id?: number;
+  @Field({ model: import("./client.model") }) public client?: Client;
+  @Field({ model: import("./certification.model") })
+  public certification?: Certification;
 }
 
 export default CertificationClient;

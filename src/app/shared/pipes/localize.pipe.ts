@@ -10,12 +10,12 @@ import { LocalizationService } from "../services";
  *   {{ home.key | localize }}
  */
 @Pipe({
-    name: "localize",
+  name: "localize",
 })
 export class LocalizePipe implements PipeTransform {
-    constructor(private localizationService: LocalizationService) {}
+  constructor(private localizationService: LocalizationService) {}
 
-    transform(value: any, ...args: any[]): any {
-        return this.localizationService.localize(value, args);
-    }
+  transform(value: any, ...args: any[]): any {
+    return this.localizationService.localize(value, args);
+  }
 }

@@ -27,7 +27,7 @@ export class GridSaveLogComponent implements ToggledGrid {
   constructor(
     private dateManagementService: DateManagementService,
     private ordresSaveLogsService: OrdresSaveLogsService,
-    public gridConfiguratorService: GridConfiguratorService,
+    public gridConfiguratorService: GridConfiguratorService
   ) {
     this.detailedFields = gridConfig["ordre-save-log"].columns;
   }
@@ -35,7 +35,7 @@ export class GridSaveLogComponent implements ToggledGrid {
   enableFilters() {
     if (this?.ordre?.id) {
       this.dataSource = this.ordresSaveLogsService.getDataSource_v2(
-        this.detailedFields.map((property) => property.dataField),
+        this.detailedFields.map((property) => property.dataField)
       );
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
       this.dataGrid.dataSource = this.dataSource;
@@ -46,8 +46,9 @@ export class GridSaveLogComponent implements ToggledGrid {
     // Best expression for date/time
     if (e.rowType === "data" && e.column.dataField === "dateModification") {
       if (e.value)
-        e.cellElement.innerText =
-          this.dateManagementService.friendlyDate(e.value);
+        e.cellElement.innerText = this.dateManagementService.friendlyDate(
+          e.value
+        );
     }
   }
 

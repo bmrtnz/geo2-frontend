@@ -1,10 +1,26 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
+import {
+  AuthService,
+  LocalizationService,
+  TransporteursService,
+} from "app/shared/services";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdresFraisLitigeService } from "app/shared/services/api/ordres-frais-litige.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -16,14 +32,12 @@ import { map } from "rxjs/operators";
 @Component({
   selector: "app-grid-forfait-litige",
   templateUrl: "./grid-forfait-litige.component.html",
-  styleUrls: ["./grid-forfait-litige.component.scss"]
+  styleUrls: ["./grid-forfait-litige.component.scss"],
 })
 export class GridForfaitLitigeComponent {
-
   @Input() public ordre: Ordre;
   @Input() public infosLitige: any;
   @Output() public totalFraisSaved = new EventEmitter();
-
 
   public dataSource: DataSource;
   public codePlusItems: any[];
@@ -33,7 +47,8 @@ export class GridForfaitLitigeComponent {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
-  @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
+  @ViewChildren(DxSelectBoxComponent)
+  selectBoxes: QueryList<DxSelectBoxComponent>;
 
   constructor(
     private ordresFraisLitigeService: OrdresFraisLitigeService,
@@ -45,35 +60,38 @@ export class GridForfaitLitigeComponent {
     public authService: AuthService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreForfaitLitige,
+      Grid.OrdreForfaitLitige
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   async enableFilters() {
     if (this.infosLitige) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return column.dataField;
-      })));
+      const fields = this.columns.pipe(
+        map((columns) =>
+          columns.map((column) => {
+            return column.dataField;
+          })
+        )
+      );
       this.dataSource = this.ordresFraisLitigeService.getDataSource_v2(
-        await fields.toPromise(),
+        await fields.toPromise()
       );
       this.dataSource.filter(["litige.id", "=", this.infosLitige.litige.id]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
 
     // Get transporteur (A payer) list
-    this.litigesService.getLitigesAPayer(
-      this.infosLitige.litige.id,
-      new Set(["id", "codeFournisseur", "raisonSociale", "numeroTri", "type"])
-    ).subscribe({
-      next: (res) => {
-        this.codePlusItems = res.data.allLitigeAPayer;
-      }
-    });
-
+    this.litigesService
+      .getLitigesAPayer(
+        this.infosLitige.litige.id,
+        new Set(["id", "codeFournisseur", "raisonSociale", "numeroTri", "type"])
+      )
+      .subscribe({
+        next: (res) => {
+          this.codePlusItems = res.data.allLitigeAPayer;
+        },
+      });
   }
 
   onInitNewRow(e) {
@@ -100,7 +118,10 @@ export class GridForfaitLitigeComponent {
   }
 
   onSaved() {
-    const litige = { id: this.infosLitige.litige.id, fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant") };
+    const litige = {
+      id: this.infosLitige.litige.id,
+      fraisAnnexes: this.datagrid.instance.getTotalSummaryValue("montant"),
+    };
     // Saving total
     this.litigesService.save(new Set(["id"]), litige).subscribe({
       next: () => this.totalFraisSaved.emit(),
@@ -110,5 +131,4 @@ export class GridForfaitLitigeComponent {
       },
     });
   }
-
 }

@@ -1,5 +1,4 @@
 ::ng-deep .reservation-stock-en-cours {
-
   .btn-delete-destockage-container {
     background: white;
     position: absolute;
@@ -18,7 +17,6 @@
   }
 
   .grid-reservation-stock-en-cours {
-
     // Reducing grid's height when it's empty
     .dx-datagrid-rowsview.dx-datagrid-nowrap.dx-empty {
       height: 70px;
@@ -27,6 +25,5 @@
     .bold-text {
       font-weight: bold !important;
     }
-
   }
 }

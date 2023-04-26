@@ -101,12 +101,12 @@ interface BaseArgs {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class FileManagerService {
   private baseArgs: BaseArgs;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Build file action url.
@@ -158,10 +158,7 @@ export class FileManagerService {
     });
   }
 
-  createDirectory(
-    parentDirectory: FileSystemItem,
-    name: string,
-  ): Promise<any> {
+  createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> {
     return this._execute("createDir", {
       path: parentDirectory.path,
       name,
@@ -175,10 +172,7 @@ export class FileManagerService {
     });
   }
 
-  copyItem(
-    item: FileSystemItem,
-    destinationDir: FileSystemItem,
-  ): Promise<any> {
+  copyItem(item: FileSystemItem, destinationDir: FileSystemItem): Promise<any> {
     return this._execute("copy", {
       path: item.path,
       dest: destinationDir.path,
@@ -191,10 +185,7 @@ export class FileManagerService {
     });
   }
 
-  moveItem(
-    item: FileSystemItem,
-    destinationDir: FileSystemItem,
-  ): Promise<any> {
+  moveItem(item: FileSystemItem, destinationDir: FileSystemItem): Promise<any> {
     return this._execute("move", {
       path: item.path,
       dest: destinationDir.path,
@@ -204,7 +195,7 @@ export class FileManagerService {
   uploadFileChunk(
     file: File,
     uploadInfo: UploadInfo,
-    destinationDirectory: FileSystemItem,
+    destinationDirectory: FileSystemItem
   ) {
     if (0 === uploadInfo.chunkIndex) {
       uploadInfo.customData.uploadId = new Guid();
@@ -242,10 +233,15 @@ export class FileManagerService {
     form.target = "_blank";
 
     FileManagerService._formAppendInput(form, "key", this.baseArgs.key);
-    if (this.baseArgs.id) FileManagerService._formAppendInput(form, "id", this.baseArgs.id);
+    if (this.baseArgs.id)
+      FileManagerService._formAppendInput(form, "id", this.baseArgs.id);
 
     for (const file of items) {
-      FileManagerService._formAppendInput(form, "files", encodeURIComponent(file.path));
+      FileManagerService._formAppendInput(
+        form,
+        "files",
+        encodeURIComponent(file.path)
+      );
     }
 
     document.body.appendChild(form);

@@ -41,7 +41,8 @@
       [allowSearch]="true"
     ></dxo-header-filter>
     <dxo-paging [enabled]="false"></dxo-paging>
-    <dxo-selection *ngIf="!readOnlyGrid"
+    <dxo-selection
+      *ngIf="!readOnlyGrid"
       mode="multiple"
       [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"
@@ -89,8 +90,8 @@
       [visible]="false"
       [width]="column.width"
       [caption]="
-        ('lignesGroupageCharg-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
+        ('lignesGroupageCharg-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
       "
       [fixed]="column.fixed"
       [cssClass]="column?.cssClass"
@@ -105,7 +106,7 @@
     ></dxi-column>
   </dx-data-grid>
 
-  <br>
+  <br />
 
   <div class="bottom-buttons-container float-left">
     <!-- Valider données -->
@@ -127,8 +128,11 @@
   </div>
   <div
     class="bottom-buttons-container float-right"
-    [ngClass]="{ 'inactive-box': unsavedData || !datagrid?.selectedRowKeys?.length || readOnlyGrid }"
-    >
+    [ngClass]="{
+      'inactive-box':
+        unsavedData || !datagrid?.selectedRowKeys?.length || readOnlyGrid
+    }"
+  >
     <!-- Transférer -->
     <dx-button
       type="success"
@@ -145,4 +149,3 @@
     ></dx-button>
   </div>
 </div>
-

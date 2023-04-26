@@ -1,9 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import {
   DxPopupComponent,
   DxDateBoxComponent,
   DxTextBoxComponent,
-  DxSwitchComponent
+  DxSwitchComponent,
 } from "devextreme-angular";
 import { alert, confirm } from "devextreme/ui/dialog";
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -15,18 +22,18 @@ import notify from "devextreme/ui/notify";
 @Component({
   selector: "app-packing-list-popup",
   templateUrl: "./packing-list-popup.component.html",
-  styleUrls: ["./packing-list-popup.component.scss"]
+  styleUrls: ["./packing-list-popup.component.scss"],
 })
 export class PackingListPopupComponent implements OnChanges {
-
   constructor(
     private localizeService: LocalizationService,
     private authService: AuthService,
     private packlistsService: PacklistsService
-  ) { }
+  ) {}
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(GridPackingListComponent, { static: false }) gridComponent: GridPackingListComponent;
+  @ViewChild(GridPackingListComponent, { static: false })
+  gridComponent: GridPackingListComponent;
 
   @ViewChild("entrepot", { static: false }) entrepotInput: DxTextBoxComponent;
   @ViewChild("dateDep", { static: false }) dateDepInput: DxDateBoxComponent;
@@ -74,10 +81,14 @@ export class PackingListPopupComponent implements OnChanges {
     this.shown = true;
 
     // ETD/ETA Missing alert
-    if (!this.ordre.etaDate || !this.ordre.etdDate) notify(
-      this.localizeService.localize("text-popup-etdeta-current-order-missing"),
-      "warning",
-      5000);
+    if (!this.ordre.etaDate || !this.ordre.etdDate)
+      notify(
+        this.localizeService.localize(
+          "text-popup-etdeta-current-order-missing"
+        ),
+        "warning",
+        5000
+      );
   }
 
   onHidden() {
@@ -106,7 +117,12 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   validateFields() {
-    if (this.dateDepInput.value && this.dateArrInput.value && this.POInput.value !== "" && this.POInput.value !== null)
+    if (
+      this.dateDepInput.value &&
+      this.dateArrInput.value &&
+      this.POInput.value !== "" &&
+      this.POInput.value !== null
+    )
       return true;
   }
 
@@ -119,23 +135,30 @@ export class PackingListPopupComponent implements OnChanges {
     let etaEtdDatesMissing = false;
     let raisonSocialCltDiff = false;
     const raisonSocialClt = this.ordre.client.raisonSocial;
-    this.ordres.map(ord => {
+    this.ordres.map((ord) => {
       myOrders.push({ ordre: { id: ord.id } });
       if (!ord.etaDate || !ord.etdDate) etaEtdDatesMissing = true;
-      if (ord.client.raisonSocial !== raisonSocialClt) raisonSocialCltDiff = true;
+      if (ord.client.raisonSocial !== raisonSocialClt)
+        raisonSocialCltDiff = true;
     });
 
     // ETD/ETA Missing alert
-    if (etaEtdDatesMissing) await alert(
-      this.localizeService.localize("text-popup-etdeta-selected-orders-missing"),
-      this.localizeService.localize("packing-list-popup-title")
-    );
+    if (etaEtdDatesMissing)
+      await alert(
+        this.localizeService.localize(
+          "text-popup-etdeta-selected-orders-missing"
+        ),
+        this.localizeService.localize("packing-list-popup-title")
+      );
 
     // One or several orders have a different client raison sociale
     if (raisonSocialCltDiff) {
-      if (await confirm(
-        this.localizeService.localize("text-popup-raisonSocial-client-diff"),
-        this.localizeService.localize("packing-list-popup-title"))) {
+      if (
+        await confirm(
+          this.localizeService.localize("text-popup-raisonSocial-client-diff"),
+          this.localizeService.localize("packing-list-popup-title")
+        )
+      ) {
         this.saveData(myOrders);
       } else return;
     }
@@ -143,36 +166,43 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   saveData(myOrders) {
-    this.packlistsService.save({
-      depart: new Date(this.dateDepInput.value).toISOString(),
-      livraison: new Date(this.dateArrInput.value).toISOString(),
-      impression: new Date(this.dateImpInput.value).toISOString(),
-      numeroPo: this.POInput.value,
-      typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
-      mail: this.authService.currentUser.email ?? "",
-      ordres: myOrders
-    }, new Set(["id"])).subscribe({
-      next: () => {
-        // Message and close
-        notify(this.localizeService.localize("text-popup-CQ-creation-PDF-deposee"), "success", 5000);
-        this.hidePopup();
-      },
-      error: (error: Error) => {
-        console.log(error);
-        notify(this.messageFormat(error.message), "error", 7000);
-      }
-    });
+    this.packlistsService
+      .save(
+        {
+          depart: new Date(this.dateDepInput.value).toISOString(),
+          livraison: new Date(this.dateArrInput.value).toISOString(),
+          impression: new Date(this.dateImpInput.value).toISOString(),
+          numeroPo: this.POInput.value,
+          typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
+          mail: this.authService.currentUser.email ?? "",
+          ordres: myOrders,
+        },
+        new Set(["id"])
+      )
+      .subscribe({
+        next: () => {
+          // Message and close
+          notify(
+            this.localizeService.localize("text-popup-CQ-creation-PDF-deposee"),
+            "success",
+            5000
+          );
+          this.hidePopup();
+        },
+        error: (error: Error) => {
+          console.log(error);
+          notify(this.messageFormat(error.message), "error", 7000);
+        },
+      });
   }
 
   private messageFormat(mess) {
-    const functionNames =
-      ["savePacklistEntete"
-      ];
-    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    const functionNames = ["savePacklistEntete"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
-
 }
-
-

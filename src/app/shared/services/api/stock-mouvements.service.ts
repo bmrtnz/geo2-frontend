@@ -5,17 +5,16 @@ import { ApiService } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class StockMouvementsService extends ApiService {
-
   constructor(apollo: Apollo) {
     super(apollo, StockMouvement);
   }
 
   public saveStockMouvement(
     stockMouvement: Partial<StockMouvement>,
-    body: Set<string>,
+    body: Set<string>
   ) {
     return this.apollo.mutate<{ saveStockMouvement: Partial<StockMouvement> }>({
       mutation: gql(this.buildSaveGraph([...body])),
@@ -32,32 +31,36 @@ export class StockMouvementsService extends ApiService {
 
   public deleteAllByOrdreLigneId(id: string) {
     return this.apollo.mutate<{ deleteStockMouvement: boolean }>({
-      mutation: gql(ApiService.buildGraph("mutation", [{
-        name: `deleteAllByOrdreLigneId`,
-        params: [
-          { name: "id", value: "id", isVariable: true },
-        ],
-      }], [
-        { name: "id", type: "String", isOptionnal: false },
-      ])),
+      mutation: gql(
+        ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: `deleteAllByOrdreLigneId`,
+              params: [{ name: "id", value: "id", isVariable: true }],
+            },
+          ],
+          [{ name: "id", type: "String", isOptionnal: false }]
+        )
+      ),
       variables: { id },
     });
   }
 
-  public fResaUneLigne =
-    (
-      fouCode: string,
-      propCode: string,
-      artRef: string,
-      username: string,
-      qteResa: number,
-      ordRef: string,
-      orlRef: string,
-      desc: string,
-      palCode: string,
-    ) => this.apollo
-      .query<{ fResaUneLigne: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  public fResaUneLigne = (
+    fouCode: string,
+    propCode: string,
+    artRef: string,
+    username: string,
+    qteResa: number,
+    ordRef: string,
+    orlRef: string,
+    desc: string,
+    palCode: string
+  ) =>
+    this.apollo.query<{ fResaUneLigne: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -73,8 +76,8 @@ export class StockMouvementsService extends ApiService {
                 { name: "orlRef", value: "orlRef", isVariable: true },
                 { name: "desc", value: "desc", isVariable: true },
                 { name: "palCode", value: "palCode", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "fouCode", type: "String", isOptionnal: false },
@@ -86,29 +89,27 @@ export class StockMouvementsService extends ApiService {
             { name: "orlRef", type: "String", isOptionnal: false },
             { name: "desc", type: "String", isOptionnal: false },
             { name: "palCode", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: {
-          fouCode,
-          propCode,
-          artRef,
-          username,
-          qteResa,
-          ordRef,
-          orlRef,
-          desc,
-          palCode,
-        },
-        fetchPolicy: "network-only",
-      })
+          ]
+        )
+      ),
+      variables: {
+        fouCode,
+        propCode,
+        artRef,
+        username,
+        qteResa,
+        ordRef,
+        orlRef,
+        desc,
+        palCode,
+      },
+      fetchPolicy: "network-only",
+    });
 
-  public fResaAutoOrdre =
-    (
-      ordRef: string,
-      username: string,
-    ) => this.apollo
-      .query<{ fResaAutoOrdre: FunctionResponse }>({
-        query: gql(ApiService.buildGraph(
+  public fResaAutoOrdre = (ordRef: string, username: string) =>
+    this.apollo.query<{ fResaAutoOrdre: FunctionResponse }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -117,18 +118,19 @@ export class StockMouvementsService extends ApiService {
               params: [
                 { name: "ordRef", value: "ordRef", isVariable: true },
                 { name: "username", value: "username", isVariable: true },
-              ]
-            }
+              ],
+            },
           ],
           [
             { name: "ordRef", type: "String", isOptionnal: false },
             { name: "username", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: {
-          ordRef,
-          username,
-        },
-        fetchPolicy: "network-only",
-      })
+          ]
+        )
+      ),
+      variables: {
+        ordRef,
+        username,
+      },
+      fetchPolicy: "network-only",
+    });
 }

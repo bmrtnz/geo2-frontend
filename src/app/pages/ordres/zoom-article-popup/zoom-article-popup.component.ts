@@ -1,24 +1,27 @@
-import { AfterViewInit, Component, Input, OnChanges, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  ViewChild,
+} from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-article-popup",
   templateUrl: "./zoom-article-popup.component.html",
-  styleUrls: ["./zoom-article-popup.component.scss"]
+  styleUrls: ["./zoom-article-popup.component.scss"],
 })
-
 export class ZoomArticlePopupComponent implements OnChanges {
-
   @Input() public articleLigneId: string;
 
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
-  constructor(
-    private localizeService: LocalizationService
-  ) { }
+  constructor(private localizeService: LocalizationService) {}
 
   ngOnChanges() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
@@ -26,15 +29,11 @@ export class ZoomArticlePopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize("zoom-article")
-      + " "
-      + this.articleLigneId;
+    this.title =
+      this.localizeService.localize("zoom-article") + " " + this.articleLigneId;
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("zoom-article-popup");
   }
-
 }
-
-

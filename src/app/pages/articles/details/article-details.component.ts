@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, ViewChild, ViewChildren } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -9,7 +18,11 @@ import { ViewDocument } from "app/shared/components/view-document-popup/view-doc
 import { Editable } from "app/shared/guards/editing-guard";
 import { Article } from "app/shared/models";
 import Document from "app/shared/models/document.model";
-import { ArticlesService, AuthService, LocalizationService } from "app/shared/services";
+import {
+  ArticlesService,
+  AuthService,
+  LocalizationService,
+} from "app/shared/services";
 import { AlveolesService } from "app/shared/services/api/alveoles.service";
 import { CalibresMarquageService } from "app/shared/services/api/calibres-marquage.service";
 import { CalibresUnifiesService } from "app/shared/services/api/calibres-unifies.service";
@@ -48,8 +61,9 @@ import { switchMap } from "rxjs/operators";
   templateUrl: "./article-details.component.html",
   styleUrls: ["./article-details.component.scss"],
 })
-export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, OnChanges {
-
+export class ArticleDetailsComponent
+  implements OnInit, NestedPart, Editable, OnChanges
+{
   @Input() public articleLigneId: string;
 
   formGroup = this.fb.group({
@@ -113,11 +127,11 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         valide: [""],
         groupe: this.fb.group({
           id: [""],
-          description: [""]
+          description: [""],
         }),
         preEmballage: this.fb.group({
           id: [""],
-          description: [""]
+          description: [""],
         }),
       }),
       conditionSpecial: [""],
@@ -138,7 +152,8 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
-  @ViewChildren(DxAccordionComponent) accordion: any;
+  @ViewChildren(DxAccordionComponent)
+  accordion: any;
   validatePopup: PushHistoryPopupComponent;
   editing = false;
   public ucBW: boolean;
@@ -213,11 +228,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     public authService: AuthService,
-    private localization: LocalizationService,
-  ) { }
+    private localization: LocalizationService
+  ) {}
 
   ngOnInit() {
-
     this.formGroup.reset();
     this.readOnlyMode = true;
     this.editing = false;
@@ -226,24 +240,19 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     if (this.route.snapshot.url[0]?.path !== "articles") return;
 
     this.route.params
-      .pipe(
-        switchMap(params => this.articlesService.getOne(params.id)),
-      )
-      .subscribe(res => this.afterLoadInitForm(res));
-
+      .pipe(switchMap((params) => this.articlesService.getOne(params.id)))
+      .subscribe((res) => this.afterLoadInitForm(res));
   }
 
   ngOnChanges() {
-
     // Zoom article mode when clicking on an order article
     if (this.articleLigneId) {
       this.formGroup.reset();
       this.preSaisie = "";
       this.articlesService
         .getOne(this.articleLigneId)
-        .subscribe(res => this.afterLoadInitForm(res));
+        .subscribe((res) => this.afterLoadInitForm(res));
     }
-
   }
 
   openCloseAccordions(action) {
@@ -266,19 +275,22 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     this.palettesConfig = {
       palette100x120: "",
       palette80x120: "",
-      palette60x80: ""
+      palette60x80: "",
     };
     // Palette management
     const emb = this.article.emballage?.emballage;
-    if (emb.xh) this.palettesConfig.palette100x120 = this.coucheColis(emb.xh, emb.xb);
-    if (emb.yh) this.palettesConfig.palette80x120 = this.coucheColis(emb.yh, emb.yb);
-    if (emb.zh) this.palettesConfig.palette60x80 = this.coucheColis(emb.zh, emb.zb);
+    if (emb.xh)
+      this.palettesConfig.palette100x120 = this.coucheColis(emb.xh, emb.xb);
+    if (emb.yh)
+      this.palettesConfig.palette80x120 = this.coucheColis(emb.yh, emb.yb);
+    if (emb.zh)
+      this.palettesConfig.palette60x80 = this.coucheColis(emb.zh, emb.zb);
     this.openCloseAccordions(!!this.articleLigneId); // When zooming
-
   }
 
   coucheColis(couche, colis) {
-    return this.localization.localize("articles-emballage-couchesColis")
+    return this.localization
+      .localize("articles-emballage-couchesColis")
       .replace("&h", couche)
       .replace("&b", colis);
   }
@@ -322,12 +334,12 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   displayIDBefore(data) {
     return data
       ? data.id +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -338,14 +350,10 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   }
 
   onSubmit() {
-    if (
-      !this.formGroup.pristine &&
-      this.formGroup.valid &&
-      !this.warningMode
-    ) {
+    if (!this.formGroup.pristine && this.formGroup.valid && !this.warningMode) {
       const article = this.formUtils.extractDirty(
         this.formGroup.controls,
-        Article.getKeyField(),
+        Article.getKeyField()
       );
 
       // Special field: need to adjust data
@@ -365,24 +373,21 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
       }
 
       (article.valide !== undefined &&
-        this.article.valide !== article.valide &&
-        !this.cloneMode
+      this.article.valide !== article.valide &&
+      !this.cloneMode
         ? this.validatePopup.present(HistoryType.ARTICLE, {
-          article: { id: article.id },
-          valide: article.valide,
-        })
+            article: { id: article.id },
+            valide: article.valide,
+          })
         : of(undefined)
       )
         .pipe(
           switchMap((_) =>
-            this.articlesService.save_v2(
-              this.getDirtyFieldsPath(),
-              {
-                article,
-                clone: this.cloneMode,
-              },
-            ),
-          ),
+            this.articlesService.save_v2(this.getDirtyFieldsPath(), {
+              article,
+              clone: this.cloneMode,
+            })
+          )
         )
         .subscribe({
           next: (event) => {
@@ -401,20 +406,16 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
             }
             this.readOnlyMode = true;
             this.editing = false;
-            this.article.historique =
-              event.data.saveArticle.historique;
+            this.article.historique = event.data.saveArticle.historique;
             this.formGroup
               .get("gtinColisBlueWhale")
-              .patchValue(
-                event.data.saveArticle.gtinColisBlueWhale,
-              );
+              .patchValue(event.data.saveArticle.gtinColisBlueWhale);
             this.formGroup
               .get("gtinUcBlueWhale")
               .patchValue(event.data.saveArticle.gtinUcBlueWhale);
             this.formGroup.markAsPristine();
           },
-          error: () =>
-            notify("Échec de la sauvegarde", "error", 3000),
+          error: () => notify("Échec de la sauvegarde", "error", 3000),
         });
     }
     this.warningMode = false;
@@ -444,8 +445,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
     this.marques.filter(filter);
     this.emballages = this.emballagesService.getDataSource();
     this.emballages.filter(filter);
-    this.conditionsSpecials =
-      this.conditionsSpecialesService.getDataSource();
+    this.conditionsSpecials = this.conditionsSpecialesService.getDataSource();
     this.conditionsSpecials.filter(filter);
     this.alveoles = this.alveolesService.getDataSource();
     this.alveoles.filter(filter);
@@ -487,11 +487,11 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils.extractDirty(
       this.formGroup.controls,
-      Article.getKeyField(),
+      Article.getKeyField()
     );
 
     const gridFields = gridsConfig.article.columns.map(
-      ({ dataField }) => dataField,
+      ({ dataField }) => dataField
     );
 
     //     return [
@@ -507,9 +507,7 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
         this.formGroup.get(key).value !== null
       ) {
         Object.keys(this.formGroup.get(key).value).forEach((key2) => {
-          const nestedVal = this.formGroup.get(
-            `${key}.${key2}`,
-          ).value;
+          const nestedVal = this.formGroup.get(`${key}.${key2}`).value;
           let controlKey;
           if (nestedVal !== null) {
             controlKey = `${key}.${key2}`;
@@ -523,11 +521,6 @@ export class ArticleDetailsComponent implements OnInit, NestedPart, Editable, On
       }
     });
 
-    return [
-      ...paths,
-      ...gridFields,
-      "gtinColisBlueWhale",
-      "gtinUcBlueWhale",
-    ];
+    return [...paths, ...gridFields, "gtinColisBlueWhale", "gtinUcBlueWhale"];
   }
 }
