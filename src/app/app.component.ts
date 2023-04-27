@@ -6,6 +6,7 @@ import dxLookup from "devextreme/ui/lookup";
 import dxTextBox from "devextreme/ui/text_box";
 import dxDateBox from "devextreme/ui/date_box";
 import dxTabPanel from "devextreme/ui/tab_panel";
+import dxPopup from "devextreme/ui/popup";
 import { environment } from "../environments/environment";
 import { LocalizationService, ScreenService } from "./shared/services";
 import { FormUtilsService } from "./shared/services/form-utils.service";
@@ -92,6 +93,11 @@ export class AppComponent {
     dxDateBox.defaultOptions({
       options: {
         useMaskBehavior: true,
+      },
+    });
+    dxPopup.defaultOptions({
+      options: {
+        showCloseButton: true,
       },
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });

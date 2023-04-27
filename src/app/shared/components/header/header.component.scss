@@ -48,3 +48,11 @@
 .company-button {
   display: block;
 }
+
+::ng-deep .main-navbar .dx-toolbar-items-container {
+  height: auto !important;
+
+  .dx-button .dx-button-content {
+    padding: 6px !important;
+  }
+}
