@@ -142,10 +142,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       this.typeFiltrage = searchType.codeSecteur;
       this.codeFiltrage = currSect.id;
     }
-    // this.formGroup.get("codeCommercial").patchValue({ id: "NB" }); // A VIRER
-    // this.typeFiltrage = searchType.codeCommercial; // A VIRER
-    // this.codeFiltrage = "NB"; // A VIRER
-    // this.formGroup.get("codeSecteur").reset(); // A VIRER
   }
 
   displayIDBefore(data) {
@@ -296,25 +292,29 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public onClotureChanged([litigeID, clotureTarget]: [
-    Litige["id"],
-    ClotureTarget
-  ]) {
-    const ds = this.datagrid.dataSource as Partial<LitigeSupervision>[];
-    const index = ds.findIndex(({ litige }) => litige.id === litigeID);
-    if (index >= 0) {
-      ds[index] = {
-        ...ds[index],
-        clientClos: [ClotureTarget.Client, ClotureTarget.Both].includes(
-          clotureTarget
-        ),
-        fournisseurClos: [
-          ClotureTarget.Responsable,
-          ClotureTarget.Both,
-        ].includes(clotureTarget),
-      };
-    }
+  public onClotureChanged(e) {
+    this.enableFilters();
   }
+
+  // public onClotureChanged([litigeID, clotureTarget]: [
+  //   Litige["id"],
+  //   ClotureTarget
+  // ]) {
+  //   const ds = this.datagrid.dataSource as Partial<LitigeSupervision>[];
+  //   const index = ds.findIndex(({ litige }) => litige.id === litigeID);
+  //   if (index >= 0) {
+  //     ds[index] = {
+  //       ...ds[index],
+  //       clientClos: [ClotureTarget.Client, ClotureTarget.Both].includes(
+  //         clotureTarget
+  //       ),
+  //       fournisseurClos: [
+  //         ClotureTarget.Responsable,
+  //         ClotureTarget.Both,
+  //       ].includes(clotureTarget),
+  //     };
+  //   }
+  // }
 }
 
 export default LitigesSupervisionComponent;

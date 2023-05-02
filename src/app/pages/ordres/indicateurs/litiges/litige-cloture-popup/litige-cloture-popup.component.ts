@@ -115,7 +115,8 @@ export class LitigeCloturePopupComponent implements OnChanges {
 
   doCloture() {
     return this.validateCloture().subscribe({
-      error: (err: Error) => notify(err.message, "ERROR", 3500),
+      error: (err: Error) =>
+        notify(this.messageFormat(err.message), "ERROR", 3500),
       next: (r) =>
         this.clotureChanged.emit([
           this.infosLitige.litige.id,
@@ -173,12 +174,12 @@ export class LitigeCloturePopupComponent implements OnChanges {
 
   private messageFormat(mess) {
     mess = mess
-      .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
-      .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
+      .replace("Exception while fetching data (/ofClotureLitigeGlobale) : ", "")
       .replace(
-        "Exception while fetching data (/fCreeOrdreComplementaire) : ",
+        "Exception while fetching data (/ofClotureLitigeResponsable) : ",
         ""
-      );
+      )
+      .replace("Exception while fetching data (/ofClotureLitigeClient) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
