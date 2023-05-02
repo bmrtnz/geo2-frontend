@@ -204,18 +204,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     if (e.rowType === "group") {
       if (e.summaryItems[0]?.column === "id") {
         this.infosLitige = e.data?.items[0];
-        if (!this.infosLitige?.litige?.fraisAnnexes) {
-          if (
-            await confirm(
-              this.localization.localize("ask-cloture-frais-zero"),
-              this.localization.localize("btn-close")
-            )
-          ) {
-            this.cloturePopup.visible = true;
-          }
-        } else {
-          this.cloturePopup.visible = true;
-        }
+        this.cloturePopup.visible = true;
       }
     }
     if (e.rowType !== "data") return;

@@ -306,19 +306,8 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.fraisAnnexesPopup.visible = true;
   }
 
-  async cloturer() {
-    if (!this.infosLitige?.fraisAnnexes) {
-      if (
-        await confirm(
-          this.localization.localize("ask-cloture-frais-zero"),
-          this.localization.localize("btn-close")
-        )
-      ) {
-        this.cloturePopup.visible = true;
-      }
-    } else {
-      this.cloturePopup.visible = true;
-    }
+  cloturer() {
+    this.cloturePopup.visible = true;
   }
 
   onToggling(toggled: boolean) {
