@@ -24,3 +24,7 @@
     text-align: right;
   }
 }
+
+::ng-deep .grid-grouping-button {
+  margin-top: 13px !important;
+}

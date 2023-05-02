@@ -57,6 +57,10 @@
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
 
+    .dx-texteditor-input-container {
+      left: 8px;
+    }
+
     .dx-placeholder {
       display: block !important;
       color: rgba(0, 0, 0, 0.87);
