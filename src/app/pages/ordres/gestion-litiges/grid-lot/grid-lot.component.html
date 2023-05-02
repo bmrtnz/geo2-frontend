@@ -1,4 +1,5 @@
 <dx-data-grid
+  class="dx-card wide-card grid-litige-lots"
   [dataSource]="dataSource"
   (onToolbarPreparing)="gridConfigHandler($event)"
 >
@@ -11,6 +12,7 @@
     [dataField]="column.dataField"
     [caption]="calculateCaption(column) || column.name"
     [dataType]="column?.dataType"
+    [cssClass]="column?.cssClass"
     [allowEditing]="column?.allowEditing"
     [visible]="column?.visible"
     [showInColumnChooser]="column?.showInColumnChooser"

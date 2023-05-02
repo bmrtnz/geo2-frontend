@@ -195,7 +195,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           );
           this.consequenceItems.sort((a, b) =>
             this.fUtils.noDiacritics(a.description) >
-            this.fUtils.noDiacritics(b.description)
+              this.fUtils.noDiacritics(b.description)
               ? 1
               : 0
           );
@@ -369,8 +369,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => {
           const [litigeID, lotNum] = this.lot;
           return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${
-              lotNum ? "==" : "=isnull="
+            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
             }${lotNum}`,
             ["id", "ordreLigne.id"]
           );
@@ -425,8 +424,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => {
           const [litigeID, lotNum] = this.lot;
           return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${
-              lotNum ? "==" : "=isnull="
+            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
             }${lotNum}`,
             ["id", "ordreLigne.id"]
           );
@@ -475,8 +473,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
-        `litige.id==${litigeID} and numeroGroupementLitige${
-          lotNum ? "==" : "=isnull="
+        `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
         }${lotNum}`,
         [
           "id",
@@ -491,16 +488,16 @@ export class GestionOperationsPopupComponent implements OnChanges {
         mergeMap((res) => res.data.allLitigeLigneList),
         map(
           (res) =>
-            ({
-              id: res.id,
-              clientNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
-              responsableNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
-              clientNombreColisReclamation: res.ordreLigne.nombreColisExpedies,
-              responsableNombreColis: res.ordreLigne.nombreColisExpedies,
-              clientPoidsNet: res.ordreLigne.poidsNetExpedie,
-              clientQuantite: res.ordreLigne.venteQuantite,
-              responsableQuantite: res.ordreLigne.achatQuantite,
-            } as LitigeLigne)
+          ({
+            id: res.id,
+            clientNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+            responsableNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+            clientNombreColisReclamation: res.ordreLigne.nombreColisExpedies,
+            responsableNombreColis: res.ordreLigne.nombreColisExpedies,
+            clientPoidsNet: res.ordreLigne.poidsNetExpedie,
+            clientQuantite: res.ordreLigne.venteQuantite,
+            responsableQuantite: res.ordreLigne.achatQuantite,
+          } as LitigeLigne)
         ),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
@@ -530,8 +527,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
-        `litige.id==${litigeID} and numeroGroupementLitige${
-          lotNum ? "==" : "=isnull="
+        `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
         }${lotNum}`,
         [
           "id",
@@ -546,15 +542,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
         mergeMap((res) => res.data.allLitigeLigneList),
         map(
           (res) =>
-            ({
-              id: res.id,
-              clientUniteFactureCode: res.ordreLigne.venteUnite?.id ?? null,
-              responsableUniteFactureCode:
-                res.ordreLigne.achatUnite?.id ?? null,
-              clientPrixUnitaire: res.ordreLigne.ventePrixUnitaire,
-              responsablePrixUnitaire: res.ordreLigne.achatPrixUnitaire,
-              devisePrixUnitaire: res.ordreLigne.achatDevisePrixUnitaire,
-            } as LitigeLigne)
+          ({
+            id: res.id,
+            clientUniteFactureCode: res.ordreLigne.venteUnite?.id ?? null,
+            responsableUniteFactureCode:
+              res.ordreLigne.achatUnite?.id ?? null,
+            clientPrixUnitaire: res.ordreLigne.ventePrixUnitaire,
+            responsablePrixUnitaire: res.ordreLigne.achatPrixUnitaire,
+            devisePrixUnitaire: res.ordreLigne.achatDevisePrixUnitaire,
+          } as LitigeLigne)
         ),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
@@ -603,15 +599,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
   displayResp(data) {
     return data
       ? this.localizeService.localize(
-          "gestion-operations-responsable-" + data.id
-        )
+        "gestion-operations-responsable-" + data.id
+      )
       : null;
   }
 
   displayCapitalize(data) {
     return data
       ? data.description.charAt(0).toUpperCase() +
-          data.description.slice(1).toLowerCase()
+      data.description.slice(1).toLowerCase()
       : null;
     // return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
@@ -698,12 +694,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
           numeroGroupementLitige,
           [ordreReferenceRemplacement, numeroOrdreReplacement],
         ]) =>
-          ({
-            numeroGroupementLitige,
-            ordreReferenceRemplacement,
-            numeroOrdreReplacement,
-            valide: true,
-          } as Partial<LitigeLigne>)
+        ({
+          numeroGroupementLitige,
+          ordreReferenceRemplacement,
+          numeroOrdreReplacement,
+          valide: true,
+        } as Partial<LitigeLigne>)
       )
     );
   }
@@ -716,11 +712,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
     ).pipe(
       map(
         ([responsableTypeCode, cause, consequence]) =>
-          ({
-            responsableTypeCode,
-            cause: { id: cause.id },
-            consequence: { id: consequence.id },
-          } as Partial<LitigeLigne>)
+        ({
+          responsableTypeCode,
+          cause: { id: cause.id },
+          consequence: { id: consequence.id },
+        } as Partial<LitigeLigne>)
       ),
       catchError((res) =>
         throwError(

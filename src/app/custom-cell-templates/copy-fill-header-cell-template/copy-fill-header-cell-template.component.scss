@@ -1,14 +1,20 @@
-.header-container {
+::ng-deep .header-container {
   display: flex;
   flex-direction: column;
 
-  ::ng-deep .dx-button {
-    font-size: small;
+  .dx-button {
+    font-size: 11px;
     height: initial;
     margin-top: 5px;
 
-    > .dx-button-content {
+    >.dx-button-content {
       padding: 0 !important;
+
+      .dx-icon {
+        margin-right: 2px;
+        color: #FFF;
+        font-size: 14px !important;
+      }
     }
   }
 }

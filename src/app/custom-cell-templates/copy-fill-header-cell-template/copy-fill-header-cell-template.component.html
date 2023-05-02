@@ -3,8 +3,11 @@
   <div class="header-container">
     <span>{{ data.column.caption }}</span>
     <dx-button
+      class="report-btn"
+      type="default"
       icon="arrowdown"
       [text]="'report' | localize"
+      [visible]="data.component.getVisibleRows()?.length > 1"
       [hint]="'duplicate-first-column-value-to-all-rows' | localize"
       (onClick)="onReportClick($event, data)"
     ></dx-button>

@@ -976,8 +976,16 @@
         "cssClass": "no-padding largeDropDown",
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "raisonSocial", "ville"],
-          "searchExpr": ["id", "raisonSocial", "ville"]
+          "displayExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
+          ],
+          "searchExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
+          ]
         }
       },
       {
@@ -988,8 +996,14 @@
         "cssClass": "mediumDropDown",
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id", "description"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
         }
       },
       {
@@ -2656,8 +2670,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["code", "raisonSocial"],
-          "searchExpr": ["code"]
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
         },
         "width": 170
       },
@@ -2674,8 +2693,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["code", "raisonSocial"],
-          "searchExpr": ["code"]
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
         },
         "width": 170
       },
@@ -2698,7 +2722,10 @@
       },
       {
         "dataField": "venteUnite.id",
-        "calculateDisplayValue": ["venteUnite.id", "venteUnite.description"],
+        "calculateDisplayValue": [
+          "venteUnite.id",
+          "venteUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "venteUnite.id",
         "editorOptions": {
@@ -2706,8 +2733,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2718,7 +2750,10 @@
       },
       {
         "dataField": "codePromo.id",
-        "calculateDisplayValue": ["codePromo.id", "codePromo.description"],
+        "calculateDisplayValue": [
+          "codePromo.id",
+          "codePromo.description"
+        ],
         "visible": true,
         "calculateSortValue": "codePromo.id",
         "editorOptions": {
@@ -2726,8 +2761,14 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id", "description"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
         },
         "cssClass": "small-header-right",
         "allowEditing": true,
@@ -2752,7 +2793,10 @@
       },
       {
         "dataField": "achatUnite.id",
-        "calculateDisplayValue": ["achatUnite.id", "achatUnite.description"],
+        "calculateDisplayValue": [
+          "achatUnite.id",
+          "achatUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
@@ -2760,8 +2804,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2773,7 +2822,10 @@
       },
       {
         "dataField": "typePalette.id",
-        "calculateDisplayValue": ["typePalette.id", "typePalette.description"],
+        "calculateDisplayValue": [
+          "typePalette.id",
+          "typePalette.description"
+        ],
         "visible": true,
         "calculateSortValue": "typePalette.id",
         "editorOptions": {
@@ -2782,8 +2834,13 @@
         "lookup": {
           "searchMode": "startswith",
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2800,8 +2857,13 @@
         "lookup": {
           "searchMode": "startswith",
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2829,7 +2891,10 @@
       },
       {
         "dataField": "fraisUnite.id",
-        "calculateDisplayValue": ["fraisUnite.id", "fraisUnite.description"],
+        "calculateDisplayValue": [
+          "fraisUnite.id",
+          "fraisUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "fraisUnite.id",
         "editorOptions": {
@@ -2837,8 +2902,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -7358,24 +7428,28 @@
         "dataField": "ligne.clientNombrePalettes",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientNombreColisReclamation",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientPoidsNet",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientIndicateurForfait",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7383,6 +7457,7 @@
         "dataField": "indicateurForfait",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -7390,6 +7465,7 @@
         "dataField": "ligne.responsableIndicateurForfait",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7397,6 +7473,7 @@
         "dataField": "ligne.clientQuantite",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7404,6 +7481,7 @@
         "dataField": "quantite",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -7411,6 +7489,7 @@
         "dataField": "ligne.responsableQuantite",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7418,6 +7497,7 @@
         "dataField": "ligne.clientUniteFactureCode",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7425,6 +7505,7 @@
         "dataField": "uniteFactureCode",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -7432,6 +7513,7 @@
         "dataField": "ligne.responsableUniteFactureCode",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0
       },
@@ -7439,6 +7521,7 @@
         "dataField": "ligne.clientPrixUnitaire",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "small-side-padding",
         "showInColumnChooser": false,
         "width": 0,
         "formatter": "formatToClientCurrency"
@@ -7447,6 +7530,7 @@
         "dataField": "prixUnitaire",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding text-align-right",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -7486,6 +7570,7 @@
         "dataField": "avoir",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "small-side-padding text-align-center",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },

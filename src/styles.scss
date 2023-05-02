@@ -124,6 +124,7 @@ body app-root.production {
 .form-ordres-page,
 .form-scrollTo-buttons-container,
 .accueil-ordres-page {
+
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size: 16px;
@@ -161,13 +162,7 @@ body app-root.production {
     }
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(
-      .small-reset-button
-    ):not(.small-detail-histo-button):not(.grid-grouping-button):not(
-      .small-detail-exp-button
-    ):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(
-      .flux-doc-button
-    ) {
+  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.grid-grouping-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
     // margin-bottom: 10px;
 
     .dx-button-content {
@@ -205,10 +200,10 @@ body app-root.production {
 }
 
 // Thinner grids
-.dx-datagrid-rowsview .dx-row > td {
+.dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
 
-  & > .dx-filemanager-details-item-name-wrapper,
+  &>.dx-filemanager-details-item-name-wrapper,
   & .dx-datagrid-summary-item {
     line-height: initial;
   }
@@ -234,7 +229,7 @@ body app-root.production {
 }
 
 // Reducing space between checkboxes
-.dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
+.dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
   margin: 10px 0 !important;
 }
 
@@ -259,7 +254,7 @@ body app-root.production {
   background-color: #ff7f07;
 }
 
-.dx-invalid-message > .dx-overlay-content {
+.dx-invalid-message>.dx-overlay-content {
   background-color: rgba(255, 255, 255, 1);
   font-size: 14px;
   padding: 3px 8px 4px 0px;
@@ -359,7 +354,7 @@ body app-root.production {
     display: none;
   }
 
-  .dx-datagrid-filter-panel-checkbox ~ .dx-datagrid-filter-panel-text {
+  .dx-datagrid-filter-panel-checkbox~.dx-datagrid-filter-panel-text {
     display: block;
   }
 
@@ -379,9 +374,7 @@ body app-root.production {
 }
 
 // Reduce vertical spacing in popup list items
-.dx-dropdownlist-popup-wrapper
-  .dx-list:not(.dx-list-select-decorator-enabled)
-  .dx-list-item-content {
+.dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
   padding: 6px 15px !important;
 }
 
@@ -511,7 +504,7 @@ body app-root.production {
 }
 
 // Better selection rows readibility
-.dx-selection.dx-row:not(.dx-row-focused) > td {
+.dx-selection.dx-row:not(.dx-row-focused)>td {
   background-color: rgba(0, 117, 156, 0.3) !important;
 }
 
@@ -542,10 +535,7 @@ body app-root.production {
 
 // Excel download buttons - grids
 
-.dx-datagrid-header-panel
-  .dx-toolbar-after
-  .dx-toolbar-menu-container
-  .dx-dropdownmenu-button {
+.dx-datagrid-header-panel .dx-toolbar-after .dx-toolbar-menu-container .dx-dropdownmenu-button {
   margin-left: -3px;
 
   &:not(:hover) {
@@ -607,6 +597,7 @@ body app-root.production {
 }
 
 .dx-field {
+
   .dx-texteditor-input,
   .dx-texteditor.dx-editor-filled .dx-texteditor-input,
   .dx-texteditor.dx-editor-outlined .dx-texteditor-input {
@@ -634,24 +625,12 @@ body app-root.production {
   }
 }
 
-.dx-editor-filled
-  .dx-texteditor-buttons-container:last-child
-  > .dx-dropdowneditor-button:last-child,
-.dx-editor-filled
-  .dx-texteditor-buttons-container:last-child
-  > .dx-numberbox-spin-container:last-child,
-.dx-editor-outlined
-  .dx-texteditor-buttons-container:last-child
-  > .dx-dropdowneditor-button:last-child,
-.dx-editor-outlined
-  .dx-texteditor-buttons-container:last-child
-  > .dx-numberbox-spin-container:last-child,
-.dx-editor-underlined
-  .dx-texteditor-buttons-container:last-child
-  > .dx-dropdowneditor-button:last-child,
-.dx-editor-underlined
-  .dx-texteditor-buttons-container:last-child
-  > .dx-numberbox-spin-container:last-child {
+.dx-editor-filled .dx-texteditor-buttons-container:last-child>.dx-dropdowneditor-button:last-child,
+.dx-editor-filled .dx-texteditor-buttons-container:last-child>.dx-numberbox-spin-container:last-child,
+.dx-editor-outlined .dx-texteditor-buttons-container:last-child>.dx-dropdowneditor-button:last-child,
+.dx-editor-outlined .dx-texteditor-buttons-container:last-child>.dx-numberbox-spin-container:last-child,
+.dx-editor-underlined .dx-texteditor-buttons-container:last-child>.dx-dropdowneditor-button:last-child,
+.dx-editor-underlined .dx-texteditor-buttons-container:last-child>.dx-numberbox-spin-container:last-child {
   margin-right: 0;
 }
 
@@ -662,8 +641,7 @@ body app-root.production {
 
 .dx-texteditor.dx-editor-filled.dx-state-disabled .dx-texteditor-input,
 .dx-texteditor.dx-editor-filled.dx-state-readonly .dx-texteditor-input,
-.dx-texteditor.dx-editor-filled.dx-state-readonly.dx-state-hover
-  .dx-texteditor-input {
+.dx-texteditor.dx-editor-filled.dx-state-readonly.dx-state-hover .dx-texteditor-input {
   color: rgba(0, 0, 0, 0.87);
 }
 
@@ -700,12 +678,7 @@ body app-root.production {
     }
   }
 
-  .dx-datagrid-content
-    .dx-datagrid-table
-    .dx-row
-    > td:not(.dx-validation-pending):not(
-      .dx-datagrid-select-all
-    ).dx-command-select {
+  .dx-datagrid-content .dx-datagrid-table .dx-row>td:not(.dx-validation-pending):not(.dx-datagrid-select-all).dx-command-select {
     overflow: visible;
     width: 40px;
     min-width: 40px;

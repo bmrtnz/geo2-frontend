@@ -15,7 +15,10 @@
   }
 }
 
-::ng-deep {
+::ng-deep .grid-litige-lots {
+  max-width: 100% !important;
+  margin: 0 2px !important;
+
   td {
     .merged {
       > :first-child {
@@ -35,4 +38,5 @@
   .responsable-cell {
     @include cell(darken($base-success, 20%));
   }
+
 }
