@@ -137,7 +137,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   onShowing(e) {
     e.component
       .content()
-      .parentNode.classList.add("selection-compte-palox-popup");
+      .parentNode.classList.add("selection-clignes-cde-litige-popup");
     // Clear temps litige lignes
     if (this.tempRowsCleaning)
       this.litigesLignesService

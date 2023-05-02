@@ -5,7 +5,22 @@
 ::ng-deep .articles-page .search-criteria-subcontainer {
   // Hiding unuseful input
   .dx-tag + .dx-texteditor-input {
-    display: none;
+    display: none !important;
+  }
+
+  .dx-tagbox {
+    .dx-tag {
+      margin: 0px 8px 8px 0;
+    }
+
+    .dx-tag-container {
+      padding: 0;
+      min-height: 0;
+
+      .dx-texteditor-input {
+        margin-top: 0;
+      }
+    }
   }
 
   // Thiner tag labels

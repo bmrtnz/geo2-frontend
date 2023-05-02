@@ -35,9 +35,7 @@
     hint="{{ 'hint-open-program' | localize }}"
   >
     <div *dxTemplate="let data of 'content'">
-      <div class="dx-button-content">
-        <div class="button-programs">Programmes</div>
-      </div>
+      <span class="dx-button-text prog-btn">Programmes</span>
       <app-program-chooser
         [programs]="programs"
         (programChosen)="openProgramPopup($event)"

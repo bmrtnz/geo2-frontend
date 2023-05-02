@@ -221,7 +221,7 @@ body app-root.production {
   }
 
   .dx-texteditor-input-container {
-    left: 8px;
+    left: -8px;
   }
 }
 
@@ -350,7 +350,7 @@ body app-root.production {
   justify-content: left;
 
   .dx-datagrid-filter-panel-text {
-    margin-top: 3px;
+    margin-top: 5px;
     pointer-events: none;
     display: none;
   }
@@ -521,7 +521,7 @@ body app-root.production {
   width: 26px;
   min-width: 26px;
   z-index: 1 !important;
-  margin-top: 14px !important;
+  margin-top: 11px !important;
   right: 141px;
   transform: rotate(180deg);
 
@@ -583,9 +583,9 @@ body app-root.production {
 }
 
 /////////////////////////////////////////
-/// Reassigning CSS parameters to fix
-/// Visual inconsistency since
-/// v Dx >= 21.5
+/// Reassigning CSS properties to fix
+/// visual inconsistency since
+/// v Dx >= 21.5 - End of April 2023
 /////////////////////////////////////////
 
 .dx-button-has-icon .dx-icon {
@@ -596,8 +596,8 @@ body app-root.production {
   font-size: 15px;
 }
 
-.dx-item-content .dx-list-item-content {
-  font-size: 15px;
+.dx-item-content.dx-list-item-content {
+  font-size: 16px;
 }
 
 .dx-selectbox,
@@ -606,18 +606,33 @@ body app-root.production {
   background-color: transparent !important;
 }
 
-// .dx-field-value {
+.dx-field {
+  .dx-texteditor-input,
+  .dx-texteditor.dx-editor-filled .dx-texteditor-input,
+  .dx-texteditor.dx-editor-outlined .dx-texteditor-input {
+    padding: 7px 0 6px !important;
+  }
+}
 
 .dx-texteditor.dx-editor-underlined .dx-placeholder::before,
-.dx-texteditor-input,
 .dx-texteditor.dx-editor-filled .dx-placeholder::before,
-.dx-texteditor.dx-editor-filled .dx-texteditor-input,
-.dx-texteditor.dx-editor-outlined .dx-placeholder::before,
-.dx-texteditor.dx-editor-outlined .dx-texteditor-input {
+.dx-texteditor.dx-editor-outlined .dx-placeholder::before {
   padding: 7px 0 6px !important;
 }
 
-// }
+.dx-datagrid-column-chooser,
+.dx-list-search {
+  .dx-texteditor-container .dx-placeholder {
+    padding-left: 46px !important;
+  }
+}
+
+.dx-datagrid {
+  .dx-editor-cell .dx-texteditor .dx-placeholder::before {
+    padding-right: 14px !important;
+    padding-left: 14px !important;
+  }
+}
 
 .dx-editor-filled
   .dx-texteditor-buttons-container:last-child
@@ -640,10 +655,6 @@ body app-root.production {
   margin-right: 0;
 }
 
-.dx-item-content.dx-list-item-content {
-  font-size: 16px;
-}
-
 .dx-button-has-text .dx-button-content,
 .dx-button-has-text .dx-button-content .dx-button-text {
   overflow: visible;
@@ -656,7 +667,19 @@ body app-root.production {
   color: rgba(0, 0, 0, 0.87);
 }
 
+.dx-texteditor.dx-editor-filled.dx-state-readonly::after {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.42) !important;
+}
+
 .dx-datagrid {
+  .dx-toolbar-before {
+    .dx-datagrid-group-panel {
+      .dx-group-panel-item {
+        font-size: 12px;
+      }
+    }
+  }
+
   .dx-toolbar-after {
     .dx-datagrid-toolbar-button {
       .dx-button-text {
@@ -669,5 +692,25 @@ body app-root.production {
         height: 24px;
       }
     }
+  }
+
+  .dx-header-row {
+    .dx-sort-index-icon {
+      font-size: 12px;
+    }
+  }
+
+  .dx-datagrid-content
+    .dx-datagrid-table
+    .dx-row
+    > td:not(.dx-validation-pending):not(
+      .dx-datagrid-select-all
+    ).dx-command-select {
+    overflow: visible;
+    width: 40px;
+    min-width: 40px;
+    padding-left: 18px;
+    padding-right: 4px;
+    line-height: 1;
   }
 }
