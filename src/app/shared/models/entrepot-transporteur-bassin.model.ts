@@ -9,10 +9,14 @@ import Transporteur from "./transporteur.model";
 export class EntrepotTransporteurBassin extends Model {
   @Field({ asKey: true }) public id: number;
   @Field({ model: import("./entrepot.model") }) public entrepot: Entrepot;
-  @Field({ model: import("./transporteur.model") }) public transporteur: Transporteur;
-  @Field({ model: import("./bureau-achat.model") }) public bureauAchat: BureauAchat;
-  @Field({ model: import("./base-tarif.model") }) public baseTarifTransport: BaseTarif;
-  @Field({ model: import("./devise.model") }) public deviseTarifTransport: Devise;
+  @Field({ model: import("./transporteur.model") })
+  public transporteur: Transporteur;
+  @Field({ model: import("./bureau-achat.model") })
+  public bureauAchat: BureauAchat;
+  @Field({ model: import("./base-tarif.model") })
+  public baseTarifTransport: BaseTarif;
+  @Field({ model: import("./devise.model") })
+  public deviseTarifTransport: Devise;
   @Field() public prixUnitaireTarifTransport: number;
 }
 

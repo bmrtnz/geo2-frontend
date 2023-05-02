@@ -3,14 +3,19 @@ import {
   Input,
   NgModule,
   OnChanges,
-  SimpleChanges, ViewChild,
+  SimpleChanges,
+  ViewChild,
 } from "@angular/core";
 
 import {
   FileManagerService,
   FileItem,
 } from "app/shared/services/file-manager.service";
-import { DxFileManagerComponent, DxFileManagerModule, DxPopupModule } from "devextreme-angular";
+import {
+  DxFileManagerComponent,
+  DxFileManagerModule,
+  DxPopupModule,
+} from "devextreme-angular";
 import { CommonModule } from "@angular/common";
 import CustomFileSystemProvider from "devextreme/file_management/custom_provider";
 import { SharedModule } from "../../shared.module";
@@ -37,7 +42,10 @@ export class FileManagerComponent {
   fileProvider: CustomFileSystemProvider;
   items: any;
 
-  constructor(public fileManagerService: FileManagerService, private authService: AuthService) {
+  constructor(
+    public fileManagerService: FileManagerService,
+    private authService: AuthService
+  ) {
     this.items = [
       "showNavPane",
       "create",
@@ -48,12 +56,8 @@ export class FileManagerComponent {
     ];
   }
 
-
   onShowing() {
-    this.fileProvider = this.fileManagerService.getProvider(
-      this.key,
-      this.id,
-    );
+    this.fileProvider = this.fileManagerService.getProvider(this.key, this.id);
 
     this.userAdmin = this.authService.currentUser.adminClient;
     // If not the first time, set currentPath to "/"
@@ -84,4 +88,4 @@ export class FileManagerComponent {
   declarations: [FileManagerComponent],
   exports: [FileManagerComponent],
 })
-export class FileManagerModule { }
+export class FileManagerModule {}

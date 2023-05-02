@@ -6,7 +6,9 @@ describe("ZonesGeographiquesService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it("should be created", () => {
-    const service: ZonesGeographiquesService = TestBed.get(ZonesGeographiquesService);
+    const service: ZonesGeographiquesService = TestBed.get(
+      ZonesGeographiquesService
+    );
     expect(service).toBeTruthy();
   });
 });

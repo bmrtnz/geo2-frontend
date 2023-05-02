@@ -15,7 +15,10 @@ import { Observable } from "rxjs";
 import { mergeAll, take } from "rxjs/operators";
 import { SharedModule } from "../../shared.module";
 import { ModifiedFieldsService } from "app/shared/services/modified-fields.service";
-import { PromptPopupComponent, PromptPopupModule } from "../prompt-popup/prompt-popup.component";
+import {
+  PromptPopupComponent,
+  PromptPopupModule,
+} from "../prompt-popup/prompt-popup.component";
 
 @Component({
   selector: "app-push-history-popup",
@@ -23,7 +26,6 @@ import { PromptPopupComponent, PromptPopupModule } from "../prompt-popup/prompt-
   styleUrls: ["./push-history-popup.component.scss"],
 })
 export class PushHistoryPopupComponent {
-
   @ViewChild(PromptPopupComponent, { static: false })
   promptPopupComponent: PromptPopupComponent;
 
@@ -38,17 +40,15 @@ export class PushHistoryPopupComponent {
 
   constructor(
     private historiqueService: HistoriqueService,
-    private modifiedFieldsService: ModifiedFieldsService,
-  ) { }
+    private modifiedFieldsService: ModifiedFieldsService
+  ) {}
 
   async onSubmit(comment: string) {
     const modifiedFields = this.modifiedFieldsService.getModifiedFields();
     const save = this.historiqueService.saveByType(this.historyType, {
       ...this.sourceData,
       // Adding modified fields list to user comment
-      commentaire:
-        comment +
-        (modifiedFields ? " " + modifiedFields : ""),
+      commentaire: comment + (modifiedFields ? " " + modifiedFields : ""),
     });
     this.persist.emit(save);
   }
@@ -59,7 +59,8 @@ export class PushHistoryPopupComponent {
 
   onShown() {
     // If applicable, populates field with the ids of the users who suggested modifications
-    if (this.modifUserIds?.length) this.promptPopupComponent.setText(`(${this.modifUserIds.join(" / ")}) `);
+    if (this.modifUserIds?.length)
+      this.promptPopupComponent.setText(`(${this.modifUserIds.join(" / ")}) `);
   }
 
   present(type: HistoryType, data) {
@@ -72,10 +73,7 @@ export class PushHistoryPopupComponent {
 
 @NgModule({
   declarations: [PushHistoryPopupComponent],
-  imports: [
-    SharedModule,
-    PromptPopupModule
-  ],
+  imports: [SharedModule, PromptPopupModule],
   exports: [PushHistoryPopupComponent],
 })
-export class PushHistoryPopupModule { }
+export class PushHistoryPopupModule {}

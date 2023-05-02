@@ -39,10 +39,7 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-editing
-    [allowUpdating]="false"
-  >
-  </dxo-editing>
+  <dxo-editing [allowUpdating]="false"> </dxo-editing>
   <dxo-state-storing
     [enabled]="true"
     type="custom"
@@ -92,11 +89,8 @@
       [focusStateEnabled]="false"
       [text]="this.localization.localize('CQ')"
       (onClick)="
-      openReport(
-        'ControleQualite-cqTechnique',
-        cell.data.cqTechnique
-      )
-    "
+        openReport('ControleQualite-cqTechnique', cell.data.cqTechnique)
+      "
     >
     </dx-button>
     <dx-button
@@ -128,7 +122,6 @@
       (onClick)="openCQClientReport(cell)"
     ></dx-button>
   </div>
-
 </dx-data-grid>
 
 <app-cq-photos-popup [ordreLigne]="ordreLigne"></app-cq-photos-popup>

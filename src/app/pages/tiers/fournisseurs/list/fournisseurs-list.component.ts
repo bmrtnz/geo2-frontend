@@ -33,7 +33,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
     this.gridConfiguratorService.init(this.gridID, {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public fournisseursService: FournisseursService,
@@ -48,21 +48,20 @@ export class FournisseursListComponent implements OnInit, NestedMain {
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   private updateData(columns: GridColumn[]) {
     of(columns)
       .pipe(
         GridConfiguratorService.getVisible(),
-        GridConfiguratorService.getFields(),
+        GridConfiguratorService.getFields()
       )
       .subscribe((fields) => {
-        this.dataGrid.dataSource =
-          this.fournisseursService.getDataSource_v2([
-            Fournisseur.getKeyField() as string,
-            ...fields,
-          ]);
+        this.dataGrid.dataSource = this.fournisseursService.getDataSource_v2([
+          Fournisseur.getKeyField() as string,
+          ...fields,
+        ]);
       });
   }
 

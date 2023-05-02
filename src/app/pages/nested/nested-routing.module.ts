@@ -22,142 +22,142 @@ import { NestedComponent } from "./nested.component";
 // OUTLETS + LAZY MODULES NOT WORKING ¯\_(ツ)_/¯
 // Duplicating routes instead of modules inclusion
 const routes: Routes = [
-    {
-        path: "",
-        redirectTo: "/home",
-        pathMatch: "full",
-    },
-    {
-        path: "n",
-        component: NestedComponent,
-        // canActivateChild: [AuthGuardService],
-        children: [
-            {
-                path: "tiers/clients/list",
-                component: ClientsListComponent,
-            },
-            {
-                path: "tiers/clients/create",
-                component: ClientDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/clients/:id",
-                component: ClientDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/clients/:client/entrepots",
-                component: EntrepotsListComponent,
-            },
-            {
-                path: "tiers/clients/:client/entrepots/list",
-                component: EntrepotsListComponent,
-            },
-            {
-                path: "tiers/clients/:client/entrepots/:id",
-                component: EntrepotDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/fournisseurs/list",
-                component: FournisseursListComponent,
-            },
-            {
-                path: "tiers/fournisseurs/create",
-                component: FournisseurDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/fournisseurs/:id",
-                component: FournisseurDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/fournisseurs/:client/entrepots",
-                component: FournisseursListComponent,
-                outlet: "details",
-            },
-            {
-                path: "tiers/transporteurs/list",
-                component: TransporteursListComponent,
-            },
-            {
-                path: "tiers/transporteurs/create",
-                component: TransporteurDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/transporteurs/:id",
-                component: TransporteurDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/lieux-passage-a-quai/list",
-                component: LieuxPassageAQuaiListComponent,
-            },
-            {
-                path: "tiers/lieux-passage-a-quai/create",
-                component: LieuxPassageAQuaiDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/lieux-passage-a-quai/:id",
-                component: LieuxPassageAQuaiDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/entrepots/list",
-                component: EntrepotsListComponent,
-            },
-            {
-                path: "tiers/entrepots/create/:client",
-                component: EntrepotDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/entrepots/:id",
-                component: EntrepotDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "tiers/contacts/:codeTiers/:typeTiers",
-                component: ContactsComponent,
-                outlet: "details",
-            },
-            {
-                path: "articles/list",
-                component: ArticlesListComponent,
-            },
-            {
-                path: "articles/create",
-                component: ArticleDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-            {
-                path: "articles/:id",
-                component: ArticleDetailsComponent,
-                outlet: "details",
-                canDeactivate: [EditingGuard],
-            },
-        ],
-    },
+  {
+    path: "",
+    redirectTo: "/home",
+    pathMatch: "full",
+  },
+  {
+    path: "n",
+    component: NestedComponent,
+    // canActivateChild: [AuthGuardService],
+    children: [
+      {
+        path: "tiers/clients/list",
+        component: ClientsListComponent,
+      },
+      {
+        path: "tiers/clients/create",
+        component: ClientDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/clients/:id",
+        component: ClientDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/clients/:client/entrepots",
+        component: EntrepotsListComponent,
+      },
+      {
+        path: "tiers/clients/:client/entrepots/list",
+        component: EntrepotsListComponent,
+      },
+      {
+        path: "tiers/clients/:client/entrepots/:id",
+        component: EntrepotDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/fournisseurs/list",
+        component: FournisseursListComponent,
+      },
+      {
+        path: "tiers/fournisseurs/create",
+        component: FournisseurDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/fournisseurs/:id",
+        component: FournisseurDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/fournisseurs/:client/entrepots",
+        component: FournisseursListComponent,
+        outlet: "details",
+      },
+      {
+        path: "tiers/transporteurs/list",
+        component: TransporteursListComponent,
+      },
+      {
+        path: "tiers/transporteurs/create",
+        component: TransporteurDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/transporteurs/:id",
+        component: TransporteurDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/lieux-passage-a-quai/list",
+        component: LieuxPassageAQuaiListComponent,
+      },
+      {
+        path: "tiers/lieux-passage-a-quai/create",
+        component: LieuxPassageAQuaiDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/lieux-passage-a-quai/:id",
+        component: LieuxPassageAQuaiDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/entrepots/list",
+        component: EntrepotsListComponent,
+      },
+      {
+        path: "tiers/entrepots/create/:client",
+        component: EntrepotDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/entrepots/:id",
+        component: EntrepotDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "tiers/contacts/:codeTiers/:typeTiers",
+        component: ContactsComponent,
+        outlet: "details",
+      },
+      {
+        path: "articles/list",
+        component: ArticlesListComponent,
+      },
+      {
+        path: "articles/create",
+        component: ArticleDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+      {
+        path: "articles/:id",
+        component: ArticleDetailsComponent,
+        outlet: "details",
+        canDeactivate: [EditingGuard],
+      },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class NestedRoutingModule {}

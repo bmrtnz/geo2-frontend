@@ -6,14 +6,13 @@ import { LocalizationService } from "./localization.service";
   providedIn: "root",
 })
 export class GridUtilsService {
-
   public currentValueTyped: string;
   public focusSB: boolean;
 
   constructor(
     private localizeService: LocalizationService,
     private dateManagementService: DateManagementService
-  ) { }
+  ) {}
 
   // Reset (go to left) datagrid horizontal scroll bar
   public resetGridScrollBar(grid) {
@@ -40,7 +39,9 @@ export class GridUtilsService {
       this.currentValueTyped = elem.event.currentTarget.value;
       if (this.focusSB) {
         this.focusSB = false;
-        this.currentValueTyped = this.currentValueTyped.slice(this.currentValueTyped.length - 1);
+        this.currentValueTyped = this.currentValueTyped.slice(
+          this.currentValueTyped.length - 1
+        );
         elem.event.currentTarget.value = this.currentValueTyped;
       }
     }
@@ -61,19 +62,31 @@ export class GridUtilsService {
   }
 
   // Customizing grid title with period/date
-  public customGridPlanningTitle(titlePrefix: string, dateMin: Date = new Date(), dateMax: Date = new Date()) {
+  public customGridPlanningTitle(
+    titlePrefix: string,
+    dateMin: Date = new Date(),
+    dateMax: Date = new Date()
+  ) {
     const title = this.localizeService.localize(titlePrefix);
     const duValue = this.localizeService.localize("du");
-    const fromDate = this.dateManagementService.formatDate(dateMin, "dd-MM-yyyy");
+    const fromDate = this.dateManagementService.formatDate(
+      dateMin,
+      "dd-MM-yyyy"
+    );
     const fromValue = `<strong>${fromDate.replace(/^0+/, "")}</strong>`;
     const auValue = this.localizeService.localize("au");
     const toDate = this.dateManagementService.formatDate(dateMax, "dd-MM-yyyy");
     const toValue = `<strong>${toDate.replace(/^0+/, "")}</strong>`;
-    const nowDate = this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy");
+    const nowDate = this.dateManagementService.formatDate(
+      new Date(),
+      "dd-MM-yyyy"
+    );
     let finalTitle = `${title} ${duValue}&nbsp;&nbsp;${fromValue}&nbsp;&nbsp;${auValue}&nbsp;&nbsp;${toValue}`;
     if (fromDate === toDate) {
       if (fromDate === nowDate) {
-        finalTitle = `${title}&nbsp;<strong>${this.localizeService.localize("from-today")}</strong>`;
+        finalTitle = `${title}&nbsp;<strong>${this.localizeService.localize(
+          "from-today"
+        )}</strong>`;
       } else {
         finalTitle = finalTitle.split(auValue)[0];
       }
@@ -83,7 +96,9 @@ export class GridUtilsService {
 
   // Format numbers with spaces between 1000
   numberWithSpaces(numb) {
-    return numb.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
+    return numb
+      .toFixed(2)
+      .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+      .replace(".", ",");
   }
-
 }

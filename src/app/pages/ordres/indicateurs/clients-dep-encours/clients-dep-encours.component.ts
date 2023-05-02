@@ -4,7 +4,7 @@ import { LocalizePipe } from "app/shared/pipes";
 import {
   AuthService,
   LocalizationService,
-  TransporteursService
+  TransporteursService,
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { Indicateur } from "app/shared/services/api/indicateurs.service";
@@ -17,14 +17,18 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import {
   Indicator,
-  OrdresIndicatorsService
+  OrdresIndicatorsService,
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent } from "devextreme-angular";
+import {
+  DxDataGridComponent,
+  DxSelectBoxComponent,
+  DxSwitchComponent,
+} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -54,7 +58,8 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("paysValue", { static: false }) paysSB: DxSelectBoxComponent;
-  @ViewChild("commercialValue", { static: false }) commercialSB: DxSelectBoxComponent;
+  @ViewChild("commercialValue", { static: false })
+  commercialSB: DxSelectBoxComponent;
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
@@ -75,19 +80,18 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     private localizePipe: LocalizePipe,
     private paysService: PaysService,
     private paysDepassementService: PaysDepassementService,
-    public tabContext: TabContext,
+    public tabContext: TabContext
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
-    this.commercial = this.personnesService.getDataSource_v2(["id", "nomUtilisateur"]);
+    this.commercial = this.personnesService.getDataSource_v2([
+      "id",
+      "nomUtilisateur",
+    ]);
     this.commercial.filter([
       ["valide", "=", true],
       "and",
@@ -97,23 +101,20 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     ]);
     this.paysUpdateDS();
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
+      this.INDICATOR_NAME
     );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.DepassementEncoursPays,
+      Grid.DepassementEncoursPays
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.title = this.localizePipe.transform(
-      "grid-depassement-encours-pays-title",
+      "grid-depassement-encours-pays-title"
     );
   }
 
   ngAfterViewInit() {
     if (!this.authService.isAdmin)
-      this.secteurSB.value =
-        this.authService.currentUser.secteurCommercial;
+      this.secteurSB.value = this.authService.currentUser.secteurCommercial;
     this.enableFilters();
   }
 
@@ -123,15 +124,17 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     const filter = [];
     const filterItem = [];
     this.datagrid.dataSource = null;
-    const dataSource = this.paysDepassementService
-      .getDataSource(this.indicator.explicitSelection, {
+    const dataSource = this.paysDepassementService.getDataSource(
+      this.indicator.explicitSelection,
+      {
         secteurCode: this.secteurSB.value?.id,
         societeCode: this.currentCompanyService.getCompany().id,
         commercialCode: this.commercialId ?? "%",
-        depassementOnly: this.switchType.value
-      });
+        depassementOnly: this.switchType.value,
+      }
+    );
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
-    filterItem.forEach(element => {
+    filterItem.forEach((element) => {
       filter.push(element);
       filter.push("and");
     });
@@ -145,7 +148,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     if (e.value) this.paysSB.value = null;
     this.paysUpdateDS(e.value?.id);
     if (!e.event) return;
-    this.pays.load().then(res => {
+    this.pays.load().then((res) => {
       if (res?.length === 1) this.paysSB.value = { id: res[0].id };
       this.enableFilters();
     });
@@ -162,7 +165,10 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   paysUpdateDS(secteurId?) {
-    this.pays = this.paysService.getDataSource_v2(["id", "description"], "description");
+    this.pays = this.paysService.getDataSource_v2(
+      ["id", "description"],
+      "description"
+    );
     const filter: any[] = [["valide", "=", true]];
     if (secteurId) {
       filter.push("and", ["secteur.id", "=", secteurId]);
@@ -175,28 +181,38 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   }
 
   onCellPrepared(e) {
-
     if (e.rowType === "header") {
       let classPrefix;
       switch (e.column.dataField) {
         case "clientsSommeEnCoursNonEchu":
-        case "clientsSommeEnCours1a30": classPrefix = "green"; break;
-        case "clientsSommeEnCours31a60": classPrefix = "yellow"; break;
-        case "clientsSommeEnCours61a90": classPrefix = "orange"; break;
-        case "clientsSommeEnCours90Plus": classPrefix = "red"; break;
-        case "clientsSommeAlerteCoface": classPrefix = "dark-red"; break;
+        case "clientsSommeEnCours1a30":
+          classPrefix = "green";
+          break;
+        case "clientsSommeEnCours31a60":
+          classPrefix = "yellow";
+          break;
+        case "clientsSommeEnCours61a90":
+          classPrefix = "orange";
+          break;
+        case "clientsSommeEnCours90Plus":
+          classPrefix = "red";
+          break;
+        case "clientsSommeAlerteCoface":
+          classPrefix = "dark-red";
+          break;
       }
       if (classPrefix) e.cellElement.classList.add(`${classPrefix}-encours`);
     }
 
-    if ([
-      "clientsSommeDepassement",
-      "clientsSommeEnCours61a90",
-      "clientsSommeEnCours90Plus",
-      "clientsSommeAlerteCoface",
-    ].includes(e.column.dataField))
-      if (e.value > 0)
-        e.cellElement.classList.add("highlight-err");
+    if (
+      [
+        "clientsSommeDepassement",
+        "clientsSommeEnCours61a90",
+        "clientsSommeEnCours90Plus",
+        "clientsSommeAlerteCoface",
+      ].includes(e.column.dataField)
+    )
+      if (e.value > 0) e.cellElement.classList.add("highlight-err");
 
     // Formating figures: 1000000 becomes 1 000 000 €
     if (e.rowType === "data") {
@@ -215,22 +231,27 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
             .join("") + " €";
       } else {
         if (e.column.dataField === "description") {
-          e.cellElement.innerText = this.capitalize(
-            e.cellElement.innerText,
-          );
+          e.cellElement.innerText = this.capitalize(e.cellElement.innerText);
         }
       }
     }
   }
 
   displayIDBefore(data) {
-    return data ?
-      (data.id + " - " + (data.nomUtilisateur ? data.nomUtilisateur : (data.raisonSocial ? data.raisonSocial : data.description)))
+    return data
+      ? data.id +
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   openOrder(ordre) {
-    if (!ordre.numero) return notify("Aucun ordre associé à cet en-cours", "warning", 4000);
+    if (!ordre.numero)
+      return notify("Aucun ordre associé à cet en-cours", "warning", 4000);
     this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 }

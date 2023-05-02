@@ -28,35 +28,28 @@ export class LitigeConsequencesService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            type Response = { allLitigeConsequence: RelayPage<LitigeConsequence> };
+            type Response = {
+              allLitigeConsequence: RelayPage<LitigeConsequence>;
+            };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allLitigeConsequence) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allLitigeConsequence,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allLitigeConsequence) {
+                resolve(
+                  this.asInstancedListCount(res.data.allLitigeConsequence)
+                );
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -64,11 +57,11 @@ export class LitigeConsequencesService extends ApiService implements APIRead {
   }
 
   public getList(columns: Array<string>, search?: string) {
-    return this.apollo
-      .query<{ allLitigeConsequenceList: Partial<LitigeConsequence>[] }>({
-        query: gql(this.buildGetListGraph(columns)),
-        variables: { search },
-      });
+    return this.apollo.query<{
+      allLitigeConsequenceList: Partial<LitigeConsequence>[];
+    }>({
+      query: gql(this.buildGetListGraph(columns)),
+      variables: { search },
+    });
   }
 }
-

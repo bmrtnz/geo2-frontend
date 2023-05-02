@@ -1,9 +1,8 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .grid-option-reservation-stock {
-
   .dx-datagrid {
     max-height: 400px;
   }
@@ -22,10 +21,9 @@
   }
 
   .dx-data-row {
-
     .highlight-stockJ9-21-cell {
       background: #ffdd00 !important;
-      color: rgba(0, 0, 0, .7) !important;
+      color: rgba(0, 0, 0, 0.7) !important;
     }
 
     .highlight-negativeStock-cell {
@@ -45,9 +43,7 @@
     .option-text {
       color: $base-accent;
     }
-
   }
-
 }
 
 ::ng-deep .stock-info {
@@ -67,7 +63,6 @@
   .dx-button {
     float: left;
   }
-
 
   .dx-field-stock-comm {
     width: 50% !important;
@@ -92,7 +87,5 @@
     .dx-field-value {
       width: 45% !important;
     }
-
   }
-
 }

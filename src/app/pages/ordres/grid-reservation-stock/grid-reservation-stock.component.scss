@@ -1,5 +1,4 @@
 ::ng-deep .grid-reservation-stock {
-
   // max-height: 300px;
   // overflow: auto;
 
@@ -21,10 +20,9 @@
   }
 
   .dx-data-row {
-
     .highlight-stockJ9-21-cell {
       background: #ffdd00 !important;
-      color: rgba(0, 0, 0, .7) !important;
+      color: rgba(0, 0, 0, 0.7) !important;
     }
 
     .highlight-negativeStock-cell {
@@ -40,7 +38,5 @@
         width: 500px !important;
       }
     }
-
   }
-
 }

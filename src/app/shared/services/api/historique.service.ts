@@ -47,52 +47,29 @@ export class HistoriqueService extends ApiService {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetAll(1, this.listRegexp);
             type Response = {
               allHistorique: RelayPage<Historique>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allHistorique)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allHistorique,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allHistorique)
+                resolve(this.asInstancedListCount(res.data.allHistorique));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
-            const query = await this.buildGetOne(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetOne(1, this.listRegexp);
             type Response = { historique: Historique };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.historique)
-                  resolve(
-                    new Historique(res.data.historique),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.historique)
+                resolve(new Historique(res.data.historique));
+            });
           }),
       }),
     });
@@ -112,9 +89,9 @@ export class HistoriqueService extends ApiService {
           variables: {
             [withLowerCaseFirst(HistoryModel[type])]: properties,
           },
-        } as MutationOptions),
+        } as MutationOptions)
       ),
-      take(1),
+      take(1)
     );
   }
 }

@@ -7,10 +7,9 @@ type MessageState = "ERROR" | "WARNING";
 @Component({
   selector: "app-confirmation-result-popup",
   templateUrl: "./confirmation-result-popup.component.html",
-  styleUrls: ["./confirmation-result-popup.component.scss"]
+  styleUrls: ["./confirmation-result-popup.component.scss"],
 })
 export class ConfirmationResultPopupComponent {
-
   public content: string;
   public state: MessageState = "WARNING";
   public continueButtonOptions = {
@@ -30,7 +29,7 @@ export class ConfirmationResultPopupComponent {
 
   @ViewChild(DxPopupComponent) popup: DxPopupComponent;
 
-  constructor() { }
+  constructor() {}
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("confirmation-result-popup");
@@ -42,14 +41,16 @@ export class ConfirmationResultPopupComponent {
   public openAs(state: MessageState, content: string) {
     this.state = state;
     console.log(content);
-    if (content.indexOf("Exception while fetching data") >= 0) content = content.substring(content.indexOf(":") + 2);
+    if (content.indexOf("Exception while fetching data") >= 0)
+      content = content.substring(content.indexOf(":") + 2);
     this.content = content
       .split(/~r~n|~r|~n/)
-      .map(chunk => `<p>${chunk}</p>`)
+      .map((chunk) => `<p>${chunk}</p>`)
       .join("");
     this.popup.instance.show();
-    return this.advance
-      .pipe(take(1), tap(_ => this.popup.instance.hide()));
+    return this.advance.pipe(
+      take(1),
+      tap((_) => this.popup.instance.hide())
+    );
   }
-
 }

@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
@@ -25,7 +25,7 @@ import { PaysService } from "app/shared/services/api/pays.service";
 import { RegimesTvaService } from "app/shared/services/api/regimes-tva.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
-import * as gridsConfig from "assets/configurations/grids.json";
+import gridsConfig from "assets/configurations/grids.json";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { tap } from "rxjs/operators";
@@ -36,8 +36,8 @@ import { tap } from "rxjs/operators";
   styleUrls: ["./lieux-passage-a-quai-details.component.scss"],
 })
 export class LieuxPassageAQuaiDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
-
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
+{
   @Input() public lieupassageaquaiLigneId: string;
   @Input() public lieupassageaquaiTitle: string;
 
@@ -95,7 +95,7 @@ export class LieuxPassageAQuaiDetailsComponent
   preSaisie: string;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,
@@ -107,7 +107,7 @@ export class LieuxPassageAQuaiDetailsComponent
     private paysService: PaysService,
     private router: Router,
     private route: ActivatedRoute,
-    public authService: AuthService,
+    public authService: AuthService
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -131,7 +131,6 @@ export class LieuxPassageAQuaiDetailsComponent
   }
 
   ngOnInit() {
-
     this.pays = this.paysService.getDataSource_v2(["id", "description"]);
     this.pays.filter(["valide", "=", "true"]);
     this.regimesTva = this.regimesTvaService.getDataSource();
@@ -152,30 +151,25 @@ export class LieuxPassageAQuaiDetailsComponent
         this.createMode = url[url.length - 1].path === "create";
         this.readOnlyMode = !this.createMode;
         if (!this.createMode) {
-          this.lieupassageaquaiService
-            .getOne(params.id)
-            .subscribe((res) => {
-              this.afterLoadInitForm(res);
-            });
+          this.lieupassageaquaiService.getOne(params.id).subscribe((res) => {
+            this.afterLoadInitForm(res);
+          });
         } else {
           this.lieupassageaquai = new LieuPassageAQuai({});
           this.contentReadyEvent.emit();
         }
       });
-
   }
 
   ngOnChanges() {
-
     // Zoom fournisseur mode when clicking on an order article
     if (this.lieupassageaquaiLigneId) {
       this.formGroup.reset();
       this.preSaisie = "";
       this.lieupassageaquaiService
         .getOne(this.lieupassageaquaiLigneId)
-        .subscribe(res => this.afterLoadInitForm(res));
+        .subscribe((res) => this.afterLoadInitForm(res));
     }
-
   }
 
   afterLoadInitForm(res) {
@@ -183,9 +177,7 @@ export class LieuxPassageAQuaiDetailsComponent
     this.formGroup.patchValue(this.lieupassageaquai);
     this.contentReadyEvent.emit();
     this.preSaisie =
-      this.lieupassageaquai.preSaisie === true
-        ? "preSaisie"
-        : "";
+      this.lieupassageaquai.preSaisie === true ? "preSaisie" : "";
   }
 
   checkCode(params) {
@@ -201,21 +193,15 @@ export class LieuxPassageAQuaiDetailsComponent
     if (!compteComptable) return;
     const lieuxpassageaquaiSource =
       this.lieupassageaquaiService.getDataSource_v2(["compteComptable"]);
-    lieuxpassageaquaiSource.filter([
-      "compteComptable",
-      "=",
-      compteComptable,
-    ]);
-    lieuxpassageaquaiSource
-      .load()
-      .then((res) => (this.CCexists = res.length));
+    lieuxpassageaquaiSource.filter(["compteComptable", "=", compteComptable]);
+    lieuxpassageaquaiSource.load().then((res) => (this.CCexists = res.length));
   }
 
   onNonRequiredSBChange(e) {
     if (this.editing && e.value === null) {
       this.formUtils.setIdToNull(
         this.formGroup,
-        e.element.attributes.formcontrolname.nodeValue,
+        e.element.attributes.formcontrolname.nodeValue
       );
     }
   }
@@ -239,18 +225,17 @@ export class LieuxPassageAQuaiDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   onSubmit() {
     if (!this.formGroup.pristine && this.formGroup.valid) {
-
       // 05-2022: Lea/Stéphane wants to avoid pre-saisie/modifications step
       this.formGroup.get("preSaisie").setValue(false);
       this.formGroup.get("preSaisie").markAsDirty();
@@ -258,7 +243,7 @@ export class LieuxPassageAQuaiDetailsComponent
 
       const lieuPassageAQuai = this.formUtils.extractDirty(
         this.formGroup.controls,
-        LieuPassageAQuai.getKeyField(),
+        LieuPassageAQuai.getKeyField()
       );
 
       if (this.createMode) {
@@ -275,10 +260,7 @@ export class LieuxPassageAQuaiDetailsComponent
       .save_v2(this.getDirtyFieldsPath(), { lieuPassageAQuai })
       .subscribe({
         next: (e) => {
-          if (
-            this.createMode ||
-            this.authService.currentUser.adminClient
-          )
+          if (this.createMode || this.authService.currentUser.adminClient)
             notify("Sauvegardé", "success", 3000);
           this.refreshGrid.emit();
           // Show red badges (unvalidated forms)
@@ -356,10 +338,10 @@ export class LieuxPassageAQuaiDetailsComponent
   private getDirtyFieldsPath() {
     const dirtyFields = this.formUtils.extractDirty(
       this.formGroup.controls,
-      LieuPassageAQuai.getKeyField(),
+      LieuPassageAQuai.getKeyField()
     );
     const gridFields = gridsConfig["lieu-passage-a-quai"].columns.map(
-      ({ dataField }) => dataField,
+      ({ dataField }) => dataField
     );
 
     return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];

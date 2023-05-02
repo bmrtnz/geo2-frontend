@@ -1,6 +1,6 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .grid-logistiques {
   .add-step-button {
@@ -37,5 +37,4 @@
   .visibility-hidden {
     visibility: hidden;
   }
-
 }

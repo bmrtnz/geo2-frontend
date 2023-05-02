@@ -1,6 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
-import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
+import {
+  AuthService,
+  ClientsService,
+  LocalizationService,
+} from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
@@ -10,7 +21,11 @@ import { OriginesService } from "app/shared/services/api/origines.service";
 import { StockMouvementsService } from "app/shared/services/api/stock-mouvements.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -22,22 +37,22 @@ import { from, Observable } from "rxjs";
 import { concatMapTo, filter, map } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 
-
 @Component({
   selector: "app-grid-reservation-stock-en-cours",
   templateUrl: "./grid-reservation-stock-en-cours.component.html",
-  styleUrls: ["./grid-reservation-stock-en-cours.component.scss"]
+  styleUrls: ["./grid-reservation-stock-en-cours.component.scss"],
 })
 export class GridReservationStockEnCoursComponent implements OnInit {
-
   @Input() public ordreLigneInfo: any;
   @Output() reservationChange = new EventEmitter<LigneReservation[]>();
 
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
-  @ViewChild(PromptPopupComponent, { static: false }) promptPopupComponent: PromptPopupComponent;
+  @ViewChild(DxDataGridComponent, { static: true })
+  datagrid: DxDataGridComponent;
+  @ViewChild(PromptPopupComponent, { static: false })
+  promptPopupComponent: PromptPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -59,17 +74,22 @@ export class GridReservationStockEnCoursComponent implements OnInit {
     public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     private stocksService: StocksService,
-    private stockMouvementsService: StockMouvementsService,
+    private stockMouvementsService: StockMouvementsService
   ) {
     this.apiService = this.articlesService;
-
   }
 
   async ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreReservationStockEnCours);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise());
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.OrdreReservationStockEnCours
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
+    this.articles = this.articlesService.getDataSource_v2(
+      await fields.toPromise()
+    );
   }
 
   onContentReady(e) {
@@ -79,11 +99,22 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   }
 
   deleteReservations() {
-    from(confirm(this.localizeService
-      .localize("text-popup-supprimer-destockage" + (this.gridRowsTotal > 1 ? "s" : "")), "Déstockage"))
+    from(
+      confirm(
+        this.localizeService.localize(
+          "text-popup-supprimer-destockage" +
+            (this.gridRowsTotal > 1 ? "s" : "")
+        ),
+        "Déstockage"
+      )
+    )
       .pipe(
-        filter(pass => pass),
-        concatMapTo(this.stockMouvementsService.deleteAllByOrdreLigneId(this.ordreLigneInfo.id)),
+        filter((pass) => pass),
+        concatMapTo(
+          this.stockMouvementsService.deleteAllByOrdreLigneId(
+            this.ordreLigneInfo.id
+          )
+        )
       )
       .subscribe({
         error: ({ message }: Error) => notify(message, "error"),
@@ -92,12 +123,11 @@ export class GridReservationStockEnCoursComponent implements OnInit {
   }
 
   reloadSource(ordreLigneID: string) {
-    this.reservationsSource = this.stocksService
-      .getLigneReservationDatasource(ordreLigneID);
+    this.reservationsSource =
+      this.stocksService.getLigneReservationDatasource(ordreLigneID);
   }
 
   clearDataSource() {
     this.datagrid.dataSource = null;
   }
-
 }

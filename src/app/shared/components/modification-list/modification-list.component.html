@@ -25,7 +25,9 @@
             type="default"
             [visible]="authService.currentUser.adminClient"
             text="{{ 'btn-hide' | localize }}"
-            (onClick)="clearModifications(modif.id, modif.initiateur.personne?.id)"
+            (onClick)="
+              clearModifications(modif.id, modif.initiateur.personne?.id)
+            "
           ></dx-button>
           <ul class="modif-items-container">
             <div *ngFor="let ligne of modif.corps">

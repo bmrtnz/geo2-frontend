@@ -1,8 +1,7 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 ::ng-deep .ajout-articles-stock-popup {
-
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 
@@ -34,10 +33,9 @@
   }
 
   .dx-popup-content {
-
     .ajout-art-stock-content-container {
       padding: 0 15px 0 2px;
-      background: #FFF !important;
+      background: #fff !important;
 
       h6 {
         font-size: 18px;
@@ -58,6 +56,5 @@
         float: right;
       }
     }
-
   }
 }

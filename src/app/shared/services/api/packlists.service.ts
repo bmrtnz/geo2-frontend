@@ -4,10 +4,9 @@ import PacklistEntete from "app/shared/models/packlist-entete.model";
 import { ApiService } from "../api.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class PacklistsService extends ApiService {
-
   constructor(apollo: Apollo) {
     super(apollo, PacklistEntete);
   }

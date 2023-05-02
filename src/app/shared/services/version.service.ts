@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { environment } from "environments/environment";
-import { version } from "../../../../package.json";
+import packageData from "../../../../package.json";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class VersionService {
   getLabel() {
-    return environment.production ? `v ${version}` : `version de développement ( ${version} )`;
+    return environment.production
+      ? `v ${packageData.version}`
+      : `version de développement ( ${packageData.version} )`;
   }
 }

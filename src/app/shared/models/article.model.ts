@@ -16,7 +16,8 @@ export class Article extends Model {
   @Field({ model: import("./article-matiere-premiere.model") })
   public matierePremiere: ArticleMatierePremiere;
   @Field({ asLabel: true }) public description: string;
-  @Field({ model: import("./article-description.model") }) public articleDescription: ArticleDescription;
+  @Field({ model: import("./article-description.model") })
+  public articleDescription: ArticleDescription;
   @Field() public blueWhaleStock: boolean;
   @Field({ model: import("./article-cahier-des-charges.model") })
   public cahierDesCharge: ArticleCahierDesCharges;

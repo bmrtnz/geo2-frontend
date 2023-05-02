@@ -1,12 +1,11 @@
 import { Injector, NgModule } from "@angular/core";
 import {
   defaultDataIdFromObject,
-
   InMemoryCache,
-  StoreObject
+  StoreObject,
 } from "@apollo/client/core";
 import { onError } from "@apollo/client/link/error";
-import { APOLLO_OPTIONS } from "apollo-angular";
+import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
 import { environment } from "../environments/environment";
 import { GridConfig } from "./shared/models";
@@ -33,12 +32,12 @@ export function createApollo(httpLink: HttpLink) {
       dataIdFromObject(responseObject: Readonly<StoreObject>) {
         if (responseObject?.__typename === "GeoDocumentNum")
           return DocumentsNumService.getCacheID(
-            responseObject as unknown as DocumentNum,
+            responseObject as unknown as DocumentNum
           );
 
         if (responseObject?.__typename === "GeoGridConfig")
           return GridsConfigsService.getCacheID(
-            responseObject as unknown as GridConfig,
+            responseObject as unknown as GridConfig
           );
 
         if (
@@ -54,6 +53,7 @@ export function createApollo(httpLink: HttpLink) {
 }
 
 @NgModule({
+  imports: [ApolloModule],
   providers: [
     {
       provide: APOLLO_OPTIONS,

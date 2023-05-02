@@ -6,7 +6,7 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -21,7 +21,8 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
-  GridConfig, GridConfiguratorService
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -41,7 +42,9 @@ import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-
   templateUrl: "./grid-ordre-ligne-logistique.component.html",
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
-export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewInit {
+export class GridOrdreLigneLogistiqueComponent
+  implements OnChanges, AfterViewInit
+{
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -60,8 +63,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   @Input() public ordreBAFOuFacture;
   @Output() refreshGridLigneDetail = new EventEmitter();
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false }) choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
-  @ViewChild(HistoriqueModifDetailPopupComponent, { static: false }) histoDetailPopup: HistoriqueModifDetailPopupComponent;
+  @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false })
+  choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
+  @ViewChild(HistoriqueModifDetailPopupComponent, { static: false })
+  histoDetailPopup: HistoriqueModifDetailPopupComponent;
 
   constructor(
     public ordresLogistiquesService: OrdresLogistiquesService,
@@ -77,14 +82,12 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
     private currentCompanyService: CurrentCompanyService,
     public historiqueLogistiqueService: HistoriqueLogistiqueService,
     public localizeService: LocalizationService,
-    private gridsService: GridsService,
+    private gridsService: GridsService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreLigneLogistique,
+      Grid.OrdreLigneLogistique
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,10 +101,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   async enableFilters() {
     if (this?.ordre?.id) {
       const fields = this.columns.pipe(
-        map((columns) => columns.map((column) => column.dataField)),
+        map((columns) => columns.map((column) => column.dataField))
       );
       this.dataSource = this.ordresLogistiquesService.getDataSource_v2(
-        await fields.toPromise(),
+        await fields.toPromise()
       );
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
       this.datagrid.dataSource = this.dataSource;
@@ -126,8 +129,10 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
       // Best expression for date/time
       if (e.column.dataField === "dateDepartReelleFournisseur") {
         if (e.value)
-          e.cellElement.innerText =
-            this.dateManagementService.friendlyDate(e.value, true);
+          e.cellElement.innerText = this.dateManagementService.friendlyDate(
+            e.value,
+            true
+          );
       }
       if (e.column.dataField === "expedieStation") {
         e.cellElement.classList.add("cursor-pointer");
@@ -138,10 +143,9 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
         e.cellElement.classList.add("cursor-pointer");
         e.cellElement.setAttribute(
           "title",
-          this.localization.localize("hint-click-fournisseur"),
+          this.localization.localize("hint-click-fournisseur")
         );
       }
-
     }
   }
 
@@ -150,7 +154,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
   }
 
   showHistoDetail(cell) {
-
     if (this.countHisto) return;
     this.countHisto = true;
     cell.cellElement.classList.add("hide-button");
@@ -166,7 +169,6 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
           notify("Aucun historique disponible", "warning", 3000);
         }
       });
-
   }
 
   onEditorPreparing(e) {
@@ -223,7 +225,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
 
   public handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
-      next: v => {
+      next: (v) => {
         this.changeCloture = false;
         this.refresh();
         this.refreshGridLigneDetail.emit(true);
@@ -231,29 +233,43 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges, AfterViewIn
         this.ordresService.fChgtQteArtRet(this.ordre.id).subscribe({
           next: () => this.gridsService.reload("Commande"),
           error: (error: Error) => {
-            notify(error.message.replace("Exception while fetching data (/fChgtQteArtRet) : ", ""), "error", 7000);
-          }
+            notify(
+              error.message.replace(
+                "Exception while fetching data (/fChgtQteArtRet) : ",
+                ""
+              ),
+              "error",
+              7000
+            );
+          },
         });
       },
       error: (error: Error) => {
         this.changeCloture = false;
-        if (this.askForCloture) this.saveGridField(this.currentRowIndex, "expedieStation", false); // Back to non-clôturé
+        if (this.askForCloture)
+          this.saveGridField(this.currentRowIndex, "expedieStation", false); // Back to non-clôturé
         this.askForCloture = false;
-        notify(error.message.replace("Exception while fetching data (/fDetailsExpOnCheckCloturer) : ", ""), "error", 7000);
+        notify(
+          error.message.replace(
+            "Exception while fetching data (/fDetailsExpOnCheckCloturer) : ",
+            ""
+          ),
+          "error",
+          7000
+        );
         console.log(error);
-      }
+      },
     };
   }
 
   onCheckCloturer(reasonId?) {
-
-    this.functionsService.fDetailsExpOnCheckCloturer(
-      reasonId,
-      this.currentLogId,
-      this.currentCompanyService.getCompany().id,
-      this.authService.currentUser.nomUtilisateur
-    ).valueChanges.subscribe(this.handleCellChangeEventResponse());
-
+    this.functionsService
+      .fDetailsExpOnCheckCloturer(
+        reasonId,
+        this.currentLogId,
+        this.currentCompanyService.getCompany().id,
+        this.authService.currentUser.nomUtilisateur
+      )
+      .valueChanges.subscribe(this.handleCellChangeEventResponse());
   }
-
 }

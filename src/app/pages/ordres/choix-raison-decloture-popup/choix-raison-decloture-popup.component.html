@@ -3,22 +3,22 @@
   [dragEnabled]="true"
   width="600"
   height="500"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   title="Sélection raison déclôturation de l'expédition"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
 >
-    <dx-list
-        [dataSource]="dataSource"
-        [height]="300"
-        [displayExpr]="capitalizeDesc"
-        selectionMode="multiple"
-        selectAllMode="false"
-        [showSelectionControls]="true"
-        [selectedItemKeys]="[]"
-        (onSelectionChanged)="onSelectionChanged($event)"
-    ></dx-list>
+  <dx-list
+    [dataSource]="dataSource"
+    [height]="300"
+    [displayExpr]="capitalizeDesc"
+    selectionMode="multiple"
+    selectAllMode="false"
+    [showSelectionControls]="true"
+    [selectedItemKeys]="[]"
+    (onSelectionChanged)="onSelectionChanged($event)"
+  ></dx-list>
   <div class="popup-buttons-container">
     <dx-button
       class="save-button"
@@ -32,6 +32,6 @@
       type="default"
       text="Annuler"
       (onClick)="hidePopup()"
-      ></dx-button>
-    </div>
+    ></dx-button>
+  </div>
 </dx-popup>

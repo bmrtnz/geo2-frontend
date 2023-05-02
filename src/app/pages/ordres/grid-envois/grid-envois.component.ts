@@ -32,7 +32,7 @@ import {
   templateUrl: "./grid-envois.component.html",
   styleUrls: ["./grid-envois.component.scss"],
 })
-export class GridEnvoisComponent implements OnInit, ToggledGrid {
+export class GridEnvoisComponent implements ToggledGrid {
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -52,26 +52,23 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
     private envoisService: EnvoisService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
-    public gridConfiguratorService: GridConfiguratorService,
+    public gridConfiguratorService: GridConfiguratorService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.Envois,
+      Grid.Envois
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
-
-  ngOnInit() { }
 
   async enableFilters() {
     if (this?.ordre?.id) {
       const fields = this.columns.pipe(
-        map((columns) => columns.map((column) => column.dataField)),
+        map((columns) => columns.map((column) => column.dataField))
       );
-      this.dataSource = this.envoisService.getDataSource_v2(
-        [...await fields.toPromise(), ...this.staticFields]
-      );
+      this.dataSource = this.envoisService.getDataSource_v2([
+        ...(await fields.toPromise()),
+        ...this.staticFields,
+      ]);
       this.dataSource.filter([
         ["ordre.id", "=", this.ordre.id],
         "and",
@@ -100,8 +97,9 @@ export class GridEnvoisComponent implements OnInit, ToggledGrid {
     }
 
     this.currentDocument = {
-      title: `${envoi.flux.description.ucFirst()} ${envoi.typeTiers.description
-        }`,
+      title: `${envoi.flux.description.ucFirst()} ${
+        envoi.typeTiers.description
+      }`,
       document: envoi.document,
     };
     this.documentVisible = true;

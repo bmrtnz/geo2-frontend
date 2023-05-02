@@ -1,14 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-encours-client-popup",
   templateUrl: "./encours-client-popup.component.html",
-  styleUrls: ["./encours-client-popup.component.scss"]
+  styleUrls: ["./encours-client-popup.component.scss"],
 })
 export class EncoursClientPopupComponent implements OnChanges {
-
   @Input() public client: Partial<Client>;
   @Input() public readOnlyMode: boolean;
   @Output() public clientInfo: any;
@@ -20,10 +26,10 @@ export class EncoursClientPopupComponent implements OnChanges {
   titleMid: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnChanges() {
     this.setTitle();
@@ -53,7 +59,4 @@ export class EncoursClientPopupComponent implements OnChanges {
   openOrder(ordre) {
     this.openEncoursOrder.emit(ordre);
   }
-
 }
-
-

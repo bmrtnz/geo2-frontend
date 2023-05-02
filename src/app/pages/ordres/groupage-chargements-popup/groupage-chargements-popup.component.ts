@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -10,10 +17,9 @@ import { GridLignesGroupageChargementsComponent } from "./grid-lignes-groupage-c
 @Component({
   selector: "app-groupage-chargements-popup",
   templateUrl: "./groupage-chargements-popup.component.html",
-  styleUrls: ["./groupage-chargements-popup.component.scss"]
+  styleUrls: ["./groupage-chargements-popup.component.scss"],
 })
 export class GroupageChargementsPopupComponent implements OnChanges {
-
   @Input() public ordre: Ordre;
   @Input() public gridCommandes: any;
   @Input() public gridEnvois: any;
@@ -39,13 +45,15 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   popupFullscreen = false;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
-  @ViewChild(GridLignesGroupageChargementsComponent, { static: false }) gridComponent: GridLignesGroupageChargementsComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
+  @ViewChild(GridLignesGroupageChargementsComponent, { static: false })
+  gridComponent: GridLignesGroupageChargementsComponent;
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
     private localizeService: LocalizationService
-  ) { }
+  ) {}
 
   ngOnChanges() {
     this.setTitle();
@@ -59,7 +67,9 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("groupage-chargements-popup");
+    e.component
+      .content()
+      .parentNode.classList.add("groupage-chargements-popup");
   }
 
   onShown(e) {
@@ -77,7 +87,9 @@ export class GroupageChargementsPopupComponent implements OnChanges {
       confirm(
         this.localizeService.localize("text-popup-quit-unsaved-elements"),
         this.localizeService.localize("groupage-chargements")
-      ).then(res => { if (res) this.hidePopup(); });
+      ).then((res) => {
+        if (res) this.hidePopup();
+      });
     } else {
       this.hidePopup();
     }
@@ -98,7 +110,4 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   updateOrder() {
     this.ordreChanged.emit();
   }
-
 }
-
-

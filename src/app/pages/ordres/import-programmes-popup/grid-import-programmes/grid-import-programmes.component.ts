@@ -2,7 +2,11 @@ import { Component, Input, ViewChild } from "@angular/core";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -15,14 +19,14 @@ import { TabContext } from "../../root/root.component";
 @Component({
   selector: "app-grid-import-programmes",
   templateUrl: "./grid-import-programmes.component.html",
-  styleUrls: ["./grid-import-programmes.component.scss"]
+  styleUrls: ["./grid-import-programmes.component.scss"],
 })
 export class GridImportProgrammesComponent {
-
   @Input() programID: string;
   @Input() title: string;
 
-  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true })
+  datagrid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -35,10 +39,12 @@ export class GridImportProgrammesComponent {
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
-    public tabContext: TabContext,
+    public tabContext: TabContext
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.ImportProgramme);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.ImportProgramme
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   reload() {

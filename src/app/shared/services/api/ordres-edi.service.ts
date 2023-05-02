@@ -9,10 +9,9 @@ import { ApiService } from "../api.service";
 import { FunctionsService } from "./functions.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class OrdresEdiService extends ApiService {
-
   constructor(
     public functionsService: FunctionsService,
     public apollo: Apollo
@@ -35,9 +34,9 @@ export class OrdresEdiService extends ApiService {
     dateMax: Date,
     columns: string[]
   ) {
-    return this.apollo
-      .query<{ allCommandeEdi: CommandeEdi[] }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allCommandeEdi: CommandeEdi[] }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -46,10 +45,18 @@ export class OrdresEdiService extends ApiService {
               params: [
                 { name: "ediOrdreId", value: "ediOrdreId", isVariable: true },
                 { name: "secteurId", value: "secteurId", isVariable: true },
-                { name: "nomUtilisateur", value: "nomUtilisateur", isVariable: true },
+                {
+                  name: "nomUtilisateur",
+                  value: "nomUtilisateur",
+                  isVariable: true,
+                },
                 { name: "clientId", value: "clientId", isVariable: true },
                 { name: "assistantId", value: "assistantId", isVariable: true },
-                { name: "commercialId", value: "commercialId", isVariable: true },
+                {
+                  name: "commercialId",
+                  value: "commercialId",
+                  isVariable: true,
+                },
                 { name: "status", value: "status", isVariable: true },
                 { name: "dateMin", value: "dateMin", isVariable: true },
                 { name: "dateMax", value: "dateMax", isVariable: true },
@@ -66,11 +73,22 @@ export class OrdresEdiService extends ApiService {
             { name: "status", type: "String", isOptionnal: true },
             { name: "dateMin", type: "LocalDateTime", isOptionnal: true },
             { name: "dateMax", type: "LocalDateTime", isOptionnal: true },
-          ],
-        )),
-        variables: { ediOrdreId, secteurId, nomUtilisateur, clientId, assistantId, commercialId, status, dateMin, dateMax },
-        fetchPolicy: "no-cache",
-      });
+          ]
+        )
+      ),
+      variables: {
+        ediOrdreId,
+        secteurId,
+        nomUtilisateur,
+        clientId,
+        assistantId,
+        commercialId,
+        status,
+        dateMin,
+        dateMax,
+      },
+      fetchPolicy: "no-cache",
+    });
   }
 
   /**
@@ -78,7 +96,9 @@ export class OrdresEdiService extends ApiService {
    */
 
   public allClientEdi(
-    secteurId: string, assistantId: string, commercialId: string
+    secteurId: string,
+    assistantId: string,
+    commercialId: string
   ) {
     const columns = Client.getFieldsName();
     columns.clear();
@@ -87,9 +107,9 @@ export class OrdresEdiService extends ApiService {
     columns.add("client.raisonSocial");
     columns.add("id");
     columns.add("code");
-    return this.apollo
-      .query<{ allClientEdi: ClientEdi[] }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allClientEdi: ClientEdi[] }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -98,19 +118,24 @@ export class OrdresEdiService extends ApiService {
               params: [
                 { name: "secteurId", value: "secteurId", isVariable: true },
                 { name: "assistantId", value: "assistantId", isVariable: true },
-                { name: "commercialId", value: "commercialId", isVariable: true }
+                {
+                  name: "commercialId",
+                  value: "commercialId",
+                  isVariable: true,
+                },
               ],
             },
           ],
           [
             { name: "secteurId", type: "String", isOptionnal: false },
             { name: "assistantId", type: "String", isOptionnal: true },
-            { name: "commercialId", type: "String", isOptionnal: true }
-          ],
-        )),
-        variables: { secteurId, assistantId, commercialId },
-        fetchPolicy: "network-only",
-      });
+            { name: "commercialId", type: "String", isOptionnal: true },
+          ]
+        )
+      ),
+      variables: { secteurId, assistantId, commercialId },
+      fetchPolicy: "network-only",
+    });
   }
 
   /**
@@ -134,7 +159,7 @@ export class OrdresEdiService extends ApiService {
       { name: "referenceCommande", type: "String", value: referenceCommande },
       { name: "referenceClient", type: "String", value: referenceClient },
       { name: "ediOrdreId", type: "String", value: ediOrdreId },
-      { name: "username", type: "String", value: username }
+      { name: "username", type: "String", value: username },
     ]);
   }
 
@@ -144,5 +169,4 @@ export class OrdresEdiService extends ApiService {
       variables,
     });
   }
-
 }

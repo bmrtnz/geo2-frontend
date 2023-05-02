@@ -1,4 +1,3 @@
-
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxScrollViewComponent } from "devextreme-angular";
@@ -6,21 +5,18 @@ import { DxScrollViewComponent } from "devextreme-angular";
 @Component({
   selector: "app-zoom-lieupassageaquai-popup",
   templateUrl: "./zoom-lieupassageaquai-popup.component.html",
-  styleUrls: ["./zoom-lieupassageaquai-popup.component.scss"]
+  styleUrls: ["./zoom-lieupassageaquai-popup.component.scss"],
 })
-
 export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
-
   @Input() public lieupassageaquaiLigneId: string;
   @Input() public lieupassageaquaiTitle: string;
 
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
   visible: boolean;
   title: string;
 
-  constructor(
-    private localizeService: LocalizationService
-  ) { }
+  constructor(private localizeService: LocalizationService) {}
 
   ngOnChanges() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
@@ -28,15 +24,17 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.title = this.localizeService.localize(("zoom-" + (this.lieupassageaquaiTitle ?? "transporteur")))
-      + " "
-      + this.lieupassageaquaiLigneId;
+    this.title =
+      this.localizeService.localize(
+        "zoom-" + (this.lieupassageaquaiTitle ?? "transporteur")
+      ) +
+      " " +
+      this.lieupassageaquaiLigneId;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-lieupassageaquai-popup");
+    e.component
+      .content()
+      .parentNode.classList.add("zoom-lieupassageaquai-popup");
   }
-
 }
-
-

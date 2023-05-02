@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { Entrepot } from "app/shared/models";
 import { AuthService, EntrepotsService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -22,7 +28,8 @@ import { map } from "rxjs/operators";
   styleUrls: ["./grid-entrepots.component.scss"],
 })
 export class GridEntrepotsComponent
-  implements OnInit, SingleSelection<Entrepot> {
+  implements OnInit, SingleSelection<Entrepot>
+{
   readonly gridID = Grid.OrdreEntrepot;
 
   @Output() public pulseButton = new EventEmitter();
@@ -36,7 +43,7 @@ export class GridEntrepotsComponent
       ...event,
       title: "Liste des entrepôts",
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public entrepotsService: EntrepotsService,
@@ -44,12 +51,12 @@ export class GridEntrepotsComponent
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
-    public tabContext: TabContext,
-  ) { }
+    public tabContext: TabContext
+  ) {}
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
     // this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreEntrepot);
     // this.columns = from(this.gridConfig).pipe(GridConfiguratorService.getColumns());
     // const visibleFields = from(this.gridConfig)
@@ -86,8 +93,8 @@ export class GridEntrepotsComponent
             Entrepot.getKeyField() as string,
             Entrepot.getLabelField() as string,
             ...fields,
-          ]),
-        ),
+          ])
+        )
       )
       .subscribe((datasource) => {
         datasource.filter([

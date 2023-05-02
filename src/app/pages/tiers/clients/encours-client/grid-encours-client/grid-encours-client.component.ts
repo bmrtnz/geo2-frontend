@@ -1,11 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Client } from "app/shared/models";
 import { AuthService, ClientsService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, TotalItem } from "basic";
@@ -17,7 +28,7 @@ import { map } from "rxjs/operators";
 
 enum InputField {
   client = "client",
-  secteur = "secteur"
+  secteur = "secteur",
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -25,10 +36,9 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
 @Component({
   selector: "app-grid-encours-client",
   templateUrl: "./grid-encours-client.component.html",
-  styleUrls: ["./grid-encours-client.component.scss"]
+  styleUrls: ["./grid-encours-client.component.scss"],
 })
 export class GridEncoursClientComponent implements OnChanges {
-
   @Input() popupShown: boolean;
   @Input() public client: Client;
   @Output() hidePopup = new EventEmitter<any>();
@@ -51,14 +61,14 @@ export class GridEncoursClientComponent implements OnChanges {
   private requiredFields: string[];
   private sumDebit: number;
   private sumCredit: number;
-  public formGroup = new FormGroup({
-    client: new FormControl(),
-    secteur: new FormControl(),
-    encoursTotal: new FormControl(),
-    encoursAutorise: new FormControl(),
-    encoursDepassement: new FormControl(),
-    encoursRetard: new FormControl()
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    client: new UntypedFormControl(),
+    secteur: new UntypedFormControl(),
+    encoursTotal: new UntypedFormControl(),
+    encoursAutorise: new UntypedFormControl(),
+    encoursDepassement: new UntypedFormControl(),
+    encoursRetard: new UntypedFormControl(),
+  } as Inputs<UntypedFormControl>);
   public deviseSociete: string;
   public deviseEncours: string;
   public deviseClient: string;
@@ -71,20 +81,18 @@ export class GridEncoursClientComponent implements OnChanges {
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
-    public gridUtilsService: GridUtilsService,
+    public gridUtilsService: GridUtilsService
   ) {
     this.deviseSociete = this.currentCompanyService.getCompany().devise.id;
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.EncoursClient);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.EncoursClient
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.requiredFields = [
       "cfcDateEcheance",
@@ -132,11 +140,11 @@ export class GridEncoursClientComponent implements OnChanges {
           id: this.client.id,
           agrement: this.client.agrement,
           enCoursTemporaire: this.client.enCoursTemporaire,
-          enCoursBlueWhale: this.client.enCoursBlueWhale
+          enCoursBlueWhale: this.client.enCoursBlueWhale,
         },
         secteur: { id: this.client.secteur.id },
         encoursAutorise: null,
-        encoursRetard: null
+        encoursRetard: null,
       });
       this.deviseClient = this.client.devise.id;
       this.enableFilters();
@@ -144,7 +152,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   enableFilters() {
-
     this.toRefresh = false;
     this.readyToRefresh = false;
     this.datagrid.dataSource = null;
@@ -153,43 +160,46 @@ export class GridEncoursClientComponent implements OnChanges {
     this.formGroup.patchValue({
       encoursTotal: null,
       encoursAutorise:
-        (values.client.agrement ?? 0)
-        + (values.client.enCoursTemporaire ?? 0)
-        + (values.client.enCoursBlueWhale ?? 0),
+        (values.client.agrement ?? 0) +
+        (values.client.enCoursTemporaire ?? 0) +
+        (values.client.enCoursBlueWhale ?? 0),
       encoursRetard: null,
-      encoursDepassement: null
+      encoursDepassement: null,
     });
     this.depassement = false;
     this.retard = false;
 
-
     this.today = new Date();
     setTimeout(() => this.datagrid.instance.beginCustomLoading(""));
-    this.clientsService.allClientEnCours(
-      values.client.id,
-      this.requiredFields,
-      this.deviseSociete
-    ).subscribe((res) => {
-      const results = res.data.allClientEnCours;
-      // Concatenate immats and containers
-      results.map(r => {
-        const immat = [];
-        const container = [];
-        r.ordre?.logistiques.map(l => {
-          if (l.numeroContainer) container.push(l.numeroContainer);
-          if (l.numeroImmatriculation) immat.push(l.numeroImmatriculation);
+    this.clientsService
+      .allClientEnCours(
+        values.client.id,
+        this.requiredFields,
+        this.deviseSociete
+      )
+      .subscribe((res) => {
+        const results = res.data.allClientEnCours;
+        // Concatenate immats and containers
+        results.map((r) => {
+          const immat = [];
+          const container = [];
+          r.ordre?.logistiques.map((l) => {
+            if (l.numeroContainer) container.push(l.numeroContainer);
+            if (l.numeroImmatriculation) immat.push(l.numeroImmatriculation);
+          });
+          if (container.length)
+            r.ordre.logistiques.numeroContainer = container.join(" - ");
+          if (immat.length)
+            r.ordre.logistiques.numeroImmatriculation = immat.join(" - ");
         });
-        if (container.length) r.ordre.logistiques.numeroContainer = container.join(" - ");
-        if (immat.length) r.ordre.logistiques.numeroImmatriculation = immat.join(" - ");
+        this.datagrid.dataSource = results;
+        this.datagrid.instance.refresh();
+        this.calculateMiscEncours(results);
+        setTimeout(() => this.datagrid.instance.endCustomLoading());
+        this.readyToRefresh = true;
+        if (results.length)
+          this.deviseEncours = res.data.allClientEnCours[0].devise.id;
       });
-      this.datagrid.dataSource = results;
-      this.datagrid.instance.refresh();
-      this.calculateMiscEncours(results);
-      setTimeout(() => this.datagrid.instance.endCustomLoading());
-      this.readyToRefresh = true;
-      if (results.length) this.deviseEncours = res.data.allClientEnCours[0].devise.id;
-    });
-
   }
 
   calculateMiscEncours(data) {
@@ -198,7 +208,7 @@ export class GridEncoursClientComponent implements OnChanges {
     let retard = 0;
     this.sumDebit = 0;
     this.sumCredit = 0;
-    data.map(enc => {
+    data.map((enc) => {
       const montant = enc.cfcMontantDevise ?? enc.cfcMontantEuros;
       if (enc.cfcSens === "D") {
         encTotal += montant;
@@ -213,18 +223,21 @@ export class GridEncoursClientComponent implements OnChanges {
         if (this.today > new Date(enc.cfcDateEcheance)) retard -= montant;
       }
     });
-    const depassement = encTotalEuros - this.formGroup.get("encoursAutorise").value;
+    const depassement =
+      encTotalEuros - this.formGroup.get("encoursAutorise").value;
     this.depassement = depassement > 0;
     this.retard = retard > 0;
     this.formGroup.patchValue({
       encoursTotal: encTotal,
       encoursDepassement: this.depassement ? depassement : null,
-      encoursRetard: this.retard ? retard : null
+      encoursRetard: this.retard ? retard : null,
     });
   }
 
   deviseTodisplay() {
-    return this.deviseEncours === "FRF" ? this?.deviseSociete : this.deviseEncours;
+    return this.deviseEncours === "FRF"
+      ? this?.deviseSociete
+      : this.deviseEncours;
   }
 
   onContentReady() {
@@ -257,10 +270,11 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onCellDblClick(e) {
-    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id) return;
+    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id)
+      return;
     const ordre = {
       numero: e.data.ordre?.numero,
-      campagne: { id: e.data.ordre?.campagne?.id }
+      campagne: { id: e.data.ordre?.campagne?.id },
     };
     this.openOrder.emit(ordre);
   }
@@ -280,16 +294,20 @@ export class GridEncoursClientComponent implements OnChanges {
       "agrement",
       "enCoursTemporaire",
       "enCoursBlueWhale",
-      "valide"
+      "valide",
     ]);
     const filter: any = [["secteur.id", "=", e.value?.id]];
     filter.push("and", ["valide", "=", true]);
-    filter.push("and", ["societe.id", "=", this.authService.currentCompanyService.getCompany().id]);
+    filter.push("and", [
+      "societe.id",
+      "=",
+      this.authService.currentCompanyService.getCompany().id,
+    ]);
     this.clients.filter(filter);
     // We check that this change is coming from the user
     if (!e.event) return;
     this.formGroup.patchValue({
-      client: null
+      client: null,
     });
     this.onFieldValueChange();
   }
@@ -299,25 +317,30 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onFieldValueChange() {
-    this.toRefresh = !!this.formGroup.get("client").value &&
+    this.toRefresh =
+      !!this.formGroup.get("client").value &&
       !!this.formGroup.get("secteur").value;
   }
 
   displayCodeBefore(data) {
-    return data ?
-      ((data.code ? data.code : data.id) + " - " + (data.nomUtilisateur ? data.nomUtilisateur :
-        (data.raisonSocial ? data.raisonSocial : data.description)))
+    return data
+      ? (data.code ? data.code : data.id) +
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   calcCaption(column: GridColumn) {
-    let localized = this.localizeService
-      .localize("encoursClient-" + column.dataField?.split(".").join("-")) ||
-      column.name;
+    let localized =
+      this.localizeService.localize(
+        "encoursClient-" + column.dataField?.split(".").join("-")
+      ) || column.name;
     if (["cfcMontantEuros", "cfcMontantDevise"].includes(column.dataField))
       localized += ` ${this.deviseTodisplay()}`;
     return localized;
   }
-
 }
-

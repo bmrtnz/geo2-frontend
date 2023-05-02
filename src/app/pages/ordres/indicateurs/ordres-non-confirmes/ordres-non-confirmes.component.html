@@ -92,8 +92,8 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [caption]="
-        ('ordres-non-confirmes-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
+        ('ordres-non-confirmes-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
       "
       [visible]="false"
       [dataType]="column?.dataType"

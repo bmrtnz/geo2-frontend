@@ -1,4 +1,4 @@
-@import "~themes/generated/variables.base.scss";
+@import "themes/generated/variables.base.scss";
 
 :host {
   background-color: darken($base-bg, 5);
@@ -13,6 +13,7 @@
     &.highlight-datagrid-row > td {
       background: #eee;
     }
+
     &.tovalidate-datagrid-row > td {
       color: #ff325a;
     }
@@ -22,6 +23,7 @@
     &.highlight-datagrid-row > td {
       color: #ccc;
     }
+
     &.tovalidate-datagrid-row > td {
       color: #ff325a;
     }

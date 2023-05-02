@@ -1,27 +1,27 @@
 {
   "items": [
     {
-      "key": "@toolbar-bg",
+      "key": "$toolbar-bg",
       "value": "rgba(0, 117, 156, 1)"
     },
     {
-      "key": "@base-accent",
+      "key": "$base-accent",
       "value": "rgba(0, 117, 156, 1)"
     },
     {
-      "key": "@base-text-color",
+      "key": "$base-text-color",
       "value": "rgba(255, 255, 255, 1)"
     },
     {
-      "key": "@base-success",
+      "key": "$base-success",
       "value": "rgba(143, 196, 89, 1)"
     },
     {
-      "key": "@base-danger",
+      "key": "$base-danger",
       "value": "rgba(255, 50, 90, 1)"
     },
     {
-      "key": "@base-border-radius",
+      "key": "$base-border-radius",
       "value": "6px"
     }
   ],
@@ -31,5 +31,7 @@
   "outputFormat": "scss",
   "makeSwatch": true,
   "base": false,
-  "widgets": ["treeview", "navbar", "toolbar"]
+  "widgets": ["Toolbar", "TreeView"],
+  "version": "22.2.5",
+  "removeExternalResources": false
 }

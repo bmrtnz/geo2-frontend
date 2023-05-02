@@ -8,10 +8,7 @@ import { ApiService } from "../api.service";
   providedIn: "root",
 })
 export class CalibresFournisseurService extends ApiService {
-
-  constructor(
-    apollo: Apollo
-  ) {
+  constructor(apollo: Apollo) {
     super(apollo, CalibreFournisseur);
   }
 

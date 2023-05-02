@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class BrowserService {
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Open wiki on tiers section with given element path.
@@ -17,5 +16,4 @@ export class BrowserService {
 
     window.open(encodeURI(`${baseUrl}${element}`), "_blank");
   }
-
 }

@@ -1,12 +1,27 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { Article } from "app/shared/models";
 import { GridsService } from "../.././grids.service";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxNumberBoxComponent, DxTextBoxComponent } from "devextreme-angular";
+import {
+  DxDataGridComponent,
+  DxNumberBoxComponent,
+  DxTextBoxComponent,
+} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
@@ -19,16 +34,16 @@ export type Reservation = [number, number, string];
 @Component({
   selector: "app-grid-option-reservation-stock",
   templateUrl: "./grid-option-reservation-stock.component.html",
-  styleUrls: ["./grid-option-reservation-stock.component.scss"]
+  styleUrls: ["./grid-option-reservation-stock.component.scss"],
 })
 export class GridOptionReservationStockComponent implements OnInit {
-
   @Input() public article: Partial<Article>;
   @Input() public ligneStock: any;
   @Output() reservationChange = new EventEmitter<Reservation>();
 
   contentReadyEvent = new EventEmitter<any>();
-  @ViewChild(DxDataGridComponent, { static: true }) datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true })
+  datagrid: DxDataGridComponent;
   @ViewChild("comBox", { static: false }) comBox: DxTextBoxComponent;
   @ViewChild("qteBox", { static: false }) qteBox: DxNumberBoxComponent;
 
@@ -57,23 +72,25 @@ export class GridOptionReservationStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public authService: AuthService,
     private stocksService: StocksService,
-    public gridsService: GridsService,
-  ) {
-  }
+    public gridsService: GridsService
+  ) {}
 
   ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreOptionReservationStock);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.OrdreOptionReservationStock
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   initFields() {
     this.stockInfo = "";
-    if (this.comBox) this.comBox.value = this.authService.currentUser.nomUtilisateur;
+    if (this.comBox)
+      this.comBox.value = this.authService.currentUser.nomUtilisateur;
     if (this.qteBox) this.qteBox.value = null;
   }
 
   updateStockInfo(data?) {
-    if (!data) return this.stockInfo = "";
+    if (!data) return (this.stockInfo = "");
 
     // Update useful data for further reservation
     this.stockId = data.stock.id;
@@ -92,7 +109,11 @@ export class GridOptionReservationStockComponent implements OnInit {
     if (e.row?.rowType === "data") {
       if (e.row?.data?.stock?.statutStock === "O") {
         // Case: already an option
-        notify(this.localizeService.localize("warning-option-on-option"), "warning", 1500);
+        notify(
+          this.localizeService.localize("warning-option-on-option"),
+          "warning",
+          1500
+        );
       } else {
         this.updateStockInfo(e.row.data);
         this.qteBox.instance.focus();
@@ -105,11 +126,15 @@ export class GridOptionReservationStockComponent implements OnInit {
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Fond jaune pour les stocks J9-21 si stock et police vert/rouge selon stock
-      if (["quantiteCalculee3", "quantiteCalculee4"].includes(e.column.dataField)) {
+      if (
+        ["quantiteCalculee3", "quantiteCalculee4"].includes(e.column.dataField)
+      ) {
         if (e.value) {
           e.cellElement.classList.add("highlight-stockJ9-21-cell");
-          if (e.value < 0) e.cellElement.classList.add("highlight-negativeStock-cell");
-          if (e.value > 0) e.cellElement.classList.add("highlight-positiveStock-cell");
+          if (e.value < 0)
+            e.cellElement.classList.add("highlight-negativeStock-cell");
+          if (e.value > 0)
+            e.cellElement.classList.add("highlight-positiveStock-cell");
         }
       }
       // Fond jaune pour le fournisseur avec stocks J9-21
@@ -119,8 +144,10 @@ export class GridOptionReservationStockComponent implements OnInit {
         }
       }
       // Higlight important columns
-      if (e.column.dataField?.indexOf("quantiteCalculee") === 0 ||
-        e.column.dataField === "quantiteDisponible") {
+      if (
+        e.column.dataField?.indexOf("quantiteCalculee") === 0 ||
+        e.column.dataField === "quantiteDisponible"
+      ) {
         e.cellElement.classList.add("bold-text");
       }
 
@@ -142,14 +169,21 @@ export class GridOptionReservationStockComponent implements OnInit {
       if (e.column.dataField === "Fournisseur" && this.ligneStock) {
         let data = e.data.items ?? e.data.collapsedItems;
         data = data[0];
-        if (data.proprietaireCode === this.ligneStock.proprietaireCode &&
-          data.fournisseurCode === this.ligneStock.fournisseurCode) {
+        if (
+          data.proprietaireCode === this.ligneStock.proprietaireCode &&
+          data.fournisseurCode === this.ligneStock.fournisseurCode
+        ) {
           // Don't ask me why a timeout needed (otherwise focus event is not triggered as it should be)
           if (e.row?.data?.items?.length !== 1) {
-            setTimeout(() => this.datagrid.instance.option("focusedRowIndex", e.rowIndex));
+            setTimeout(() =>
+              this.datagrid.instance.option("focusedRowIndex", e.rowIndex)
+            );
           } else {
             setTimeout(() => {
-              this.datagrid.instance.option("focusedRowIndex", this.datagrid.instance.getRowIndexByKey(e.row.data.items[0].id));
+              this.datagrid.instance.option(
+                "focusedRowIndex",
+                this.datagrid.instance.getRowIndexByKey(e.row.data.items[0].id)
+              );
             });
           }
         }
@@ -160,10 +194,14 @@ export class GridOptionReservationStockComponent implements OnInit {
   async onClickReservation() {
     const stockAfter = this.dispo - this.qteBox.value;
     if (stockAfter < 0) {
-      if (await confirm(
-        this.localizeService.localize("ordres-dispo-stock-negatif")
-          .replace("&N", stockAfter.toString()),
-        this.localizeService.localize("title-option-stock-popup"))) {
+      if (
+        await confirm(
+          this.localizeService
+            .localize("ordres-dispo-stock-negatif")
+            .replace("&N", stockAfter.toString()),
+          this.localizeService.localize("title-option-stock-popup")
+        )
+      ) {
         this.reservation();
       }
     } else {
@@ -172,9 +210,12 @@ export class GridOptionReservationStockComponent implements OnInit {
   }
 
   reservation() {
-
     if (!this.qteBox.value) {
-      notify(this.localizeService.localize("warning-option-noQty"), "warning", 1500);
+      notify(
+        this.localizeService.localize("warning-option-noQty"),
+        "warning",
+        1500
+      );
       this.qteBox.instance.focus();
       return;
     }
@@ -186,29 +227,39 @@ export class GridOptionReservationStockComponent implements OnInit {
         this.propCode,
         this.palCode,
         this.comBox.value
-      ).subscribe({
+      )
+      .subscribe({
         next: (res) => {
-          notify(this.localizeService.localize("reservation-ok"), "success", 3000);
+          notify(
+            this.localizeService.localize("reservation-ok"),
+            "success",
+            3000
+          );
           this.reservationChange.emit();
         },
         error: (error: Error) => {
           console.log(error);
-          alert(this.messageFormat(error.message), this.localizeService.localize("title-option-stock-popup"));
-        }
+          alert(
+            this.messageFormat(error.message),
+            this.localizeService.localize("title-option-stock-popup")
+          );
+        },
       });
   }
 
   private messageFormat(mess) {
-    const functionNames =
-      ["takeOptionStock",
-      ];
-    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    const functionNames = ["takeOptionStock"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
 
   reloadSource(articleID: string) {
-    this.reservationsSource = this.stocksService.getStockReservationDatasource(articleID);
+    this.reservationsSource =
+      this.stocksService.getStockReservationDatasource(articleID);
   }
 
   public calcFouProp(rowData: Partial<StockReservation>) {
@@ -220,5 +271,4 @@ export class GridOptionReservationStockComponent implements OnInit {
       if (options.summaryProcess === "calculate")
         options.totalValue = options.value;
   }
-
 }

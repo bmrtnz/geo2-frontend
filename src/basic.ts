@@ -1,7 +1,10 @@
 import { EventEmitter } from "@angular/core";
 import { SummaryType } from "app/shared/services/api.service";
 import CustomStore from "devextreme/data/custom_store";
-import dxDataGrid, { dxDataGridColumn, dxDataGridRowObject } from "devextreme/ui/data_grid";
+import dxDataGrid, {
+  dxDataGridColumn,
+  dxDataGridRowObject,
+} from "devextreme/ui/data_grid";
 import {
   AsyncRule,
   CompareRule,
@@ -11,7 +14,7 @@ import {
   PatternRule,
   RangeRule,
   RequiredRule,
-  StringLengthRule
+  StringLengthRule,
 } from "devextreme/ui/validation_rules";
 
 declare global {
@@ -43,7 +46,7 @@ Object.defineProperty(Object.prototype, "reach", {
     return path.length
       ? context?.reach(path, context?.[path.shift()])
       : context;
-  }
+  },
 });
 
 /**
@@ -207,13 +210,12 @@ interface GridColumn {
 
   calculateDisplayValue?: string;
 
-  lookup?: { valueExpr: string, displayExpr: string, dataSource: any };
+  lookup?: { valueExpr: string; displayExpr: string; dataSource: any };
 
   calculateSortValue?: string;
   calculateCellValue?: string;
   customizeText?: string;
   virtual?: boolean;
-
 }
 
 /**
@@ -279,7 +281,7 @@ export type TotalItem = {
 /**
  * Formats values.
  */
-// tslint:disable-next-line:max-line-length
+// eslint-disable-next-line max-len
 type format =
   | "billions"
   | "currency"
@@ -312,40 +314,40 @@ type format =
   | string
   | ((value: number | Date) => string)
   | {
-    currency?: string;
-    formatter?: (value: number | Date) => string;
-    parser?: (value: string) => number | Date;
-    precision?: number;
-    type?:
-    | "billions"
-    | "currency"
-    | "day"
-    | "decimal"
-    | "exponential"
-    | "fixedPoint"
-    | "largeNumber"
-    | "longDate"
-    | "longTime"
-    | "millions"
-    | "millisecond"
-    | "month"
-    | "monthAndDay"
-    | "monthAndYear"
-    | "percent"
-    | "quarter"
-    | "quarterAndYear"
-    | "shortDate"
-    | "shortTime"
-    | "thousands"
-    | "trillions"
-    | "year"
-    | "dayOfWeek"
-    | "hour"
-    | "longDateLongTime"
-    | "minute"
-    | "second"
-    | "shortDateShortTime";
-  };
+      currency?: string;
+      formatter?: (value: number | Date) => string;
+      parser?: (value: string) => number | Date;
+      precision?: number;
+      type?:
+        | "billions"
+        | "currency"
+        | "day"
+        | "decimal"
+        | "exponential"
+        | "fixedPoint"
+        | "largeNumber"
+        | "longDate"
+        | "longTime"
+        | "millions"
+        | "millisecond"
+        | "month"
+        | "monthAndDay"
+        | "monthAndYear"
+        | "percent"
+        | "quarter"
+        | "quarterAndYear"
+        | "shortDate"
+        | "shortTime"
+        | "thousands"
+        | "trillions"
+        | "year"
+        | "dayOfWeek"
+        | "hour"
+        | "longDateLongTime"
+        | "minute"
+        | "second"
+        | "shortDateShortTime";
+    };
 
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = ONE_SECOND * 60;
@@ -372,29 +374,29 @@ export class Change<T> {
 }
 
 export type OnSavingEvent = {
-  cancel: boolean,
-  changes: Array<any>,
-  component: dxDataGrid,
-  element: HTMLElement,
-  promise: Promise<void>,
+  cancel: boolean;
+  changes: Array<any>;
+  component: dxDataGrid;
+  element: HTMLElement;
+  promise: Promise<void>;
 };
 
 export type CellTemplate = {
-  column: dxDataGridColumn,
-  columnIndex: number,
-  component: dxDataGrid,
-  data: Record<string, any>,
-  displayValue: any,
-  oldValue: any,
-  row: dxDataGridRowObject,
-  rowIndex: number,
-  rowType: string,
-  text: string,
-  value: any
-  watch: (getter, handler) => void,
+  column: dxDataGridColumn;
+  columnIndex: number;
+  component: dxDataGrid;
+  data: Record<string, any>;
+  displayValue: any;
+  oldValue: any;
+  row: dxDataGridRowObject;
+  rowIndex: number;
+  rowType: string;
+  text: string;
+  value: any;
+  watch: (getter, handler) => void;
 };
 
 export type LookupStore = {
-  store: CustomStore,
-  [key: string]: any,
+  store: CustomStore;
+  [key: string]: any;
 };

@@ -2,14 +2,13 @@ import { Injectable } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class FluxArService {
-
   private ignoredTiers: string[] = [];
   private reasons: Record<string, string> = {};
 
-  constructor() { }
+  constructor() {}
 
   get hasData() {
     return !!this.ignoredTiers.length || !!Object.keys(this.reasons).length;
@@ -23,18 +22,19 @@ export class FluxArService {
   }
 
   get(): {
-    ignoredTiers: FluxArService["ignoredTiers"],
-    reasons: FluxArService["reasons"],
+    ignoredTiers: FluxArService["ignoredTiers"];
+    reasons: FluxArService["reasons"];
   } {
-    return JSON.parse(JSON.stringify({
-      ignoredTiers: this.ignoredTiers,
-      reasons: this.reasons,
-    }));
+    return JSON.parse(
+      JSON.stringify({
+        ignoredTiers: this.ignoredTiers,
+        reasons: this.reasons,
+      })
+    );
   }
 
   clear() {
     this.ignoredTiers = [];
     this.reasons = {};
   }
-
 }

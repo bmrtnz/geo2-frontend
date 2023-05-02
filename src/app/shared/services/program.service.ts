@@ -14,14 +14,13 @@ export const SUPPORTED_MIMES = [
 ];
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ProgramService {
-
   constructor(
     private currentCompanyService: CurrentCompanyService,
-    private authService: AuthService,
-  ) { }
+    private authService: AuthService
+  ) {}
 
   /** Name of the body parameter in the backend */
   public static bodyName = "chunk";
@@ -51,7 +50,9 @@ export class ProgramService {
 
   /** Build the import URL that match the program */
   public static buildImportUrl(program: Program): string {
-    return encodeURI(`${environment.apiEndpoint}/program/${program.toString()}`);
+    return encodeURI(
+      `${environment.apiEndpoint}/program/${program.toString()}`
+    );
   }
 
   /** Build extra upload data */
@@ -64,5 +65,4 @@ export class ProgramService {
       genericEntrepot: genericEntrepot.toString(),
     };
   }
-
 }

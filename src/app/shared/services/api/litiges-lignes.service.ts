@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import { gql, OperationVariables, WatchQueryOptions } from "@apollo/client/core";
+import {
+  gql,
+  OperationVariables,
+  WatchQueryOptions,
+} from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigneForfait from "app/shared/models/litige-ligne-forfait.model";
@@ -16,41 +20,36 @@ import { FormUtilsService } from "../form-utils.service";
   providedIn: "root",
 })
 export class LitigesLignesService extends ApiService implements APIRead {
-
   constructor(apollo: Apollo, private formUtils: FormUtilsService) {
     super(apollo, LitigeLigne);
   }
   listRegexp = /.*\.(?:id)$/i;
 
   getOne_v2(id: LitigeLigne["id"], columns: Set<string>) {
-    return this.apollo
-      .query<{ litigeLigne: LitigeLigne }>({
-        query: gql(this.buildGetOneGraph(columns)),
-        variables: { id },
-      });
+    return this.apollo.query<{ litigeLigne: LitigeLigne }>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
+    });
   }
 
   getList(search: string, columns: Array<string>) {
-    return this.apollo
-      .query<{ allLitigeLigneList: LitigeLigne[] }>({
-        query: gql(this.buildGetListGraph(columns)),
-        variables: { search },
-        fetchPolicy: "network-only",
-      });
+    return this.apollo.query<{ allLitigeLigneList: LitigeLigne[] }>({
+      query: gql(this.buildGetListGraph(columns)),
+      variables: { search },
+      fetchPolicy: "network-only",
+    });
   }
 
   getDataSource() {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             // const query = await this.buildGetAll(2, this.listRegexp);
@@ -58,40 +57,22 @@ export class LitigesLignesService extends ApiService implements APIRead {
             type Response = {
               allLitigeLigne: RelayPage<LitigeLigne>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allLitigeLigne)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allLitigeLigne,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allLitigeLigne)
+                resolve(this.asInstancedListCount(res.data.allLitigeLigne));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
-            const query = await this.buildGetOne(
-              1,
-              this.listRegexp,
-            );
+            const query = await this.buildGetOne(1, this.listRegexp);
             type Response = { litigeLigne: LitigeLigne };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.litigeLigne)
-                  resolve(
-                    new LitigeLigne(res.data.litigeLigne),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.litigeLigne)
+                resolve(new LitigeLigne(res.data.litigeLigne));
+            });
           }),
       }),
     });
@@ -112,36 +93,29 @@ export class LitigesLignesService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = {
               allLitigeLigne: RelayPage<LitigeLigne>;
             };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
             this.listenQuery<Response>(
               query,
               { variables, fetchPolicy: "network-only" },
               (res) => {
                 if (res.data && res.data.allLitigeLigne) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allLitigeLigne,
-                    ),
-                  );
+                  resolve(this.asInstancedListCount(res.data.allLitigeLigne));
                 }
-              },
+              }
             );
           }),
         byKey: this.byKey(columns),
@@ -151,10 +125,18 @@ export class LitigesLignesService extends ApiService implements APIRead {
 
   deleteAll(ids: Array<LitigeLigne["id"]>) {
     return this.apollo.mutate({
-      mutation: gql(ApiService.buildGraph("mutation", [{
-        name: "deleteAllLitigeLigne",
-        params: [{ name: "ids", value: "ids", isVariable: true }],
-      }], [{ name: "ids", type: "[String]", isOptionnal: false }])),
+      mutation: gql(
+        ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: "deleteAllLitigeLigne",
+              params: [{ name: "ids", value: "ids", isVariable: true }],
+            },
+          ],
+          [{ name: "ids", type: "[String]", isOptionnal: false }]
+        )
+      ),
       variables: { ids },
     });
   }
@@ -179,36 +161,46 @@ export class LitigesLignesService extends ApiService implements APIRead {
   allLitigeLigneFait(litigeID: string, numeroLigne: string, body: Set<string>) {
     return this.apollo.query<{ allLitigeLigneFait: LitigeLigneFait[] }>({
       fetchPolicy: "network-only",
-      query: gql(ApiService.buildGraph("query", [
-        {
-          name: "allLitigeLigneFait",
-          body,
-          params: [
-            { name: "litigeID", value: "litigeID", isVariable: true },
-            { name: "numeroLigne", value: "numeroLigne", isVariable: true },
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "allLitigeLigneFait",
+              body,
+              params: [
+                { name: "litigeID", value: "litigeID", isVariable: true },
+                { name: "numeroLigne", value: "numeroLigne", isVariable: true },
+              ],
+            },
           ],
-        }
-      ], [
-        { name: "litigeID", type: "String", isOptionnal: false },
-        { name: "numeroLigne", type: "String", isOptionnal: false },
-      ])),
+          [
+            { name: "litigeID", type: "String", isOptionnal: false },
+            { name: "numeroLigne", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
       variables: { litigeID, numeroLigne },
     });
   }
 
   allLitigeLigneForfait(litigeID: string, body: Set<string>) {
     return this.apollo.query<{ allLitigeLigneForfait: LitigeLigneForfait[] }>({
-      query: gql(ApiService.buildGraph("query", [
-        {
-          name: "allLitigeLigneForfait",
-          body,
-          params: [
-            { name: "litigeID", value: "litigeID", isVariable: true },
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "allLitigeLigneForfait",
+              body,
+              params: [
+                { name: "litigeID", value: "litigeID", isVariable: true },
+              ],
+            },
           ],
-        }
-      ], [
-        { name: "litigeID", type: "String", isOptionnal: false },
-      ])),
+          [{ name: "litigeID", type: "String", isOptionnal: false }]
+        )
+      ),
       variables: { litigeID },
     });
   }
@@ -221,31 +213,40 @@ export class LitigesLignesService extends ApiService implements APIRead {
   }
 
   saveAll(body: Set<string>, allLitigeLigne: Array<Partial<LitigeLigne>>) {
-    return this.apollo.mutate<{ saveAllLitigeLigne: Array<Partial<LitigeLigne>> }>({
+    return this.apollo.mutate<{
+      saveAllLitigeLigne: Array<Partial<LitigeLigne>>;
+    }>({
       mutation: gql(this.buildSaveAllGraph([...body])),
       variables: { allLitigeLigne },
     });
   }
 
-  allLitigeLigneFaitDatasource(litigeID: string, numeroLigne: string, body: Set<string>) {
-    const llBody = new Set([...body].map(field => field.replace("ligne.", "")));
+  allLitigeLigneFaitDatasource(
+    litigeID: string,
+    numeroLigne: string,
+    body: Set<string>
+  ) {
+    const llBody = new Set(
+      [...body].map((field) => field.replace("ligne.", ""))
+    );
     return new DataSource({
       store: new CustomStore({
         key: "ligne.id",
-        load: (options: LoadOptions) => this
-          .allLitigeLigneFait(litigeID, numeroLigne, body).pipe(
-            map(res => JSON.parse(JSON.stringify(res.data.allLitigeLigneFait))
-              .map(i => this.formUtils.cleanTypenames(i))),
-          ).toPromise(),
+        load: (options: LoadOptions) =>
+          this.allLitigeLigneFait(litigeID, numeroLigne, body)
+            .pipe(
+              map((res) =>
+                JSON.parse(JSON.stringify(res.data.allLitigeLigneFait)).map(
+                  (i) => this.formUtils.cleanTypenames(i)
+                )
+              )
+            )
+            .toPromise(),
         update: (key, values) => {
-          return this.save(
-            llBody,
-            { id: key, ...values.ligne },
-          ).toPromise();
+          return this.save(llBody, { id: key, ...values.ligne }).toPromise();
         },
-        byKey: key => this.getOne_v2(key, llBody).toPromise(),
+        byKey: (key) => this.getOne_v2(key, llBody).toPromise(),
       }),
     });
   }
-
 }

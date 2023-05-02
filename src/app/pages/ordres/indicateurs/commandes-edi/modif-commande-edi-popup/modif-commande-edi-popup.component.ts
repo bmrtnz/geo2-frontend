@@ -1,14 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import GridModifCommandeEdiComponent from "../grid-modif-commande-edi/grid-modif-commande-edi.component";
-
 
 @Component({
   selector: "app-modif-commande-edi-popup",
   templateUrl: "./modif-commande-edi-popup.component.html",
-  styleUrls: ["./modif-commande-edi-popup.component.scss"]
+  styleUrls: ["./modif-commande-edi-popup.component.scss"],
 })
 export class ModifCommandeEdiPopupComponent implements OnChanges {
-
   @Input() public commandeEdiId: string;
   @Input() public commandeId: string;
   @Output() public ordreEdiId: string;
@@ -16,12 +21,12 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   @Output() refreshGrid = new EventEmitter();
   @Output() gridTitle = "";
 
-  @ViewChild(GridModifCommandeEdiComponent) private datagrid: GridModifCommandeEdiComponent;
+  @ViewChild(GridModifCommandeEdiComponent)
+  private datagrid: GridModifCommandeEdiComponent;
 
   visible: boolean;
 
-  constructor(
-  ) { }
+  constructor() {}
 
   ngOnChanges() {
     this.ordreEdiId = this.commandeEdiId;
@@ -37,5 +42,4 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
     this.refreshGrid.emit();
     this.visible = false;
   }
-
 }

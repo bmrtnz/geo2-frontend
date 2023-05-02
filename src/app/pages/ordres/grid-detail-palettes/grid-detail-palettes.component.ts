@@ -2,7 +2,11 @@ import { Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { TracabiliteLignesService } from "app/shared/services/api/tracabilite-lignes.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -29,24 +33,26 @@ export class GridDetailPalettesComponent implements ToggledGrid {
   constructor(
     private tracabiliteLignesService: TracabiliteLignesService,
     public gridConfiguratorService: GridConfiguratorService,
-    public localizeService: LocalizationService,
+    public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreDetailPalettes,
+      Grid.OrdreDetailPalettes
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   async enableFilters() {
     if (this?.ordre?.id) {
-
-      const fields = this.columns.pipe(map(cols => cols.map(column => {
-        return column.dataField;
-      })));
+      const fields = this.columns.pipe(
+        map((cols) =>
+          cols.map((column) => {
+            return column.dataField;
+          })
+        )
+      );
       const gridFields = await fields.toPromise();
-      this.dataSource = this.tracabiliteLignesService.getDataSource_v2(gridFields);
+      this.dataSource =
+        this.tracabiliteLignesService.getDataSource_v2(gridFields);
 
       this.dataSource.filter([
         ["tracabiliteDetailPalette.ordre.id", "=", this.ordre.id],

@@ -10,21 +10,16 @@ import { OrdresIndicatorsService } from "./shared/services/ordres-indicators.ser
 import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
-    declarations: [AppComponent],
-    imports: [
-        BrowserModule,
-        SharedModule,
-        AppRoutingModule,
-        GraphQLModule,
-        HttpClientModule,
-    ],
-    exports: [],
-    providers: [
-        AuthService,
-        ScreenService,
-        DatePipe,
-        OrdresIndicatorsService,
-    ],
-    bootstrap: [AppComponent],
+  declarations: [AppComponent],
+  imports: [
+    BrowserModule,
+    SharedModule,
+    AppRoutingModule,
+    GraphQLModule,
+    HttpClientModule,
+  ],
+  exports: [],
+  providers: [AuthService, ScreenService, DatePipe, OrdresIndicatorsService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -24,7 +24,7 @@ import Ordre from "app/shared/models/ordre.model";
 @Component({
   selector: "app-grid-histo-modif-detail",
   templateUrl: "./grid-histo-modif-detail.component.html",
-  styleUrls: ["./grid-histo-modif-detail.component.scss"]
+  styleUrls: ["./grid-histo-modif-detail.component.scss"],
 })
 export class GridHistoModifDetailComponent implements OnChanges {
   public dataSource: DataSource;
@@ -39,14 +39,12 @@ export class GridHistoModifDetailComponent implements OnChanges {
     public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
-    public localizeService: LocalizationService,
+    public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.HistoriqueModifDetail,
+      Grid.HistoriqueModifDetail
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -56,15 +54,16 @@ export class GridHistoModifDetailComponent implements OnChanges {
   async enableFilters() {
     if (this.ligneLogistiqueId) {
       const fields = this.columns.pipe(
-        map((columns) => columns.map((column) => column.dataField)),
+        map((columns) => columns.map((column) => column.dataField))
       );
-      this.dataSource = this.historiqueModificationsDetailService.getDataSource_v2(
-        await fields.toPromise(),
-      );
+      this.dataSource =
+        this.historiqueModificationsDetailService.getDataSource_v2(
+          await fields.toPromise()
+        );
       this.dataSource.filter([
         ["logistique.id", "=", this.ligneLogistiqueId],
         "and",
-        ["ordre.id", "=", this.ordre.id]
+        ["ordre.id", "=", this.ordre.id],
       ]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
@@ -72,12 +71,14 @@ export class GridHistoModifDetailComponent implements OnChanges {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if ([
-        "nombrePalettesExpedieesApres",
-        "nombreColisExpediesApres",
-        "poidsBrutExpedieApres",
-        "poidsNetExpedieApres"
-      ].includes(e.column.dataField)) {
+      if (
+        [
+          "nombrePalettesExpedieesApres",
+          "nombreColisExpediesApres",
+          "poidsBrutExpedieApres",
+          "poidsNetExpedieApres",
+        ].includes(e.column.dataField)
+      ) {
         // Bold text
         e.cellElement.classList.add("bold-grey-light");
       }
@@ -87,6 +88,4 @@ export class GridHistoModifDetailComponent implements OnChanges {
   public refresh() {
     this.datagrid.instance.refresh();
   }
-
-
 }

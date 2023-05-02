@@ -35,7 +35,7 @@
                 [displayExpr]="displayIDBefore"
                 [searchExpr]="['id']"
                 itemTemplate="items"
-                >
+              >
                 <div *dxTemplate="let data of 'items'">
                   <div
                     [title]="!data.valide ? 'non valide' : ''"
@@ -182,7 +182,10 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-header-filter [visible]="true" [allowSearch]="true"></dxo-header-filter>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-paging></dxo-paging>
   <dxo-pager

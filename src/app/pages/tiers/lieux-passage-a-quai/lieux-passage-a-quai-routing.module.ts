@@ -6,31 +6,31 @@ import { LieuxPassageAQuaiDetailsComponent } from "./details/lieux-passage-a-qua
 import { LieuxPassageAQuaiListComponent } from "./list/lieux-passage-a-quai-list.component";
 
 const routes: Routes = [
-    {
-        path: "",
-        redirectTo: "list",
-        pathMatch: "full",
-    },
-    {
-        path: "list",
-        component: LieuxPassageAQuaiListComponent,
-    },
-    {
-        path: "create",
-        component: LieuxPassageAQuaiDetailsComponent,
-        canActivate: [NestedGuard],
-        canDeactivate: [EditingGuard],
-    },
-    {
-        path: ":id",
-        component: LieuxPassageAQuaiDetailsComponent,
-        canActivate: [NestedGuard],
-        canDeactivate: [EditingGuard],
-    },
+  {
+    path: "",
+    redirectTo: "list",
+    pathMatch: "full",
+  },
+  {
+    path: "list",
+    component: LieuxPassageAQuaiListComponent,
+  },
+  {
+    path: "create",
+    component: LieuxPassageAQuaiDetailsComponent,
+    canActivate: [NestedGuard],
+    canDeactivate: [EditingGuard],
+  },
+  {
+    path: ":id",
+    component: LieuxPassageAQuaiDetailsComponent,
+    canActivate: [NestedGuard],
+    canDeactivate: [EditingGuard],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class LieuxPassageAQuaiRoutingModule {}

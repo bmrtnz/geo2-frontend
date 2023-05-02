@@ -8,7 +8,7 @@ import { GridsConfigsService } from "app/shared/services/api/grids-configs.servi
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
-  GridConfiguratorService
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
@@ -33,7 +33,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     this.gridConfiguratorService.init(this.gridID, {
       ...event,
       onColumnsChange: this.onColumnsChange.bind(this),
-    })
+    });
 
   constructor(
     public clientsService: ClientsService,
@@ -50,19 +50,20 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
-    this.columns.subscribe(columns => this.updateData(columns));
+    this.columns.subscribe((columns) => this.updateData(columns));
   }
 
   private updateData(columns: GridColumn[]) {
     of(columns)
       .pipe(
         GridConfiguratorService.getVisible(),
-        GridConfiguratorService.getFields(),
+        GridConfiguratorService.getFields()
       )
       .subscribe((fields) => {
-        this.dataGrid.dataSource = this.clientsService.getDataSource_v2(
-          [Client.getKeyField() as string, ...fields],
-        );
+        this.dataGrid.dataSource = this.clientsService.getDataSource_v2([
+          Client.getKeyField() as string,
+          ...fields,
+        ]);
         this.dataGrid.dataSource.filter([
           "societe.id",
           "=",

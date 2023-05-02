@@ -1,20 +1,22 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { Program, ProgramService } from "app/shared/services/program.service";
-import { DxFileUploaderComponent, DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+import {
+  DxFileUploaderComponent,
+  DxPopupComponent,
+  DxScrollViewComponent,
+} from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 
-
 @Component({
   selector: "app-import-programmes-popup",
   templateUrl: "./import-programmes-popup.component.html",
-  styleUrls: ["./import-programmes-popup.component.scss"]
+  styleUrls: ["./import-programmes-popup.component.scss"],
 })
 export class ImportProgrammesPopupComponent implements OnChanges {
-
-  @Input() program: { id: string, name: string, text: string };
+  @Input() program: { id: string; name: string; text: string };
   @Output() programID: string;
   @Output() title: string;
 
@@ -27,16 +29,18 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   public customUploadData;
   public loading: boolean;
 
-  @ViewChild(GridImportProgrammesComponent, { static: false }) gridComponent: GridImportProgrammesComponent;
+  @ViewChild(GridImportProgrammesComponent, { static: false })
+  gridComponent: GridImportProgrammesComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
-  @ViewChild(DxFileUploaderComponent, { static: false }) uploader: DxFileUploaderComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxFileUploaderComponent, { static: false })
+  uploader: DxFileUploaderComponent;
 
   constructor(
     private localizeService: LocalizationService,
-    private programService: ProgramService,
-  ) {
-  }
+    private programService: ProgramService
+  ) {}
 
   ngOnChanges() {
     this.loadingMessage = "";
@@ -48,7 +52,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   }
 
   onClickUpload() {
-    const chooseFileButton = document.querySelector(".import-programme-popup .dx-fileuploader-button") as HTMLElement;
+    const chooseFileButton = document.querySelector(
+      ".import-programme-popup .dx-fileuploader-button"
+    ) as HTMLElement;
     if (this.programID === "tesco") {
       this.customUploadData = this.programService.buildCustomData(false);
       chooseFileButton.click();
@@ -64,9 +70,13 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   }
 
   onProgress(e) {
-    const progressStatut = document.querySelector(".import-programme-popup .dx-progressbar-status") as HTMLElement;
+    const progressStatut = document.querySelector(
+      ".import-programme-popup .dx-progressbar-status"
+    ) as HTMLElement;
     if (progressStatut?.innerHTML === "100%") {
-      progressStatut.innerHTML = this.localizeService.localize("traitement-en-cours");
+      progressStatut.innerHTML = this.localizeService.localize(
+        "traitement-en-cours"
+      );
       this.gridComponent.datagrid.instance.beginCustomLoading("");
     }
   }
@@ -74,11 +84,8 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   onUploaded(e: { request: XMLHttpRequest }) {
     const DSitems = e.request?.response?.rows;
 
-    if (e.request.status !== 200) return notify(
-      "L'import du programme a échoué",
-      "error",
-      7000
-    );
+    if (e.request.status !== 200)
+      return notify("L'import du programme a échoué", "error", 7000);
 
     if (!DSitems?.length) return this.noDataError();
 
@@ -102,7 +109,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   onUploadAborted(e) {
     this.endLoading();
-    notify(this.localizeService.localize("chargement-fichier-interrompu"), "warning", 3000);
+    notify(
+      this.localizeService.localize("chargement-fichier-interrompu"),
+      "warning",
+      3000
+    );
   }
 
   onUploadError(e) {
@@ -113,7 +124,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   noDataError() {
     this.endLoading();
-    notify(this.localizeService.localize("aucune-donnee-recuperee"), "warning", 7000);
+    notify(
+      this.localizeService.localize("aucune-donnee-recuperee"),
+      "warning",
+      7000
+    );
   }
 
   endLoading() {
@@ -124,8 +139,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   setTitle() {
     if (this.program) {
       this.programID = this.program.id;
-      this.title =
-        this.localizeService.localize("title-import-programme-popup").replace("&P", this.program.text);
+      this.title = this.localizeService
+        .localize("title-import-programme-popup")
+        .replace("&P", this.program.text);
       this.loadingMessage = "fake";
     }
   }
@@ -151,11 +167,12 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     if (this.loading) {
       confirm(
         this.localizeService.localize("text-popup-quit"),
-        this.localizeService.localize("title-import-programme-popup").replace(" &P", "")
-      ).then(res => this.popup.visible = !res);
+        this.localizeService
+          .localize("title-import-programme-popup")
+          .replace(" &P", "")
+      ).then((res) => (this.popup.visible = !res));
     } else {
       this.popup.visible = false;
     }
   }
-
 }

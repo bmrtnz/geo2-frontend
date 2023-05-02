@@ -6,12 +6,21 @@ import { FileManagerModule } from "app/shared/components/file-manager/file-manag
 import { EditingGuard } from "app/shared/guards/editing-guard";
 import { NestedGuard } from "app/shared/guards/nested-guard";
 import {
-  DxAccordionModule, DxBoxModule,
-  DxButtonModule, DxCheckBoxModule,
-  DxDataGridModule, DxDateBoxModule,
-  DxFormModule, DxListModule, DxNumberBoxModule, DxPopoverModule, DxSelectBoxModule, DxTagBoxModule,
+  DxAccordionModule,
+  DxBoxModule,
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxListModule,
+  DxNumberBoxModule,
+  DxPopoverModule,
+  DxSelectBoxModule,
+  DxTagBoxModule,
   DxTextAreaModule,
-  DxTextBoxModule, DxValidatorModule
+  DxTextBoxModule,
+  DxValidatorModule,
 } from "devextreme-angular";
 import { HistoriqueValideModule } from "../../../shared/components/historique-valide/historique-valide.component";
 import { PushHistoryPopupModule } from "../../../shared/components/push-history-popup/push-history-popup.component";
@@ -21,7 +30,6 @@ import { FournisseursRoutingModule } from "./fournisseurs-routing.module";
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
 import { FournisseursListComponent } from "./list/fournisseurs-list.component";
 import { ModificationListModule } from "app/shared/components/modification-list/modification-list.component";
-
 
 @NgModule({
   imports: [
@@ -52,13 +60,8 @@ import { ModificationListModule } from "app/shared/components/modification-list/
     CertificationDatePopupModule,
     ModificationListModule,
   ],
-  declarations: [
-    FournisseursListComponent,
-    FournisseurDetailsComponent
-  ],
+  declarations: [FournisseursListComponent, FournisseurDetailsComponent],
   providers: [NestedGuard, EditingGuard],
-  exports: [FournisseurDetailsComponent]
+  exports: [FournisseurDetailsComponent],
 })
-export class FournisseursModule { }
-
-
+export class FournisseursModule {}

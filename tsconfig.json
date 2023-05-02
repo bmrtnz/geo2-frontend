@@ -11,14 +11,13 @@
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES5",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2019",
-      "dom",
-      "esnext.asynciterable"
+      "es2020",
+      "dom"
     ],
     "paths": {
       "jszip": [
@@ -26,7 +25,8 @@
       ]
     },
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

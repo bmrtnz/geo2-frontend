@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   width="830"
   height="auto"
-  [closeOnOutsideClick]="false"
+  [hideOnOutsideClick]="false"
   [(visible)]="visible"
   title="{{ 'ordre-edi-choix-ordre' | localize }}"
   [focusStateEnabled]="false"
@@ -11,100 +11,100 @@
   (onShowing)="onShowing($event)"
   (onShowing)="onHiding()"
 >
+  <!-- Subtitle shown over the grid -->
+  <div class="popup-subtitle">
+    {{ "text-popup-visualiser-ordres-subtitle" | localize }}
+    <br />
+  </div>
 
-<!-- Subtitle shown over the grid -->
-<div class="popup-subtitle">
-  {{ 'text-popup-visualiser-ordres-subtitle' | localize }}
-<br>
-</div>
-
-<dx-data-grid
-  class="grid-lignes-edi"
-  [remoteOperations]="true"
-  [showBorders]="false"
-  [focusedRowEnabled]="false"
-  [focusedRowIndex]="0"
-  [columnAutoWidth]="false"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  (onRowClick)="onRowClick($event)"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onSelectionChanged)="selectFromGrid()"
-  (onToolbarPreparing)="
-    gridConfiguratorService.onToolbarPreparing(
-      gridTitle,
-      $event,
-      gridConfiguratorService.Grid.LignesEdi,
-      enableFilters.bind(this)
-    )
-  "
->
-  <!-- Grid configuration -->
-  <dxo-export fileName="Lignes de commandes EDI"></dxo-export>
-  <dxo-paging [enabled]="true"></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
-  ></dxo-pager>
-  <dxo-selection
-    mode="multiple"
-    [allowSelectAll]="false"
-    [showCheckBoxesMode]="'always'"
-  ></dxo-selection>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.LignesEdi"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
-  >
-  </dxo-column-chooser>
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [width]="column?.width"
-    [cssClass]="column?.cssClass"
-    [caption]="
-      ('ordresEdi-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+  <dx-data-grid
+    class="grid-lignes-edi"
+    [remoteOperations]="true"
+    [showBorders]="false"
+    [focusedRowEnabled]="false"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="false"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    (onRowClick)="onRowClick($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onSelectionChanged)="selectFromGrid()"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        gridTitle,
+        $event,
+        gridConfiguratorService.Grid.LignesEdi,
+        enableFilters.bind(this)
+      )
     "
-    [allowGrouping]="column?.allowGrouping ? column.allowGrouping : false"
-    [dataType]="column?.dataType"
-    [groupCellTemplate]="column.groupCellTemplate"
-    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [allowHeaderFiltering]="
-      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
   >
-  </dxi-column>
-
-</dx-data-grid>
-<br><br>
-<div class="popup-buttons-container">
-  <dx-button
-    type="default"
-    text="{{ 'btn-annuler' | localize }}"
-    (onClick)="cancelClick()"
-  ></dx-button>
-  <dx-button
-    type="normal"
-    text="{{ 'btn-ouvrir' | localize }}"
-    [hint]="chosenOrdersDisplayed"
-    [disabled]="!chosenOrders?.size"
-    (onClick)="applyClick()"
-  ></dx-button>
-</div>
+    <!-- Grid configuration -->
+    <dxo-export fileName="Lignes de commandes EDI"></dxo-export>
+    <dxo-paging [enabled]="true"></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-selection
+      mode="multiple"
+      [allowSelectAll]="false"
+      [showCheckBoxesMode]="'always'"
+    ></dxo-selection>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.LignesEdi"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [width]="column?.width"
+      [cssClass]="column?.cssClass"
+      [caption]="
+        ('ordresEdi-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [allowGrouping]="column?.allowGrouping ? column.allowGrouping : false"
+      [dataType]="column?.dataType"
+      [groupCellTemplate]="column.groupCellTemplate"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    >
+    </dxi-column>
+  </dx-data-grid>
+  <br /><br />
+  <div class="popup-buttons-container">
+    <dx-button
+      type="default"
+      text="{{ 'btn-annuler' | localize }}"
+      (onClick)="cancelClick()"
+    ></dx-button>
+    <dx-button
+      type="normal"
+      text="{{ 'btn-ouvrir' | localize }}"
+      [hint]="chosenOrdersDisplayed"
+      [disabled]="!chosenOrders?.size"
+      (onClick)="applyClick()"
+    ></dx-button>
+  </div>
 </dx-popup>

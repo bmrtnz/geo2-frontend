@@ -1,18 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 // App style
-@import "~scss/font";
-@import "~scss/icons";
+@import "scss/font";
+@import "scss/icons";
 
 // Dx style customisation
-@import "~scss/dx/base";
-@import "~scss/dx/datagrid";
-@import "~scss/dx/form";
-@import "~scss/dx/accordion";
-
+@import "scss/dx/base";
+@import "scss/dx/datagrid";
+@import "scss/dx/form";
+@import "scss/dx/accordion";
 
 .img-responsive {
   max-width: 100%;
@@ -125,7 +124,6 @@ body app-root.production {
 .form-ordres-page,
 .form-scrollTo-buttons-container,
 .accueil-ordres-page {
-
   // Mise en adéquation (16px au lieu de 14) vs taille police valeurs champs
   .dx-field-label {
     font-size: 16px;
@@ -140,11 +138,36 @@ body app-root.production {
     top: 11px;
   }
 
-  .left-button-container-detail .dx-button {
-    margin-bottom: 10px;
+  .left-button-container-detail {
+    .dx-button {
+      margin-bottom: 10px;
+
+      .dx-button-content {
+        display: block;
+
+        .dx-icon {
+          display: inline;
+          font-size: 18px !important;
+        }
+      }
+    }
+
+    .dx-checkbox-container {
+      display: inline-block;
+
+      .dx-checkbox-icon {
+        display: flex;
+      }
+    }
   }
 
-  .dx-button:not(.subButton):not(.small-article-button):not(.small-reset-button):not(.small-detail-histo-button):not(.grid-grouping-button):not(.small-detail-exp-button):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(.flux-doc-button) {
+  .dx-button:not(.subButton):not(.small-article-button):not(
+      .small-reset-button
+    ):not(.small-detail-histo-button):not(.grid-grouping-button):not(
+      .small-detail-exp-button
+    ):not(.grid-zoom-button):not(.icon-btn):not(.upperButton):not(
+      .flux-doc-button
+    ) {
     // margin-bottom: 10px;
 
     .dx-button-content {
@@ -182,19 +205,24 @@ body app-root.production {
 }
 
 // Thinner grids
-.dx-datagrid-rowsview .dx-row>td {
+.dx-datagrid-rowsview .dx-row > td {
   line-height: 0;
 
-  &>.dx-filemanager-details-item-name-wrapper,
+  & > .dx-filemanager-details-item-name-wrapper,
   & .dx-datagrid-summary-item {
     line-height: initial;
   }
 }
 
 // Datagrid title customization
-.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly.dx-state-hover::after,
-.dx-datagrid-header-panel .dx-texteditor.dx-editor-underlined.dx-state-readonly::after {
-  border: 0;
+.dx-datagrid-header-panel .dx-toolbar-before {
+  .dx-texteditor.dx-editor-filled::after {
+    border: 0 !important;
+  }
+
+  .dx-texteditor-input-container {
+    left: 8px;
+  }
 }
 
 // Reducing space between form fields
@@ -206,7 +234,7 @@ body app-root.production {
 }
 
 // Reducing space between checkboxes
-.dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
+.dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
   margin: 10px 0 !important;
 }
 
@@ -231,7 +259,7 @@ body app-root.production {
   background-color: #ff7f07;
 }
 
-.dx-invalid-message>.dx-overlay-content {
+.dx-invalid-message > .dx-overlay-content {
   background-color: rgba(255, 255, 255, 1);
   font-size: 14px;
   padding: 3px 8px 4px 0px;
@@ -279,10 +307,11 @@ body app-root.production {
   td {
     background-color: #666 !important;
     color: #fff !important;
+    font-size: 12px;
 
     &.dx-command-select {
       .dx-checkbox-icon {
-        border-color: #FFF;
+        border-color: #fff;
       }
     }
 
@@ -320,12 +349,8 @@ body app-root.production {
   padding: 0 18px;
   justify-content: left;
 
-  .dx-checkbox-icon {
-    top: 5px;
-  }
-
   .dx-datagrid-filter-panel-text {
-    margin: auto;
+    margin-top: 3px;
     pointer-events: none;
     display: none;
   }
@@ -334,7 +359,7 @@ body app-root.production {
     display: none;
   }
 
-  .dx-datagrid-filter-panel-checkbox~.dx-datagrid-filter-panel-text {
+  .dx-datagrid-filter-panel-checkbox ~ .dx-datagrid-filter-panel-text {
     display: block;
   }
 
@@ -343,7 +368,7 @@ body app-root.production {
     padding: 0px 10px 2px 10px;
     background: $base-accent;
     font-size: 13px;
-    color: #FFF;
+    color: #fff;
     border-radius: 5px;
     text-decoration: none !important;
 
@@ -354,7 +379,9 @@ body app-root.production {
 }
 
 // Reduce vertical spacing in popup list items
-.dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+.dx-dropdownlist-popup-wrapper
+  .dx-list:not(.dx-list-select-decorator-enabled)
+  .dx-list-item-content {
   padding: 6px 15px !important;
 }
 
@@ -484,8 +511,8 @@ body app-root.production {
 }
 
 // Better selection rows readibility
-.dx-selection.dx-row:not(.dx-row-focused)>td {
-  background-color: rgba(0, 117, 156, .3) !important;
+.dx-selection.dx-row:not(.dx-row-focused) > td {
+  background-color: rgba(0, 117, 156, 0.3) !important;
 }
 
 .grid-grouping-button {
@@ -494,7 +521,7 @@ body app-root.production {
   width: 26px;
   min-width: 26px;
   z-index: 1 !important;
-  margin-top: 11px;
+  margin-top: 14px !important;
   right: 141px;
   transform: rotate(180deg);
 
@@ -502,7 +529,7 @@ body app-root.production {
     padding: 0;
 
     .dx-icon {
-      font-size: 18px;
+      font-size: 18px !important;
     }
   }
 }
@@ -515,7 +542,10 @@ body app-root.production {
 
 // Excel download buttons - grids
 
-.dx-datagrid-header-panel .dx-toolbar-after .dx-toolbar-menu-container .dx-dropdownmenu-button {
+.dx-datagrid-header-panel
+  .dx-toolbar-after
+  .dx-toolbar-menu-container
+  .dx-dropdownmenu-button {
   margin-left: -3px;
 
   &:not(:hover) {
@@ -538,11 +568,105 @@ body app-root.production {
       top: -1px;
       height: 30px;
       float: left;
-      padding-left: 110px;
+      padding-left: 110px !important;
       overflow: visible;
 
       .dx-button-content {
-        padding: 0;
+        padding: 0 !important;
+      }
+
+      &:hover {
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+
+/////////////////////////////////////////
+/// Reassigning CSS parameters to fix
+/// Visual inconsistency since
+/// v Dx >= 21.5
+/////////////////////////////////////////
+
+.dx-button-has-icon .dx-icon {
+  font-size: 24px !important;
+}
+
+.dx-context-menu .dx-menu-item {
+  font-size: 15px;
+}
+
+.dx-item-content .dx-list-item-content {
+  font-size: 15px;
+}
+
+.dx-selectbox,
+.dx-textbox,
+.dx-numberbox {
+  background-color: transparent !important;
+}
+
+// .dx-field-value {
+
+.dx-texteditor.dx-editor-underlined .dx-placeholder::before,
+.dx-texteditor-input,
+.dx-texteditor.dx-editor-filled .dx-placeholder::before,
+.dx-texteditor.dx-editor-filled .dx-texteditor-input,
+.dx-texteditor.dx-editor-outlined .dx-placeholder::before,
+.dx-texteditor.dx-editor-outlined .dx-texteditor-input {
+  padding: 7px 0 6px !important;
+}
+
+// }
+
+.dx-editor-filled
+  .dx-texteditor-buttons-container:last-child
+  > .dx-dropdowneditor-button:last-child,
+.dx-editor-filled
+  .dx-texteditor-buttons-container:last-child
+  > .dx-numberbox-spin-container:last-child,
+.dx-editor-outlined
+  .dx-texteditor-buttons-container:last-child
+  > .dx-dropdowneditor-button:last-child,
+.dx-editor-outlined
+  .dx-texteditor-buttons-container:last-child
+  > .dx-numberbox-spin-container:last-child,
+.dx-editor-underlined
+  .dx-texteditor-buttons-container:last-child
+  > .dx-dropdowneditor-button:last-child,
+.dx-editor-underlined
+  .dx-texteditor-buttons-container:last-child
+  > .dx-numberbox-spin-container:last-child {
+  margin-right: 0;
+}
+
+.dx-item-content.dx-list-item-content {
+  font-size: 16px;
+}
+
+.dx-button-has-text .dx-button-content,
+.dx-button-has-text .dx-button-content .dx-button-text {
+  overflow: visible;
+}
+
+.dx-texteditor.dx-editor-filled.dx-state-disabled .dx-texteditor-input,
+.dx-texteditor.dx-editor-filled.dx-state-readonly .dx-texteditor-input,
+.dx-texteditor.dx-editor-filled.dx-state-readonly.dx-state-hover
+  .dx-texteditor-input {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.dx-datagrid {
+  .dx-toolbar-after {
+    .dx-datagrid-toolbar-button {
+      .dx-button-text {
+        display: none !important;
+      }
+
+      .dx-icon-edit-button-addrow {
+        font-size: 18px !important;
+        width: 24px;
+        height: 24px;
       }
     }
   }

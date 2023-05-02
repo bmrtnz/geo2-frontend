@@ -6,39 +6,58 @@
   [visible]="visible"
   (onHidden)="onHidden()"
   (onShown)="onShowing($event)"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
-    <form #form="ngForm" class="inputs">
-
+    <form
+      #form="ngForm"
+      class="inputs"
+    >
       <!-- Entrepôt, station & type palox -->
       <div class="palox-info-boxes">
         <div class="dx-field">
-          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-entrepot' | localize }}</div>
+          <div class="dx-field-label text-align-right">
+            {{ "text-palox-popup-entrepot" | localize }}
+          </div>
           <div class="dx-field-value">
-            <dx-text-box #entrepotBox [disabled]="true"></dx-text-box>
+            <dx-text-box
+              #entrepotBox
+              [disabled]="true"
+            ></dx-text-box>
           </div>
         </div>
         <div class="dx-field">
-          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-station' | localize }}</div>
+          <div class="dx-field-label text-align-right">
+            {{ "text-palox-popup-station" | localize }}
+          </div>
           <div class="dx-field-value">
-            <dx-text-box #stationBox [disabled]="true"></dx-text-box>
+            <dx-text-box
+              #stationBox
+              [disabled]="true"
+            ></dx-text-box>
           </div>
         </div>
         <div class="dx-field">
-          <div class="dx-field-label text-align-right">{{ 'text-palox-popup-type-palox' | localize }}</div>
+          <div class="dx-field-label text-align-right">
+            {{ "text-palox-popup-type-palox" | localize }}
+          </div>
           <div class="dx-field-value">
-            <dx-text-box #typePaloxBox [disabled]="true"></dx-text-box>
+            <dx-text-box
+              #typePaloxBox
+              [disabled]="true"
+            ></dx-text-box>
           </div>
         </div>
       </div>
 
-      <br>
+      <br />
 
       <div class="palox-info-boxes palox-inputs">
         <!-- Palox -->
         <div class="dx-field">
-          <div class="dx-field-label text-align-right large-padding-left">{{ paloxLabel }}</div>
+          <div class="dx-field-label text-align-right large-padding-left">
+            {{ paloxLabel }}
+          </div>
           <div class="dx-field-value">
             <dx-number-box
               ngModel
@@ -46,7 +65,7 @@
               name="palox"
               valueChangeEvent="keyup"
               [showClearButton]="true"
-              >
+            >
               <dx-validator>
                 <dxi-validation-rule type="required"></dxi-validation-rule>
               </dx-validator>
@@ -66,7 +85,7 @@
               dateSerializationFormat="yyyy-MM-dd"
               valueChangeEvent="keyup"
               type="date"
-              >
+            >
               <dx-validator>
                 <dxi-validation-rule type="required"></dxi-validation-rule>
               </dx-validator>
@@ -76,19 +95,25 @@
       </div>
 
       <!-- Commentaire -->
-      <div class="dx-field" *ngIf="purpose === 'adjust'">
-        <div class="dx-field-label text-align-right comment-palox">{{ 'text-palox-popup-commentaire' | localize }}</div>
+      <div
+        class="dx-field"
+        *ngIf="purpose === 'adjust'"
+      >
+        <div class="dx-field-label text-align-right comment-palox">
+          {{ "text-palox-popup-commentaire" | localize }}
+        </div>
         <div class="dx-field-value">
           <dx-text-box
             ngModel
             #commentBox
-            name="commentaire">
+            name="commentaire"
+          >
           </dx-text-box>
         </div>
       </div>
 
-      <br>
-      <br>
+      <br />
+      <br />
       <div class="popup-action">
         <dx-button
           text="{{ 'btn-annuler' | localize }}"
@@ -104,4 +129,3 @@
     </form>
   </div>
 </dx-popup>
-

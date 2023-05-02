@@ -70,27 +70,21 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
-    private tabContext: TabContext,
+    private tabContext: TabContext
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
+      this.INDICATOR_NAME
     );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdresNonClotures,
+      Grid.OrdresNonClotures
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.dataSource = this.indicator.dataSource;
   }
 
@@ -117,27 +111,27 @@ export class OrdresNonCloturesComponent implements OnInit, AfterViewInit {
     else if (!this.authService.isAdmin)
       filters.push(
         ...(this.authService.currentUser.personne?.role?.toString() ===
-          Role[Role.COMMERCIAL]
+        Role[Role.COMMERCIAL]
           ? [
-            "and",
-            [
-              "commercial.id",
-              "=",
-              this.authService.currentUser.commercial.id,
-            ],
-          ]
+              "and",
+              [
+                "commercial.id",
+                "=",
+                this.authService.currentUser.commercial.id,
+              ],
+            ]
           : []),
         ...(this.authService.currentUser.personne?.role?.toString() ===
-          Role[Role.ASSISTANT]
+        Role[Role.ASSISTANT]
           ? [
-            "and",
-            [
-              "assistante.id",
-              "=",
-              this.authService.currentUser.assistante.id,
-            ],
-          ]
-          : []),
+              "and",
+              [
+                "assistante.id",
+                "=",
+                this.authService.currentUser.assistante.id,
+              ],
+            ]
+          : [])
       );
 
     this.dataSource?.filter(filters);

@@ -1,5 +1,5 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 h6 {
   margin: 0;
@@ -22,13 +22,11 @@ h6 {
   width: 980px;
 }
 
-
 ::ng-deep .period-list .dx-list-item {
   padding: 6px 15px;
 }
 
 ::ng-deep .ordres-litiges-grid {
-
   // Highlight groups
 
   max-width: none !important;
@@ -38,7 +36,7 @@ h6 {
       background: $base-accent;
       color: white;
 
-      &~td {
+      & ~ td {
         background: $base-accent;
 
         .dx-checkbox,
@@ -56,7 +54,7 @@ h6 {
       color: $base-accent;
       background: rgba(0, 117, 156, 0.3);
 
-      &~td {
+      & ~ td {
         background: rgba(0, 117, 156, 0.3);
 
         .dx-checkbox-checked .dx-checkbox-icon {
@@ -64,7 +62,7 @@ h6 {
         }
 
         .dx-checkbox:not(.dx-checkbox-checked) .dx-checkbox-icon {
-          background: #FFF;
+          background: #fff;
         }
 
         .dx-checkbox-icon {
@@ -79,7 +77,7 @@ h6 {
           margin-left: 5px;
           font-weight: normal;
           border-radius: 12px;
-          background: #8FC459;
+          background: #8fc459;
           width: 70px;
           height: 20px;
           padding: 4px 10px;
@@ -90,12 +88,11 @@ h6 {
           font-size: 13px;
 
           &:hover {
-            background: #5F9429;
+            background: #5f9429;
           }
         }
       }
     }
-
   }
 
   // Redesign group arrows
@@ -155,7 +152,6 @@ h6 {
       .litiges-causeconseq {
         display: inline-block;
       }
-
     }
   }
 
@@ -170,5 +166,4 @@ h6 {
   .visibility-hidden {
     visibility: hidden;
   }
-
 }

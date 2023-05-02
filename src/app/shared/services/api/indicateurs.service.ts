@@ -11,43 +11,46 @@ export enum Indicateur {
   LitigeOuvert = "LitigeOuvert",
 }
 
-export type IndicateurCount = { count: number, secteur?: string };
-export type IndicateurCountResponse = { [key in keyof typeof Indicateur]: IndicateurCount };
+export type IndicateurCount = { count: number; secteur?: string };
+export type IndicateurCountResponse = {
+  [key in keyof typeof Indicateur]: IndicateurCount;
+};
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class IndicateursService {
-
   public secteur: string;
 
   constructor(
     private apollo: Apollo,
-    private currentCompanyService: CurrentCompanyService,
-  ) { }
+    private currentCompanyService: CurrentCompanyService
+  ) {}
 
   /**
    * Request entities count from specified indicators
    */
   public countByIndicators(...indicateurs: Indicateur[]) {
-    return this.apollo.query<IndicateurCountResponse>({
-      query: gql(this.buildCountsGraph(...indicateurs)),
-      fetchPolicy: "network-only",
-      variables: {
-        societeCode: this.currentCompanyService.getCompany().id,
-        secteurCode: this.secteur,
-        ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
-      },
-    })
+    return this.apollo
+      .query<IndicateurCountResponse>({
+        query: gql(this.buildCountsGraph(...indicateurs)),
+        fetchPolicy: "network-only",
+        variables: {
+          societeCode: this.currentCompanyService.getCompany().id,
+          secteurCode: this.secteur,
+          ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
+        },
+      })
       .pipe(
-        takeWhile(res => res.loading, true),
-        map(res => res.data),
+        takeWhile((res) => res.loading, true),
+        map((res) => res.data)
       );
   }
 
   private buildCountsGraph(...indicateurs: Indicateur[]) {
-    return ApiService.buildGraph("query", indicateurs.map(alias =>
-      ({
+    return ApiService.buildGraph(
+      "query",
+      indicateurs.map((alias) => ({
         name: "countByIndicator",
         alias,
         body: ["count", "secteur"],
@@ -56,13 +59,18 @@ export class IndicateursService {
           { name: "societeCode", value: "societeCode", isVariable: true },
           { name: "secteurCode", value: "secteurCode", isVariable: true },
         ],
-      })
-    ), indicateurs.map((name: string) =>
-      ({ name, type: "Indicateur", isOptionnal: false })
-    ).concat([
-      { name: "societeCode", type: "String", isOptionnal: false },
-      { name: "secteurCode", type: "String", isOptionnal: true },
-    ]),
-      "CountByIndicators");
+      })),
+      indicateurs
+        .map((name: string) => ({
+          name,
+          type: "Indicateur",
+          isOptionnal: false,
+        }))
+        .concat([
+          { name: "societeCode", type: "String", isOptionnal: false },
+          { name: "secteurCode", type: "String", isOptionnal: true },
+        ]),
+      "CountByIndicators"
+    );
   }
 }

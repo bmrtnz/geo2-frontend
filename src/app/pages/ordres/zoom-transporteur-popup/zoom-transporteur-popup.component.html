@@ -1,7 +1,7 @@
 <dx-popup
   [showTitle]="true"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   [title]="title"
   (onShowing)="onShowing($event)"
@@ -9,9 +9,7 @@
 >
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-      <app-transporteur-details
-        [transporteurLigneId]="transporteurLigneId"
-      >
+      <app-transporteur-details [transporteurLigneId]="transporteurLigneId">
       </app-transporteur-details>
       <app-contacts [transporteurLigneId]="transporteurLigneId"></app-contacts>
       <br />

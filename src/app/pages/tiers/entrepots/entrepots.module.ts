@@ -50,8 +50,12 @@ import { SetBassinComponent } from "./set-bassin/set-bassin.component";
     EditingAlertModule,
     ModificationListModule,
   ],
-  declarations: [EntrepotsListComponent, EntrepotDetailsComponent, SetBassinComponent],
+  declarations: [
+    EntrepotsListComponent,
+    EntrepotDetailsComponent,
+    SetBassinComponent,
+  ],
   providers: [NestedGuard, EditingGuard],
-  exports: [EntrepotDetailsComponent]
+  exports: [EntrepotDetailsComponent],
 })
-export class EntrepotsModule { }
+export class EntrepotsModule {}

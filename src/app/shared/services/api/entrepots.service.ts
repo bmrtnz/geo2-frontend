@@ -14,10 +14,7 @@ import { AuthService } from "../auth.service";
 export class EntrepotsService extends ApiService implements APIRead {
   fieldsFilter = /.*\.(?:id|code|raisonSocial|ville|valide|typeTiers)$/i;
 
-  constructor(
-    apollo: Apollo,
-    private authService: AuthService
-  ) {
+  constructor(apollo: Apollo, private authService: AuthService) {
     super(apollo, Entrepot);
   }
 
@@ -27,25 +24,31 @@ export class EntrepotsService extends ApiService implements APIRead {
     return this.watchGetOneQuery<Response>({ variables });
   }
 
-  getOneByCodeAndSocieteId(columns: Set<string>, code: string, societeId?: string) {
+  getOneByCodeAndSocieteId(
+    columns: Set<string>,
+    code: string,
+    societeId?: string
+  ) {
     return this.apollo.query<{ entrepotByCodeAndSocieteId: Entrepot }>({
-      query: gql(ApiService.buildGraph(
-        "query",
-        [
-          {
-            name: "entrepotByCodeAndSocieteId",
-            body: columns,
-            params: [
-              { name: "code", value: "code", isVariable: true },
-              { name: "societeId", value: "societeId", isVariable: true }
-            ],
-          },
-        ],
-        [
-          { name: "code", type: "String", isOptionnal: false },
-          { name: "societeId", type: "String", isOptionnal: true }
-        ],
-      )),
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "entrepotByCodeAndSocieteId",
+              body: columns,
+              params: [
+                { name: "code", value: "code", isVariable: true },
+                { name: "societeId", value: "societeId", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "code", type: "String", isOptionnal: false },
+            { name: "societeId", type: "String", isOptionnal: true },
+          ]
+        )
+      ),
       variables: { code, societeId },
     });
   }
@@ -68,42 +71,27 @@ export class EntrepotsService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll_v2(columns);
             type Response = { allEntrepot: RelayPage<Entrepot> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allEntrepot)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allEntrepot,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allEntrepot)
+                resolve(this.asInstancedListCount(res.data.allEntrepot));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne_v2(columns);
             type Response = { entrepot: Entrepot };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.entrepot)
-                  resolve(new Entrepot(res.data.entrepot));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.entrepot)
+                resolve(new Entrepot(res.data.entrepot));
+            });
           }),
       }),
     });
@@ -117,12 +105,15 @@ export class EntrepotsService extends ApiService implements APIRead {
     return this.watchSaveQuery_v2({ variables }, columns);
   }
 
-  disableCreation(societeID, codeClient) {   // Some companies/clients can't create new ones
-    const disable = !this.authService.currentUser.adminClient
-      && (
-        (societeID === "IMP")
-        || ((societeID === "BWS") && ["BWSTOCK", "BWS GBP", "BWSTOCKGBPAL", "BWSTOCK GB"].includes(codeClient))
-      );
+  disableCreation(societeID, codeClient) {
+    // Some companies/clients can't create new ones
+    const disable =
+      !this.authService.currentUser.adminClient &&
+      (societeID === "IMP" ||
+        (societeID === "BWS" &&
+          ["BWSTOCK", "BWS GBP", "BWSTOCKGBPAL", "BWSTOCK GB"].includes(
+            codeClient
+          )));
     return disable;
   }
 }

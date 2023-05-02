@@ -33,7 +33,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
         if (res.data && res.data.stockArticleAge)
           resolve(new StockArticleAge(res.data.stockArticleAge));
       });
-    })
+    });
 
   getDataSource() {
     return new DataSource({
@@ -44,30 +44,19 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll(3);
             type Response = {
               allStockArticleAge: RelayPage<StockArticleAge>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allStockArticleAge)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allStockArticleAge,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allStockArticleAge)
+                resolve(this.asInstancedListCount(res.data.allStockArticleAge));
+            });
           }),
         byKey: this.byKey,
       }),
@@ -83,9 +72,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const [value] = options.filter.slice(-1);
@@ -94,10 +81,8 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
               { ...options, group: { selector } },
               (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
-              },
+                  resolve(this.asListCount(res.data.distinct));
+              }
             );
           }),
       }),
@@ -115,9 +100,7 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = `
@@ -160,18 +143,10 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
               ...this.mapLoadOptionsToVariables(options),
               ...this.customVariables,
             };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.fetchStock)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.fetchStock,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.fetchStock)
+                resolve(this.asInstancedListCount(res.data.fetchStock));
+            });
           }),
         byKey: this.byKey,
       }),
@@ -182,34 +157,46 @@ export class StockArticlesAgeService extends ApiService implements APIRead {
   public subDistinct<T extends SubEntity>(
     entity: Type<T>,
     especeID: string,
-    body?: Set<string>,
+    body?: Set<string>
   ) {
-    if (!body) body = new Set([
-      (entity as any).getKeyField(),
-      (entity as any).getLabelField()
-    ]);
+    if (!body)
+      body = new Set([
+        (entity as any).getKeyField(),
+        (entity as any).getLabelField(),
+      ]);
     const name = `subDistinctStock${entity.name}`;
-    return this.apollo.query<{ [name: string]: Array<T> }>({
-      query: gql(ApiService.buildGraph("query", [{
-        name,
-        body,
-        params: [{ name: "especeID", value: "especeID", isVariable: true }],
-      }], [{ name: "especeID", type: "String", isOptionnal: false }])),
-      variables: { especeID },
-    }).pipe(map(res => res.data[name]));
+    return this.apollo
+      .query<{ [name: string]: Array<T> }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name,
+                body,
+                params: [
+                  { name: "especeID", value: "especeID", isVariable: true },
+                ],
+              },
+            ],
+            [{ name: "especeID", type: "String", isOptionnal: false }]
+          )
+        ),
+        variables: { especeID },
+      })
+      .pipe(map((res) => res.data[name]));
   }
 
   public getSubDistinctDataSource<T extends SubEntity>(
     entity: Type<T>,
     especeID: string,
-    body?: Set<string>,
+    body?: Set<string>
   ) {
     return new DataSource({
       store: new CustomStore({
         key: (entity as any).getKeyField(),
-        load: options => this.subDistinct(entity, especeID, body).toPromise(),
+        load: (options) => this.subDistinct(entity, especeID, body).toPromise(),
       }),
     });
   }
 }
-

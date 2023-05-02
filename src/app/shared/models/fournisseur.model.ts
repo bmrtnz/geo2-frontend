@@ -26,7 +26,7 @@ export enum LibelleNatureStation {
   EXPEDITEUR_EMBALLEUR = "Force liste expéditeur",
   STATION_NORMAL = "Propriétaire et emballeur/expéditeur",
   EXCLUSIVEMENT_PROPRIETAIRE = "Propriétaire",
-  EXCLUSIVEMENT_EXPEDITEUR = "Emballeur/expéditeur"
+  EXCLUSIVEMENT_EXPEDITEUR = "Emballeur/expéditeur",
 }
 
 @ModelName("Fournisseur")
@@ -82,7 +82,7 @@ export class Fournisseur extends Model {
   @Field({ dataType: "date" }) public dateDebutIfco: string;
   @Field() public consignePaloxSa: boolean;
   @Field() public consignePaloxUdc: boolean;
-  @Field(({ asLabel: true })) public listeExpediteurs: string;
+  @Field({ asLabel: true }) public listeExpediteurs: string;
   @Field({ allowHeaderFiltering: false, allowSearch: false })
   public typeTiers: TypeTiers;
   @Field() public autoFacturation: boolean;

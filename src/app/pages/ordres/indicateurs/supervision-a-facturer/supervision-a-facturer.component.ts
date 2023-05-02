@@ -1,11 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
 import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { Role } from "app/shared/models/personne.model";
 import {
-  AuthService, ClientsService, EntrepotsService, LocalizationService
+  AuthService,
+  ClientsService,
+  EntrepotsService,
+  LocalizationService,
 } from "app/shared/services";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -15,8 +18,8 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DateManagementService } from "app/shared/services/date-management.service";
 import {
   Grid,
-
-  GridConfig, GridConfiguratorService
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -76,15 +79,15 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
 
-  public formGroup = new FormGroup({
-    secteurCode: new FormControl(),
-    clientCode: new FormControl(),
-    entrepotCode: new FormControl(),
-    codeCommercial: new FormControl(),
-    codeAssistante: new FormControl(),
-    dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    dateMax: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    secteurCode: new UntypedFormControl(),
+    clientCode: new UntypedFormControl(),
+    entrepotCode: new UntypedFormControl(),
+    codeCommercial: new UntypedFormControl(),
+    codeAssistante: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
@@ -99,24 +102,18 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     private currentCompanyService: CurrentCompanyService,
     public ordresBafService: OrdresBafService,
     public authService: AuthService,
-    private tabContext: TabContext,
+    private tabContext: TabContext
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdresAFacturer,
+      Grid.OrdresAFacturer
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
 
     this.secteurs = this.secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.clients = this.clientsService.getDataSource_v2([
       "id",
@@ -158,11 +155,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     this.toRefresh = true;
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
 
     this.ordresDataSource = this.ordresBafService.getDataSource_v2(
-      await fields.toPromise(),
+      await fields.toPromise()
     );
   }
 
@@ -202,12 +199,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -251,11 +248,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       "raisonSocial",
       "secteur.id",
     ]);
-    if (e.value) this.clients.filter([
-      ["secteur.id", "=", e.value.id],
-      "and",
-      ["societe.id", "=", this.currentCompanyService.getCompany().id]
-    ]);
+    if (e.value)
+      this.clients.filter([
+        ["secteur.id", "=", e.value.id],
+        "and",
+        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+      ]);
   }
 
   onClientChange(e) {
@@ -269,8 +267,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.value) this.entrepots.filter(["client.id", "=", e.value.id]);
   }
 
-  onGridContentReady(e) {
-  }
+  onGridContentReady(e) {}
 
   manualDate(e) {
     // We check that this change is coming from the user, not following a period change
@@ -318,20 +315,21 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       this.tabContext.openOrdre(e.data.numeroOrdre, e.data.campagneID);
     }
     if (e.column.dataField === "clientReference") {
-
       let regexCtrlCheck;
       let lengthMess = "";
       // Find length requirements 8; = 8 only / 6-70 : from 6 to 70 car
       // Entrepot first otherwise client
-      const ctrl = e.data.ordre.entrepot.controlReferenceClient ?? e.data.ordre.client.controlReferenceClient;
+      const ctrl =
+        e.data.ordre.entrepot.controlReferenceClient ??
+        e.data.ordre.client.controlReferenceClient;
       if (ctrl) {
         let regexCtrl;
 
         if (ctrl.includes(";")) {
-          const values = ctrl.split(";").filter(v => v);
+          const values = ctrl.split(";").filter((v) => v);
 
-          lengthMess = `(${values.map(v => `${v}`).join(" ou ")} chiffres)`;
-          regexCtrl = values.map(v => `\\d{${v}}`).join("|");
+          lengthMess = `(${values.map((v) => `${v}`).join(" ou ")} chiffres)`;
+          regexCtrl = values.map((v) => `\\d{${v}}`).join("|");
         } else if (ctrl.includes("-")) {
           const ctrlValues = ctrl.split("-");
           const minNumberLength = ctrlValues[0];
@@ -347,14 +345,16 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       }
       // Show text change popup
       this.promptPopupTitle = this.localization.localize("referenceClient");
-      this.promptPopup.show(
-        {
-          commentTitle: this.localization.localize("ordreBAF-change-refClt") + " " + lengthMess + " :",
-          comment: e.value ?? "",
-          commentMaxLength: 70,
-          commentRegex: regexCtrlCheck
-        }
-      );
+      this.promptPopup.show({
+        commentTitle:
+          this.localization.localize("ordreBAF-change-refClt") +
+          " " +
+          lengthMess +
+          " :",
+        comment: e.value ?? "",
+        commentMaxLength: 70,
+        commentRegex: regexCtrlCheck,
+      });
       // Store current order id/ cell elem
       this.currOrder = { id: e.data.ordreRef };
       this.currCell = e;
@@ -371,40 +371,58 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       next: () => {
         const ds = this.datagrid.dataSource as DataSource;
         const store = ds.store() as CustomStore;
-        store.push([{ key: ordre.id, type: "update", data: { clientReference: ref } }]);
-        notify(this.localizeService.localize("ordreBAF-save-refClient"), "success", 2000);
-        this.ordresBafService.fControlBaf(ordre.id, this.currentCompanyService.getCompany().id).subscribe({
-          next: (res: any) => {
-            console.log(res);
-            store.push([{
-              key: ordre.id, type: "update", data: {
-                indicateurBaf: res.data.fControlBaf.data.ind_baf,
-                description: res.data.fControlBaf.data.desc_ctl
-              }
-            }]);
-            this.datagrid.instance.repaintRows([this.currCell.row.rowIndex]);
-            this.datagrid.instance.endCustomLoading();
-          },
-          error: (err) => {
-            notify("Erreur update valeurs", "error", 3000);
-            console.log(err);
-            this.datagrid.instance.endCustomLoading();
-          }
-        });
+        store.push([
+          { key: ordre.id, type: "update", data: { clientReference: ref } },
+        ]);
+        notify(
+          this.localizeService.localize("ordreBAF-save-refClient"),
+          "success",
+          2000
+        );
+        this.ordresBafService
+          .fControlBaf(ordre.id, this.currentCompanyService.getCompany().id)
+          .subscribe({
+            next: (res: any) => {
+              console.log(res);
+              store.push([
+                {
+                  key: ordre.id,
+                  type: "update",
+                  data: {
+                    indicateurBaf: res.data.fControlBaf.data.ind_baf,
+                    description: res.data.fControlBaf.data.desc_ctl,
+                  },
+                },
+              ]);
+              this.datagrid.instance.repaintRows([this.currCell.row.rowIndex]);
+              this.datagrid.instance.endCustomLoading();
+            },
+            error: (err) => {
+              notify("Erreur update valeurs", "error", 3000);
+              console.log(err);
+              this.datagrid.instance.endCustomLoading();
+            },
+          });
       },
       error: (err) => {
         notify("Erreur sauvegarde réf. client", "error", 3000);
         console.log(err);
         this.datagrid.instance.endCustomLoading();
-      }
+      },
     });
   }
 
   launch(e) {
     this.launchEnabled = false;
-    const ordreRefs = this.datagrid.instance.getSelectedRowsData().map((row: Partial<OrdreBaf>) => row.ordreRef);
+    const ordreRefs = this.datagrid.instance
+      .getSelectedRowsData()
+      .map((row: Partial<OrdreBaf>) => row.ordreRef);
     this.ordresBafService
-      .fBonAFacturer(ordreRefs, this.currentCompanyService.getCompany().id, true) // true for silent mode without warnings
+      .fBonAFacturer(
+        ordreRefs,
+        this.currentCompanyService.getCompany().id,
+        true
+      ) // true for silent mode without warnings
       .subscribe({
         complete: () => this.enableFilters(),
       });
@@ -424,7 +442,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add("refClient-BAF");
         e.cellElement.setAttribute(
           "title",
-          this.localization.localize("hint-click-change-refClt"),
+          this.localization.localize("hint-click-change-refClt")
         );
       }
 
@@ -433,7 +451,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add("text-underlined");
         e.cellElement.setAttribute(
           "title",
-          this.localization.localize("hint-click-ordre"),
+          this.localization.localize("hint-click-ordre")
         );
       }
     }
@@ -446,15 +464,18 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       }
 
       if (e.rowType === "data") {
-
         if (e.value === "0") {
           if (field !== "indicateurBaf") {
             e.cellElement.innerText = "";
           } else {
             // OK rows get selected
             let selected = [];
-            e.component.getSelectedRowKeys().map(sel => selected.push(e.component.getRowIndexByKey(sel)));
-            selected?.length ? selected.push(e.rowIndex) : selected = [e.rowIndex];
+            e.component
+              .getSelectedRowKeys()
+              .map((sel) => selected.push(e.component.getRowIndexByKey(sel)));
+            selected?.length
+              ? selected.push(e.rowIndex)
+              : (selected = [e.rowIndex]);
             e.component.selectRowsByIndexes(selected);
           }
         }
@@ -462,7 +483,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add(this.colorizeCell(e.value));
         e.cellElement.innerText =
           Object.keys(status)[
-          (Object.values(status) as string[]).indexOf(e.value)
+            (Object.values(status) as string[]).indexOf(e.value)
           ];
         if (e.data.description) {
           e.cellElement.setAttribute(
@@ -487,10 +508,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onSelectionChanged(e) {
     // Disallowing selection of hidden checkboxes (Select All button) when status is BLOCKED
-    e.component.getVisibleRows().map(row => {
-      if (row.data.indicateurBaf === status.BLOQUÉ) e.component.deselectRows([row.key]);
+    e.component.getVisibleRows().map((row) => {
+      if (row.data.indicateurBaf === status.BLOQUÉ)
+        e.component.deselectRows([row.key]);
     });
-    this.gridItemsSelected = this.datagrid.instance.getSelectedRowsData()?.length > 0;
+    this.gridItemsSelected =
+      this.datagrid.instance.getSelectedRowsData()?.length > 0;
   }
 
   colorizeCell(theValue) {

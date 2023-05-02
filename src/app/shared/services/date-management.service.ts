@@ -8,13 +8,13 @@ import { OrdresIndicatorsService } from "./ordres-indicators.service";
 export class DateManagementService {
   constructor(
     private datePipe: DatePipe,
-    private ordresIndicatorsService: OrdresIndicatorsService,
-  ) { }
+    private ordresIndicatorsService: OrdresIndicatorsService
+  ) {}
 
   formatDate(myDate, myFormat?) {
     return this.datePipe.transform(
       myDate.valueOf(),
-      myFormat ? myFormat : "yyyy-MM-dd",
+      myFormat ? myFormat : "yyyy-MM-dd"
     );
   }
 
@@ -22,8 +22,7 @@ export class DateManagementService {
     // e.g. 17/09/2020 (11h37 44s)
     const mydate = new Date(theDate);
     let myTime =
-      mydate.toLocaleTimeString().replace(":", "h").replace(":", " ") +
-      "s";
+      mydate.toLocaleTimeString().replace(":", "h").replace(":", " ") + "s";
     if (nosecs) myTime = myTime.slice(0, -4);
     return mydate.toLocaleDateString() + " (" + myTime + ")";
   }
@@ -67,7 +66,6 @@ export class DateManagementService {
   }
 
   getDates(e) {
-
     const periode = e.value;
 
     let deb: any;
@@ -151,7 +149,7 @@ export class DateManagementService {
           "-" +
           this.daysInMonth(
             month === 1 ? year - 1 : year,
-            month === 1 ? 12 : month - 1,
+            month === 1 ? 12 : month - 1
           );
         break;
       case "Mois en cours":
@@ -161,10 +159,7 @@ export class DateManagementService {
         break;
       case "Trimestre dernier":
         deb =
-          (quarter === 1 ? year - 1 : year) +
-          "-" +
-          prevQuarterStart +
-          "-01";
+          (quarter === 1 ? year - 1 : year) + "-" + prevQuarterStart + "-01";
         fin =
           (quarter === 1 ? year - 1 : year) +
           "-" +
@@ -172,7 +167,7 @@ export class DateManagementService {
           "-" +
           this.daysInMonth(
             quarter === 1 ? year - 1 : year,
-            prevQuarterStart + 2,
+            prevQuarterStart + 2
           );
         break;
       case "Trimestre en cours":
@@ -193,10 +188,7 @@ export class DateManagementService {
         fin = (month > 6 ? year + 1 : year) + "-06-30";
         break;
       case "Même semaine année dernière": {
-        deb = this.getDateOfISOWeek(
-          this.getWeekNumber(dateNow),
-          year - 1,
-        );
+        deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
         temp = new Date(deb);
         fin = temp.setDate(temp.getDate() + 6);
         deb = this.formatDate(deb);
@@ -224,7 +216,7 @@ export class DateManagementService {
 
   findDate(delta) {
     return this.ordresIndicatorsService.getFormatedDate(
-      new Date().setDate(new Date().getDate() + delta).valueOf(),
+      new Date().setDate(new Date().getDate() + delta).valueOf()
     );
   }
 
@@ -232,7 +224,8 @@ export class DateManagementService {
     const currDateTime0 = new Date();
     currDateTime0.setHours(0, 0, 0, 0);
     return this.ordresIndicatorsService.getFormatedDate(
-      currDateTime0.setDate(currDateTime0.getDate() + delta).valueOf(), "yyyy-MM-ddTHH:mm:ss"
+      currDateTime0.setDate(currDateTime0.getDate() + delta).valueOf(),
+      "yyyy-MM-ddTHH:mm:ss"
     );
   }
 
@@ -247,8 +240,7 @@ export class DateManagementService {
     const simple = new Date(y, 0, 1 + (w - 1) * 7);
     const dow = simple.getDay();
     const ISOweekStart = simple;
-    if (dow <= 4)
-      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    if (dow <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
     else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
     return ISOweekStart;
   }

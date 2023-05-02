@@ -2,7 +2,6 @@ import { Field, Model, ModelName } from "./model";
 
 @ModelName("StockQuantite")
 export abstract class StockQuantite extends Model {
-
   @Field()
   quantiteInitiale1: number;
 

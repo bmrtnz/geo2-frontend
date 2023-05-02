@@ -1,10 +1,8 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 ::ng-deep .visualiser-ordres-popup {
-
   .dx-popup-content {
-
     .popup-subtitle {
       position: relative;
       left: 13px;
@@ -38,7 +36,6 @@
       .bold-text {
         font-weight: bold;
       }
-
     }
 
     .popup-buttons-container {
@@ -52,5 +49,4 @@
       }
     }
   }
-
 }

@@ -16,7 +16,6 @@ type OrdreGridId =
  */
 @Injectable()
 export class GridsService {
-
   private grids: { [key: number]: DxDataGridComponent } = {};
 
   /**
@@ -32,8 +31,8 @@ export class GridsService {
    * Call "refresh" on each provided grid
    * @param ids List of grid identifiers
    */
-  public reload(...ids: (OrdreGridId)[]) {
-    ids.forEach(id => this.grids[id]?.instance.refresh());
+  public reload(...ids: OrdreGridId[]) {
+    ids.forEach((id) => this.grids[id]?.instance.refresh());
   }
 
   /**
@@ -49,15 +48,13 @@ export class GridsService {
    */
   public expandCollapseGroups(that, masterDetail = true) {
     if (!that.datagrid) return;
-    that.datagrid.instance.option(
-      "grouping",
-      { autoExpandAll: !that.datagrid.instance.option("grouping").autoExpandAll }
-    );
+    that.datagrid.instance.option("grouping", {
+      autoExpandAll: !that.datagrid.instance.option("grouping").autoExpandAll,
+    });
     if (masterDetail)
-      that.datagrid.instance.option(
-        "masterDetail",
-        { autoExpandAll: !that.datagrid.instance.option("masterDetail").autoExpandAll }
-      );
+      that.datagrid.instance.option("masterDetail", {
+        autoExpandAll:
+          !that.datagrid.instance.option("masterDetail").autoExpandAll,
+      });
   }
-
 }

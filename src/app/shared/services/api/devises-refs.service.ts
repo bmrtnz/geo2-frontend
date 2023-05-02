@@ -48,7 +48,7 @@ export class DevisesRefsService extends ApiService {
               totalCount: res.data.allDeviseRefList.length,
             });
           }),
-        byKey: this.byKey_v2(columns)
+        byKey: this.byKey_v2(columns),
       }),
     });
   }
@@ -58,11 +58,10 @@ export class DevisesRefsService extends ApiService {
         const query = await this.buildGetOne_v2(columns);
         type Response = { deviseRef: DeviseRef };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
+        this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.deviseRef)
             resolve(new DeviseRef(res.data.deviseRef));
         });
       });
   }
-
 }

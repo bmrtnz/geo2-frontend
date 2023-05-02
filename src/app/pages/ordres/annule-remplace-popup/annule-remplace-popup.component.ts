@@ -1,4 +1,3 @@
-
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
@@ -11,10 +10,9 @@ import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 @Component({
   selector: "app-annule-remplace-popup",
   templateUrl: "./annule-remplace-popup.component.html",
-  styleUrls: ["./annule-remplace-popup.component.scss"]
+  styleUrls: ["./annule-remplace-popup.component.scss"],
 })
 export class AnnuleRemplacePopupComponent implements OnChanges {
-
   @Input() public ordre: Ordre;
   @Input() public gridEnvois: GridEnvoisComponent;
   @Input() docsPopup: DocumentsOrdresPopupComponent;
@@ -23,11 +21,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   title: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(GridAnnuleRemplaceComponent) gridAnnuleRemplaceComponent: GridAnnuleRemplaceComponent;
+  @ViewChild(GridAnnuleRemplaceComponent)
+  gridAnnuleRemplaceComponent: GridAnnuleRemplaceComponent;
 
-  constructor(
-    public localizeService: LocalizationService
-  ) { }
+  constructor(public localizeService: LocalizationService) {}
 
   ngOnChanges() {
     this.setTitle();
@@ -53,15 +50,13 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   }
 
   goDocuments() {
-    this.gridAnnuleRemplaceComponent.done()
-      .subscribe({
-        next: async arData => {
-          this.popup.instance.hide();
-          await this.docsPopup.open();
-        },
-        error: (error: Error) => notify(error.message.replace("Error :", ""), "error", 7000),
-      });
+    this.gridAnnuleRemplaceComponent.done().subscribe({
+      next: async (arData) => {
+        this.popup.instance.hide();
+        await this.docsPopup.open();
+      },
+      error: (error: Error) =>
+        notify(error.message.replace("Error :", ""), "error", 7000),
+    });
   }
-
 }
-

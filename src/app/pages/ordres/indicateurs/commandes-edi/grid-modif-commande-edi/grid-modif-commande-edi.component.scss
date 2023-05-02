@@ -1,6 +1,6 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .order-edi-complete-button {
   position: absolute;
@@ -51,7 +51,7 @@
   height: auto;
   width: 560px;
   white-space: initial;
-  color: rgba(0, 0, 0, .54) !important;
+  color: rgba(0, 0, 0, 0.54) !important;
   line-height: 16px;
   float: left;
 }
@@ -66,7 +66,7 @@
 }
 
 ::ng-deep .group-back-color {
-  background-color: #FFE7AD !important;
+  background-color: #ffe7ad !important;
 }
 
 ::ng-deep .info-U {
@@ -78,11 +78,10 @@
 }
 
 ::ng-deep .white-text {
-  color: #FFF !important;
+  color: #fff !important;
 }
 
 ::ng-deep .grid-modif-commande-Edi {
-
   max-height: 500px;
 
   .dx-datagrid-group-panel {
@@ -95,7 +94,7 @@
 
   .dx-datagrid-group-closed,
   .dx-datagrid-group-opened {
-    color: rgba(0, 0, 0, .54) !important;
+    color: rgba(0, 0, 0, 0.54) !important;
   }
 
   .dx-row-focused {

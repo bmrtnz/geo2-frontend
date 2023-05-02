@@ -5,7 +5,7 @@ import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
   LocalizationService,
-  TransporteursService
+  TransporteursService,
 } from "app/shared/services";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { Indicateur } from "app/shared/services/api/indicateurs.service";
@@ -15,17 +15,17 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import {
   Indicator,
-  OrdresIndicatorsService
+  OrdresIndicatorsService,
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
 import {
   DxCheckBoxComponent,
   DxDataGridComponent,
-  DxSelectBoxComponent
+  DxSelectBoxComponent,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
@@ -70,27 +70,21 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
-    private tabContext: TabContext,
+    private tabContext: TabContext
   ) {
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.indicator = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
+      this.INDICATOR_NAME
     );
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdresNonConfirmes,
+      Grid.OrdresNonConfirmes
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnInit() {
@@ -108,35 +102,31 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   enableFilters() {
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value?.id && this.withSector.value)
-      filters.push("and", [
-        "secteurCode",
-        "=",
-        this.secteurSB.value.id,
-      ]);
+      filters.push("and", ["secteurCode", "=", this.secteurSB.value.id]);
     else if (!this.authService.isAdmin)
       filters.push(
         ...(this.authService.currentUser.personne?.role.toString() ===
-          Role[Role.COMMERCIAL]
+        Role[Role.COMMERCIAL]
           ? [
-            "and",
-            [
-              "commercial.id",
-              "=",
-              this.authService.currentUser.commercial.id,
-            ],
-          ]
+              "and",
+              [
+                "commercial.id",
+                "=",
+                this.authService.currentUser.commercial.id,
+              ],
+            ]
           : []),
         ...(this.authService.currentUser.personne?.role.toString() ===
-          Role[Role.ASSISTANT]
+        Role[Role.ASSISTANT]
           ? [
-            "and",
-            [
-              "assistante.id",
-              "=",
-              this.authService.currentUser.assistante.id,
-            ],
-          ]
-          : []),
+              "and",
+              [
+                "assistante.id",
+                "=",
+                this.authService.currentUser.assistante.id,
+              ],
+            ]
+          : [])
       );
 
     this.dataSource?.filter(filters);

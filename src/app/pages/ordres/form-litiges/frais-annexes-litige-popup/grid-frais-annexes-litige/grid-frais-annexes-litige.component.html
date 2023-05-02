@@ -33,7 +33,8 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
-  <dxo-editing *ngIf="!this.infosLitige?.fournisseurClos || !this.infosLitige?.clientClos"
+  <dxo-editing
+    *ngIf="!this.infosLitige?.fournisseurClos || !this.infosLitige?.clientClos"
     [selectTextOnEditStart]="true"
     [allowAdding]="true"
     [allowUpdating]="true"
@@ -63,8 +64,8 @@
     [dataField]="column.dataField"
     [visible]="false"
     [caption]="
-      ('ordreFraisLitige-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+      ('ordreFraisLitige-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
     "
     [dataType]="column?.dataType"
     [showEditorAlways]="false"
@@ -80,17 +81,20 @@
     "
     [showInColumnChooser]="column.showInColumnChooser"
   >
-  <dxi-validation-rule
-    *ngIf="['transporteurCodePlus', 'montant', 'description'].includes(column.dataField)"
-    type="required"
-  ></dxi-validation-rule>
-  <dxi-validation-rule
-    *ngIf="column.dataField === 'montant'"
-    type="range"
-    [min]="1"
-    message="{{ 'MontantNonNul' | localize }}"
-  ></dxi-validation-rule>
-
+    <dxi-validation-rule
+      *ngIf="
+        ['transporteurCodePlus', 'montant', 'description'].includes(
+          column.dataField
+        )
+      "
+      type="required"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'montant'"
+      type="range"
+      [min]="1"
+      message="{{ 'MontantNonNul' | localize }}"
+    ></dxi-validation-rule>
   </dxi-column>
 
   <dxo-summary>

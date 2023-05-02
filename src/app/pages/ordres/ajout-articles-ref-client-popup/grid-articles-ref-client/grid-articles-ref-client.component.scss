@@ -3,14 +3,12 @@
 }
 
 ::ng-deep .articles-ref-client-page {
-
   .search-criteria-container {
     margin-top: -30px;
 
     .search-criteria-subcontainer {
-
       // Hiding unuseful input
-      .dx-tag+.dx-texteditor-input {
+      .dx-tag + .dx-texteditor-input {
         display: none;
       }
 
@@ -59,7 +57,6 @@
         &.valid-field {
           width: 100px;
         }
-
       }
 
       .dx-field-value {
