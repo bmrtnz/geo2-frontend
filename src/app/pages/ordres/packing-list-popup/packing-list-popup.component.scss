@@ -1,10 +1,8 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
-
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .packing-list-popup {
-
   min-width: 800px;
 
   .dx-template-wrapper.dx-popup-title {
@@ -33,8 +31,7 @@
   }
 
   .packing-list-content-container {
-
-    background: #FFF !important;
+    background: #fff !important;
     padding: 0 15px 0 2px;
 
     .grid-packing-list {
@@ -47,7 +44,7 @@
       left: 50%;
       transform: translateX(-50%);
 
-      &>.dx-button {
+      & > .dx-button {
         margin: 0 5px;
       }
     }
@@ -82,7 +79,6 @@
       }
 
       .departLivraison-switch {
-
         height: 36px;
 
         .dx-switch-handle:before {
@@ -90,7 +86,7 @@
         }
 
         .dx-switch-container:before {
-          background-color: rgba(0, 117, 156, .5) !important;
+          background-color: rgba(0, 117, 156, 0.5) !important;
         }
 
         .dx-field-value {
@@ -104,14 +100,14 @@
         .dx-field-label-left {
           margin-top: 4px;
           width: 21% !important;
-          color: rgba(0, 0, 0, 0.87)
+          color: rgba(0, 0, 0, 0.87);
         }
 
         .dx-field-label-right {
           margin-top: 4px;
           padding-left: 10px;
           width: 35% !important;
-          color: rgba(0, 0, 0, 0.87)
+          color: rgba(0, 0, 0, 0.87);
         }
       }
 
@@ -125,6 +121,5 @@
         }
       }
     }
-
   }
 }

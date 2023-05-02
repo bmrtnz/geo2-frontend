@@ -1,9 +1,21 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService } from "app/shared/services";
 import { SummaryType } from "app/shared/services/api.service";
 import { alert } from "devextreme/ui/dialog";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
@@ -21,14 +33,14 @@ import LigneChargement from "app/shared/models/ligne-chargement.model";
 import { Operation } from "app/shared/services/api/lignes-chargement.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
-
 @Component({
   selector: "app-grid-lignes-groupage-chargements",
   templateUrl: "./grid-lignes-groupage-chargements.component.html",
-  styleUrls: ["./grid-lignes-groupage-chargements.component.scss"]
+  styleUrls: ["./grid-lignes-groupage-chargements.component.scss"],
 })
-export class GridLignesGroupageChargementsComponent implements AfterViewInit, OnChanges {
-
+export class GridLignesGroupageChargementsComponent
+  implements AfterViewInit, OnChanges
+{
   @Input() public ordre: Ordre;
   @Input() public gridCdes: any;
   @Input() public gridEnv: any;
@@ -44,7 +56,11 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public allowMutations = false;
-  public totalItems: { column: string, summaryType: SummaryType, displayFormat?: string }[] = [];
+  public totalItems: {
+    column: string;
+    summaryType: SummaryType;
+    displayFormat?: string;
+  }[] = [];
   public gridFilter: any[];
   public gridExpFiltered: boolean;
   public gridRowsTotal: number;
@@ -53,7 +69,8 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   public unsavedData: boolean;
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
-  @ViewChild(ModifDetailLignesPopupComponent, { static: false }) modifDetailPopup: ModifDetailLignesPopupComponent;
+  @ViewChild(ModifDetailLignesPopupComponent, { static: false })
+  modifDetailPopup: ModifDetailLignesPopupComponent;
 
   constructor(
     public lignesChargementService: LignesChargementService,
@@ -65,8 +82,10 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     public tabContext: TabContext,
     public currentCompanyService: CurrentCompanyService
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.LignesGroupageChargements);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.LignesGroupageChargements
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngAfterViewInit() {
@@ -80,25 +99,27 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   async enableFilters(e?) {
-
     if (!this.datagrid) return;
     if (this?.ordre?.id) {
-      const fields = this.columns.pipe(map(columns => columns.map(column => {
-        return column.dataField;
-      })));
+      const fields = this.columns.pipe(
+        map((columns) =>
+          columns.map((column) => {
+            return column.dataField;
+          })
+        )
+      );
 
       this.dataSource = this.lignesChargementService.getDataSource(
         {
           campagne: this.ordre.campagne.id,
-          codeChargement: this.ordre.codeChargement
+          codeChargement: this.ordre.codeChargement,
         },
         new Set(await fields.toPromise())
       );
 
       this.datagrid.dataSource = this.dataSource;
       this.gridUtilsService.resetGridScrollBar(this.datagrid);
-    } else if (this.datagrid)
-      this.datagrid.dataSource = null;
+    } else if (this.datagrid) this.datagrid.dataSource = null;
   }
 
   saveGridEditData() {
@@ -111,19 +132,20 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   onEditorPreparing(e) {
-
     if (e.parentType === "dataRow") {
-
       e.editorOptions.onValueChanged = (elem) => {
         const rows = this.datagrid.instance.getVisibleRows();
 
-        if (![
-          "dateDepartPrevue",
-          "dateLivraisonPrevue",
-          "dateDepartPrevueFournisseur",
-          "numeroCamion",
-          "ordreChargement"
-        ].includes(this.dataField)) return;
+        if (
+          ![
+            "dateDepartPrevue",
+            "dateLivraisonPrevue",
+            "dateDepartPrevueFournisseur",
+            "numeroCamion",
+            "ordreChargement",
+          ].includes(this.dataField)
+        )
+          return;
 
         ///////////////////////////////
         // Update other cells value
@@ -138,17 +160,20 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           }
           case "dateDepartPrevueFournisseur": {
             // Copy paste on same fournisseur rows
-            rows.filter(
-              l => l.data.codeFournisseur === this.ligneOrdre.codeFournisseur
-            ).map((res) => this.updateRowsAndDs(res, elem));
+            rows
+              .filter(
+                (l) =>
+                  l.data.codeFournisseur === this.ligneOrdre.codeFournisseur
+              )
+              .map((res) => this.updateRowsAndDs(res, elem));
             break;
           }
           case "ordreChargement":
           case "numeroCamion": {
             // Copy paste on same order rows
-            rows.filter(
-              l => l.data.ordre.id === this.ligneOrdre.ordre.id
-            ).map((res) => this.updateRowsAndDs(res, elem));
+            rows
+              .filter((l) => l.data.ordre.id === this.ligneOrdre.ordre.id)
+              .map((res) => this.updateRowsAndDs(res, elem));
             break;
           }
         }
@@ -162,12 +187,13 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
     // Saving value
     this.datagrid.instance.cellValue(res.rowIndex, this.dataField, elem.value);
     // Updating datasource
-    (this.datagrid.dataSource as DataSource).items()
-      .filter(r => r.ligne.id === res.data.ligne.id)[0][this.dataField] = elem.value;
+    (this.datagrid.dataSource as DataSource)
+      .items()
+      .filter((r) => r.ligne.id === res.data.ligne.id)[0][this.dataField] =
+      elem.value;
     // Updating row data
     // this.datagrid.instance.getVisibleRows()[res.rowIndex].data[this.dataField] = elem.value;
   }
-
 
   onToolbarPreparing(e) {
     // Hide save/undo buttons
@@ -195,18 +221,19 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   onCellPrepared(e) {
-
     const field = e.column.dataField;
 
     if (e.rowType === "data") {
       // Higlight editable columns
-      if ([
-        "dateDepartPrevue",
-        "dateLivraisonPrevue",
-        "dateDepartPrevueFournisseur",
-        "numeroCamion",
-        "ordreChargement"
-      ].includes(e.column.dataField)) {
+      if (
+        [
+          "dateDepartPrevue",
+          "dateLivraisonPrevue",
+          "dateDepartPrevueFournisseur",
+          "numeroCamion",
+          "ordreChargement",
+        ].includes(e.column.dataField)
+      ) {
         e.cellElement.classList.add("grey-light-column"); // grey bkg
       }
     }
@@ -216,7 +243,7 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
       e.cellElement.classList.add("text-underlined-pointer");
       e.cellElement.setAttribute(
         "title",
-        this.localizeService.localize("hint-click-ordre"),
+        this.localizeService.localize("hint-click-ordre")
       );
     }
   }
@@ -224,7 +251,10 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   onSelectionChanged(e) {
     // Only one order can be selected at once
     if (e.selectedRowsData?.length > 1) {
-      if (e.selectedRowsData[e.selectedRowsData.length - 1].ordre.id !== e.selectedRowsData[0].ordre.id) {
+      if (
+        e.selectedRowsData[e.selectedRowsData.length - 1].ordre.id !==
+        e.selectedRowsData[0].ordre.id
+      ) {
         e.selectedRowKeys.pop();
         e.component.deselectRows(e.selectedRowKeys);
       }
@@ -232,15 +262,15 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   saveData(quitPopup?) {
-
     const modified = "modified"; // Curiously, unknown default property
-    const modifiedRows = this.datagrid.instance.getVisibleRows().filter(r => r[modified]);
+    const modifiedRows = this.datagrid.instance
+      .getVisibleRows()
+      .filter((r) => r[modified]);
     if (modifiedRows.length) {
-
       // Loop through edited rows
       this.datagrid.instance.beginCustomLoading("");
       const allLigneChargement = [];
-      modifiedRows.map(row => {
+      modifiedRows.map((row) => {
         const d = row.data;
         allLigneChargement.push({
           id: d.id,
@@ -248,34 +278,36 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
           ordreChargement: d.ordreChargement,
           dateDepartPrevue: d.dateDepartPrevue.split("T")[0] + "T00:00",
           dateLivraisonPrevue: d.dateLivraisonPrevue.split("T")[0] + "T00:00",
-          dateDepartPrevueFournisseur: d.dateDepartPrevueFournisseur.split("T")[0] + "T00:00"
+          dateDepartPrevueFournisseur:
+            d.dateDepartPrevueFournisseur.split("T")[0] + "T00:00",
         });
       });
-      this.lignesChargementService.saveAll(allLigneChargement, new Set(["id"])).subscribe({
-        next: (res) => {
-          if (quitPopup) {
-            // Message and close
-            notify("Sauvegardé", "success", 3000);
+      this.lignesChargementService
+        .saveAll(allLigneChargement, new Set(["id"]))
+        .subscribe({
+          next: (res) => {
+            if (quitPopup) {
+              // Message and close
+              notify("Sauvegardé", "success", 3000);
+              this.datagrid.instance.endCustomLoading();
+              this.closePopup.emit();
+            } else {
+              this.datagrid.instance.cancelEditData();
+              this.datagrid.instance.refresh();
+              this.datagrid.instance.endCustomLoading();
+              this.updateOrder.emit();
+            }
+          },
+          error: (error: Error) => {
+            console.log(error);
+            notify(this.messageFormat(error.message), "error", 7000);
             this.datagrid.instance.endCustomLoading();
-            this.closePopup.emit();
-          } else {
-            this.datagrid.instance.cancelEditData();
-            this.datagrid.instance.refresh();
-            this.datagrid.instance.endCustomLoading();
-            this.updateOrder.emit();
-          }
-        },
-        error: (error: Error) => {
-          console.log(error);
-          notify(this.messageFormat(error.message), "error", 7000);
-          this.datagrid.instance.endCustomLoading();
-        },
-        complete: () => this.datagrid.instance.endCustomLoading()
-      });
+          },
+          complete: () => this.datagrid.instance.endCustomLoading(),
+        });
     } else {
       if (quitPopup) this.closePopup.emit();
     }
-
   }
 
   validGrouping() {
@@ -283,50 +315,66 @@ export class GridLignesGroupageChargementsComponent implements AfterViewInit, On
   }
 
   transferOrDuplicate(operation: Operation) {
-
-    this.lignesChargementService.transferOrDuplicate(
-      operation,
-      this.datagrid.selectedRowKeys,
-      this.ordre.codeChargement,
-      this.ordre.id,
-      new Set(["id", "ordre.numero"])
-    ).subscribe({
-      next: (res) => {
-        const data = res.data[operation];
-        const numOrdre = data[0].ordre.numero;
-        const campOrdre = this.currentCompanyService.getCompany().campagne.id;
-        let message = this.localizeService.localize("ordre-cree").replace("&O", numOrdre);
-        message += " - " + this.localizeService.localize(`ordre-${operation}-lignes`);
-        message = message
-          .replace("&L", data.length.toString())
-          .split("&&").join(data.length > 1 ? "s" : "");
-        notify(message, "success", 7000);
-        this.datagrid.instance.clearSelection();
-        if (operation === "transfer") {
-          this.datagrid.instance.refresh();
-          this.updateGridCde.emit();
-          this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
-        }
-        this.tabContext.openOrdre(numOrdre, campOrdre, false);
-        setTimeout(() => this.tabContext.openOrdre(this.ordre.numero, this.ordre.campagne.id, false), 500);
-      },
-      error: (error: Error) => {
-        console.log(error);
-        alert(this.messageFormat(error.message), this.localizeService.localize(`ordre-${operation}-creation`));
-      }
-    });
-
+    this.lignesChargementService
+      .transferOrDuplicate(
+        operation,
+        this.datagrid.selectedRowKeys,
+        this.ordre.codeChargement,
+        this.ordre.id,
+        new Set(["id", "ordre.numero"])
+      )
+      .subscribe({
+        next: (res) => {
+          const data = res.data[operation];
+          const numOrdre = data[0].ordre.numero;
+          const campOrdre = this.currentCompanyService.getCompany().campagne.id;
+          let message = this.localizeService
+            .localize("ordre-cree")
+            .replace("&O", numOrdre);
+          message +=
+            " - " + this.localizeService.localize(`ordre-${operation}-lignes`);
+          message = message
+            .replace("&L", data.length.toString())
+            .split("&&")
+            .join(data.length > 1 ? "s" : "");
+          notify(message, "success", 7000);
+          this.datagrid.instance.clearSelection();
+          if (operation === "transfer") {
+            this.datagrid.instance.refresh();
+            this.updateGridCde.emit();
+            this.gridsService.reload(
+              "SyntheseExpeditions",
+              "DetailExpeditions"
+            );
+          }
+          this.tabContext.openOrdre(numOrdre, campOrdre, false);
+          setTimeout(
+            () =>
+              this.tabContext.openOrdre(
+                this.ordre.numero,
+                this.ordre.campagne.id,
+                false
+              ),
+            500
+          );
+        },
+        error: (error: Error) => {
+          console.log(error);
+          alert(
+            this.messageFormat(error.message),
+            this.localizeService.localize(`ordre-${operation}-creation`)
+          );
+        },
+      });
   }
 
   private messageFormat(mess) {
-    const functionNames =
-      ["duplicate",
-        "transfer"
-      ];
-    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    const functionNames = ["duplicate", "transfer"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
-
 }
-

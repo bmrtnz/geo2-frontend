@@ -15,10 +15,7 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   fieldsFilter =
     /.*\.(?:id|code|raisonSocial|description|ville|valide|commentaire|userModification|dateModification|typeTiers)$/i;
 
-  constructor(
-    apollo: Apollo,
-    public functionsService: FunctionsService
-  ) {
+  constructor(apollo: Apollo, public functionsService: FunctionsService) {
     super(apollo, Client);
   }
 
@@ -46,42 +43,27 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll_v2(columns);
             type Response = { allClient: RelayPage<Client> };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allClient)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allClient,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allClient)
+                resolve(this.asInstancedListCount(res.data.allClient));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne_v2(columns);
             type Response = { client: Client };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.client)
-                  resolve(new Client(res.data.client));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.client)
+                resolve(new Client(res.data.client));
+            });
           }),
       }),
     });
@@ -101,11 +83,11 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
   public allClientEnCours(
     clientRef: string,
     columns: string[],
-    deviseCodeRef?: string,
+    deviseCodeRef?: string
   ) {
-    return this.apollo
-      .query<{ allClientEnCours }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{ allClientEnCours }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
@@ -113,18 +95,22 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
               body: columns,
               params: [
                 { name: "clientRef", value: "clientRef", isVariable: true },
-                { name: "deviseCodeRef", value: "deviseCodeRef", isVariable: true },
+                {
+                  name: "deviseCodeRef",
+                  value: "deviseCodeRef",
+                  isVariable: true,
+                },
               ],
             },
           ],
           [
             { name: "clientRef", type: "String", isOptionnal: false },
             { name: "deviseCodeRef", type: "String", isOptionnal: true },
-          ],
-        )),
-        variables: { clientRef, deviseCodeRef },
-        fetchPolicy: "no-cache",
-      });
+          ]
+        )
+      ),
+      variables: { clientRef, deviseCodeRef },
+      fetchPolicy: "no-cache",
+    });
   }
-
 }

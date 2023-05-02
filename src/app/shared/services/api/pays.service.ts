@@ -18,7 +18,8 @@ export type CountResponse = { countPays: number };
 })
 export class PaysService
   extends ApiService
-  implements APIRead, APICount<CountResponse> {
+  implements APIRead, APICount<CountResponse>
+{
   fieldsFilter = /.*\.(?:id|description)$/i;
 
   constructor(apollo: Apollo) {
@@ -28,10 +29,10 @@ export class PaysService
   getDataSource(
     depth = 1,
     filter = this.fieldsFilter,
-    operation = Operation.All,
+    operation = Operation.All
   ) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() }],
+      sort: [{ selector: this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
@@ -43,45 +44,25 @@ export class PaysService
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            const query = await this.buildGetAll(
-              depth,
-              filter,
-              operationName,
-            );
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const query = await this.buildGetAll(depth, filter, operationName);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data[operationName])
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data[operationName],
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data[operationName])
+                resolve(this.asInstancedListCount(res.data[operationName]));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne(depth, filter);
             type Response = { pays: Pays };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.pays)
-                  resolve(new Pays(res.data.pays));
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.pays) resolve(new Pays(res.data.pays));
+            });
           }),
       }),
     });
@@ -94,8 +75,7 @@ export class PaysService
         type Response = { pays: Pays };
         const variables = { id: key };
         this.listenQuery<Response>(query, { variables }, (res) => {
-          if (res.data && res.data.pays)
-            resolve(new Pays(res.data.pays));
+          if (res.data && res.data.pays) resolve(new Pays(res.data.pays));
         });
       });
   }
@@ -109,28 +89,17 @@ export class PaysService
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allPays: RelayPage<Pays> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allPays) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allPays,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allPays) {
+                resolve(this.asInstancedListCount(res.data.allPays));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -156,7 +125,7 @@ export class PaysService
           params: [{ name: "search", value: "search", isVariable: true }],
         },
       ],
-      [{ name: "search", type: "String", isOptionnal: true }],
+      [{ name: "search", type: "String", isOptionnal: true }]
     );
   }
 

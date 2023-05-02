@@ -5,17 +5,17 @@ import { AuthService } from "./auth.service";
 import { GridConfiguratorService } from "./grid-configurator.service";
 
 describe("GridConfiguratorService", () => {
-    beforeEach(() =>
-        TestBed.configureTestingModule({
-            imports: [RouterTestingModule, HttpClientTestingModule],
-            providers: [AuthService],
-        }),
-    );
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [AuthService],
+    })
+  );
 
-    it("should be created", () => {
-        const service: GridConfiguratorService = TestBed.inject(
-            GridConfiguratorService,
-        );
-        expect(service).toBeTruthy();
-    });
+  it("should be created", () => {
+    const service: GridConfiguratorService = TestBed.inject(
+      GridConfiguratorService
+    );
+    expect(service).toBeTruthy();
+  });
 });

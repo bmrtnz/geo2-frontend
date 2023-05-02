@@ -1,5 +1,5 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 ::ng-deep .tabpanel-item {
   // height: 200px;
@@ -16,7 +16,7 @@
   padding-top: 10px;
 }
 
-::ng-deep .tabpanel-item>div {
+::ng-deep .tabpanel-item > div {
   float: left;
   padding: 0 85px 10px 10px;
 }

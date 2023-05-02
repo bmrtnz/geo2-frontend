@@ -21,4 +21,3 @@ export class Emballage extends Model {
   @Field() public valide?: boolean;
 }
 export default Emballage;
-

@@ -5,9 +5,9 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, UntypedFormBuilder } from "@angular/forms";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { Flux, OrdreLigne } from "app/shared/models";
@@ -55,7 +55,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     id: [""],
     ordreAvoirFournisseur: this.fb.group({
       id: [""],
-      numero: [""]
+      numero: [""],
     }),
     dateCreation: [""],
     avoirClient: [""],
@@ -73,7 +73,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     totalMontantRistourneTaux: [""],
     ordreAvoirClient: this.fb.group({
       id: [""],
-      numero: [""]
+      numero: [""],
     }),
     fraisAnnexes: [""],
     totalMontantRistourne: [""],
@@ -93,24 +93,30 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   public noFraisAnnexes: boolean;
 
   @ViewChild("resultat", { static: false }) resultat: DxNumberBoxComponent;
-  @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
-  @ViewChild(FraisAnnexesLitigePopupComponent, { static: false }) fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
-  @ViewChild(SelectionLignesLitigePopupComponent, { static: false }) selectLignesPopup: SelectionLignesLitigePopupComponent;
-  @ViewChild(GestionOperationsPopupComponent, { static: false }) gestionOpPopup: GestionOperationsPopupComponent;
-  @ViewChild(ConfirmationResultPopupComponent) envoisFluxWarningPopup: ConfirmationResultPopupComponent;
-  @ViewChild(DocumentsOrdresPopupComponent) docsPopup: DocumentsOrdresPopupComponent;
+  @ViewChild(LitigeCloturePopupComponent, { static: false })
+  cloturePopup: LitigeCloturePopupComponent;
+  @ViewChild(FraisAnnexesLitigePopupComponent, { static: false })
+  fraisAnnexesPopup: FraisAnnexesLitigePopupComponent;
+  @ViewChild(SelectionLignesLitigePopupComponent, { static: false })
+  selectLignesPopup: SelectionLignesLitigePopupComponent;
+  @ViewChild(GestionOperationsPopupComponent, { static: false })
+  gestionOpPopup: GestionOperationsPopupComponent;
+  @ViewChild(ConfirmationResultPopupComponent)
+  envoisFluxWarningPopup: ConfirmationResultPopupComponent;
+  @ViewChild(DocumentsOrdresPopupComponent)
+  docsPopup: DocumentsOrdresPopupComponent;
   @ViewChild(FileManagerComponent) fileManagerComponent: FileManagerComponent;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public litigesService: LitigesService,
     public ordresService: OrdresService,
     public localization: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
     public litigesLignesService: LitigesLignesService,
     public envoisService: EnvoisService,
-    public fluxEnvoisService: FluxEnvoisService,
-  ) { }
+    public fluxEnvoisService: FluxEnvoisService
+  ) {}
 
   ngOnChanges() {
     if (this.ordre) {
@@ -158,10 +164,11 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             litige: { id: res[0].id },
             clientClos: res[0].clientCloture,
             fournisseurClos: res[0].fournisseurCloture,
-            fraisAnnexes: res[0].fraisAnnexes
+            fraisAnnexes: res[0].fraisAnnexes,
           };
           this.noFraisAnnexes = !this.infosLitige.fraisAnnexes;
-          this.litigeClosed = this.infosLitige.clientClos && this.infosLitige.fournisseurClos;
+          this.litigeClosed =
+            this.infosLitige.clientClos && this.infosLitige.fournisseurClos;
           from(this.litigesLignesService.getTotaux(res[0].id))
             .pipe(mergeAll())
             .subscribe((result) => {
@@ -190,29 +197,38 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   createLitige() {
     if (Statut[this.ordre.statut] !== Statut.ANNULE.toString()) {
       if (this.ordre.factureAvoir.toString() === "FACTURE") {
-
-        this.litigesService.ofChronoLitige(this.ordre.id).pipe(
-          concatMap(res => this.litigesService.ofLitigeCtlClientInsert(
-            this.currentCompanyService.getCompany().id,
-            this.ordre.id,
-            res.data.ofChronoLitige.data.is_cur_lit_ref,
-          )),
-        )
+        this.litigesService
+          .ofChronoLitige(this.ordre.id)
+          .pipe(
+            concatMap((res) =>
+              this.litigesService.ofLitigeCtlClientInsert(
+                this.currentCompanyService.getCompany().id,
+                this.ordre.id,
+                res.data.ofChronoLitige.data.is_cur_lit_ref
+              )
+            )
+          )
           .subscribe({
-            next: res => {
+            next: (res) => {
               this.loadForm();
               this.selectLignesPopup.visible = true;
             },
-            error: err => notify(err.message, "error", 3000),
+            error: (err) => notify(err.message, "error", 3000),
           });
-
       } else {
-        notify(this.localization.localize("ordres-litiges-warn-no-facture"), "warning", 3500);
+        notify(
+          this.localization.localize("ordres-litiges-warn-no-facture"),
+          "warning",
+          3500
+        );
       }
     } else {
-      notify(this.localization.localize("ordres-litiges-warn-cancelled-order"), "warning", 3500);
+      notify(
+        this.localization.localize("ordres-litiges-warn-cancelled-order"),
+        "warning",
+        3500
+      );
     }
-
   }
 
   assignLitigeLignes(e) {
@@ -221,24 +237,28 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   saveLitige() {
-    const persistedFields = [
-      "id",
-      "referenceClient",
-      "commentairesInternes",
-    ];
-    this.litigesService.save(
-      new Set(persistedFields),
-      {
+    const persistedFields = ["id", "referenceClient", "commentairesInternes"];
+    this.litigesService
+      .save(new Set(persistedFields), {
         id: this.infosLitige.litige.id,
         ...persistedFields
-          .map(field => ({ [field]: this.formGroup.get(field).value }))
+          .map((field) => ({ [field]: this.formGroup.get(field).value }))
           .reduce((acm, crt) => ({ ...acm, ...crt })),
-      }).pipe(
-        concatMap(res => this.litigesService.ofSauveLitige(res.data.saveLitige.id)),
-      ).subscribe({
+      })
+      .pipe(
+        concatMap((res) =>
+          this.litigesService.ofSauveLitige(res.data.saveLitige.id)
+        )
+      )
+      .subscribe({
         next: () => this.loadForm(),
-        complete: () => notify(this.localization.localize("litige-save-success"), "success", 3500),
-        error: err => notify(err.message, "error", 3000),
+        complete: () =>
+          notify(
+            this.localization.localize("litige-save-success"),
+            "success",
+            3500
+          ),
+        error: (err) => notify(err.message, "error", 3000),
       });
   }
 
@@ -262,15 +282,23 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   modifierLot() {
-    iif(() => !!this.selectedLitigeLigneKey,
+    iif(
+      () => !!this.selectedLitigeLigneKey,
       this.litigesLignesService
-        .getOne_v2(this.selectedLitigeLigneKey, new Set(["id", "numeroGroupementLitige"]))
-        .pipe(map(res => res.data.litigeLigne.numeroGroupementLitige)),
-      of(""))
-      .subscribe({
-        next: numRegroupement => this.gestionOpPopup.lot = [this.infosLitige.litige.id, numRegroupement],
-        complete: () => this.gestionOpPopup.visible = true,
-      });
+        .getOne_v2(
+          this.selectedLitigeLigneKey,
+          new Set(["id", "numeroGroupementLitige"])
+        )
+        .pipe(map((res) => res.data.litigeLigne.numeroGroupementLitige)),
+      of("")
+    ).subscribe({
+      next: (numRegroupement) =>
+        (this.gestionOpPopup.lot = [
+          this.infosLitige.litige.id,
+          numRegroupement,
+        ]),
+      complete: () => (this.gestionOpPopup.visible = true),
+    });
   }
 
   fraisAnnexes() {
@@ -279,11 +307,13 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   async cloturer() {
-
     if (!this.infosLitige?.fraisAnnexes) {
-      if (await confirm(
-        this.localization.localize("ask-cloture-frais-zero"),
-        this.localization.localize("btn-close"))) {
+      if (
+        await confirm(
+          this.localization.localize("ask-cloture-frais-zero"),
+          this.localization.localize("btn-close")
+        )
+      ) {
         this.cloturePopup.visible = true;
       }
     } else {
@@ -301,15 +331,18 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   private handleFlux(flux: Flux["id"]) {
-    this.fluxEnvoisService.prompt(flux, this.ordre.id, this.envoisFluxWarningPopup).pipe(
-      filter(res => res),
-    ).subscribe(res => {
-      this.docsPopup.setTitle();
-      this.docsPopup.titleEnd = `${this.ordre.numero} - ${this.localization.localize("tiers-contacts-flux")} ${flux}`;
-      this.docsPopup.ordre = this.ordre;
-      this.docsPopup.flux = flux;
-      this.docsPopup.visible = true;
-    });
+    this.fluxEnvoisService
+      .prompt(flux, this.ordre.id, this.envoisFluxWarningPopup)
+      .pipe(filter((res) => res))
+      .subscribe((res) => {
+        this.docsPopup.setTitle();
+        this.docsPopup.titleEnd = `${
+          this.ordre.numero
+        } - ${this.localization.localize("tiers-contacts-flux")} ${flux}`;
+        this.docsPopup.ordre = this.ordre;
+        this.docsPopup.flux = flux;
+        this.docsPopup.visible = true;
+      });
   }
 
   public openAssociatedDocsPopup() {

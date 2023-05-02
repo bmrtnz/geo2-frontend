@@ -1,8 +1,24 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { AuthService, LocalizationService } from "app/shared/services";
-import { DxPopupComponent, DxScrollViewComponent, DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
+import {
+  DxPopupComponent,
+  DxScrollViewComponent,
+  DxDataGridComponent,
+  DxSwitchComponent,
+} from "devextreme-angular";
 import { alert } from "devextreme/ui/dialog";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { from, Observable } from "rxjs";
 import DataSource from "devextreme/data/data_source";
@@ -14,15 +30,12 @@ import { OrdreLigne } from "app/shared/models";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
-
 @Component({
   selector: "app-destockage-auto-popup",
   templateUrl: "./destockage-auto-popup.component.html",
-  styleUrls: ["./destockage-auto-popup.component.scss"]
+  styleUrls: ["./destockage-auto-popup.component.scss"],
 })
-
 export class DestockageAutoPopupComponent implements OnChanges {
-
   @Input() ordreId: string;
   @Input() gridCommandes: GridCommandesComponent;
   @Output() updateGridDestockAuto = new EventEmitter();
@@ -30,7 +43,8 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
   @ViewChild("switchErrors", { static: false }) switchErrors: DxSwitchComponent;
 
   public dataSource: DataSource;
@@ -55,8 +69,10 @@ export class DestockageAutoPopupComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreDestockageAuto);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.OrdreDestockageAuto
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnChanges() {
@@ -65,23 +81,27 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   onRowClick(e) {
     // Retrieve ligne data
-    this.ordreLigne = this.lignes.filter(l => l.id === e.data.orl_ref)[0];
+    this.ordreLigne = this.lignes.filter((l) => l.id === e.data.orl_ref)[0];
     this.gridCommandes.openDestockagePopup(this.ordreLigne);
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
       if (e.column.dataField === "resa_desc") {
-        if (e.value.includes("<br>")) e.cellElement.classList.add("lineHeight16");
+        if (e.value.includes("<br>"))
+          e.cellElement.classList.add("lineHeight16");
       }
-      if (e.column.dataField === "info_stock") e.cellElement.classList.add("red-font");
+      if (e.column.dataField === "info_stock")
+        e.cellElement.classList.add("red-font");
     }
   }
 
   onRowPrepared(e) {
     if (e.rowType === "data") {
       e.rowElement.classList.add("cursor-pointer");
-      e.rowElement.title = this.localizeService.localize("hint-click-modif-destock");
+      e.rowElement.title = this.localizeService.localize(
+        "hint-click-modif-destock"
+      );
     }
   }
 
@@ -90,52 +110,65 @@ export class DestockageAutoPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    if (this.ordreId) this.title =
-      this.localizeService.localize("title-destockage-auto-popup");
+    if (this.ordreId)
+      this.title = this.localizeService.localize("title-destockage-auto-popup");
   }
 
   enableFilters() {
     this.datagrid.instance.beginCustomLoading("");
-    this.stockMouvementsService.fResaAutoOrdre(
-      this.ordreId,
-      this.authService.currentUser.nomUtilisateur
-    ).subscribe({
-      next: (res) => {
-        this.DsItems = JSON.parse(JSON.stringify(res.data.fResaAutoOrdre.data.result));
-        this.DsItems.map((item, index) => {
-          item.id = index;
-          item.statut = item.statut === "O" ? true : false;
-          item.warning = item.warning === "O" ? true : false;
-          item.resa_desc = item.resa_desc.split("~n").join("<br>").split("ERREUR").join("<br>ERREUR");
-        });
-        this.applyErrorsFilter();
-        setTimeout(() => this.datagrid.instance.endCustomLoading());
-      },
-      error: (error: Error) => {
-        console.log(error);
-        alert(this.messageFormat(error.message), this.localizeService.localize("title-destock-auto"));
-      }
-    });
+    this.stockMouvementsService
+      .fResaAutoOrdre(this.ordreId, this.authService.currentUser.nomUtilisateur)
+      .subscribe({
+        next: (res) => {
+          this.DsItems = JSON.parse(
+            JSON.stringify(res.data.fResaAutoOrdre.data.result)
+          );
+          this.DsItems.map((item, index) => {
+            item.id = index;
+            item.statut = item.statut === "O" ? true : false;
+            item.warning = item.warning === "O" ? true : false;
+            item.resa_desc = item.resa_desc
+              .split("~n")
+              .join("<br>")
+              .split("ERREUR")
+              .join("<br>ERREUR");
+          });
+          this.applyErrorsFilter();
+          setTimeout(() => this.datagrid.instance.endCustomLoading());
+        },
+        error: (error: Error) => {
+          console.log(error);
+          alert(
+            this.messageFormat(error.message),
+            this.localizeService.localize("title-destock-auto")
+          );
+        },
+      });
   }
 
   applyErrorsFilter(e?) {
     // We check that this change is coming from the user
     if (e && !e.event) return;
     let dataSource = this.DsItems;
-    if (this.switchErrors.value) dataSource = dataSource.filter(ds => ds.warning);
+    if (this.switchErrors.value)
+      dataSource = dataSource.filter((ds) => ds.warning);
     this.datagrid.dataSource = dataSource;
   }
 
   updateGrid() {
     // On modifie le commentaire sur la ligne de la grid selon l'état du déstockage
-    this.stocksService.allLigneReservationList(this.ordreLigne.id).subscribe(res => {
-      const info = res?.data?.allLigneReservationList;
-      let newDesc = `${this.ordreLigne.fournisseur.code}/${this.ordreLigne.proprietaireMarchandise.code} ${info.length}`;
-      if (info.length) {
-        newDesc = `OK ${info[0].ligneFournisseurCode}/${info[0].proprietaireCode} ${info.length}`;
-      }
-      this.DsItems.filter(ds => ds.orl_ref === this.ordreLigne.id)[0].resa_desc = newDesc;
-    });
+    this.stocksService
+      .allLigneReservationList(this.ordreLigne.id)
+      .subscribe((res) => {
+        const info = res?.data?.allLigneReservationList;
+        let newDesc = `${this.ordreLigne.fournisseur.code}/${this.ordreLigne.proprietaireMarchandise.code} ${info.length}`;
+        if (info.length) {
+          newDesc = `OK ${info[0].ligneFournisseurCode}/${info[0].proprietaireCode} ${info.length}`;
+        }
+        this.DsItems.filter(
+          (ds) => ds.orl_ref === this.ordreLigne.id
+        )[0].resa_desc = newDesc;
+      });
   }
 
   onShowing(e) {
@@ -162,13 +195,12 @@ export class DestockageAutoPopupComponent implements OnChanges {
   }
 
   private messageFormat(mess) {
-    const functionNames =
-      [
-        "fResaAutoOrdre"
-      ];
-    functionNames.map(fn => mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""));
+    const functionNames = ["fResaAutoOrdre"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
   }
-
 }

@@ -48,14 +48,12 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public gridsService: GridsService,
-    public gridConfiguratorService: GridConfiguratorService,
+    public gridConfiguratorService: GridConfiguratorService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.LitigeLigne,
+      Grid.LitigeLigne
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnInit() {
@@ -69,10 +67,10 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   async enableFilters() {
     if (this.ordre?.id) {
       const fields = this.columns.pipe(
-        map((columns) => columns.map((column) => column.dataField)),
+        map((columns) => columns.map((column) => column.dataField))
       );
       this.dataSource = this.litigesLignesService.getDataSource_v2(
-        await fields.toPromise(),
+        await fields.toPromise()
       );
       this.dataSource.filter([
         ["ordreLigne.ordre.id", "=", this.ordre.id],
@@ -91,6 +89,8 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
   }
 
   public getFocusedRowKey() {
-    return this.datagrid.instance?.totalCount() ? this.datagrid.focusedRowKey : null;
+    return this.datagrid.instance?.totalCount()
+      ? this.datagrid.focusedRowKey
+      : null;
   }
 }

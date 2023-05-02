@@ -4,9 +4,12 @@ import { Apollo } from "apollo-angular";
 import { GridColumn, LookupStore } from "basic";
 import {
   DxoColumnChooserComponent,
-  DxoStateStoringComponent
+  DxoStateStoringComponent,
 } from "devextreme-angular/ui/nested";
-import dxDataGrid from "devextreme/ui/data_grid";
+import dxDataGrid, {
+  ColumnChooser,
+  StateStoring,
+} from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import { dxToolbarItem, dxToolbarOptions } from "devextreme/ui/toolbar";
 import { environment } from "environments/environment";
@@ -27,7 +30,7 @@ import {
   shareReplay,
   startWith,
   tap,
-  toArray
+  toArray,
 } from "rxjs/operators";
 import { Model } from "../models/model";
 import { GridsConfigsService } from "./api/grids-configs.service";
@@ -174,14 +177,13 @@ const extraConfigurations = [
   providedIn: "root",
 })
 export class GridConfiguratorService {
-
   constructor(
     private gridsConfigsService: GridsConfigsService,
     private authService: AuthService,
     private httpClient: HttpClient,
     private apollo: Apollo,
     private localizationService: LocalizationService,
-    private currentCompanyService: CurrentCompanyService,
+    private currentCompanyService: CurrentCompanyService
   ) {
     self = this;
   }
@@ -191,12 +193,12 @@ export class GridConfiguratorService {
     return Grid;
   }
   private readonly GRID_CONFIG_FILE = "/assets/configurations/grids.json";
-  private fetchConfigFile = this.httpClient
-    .get(this.GRID_CONFIG_FILE)
-    .pipe(
-      concatMap((res: { [key: string]: GridConfig }) => from(Object.entries(res))),
-      shareReplay(),
-    );
+  private fetchConfigFile = this.httpClient.get(this.GRID_CONFIG_FILE).pipe(
+    concatMap((res: { [key: string]: GridConfig }) =>
+      from(Object.entries(res))
+    ),
+    shareReplay()
+  );
   private columnChooser = environment.columnChooser;
 
   /**
@@ -211,7 +213,7 @@ export class GridConfiguratorService {
    */
   static getVisible() {
     return map((columns: GridColumn[]) =>
-      columns.filter((column) => column.visible),
+      columns.filter((column) => column.visible)
     );
   }
 
@@ -220,9 +222,7 @@ export class GridConfiguratorService {
    */
   static getVisibleAndID() {
     return map((columns: GridColumn[]) =>
-      columns.filter(
-        (column) => column.visible || column.dataField === "id",
-      ),
+      columns.filter((column) => column.visible || column.dataField === "id")
     );
   }
 
@@ -231,7 +231,7 @@ export class GridConfiguratorService {
    */
   static getFields() {
     return map((columns: GridColumn[]) =>
-      columns.map((column) => column.dataField),
+      columns.map((column) => column.dataField)
     );
   }
 
@@ -240,17 +240,26 @@ export class GridConfiguratorService {
    */
   static filterNonVirtual() {
     return map((columns: GridColumn[]) =>
-      columns.filter((column) => !column.virtual),
+      columns.filter((column) => !column.virtual)
     );
   }
 
   /** Bind datasource to lookup column */
-  public static bindLookupColumnSource(dataGrid: dxDataGrid, dataField: string, dataSource: LookupStore) {
+  public static bindLookupColumnSource(
+    dataGrid: dxDataGrid,
+    dataField: string,
+    dataSource: LookupStore
+  ) {
     const originalLookupSettings = dataGrid.columnOption(dataField, "lookup");
 
     // evaluate displayExpression
-    if (originalLookupSettings && Array.isArray(originalLookupSettings.displayExpr))
-      originalLookupSettings.displayExpr = EvalDisplayPipe.doTransform(originalLookupSettings.displayExpr);
+    if (
+      originalLookupSettings &&
+      Array.isArray(originalLookupSettings.displayExpr)
+    )
+      originalLookupSettings.displayExpr = EvalDisplayPipe.doTransform(
+        originalLookupSettings.displayExpr
+      );
 
     dataGrid.columnOption(dataField, "lookup", {
       ...originalLookupSettings,
@@ -286,14 +295,13 @@ export class GridConfiguratorService {
    * @param config GridConfig object
    */
   save(config: GridConfig) {
-
     // cancel on empty columns configs
     if (!Array.isArray(config?.columns) || !config.columns.length) return;
 
     // cas grid lignes-commandes
     // il faut qu'au moins une colonne possede un attribut `datafield`
     // sinon, ce ne sont que des colonnes virtuelles
-    if (!config.columns.some(c => c.dataField)) return;
+    if (!config.columns.some((c) => c.dataField)) return;
 
     const context = this as unknown as DxoStateStoringComponent;
     const gridConfig = self.prepareGrid(context.storageKey as Grid);
@@ -304,7 +312,7 @@ export class GridConfiguratorService {
           ...gridConfig,
           config: {
             ...config,
-            columns: config.columns.filter(c => c.dataField),
+            columns: config.columns.filter((c) => c.dataField),
           },
         },
       })
@@ -318,7 +326,7 @@ export class GridConfiguratorService {
    */
   private precacheColumns(
     grid: Grid,
-    alterationsCallback: (columns: GridColumn[]) => GridColumn[],
+    alterationsCallback: (columns: GridColumn[]) => GridColumn[]
   ) {
     const alter = (columns: GridColumn[]) =>
       alterationsCallback(JSON.parse(JSON.stringify(columns))); // unsealed
@@ -358,27 +366,34 @@ export class GridConfiguratorService {
   fetchDefaultConfig(grid: Grid): Promise<GridConfig> {
     if (!grid)
       throw Error(
-        "Grid name required, use GridConfiguratorService.with(gridName)",
+        "Grid name required, use GridConfiguratorService.with(gridName)"
       );
     this.evictCache(grid);
-    return this.fetchConfigFile.pipe(
-      filter(([k]) => ["common", grid].includes(k)),
-      // set defaults
-      map(([, config]) => ({
-        ...config,
-        columns: config?.columns ? config.columns.map(column => ({
-          ...column,
-          ...column?.showInColumnChooser !== undefined
-            ? { showInColumnChooser: column?.showInColumnChooser }
-            : { showInColumnChooser: true },
-          ...column?.visible
-            ? { visible: column?.visible }
-            : { visible: false },
-        })) : [],
-      } as GridConfig)),
-      concatMap(config => this.mergeExtraConfiguration(config, config)),
-      reduce((previous, config) => ({ ...previous, ...config })),
-    ).toPromise();
+    return this.fetchConfigFile
+      .pipe(
+        filter(([k]) => ["common", grid].includes(k)),
+        // set defaults
+        map(
+          ([, config]) =>
+            ({
+              ...config,
+              columns: config?.columns
+                ? config.columns.map((column) => ({
+                    ...column,
+                    ...(column?.showInColumnChooser !== undefined
+                      ? { showInColumnChooser: column?.showInColumnChooser }
+                      : { showInColumnChooser: true }),
+                    ...(column?.visible
+                      ? { visible: column?.visible }
+                      : { visible: false }),
+                  }))
+                : [],
+            } as GridConfig)
+        ),
+        concatMap((config) => this.mergeExtraConfiguration(config, config)),
+        reduce((previous, config) => ({ ...previous, ...config }))
+      )
+      .toPromise();
   }
 
   /**
@@ -388,23 +403,31 @@ export class GridConfiguratorService {
   async fetchConfig(grid: Grid): Promise<GridConfig> {
     if (!grid)
       throw Error(
-        "Grid name required, use GridConfiguratorService.with(gridName)",
+        "Grid name required, use GridConfiguratorService.with(gridName)"
       );
 
     const res = await this.gridsConfigsService
-      .fetchUserGrid(this.authService.currentUser, grid, this.currentCompanyService.getCompany())
+      .fetchUserGrid(
+        this.authService.currentUser,
+        grid,
+        this.currentCompanyService.getCompany()
+      )
       .toPromise();
 
     const defaultConfig = this.fetchDefaultConfig(grid);
-    if (res?.error || !res.data.gridConfig)
-      return await defaultConfig;
+    if (res?.error || !res.data.gridConfig) return await defaultConfig;
 
     // cas lignes-commandes
-    if (grid === Grid.LignesCommandes && !res.data.gridConfig.config.columns.length)
+    if (
+      grid === Grid.LignesCommandes &&
+      !res.data.gridConfig.config.columns.length
+    )
       return await defaultConfig;
 
     // clone config (original is sealed)
-    const userConfig: GridConfig = JSON.parse(JSON.stringify(res.data.gridConfig.config));
+    const userConfig: GridConfig = JSON.parse(
+      JSON.stringify(res.data.gridConfig.config)
+    );
 
     // merge extra configurations ( not handled by DX state storing )
     return this.mergeExtraConfiguration(userConfig, await defaultConfig);
@@ -413,21 +436,39 @@ export class GridConfiguratorService {
   /**
    * Merge extra configurations in DxGridConfig ( not handled by DX state storing )
    */
-  private mergeExtraConfiguration(inputConfig: GridConfig, defaultConfig: GridConfig) {
+  private mergeExtraConfiguration(
+    inputConfig: GridConfig,
+    defaultConfig: GridConfig
+  ) {
     if (!inputConfig.columns) return Promise.resolve(inputConfig);
     return from(inputConfig.columns)
       .pipe(
-        mergeMap(async column => [column, defaultConfig
-          .columns.find(c => c.dataField === column.dataField)] as [GridColumn, GridColumn]),
+        mergeMap(
+          async (column) =>
+            [
+              column,
+              defaultConfig.columns.find(
+                (c) => c.dataField === column.dataField
+              ),
+            ] as [GridColumn, GridColumn]
+        ),
         map(([userColumn, defaultColumn]) => ({
           ...userColumn,
-          ...defaultColumn ? extraConfigurations
-            .filter(param => defaultColumn[param] !== undefined)
-            .map(param => ({ [param]: defaultColumn[param] }))
-            .reduce((acm, crt) => ({ ...acm, ...crt })) : {},
+          ...(defaultColumn
+            ? extraConfigurations
+                .filter((param) => defaultColumn[param] !== undefined)
+                .map((param) => ({ [param]: defaultColumn[param] }))
+                .reduce((acm, crt) => ({ ...acm, ...crt }))
+            : {}),
         })),
         toArray(),
-        map(columns => ({ ...inputConfig, columns: columns ?? defaultConfig.columns }) as GridConfig),
+        map(
+          (columns) =>
+            ({
+              ...inputConfig,
+              columns: columns ?? defaultConfig.columns,
+            } as GridConfig)
+        )
       )
       .toPromise();
   }
@@ -440,7 +481,7 @@ export class GridConfiguratorService {
   fetchColumns(grid: Grid): Observable<GridColumn[]> {
     return from(this.fetchConfig(grid)).pipe(
       share(),
-      GridConfiguratorService.getColumns(),
+      GridConfiguratorService.getColumns()
     );
   }
 
@@ -456,16 +497,12 @@ export class GridConfiguratorService {
       autoStateStoring = true,
       autoColumnChooser = true,
       onColumnsChange,
-    }: AutoConfig,
+    }: AutoConfig
   ) {
-
     component.beginCustomLoading("Initializing...");
 
     if (autoStateStoring)
-      this.autoConfigureStateStoring(
-        component.option("stateStoring"),
-        grid,
-      );
+      this.autoConfigureStateStoring(component.option("stateStoring"), grid);
     if (autoColumnChooser)
       this.autoConfigureColumnChooser(component.option("columnChooser"));
 
@@ -475,27 +512,23 @@ export class GridConfiguratorService {
 
     columnsChangeEmitter
       .pipe(
-        filter(({ name, value }) => name === "columns" && !!onColumnsChange && !!value?.length),
+        filter(
+          ({ name, value }) =>
+            name === "columns" && !!onColumnsChange && !!value?.length
+        ),
         tap(
-          ({
-            fullName,
-            value,
-          }: Partial<{ fullName: string; value: any }>) => {
+          ({ fullName, value }: Partial<{ fullName: string; value: any }>) => {
             component.beginCustomLoading("Initializing columns...");
-            const res = fullName.match(
-              /^columns\[(\d+)\]\.visible$/,
-            );
+            const res = fullName.match(/^columns\[(\d+)\]\.visible$/);
             if (res?.[1])
               this.precacheColumns(
                 grid,
-                (columns) => (
-                  (columns[res[1]].visible = value), columns
-                ),
+                (columns) => ((columns[res[1]].visible = value), columns)
               );
-          },
+          }
         ),
         debounce(({ fullName }) =>
-          interval(fullName === "columns" ? 10 : 1000),
+          interval(fullName === "columns" ? 10 : 1000)
         ),
         concatMapTo(this.fetchColumns(grid)),
         GridConfiguratorService.getVisible(),
@@ -505,10 +538,8 @@ export class GridConfiguratorService {
         filter(
           ([previous, current]) =>
             previous.length !== current.length ||
-            !current.every(
-              (v, i) => previous?.[i].dataField === v.dataField,
-            ),
-        ),
+            !current.every((v, i) => previous?.[i].dataField === v.dataField)
+        )
       )
       .subscribe(([previous, current]) => {
         const fresh = current.filter((x) => !previous.includes(x));
@@ -534,10 +565,7 @@ export class GridConfiguratorService {
    * @param state DX StateStoring component
    * @param grid Targeted grid config id
    */
-  private autoConfigureStateStoring(
-    state: DxoStateStoringComponent,
-    grid: Grid,
-  ) {
+  private autoConfigureStateStoring(state: StateStoring, grid: Grid) {
     state.enabled = true;
     state.type = "custom";
     state.customLoad = this.load;
@@ -550,7 +578,7 @@ export class GridConfiguratorService {
    * @param chooser DX ColumnChooser component
    * @param grid Targeted grid config id
    */
-  private autoConfigureColumnChooser(chooser: DxoColumnChooserComponent) {
+  private autoConfigureColumnChooser(chooser: ColumnChooser) {
     chooser.enabled = true;
     chooser.mode = "select";
     chooser.title = this.localizationService.localize("columnChooser");
@@ -568,34 +596,36 @@ export class GridConfiguratorService {
       title,
       onConfigReload,
       onColumnsChange,
-    }: AutoConfig,
+    }: AutoConfig
   ) {
     toolbarOptions.items.unshift(...toolbarItems);
     toolbarOptions.items.unshift(
       {
         location: "after",
         widget: "dxButton",
-        cssClass: `grid-refresh${(title ? "-" + title.toLowerCase().split(" ").join("-") : "")}`,
+        cssClass: `grid-refresh${
+          title ? "-" + title.toLowerCase().split(" ").join("-") : ""
+        }`,
         options: {
           icon: "material-icons settings_backup_restore",
           hint: "Réinitialiser les colonnes affichées",
           onClick: async () => {
-            const defaultState = await this.fetchDefaultConfig(
-              grid,
-            );
-            confirm("Êtes-vous sûr de vouloir réinitialiser l'affichage ?", "Configuration grille")
-              .then(res => {
-                if (res) {
-                  component.state(defaultState);
-                  // manual state reloading
-                  component
-                    .option("stateStoring")
-                    .customLoad.call(component.option("stateStoring"));
-                  if (onConfigReload) onConfigReload(defaultState);
-                  if (onColumnsChange)
-                    onColumnsChange({ current: defaultState.columns });
-                }
-              });
+            const defaultState = await this.fetchDefaultConfig(grid);
+            confirm(
+              "Êtes-vous sûr de vouloir réinitialiser l'affichage ?",
+              "Configuration grille"
+            ).then((res) => {
+              if (res) {
+                component.state(defaultState);
+                // manual state reloading
+                component
+                  .option("stateStoring")
+                  .customLoad.call(component.option("stateStoring"));
+                if (onConfigReload) onConfigReload(defaultState);
+                if (onColumnsChange)
+                  onColumnsChange({ current: defaultState.columns });
+              }
+            });
           },
         },
       },
@@ -609,15 +639,11 @@ export class GridConfiguratorService {
           readOnly: true,
           text: title,
         },
-      },
+      }
     );
 
     if (component.option("columnChooser").enabled)
-      if (
-        !toolbarOptions.items.find(
-          (i) => i.name === "columnChooserButton",
-        )
-      )
+      if (!toolbarOptions.items.find((i) => i.name === "columnChooserButton"))
         toolbarOptions.items.unshift({
           widget: "dxButton",
           options: {
@@ -631,26 +657,33 @@ export class GridConfiguratorService {
         });
 
     // Export page
-    toolbarOptions.items.push(this.buildExportToolbarItem(component, {
-      name: "exportPage",
-      hint: this.localizationService.localize("btn-export-view"),
-    }));
+    toolbarOptions.items.push(
+      this.buildExportToolbarItem(component, {
+        name: "exportPage",
+        hint: this.localizationService.localize("btn-export-view"),
+      })
+    );
 
     // Export all
-    toolbarOptions.items.push(this.buildExportToolbarItem(component, {
-      name: "exportAll",
-      hint: this.localizationService.localize("btn-export-all"),
-      exportTake: 1_000_000,
-    }));
+    toolbarOptions.items.push(
+      this.buildExportToolbarItem(component, {
+        name: "exportAll",
+        hint: this.localizationService.localize("btn-export-all"),
+        exportTake: 1_000_000,
+      })
+    );
   }
 
   /** Build dxToolbarItem for Excel export */
-  private buildExportToolbarItem(grid: dxDataGrid, options: {
-    name: string,
-    hint: string,
-    icon?: string,
-    exportTake?: number,
-  }) {
+  private buildExportToolbarItem(
+    grid: dxDataGrid,
+    options: {
+      name: string;
+      hint: string;
+      icon?: string;
+      exportTake?: number;
+    }
+  ) {
     return {
       widget: "dxButton",
       locateInMenu: "always",
@@ -681,10 +714,11 @@ export class GridConfiguratorService {
 /** Evaluate display value from data & path(s) */
 export class EvalDisplayPipe implements PipeTransform {
   static doTransform(paths) {
-    return data => {
+    return (data) => {
       if (paths)
-        return [paths].flat(2)
-          .map(arg => Model.fetchValue(arg.split("."), data))
+        return [paths]
+          .flat(2)
+          .map((arg) => Model.fetchValue(arg.split("."), data))
           .join(" - ");
     };
   }

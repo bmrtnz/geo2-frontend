@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
@@ -6,9 +13,17 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { Grid, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { DxButtonComponent, DxPopupComponent, DxScrollViewComponent, DxTagBoxComponent } from "devextreme-angular";
+import {
+  DxButtonComponent,
+  DxPopupComponent,
+  DxScrollViewComponent,
+  DxTagBoxComponent,
+} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
@@ -19,11 +34,9 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 @Component({
   selector: "app-ajout-articles-manu-popup",
   templateUrl: "./ajout-articles-manu-popup.component.html",
-  styleUrls: ["./ajout-articles-manu-popup.component.scss"]
+  styleUrls: ["./ajout-articles-manu-popup.component.scss"],
 })
-
 export class AjoutArticlesManuPopupComponent implements OnChanges {
-
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
   @Output() public lignesChanged = new EventEmitter();
@@ -44,13 +57,18 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   remplacementArticle: boolean;
   popupFullscreen = true;
 
-  @ViewChild(ArticlesListComponent, { static: false }) catalogue: ArticlesListComponent;
-  @ViewChild(DxTagBoxComponent, { static: false }) saisieCode: DxTagBoxComponent;
+  @ViewChild(ArticlesListComponent, { static: false })
+  catalogue: ArticlesListComponent;
+  @ViewChild(DxTagBoxComponent, { static: false })
+  saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
-  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
-  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
+  @ViewChild(AssociatedArticlePromptComponent)
+  associatedPrompt: AssociatedArticlePromptComponent;
+  @ViewChild(ZoomArticlePopupComponent, { static: false })
+  zoomArticlePopup: ZoomArticlePopupComponent;
 
   constructor(
     private articlesService: ArticlesService,
@@ -60,7 +78,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
-  ) { }
+  ) {}
 
   ngOnChanges() {
     this.remplacementArticle = !!this.articleRowKey;
@@ -68,11 +86,19 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   setTitle() {
-    this.titleStart = this.localizeService.localize(this.remplacementArticle ? "remplacement-article" : "ajout-articles");
+    this.titleStart = this.localizeService.localize(
+      this.remplacementArticle ? "remplacement-article" : "ajout-articles"
+    );
     if (!this.ordre) return;
-    this.titleEnd = "n° " + this.ordre.campagne.id + "-" + this.ordre.numero
-      + " - " + this.ordre.client.code
-      + "/" + this.ordre.entrepot.code;
+    this.titleEnd =
+      "n° " +
+      this.ordre.campagne.id +
+      "-" +
+      this.ordre.numero +
+      " - " +
+      this.ordre.client.code +
+      "/" +
+      this.ordre.entrepot.code;
   }
 
   openZoomArticle(e) {
@@ -86,17 +112,23 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.nbARticles = this.chosenArticles.length;
     this.articlesKO = !this.nbARticles;
     if (!this.remplacementArticle) {
-      this.validBtnText = this.localizeService.localize("btn-valider-article" + (this.nbARticles > 1 ? "s" : ""))
+      this.validBtnText = this.localizeService
+        .localize("btn-valider-article" + (this.nbARticles > 1 ? "s" : ""))
         .replace("&&", this.nbARticles.toString());
     } else {
-      this.validBtnText = this.localizeService.localize("btn-remplacer-article");
+      this.validBtnText = this.localizeService.localize(
+        "btn-remplacer-article"
+      );
     }
     if (this.nbARticles !== this.nbArticlesOld) {
       this.pulseBtnOn = false;
-      setTimeout(() => this.pulseBtnOn = true, 1);
+      setTimeout(() => (this.pulseBtnOn = true), 1);
     }
     this.nbArticlesOld = this.nbARticles;
-    if (this.nbARticles) this.addButton.instance.option(this.gridUtilsService.friendlyFormatList(this.chosenArticles));
+    if (this.nbARticles)
+      this.addButton.instance.option(
+        this.gridUtilsService.friendlyFormatList(this.chosenArticles)
+      );
   }
 
   getGridSelectedArticles() {
@@ -111,7 +143,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;
       }
-      if (e.selectedRowKeys?.length === 2) e.component.deselectRows(e.selectedRowKeys[0]);
+      if (e.selectedRowKeys?.length === 2)
+        e.component.deselectRows(e.selectedRowKeys[0]);
     }
     this.updateChosenArticles();
   }
@@ -125,11 +158,17 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     if (this.remplacementArticle) this.clearAll();
 
-    this.catalogue.dataGrid.selection = { mode: "multiple", allowSelectAll: false, showCheckBoxesMode: "always" };
+    this.catalogue.dataGrid.selection = {
+      mode: "multiple",
+      allowSelectAll: false,
+      showCheckBoxesMode: "always",
+    };
     this.catalogue.valideSB.value = this.catalogue.trueFalse[1];
 
     // datagrid state loading is not executed automatically in this component...
-    const gridConfig = await this.gridConfiguratorService.fetchConfig(Grid.Article);
+    const gridConfig = await this.gridConfiguratorService.fetchConfig(
+      Grid.Article
+    );
     this.catalogue?.dataGrid.instance.state(gridConfig);
     this.catalogue?.dataGrid.instance.repaint();
 
@@ -153,20 +192,18 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         tagArray.push(myValue);
         e.component.option("value", tagArray);
         this.articlesKO = true;
-        this.articlesService.getOne(myValue)
-          .subscribe(res => {
-            const myArt = res?.data?.article;
-            this.articlesKO = !myArt || myArt.valide !== true;
-            if (this.articlesKO) {
-              notify("L'article " + myValue + " n'existe pas", "error", 3000);
-              if (tagArray.includes(myValue)) tagArray.pop();
-              e.component.option("value", tagArray);
-            }
-            this.updateChosenArticles();
-            this.codeChangeProcess = false;
-          });
+        this.articlesService.getOne(myValue).subscribe((res) => {
+          const myArt = res?.data?.article;
+          this.articlesKO = !myArt || myArt.valide !== true;
+          if (this.articlesKO) {
+            notify("L'article " + myValue + " n'existe pas", "error", 3000);
+            if (tagArray.includes(myValue)) tagArray.pop();
+            e.component.option("value", tagArray);
+          }
+          this.updateChosenArticles();
+          this.codeChangeProcess = false;
+        });
         return;
-
       }
       e.component.option("value", tagArray);
     }
@@ -204,24 +241,32 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   insertReplaceArticles() {
-
     if (!this.remplacementArticle) {
-      const info = this.localizeService.localize("ajout-article" + (this.nbARticles > 1 ? "s" : "")) + "...";
+      const info =
+        this.localizeService.localize(
+          "ajout-article" + (this.nbARticles > 1 ? "s" : "")
+        ) + "...";
       notify(info, "info", 3000);
       from(this.chosenArticles)
         .pipe(
-          concatMap(articleID => this.functionsService
-            .ofInitArticle(this.ordre.id, articleID, this.currentCompanyService.getCompany().id)
-            .valueChanges
-            .pipe(
-              concatMap(res => {
-                this.associatedPrompt.ordreLigneID = res.data.ofInitArticle.data.new_orl_ref;
-                this.associatedPrompt.articleAssocieID = res.data.ofInitArticle.data.art_ass;
-                return this.associatedPrompt.tryPrompt();
-              }),
-              takeWhile(res => res.loading),
-            )
-          ),
+          concatMap((articleID) =>
+            this.functionsService
+              .ofInitArticle(
+                this.ordre.id,
+                articleID,
+                this.currentCompanyService.getCompany().id
+              )
+              .valueChanges.pipe(
+                concatMap((res) => {
+                  this.associatedPrompt.ordreLigneID =
+                    res.data.ofInitArticle.data.new_orl_ref;
+                  this.associatedPrompt.articleAssocieID =
+                    res.data.ofInitArticle.data.art_ass;
+                  return this.associatedPrompt.tryPrompt();
+                }),
+                takeWhile((res) => res.loading)
+              )
+          )
         )
         .subscribe({
           error: ({ message }: Error) => notify(message, "error"),
@@ -232,7 +277,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         id: this.articleRowKey,
         article: { id: this.chosenArticles[0] },
         listeCertifications: "0",
-        origineCertification: null
+        origineCertification: null,
       };
       this.OrdreLigneService.save_v2(["id"], { ordreLigne }).subscribe({
         next: (res) => {
@@ -240,12 +285,9 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
           this.nbARticles = 0;
           this.clearAndHidePopup();
         },
-        error: () => notify("Erreur lors du remplacement de l'article", "error", 3000)
+        error: () =>
+          notify("Erreur lors du remplacement de l'article", "error", 3000),
       });
     }
-
   }
-
 }
-
-

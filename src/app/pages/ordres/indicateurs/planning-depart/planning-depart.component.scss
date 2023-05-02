@@ -12,21 +12,19 @@
     position: relative;
     top: 9px;
   }
-
 }
 
 ::ng-deep .grid-planning-departs {
-
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
 
     .dx-placeholder {
-      color: rgba(0, 0, 0, .87);
+      color: rgba(0, 0, 0, 0.87);
     }
   }
 
   .highlight-ok {
-    background-color: #8FC459 !important;
+    background-color: #8fc459 !important;
     color: white !important;
   }
 
@@ -37,13 +35,12 @@
 
   .highlight-ok,
   .highlight-err {
-    border-left: 1px solid #FFF;
+    border-left: 1px solid #fff;
   }
 
   .cursor-pointer {
     cursor: pointer;
   }
-
 }
 
 .refresh {

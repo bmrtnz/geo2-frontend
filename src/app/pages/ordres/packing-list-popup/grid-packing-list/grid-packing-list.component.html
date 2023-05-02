@@ -19,7 +19,7 @@
       enableFilters.bind(this)
     )
   "
-  >
+>
   <!-- Grid configuration -->
   <dxo-export fileName="Packing list"></dxo-export>
   <dxo-header-filter
@@ -59,8 +59,8 @@
     [visible]="false"
     [width]="column.width"
     [caption]="
-      ('ordres-packingList-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+      ('ordres-packingList-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
     "
     [fixed]="column.fixed"
     [cssClass]="column?.cssClass"

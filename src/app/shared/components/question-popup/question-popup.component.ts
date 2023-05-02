@@ -1,15 +1,24 @@
-import { Component, EventEmitter, Input, NgModule, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgModule,
+  ViewChild,
+} from "@angular/core";
 import { LocalizePipe } from "app/shared/pipes";
 import { SharedModule } from "app/shared/shared.module";
-import { DxButtonModule, DxPopupComponent, DxPopupModule } from "devextreme-angular";
+import {
+  DxButtonModule,
+  DxPopupComponent,
+  DxPopupModule,
+} from "devextreme-angular";
 
 @Component({
   selector: "app-question-popup",
   templateUrl: "./question-popup.component.html",
-  styleUrls: ["./question-popup.component.scss"]
+  styleUrls: ["./question-popup.component.scss"],
 })
 export class QuestionPopupComponent {
-
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
   public question: string;
   private response = new EventEmitter<boolean>();
@@ -30,17 +39,12 @@ export class QuestionPopupComponent {
     this.popup.visible = false;
     this.response.emit(false);
   }
-
 }
 
 @NgModule({
-  imports: [
-    DxPopupModule,
-    DxButtonModule,
-    SharedModule,
-  ],
+  imports: [DxPopupModule, DxButtonModule, SharedModule],
   providers: [LocalizePipe],
   declarations: [QuestionPopupComponent],
   exports: [QuestionPopupComponent],
 })
-export class QuestionPopupModule { }
+export class QuestionPopupModule {}

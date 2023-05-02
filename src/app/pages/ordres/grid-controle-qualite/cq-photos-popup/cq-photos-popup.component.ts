@@ -6,10 +6,9 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 @Component({
   selector: "app-cq-photos-popup",
   templateUrl: "./cq-photos-popup.component.html",
-  styleUrls: ["./cq-photos-popup.component.scss"]
+  styleUrls: ["./cq-photos-popup.component.scss"],
 })
 export class CqPhotosPopupComponent implements OnChanges {
-
   @Input() public ordreLigne;
   @Output() public ordreLigneId: string;
   @Input() public readOnlyMode: boolean;
@@ -21,13 +20,13 @@ export class CqPhotosPopupComponent implements OnChanges {
   titleEnd: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
 
   constructor(
     private localization: LocalizationService,
-    public documentsNumService: DocumentsNumService,
-  ) {
-  }
+    public documentsNumService: DocumentsNumService
+  ) {}
 
   ngOnChanges() {
     this.setTitle();
@@ -35,7 +34,9 @@ export class CqPhotosPopupComponent implements OnChanges {
 
   setTitle() {
     if (this.ordreLigne) {
-      this.titleStart = this.localization.localize("controle-qualité-popup-title");
+      this.titleStart = this.localization.localize(
+        "controle-qualité-popup-title"
+      );
       this.titleMid = this.ordreLigne.ordre.numero;
       this.titleEnd = this.ordreLigne.id;
       this.ordreLigneId = this.ordreLigne.id;
@@ -53,7 +54,4 @@ export class CqPhotosPopupComponent implements OnChanges {
   hidePopup() {
     this.popup.visible = false;
   }
-
 }
-
-

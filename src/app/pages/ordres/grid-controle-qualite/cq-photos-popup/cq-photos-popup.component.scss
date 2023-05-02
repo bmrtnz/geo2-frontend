@@ -1,6 +1,5 @@
 // Var
-@import "~themes/generated/variables.base";
-
+@import "themes/generated/variables.base";
 
 ::ng-deep .photo-cq-popup {
   max-width: 1320px;
@@ -28,7 +27,7 @@
     .title-end {
       font-size: 12px;
       line-height: 34px;
-      color: #AAA;
+      color: #aaa;
     }
 
     .close-popup {
@@ -36,5 +35,4 @@
       float: right;
     }
   }
-
 }

@@ -52,10 +52,10 @@ import { HistoriqueValideModule } from "app/shared/components/historique-valide/
     FileManagerModule,
     ModificationListModule,
     HistoriqueValideModule,
-    PushHistoryPopupModule
+    PushHistoryPopupModule,
   ],
   declarations: [TransporteursListComponent, TransporteurDetailsComponent],
   providers: [NestedGuard, EditingGuard],
-  exports: [TransporteurDetailsComponent]
+  exports: [TransporteurDetailsComponent],
 })
-export class TransporteursModule { }
+export class TransporteursModule {}

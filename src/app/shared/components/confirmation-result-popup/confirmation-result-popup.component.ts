@@ -1,5 +1,13 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, NgModule, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  NgModule,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxPopupModule } from "devextreme-angular";
@@ -11,10 +19,9 @@ type MessageState = "ERROR" | "WARNING";
 @Component({
   selector: "app-confirmation-result-popup",
   templateUrl: "./confirmation-result-popup.component.html",
-  styleUrls: ["./confirmation-result-popup.component.scss"]
+  styleUrls: ["./confirmation-result-popup.component.scss"],
 })
 export class ConfirmationResultPopupComponent implements OnInit {
-
   public content: string;
   public state: MessageState = "WARNING";
 
@@ -29,9 +36,7 @@ export class ConfirmationResultPopupComponent implements OnInit {
 
   @ViewChild(DxPopupComponent) popup: DxPopupComponent;
 
-  constructor(
-    private localization: LocalizationService,
-  ) { }
+  constructor(private localization: LocalizationService) {}
 
   ngOnInit() {
     this.continueButtonOptions = {
@@ -57,25 +62,23 @@ export class ConfirmationResultPopupComponent implements OnInit {
   public openAs(state: MessageState, content: string) {
     this.state = state;
     console.log(content);
-    if (content.indexOf("Exception while fetching data") >= 0) content = content.substring(content.indexOf(":") + 2);
+    if (content.indexOf("Exception while fetching data") >= 0)
+      content = content.substring(content.indexOf(":") + 2);
     this.content = content
       .split(/~r~n|~r|~n/)
-      .map(chunk => `<p>${chunk}</p>`)
+      .map((chunk) => `<p>${chunk}</p>`)
       .join("");
     this.popup.instance.show();
-    return this.advance
-      .pipe(take(1), tap(_ => this.popup.instance.hide()));
+    return this.advance.pipe(
+      take(1),
+      tap((_) => this.popup.instance.hide())
+    );
   }
-
 }
 
 @NgModule({
-  imports: [
-    CommonModule,
-    DxPopupModule,
-    DxiToolbarItemModule,
-  ],
+  imports: [CommonModule, DxPopupModule, DxiToolbarItemModule],
   declarations: [ConfirmationResultPopupComponent],
   exports: [ConfirmationResultPopupComponent],
 })
-export class ConfirmationResultPopupModule { }
+export class ConfirmationResultPopupModule {}

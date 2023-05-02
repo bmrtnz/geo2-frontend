@@ -96,7 +96,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
     public clientsService: ClientsService,
     public authService: AuthService,
     public localizeService: LocalizationService,
-    private ordresIndicatorsService: OrdresIndicatorsService,
+    private ordresIndicatorsService: OrdresIndicatorsService
   ) {
     this.dataSource = this.ordresService.getDataSource(Operation.BAF);
     this.detailedFields = this.ordresService.model.getDetailedFields();
@@ -104,19 +104,12 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      [
-        "societes",
-        "contains",
-        this.currentCompanyService.getCompany().id,
-      ],
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
     this.clients = clientsService.getDataSource_v2(["id", "raisonSocial"]);
     this.commercial = personnesService.getDataSource();
     this.assistante = personnesService.getDataSource();
-    this.entrepot = entrepotsService.getDataSource_v2([
-      "id",
-      "raisonSocial",
-    ]);
+    this.entrepot = entrepotsService.getDataSource_v2(["id", "raisonSocial"]);
     this.periodes = [
       "Hier",
       "Aujourd'hui",
@@ -154,15 +147,14 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
     if (this.authService.currentUser.limitationSecteur) {
       this.secteurSB.value = {
         id: this.authService.currentUser.secteurCommercial.id,
-        description:
-          this.authService.currentUser.secteurCommercial.description,
+        description: this.authService.currentUser.secteurCommercial.description,
       };
     }
   }
 
   enableFilters() {
     const filters = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
+      this.INDICATOR_NAME
     ).filter;
     this.initialFilterLengh = filters.length;
 
@@ -206,7 +198,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
 
     // Retrieves the initial filter while removing date criteria
     let filters = this.ordresIndicatorsService.getIndicatorByName(
-      this.INDICATOR_NAME,
+      this.INDICATOR_NAME
     ).filter;
     filters = filters.slice(0, this.initialFilterLengh - 4);
 
@@ -215,31 +207,19 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
       [
         "dateLivraisonPrevue",
         ">=",
-        this.ordresIndicatorsService.getFormatedDate(
-          this.dateStartSB.value,
-        ),
+        this.ordresIndicatorsService.getFormatedDate(this.dateStartSB.value),
       ],
       "and",
       [
         "dateLivraisonPrevue",
         "<=",
-        this.ordresIndicatorsService.getFormatedDate(
-          this.dateEndSB.value,
-        ),
-      ],
+        this.ordresIndicatorsService.getFormatedDate(this.dateEndSB.value),
+      ]
     );
     if (this.assistanteSB.value)
-      filters.push("and", [
-        "assistante.id",
-        "=",
-        this.assistanteSB.value.id,
-      ]);
+      filters.push("and", ["assistante.id", "=", this.assistanteSB.value.id]);
     if (this.commercialSB.value)
-      filters.push("and", [
-        "commercial.id",
-        "=",
-        this.commercialSB.value.id,
-      ]);
+      filters.push("and", ["commercial.id", "=", this.commercialSB.value.id]);
     if (this.clientSB.value)
       filters.push("and", ["client.id", "=", this.clientSB.value.id]);
     if (this.entrepotSB.value)
@@ -413,7 +393,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
           "-" +
           this.daysInMonth(
             month === 1 ? year - 1 : year,
-            month === 1 ? 12 : month - 1,
+            month === 1 ? 12 : month - 1
           );
         break;
       case "Mois en cours":
@@ -423,10 +403,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
         break;
       case "Trimestre dernier":
         deb =
-          (quarter === 1 ? year - 1 : year) +
-          "-" +
-          prevQuarterStart +
-          "-01";
+          (quarter === 1 ? year - 1 : year) + "-" + prevQuarterStart + "-01";
         fin =
           (quarter === 1 ? year - 1 : year) +
           "-" +
@@ -434,7 +411,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
           "-" +
           this.daysInMonth(
             quarter === 1 ? year - 1 : year,
-            prevQuarterStart + 2,
+            prevQuarterStart + 2
           );
         break;
       case "Trimestre en cours":
@@ -455,10 +432,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
         fin = (month > 6 ? year + 1 : year) + "-06-30";
         break;
       case "Même semaine année dernière": {
-        deb = this.getDateOfISOWeek(
-          this.getWeekNumber(dateNow),
-          year - 1,
-        );
+        deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
         const tempDate = new Date(deb);
         fin = tempDate.setDate(tempDate.getDate() + 6);
         deb = this.datePipe.transform(deb.valueOf(), "yyyy-MM-dd");
@@ -484,7 +458,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
 
   findDate(delta) {
     return this.ordresIndicatorsService.getFormatedDate(
-      new Date().setDate(new Date().getDate() + delta).valueOf(),
+      new Date().setDate(new Date().getDate() + delta).valueOf()
     );
   }
 
@@ -499,8 +473,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
     const simple = new Date(y, 0, 1 + (w - 1) * 7);
     const dow = simple.getDay();
     const ISOweekStart = simple;
-    if (dow <= 4)
-      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    if (dow <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
     else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
     return ISOweekStart;
   }

@@ -5,7 +5,7 @@ import {
   Input,
   NgModule,
   Output,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
@@ -21,7 +21,7 @@ import {
   DxCheckBoxModule,
   DxDataGridModule,
   DxSelectBoxComponent,
-  DxSelectBoxModule
+  DxSelectBoxModule,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { filter, map } from "rxjs/operators";
@@ -75,7 +75,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     private authService: AuthService,
     public tabContext: TabContext,
     private route: ActivatedRoute,
-    private ordresService: OrdresService,
+    private ordresService: OrdresService
   ) {
     self = this;
     this.searchItems = [
@@ -93,10 +93,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.route.paramMap
       .pipe(
-        filter(
-          (param) =>
-            param.get(RouteParam.TabID) === this.INDICATOR_ID,
-        ),
+        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID)
       )
       .subscribe((_) => {
         this.histoGrid.reload();
@@ -107,9 +104,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   searchDisplayExpr(item) {
     return item
-      ? self.localizeService.localize(
-        "rechOrdres-" + item.split(".").join("-"),
-      )
+      ? self.localizeService.localize("rechOrdres-" + item.split(".").join("-"))
       : null;
   }
 
@@ -158,11 +153,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
     // Current campaing filtering
     if (this.currCampaign.instance.option("value")) {
-      this.filter.push("and", [
-        "campagne.id",
-        "=",
-        this.campagneEnCours.id,
-      ]);
+      this.filter.push("and", ["campagne.id", "=", this.campagneEnCours.id]);
     }
   }
 
@@ -178,12 +169,14 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   public handleOrdreSelection(ordreID: Ordre["id"]) {
     if (this.rowSelectionEventMode === "open")
-      this.ordresService.getOne_v2(ordreID, new Set(["numero", "campagne.id"]))
-        .pipe(map(res => res.data.ordre))
-        .subscribe(ordre => this.tabContext.openOrdre(ordre.numero, ordre.campagne.id));
+      this.ordresService
+        .getOne_v2(ordreID, new Set(["numero", "campagne.id"]))
+        .pipe(map((res) => res.data.ordre))
+        .subscribe((ordre) =>
+          this.tabContext.openOrdre(ordre.numero, ordre.campagne.id)
+        );
     if (this.rowSelectionEventMode === "emit")
       this.whenRowSelected.emit(ordreID);
-
   }
 }
 
@@ -205,4 +198,4 @@ export default OrdresSuiviComponent;
   ],
   exports: [OrdresSuiviComponent],
 })
-export class OrdresSuiviModule { }
+export class OrdresSuiviModule {}

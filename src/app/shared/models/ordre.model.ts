@@ -104,7 +104,8 @@ export class Ordre extends Model {
   @Field() public tauxRemiseFacture: number;
   @Field() public tauxRemiseHorsFacture: number;
   @Field() public remiseSurFactureMDDTaux: number;
-  @Field({ model: import("./devise.model") }) public transporteurDEVCode?: Devise;
+  @Field({ model: import("./devise.model") })
+  public transporteurDEVCode?: Devise;
   @Field() public transporteurDEVTaux?: number;
   @Field({ model: import("./base-tarif.model") })
   public baseTarifTransport?: Partial<BaseTarif>;
@@ -166,7 +167,8 @@ export class Ordre extends Model {
   public sommeColisExpedies?: number;
   @Field({ model: import("./transitaire.model") })
   public transitaire?: Transitaire;
-  @Field({ model: import("./document.model") }) public documentFacture: Document;
+  @Field({ model: import("./document.model") })
+  public documentFacture: Document;
   @Field({ model: import("./document.model") }) public documentCMR: Document;
   @Field() public societeCode: string;
   @Field() public secteurCode: string;
@@ -176,13 +178,10 @@ export class Ordre extends Model {
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
-    return [
-      Statut[Statut.EXPEDIE],
-      Statut[Statut.FACTURE],
-    ]
-      .includes(ordre?.statut.toString());
+    return [Statut[Statut.EXPEDIE], Statut[Statut.FACTURE]].includes(
+      ordre?.statut.toString()
+    );
   }
-
 }
 
 export default Ordre;

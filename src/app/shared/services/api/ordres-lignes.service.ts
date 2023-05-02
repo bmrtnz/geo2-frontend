@@ -3,7 +3,11 @@ import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import OrdreLigneLitigePick from "app/shared/models/ordre-ligne-litige-pick.model";
 import Ordre from "app/shared/models/ordre.model";
-import { functionBody, FunctionResponse, FunctionsService } from "app/shared/services/api/functions.service";
+import {
+  functionBody,
+  FunctionResponse,
+  FunctionsService,
+} from "app/shared/services/api/functions.service";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -16,16 +20,15 @@ import { CurrentCompanyService } from "../current-company.service";
 export enum SummaryOperation {
   Marge = "allOrdreLigneMarge",
   TotauxDetail = "allOrdreLigneTotauxDetail",
-  Totaux = "allOrdreLigneTotaux"
+  Totaux = "allOrdreLigneTotaux",
 }
 
 let self;
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class OrdreLignesService extends ApiService implements APIRead {
-
   queryFilter = /.*(?:id)$/i;
 
   /**
@@ -33,65 +36,67 @@ export class OrdreLignesService extends ApiService implements APIRead {
    * @param id OrdreLigne id
    */
   public remove = (id: string) =>
-    this.apollo.mutate({
-      mutation: gql(this.buildDeleteGraph()),
-      variables: { id },
-      fetchPolicy: "no-cache",
-    }).toPromise()
+    this.apollo
+      .mutate({
+        mutation: gql(this.buildDeleteGraph()),
+        variables: { id },
+        fetchPolicy: "no-cache",
+      })
+      .toPromise();
 
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
     public authService: AuthService,
-    private currentCompanyService: CurrentCompanyService,
+    private currentCompanyService: CurrentCompanyService
   ) {
     super(apollo, OrdreLigne);
     self = this;
   }
 
   getOne_v2(id: string, columns: Array<string> | Set<string>) {
-    return this.apollo
-      .query<{ ordreLigne: Partial<OrdreLigne> }>({
-        query: gql(this.buildGetOneGraph(columns)),
-        variables: { id },
-      });
+    return this.apollo.query<{ ordreLigne: Partial<OrdreLigne> }>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
+    });
   }
 
   getDataSource(depth = 1, filter?: RegExp) {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            const query = await this.buildGetAll(depth, filter);
+            type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+            const variables = this.mapLoadOptionsToVariables(options);
+
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allOrdreLigne)
+                resolve(this.asInstancedListCount(res.data.allOrdreLigne));
             });
-
-          const query = await this.buildGetAll(depth, filter);
-          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
-          const variables = this.mapLoadOptionsToVariables(options);
-
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allOrdreLigne)
-              resolve(this.asInstancedListCount(res.data.allOrdreLigne));
-          });
-        }),
+          }),
         byKey: this.byKey(depth, filter),
       }),
     });
   }
 
   private byKey(depth: number, filter: RegExp) {
-    return key => new Promise(async (resolve) => {
-      const query = await this.buildGetOne(depth, filter);
-      type Response = { ordreLigne: OrdreLigne };
-      const variables = { id: key };
-      this.listenQuery<Response>(query, { variables }, res => {
-        if (res.data && res.data.ordreLigne)
-          resolve(new OrdreLigne(res.data.ordreLigne));
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne(depth, filter);
+        type Response = { ordreLigne: OrdreLigne };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, (res) => {
+          if (res.data && res.data.ordreLigne)
+            resolve(new OrdreLigne(res.data.ordreLigne));
+        });
       });
-    });
   }
 
   private byKey_v2(columns: Array<string>) {
@@ -100,7 +105,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         const query = await this.buildGetOne_v2(columns);
         type Response = { ordreLigne: OrdreLigne };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
+        this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.ordreLigne)
             resolve(new OrdreLigne(res.data.ordreLigne));
         });
@@ -120,38 +125,39 @@ export class OrdreLignesService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       reshapeOnPush: true,
-      sort: [
-        { selector: "numero", }
-      ],
+      sort: [{ selector: "numero" }],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+            const query = await this.buildGetAll_v2(columns);
+            type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
+            const variables = this.mapLoadOptionsToVariables(options);
 
-          const query = await this.buildGetAll_v2(columns);
-          type Response = { allOrdreLigne: RelayPage<OrdreLigne> };
-          const variables = this.mapLoadOptionsToVariables(options);
-
-          this.listenQuery<Response>(query, {
-            variables,
-            fetchPolicy: "network-only", // to work with editable dx-grid
-          }, res => {
-            if (res.data && res.data.allOrdreLigne)
-              resolve(this.asInstancedListCount(res.data.allOrdreLigne));
-          });
-        }),
+            this.listenQuery<Response>(
+              query,
+              {
+                variables,
+                fetchPolicy: "network-only", // to work with editable dx-grid
+              },
+              (res) => {
+                if (res.data && res.data.allOrdreLigne)
+                  resolve(this.asInstancedListCount(res.data.allOrdreLigne));
+              }
+            );
+          }),
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }
-
 
   getSummarisedDatasource(
     operation: SummaryOperation,
@@ -160,41 +166,40 @@ export class OrdreLignesService extends ApiService implements APIRead {
   ) {
     return new DataSource({
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve, reject) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve, reject) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
-            });
+            const queryGraph = this.buildGetSummaryGraph(operation, columns);
+            type Response = { [operation: string]: RelayPage<OrdreLigne> };
+            const variables = {
+              ...this.mapLoadOptionsToVariables(options),
+              summary,
+            };
 
-          const queryGraph = this.buildGetSummaryGraph(
-            operation,
-            columns,
-          );
-          type Response = { [operation: string]: RelayPage<OrdreLigne> };
-          const variables = {
-            ...this.mapLoadOptionsToVariables(options),
-            summary,
-          };
+            // to have correct group summaries
+            if (operation === SummaryOperation.TotauxDetail)
+              variables.pageable.pageSize = 100;
 
-          // to have correct group summaries
-          if (operation === SummaryOperation.TotauxDetail)
-            variables.pageable.pageSize = 100;
-
-          this.apollo.query<Response>({
-            query: gql(queryGraph),
-            variables,
-            fetchPolicy: "no-cache",
-          })
-            .pipe(takeWhile(res => !res.loading))
-            .subscribe(({ data }) => resolve(this.asInstancedListCount(data[operation])));
-
-        }),
+            this.apollo
+              .query<Response>({
+                query: gql(queryGraph),
+                variables,
+                fetchPolicy: "no-cache",
+              })
+              .pipe(takeWhile((res) => !res.loading))
+              .subscribe(({ data }) =>
+                resolve(this.asInstancedListCount(data[operation]))
+              );
+          }),
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }
@@ -213,116 +218,136 @@ export class OrdreLignesService extends ApiService implements APIRead {
   lockFields(e) {
     // Locking step
     const data = e.data;
-    const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
+    const bloquer =
+      window.sessionStorage.getItem("blockage") === "true" ? true : false;
 
     switch (e.column.dataField) {
-
       case "nombrePalettesCommandees": {
-        if ((data.logistique?.expedieStation === true
-          || data.ordre.secteurCommercial.id === "F"
-          || bloquer === true)
-          && data.ordre.type?.id !== "RPR"
-          && data.ordre.type?.id !== "RPO"
-          && data.ordre.societe.id !== "BWS"
-          && data.venteUnite?.id !== "UNITE"
-          && data.achatUnite?.id !== "UNITE") this.lock(e);
+        if (
+          (data.logistique?.expedieStation === true ||
+            data.ordre.secteurCommercial.id === "F" ||
+            bloquer === true) &&
+          data.ordre.type?.id !== "RPR" &&
+          data.ordre.type?.id !== "RPO" &&
+          data.ordre.societe.id !== "BWS" &&
+          data.venteUnite?.id !== "UNITE" &&
+          data.achatUnite?.id !== "UNITE"
+        )
+          this.lock(e);
         break;
       }
       case "nombrePalettesIntermediaires": {
-        if (data.logistique?.expedieStation === true ||
-          data.indicateurPalette === 1
-          || bloquer === true
-        ) this.lock(e);
+        if (
+          data.logistique?.expedieStation === true ||
+          data.indicateurPalette === 1 ||
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "nombreColisPalette": {
-        if (data.logistique?.expedieStation === true
-          || bloquer === true
-        ) this.lock(e);
+        if (data.logistique?.expedieStation === true || bloquer === true)
+          this.lock(e);
         break;
       }
       case "nombreColisCommandes": {
-        if (data.logistique?.expedieStation === true
-          || bloquer === true
-        ) this.lock(e);
+        if (data.logistique?.expedieStation === true || bloquer === true)
+          this.lock(e);
         break;
       }
       case "proprietaireMarchandise": {
-        if (data.logistique?.expedieStation === true
-          || bloquer === true
-          || data.ordre.type?.id === "RDF"
-          || data.ordre.type?.id === "REP"
-          || (data.ordre.type?.id === "RPR"
-            && data.ordre.commentaireUsageInterne.substring(0, 3) === "B02"
-            && data.ordre.entrepot.modeLivraison !== "S")
-        ) this.lock(e);
+        if (
+          data.logistique?.expedieStation === true ||
+          bloquer === true ||
+          data.ordre.type?.id === "RDF" ||
+          data.ordre.type?.id === "REP" ||
+          (data.ordre.type?.id === "RPR" &&
+            data.ordre.commentaireUsageInterne.substring(0, 3) === "B02" &&
+            data.ordre.entrepot.modeLivraison !== "S")
+        )
+          this.lock(e);
         break;
       }
-      case "fournisseur": { // Emballeur/Expéditeur
-        if (data.logistique?.expedieStation === true
-          || bloquer === true
-          || data.ordre.type?.id === "RDF"
-          || data.ordre.type?.id === "REP"
-          || (data.ordre.type?.id === "RPR"
-            && !data.ordre.commentaireUsageInterne.includes("B02")
-            && data.ordre.entrepot.modeLivraison !== "S")
-        ) this.lock(e);
+      case "fournisseur": {
+        // Emballeur/Expéditeur
+        if (
+          data.logistique?.expedieStation === true ||
+          bloquer === true ||
+          data.ordre.type?.id === "RDF" ||
+          data.ordre.type?.id === "REP" ||
+          (data.ordre.type?.id === "RPR" &&
+            !data.ordre.commentaireUsageInterne.includes("B02") &&
+            data.ordre.entrepot.modeLivraison !== "S")
+        )
+          this.lock(e);
         break;
       }
       case "ventePrixUnitaire": {
-        if ((data.ordre.venteACommission !== true
-          && data.ordre.type?.id !== "REP"
-          && data.ordre.type?.id !== "RPF")
-          && bloquer === true
-        ) this.lock(e);
+        if (
+          data.ordre.venteACommission !== true &&
+          data.ordre.type?.id !== "REP" &&
+          data.ordre.type?.id !== "RPF" &&
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "venteUnite": {
-        if ((data.ordre.venteACommission !== true
-          && data.ordre.type?.id !== "REP"
-          && data.ordre.type?.id !== "RPF")
-          && bloquer === true
-        ) this.lock(e);
+        if (
+          data.ordre.venteACommission !== true &&
+          data.ordre.type?.id !== "REP" &&
+          data.ordre.type?.id !== "RPF" &&
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "gratuit": {
-        if (data.ordre.venteACommission !== true
-          && (data.ordre.bonAFacturer === true
-            || bloquer === true)
-        ) this.lock(e);
+        if (
+          data.ordre.venteACommission !== true &&
+          (data.ordre.bonAFacturer === true || bloquer === true)
+        )
+          this.lock(e);
         break;
       }
       case "achatDevisePrixUnitaire": {
-        if ((data.ordre.venteACommission !== true
-          && data.ordre.type?.id !== "REP"
-          && data.ordre.type?.id !== "RPF")
-          && (data.logistique?.expedieStation === true
-            || bloquer === true)
-        ) this.lock(e);
+        if (
+          data.ordre.venteACommission !== true &&
+          data.ordre.type?.id !== "REP" &&
+          data.ordre.type?.id !== "RPF" &&
+          (data.logistique?.expedieStation === true || bloquer === true)
+        )
+          this.lock(e);
         break;
       }
       case "achatUnite": {
-        if ((data.ordre.venteACommission !== true
-          && data.ordre.type?.id !== "REP"
-          && data.ordre.type?.id !== "RPF")
-          && bloquer === true
-        ) this.lock(e);
+        if (
+          data.ordre.venteACommission !== true &&
+          data.ordre.type?.id !== "REP" &&
+          data.ordre.type?.id !== "RPF" &&
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "typePalette": {
-        if (data.logistique?.expedieStation === true
-          || data.ordre.type?.id === "REP"
-          || data.ordre.type?.id === "RPF"
-          || bloquer === true
-        ) this.lock(e);
+        if (
+          data.logistique?.expedieStation === true ||
+          data.ordre.type?.id === "REP" ||
+          data.ordre.type?.id === "RPF" ||
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "paletteInter": {
-        if (data.logistique?.expedieStation === true
-          || data.ordre.type?.id === "REP"
-          || data.ordre.type?.id === "RPF"
-          || bloquer === true
-        ) this.lock(e);
+        if (
+          data.logistique?.expedieStation === true ||
+          data.ordre.type?.id === "REP" ||
+          data.ordre.type?.id === "RPF" ||
+          bloquer === true
+        )
+          this.lock(e);
         break;
       }
       case "fraisPrixUnitaire": {
@@ -332,24 +357,22 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "articleKit": {
-        if (data.ordre.bonAFacturer === true
-          || bloquer === true
-        ) this.lock(e);
+        if (data.ordre.bonAFacturer === true || bloquer === true) this.lock(e);
         break;
       }
       case "gtinColisKit": {
-        if (data.ordre.bonAFacturer === true
-          || (data.ordre.ordreEDI?.id !== null && data.ordre.ordreEDI?.id !== undefined)
-        ) this.lock(e);
+        if (
+          data.ordre.bonAFacturer === true ||
+          (data.ordre.ordreEDI?.id !== null &&
+            data.ordre.ordreEDI?.id !== undefined)
+        )
+          this.lock(e);
         break;
       }
-
     }
-
   }
 
   lockFieldsDetails(e) {
-
     // Locking step
     const data = e.data;
 
@@ -363,7 +386,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
     // Standard Lock
     switch (e.column.dataField) {
-
       case "nombrePalettesExpediees":
       case "nombreColisExpedies":
       case "poidsNetExpedie":
@@ -374,18 +396,23 @@ export class OrdreLignesService extends ApiService implements APIRead {
       case "achatUnite.description":
       case "typePalette":
       case "paletteInter": {
-        if (data.logistique?.expedieStation ||
-          !(data.ordre.client.modificationDetail !== false ||
+        if (
+          data.logistique?.expedieStation ||
+          !(
+            data.ordre.client.modificationDetail !== false ||
             data.ordre.secteurCommercial?.id === "PAL" ||
             this.authService.currentUser.geoClient === "2" ||
             data.ordre.societe.id === "IMP" ||
             data.ordre.societe.id === "UDC" ||
-            data.article.cahierDesCharge?.espece?.id.substring(0, 5) === "EMBAL" ||
+            data.article.cahierDesCharge?.espece?.id.substring(0, 5) ===
+              "EMBAL" ||
             data.ordre.type.id === "RPR" ||
             data.ordre.type.id === "RPO" ||
             data.article.matierePremiere?.variete?.modificationDetail ||
             data.ordre.societe.id === "IUK"
-          )) this.lock(e);
+          )
+        )
+          this.lock(e);
         break;
       }
     }
@@ -418,7 +445,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         byKey: this.byKey_v2(columns),
         insert: this.insert,
         update: this.update,
-        remove: this.remove,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
     });
   }
@@ -430,9 +457,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
         variables: { search },
         fetchPolicy: "network-only",
       })
-      .pipe(
-        map(res => res.data[`all${this.model.name}List`]),
-      ).toPromise();
+      .pipe(map((res) => res.data[`all${this.model.name}List`]))
+      .toPromise();
     return new DataSource({
       store: new ArrayStore({
         key: this.keyField,
@@ -446,105 +472,104 @@ export class OrdreLignesService extends ApiService implements APIRead {
     value: any,
     id: string,
     socCode: string,
-    body: string[],
+    body: string[]
   ) {
     return this.apollo.mutate<{ updateField: Partial<OrdreLigne> }>({
-      mutation: gql(ApiService.buildGraph("mutation", [{
-        name: "updateField",
-        body,
-        params: [
-          { name: "fieldName", value: "fieldName", isVariable: true },
-          { name: "value", value: "value", isVariable: true },
-          { name: "id", value: "id", isVariable: true },
-          { name: "socCode", value: "socCode", isVariable: true },
-        ],
-      }], [
-        { name: "fieldName", type: "String", isOptionnal: false },
-        { name: "value", type: "ObjectScalar", isOptionnal: true },
-        { name: "id", type: "String", isOptionnal: false },
-        { name: "socCode", type: "String", isOptionnal: false },
-      ])),
+      mutation: gql(
+        ApiService.buildGraph(
+          "mutation",
+          [
+            {
+              name: "updateField",
+              body,
+              params: [
+                { name: "fieldName", value: "fieldName", isVariable: true },
+                { name: "value", value: "value", isVariable: true },
+                { name: "id", value: "id", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "fieldName", type: "String", isOptionnal: false },
+            { name: "value", type: "ObjectScalar", isOptionnal: true },
+            { name: "id", type: "String", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
       variables: { fieldName, value, id, socCode },
       fetchPolicy: "network-only",
     });
   }
 
   public fGetInfoResa(orlRef: string) {
-    return this.apollo
-      .query<{
-        fGetInfoResa: FunctionResponse<{
-          ll_tot_qte_ini: number,
-          ll_tot_qte_res: number,
-          ll_tot_mvt_qte: number,
-          ll_tot_nb_resa: number,
-        }>
-      }>({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{
+      fGetInfoResa: FunctionResponse<{
+        ll_tot_qte_ini: number;
+        ll_tot_qte_res: number;
+        ll_tot_mvt_qte: number;
+        ll_tot_nb_resa: number;
+      }>;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
               name: "fGetInfoResa",
               body: functionBody,
-              params: [
-                { name: "orlRef", value: "orlRef", isVariable: true },
-              ]
-            }
+              params: [{ name: "orlRef", value: "orlRef", isVariable: true }],
+            },
           ],
-          [
-            { name: "orlRef", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { orlRef },
-        fetchPolicy: "network-only",
-      });
+          [{ name: "orlRef", type: "String", isOptionnal: false }]
+        )
+      ),
+      variables: { orlRef },
+      fetchPolicy: "network-only",
+    });
   }
 
   public reindex(lignes: string[], body: string[]) {
-    return this.apollo
-      .mutate<{ reindex: Partial<OrdreLigne>[] }>
-      ({
-        mutation: gql(ApiService.buildGraph(
+    return this.apollo.mutate<{ reindex: Partial<OrdreLigne>[] }>({
+      mutation: gql(
+        ApiService.buildGraph(
           "mutation",
           [
             {
               name: "reindex",
               body,
-              params: [
-                { name: "lignes", value: "lignes", isVariable: true },
-              ]
-            }
+              params: [{ name: "lignes", value: "lignes", isVariable: true }],
+            },
           ],
-          [
-            { name: "lignes", type: "[String]", isOptionnal: false },
-          ],
-        )),
-        variables: { lignes },
-        fetchPolicy: "network-only",
-      });
+          [{ name: "lignes", type: "[String]", isOptionnal: false }]
+        )
+      ),
+      variables: { lignes },
+      fetchPolicy: "network-only",
+    });
   }
 
   public wLitigePickOrdreOrdligV2(ordreID: Ordre["id"], body: string[]) {
-    return this.apollo
-      .query<{ wLitigePickOrdreOrdligV2: Partial<OrdreLigneLitigePick>[] }>
-      ({
-        query: gql(ApiService.buildGraph(
+    return this.apollo.query<{
+      wLitigePickOrdreOrdligV2: Partial<OrdreLigneLitigePick>[];
+    }>({
+      query: gql(
+        ApiService.buildGraph(
           "query",
           [
             {
               name: "wLitigePickOrdreOrdligV2",
               body,
-              params: [
-                { name: "ordreID", value: "ordreID", isVariable: true },
-              ]
-            }
+              params: [{ name: "ordreID", value: "ordreID", isVariable: true }],
+            },
           ],
-          [
-            { name: "ordreID", type: "String", isOptionnal: false },
-          ],
-        )),
-        variables: { ordreID },
-        fetchPolicy: "network-only",
-      });
+          [{ name: "ordreID", type: "String", isOptionnal: false }]
+        )
+      ),
+      variables: { ordreID },
+      fetchPolicy: "network-only",
+    });
   }
 
   public fCreeOrdreReplacementLigne(

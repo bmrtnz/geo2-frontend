@@ -1,12 +1,12 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .grid-packing-list {
   max-height: 300px;
 
   .dx-toolbar-after {
-    background-color: #FFF;
+    background-color: #fff;
   }
 
   .cursor-pointer {
@@ -28,5 +28,4 @@
       background-color: $BW-purple-light !important;
     }
   }
-
 }

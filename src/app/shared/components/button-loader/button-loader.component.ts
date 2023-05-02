@@ -32,12 +32,11 @@ export class ButtonLoaderComponent<T> implements OnChanges {
 
   public loading = false;
 
-  constructor() { }
+  constructor() {}
 
   ngOnChanges(properties) {
     if (
-      properties.resolver?.currentValue !==
-      properties.resolver?.previousValue
+      properties.resolver?.currentValue !== properties.resolver?.previousValue
     )
       this.resolve();
   }
@@ -66,4 +65,4 @@ export class ButtonLoaderComponent<T> implements OnChanges {
   declarations: [ButtonLoaderComponent],
   exports: [ButtonLoaderComponent],
 })
-export class ButtonLoaderModule { }
+export class ButtonLoaderModule {}

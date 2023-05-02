@@ -1,8 +1,7 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 ::ng-deep .forfait-litige-popup {
-
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
 
@@ -36,5 +35,4 @@
   .frais-annexes-expl {
     text-align: justify;
   }
-
 }

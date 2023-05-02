@@ -8,11 +8,11 @@ import "./basic";
 import themes from "devextreme/ui/themes";
 
 if (environment.production) {
-    enableProdMode();
+  enableProdMode();
 }
 
 themes.initialized(() => {
-    platformBrowserDynamic()
-        .bootstrapModule(AppModule)
-        .catch((err) => console.error(err));
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch((err) => console.error(err));
 });

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup, NgForm } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -63,12 +63,12 @@ export class PlanningTransporteursComponent implements OnInit {
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
-  public formGroup = new FormGroup({
-    valide: new FormControl(),
-    transporteurCode: new FormControl(),
-    dateMin: new FormControl(this.dateManagementService.startOfDay()),
-    dateMax: new FormControl(this.dateManagementService.endOfDay()),
-  } as Inputs<FormControl>);
+  public formGroup = new UntypedFormGroup({
+    valide: new UntypedFormControl(),
+    transporteurCode: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
@@ -79,16 +79,17 @@ export class PlanningTransporteursComponent implements OnInit {
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
     private tabContext: TabContext,
-    private currentCompanyService: CurrentCompanyService,
+    private currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchConfig(
-      Grid.PlanningTransporteurs,
+      Grid.PlanningTransporteurs
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
-    this.transporteursDataSource =
-      this.transporteursService.getDataSource_v2(["id", "raisonSocial", "valide"]);
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+    this.transporteursDataSource = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+      "valide",
+    ]);
     this.transporteursDataSource.filter(["valide", "=", true]);
     this.periodes = this.dateManagementService.periods();
     this.validRequiredEntity = {
@@ -100,13 +101,12 @@ export class PlanningTransporteursComponent implements OnInit {
 
   async ngOnInit() {
     const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField)),
+      map((columns) => columns.map((column) => column.dataField))
     );
 
-    this.ordresDataSource =
-      this.planningTransporteursService.getDataSource_v2(
-        await fields.toPromise(),
-      );
+    this.ordresDataSource = this.planningTransporteursService.getDataSource_v2(
+      await fields.toPromise()
+    );
 
     // Only way found to validate and show Warning icon
     this.formGroup.get("transporteurCode").setValue("");
@@ -162,18 +162,17 @@ export class PlanningTransporteursComponent implements OnInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-
       // Best expression for order status display
       if (e.column.dataField === "ordre.statut") {
         if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
@@ -181,13 +180,16 @@ export class PlanningTransporteursComponent implements OnInit {
 
       // Groupage
       if (e.column.dataField === "groupage" && e.value) {
-        e.cellElement.textContent =
-          this.localizeService.localize("ordresTransporteur-groupage-text")
-            .replace("&T", e.value)
-            .replace("&D", this.dateManagementService.formatDate(
+        e.cellElement.textContent = this.localizeService
+          .localize("ordresTransporteur-groupage-text")
+          .replace("&T", e.value)
+          .replace(
+            "&D",
+            this.dateManagementService.formatDate(
               e.data.dateDepartPrevueGroupage,
-              "dd-MM-yyyy",
-            ));
+              "dd-MM-yyyy"
+            )
+          );
         e.cellElement.classList.add("transporteur-grouping");
       }
       // Ajout CP, ville et pays au lieu de livraison
@@ -205,7 +207,7 @@ export class PlanningTransporteursComponent implements OnInit {
       }
       // Ajout version ordre
       if (e.column.dataField === "numero") {
-        e.cellElement.innerText += (e.data.version ? " - " + e.data.version : "");
+        e.cellElement.innerText += e.data.version ? " - " + e.data.version : "";
         e.cellElement.classList += " bold";
       }
       // Ajout type colis
@@ -222,11 +224,10 @@ export class PlanningTransporteursComponent implements OnInit {
         e.column.dataField === "dateDepartPrevueFournisseur"
       ) {
         if (e.value)
-          e.cellElement.innerText =
-            this.dateManagementService.formatDate(
-              e.value,
-              "dd-MM-yyyy",
-            );
+          e.cellElement.innerText = this.dateManagementService.formatDate(
+            e.value,
+            "dd-MM-yyyy"
+          );
       }
     }
 
@@ -249,8 +250,6 @@ export class PlanningTransporteursComponent implements OnInit {
         e.cellElement.classList.add("numero-planning-transporteurs");
       }
     }
-
-
   }
 
   onRowPrepared(e) {
@@ -272,9 +271,13 @@ export class PlanningTransporteursComponent implements OnInit {
   onValideChanged(e) {
     if (!e.event) return; // Only user event
     this.formGroup.patchValue({
-      transporteurCode: null
+      transporteurCode: null,
     });
-    this.transporteursDataSource = this.transporteursService.getDataSource_v2(["id", "raisonSocial", "valide"]);
+    this.transporteursDataSource = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+      "valide",
+    ]);
     if (this.formGroup.get("valide").value)
       this.transporteursDataSource.filter(["valide", "=", true]);
   }
@@ -321,7 +324,7 @@ export class PlanningTransporteursComponent implements OnInit {
     const Filter = Utils.Api.Filter;
 
     return Utils.pipe(
-      Filter.create,
+      Filter.create
       // Filter.mergeIfValue.with([FormInput.valideClient, '=', values.valideClient]),
       // Filter.andMergeIfValue.with([FormInput.valideEntrepot, '=', values.valideEntrepot]),
       // Filter.andMergeIfValue.with([FormInput.valideFournisseur, '=', values.valideFournisseur]),

@@ -6,13 +6,10 @@ import { ZoneGeographique } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ZonesGeographiquesService extends ApiService implements APIRead {
-
-  constructor(
-    apollo: Apollo,
-  ) {
+  constructor(apollo: Apollo) {
     super(apollo, ZoneGeographique);
   }
 
@@ -22,7 +19,7 @@ export class ZonesGeographiquesService extends ApiService implements APIRead {
         const query = await this.buildGetOne_v2(columns);
         type Response = { zoneGeographique: ZoneGeographique };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
+        this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.zoneGeographique)
             resolve(new ZoneGeographique(res.data.zoneGeographique));
         });
@@ -31,30 +28,31 @@ export class ZonesGeographiquesService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [
-        { selector: this.model.getKeyField() }
-      ],
+      sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            type Response = {
+              allZoneGeographique: RelayPage<ZoneGeographique>;
+            };
+            const query = await this.buildGetAll_v2(columns);
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allZoneGeographique) {
+                resolve(
+                  this.asInstancedListCount(res.data.allZoneGeographique)
+                );
+              }
             });
-
-          type Response = { allZoneGeographique: RelayPage<ZoneGeographique> };
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allZoneGeographique) {
-              resolve(this.asInstancedListCount(res.data.allZoneGeographique));
-            }
-          });
-        }),
+          }),
         byKey: this.byKey(columns),
       }),
     });
   }
-
 }

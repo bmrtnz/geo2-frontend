@@ -5,7 +5,8 @@ import Ordre from "./ordre.model";
 @ModelName("Litige")
 export class Litige extends Model {
   @Field({ asKey: true }) public id?: string;
-  @Field({ model: import("./ordre.model") }) public ordreOrigine?: Partial<Ordre>;
+  @Field({ model: import("./ordre.model") })
+  public ordreOrigine?: Partial<Ordre>;
   @Field({ model: import("./ordre.model") }) public ordreAvoirClient?: Ordre;
   @Field({ model: import("./litige-ligne.model") })
   public lignes?: LitigeLigne[];
@@ -28,7 +29,8 @@ export class Litige extends Model {
   @Field() public fournisseurValideAdmin?: boolean;
   @Field() public fraisAnnexesCommentaires: number;
   @Field() public numeroVersion: number;
-  @Field({ model: import("./ordre.model") }) public ordreAvoirFournisseur?: Ordre;
+  @Field({ model: import("./ordre.model") })
+  public ordreAvoirFournisseur?: Ordre;
   @Field({ model: import("./ordre.model") }) public ordreReplacement?: Ordre;
   @Field() public referenceClient?: string;
   @Field() public responsableTiers?: string;

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { HistoriqueModificationDetail } from "app/shared/models";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { ArticlesService, AuthService } from "app/shared/services";
@@ -11,11 +18,9 @@ import { PartialObserver } from "rxjs";
 @Component({
   selector: "app-modif-detail-lignes-popup",
   templateUrl: "./modif-detail-lignes-popup.component.html",
-  styleUrls: ["./modif-detail-lignes-popup.component.scss"]
+  styleUrls: ["./modif-detail-lignes-popup.component.scss"],
 })
-export class ModifDetailLignesPopupComponent implements OnChanges {
-
-
+export class ModifDetailLignesPopupComponent {
   @Input() public ligneDetail: any;
   @ViewChild("form") NgForm: any;
   @Output() refreshGrid = new EventEmitter();
@@ -30,18 +35,15 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     public formUtilsService: FormUtilsService,
     private historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     private functionsService: FunctionsService
-  ) { }
-
-  ngOnChanges() {
-  }
+  ) {}
 
   public handleCellChangeEventResponse<T>(): PartialObserver<T> {
     return {
-      next: v => this.refreshGrid.emit(true),
+      next: (v) => this.refreshGrid.emit(true),
       error: (message: string) => {
         notify({ message }, "error", 7000);
         console.log(message);
-      }
+      },
     };
   }
 
@@ -50,7 +52,6 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
   }
 
   applyClick(form) {
-
     const ligne = this.ligneDetail;
 
     const historiqueModificationDetail = {
@@ -61,32 +62,41 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
       nombrePalettesExpedieesAvant: ligne.nombrePalettesExpediees,
       nombreColisExpediesAvant: ligne.nombreColisExpedies,
       poidsBrutExpedieAvant: ligne.poidsBrutExpedie,
-      poidsNetExpedieAvant: ligne.poidsNetExpedie
+      poidsNetExpedieAvant: ligne.poidsNetExpedie,
     };
 
     // Select only modified qty fields
-    Object.keys(form.value).map(val => {
+    Object.keys(form.value).map((val) => {
       if (form.value[val] !== "" && form.value[val] !== null) {
         historiqueModificationDetail[val] = form.value[val];
       }
     });
 
-
-    this.historiqueModificationsDetailService.save_v2(["id"], { historiqueModificationDetail }).subscribe({
-      next: (res) => {
-        notify("Sauvegarde modifications effectuée !", "success", 3000);
-        const refHisto = res.data.saveHistoriqueModificationDetail.id;
-        this.functionsService.fDetailsExpClickModifier(ligne.ordre.id, ligne.id, refHisto).subscribe(this.handleCellChangeEventResponse());
-        this.hidePopup();
-      },
-      error: () => notify("Erreur lors de l'enregistrement ddes modifications", "error", 3000)
-    });
-
+    this.historiqueModificationsDetailService
+      .save_v2(["id"], { historiqueModificationDetail })
+      .subscribe({
+        next: (res) => {
+          notify("Sauvegarde modifications effectuée !", "success", 3000);
+          const refHisto = res.data.saveHistoriqueModificationDetail.id;
+          this.functionsService
+            .fDetailsExpClickModifier(ligne.ordre.id, ligne.id, refHisto)
+            .subscribe(this.handleCellChangeEventResponse());
+          this.hidePopup();
+        },
+        error: () =>
+          notify(
+            "Erreur lors de l'enregistrement ddes modifications",
+            "error",
+            3000
+          ),
+      });
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("modif-detail-lignes-popup");
-    this.articleDesc = this.articlesService.concatArtDescript(this.ligneDetail.article).concatDesc;
+    this.articleDesc = this.articlesService.concatArtDescript(
+      this.ligneDetail.article
+    ).concatDesc;
   }
 
   onHidden() {
@@ -99,7 +109,7 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
     let sum = 0;
     // Detecting null or empty values
     const myInputs = this.NgForm.form.value;
-    Object.keys(myInputs).forEach(key => {
+    Object.keys(myInputs).forEach((key) => {
       if (myInputs[key] === "" || myInputs[key] === null) sum++;
     });
     this.validForm = !(sum === Object.keys(myInputs).length);
@@ -112,5 +122,4 @@ export class ModifDetailLignesPopupComponent implements OnChanges {
   hidePopup() {
     this.visible = false;
   }
-
 }

@@ -1,4 +1,4 @@
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 @mixin cell($color) {
   color: $color;
@@ -18,16 +18,14 @@
 ::ng-deep {
   td {
     .merged {
-
-      >:first-child {
+      > :first-child {
         @extend .client-cell;
       }
 
-      >:last-child {
+      > :last-child {
         @extend .responsable-cell;
       }
     }
-
   }
 
   .client-cell {

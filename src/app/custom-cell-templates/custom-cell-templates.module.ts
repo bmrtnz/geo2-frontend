@@ -1,15 +1,17 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { LocalizePipe } from "app/shared/pipes";
-import { DxButtonModule, DxDataGridModule, DxTextBoxModule } from "devextreme-angular";
-import { SharedModule } from "../shared/shared.module";
 import {
-  CopyFillHeaderCellTemplateComponent
-} from "./copy-fill-header-cell-template/copy-fill-header-cell-template.component";
+  DxButtonModule,
+  DxDataGridModule,
+  DxTextBoxModule,
+} from "devextreme-angular";
+import { SharedModule } from "../shared/shared.module";
+import { CopyFillHeaderCellTemplateComponent } from "./copy-fill-header-cell-template/copy-fill-header-cell-template.component";
 import {
   MergedDxgridCellTemplateComponent,
-
-  MergeEditSiblingColumnsPipe, MergeSiblingColumnsPipe
+  MergeEditSiblingColumnsPipe,
+  MergeSiblingColumnsPipe,
 } from "./merged-dxgrid-cell-template/merged-dxgrid-cell-template.component";
 
 @NgModule({
@@ -25,16 +27,13 @@ import {
     MergeEditSiblingColumnsPipe,
     CopyFillHeaderCellTemplateComponent,
   ],
-  providers: [
-    LocalizePipe,
-    MergeSiblingColumnsPipe,
-  ],
+  providers: [LocalizePipe, MergeSiblingColumnsPipe],
   imports: [
     CommonModule,
     DxDataGridModule,
     DxTextBoxModule,
     DxButtonModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class CustomCellTemplatesModule { }
+export class CustomCellTemplatesModule {}

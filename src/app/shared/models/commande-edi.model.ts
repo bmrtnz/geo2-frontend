@@ -11,7 +11,7 @@ export enum MaskModif {
   typeColis = 6,
   quantiteColis = 7,
   eanColisClient = 8,
-  prixVente = 9
+  prixVente = 9,
 }
 
 @ModelName("CommandeEdi")
@@ -47,7 +47,6 @@ export class CommandeEdi extends Model {
   @Field() public verifStatusEdi?: boolean;
   @Field({ dataType: "datetime" }) public dateDocument?: string;
   @Field({ dataType: "datetime" }) public dateLivraison?: string;
-
 }
 
 export default CommandeEdi;

@@ -3,7 +3,6 @@ import StockQuantite from "./stock-quantite.model";
 
 @ModelName("StockArticle")
 export class StockArticle extends StockQuantite {
-
   @Field({ asKey: true })
   id: number;
 
@@ -71,7 +70,6 @@ export class StockArticle extends StockQuantite {
 
   @Field()
   commentaire: string;
-
 }
 
 export default StockArticle;

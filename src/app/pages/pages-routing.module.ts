@@ -15,24 +15,29 @@ const routes: Routes = [
     children: [
       {
         path: "nested",
-        loadChildren: () => import("./nested/nested.module").then(m => m.NestedModule),
+        loadChildren: () =>
+          import("./nested/nested.module").then((m) => m.NestedModule),
       },
       {
         path: "tiers",
-        loadChildren: () => import("./tiers/tiers.module").then(m => m.TiersModule),
+        loadChildren: () =>
+          import("./tiers/tiers.module").then((m) => m.TiersModule),
       },
       {
         path: "articles",
-        loadChildren: () => import("./articles/articles.module").then(m => m.ArticlesModule),
+        loadChildren: () =>
+          import("./articles/articles.module").then((m) => m.ArticlesModule),
       },
       {
         path: "ordres",
-        loadChildren: () => import("./ordres/ordres.module").then(m => m.OrdresModule),
+        loadChildren: () =>
+          import("./ordres/ordres.module").then((m) => m.OrdresModule),
       },
       {
         path: "stock",
-        loadChildren: () => import("./stock/stock.module").then(m => m.StockModule),
-      }
+        loadChildren: () =>
+          import("./stock/stock.module").then((m) => m.StockModule),
+      },
     ],
   },
 ];
@@ -41,4 +46,4 @@ const routes: Routes = [
   declarations: [],
   imports: [RouterModule.forChild(routes), CommonModule],
 })
-export class PagesRoutingModule { }
+export class PagesRoutingModule {}

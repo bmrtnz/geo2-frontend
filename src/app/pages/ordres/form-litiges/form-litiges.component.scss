@@ -1,8 +1,7 @@
 // Var
-@import "~themes/generated/variables.base";
+@import "themes/generated/variables.base";
 
 ::ng-deep .form-litiges {
-
   width: calc(100% - 170px);
   margin: 0 0 20px 0;
   float: left;
@@ -28,7 +27,7 @@
     pointer-events: none;
 
     &.dx-checkbox-checked .dx-checkbox-icon {
-      background: #79B23F !important;
+      background: #79b23f !important;
     }
   }
 
@@ -47,7 +46,7 @@
   }
 
   .cloture-info {
-    background: #EEE;
+    background: #eee;
     padding: 0 10px;
   }
 
@@ -66,14 +65,13 @@
 
 ::ng-deep .litige-btn-container,
 .form-litiges {
-
   .dx-button {
     width: calc(100% - 10px);
     margin: 4px 2px;
 
     &.dx-button-normal {
       .dx-button-text {
-        color: rgba(0, 0, 0, .87) !important;
+        color: rgba(0, 0, 0, 0.87) !important;
       }
     }
 
@@ -90,7 +88,7 @@
 ::ng-deep .nolitiges {
   text-align: center;
   font-size: 16px;
-  color: rgba(102, 102, 102, .87)
+  color: rgba(102, 102, 102, 0.87);
 }
 
 ::ng-deep .create-litige-btn {

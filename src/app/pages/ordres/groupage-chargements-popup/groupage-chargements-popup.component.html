@@ -3,7 +3,7 @@
   [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="false"
+  [hideOnOutsideClick]="false"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
@@ -11,7 +11,6 @@
   [shading]="false"
   [resizeEnabled]="true"
 >
-
   <div *dxTemplate="let data of 'title'">
     <div class="title-popup">{{ title }}</div>
     <dx-button
@@ -28,7 +27,6 @@
 
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-
       <div class="groupage-chargements-popup">
         <div class="groupage-chargements-popup-content-container">
           <app-grid-lignes-groupage-chargements
@@ -45,5 +43,4 @@
       </div>
     </dx-scroll-view>
   </div>
-
 </dx-popup>

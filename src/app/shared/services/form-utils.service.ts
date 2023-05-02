@@ -5,7 +5,7 @@ import { AbstractControl } from "@angular/forms";
   providedIn: "root",
 })
 export class FormUtilsService {
-  constructor() { }
+  constructor() {}
 
   /**
    * Filter dirty controls and map them to their field value
@@ -14,7 +14,7 @@ export class FormUtilsService {
    */
   public extractDirty(
     controls: { [key: string]: AbstractControl },
-    entityKey: string | string[],
+    entityKey: string | string[]
   ) {
     const clean = (value) => {
       if (value && value.__typename)
@@ -27,9 +27,7 @@ export class FormUtilsService {
       .map(([key, control]) => {
         const value = JSON.parse(JSON.stringify(control.value));
         const cleanValue =
-          typeof value === "object" &&
-            value &&
-            value.length !== undefined
+          typeof value === "object" && value && value.length !== undefined
             ? (value as []).map((v) => clean(v))
             : clean(value);
         return { [key]: cleanValue };
@@ -43,14 +41,13 @@ export class FormUtilsService {
    * @param prefix Path prefix
    */
   public extractPaths(entity: {}, prefix = ""): string[] {
-    return Object.entries(entity)
-      .flatMap(([key, value]) => {
-        if (typeof value === "object" && value !== null) {
-          if (length in value) return this.extractPaths(value[0], key);
-          return this.extractPaths(value, key);
-        }
-        return `${prefix ? `${prefix}.` : ""}${key}`;
-      });
+    return Object.entries(entity).flatMap(([key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        if (length in value) return this.extractPaths(value[0], key);
+        return this.extractPaths(value, key);
+      }
+      return `${prefix ? `${prefix}.` : ""}${key}`;
+    });
   }
 
   /**
@@ -58,11 +55,12 @@ export class FormUtilsService {
    * @param entity Entity data
    */
   public cleanTypenames<E = {}>(entity: E): E {
-    return JSON.parse(JSON.stringify(entity, (key, value) => {
-      if (key === "__typename")
-        delete value[key];
-      else return value;
-    }));
+    return JSON.parse(
+      JSON.stringify(entity, (key, value) => {
+        if (key === "__typename") delete value[key];
+        else return value;
+      })
+    );
   }
 
   public setIdToNull(formGroup, field) {
@@ -79,5 +77,4 @@ export class FormUtilsService {
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
-
 }

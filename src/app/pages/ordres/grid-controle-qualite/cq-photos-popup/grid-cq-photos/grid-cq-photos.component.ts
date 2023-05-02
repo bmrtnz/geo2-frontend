@@ -3,7 +3,7 @@ import {
   Component,
   Input,
   OnChanges,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
@@ -16,7 +16,8 @@ import { alert, confirm } from "devextreme/ui/dialog";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
-  GridConfig, GridConfiguratorService
+  GridConfig,
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -31,10 +32,9 @@ import { map } from "rxjs/operators";
 @Component({
   selector: "app-grid-cq-photos",
   templateUrl: "./grid-cq-photos.component.html",
-  styleUrls: ["./grid-cq-photos.component.scss"]
+  styleUrls: ["./grid-cq-photos.component.scss"],
 })
-export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
-
+export class GridCqPhotosComponent implements OnChanges {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -62,14 +62,12 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     public authService: AuthService,
     public formUtilsService: FormUtilsService,
     public historiqueLogistiqueService: HistoriqueLogistiqueService,
-    public localizeService: LocalizationService,
+    public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.PhotosControleQualite,
+      Grid.PhotosControleQualite
     );
-    this.columns = from(this.gridConfig).pipe(
-      map((config) => config.columns),
-    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   ngOnChanges() {
@@ -78,20 +76,23 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
     this.enableFilters();
   }
 
-  ngAfterViewInit() {
-  }
-
   async enableFilters() {
     if (this?.ordreLigneId) {
-      const fields = this.columns.pipe(map(cols => cols.map(column => {
-        return column.dataField;
-      })));
+      const fields = this.columns.pipe(
+        map((cols) =>
+          cols.map((column) => {
+            return column.dataField;
+          })
+        )
+      );
       this.gridFields = await fields.toPromise();
-      const dataSource = this.documentsNumService.getDataSource(new Set(this.gridFields));
+      const dataSource = this.documentsNumService.getDataSource(
+        new Set(this.gridFields)
+      );
       dataSource.filter([
         ["ordreLigne.id", "=", this.ordreLigneId],
         "and",
-        ["typeDocument", "=", "CQPHO"]
+        ["typeDocument", "=", "CQPHO"],
       ]);
       this.datagrid.dataSource = dataSource;
     }
@@ -109,16 +110,21 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
     this.currentImgPath = e.row.data.cqDoc.uri;
-    if (!this.currentImgPath) this.currentImgPath = "assets/images/BW-couleur-blanc.png";
+    if (!this.currentImgPath)
+      this.currentImgPath = "assets/images/BW-couleur-blanc.png";
     this.currentImgComment = e.row.data.commentaire;
   }
 
   downloadAllPhotos() {
-    this.documentsNumService.downloadPhotos(`ordreLigne.id==${this.ordreLigneId}`);
+    this.documentsNumService.downloadPhotos(
+      `ordreLigne.id==${this.ordreLigneId}`
+    );
   }
 
   downloadPhoto(cell) {
-    this.documentsNumService.downloadPhotos(`ordreNumero==${cell.data.ordreNumero}`);
+    this.documentsNumService.downloadPhotos(
+      `ordreNumero==${cell.data.ordreNumero}`
+    );
   }
 
   commentPhoto() {
@@ -130,7 +136,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
       ordreNumero: this.currentData.ordreNumero,
       typeDocument: this.currentData.typeDocument,
       anneeCreation: this.currentData.anneeCreation,
-      commentaire: comment
+      commentaire: comment,
     };
 
     this.documentsNumService
@@ -144,9 +150,7 @@ export class GridCqPhotosComponent implements OnChanges, AfterViewInit {
         error: (err) => {
           notify("Erreur sauvegarde commentaire", "error", 7000);
           console.log(err);
-        }
+        },
       });
-
   }
-
 }

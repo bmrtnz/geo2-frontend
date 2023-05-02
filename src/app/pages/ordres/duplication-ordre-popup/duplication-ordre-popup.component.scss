@@ -1,9 +1,8 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .duplication-ordre-popup {
-
   .midLarge {
     width: 100%;
 
@@ -17,7 +16,7 @@
     }
   }
 
-  .dx-field-value:not(.dx-widget)>.dx-checkbox {
+  .dx-field-value:not(.dx-widget) > .dx-checkbox {
     margin: 0 !important;
   }
 
@@ -46,9 +45,7 @@
           width: 45% !important;
         }
       }
-
     }
-
   }
 
   .items-title {
@@ -73,7 +70,7 @@
       .dx-field-label {
         position: relative;
         left: 15px;
-        color: rgba(0, 0, 0, .87);
+        color: rgba(0, 0, 0, 0.87);
       }
     }
   }
@@ -88,5 +85,4 @@
       margin: 5px;
     }
   }
-
 }

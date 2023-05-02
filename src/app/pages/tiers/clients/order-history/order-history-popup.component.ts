@@ -5,10 +5,9 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 @Component({
   selector: "app-order-history-popup",
   templateUrl: "./order-history-popup.component.html",
-  styleUrls: ["./order-history-popup.component.scss"]
+  styleUrls: ["./order-history-popup.component.scss"],
 })
 export class OrderHistoryPopupComponent implements OnChanges {
-
   @Input() public client: Client;
   @Input() public readOnlyMode: boolean;
   @Output() public gridSelectionEnabled: boolean;
@@ -22,10 +21,10 @@ export class OrderHistoryPopupComponent implements OnChanges {
   titleMid: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false })
+  dxScrollView: DxScrollViewComponent;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnChanges() {
     this.setTitle();
@@ -54,7 +53,4 @@ export class OrderHistoryPopupComponent implements OnChanges {
     this.popup.visible = false;
     this.popupShown = false;
   }
-
 }
-
-

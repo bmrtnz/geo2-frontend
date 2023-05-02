@@ -6,13 +6,10 @@ import { Departement } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DepartementsService extends ApiService implements APIRead {
-
-  constructor(
-    apollo: Apollo,
-  ) {
+  constructor(apollo: Apollo) {
     super(apollo, Departement);
   }
 
@@ -22,7 +19,7 @@ export class DepartementsService extends ApiService implements APIRead {
         const query = await this.buildGetOne_v2(columns);
         type Response = { departement: Departement };
         const variables = { id: key };
-        this.listenQuery<Response>(query, { variables }, res => {
+        this.listenQuery<Response>(query, { variables }, (res) => {
           if (res.data && res.data.departement)
             resolve(new Departement(res.data.departement));
         });
@@ -31,31 +28,28 @@ export class DepartementsService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [
-        { selector: this.model.getKeyField() }
-      ],
-      pageSize : 200,
+      sort: [{ selector: this.model.getKeyField() as string }],
+      pageSize: 200,
       store: this.createCustomStore({
-        load: (options: LoadOptions) => new Promise(async (resolve) => {
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
-          if (options.group)
-            return this.loadDistinctQuery(options, res => {
-              if (res.data && res.data.distinct)
-                resolve(this.asListCount(res.data.distinct));
+            type Response = { allDepartement: RelayPage<Departement> };
+            const query = await this.buildGetAll_v2(columns);
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allDepartement) {
+                resolve(this.asInstancedListCount(res.data.allDepartement));
+              }
             });
-
-          type Response = { allDepartement: RelayPage<Departement> };
-          const query = await this.buildGetAll_v2(columns);
-          const variables = this.mapLoadOptionsToVariables(options);
-          this.listenQuery<Response>(query, { variables }, res => {
-            if (res.data && res.data.allDepartement) {
-              resolve(this.asInstancedListCount(res.data.allDepartement));
-            }
-          });
-        }),
+          }),
         byKey: this.byKey(columns),
       }),
     });
   }
-
 }

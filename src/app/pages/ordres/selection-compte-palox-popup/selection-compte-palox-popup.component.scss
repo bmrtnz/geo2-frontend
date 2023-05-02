@@ -1,5 +1,4 @@
 ::ng-deep .selection-compte-palox-popup {
-
   .not-valid {
     opacity: 0.5;
   }
@@ -29,9 +28,8 @@
   }
 
   .dx-popup-content {
-
     dx-scroll-view {
-      background: #FFF !important;
+      background: #fff !important;
       padding: 0 15px 0 2px;
     }
 
@@ -41,6 +39,5 @@
       left: 50%;
       transform: translateX(-50%);
     }
-
   }
 }

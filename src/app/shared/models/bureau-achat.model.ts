@@ -7,7 +7,8 @@ export class BureauAchat extends Model {
   @Field({ asLabel: true }) raisonSocial: string;
   @Field() emailInterlocuteurBW: string;
   @Field() valide: boolean;
-  @Field({ model: import("./entrepot-transporteur-bassin.model") }) bassins: EntrepotTransporteurBassin[];
+  @Field({ model: import("./entrepot-transporteur-bassin.model") })
+  bassins: EntrepotTransporteurBassin[];
 }
 
 export default BureauAchat;

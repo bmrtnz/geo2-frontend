@@ -1,7 +1,7 @@
 <dx-popup
   [showTitle]="true"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [(visible)]="visible"
   title="{{ 'ordre-edi-creation' | localize }}"
   [width]="500"
@@ -11,7 +11,9 @@
   [resizeEnabled]="false"
 >
   <div *dxTemplate="let data of 'content'">
-    <div class="popup-subtitle">{{ 'text-popup-choix-entrepot' | localize }}</div>
+    <div class="popup-subtitle">
+      {{ "text-popup-choix-entrepot" | localize }}
+    </div>
     <br />
     <!-- Client -->
     <div class="dx-field">

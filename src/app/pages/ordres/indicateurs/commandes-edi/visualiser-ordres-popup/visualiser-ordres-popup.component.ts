@@ -1,7 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { TabContext } from "../../../root/root.component";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
+import {
+  GridConfiguratorService,
+  Grid,
+  GridConfig,
+} from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -15,10 +19,9 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 @Component({
   selector: "app-visualiser-ordres-popup",
   templateUrl: "./visualiser-ordres-popup.component.html",
-  styleUrls: ["./visualiser-ordres-popup.component.scss"]
+  styleUrls: ["./visualiser-ordres-popup.component.scss"],
 })
 export class VisualiserOrdresPopupComponent {
-
   @Input() public lignesOrdreIds: string[];
   @Input() public ordresNumeros: string[];
 
@@ -42,32 +45,41 @@ export class VisualiserOrdresPopupComponent {
   ) {
     this.gridTitle = "";
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.LignesEdi,
+      Grid.LignesEdi
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   async enableFilters() {
-
     if (!this.datagrid) return;
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
-    this.dataSource = this.ordreLignesService.getDataSource_v2(await fields.toPromise());
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
+    this.dataSource = this.ordreLignesService.getDataSource_v2(
+      await fields.toPromise()
+    );
     const filter = [];
 
     // Filtering trought lines ids or order ids according to the case
     if (this.lignesOrdreIds?.length) {
-      this.lignesOrdreIds.map(id => {
+      this.lignesOrdreIds.map((id) => {
         filter.push(["ediLigne.id", "=", id], "or");
       });
       filter.pop();
       this.dataSource.filter(filter);
     } else if (this.ordresNumeros?.length) {
-      this.ordresNumeros.map(id => {
+      this.ordresNumeros.map((id) => {
         filter.push(["ordre.numero", "=", id], "or");
       });
       filter.pop();
       this.dataSource.filter([
-        ["ordre.campagne.id", "=", this.currentCompanyService.getCompany().campagne.id], "and", [filter]
+        [
+          "ordre.campagne.id",
+          "=",
+          this.currentCompanyService.getCompany().campagne.id,
+        ],
+        "and",
+        [filter],
       ]);
     } else {
       this.dataSource = null;
@@ -83,9 +95,12 @@ export class VisualiserOrdresPopupComponent {
   }
 
   updateChosenOrders() {
-    const list = this.getGridSelectedArticles().map(row => `${row.ordre.campagne.id}-${row.ordre.numero}`);
+    const list = this.getGridSelectedArticles().map(
+      (row) => `${row.ordre.campagne.id}-${row.ordre.numero}`
+    );
     this.chosenOrders = new Set(list);
-    if (this.chosenOrders.size) this.chosenOrdersDisplayed = Array.from(this.chosenOrders).join(" & ");
+    if (this.chosenOrders.size)
+      this.chosenOrdersDisplayed = Array.from(this.chosenOrders).join(" & ");
   }
 
   getGridSelectedArticles() {
@@ -97,9 +112,9 @@ export class VisualiserOrdresPopupComponent {
   }
 
   onCellPrepared(e) {
-
     if (e.rowType === "data") {
-      if (e.column.dataField === "ordre.numero") e.cellElement.classList.add("bold-text");
+      if (e.column.dataField === "ordre.numero")
+        e.cellElement.classList.add("bold-text");
     }
   }
 
@@ -120,13 +135,21 @@ export class VisualiserOrdresPopupComponent {
   applyClick() {
     const nbOrdres = this.chosenOrders.size;
     notify(
-      this.localization.localize("ouverture-ordre" + (nbOrdres > 1 ? "s" : "")).replace("&NO", this.chosenOrdersDisplayed),
+      this.localization
+        .localize("ouverture-ordre" + (nbOrdres > 1 ? "s" : ""))
+        .replace("&NO", this.chosenOrdersDisplayed),
       "success",
       1500
     );
 
-    [...this.chosenOrders].map(ordre => {
-      setTimeout(() => this.tabContext.openOrdre(ordre.split("-")[1], ordre.split("-")[0], false));
+    [...this.chosenOrders].map((ordre) => {
+      setTimeout(() =>
+        this.tabContext.openOrdre(
+          ordre.split("-")[1],
+          ordre.split("-")[0],
+          false
+        )
+      );
     });
     this.visible = false;
   }
@@ -138,7 +161,4 @@ export class VisualiserOrdresPopupComponent {
   onHiding() {
     this.datagrid.instance.clearSelection();
   }
-
 }
-
-

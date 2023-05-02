@@ -1,6 +1,6 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .cq-copy-photos {
   position: absolute;
@@ -23,7 +23,7 @@
 }
 
 ::ng-deep .yellow-datagrid-row {
-  background-color: #FFD662;
+  background-color: #ffd662;
 }
 
 ::ng-deep .small-CQ-button {
@@ -47,18 +47,18 @@
 
   &.CQ {
     margin-right: 5px;
-    background-color: $BW-purple-medium  !important;
+    background-color: $BW-purple-medium !important;
 
     &:hover {
-      background-color: $BW-purple-dark  !important;
+      background-color: $BW-purple-dark !important;
     }
   }
 
   &.photos {
-    background-color: $BW-orange-medium  !important;
+    background-color: $BW-orange-medium !important;
 
     &:hover {
-      background-color: $BW-orange-dark  !important;
+      background-color: $BW-orange-dark !important;
     }
   }
 
@@ -82,5 +82,4 @@
       }
     }
   }
-
 }

@@ -26,7 +26,7 @@ export class SupervisionPaloxsService extends ApiService {
 
   getListDataSource<M extends typeof SupervisionPalox>(
     columns: Array<string>,
-    model: M,
+    model: M
   ) {
     return new DataSource({
       store: this.createCustomStore({
@@ -47,7 +47,7 @@ export class SupervisionPaloxsService extends ApiService {
                     totalCount: res.data[operation].length,
                   });
                 }
-              },
+              }
             );
           }),
         byKey: (key) =>
@@ -62,7 +62,7 @@ export class SupervisionPaloxsService extends ApiService {
               (res) => {
                 if (res.data && res.data[operation])
                   resolve(res.data[operation]);
-              },
+              }
             );
           }),
       }),
@@ -95,8 +95,13 @@ export class SupervisionPaloxsService extends ApiService {
    * Inventaire Palox
    */
   public fDecomptePalox(
-    espCode: string, dateApplication: Date, cenRef: string, colCode: string,
-    socCode: string, fouCode: string, nbPallox: number
+    espCode: string,
+    dateApplication: Date,
+    cenRef: string,
+    colCode: string,
+    socCode: string,
+    fouCode: string,
+    nbPallox: number
   ) {
     return this.functionsService.queryFunction("fDecomptePalox", [
       { name: "espCode", type: "String", value: espCode },
@@ -105,7 +110,7 @@ export class SupervisionPaloxsService extends ApiService {
       { name: "colCode", type: "String", value: colCode },
       { name: "socCode", type: "String", value: socCode },
       { name: "fouCode", type: "String", value: fouCode },
-      { name: "nbPallox", type: "Long", value: nbPallox }
+      { name: "nbPallox", type: "Long", value: nbPallox },
     ]);
   }
 
@@ -113,8 +118,15 @@ export class SupervisionPaloxsService extends ApiService {
    * Ajustement nombre de Palox
    */
   public fAjustPalox(
-    cliCode: string, espCode: string, dateApplication: Date, cenCode: string, colCode: string,
-    commentaire: string, socCode: string, fouCode: string, nbPallox: number
+    cliCode: string,
+    espCode: string,
+    dateApplication: Date,
+    cenCode: string,
+    colCode: string,
+    commentaire: string,
+    socCode: string,
+    fouCode: string,
+    nbPallox: number
   ) {
     return this.functionsService.queryFunction("fAjustPalox", [
       { name: "cliCode", type: "String", value: cliCode },
@@ -125,8 +137,7 @@ export class SupervisionPaloxsService extends ApiService {
       { name: "commentaire", type: "String", value: commentaire },
       { name: "socCode", type: "String", value: socCode },
       { name: "fouCode", type: "String", value: fouCode },
-      { name: "nbPallox", type: "Int", value: nbPallox }
+      { name: "nbPallox", type: "Int", value: nbPallox },
     ]);
   }
-
 }

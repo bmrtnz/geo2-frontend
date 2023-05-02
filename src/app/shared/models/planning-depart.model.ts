@@ -6,7 +6,8 @@ export class PlanningDepart extends Model {
   @Field({ asKey: true }) id: number;
   @Field() sommeColisCommandes: number;
   @Field() sommeColisExpedies: number;
-  @Field({ model: import("./ordre-logistique.model") }) public ordreLogistique: OrdreLogistique;
+  @Field({ model: import("./ordre-logistique.model") })
+  public ordreLogistique: OrdreLogistique;
 }
 
 export default PlanningDepart;

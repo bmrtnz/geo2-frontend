@@ -3,7 +3,7 @@ import { Field, ModelName } from "./model";
 
 @ModelName("RecapitulatifEntrepot")
 export class RecapitulatifEntrepot extends SupervisionPalox {
-    @Field() station: string;
+  @Field() station: string;
 }
 
 export default RecapitulatifEntrepot;

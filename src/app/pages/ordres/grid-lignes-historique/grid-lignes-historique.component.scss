@@ -1,7 +1,6 @@
 // Var
-@import "~themes/generated/variables.base";
-@import "~scss/variables.scss";
-
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .grid-ordre-ligne-historique {
   .bio-article {
@@ -19,13 +18,11 @@
 }
 
 ::ng-deep .secteur-histo-ligne-field {
-
   .dx-field-label,
   .dx-field-value {
     width: 50% !important;
   }
 }
-
 
 ::ng-deep .grid-zoom-button {
   width: 22px !important;
@@ -97,7 +94,6 @@
 }
 
 ::ng-deep .dx-row-focused {
-
   .bio-article {
     color: #a9f77e !important;
   }

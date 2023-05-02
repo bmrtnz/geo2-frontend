@@ -8,13 +8,10 @@ import { LoadOptions } from "devextreme/data/load_options";
 import { AuthService } from "..";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
-
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class HistoriqueLogistiqueService extends ApiService implements APIRead {
-
-
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
@@ -38,35 +35,28 @@ export class HistoriqueLogistiqueService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getKeyField() }],
+      sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
-            type Response = { allHistoriqueLogistique: RelayPage<HistoriqueLogistique> };
+            type Response = {
+              allHistoriqueLogistique: RelayPage<HistoriqueLogistique>;
+            };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allHistoriqueLogistique) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allHistoriqueLogistique,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allHistoriqueLogistique) {
+                resolve(
+                  this.asInstancedListCount(res.data.allHistoriqueLogistique)
+                );
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),
@@ -74,10 +64,11 @@ export class HistoriqueLogistiqueService extends ApiService implements APIRead {
   }
 
   save_v2(columns: Array<string>, variables: OperationVariables) {
-    return this.apollo.mutate<{ saveHistoriqueLogistique: HistoriqueLogistique }>({
+    return this.apollo.mutate<{
+      saveHistoriqueLogistique: HistoriqueLogistique;
+    }>({
       mutation: gql(this.buildSaveGraph(columns)),
       variables,
     });
   }
-
 }

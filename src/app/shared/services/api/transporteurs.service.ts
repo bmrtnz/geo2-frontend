@@ -40,7 +40,7 @@ export class TransporteursService extends ApiService implements APIRead {
         variables: { search },
         fetchPolicy: "cache-first",
       })
-      .pipe(takeWhile(res => !res.loading));
+      .pipe(takeWhile((res) => !res.loading));
   }
 
   getDataSource_v2(columns: Array<string>) {
@@ -52,46 +52,29 @@ export class TransporteursService extends ApiService implements APIRead {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             const query = await this.buildGetAll_v2(columns);
             type Response = {
               allTransporteur: RelayPage<Transporteur>;
             };
-            const variables =
-              this.mapLoadOptionsToVariables(options);
+            const variables = this.mapLoadOptionsToVariables(options);
 
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allTransporteur)
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allTransporteur,
-                    ),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allTransporteur)
+                resolve(this.asInstancedListCount(res.data.allTransporteur));
+            });
           }),
         byKey: (key) =>
           new Promise(async (resolve) => {
             const query = await this.buildGetOne_v2(columns);
             type Response = { transporteur: Transporteur };
             const variables = { id: key };
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.transporteur)
-                  resolve(
-                    new Transporteur(res.data.transporteur),
-                  );
-              },
-            );
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.transporteur)
+                resolve(new Transporteur(res.data.transporteur));
+            });
           }),
       }),
     });
@@ -104,6 +87,4 @@ export class TransporteursService extends ApiService implements APIRead {
   save_v2(columns: Array<string>, variables: OperationVariables) {
     return this.watchSaveQuery_v2({ variables }, columns);
   }
-
-
 }

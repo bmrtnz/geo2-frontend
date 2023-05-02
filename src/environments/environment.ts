@@ -3,14 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    debugRouting: false,
-    apiEndpoint: "http://localhost:8081",
-    columnChooser: {
-        width: 400,
-        height: 500,
-        searchTimeout: 200,
-    },
+  production: false,
+  debugRouting: false,
+  apiEndpoint: "http://localhost:8081",
+  columnChooser: {
+    width: 400,
+    height: 500,
+    searchTimeout: 200,
+  },
 };
 
 /*
@@ -20,4 +20,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

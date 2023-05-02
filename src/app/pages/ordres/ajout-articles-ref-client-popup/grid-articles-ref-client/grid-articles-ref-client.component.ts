@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { NestedMain } from "app/pages/nested/nested.component";
 import Ordre from "app/shared/models/ordre.model";
 import { ClientsService, LocalizationService } from "app/shared/services";
@@ -9,7 +16,11 @@ import { EspecesService } from "app/shared/services/api/especes.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { OriginesService } from "app/shared/services/api/origines.service";
 import { VarietesService } from "app/shared/services/api/varietes.service";
-import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import {
+  Grid,
+  GridConfig,
+  GridConfiguratorService,
+} from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -21,10 +32,9 @@ import { map, tap } from "rxjs/operators";
 @Component({
   selector: "app-grid-articles-ref-client",
   templateUrl: "./grid-articles-ref-client.component.html",
-  styleUrls: ["./grid-articles-ref-client.component.scss"]
+  styleUrls: ["./grid-articles-ref-client.component.scss"],
 })
 export class GridArticlesRefClientComponent implements OnInit, NestedMain {
-
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -34,12 +44,15 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true })
+  dataGrid: DxDataGridComponent;
   @ViewChild("especeSB", { static: false }) especesSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varietesSB: DxSelectBoxComponent;
-  @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
+  @ViewChild("modesCultureSB", { static: false })
+  modesCultureSB: DxSelectBoxComponent;
   @ViewChild("groupeSB") groupesSB: DxSelectBoxComponent;
-  @ViewChild("emballageSB", { static: false }) emballagesSB: DxSelectBoxComponent;
+  @ViewChild("emballageSB", { static: false })
+  emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
   @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
   public columns: Observable<GridColumn[]>;
@@ -67,28 +80,54 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     public groupesEmballageService: EmballagesService,
     public emballagesService: EmballagesService,
     public modesCultureService: ModesCultureService,
-    public originesService: OriginesService,
+    public originesService: OriginesService
   ) {
     this.apiService = this.articlesService;
     this.trueFalse = ["Tous", "Oui", "Non"];
   }
 
   ngOnInit() {
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.Article);
-    this.columns = from(this.gridConfig).pipe(map(config => config.columns));
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
+      Grid.Article
+    );
+    this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
   loadPreFilters() {
     const refCltFilter = `(referencesClient.client.id=='${this.ordre.client.id}') and (valide == true)`;
     const dataToLoad = [
-      { var: "especes", id: "matierePremiere.espece.id", desc: "matierePremiere.espece.description" },
-      { var: "varietes", id: "matierePremiere.variete.id", desc: "matierePremiere.variete.description" },
-      { var: "groupes", id: "emballage.emballage.groupe.id", desc: "emballage.emballage.groupe.description" },
-      { var: "emballages", id: "emballage.emballage.id", desc: "emballage.emballage.description" },
-      { var: "origines", id: "matierePremiere.origine.id", desc: "matierePremiere.origine.description" },
-      { var: "modesCulture", id: "matierePremiere.modeCulture.id", desc: "matierePremiere.modeCulture.description" },
+      {
+        var: "especes",
+        id: "matierePremiere.espece.id",
+        desc: "matierePremiere.espece.description",
+      },
+      {
+        var: "varietes",
+        id: "matierePremiere.variete.id",
+        desc: "matierePremiere.variete.description",
+      },
+      {
+        var: "groupes",
+        id: "emballage.emballage.groupe.id",
+        desc: "emballage.emballage.groupe.description",
+      },
+      {
+        var: "emballages",
+        id: "emballage.emballage.id",
+        desc: "emballage.emballage.description",
+      },
+      {
+        var: "origines",
+        id: "matierePremiere.origine.id",
+        desc: "matierePremiere.origine.description",
+      },
+      {
+        var: "modesCulture",
+        id: "matierePremiere.modeCulture.id",
+        desc: "matierePremiere.modeCulture.description",
+      },
     ];
-    dataToLoad.forEach(data => {
+    dataToLoad.forEach((data) => {
       let pimpedFilter;
       // filtering emballages by their groups
       if (data.var === "emballages" && this.groupesSB.value.length) {
@@ -97,7 +136,12 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
           pimpedFilter = `${pimpedFilter} and emballage.emballage.groupe.id == ${key}`;
       }
 
-      this[data.var] = this.articlesService.getDistinctEntityDatasource(data.id, data.desc, pimpedFilter ?? refCltFilter, "no-cache");
+      this[data.var] = this.articlesService.getDistinctEntityDatasource(
+        data.id,
+        data.desc,
+        pimpedFilter ?? refCltFilter,
+        "no-cache"
+      );
       // this[data.var].subscribe(res => res.load().then(result => {
       //   const selectBox = data.var + "SB";
       //   if (result?.length === 1) this[selectBox].instance.option("value", [result[0].node]);
@@ -112,9 +156,14 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
   async refreshArticlesGrid() {
     this.toRefresh = false;
     this.loadPreFilters();
-    const fields = this.columns.pipe(map(columns => columns.map(column => column.dataField)));
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
     console.log(this.fetchPolicy);
-    this.articles = this.articlesService.getDataSource_v2(await fields.toPromise(), this.fetchPolicy);
+    this.articles = this.articlesService.getDataSource_v2(
+      await fields.toPromise(),
+      this.fetchPolicy
+    );
     this.articles.filter(this.allGridFilters);
     this.dataGrid.dataSource = this.articles;
   }
@@ -125,8 +174,12 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
 
   onCellPrepared(e) {
     // Best expression for emballage display
-    if (e.rowType === "data" && e.column.dataField === "emballage.emballage.description") {
-      e.cellElement.textContent = e.data.emballage.emballage.id + " - " + e.value;
+    if (
+      e.rowType === "data" &&
+      e.column.dataField === "emballage.emballage.description"
+    ) {
+      e.cellElement.textContent =
+        e.data.emballage.emballage.id + " - " + e.value;
     }
   }
 
@@ -136,8 +189,7 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
    * @param dataField Field path
    */
   onFieldValueChange(event: any[], dataField: any) {
-
-    this.toRefresh = (this.dataGrid.dataSource !== null);
+    this.toRefresh = this.dataGrid.dataSource !== null;
 
     // No value cases
     if (event !== null) {
@@ -147,31 +199,40 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     }
 
     // toggle emballages filtering by their groupes
-    if (dataField === "emballage.emballage.groupe.id")
-      this.loadPreFilters();
+    if (dataField === "emballage.emballage.groupe.id") this.loadPreFilters();
 
     // Changing values for Oui/Non select-box
-    if (event.toString() === "Oui") { event = ["true"]; }
-    if (event.toString() === "Non") { event = ["false"]; }
-    if (event.toString() === "Tous") { event = ["null"]; }
+    if (event.toString() === "Oui") {
+      event = ["true"];
+    }
+    if (event.toString() === "Non") {
+      event = ["false"];
+    }
+    if (event.toString() === "Tous") {
+      event = ["null"];
+    }
     this.tagFilters[dataField] = event;
 
     try {
-      this.allGridFilters = Object
-        .entries(this.tagFilters)
+      this.allGridFilters = Object.entries(this.tagFilters)
         .filter(([, values]) => values.length)
         .filter(([, [value]]) => value !== "null")
-        .map(([path, values]) => values
-          .map(value => [path, value === "null" ? "isnotnull" : "=", value.key ?? value])
-          .map(value => JSON.stringify(value))
-          .join(`¤${JSON.stringify("or")}¤`)
-          .split("¤")
-          .map(v => JSON.parse(v))
+        .map(([path, values]) =>
+          values
+            .map((value) => [
+              path,
+              value === "null" ? "isnotnull" : "=",
+              value.key ?? value,
+            ])
+            .map((value) => JSON.stringify(value))
+            .join(`¤${JSON.stringify("or")}¤`)
+            .split("¤")
+            .map((v) => JSON.parse(v))
         )
-        .map(value => JSON.stringify(value))
+        .map((value) => JSON.stringify(value))
         .join(`¤${JSON.stringify("and")}¤`)
         .split("¤")
-        .map(v => JSON.parse(v));
+        .map((v) => JSON.parse(v));
     } catch (error) {
       console.warn("Failed to parse filter, resetted to empty");
       return;
@@ -179,8 +240,9 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
 
     if (!this.allGridFilters) this.allGridFilters = [];
     if (this.additionnalFilter)
-      this.additionnalFilter.map(addFilt => this.allGridFilters.push(addFilt));
-
+      this.additionnalFilter.map((addFilt) =>
+        this.allGridFilters.push(addFilt)
+      );
   }
 
   displayCodeBefore(data) {
@@ -190,13 +252,12 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
 
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
-
 }

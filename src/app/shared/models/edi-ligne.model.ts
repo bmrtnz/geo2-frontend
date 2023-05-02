@@ -4,7 +4,6 @@ import { Field, Model, ModelName } from "./model";
 
 @ModelName("EdiLigne")
 export class EdiLigne extends Model {
-
   @Field({ asKey: true, asLabel: true }) public id?: string;
   @Field() public codeInterneProduitBlueWhale?: string;
   @Field() public codeInterneProduitClient?: string;
@@ -25,8 +24,6 @@ export class EdiLigne extends Model {
   @Field() public status?: string;
   @Field() public typeColis?: string;
   @Field() public uniteQtt?: string;
-
 }
 
 export default EdiLigne;
-

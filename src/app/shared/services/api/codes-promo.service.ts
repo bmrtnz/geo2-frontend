@@ -9,7 +9,6 @@ import { APIRead, ApiService, RelayPage } from "../api.service";
   providedIn: "root",
 })
 export class CodesPromoService extends ApiService implements APIRead {
-
   constructor(apollo: Apollo) {
     super(apollo, CodePromo);
   }
@@ -29,35 +28,24 @@ export class CodesPromoService extends ApiService implements APIRead {
 
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
-      sort: [{ selector: this.model.getKeyField() }],
+      sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
             if (options.group)
               return this.loadDistinctQuery(options, (res) => {
                 if (res.data && res.data.distinct)
-                  resolve(
-                    this.asListCount(res.data.distinct),
-                  );
+                  resolve(this.asListCount(res.data.distinct));
               });
 
             type Response = { allCodePromo: RelayPage<CodePromo> };
             const query = await this.buildGetAll_v2(columns);
-            const variables =
-              this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(
-              query,
-              { variables },
-              (res) => {
-                if (res.data && res.data.allCodePromo) {
-                  resolve(
-                    this.asInstancedListCount(
-                      res.data.allCodePromo,
-                    ),
-                  );
-                }
-              },
-            );
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allCodePromo) {
+                resolve(this.asInstancedListCount(res.data.allCodePromo));
+              }
+            });
           }),
         byKey: this.byKey(columns),
       }),

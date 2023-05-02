@@ -19,14 +19,12 @@ import {
   DxRadioGroupModule,
   DxScrollViewModule,
   DxSelectBoxModule,
-  DxTextBoxModule
+  DxTextBoxModule,
 } from "devextreme-angular";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { GridForfaitLitigeComponent } from "../forfait-litige-popup/grid-forfait-litige/grid-forfait-litige.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
-import {
-  GridFraisAnnexesLitigeComponent
-} from "../form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
+import { GridFraisAnnexesLitigeComponent } from "../form-litiges/frais-annexes-litige-popup/grid-frais-annexes-litige/grid-frais-annexes-litige.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { GridLitigesLignesComponent } from "../grid-litiges-lignes/grid-litiges-lignes.component";
 import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
@@ -75,4 +73,4 @@ import { GridLotComponent } from "./grid-lot/grid-lot.component";
     SelectionLignesLitigePopupComponent,
   ],
 })
-export class GestionLitigesModule { }
+export class GestionLitigesModule {}

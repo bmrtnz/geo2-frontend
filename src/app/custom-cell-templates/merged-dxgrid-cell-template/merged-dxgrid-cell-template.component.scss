@@ -1,19 +1,18 @@
 ::ng-deep {
-
   td {
     .merged {
       display: flex;
       flex-direction: column;
       align-items: center;
 
-      >div {
+      > div {
         padding: 5px;
         line-height: normal;
       }
     }
 
     .extra {
-      >div {
+      > div {
         padding: 5px;
         line-height: normal;
       }

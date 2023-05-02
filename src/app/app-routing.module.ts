@@ -7,11 +7,13 @@ import { SharedModule } from "./shared/shared.module";
 const routes: Routes = [
   {
     path: "profile",
-    loadChildren: () => import("./profile/profile.module").then(m => m.ProfileModule),
+    loadChildren: () =>
+      import("./profile/profile.module").then((m) => m.ProfileModule),
   },
   {
     path: "pages",
-    loadChildren: () => import("./pages/pages.module").then(m => m.PagesModule),
+    loadChildren: () =>
+      import("./pages/pages.module").then((m) => m.PagesModule),
     canActivateChild: [ProfileGuard],
   },
   {
@@ -30,4 +32,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

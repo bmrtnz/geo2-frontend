@@ -14,13 +14,13 @@
     class="merged"
   >
     <dx-text-box
-      [value]="cell | mergeEditSiblingColumns: 'previous'"
+      [value]="cell | mergeEditSiblingColumns : 'previous'"
       (onKeyDown)="onKeyDownFromFirst($event, inputNext)"
       (onValueChanged)="onValueChanged($event, cell, 'previous')"
     ></dx-text-box>
     <dx-text-box
       #inputNext
-      [value]="cell | mergeEditSiblingColumns: 'next'"
+      [value]="cell | mergeEditSiblingColumns : 'next'"
       (onKeyDown)="onKeyDownFromLast($event)"
       (onValueChanged)="onValueChanged($event, cell, 'next')"
     ></dx-text-box>

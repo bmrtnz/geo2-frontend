@@ -24,7 +24,8 @@ import {
   DxCheckBoxModule,
   DxDataGridModule,
   DxDateBoxModule,
-  DxFileUploaderModule, DxFormModule,
+  DxFileUploaderModule,
+  DxFormModule,
   DxListModule,
   DxLoadIndicatorModule,
   DxLoadPanelModule,
@@ -41,10 +42,9 @@ import {
   DxTextAreaModule,
   DxTextBoxModule,
   DxTileViewModule,
-
   DxTooltipModule,
   DxValidationGroupModule,
-  DxValidatorModule
+  DxValidatorModule,
 } from "devextreme-angular";
 import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 import { ArticlesModule } from "../articles/articles.module";
@@ -59,9 +59,7 @@ import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/acti
 import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
-import {
-  GridArticlesRefClientComponent
-} from "./ajout-articles-ref-client-popup/grid-articles-ref-client/grid-articles-ref-client.component";
+import { GridArticlesRefClientComponent } from "./ajout-articles-ref-client-popup/grid-articles-ref-client/grid-articles-ref-client.component";
 import { AjoutArticlesStockPopupComponent } from "./ajout-articles-stock-popup/ajout-articles-stock-popup.component";
 import { AjoutEtapeLogistiquePopupComponent } from "./ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
 import { AjustDecomptePaloxPopupComponent } from "./ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
@@ -70,7 +68,7 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
 import {
   ArticleReservationOrdrePopupComponent,
-  ListPipe
+  ListPipe,
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
@@ -108,18 +106,14 @@ import { GridSaveLogComponent } from "./grid-save-log/grid-save-log.component";
 import { GridStockComponent } from "./grid-stock/grid-stock.component";
 import { ReservationPopupComponent } from "./grid-stock/reservation-popup/reservation-popup.component";
 import { GridsService } from "./grids.service";
-import {
-  GridLignesGroupageChargementsComponent
-} from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
+import { GridLignesGroupageChargementsComponent } from "./groupage-chargements-popup/grid-lignes-groupage-chargements/grid-lignes-groupage-chargements.component";
 import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/groupage-chargements-popup.component";
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { GridImportProgrammesComponent } from "./import-programmes-popup/grid-import-programmes/grid-import-programmes.component";
 import { ImportProgrammesPopupComponent } from "./import-programmes-popup/import-programmes-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
-import {
-  ChoixEntrepotCommandeEdiPopupComponent
-} from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
+import { ChoixEntrepotCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
 import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
 import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
@@ -133,9 +127,7 @@ import { OrdresNonConfirmesComponent } from "./indicateurs/ordres-non-confirmes/
 import { PlanningDepartComponent } from "./indicateurs/planning-depart/planning-depart.component";
 import { PlanningFournisseursComponent } from "./indicateurs/planning-fournisseurs/planning-fournisseurs.component";
 import { PlanningMaritimeComponent } from "./indicateurs/planning-maritime/planning-maritime.component";
-import {
-  PlanningTransporteursApprocheComponent
-} from "./indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component";
+import { PlanningTransporteursApprocheComponent } from "./indicateurs/planning-transporteurs-approche/planning-transporteurs-approche.component";
 import PlanningTransporteursComponent from "./indicateurs/planning-transporteurs/planning-transporteurs.component";
 import { SupervisionAFacturerComponent } from "./indicateurs/supervision-a-facturer/supervision-a-facturer.component";
 import { SupervisionComptesPaloxComponent } from "./indicateurs/supervision-comptes-palox/supervision-comptes-palox.component";
@@ -143,14 +135,16 @@ import { SupervisionLivraisonComponent } from "./indicateurs/supervision-livrais
 import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import { NouvelOrdreComponent } from "./nouvel-ordre/nouvel-ordre.component";
-import {
-  GridOptionReservationStockComponent
-} from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
+import { GridOptionReservationStockComponent } from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
 import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-popup.component";
 import { OrdresRoutingModule } from "./ordres-routing.module";
 import { GridPackingListComponent } from "./packing-list-popup/grid-packing-list/grid-packing-list.component";
 import { PackingListPopupComponent } from "./packing-list-popup/packing-list-popup.component";
-import { LoadingTabComponent, RootComponent, TabContext } from "./root/root.component";
+import {
+  LoadingTabComponent,
+  RootComponent,
+  TabContext,
+} from "./root/root.component";
 import { SelectionComptePaloxPopupComponent } from "./selection-compte-palox-popup/selection-compte-palox-popup.component";
 import { OrdresSuiviModule } from "./suivi/ordres-suivi.component";
 import { ZoomArticlePopupComponent } from "./zoom-article-popup/zoom-article-popup.component";
@@ -318,4 +312,4 @@ import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-t
     QuestionPopupModule,
   ],
 })
-export class OrdresModule { }
+export class OrdresModule {}

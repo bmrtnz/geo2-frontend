@@ -3,9 +3,8 @@
 }
 
 ::ng-deep .articles-page .search-criteria-subcontainer {
-
   // Hiding unuseful input
-  .dx-tag+.dx-texteditor-input {
+  .dx-tag + .dx-texteditor-input {
     display: none;
   }
 
