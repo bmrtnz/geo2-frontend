@@ -7,16 +7,15 @@
     overflow: hidden;
     white-space: inherit;
   }
-
-  .difference-checkbox {
-    position: relative;
-    top: 9px;
-  }
 }
 
 ::ng-deep .grid-planning-departs {
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
+
+    .dx-texteditor-input-container {
+      left: 8px;
+    }
 
     .dx-placeholder {
       color: rgba(0, 0, 0, 0.87);

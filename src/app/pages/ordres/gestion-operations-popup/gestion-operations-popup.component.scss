@@ -2,6 +2,7 @@
   .dx-template-wrapper.dx-popup-title {
     background-color: #fff;
     overflow: hidden;
+    padding: 0 8px 0 24px;
 
     .title {
       font-size: 20px;
@@ -109,6 +110,10 @@
 
           .dx-button-content {
             padding: 4px 11px;
+
+            .dx-icon {
+              font-size: 18px !important;
+            }
           }
         }
 

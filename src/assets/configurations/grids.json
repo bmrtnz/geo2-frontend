@@ -2768,7 +2768,8 @@
         "dataField": "achatDevise",
         "visible": true,
         "cssClass": "multi-line-header",
-        "allowEditing": false
+        "allowEditing": false,
+        "width": 50
       },
       {
         "dataField": "typePalette.id",
@@ -4085,7 +4086,7 @@
         "dataField": "delai",
         "cssClass": "red-font bold-text",
         "format": "#",
-        "width": 60,
+        "width": 80,
         "sortIndex": 1,
         "sortOrder": "desc",
         "visible": true

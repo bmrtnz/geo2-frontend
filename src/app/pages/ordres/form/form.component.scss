@@ -184,6 +184,7 @@
 
   .dx-button {
     width: 100%;
+    min-height: 44px;
     margin-bottom: 10px;
 
     .dx-button-content {
@@ -523,7 +524,7 @@ dx-button[type="normal"] {
     }
 
     &.dx-state-readonly::after {
-      border-bottom: 0;
+      border-bottom: 0 !important;
     }
 
     .dx-placeholder::before {

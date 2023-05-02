@@ -20,6 +20,10 @@ h2.nouvelOrdre-title {
   margin-left: 20px;
   margin-bottom: 0;
   float: left;
+
+  .dx-radiogroup {
+    margin: 5px 0;
+  }
 }
 
 ::ng-deep .pulse .dx-button {

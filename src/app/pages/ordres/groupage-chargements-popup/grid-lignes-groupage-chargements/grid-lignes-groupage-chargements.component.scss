@@ -6,6 +6,12 @@
   .grid-ordre-lignes-groupage-chargements {
     height: 400px;
 
+    .dx-toolbar-before {
+      .dx-texteditor-input {
+        width: 420px;
+      }
+    }
+
     .grey-light-column:not(.dx-cell-modified) {
       background-color: #eee;
     }
@@ -41,6 +47,10 @@
     .dx-button {
       margin: 5px;
       float: left;
+
+      .dx-icon {
+        font-size: 18px !important;
+      }
     }
   }
 }
