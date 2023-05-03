@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
+import DeclarationFraude from "app/shared/models/declaration-fraude.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import notify from "devextreme/ui/notify";
@@ -694,5 +695,92 @@ export class OrdresService
           (res) => ({ ...ordreChunk, ...res.data.saveOrdre } as Partial<Ordre>)
         )
       );
+  }
+
+  public allDeclarationFraude(
+    body: Set<string>,
+    secteur: string,
+    societe: string,
+    dateMin: string,
+    dateMax: string,
+    dateCreation: string,
+    client: string,
+    transporteur: string,
+    fournisseur: string,
+    bureauAchat: string,
+    entrepot: string
+  ) {
+    return this.apollo
+      .query<{ allDeclarationFraude: Array<Partial<DeclarationFraude>> }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: "allDeclarationFraude",
+                body,
+                params: [
+                  { name: "secteur", value: "secteur", isVariable: true },
+                  { name: "societe", value: "societe", isVariable: true },
+                  { name: "dateMin", value: "dateMin", isVariable: true },
+                  { name: "dateMax", value: "dateMax", isVariable: true },
+                  {
+                    name: "dateCreation",
+                    value: "dateCreation",
+                    isVariable: true,
+                  },
+                  { name: "client", value: "client", isVariable: true },
+                  {
+                    name: "transporteur",
+                    value: "transporteur",
+                    isVariable: true,
+                  },
+                  {
+                    name: "fournisseur",
+                    value: "fournisseur",
+                    isVariable: true,
+                  },
+                  {
+                    name: "bureauAchat",
+                    value: "bureauAchat",
+                    isVariable: true,
+                  },
+                  { name: "entrepot", value: "entrepot", isVariable: true },
+                ],
+              },
+            ],
+            [
+              { name: "secteur", type: "String", isOptionnal: false },
+              { name: "societe", type: "String", isOptionnal: false },
+              { name: "dateMin", type: "LocalDate", isOptionnal: false },
+              { name: "dateMax", type: "LocalDate", isOptionnal: false },
+              {
+                name: "dateCreation",
+                type: "LocalDateTime",
+                isOptionnal: true,
+              },
+              { name: "client", type: "String", isOptionnal: true },
+              { name: "transporteur", type: "String", isOptionnal: true },
+              { name: "fournisseur", type: "String", isOptionnal: true },
+              { name: "bureauAchat", type: "String", isOptionnal: true },
+              { name: "entrepot", type: "String", isOptionnal: true },
+            ]
+          )
+        ),
+        variables: {
+          secteur,
+          societe,
+          dateMin,
+          dateMax,
+          dateCreation,
+          client,
+          transporteur,
+          fournisseur,
+          bureauAchat,
+          entrepot,
+        },
+        fetchPolicy: "network-only",
+      })
+      .pipe(map((res) => res.data.allDeclarationFraude));
   }
 }

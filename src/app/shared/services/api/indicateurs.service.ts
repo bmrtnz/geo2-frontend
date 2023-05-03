@@ -9,6 +9,7 @@ export enum Indicateur {
   OrdresNonConfirmes = "OrdresNonConfirmes",
   PlanningDepart = "PlanningDepart",
   LitigeOuvert = "LitigeOuvert",
+  DelarationFraude = "DelarationFraude",
 }
 
 export type IndicateurCount = { count: number; secteur?: string };

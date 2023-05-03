@@ -1,0 +1,14 @@
+::ng-deep {
+  .justified-row {
+    background-color: lightgray !important;
+  }
+
+  .hide-row {
+    display: none;
+  }
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+}

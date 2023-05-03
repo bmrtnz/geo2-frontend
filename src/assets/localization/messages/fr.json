@@ -1784,6 +1784,20 @@
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
     "report": "reporter",
     "associated-docs": "Documents associés",
-    "ordre-date-depart-mutate": "Date de départ de l'ordre modifiée, on modifie aussi les dates de départ station/ lieu de passage à quai (logistique départ) ?"
+    "ordre-date-depart-mutate": "Date de départ de l'ordre modifiée, on modifie aussi les dates de départ station/ lieu de passage à quai (logistique départ) ?",
+    "fraude-depart-station": "Départs de station du",
+    "fraude-total-variete-station": "Total par Variété/Station:",
+    "order": "ordre",
+    "declaration-fraude": "declaration fraude",
+    "state-from": "Etat du",
+    "fraude-grid-title": "SECDEP résumé - planning des départs de station prévus du {0} au {1} - secteur {2} - {3}",
+    "fraude-column-fournisseurCode": "Fournisseur",
+    "fraude-column-dateDepartPrevue": "Départ",
+    "fraude-column-dateDepartPrevueFournisseur": "Date exped.",
+    "fraude-column-nombrePalettesCommandees": "Pal",
+    "fraude-column-nombreColisCommandes": "Colis",
+    "fraude-column-poidsNet": "Pds net",
+    "fraude-column-articleDescription": "Description résumée de l'article",
+    "fraude-column-incotermCode": "Incoterm"
   }
 }
