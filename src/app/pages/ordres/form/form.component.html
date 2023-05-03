@@ -1162,6 +1162,7 @@
                       [selectedLitigeLigneKey]="
                         gridLitigesLignes.getFocusedRowKey()
                       "
+                      (litigeCreated)="refreshHeader()"
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
                       #gridLitigesLignes

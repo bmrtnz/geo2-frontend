@@ -47,6 +47,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @Input() selectedLitigeLigneKey: LitigeLigne["id"];
   @Input() grid: GridLitigesLignesComponent;
   @Output() public ordreSelected = new EventEmitter<Litige>();
+  @Output() public litigeCreated = new EventEmitter();
   @Output() public currOrdre;
   @Output() public infosLitige: any;
   @Output() public litigeID: string;
@@ -166,6 +167,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             fournisseurClos: res[0].fournisseurCloture,
             fraisAnnexes: res[0].fraisAnnexes,
           };
+          console.log(this.infosLitige);
           this.noFraisAnnexes = !this.infosLitige.fraisAnnexes;
           this.litigeClosed =
             this.infosLitige.clientClos && this.infosLitige.fournisseurClos;
@@ -212,6 +214,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             next: (res) => {
               this.loadForm();
               this.selectLignesPopup.visible = true;
+              this.litigeCreated.emit();
             },
             error: (err) => notify(err.message, "error", 3000),
           });

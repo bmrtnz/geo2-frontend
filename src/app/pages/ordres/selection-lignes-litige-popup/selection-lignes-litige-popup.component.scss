@@ -30,6 +30,12 @@
       display: inline-block;
       left: 50%;
       transform: translateX(-50%);
+
+      .dx-button {
+        .dx-icon {
+          font-size: 18px !important;
+        }
+      }
     }
   }
 }

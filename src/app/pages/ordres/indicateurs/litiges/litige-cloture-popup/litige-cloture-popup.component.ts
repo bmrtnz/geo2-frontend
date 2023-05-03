@@ -116,7 +116,7 @@ export class LitigeCloturePopupComponent implements OnChanges {
   doCloture() {
     return this.validateCloture().subscribe({
       error: (err: Error) =>
-        notify(this.messageFormat(err.message), "ERROR", 3500),
+        notify(this.messageFormat(err.message), "ERROR", 7000),
       next: (r) =>
         this.clotureChanged.emit([
           this.infosLitige.litige.id,

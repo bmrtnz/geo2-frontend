@@ -418,19 +418,21 @@
       type="normal"
       text="{{ 'btn-creerLot' | localize }}"
       [focusStateEnabled]="false"
+      [disabled]="litigeClosed"
       (onClick)="creerLot()"
     ></dx-button>
     <dx-button
       type="normal"
       text="{{ 'btn-modifierLot' | localize }}"
       [focusStateEnabled]="false"
-      [disabled]="!selectedLitigeLigneKey?.length"
+      [disabled]="!selectedLitigeLigneKey?.length || litigeClosed"
       (onClick)="modifierLot()"
     ></dx-button>
     <dx-button
       type="success"
       text="{{ 'btn-close' | localize }}"
       [focusStateEnabled]="false"
+      [disabled]="litigeClosed"
       (onClick)="cloturer()"
     ></dx-button>
   </div>
