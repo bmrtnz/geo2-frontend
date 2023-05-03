@@ -196,10 +196,11 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     this.firstRun = false;
   }
 
-  async onCellClick(e) {
+  onCellClick(e) {
     if (e.rowType === "group") {
       if (e.summaryItems[0]?.column === "id") {
-        this.infosLitige = e.data?.items[0];
+        const data = e.data.items ?? e.data.collapsedItems;
+        this.infosLitige = data[0];
         this.cloturePopup.visible = true;
       }
     }
