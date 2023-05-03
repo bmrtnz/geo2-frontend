@@ -60,6 +60,7 @@
     "btn-createRefactTranspOrder": "Créer ordre de refacturation transporteur",
     "btn-createReplaceOrder": "Créer ordre de replacement",
     "btn-addToReplaceOrder": "Ajouter à ordre replacement existant",
+    "btn-assign-ligne": "Affecter la ligne au litige en cours",
     "btn-assign-lignes": "Affecter les lignes au litige en cours",
     "btn-appliquer": "Appliquer",
     "btn-ouvrir": "Ouvrir",

@@ -35,8 +35,7 @@
         [remoteOperations]="true"
         [keyExpr]="'ordreLigne.id'"
         (onCellPrepared)="onCellPrepared($event)"
-        (onRowPrepared)="onRowPrepared($event)"
-        (onSelectionChanged)="onSelectionChanged($event)"
+        (onSelectionChanged)="onSelectionChanged()"
         [columnAutoWidth]="true"
         [columnHidingEnabled]="false"
         [allowColumnReordering]="true"
@@ -110,7 +109,7 @@
           type="success"
           icon="arrowright"
           [disabled]="!selectedLignesIds?.length"
-          text="{{ 'btn-assign-lignes' | localize }}"
+          [text]="buttonText"
           (onClick)="assignLitige()"
         ></dx-button>
       </div>
