@@ -5,6 +5,7 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
+import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -28,7 +29,7 @@ import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
+import { Observable, from } from "rxjs";
 import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
 
@@ -338,5 +339,17 @@ export class GridFraisComponent implements ToggledGrid {
     toggled && this?.ordre?.id
       ? this.enableFilters()
       : (this.dataSource = null);
+  }
+
+  public calculateAchatPU(entity: Partial<OrdreFrais>) {
+    return entity.achatDevisePrixUnitaire * entity.deviseTaux;
+  }
+
+  public calculateMontant(entity: Partial<OrdreFrais>) {
+    return entity.achatQuantite * entity.achatDevisePrixUnitaire;
+  }
+
+  public calculateMontantTotal(entity: Partial<OrdreFrais>) {
+    return entity.achatQuantite * entity.achatPrixUnitaire;
   }
 }

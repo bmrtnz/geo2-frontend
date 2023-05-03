@@ -9,13 +9,14 @@ export class OrdreFrais extends Model {
   @Field({ asLabel: true }) public description?: string;
   @Field({ model: import("./frais.model") }) public frais?: Frais;
   @Field({ model: import("./devise.model") }) public devise?: Devise;
-  @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
-  public montant?: number;
+  @Field() public montant?: number;
   @Field() public deviseTaux?: number;
   @Field() public codePlus?: string;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
-  @Field({ format: { type: "currency", precision: 2 }, currency: "EUR" })
-  public montantTotal?: number;
+  @Field() public achatQuantite?: number;
+  @Field() public achatPrixUnitaire?: number;
+  @Field() public achatDevisePrixUnitaire?: number;
+  @Field() public montantTotal?: number;
   @Field() public valide?: string;
 }
 
