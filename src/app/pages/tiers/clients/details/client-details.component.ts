@@ -14,9 +14,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
 import { EditingAlertComponent } from "app/shared/components/editing-alert/editing-alert.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
+import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { ModificationListComponent } from "app/shared/components/modification-list/modification-list.component";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
-import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { Editable } from "app/shared/guards/editing-guard";
 import { BasesPaiementService } from "app/shared/services/api/bases-paiement.service";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
@@ -37,6 +37,8 @@ import { TypesClientService } from "app/shared/services/api/types-client.service
 import { TypesVenteService } from "app/shared/services/api/types-vente.service";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+import gridsConfig from "assets/configurations/grids.json";
 import {
   DxAccordionComponent,
   DxCheckBoxComponent,
@@ -52,11 +54,14 @@ import {
   Client,
   Role,
 } from "../../../../shared/models";
-import { AuthService, ClientsService } from "../../../../shared/services";
-import gridsConfig from "assets/configurations/grids.json";
-import { FormUtilsService } from "app/shared/services/form-utils.service";
-import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
+import {
+  AuthService,
+  ClientsService,
+  LocalizationService,
+} from "../../../../shared/services";
+import { DuplicationPopupComponent } from "../duplication-popup/duplication-popup.component";
 import { EncoursClientPopupComponent } from "../encours-client/encours-client-popup.component";
+import { OrderHistoryPopupComponent } from "../order-history/order-history-popup.component";
 
 const PREORDRE = "PREORDRE";
 
@@ -297,6 +302,8 @@ export class ClientDetailsComponent
   encoursPopup: EncoursClientPopupComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false })
   validatePopup: PushHistoryPopupComponent;
+  @ViewChild(DuplicationPopupComponent)
+  duplicationPopup: DuplicationPopupComponent;
   editing = false;
 
   client: Client;
@@ -358,7 +365,8 @@ export class ClientDetailsComponent
     public validationService: ValidationService,
     private route: ActivatedRoute,
     private currentCompanyService: CurrentCompanyService,
-    public authService: AuthService
+    public authService: AuthService,
+    public localizationService: LocalizationService
   ) {
     this.defaultVisible = false;
     this.checkCode = this.checkCode.bind(this);
@@ -987,5 +995,13 @@ export class ClientDetailsComponent
         "certifications.certification.id",
       ]),
     ];
+  }
+
+  public onDuplicateClick() {
+    return this.duplicationPopup.prompt().subscribe({
+      error: (err: Error) => notify(err.message, "error", 3500),
+      complete: () =>
+        notify(this.localizationService.localize("copy-done"), "success", 3500),
+    });
   }
 }

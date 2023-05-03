@@ -3,7 +3,7 @@ import { gql, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { takeWhile } from "rxjs/operators";
+import { first, takeWhile } from "rxjs/operators";
 import { Client } from "../../models";
 import { APIPersist, APIRead, ApiService, RelayPage } from "../api.service";
 import { FunctionsService } from "./functions.service";
@@ -110,6 +110,75 @@ export class ClientsService extends ApiService implements APIRead, APIPersist {
         )
       ),
       variables: { clientRef, deviseCodeRef },
+      fetchPolicy: "no-cache",
+    });
+  }
+
+  public duplicate(
+    columns: Set<string>,
+    clientID: string,
+    fromSocieteID: string,
+    toSocieteID: string,
+    copyContacts: boolean,
+    copyContactsEntrepots: boolean,
+    copyEntrepots: boolean
+  ) {
+    return this.apollo.query<{ duplicateClient }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `duplicateClient`,
+              body: columns,
+              params: [
+                { name: "clientID", value: "clientID", isVariable: true },
+                {
+                  name: "fromSocieteID",
+                  value: "fromSocieteID",
+                  isVariable: true,
+                },
+                { name: "toSocieteID", value: "toSocieteID", isVariable: true },
+                {
+                  name: "copyContacts",
+                  value: "copyContacts",
+                  isVariable: true,
+                },
+                {
+                  name: "copyContactsEntrepots",
+                  value: "copyContactsEntrepots",
+                  isVariable: true,
+                },
+                {
+                  name: "copyEntrepots",
+                  value: "copyEntrepots",
+                  isVariable: true,
+                },
+              ],
+            },
+          ],
+          [
+            { name: "clientID", type: "String", isOptionnal: false },
+            { name: "fromSocieteID", type: "String", isOptionnal: false },
+            { name: "toSocieteID", type: "String", isOptionnal: false },
+            { name: "copyContacts", type: "Boolean", isOptionnal: false },
+            {
+              name: "copyContactsEntrepots",
+              type: "Boolean",
+              isOptionnal: false,
+            },
+            { name: "copyEntrepots", type: "Boolean", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        clientID,
+        fromSocieteID,
+        toSocieteID,
+        copyContacts,
+        copyContactsEntrepots,
+        copyEntrepots,
+      },
       fetchPolicy: "no-cache",
     });
   }

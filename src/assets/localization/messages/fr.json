@@ -1798,6 +1798,13 @@
     "fraude-column-nombreColisCommandes": "Colis",
     "fraude-column-poidsNet": "Pds net",
     "fraude-column-articleDescription": "Description résumée de l'article",
-    "fraude-column-incotermCode": "Incoterm"
+    "fraude-column-incotermCode": "Incoterm",
+    "btn-duplicate": "Dupliquer",
+    "hint-client-duplicate": "Dupliquer le client",
+    "duplicate-client": "Duplication client {0}",
+    "copy-contacts": "Copier les contacts",
+    "copy-entreps": "Copier les entrepôts",
+    "copy-entreps-contacts": "Copier les contacts des entrepôts",
+    "copy-done": "Duplication terminée"
   }
 }

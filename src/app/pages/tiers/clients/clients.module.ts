@@ -39,6 +39,7 @@ import { ArticlesModule } from "app/pages/articles/articles.module";
 import { EncoursClientPopupComponent } from "./encours-client/encours-client-popup.component";
 import { GridEncoursClientComponent } from "./encours-client/grid-encours-client/grid-encours-client.component";
 import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-article-popup/zoom-client-article-popup.component";
+import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup.component";
 
 @NgModule({
   imports: [
@@ -82,6 +83,7 @@ import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-art
     GridEncoursClientComponent,
     ZoomClientArticlePopupComponent,
     EncoursClientPopupComponent,
+    DuplicationPopupComponent,
   ],
   providers: [NestedGuard, EditingGuard],
   exports: [

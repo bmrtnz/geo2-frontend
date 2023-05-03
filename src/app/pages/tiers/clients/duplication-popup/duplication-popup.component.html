@@ -1,0 +1,82 @@
+<dx-popup
+  [title]="'duplicate-client' | localize : client?.code || ''"
+  [width]="'auto'"
+  [height]="'auto'"
+  [minWidth]="800"
+  [showCloseButton]="false"
+>
+  <!-- select button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+  >
+    <dx-button
+      [icon]="'exportselected'"
+      [text]="'btn-duplicate' | localize"
+      [disabled]="!societeInput?.selectedItem"
+      [stylingMode]="'contained'"
+      (onClick)="onSelectClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+
+  <!-- cancel button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+  >
+    <dx-button
+      [icon]="'back'"
+      [text]="'btn-annuler' | localize"
+      (onClick)="onCancelClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+
+  <div *dxTemplate="let data of 'content'">
+    <div class="dx-fieldset">
+      <!-- société input -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "auth-societe" | localize | titlecase }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #societeInput
+            [dataSource]="societesSource"
+            [valueExpr]="'id'"
+            [displayExpr]="'raisonSocial'"
+            [searchExpr]="['id', 'raisonSocial']"
+            [searchMode]="'contains'"
+          ></dx-select-box>
+        </div>
+      </div>
+      <!-- copy entrepots -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">{{ "copy-entreps" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-switch #copyEntrepsInput></dx-switch>
+        </div>
+      </div>
+      <!-- copy entrepots contacts -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "copy-entreps-contacts" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-switch
+            #copyEntrepsContactsInput
+            [disabled]="!copyEntrepsInput.value"
+          ></dx-switch>
+        </div>
+      </div>
+      <!-- copy contacts -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">{{ "copy-contacts" | localize }}</div>
+        <div class="dx-field-value">
+          <dx-switch #copyContactsInput></dx-switch>
+        </div>
+      </div>
+    </div>
+  </div>
+</dx-popup>
