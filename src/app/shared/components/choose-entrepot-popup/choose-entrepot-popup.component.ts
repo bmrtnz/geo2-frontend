@@ -104,6 +104,14 @@ export class ChooseEntrepotPopupComponent implements OnInit {
       "and",
       ["client.id", "=", this.clientInput.value],
     ]);
+    // Auto-select when only one entrepot assigned to the client
+    this.entrepotsSource.load().then((res) => {
+      if (res?.length === 1) this.entrepotInput.value = { id: res[0].id };
+    });
+  }
+
+  public onShowing(e) {
+    e.component.content().parentNode.classList.add("choose-entrepot-popup");
   }
 
   public onHidden() {

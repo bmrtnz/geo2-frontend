@@ -4,6 +4,7 @@
   [height]="'auto'"
   [showCloseButton]="false"
   (onHidden)="onHidden()"
+  (onShowing)="onShowing($event)"
 >
   <!-- select button -->
   <dxi-toolbar-item
@@ -14,6 +15,7 @@
     <dx-button
       [icon]="'exportselected'"
       [text]="'select-this-entrep' | localize"
+      type="success"
       [disabled]="!entrepotInput?.selectedItem"
       [stylingMode]="'contained'"
       (onClick)="onSelectClick()"
@@ -32,6 +34,7 @@
       (onClick)="onCancelClick()"
     ></dx-button>
   </dxi-toolbar-item>
+
   <div *dxTemplate="let data of 'content'">
     <div class="inputs">
       <!-- société input -->
@@ -84,4 +87,5 @@
       </div>
     </div>
   </div>
+  <br />
 </dx-popup>

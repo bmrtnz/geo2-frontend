@@ -1,7 +1,19 @@
-::ng-deep .inputs {
-  display: flex;
+::ng-deep .choose-entrepot-popup {
+  padding-bottom: 20px;
 
-  > .field {
-    margin: 20px;
+  .inputs {
+    display: flex;
+
+    > .field {
+      margin: 20px;
+    }
+  }
+
+  dxi-toolbar-item {
+    .dx-button {
+      .dx-icon {
+        font-size: 18px !important;
+      }
+    }
   }
 }

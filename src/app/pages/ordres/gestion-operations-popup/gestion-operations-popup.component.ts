@@ -776,6 +776,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
         map((res) => res.data.ordre),
         concatMap((data) => {
           this.ordreGenNumero = data.numero;
+          if (this.ordreGenNumero) {
+            notify(
+              this.localizeService
+                .localize("ordre-cree")
+                .replace("&O", this.ordreGenNumero),
+              "success",
+              7000
+            );
+          }
           return this.gridLot.updateLot({
             ordreReferenceRemplacement: data.id,
             numeroOrdreReplacement: data.numero,
