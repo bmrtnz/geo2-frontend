@@ -7,6 +7,7 @@
   [allowColumnReordering]="true"
   (onSaving)="onSaving($event)"
   (onToolbarPreparing)="
+    onToolbarPreparing($event);
     gridConfiguratorService.onToolbarPreparing(
       '',
       $event,

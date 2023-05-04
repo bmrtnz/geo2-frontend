@@ -436,4 +436,9 @@ export class GridLotComponent implements OnInit, OnChanges {
     context.defaultSetCellValue(newData, value, rowData);
     self.setQuantite(newData, value, rowData);
   }
+
+  onToolbarPreparing(e) {
+    // Hide save button
+    e.toolbarOptions.items[0].visible = false;
+  }
 }

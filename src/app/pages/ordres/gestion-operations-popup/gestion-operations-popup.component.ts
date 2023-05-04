@@ -111,7 +111,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   private confirmPopup: ConfirmationResultPopupComponent;
 
   constructor(
-    private localizeService: LocalizationService,
+    public localizeService: LocalizationService,
     public causesService: LitigeCausesService,
     public litigesLignesService: LitigesLignesService,
     public litigesService: LitigesService,
@@ -297,7 +297,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.whenUpdated.emit(dataMutated);
           this.gridsService.reload("LitigeLigne");
         },
-        error: (err: Error) => notify(err.message, "ERROR", 3500),
+        error: (err: Error) => notify(err.message, "ERROR", 7000),
       });
   }
 
@@ -322,7 +322,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           "no-associated-client-to-transporteur-contact"
         ),
         "ERROR",
-        3500
+        7000
       );
 
     let totalAvoirClient = this.gridLot.getTotalSummaries("clientAvoir");
@@ -396,7 +396,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => this.registerOrdreRep(ordreReplaceID))
       )
       .subscribe({
-        error: (error: Error) => notify(error.message, "ERROR", 3500),
+        error: (error: Error) => notify(error.message, "ERROR", 7000),
       });
   }
 
@@ -451,7 +451,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => this.registerOrdreRep(ordreReplace.id, "add"))
       )
       .subscribe({
-        error: (error: Error) => notify(error.message, "ERROR", 3500),
+        error: (error: Error) => notify(error.message, "ERROR", 7000),
       });
   }
 
@@ -466,7 +466,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 3500),
+        error: (err: Error) => notify(err.message, "ERROR", 7000),
       });
   }
 
@@ -507,7 +507,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 3500),
+        error: (err: Error) => notify(err.message, "ERROR", 7000),
       });
   }
 
@@ -519,7 +519,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       return notify(
         `${this.localizeService.localize("no-possible-saisie-forfait")}`,
         "warning",
-        3000
+        5000
       );
 
     if (this.checkEmptyCauseConseq()) return;
@@ -561,7 +561,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 3500),
+        error: (err: Error) => notify(err.message, "ERROR", 7000),
       });
   }
 
@@ -614,7 +614,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
       ? data.description.charAt(0).toUpperCase() +
           data.description.slice(1).toLowerCase()
       : null;
-    // return data ? data.description.charAt(0).toUpperCase() + data.description.slice(1).toLowerCase() : null;
   }
 
   onShowing(e) {
@@ -672,7 +671,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.consequences.instance.scrollToItem(itemIndex);
           }
         },
-        error: (err: Error) => notify(err.message, "ERROR", 3500),
+        error: (err: Error) => notify(err.message, "ERROR", 7000),
       });
   }
 
@@ -752,7 +751,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   forfaitChanged(event) {
     this.gridLot.updateLot(event).subscribe({
-      error: (err: Error) => notify(err.message, "ERROR", 3500),
+      error: (err: Error) => notify(err.message, "ERROR", 7000),
     });
   }
 

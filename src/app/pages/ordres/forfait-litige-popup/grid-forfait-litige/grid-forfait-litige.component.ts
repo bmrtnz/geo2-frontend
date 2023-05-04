@@ -105,6 +105,11 @@ export class GridForfaitLitigeComponent {
       });
   }
 
+  onToolbarPreparing(e) {
+    // Hide save button
+    e.toolbarOptions.items[0].visible = false;
+  }
+
   public calculateForfaitClient(rowData: Partial<LitigeLigneForfait>) {
     if (rowData.forfaitClient) return rowData.forfaitClient;
     if (
@@ -146,7 +151,7 @@ export class GridForfaitLitigeComponent {
       newData.clientPrixUnitaire = currentRowData.forfaitClient;
       newData.clientQuantite = 1;
       newData.clientUniteFactureCode = "UNITE";
-      // Focus on forfait responsable
+      // Focus on forfait responsable - Uggly but works
       setTimeout(() => {
         self.datagrid.instance.editCell(
           self.datagrid.instance.getRowIndexByKey(currentRowData.id),
