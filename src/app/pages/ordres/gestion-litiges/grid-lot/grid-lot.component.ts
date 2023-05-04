@@ -278,7 +278,7 @@ export class GridLotComponent implements OnInit, OnChanges {
             }
           } else
             Object.entries(data).forEach(([field, value]) => {
-              console.log(rowIndex, `ligne.${field}`, value);
+              // console.log(rowIndex, `ligne.${field}`, value);
               this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
             });
         });

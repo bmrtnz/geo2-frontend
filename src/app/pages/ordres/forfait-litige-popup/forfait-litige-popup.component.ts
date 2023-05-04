@@ -54,6 +54,7 @@ export class ForfaitLitigePopupComponent implements OnChanges {
 
   hidePopup() {
     this.datagridComponent.datagrid.instance.saveEditData().then(() => {
+      this.datagridComponent.datagrid.instance.cancelEditData();
       this.datagridComponent.datagrid.dataSource = null;
       this.popup.visible = false;
     });

@@ -221,8 +221,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   changeResponsible(e) {
+    if (!e.value) return;
     this.selectedResponsible = e.value?.id;
-    if (e.value) this.updateCauseConseq(e.value.typeTiers);
+    this.updateCauseConseq(e.value.typeTiers);
     this.headerData.responsable = e.value.typeTiers;
   }
 
@@ -447,7 +448,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
             )
           );
         }),
-        concatMap(() => this.registerOrdreRep(ordreReplace.id))
+        concatMap(() => this.registerOrdreRep(ordreReplace.id, "add"))
       )
       .subscribe({
         error: (error: Error) => notify(error.message, "ERROR", 3500),
@@ -577,7 +578,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (!this.selectedConsequence)
       texts.push(this.localizeService.localize("one-consequence"));
     if (texts.length) {
-      message = texts.join(" & ");
+      message = texts.join(` ${this.localizeService.localize("et")} `);
       notify(
         `${this.localizeService.localize("please-select")} ${message}`,
         "warning",
@@ -769,7 +770,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       );
   }
 
-  private registerOrdreRep(ordreID: Ordre["id"]) {
+  private registerOrdreRep(ordreID: Ordre["id"], type?) {
     return this.ordresService
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
@@ -779,7 +780,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           if (this.ordreGenNumero) {
             notify(
               this.localizeService
-                .localize("ordre-cree")
+                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
                 .replace("&O", this.ordreGenNumero),
               "success",
               7000

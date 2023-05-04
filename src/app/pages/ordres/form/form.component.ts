@@ -193,8 +193,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public readOnlyMode: boolean;
   @Output() public ordreBAFOuFacture: boolean;
 
-  @Output() public fakeinfosLitige: any; /// A VIRER !!
-
   private readonly headerFields = [
     "id",
     "numero",
@@ -531,14 +529,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
-
-    this.fakeinfosLitige = {
-      clientClos: true,
-      fournisseurClos: false,
-      fraisAnnexes: 0,
-      litige: { id: "136092" },
-    };
-    // this.gestionOpPopup.visible = true;
   }
 
   ngOnDestroy() {

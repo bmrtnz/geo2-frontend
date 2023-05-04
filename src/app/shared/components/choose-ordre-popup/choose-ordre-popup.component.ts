@@ -39,7 +39,8 @@ export class ChooseOrdrePopupComponent {
     );
   }
 
-  public onShowing() {
+  public onShowing(e) {
+    e.component.content().parentNode.classList.add("choose-ordre-popup");
     this.suiviComponent.histoGrid.reload();
   }
 }

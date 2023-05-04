@@ -4,8 +4,7 @@
   [height]="'auto'"
   [maxWidth]="'80vw'"
   [showCloseButton]="true"
-  (onShowing)="onShowing()"
-  (onHiding)="choosed.emit()"
+  (onShowing)="onShowing($event)"
 >
   <dx-scroll-view [height]="'80vh'">
     <app-ordres-suivi

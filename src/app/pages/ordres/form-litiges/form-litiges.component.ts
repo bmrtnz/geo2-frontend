@@ -167,7 +167,6 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             fournisseurClos: res[0].fournisseurCloture,
             fraisAnnexes: res[0].fraisAnnexes,
           };
-          console.log(this.infosLitige);
           this.noFraisAnnexes = !this.infosLitige.fraisAnnexes;
           this.litigeClosed =
             this.infosLitige.clientClos && this.infosLitige.fournisseurClos;

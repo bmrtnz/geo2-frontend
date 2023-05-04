@@ -31,6 +31,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
+let self;
 @Component({
   selector: "app-grid-forfait-litige",
   templateUrl: "./grid-forfait-litige.component.html",
@@ -62,6 +63,7 @@ export class GridForfaitLitigeComponent {
     public localizeService: LocalizationService,
     public authService: AuthService
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreForfaitLitige
     );
@@ -101,29 +103,6 @@ export class GridForfaitLitigeComponent {
           this.codePlusItems = res.data.allLitigeAPayer;
         },
       });
-  }
-
-  onInitNewRow(e) {
-    e.data.litige = { id: this.infosLitige.litige.id };
-    e.data.frais = { id: "DIVERS" };
-    setTimeout(() => this.datagrid.instance.saveEditData(), 1);
-  }
-
-  onValueChanged(event, cell) {
-    if (!event.event) return;
-    if (cell.setValue) cell.setValue(event.value.codeFournisseur);
-  }
-
-  displayIdBefore(data) {
-    return data ? data.codeFournisseur + " - " + data.raisonSociale : null;
-  }
-
-  onCellPrepared(e) {
-    if (e.rowType === "data") {
-      // Higlight important columns
-      if (e.column.dataField === "montant")
-        e.cellElement.classList.add("grey-light-montant"); // Grey background
-    }
   }
 
   public calculateForfaitClient(rowData: Partial<LitigeLigneForfait>) {
@@ -167,6 +146,17 @@ export class GridForfaitLitigeComponent {
       newData.clientPrixUnitaire = currentRowData.forfaitClient;
       newData.clientQuantite = 1;
       newData.clientUniteFactureCode = "UNITE";
+      // Focus on forfait responsable
+      setTimeout(() => {
+        self.datagrid.instance.editCell(
+          self.datagrid.instance.getRowIndexByKey(currentRowData.id),
+          "forfait"
+        );
+        setTimeout(() => {
+          const myInput = document.querySelector(".dx-state-focused");
+          myInput?.nextElementSibling.querySelector("input").focus();
+        }, 1);
+      }, 100);
     }
 
     if (currentRowData.forfaitResponsable) {
