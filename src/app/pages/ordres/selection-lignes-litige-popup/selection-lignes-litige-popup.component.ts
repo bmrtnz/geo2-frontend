@@ -56,6 +56,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   public title: string;
   public selectedLignesIds: string[];
   public popupFullscreen = false;
+  public buttonText: string;
 
   constructor(
     private ordreLignesService: OrdreLignesService,
@@ -92,13 +93,11 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     }
   }
 
-  onRowPrepared(e) {
-    if (e.rowType === "data") {
-    }
-  }
-
-  onSelectionChanged(e) {
+  onSelectionChanged() {
     this.selectedLignesIds = this.datagrid?.instance.getSelectedRowKeys();
+    this.buttonText = this.localizeService.localize(
+      "btn-assign-ligne" + (this.selectedLignesIds?.length > 1 ? "s" : "")
+    );
   }
 
   setTitle() {
@@ -106,6 +105,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       this.title = this.localizeService.localize(
         "title-selection-lignes-cde-litige"
       );
+    this.onSelectionChanged();
   }
 
   async enableFilters() {
