@@ -1168,6 +1168,7 @@
                       #gridLitigesLignes
                       [hidden]="!formLitiges.infosLitige"
                       [ordre]="ordre"
+                      (litigeLigneSelected)="formLitiges.modifierLot()"
                     >
                     </app-grid-litiges-lignes>
                   </dxi-item>

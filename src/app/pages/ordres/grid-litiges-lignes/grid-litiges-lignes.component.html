@@ -17,7 +17,8 @@
   [allowColumnReordering]="true"
   [focusedRowEnabled]="true"
   (onContentReady)="sortGrid()"
-  (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
+  (onRowPrepared)="onRowPrepared($event)"
+  (onRowDblClick)="litigeLigneSelected.emit()"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Litiges',

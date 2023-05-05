@@ -78,12 +78,6 @@
       *ngIf="['forfait'].includes(column.dataField)"
       type="required"
     ></dxi-validation-rule>
-    <dxi-validation-rule
-      *ngIf="column.dataField === 'montant'"
-      type="range"
-      [min]="1"
-      message="{{ 'MontantNonNul' | localize }}"
-    ></dxi-validation-rule>
   </dxi-column>
   <app-merged-dxgrid-cell-template></app-merged-dxgrid-cell-template>
 </dx-data-grid>

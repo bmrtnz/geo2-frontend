@@ -32,7 +32,7 @@ import { GridsService } from "../grids.service";
   styleUrls: ["./grid-litiges-lignes.component.scss"],
 })
 export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
-  @Output() public ordreSelected = new EventEmitter<LitigeLigne>();
+  @Output() public litigeLigneSelected = new EventEmitter<LitigeLigne>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
@@ -58,6 +58,12 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
 
   ngOnInit() {
     this.gridsService.register("LitigeLigne", this.datagrid);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data") {
+      e.rowElement.classList.add("cursor-pointer");
+    }
   }
 
   sortGrid() {
