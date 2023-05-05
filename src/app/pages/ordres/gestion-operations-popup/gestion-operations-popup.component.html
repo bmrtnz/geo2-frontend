@@ -4,6 +4,7 @@
   [dragEnabled]="true"
   width="1400"
   height="auto"
+  minWidth="950"
   [hideOnOutsideClick]="true"
   [(visible)]="visible"
   [resizeEnabled]="true"
@@ -128,25 +129,22 @@
       <div class="bottom-buttons-container">
         <dx-button
           class="big-button createRefactTranspOrder"
-          type="normal"
+          type="default"
           [visible]="selectedConsequence === 'G'"
-          stylingMode="outlined"
           text="{{ 'btn-createRefactTranspOrder' | localize }}"
           (onClick)="createRefactTranspOrder()"
         ></dx-button>
         <dx-button
           class="big-button"
-          type="normal"
+          type="default"
           [visible]="selectedConsequence === 'B'"
-          stylingMode="outlined"
           text="{{ 'btn-createReplaceOrder' | localize }}"
           (onClick)="createReplaceOrder()"
         ></dx-button>
         <dx-button
-          class="big-button"
-          type="normal"
+          class="big-button addToReplaceOrder"
+          type="default"
           [visible]="selectedConsequence === 'B'"
-          stylingMode="outlined"
           text="{{ 'btn-addToReplaceOrder' | localize }}"
           (onClick)="addToReplaceOrder()"
         ></dx-button>
@@ -163,7 +161,7 @@
           *ngIf="['G', 'B'].includes(selectedConsequence)"
           class="red-font generated-order"
         >
-          Ordre généré n°
+          {{ "generated-order-number" | localize }}
         </div>
         <dx-button
           class="order-number-button"

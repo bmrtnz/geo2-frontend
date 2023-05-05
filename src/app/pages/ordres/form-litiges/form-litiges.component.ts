@@ -7,10 +7,10 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder, UntypedFormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
-import { Flux, OrdreLigne } from "app/shared/models";
+import { Flux } from "app/shared/models";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
@@ -24,11 +24,9 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 import { DxNumberBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { from, iif, of } from "rxjs";
 import { concatMap, filter, map, mergeAll } from "rxjs/operators";
-// tslint:disable-next-line: max-line-length
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { GridLitigesLignesComponent } from "../grid-litiges-lignes/grid-litiges-lignes.component";
@@ -88,7 +86,6 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   devise = "EUR";
   ddeAvoirFournisseur: any;
   totalMontantRistourne: any;
-  // disableCreate: boolean;
   columns: any;
   public litigeClosed: boolean;
   public noFraisAnnexes: boolean;
@@ -120,12 +117,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges() {
-    if (this.ordre) {
-      this.currOrdre = this.ordre;
-      // this.disableCreate =
-      //   Statut[this.ordre.statut] === Statut.ANNULE.toString()
-      //   && this.ordre.factureAvoir.toString() === "FACTURE";
-    }
+    if (this.ordre) this.currOrdre = this.ordre;
   }
 
   ngOnInit() {
@@ -260,7 +252,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             "success",
             3500
           ),
-        error: (err) => notify(err.message, "error", 3000),
+        error: (err) => notify(err.message, "error", 7000),
       });
   }
 

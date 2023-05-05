@@ -66,7 +66,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   @Input() lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]];
 
-  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public grid: DxDataGridComponent;
   @ViewChild(ConfirmationResultPopupComponent)
   private confirmPopup: ConfirmationResultPopupComponent;
 

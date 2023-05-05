@@ -19,14 +19,33 @@
   max-width: 100% !important;
   margin: 0 2px !important;
 
-  td {
-    .merged {
-      > :first-child {
-        @extend .client-cell;
+  tr.dx-row.dx-header-row {
+    td {
+      padding-top: 3px !important;
+      padding-bottom: 4px !important;
+    }
+  }
+
+  tr.dx-row:not(.dx-header-row) {
+    td {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+
+      .extra {
+        .current-value,
+        .diff {
+          padding: 3px 5px;
+        }
       }
 
-      > :last-child {
-        @extend .responsable-cell;
+      .merged {
+        > :first-child {
+          @extend .client-cell;
+        }
+
+        > :last-child {
+          @extend .responsable-cell;
+        }
       }
     }
   }

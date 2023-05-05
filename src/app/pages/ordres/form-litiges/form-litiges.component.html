@@ -464,7 +464,7 @@
 <app-documents-ordres-popup></app-documents-ordres-popup>
 <app-file-manager-popup
   key="litiges"
-  [subTitle]="infosLitige?.litige.id"
+  [subTitle]="('litige' | localize) + ' ' + infosLitige?.litige.id"
   [id]="infosLitige?.litige.id"
   *ngIf="infosLitige?.litige.id"
 ></app-file-manager-popup>

@@ -11,7 +11,6 @@ import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-po
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import LitigeCause from "app/shared/models/litige-cause.model";
 import LitigeConsequence from "app/shared/models/litige-consequence.model";
-import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -31,24 +30,12 @@ import {
   DxRadioGroupComponent,
 } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import {
-  combineLatest,
-  EMPTY,
-  forkJoin,
-  from,
-  iif,
-  of,
-  throwError,
-  zip,
-} from "rxjs";
+import { EMPTY, forkJoin, from, iif, of, throwError, zip } from "rxjs";
 import {
   catchError,
   concatMap,
   concatMapTo,
-  filter,
-  first,
   map,
-  mapTo,
   mergeMap,
   tap,
   toArray,
@@ -593,6 +580,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   hidePopup() {
+    this.gridLot.grid.instance.cancelEditData();
     this.causes.selectedItems = [];
     this.consequences.selectedItems = [];
     this.causeItems = [];

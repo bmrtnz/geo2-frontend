@@ -121,15 +121,15 @@
           min-width: 90px;
         }
 
-        &.createRefactTranspOrder {
-          margin-right: 20px;
+        &.createRefactTranspOrder,
+        &.addToReplaceOrder {
+          margin-right: 15px;
         }
       }
 
       .generated-order {
         float: left;
-        line-height: 42px;
-        margin-left: 5px;
+        margin: 19px 0 0 5px;
       }
     }
   }
