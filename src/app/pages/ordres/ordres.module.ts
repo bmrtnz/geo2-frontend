@@ -247,6 +247,7 @@ import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/dec
     AssociatedArticlePromptComponent,
     SelectionComptePaloxPopupComponent,
     FormLitigesComponent,
+    DeclarationFraudeComponent,
   ],
   providers: [
     OrdresIndicatorsService,
@@ -256,7 +257,6 @@ import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/dec
     TabContext,
     OrdresTabsPersistGuard,
     GridsService,
-    DeclarationFraudeComponent,
   ],
   imports: [
     OrdresRoutingModule,
