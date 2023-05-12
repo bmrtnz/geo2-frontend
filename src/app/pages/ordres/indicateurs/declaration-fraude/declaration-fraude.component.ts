@@ -21,7 +21,7 @@ import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { DxFormComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxFormComponent } from "devextreme-angular";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { exportDataGrid } from "devextreme/excel_exporter";
@@ -29,7 +29,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
-import { concatMap } from "rxjs/operators";
+import { concatMap, finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-declaration-fraude",
@@ -37,6 +37,9 @@ import { concatMap } from "rxjs/operators";
   styleUrls: ["./declaration-fraude.component.scss"],
 })
 export class DeclarationFraudeComponent {
+
+  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
@@ -149,6 +152,8 @@ export class DeclarationFraudeComponent {
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
 
+    this.grid.instance.beginCustomLoading("");
+
     this.etatLabel = `${this.localizer.localize(
       "state-from"
     )} ${new Date().toLocaleString()}`;
@@ -196,7 +201,8 @@ export class DeclarationFraudeComponent {
         this.preFilterData?.entrepot?.id
       )
       .pipe(
-        concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res)))
+        concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
+        finalize(() => this.grid.instance.endCustomLoading()),
       )
       .subscribe((res) => {
         this.dataSource = new DataSource({
