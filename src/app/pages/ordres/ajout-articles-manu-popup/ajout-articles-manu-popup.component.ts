@@ -127,6 +127,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.nbArticlesOld = this.nbARticles;
     if (this.nbARticles)
       this.addButton.instance.option(
+        "hint",
         this.gridUtilsService.friendlyFormatList(this.chosenArticles)
       );
   }
@@ -269,7 +270,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
           )
         )
         .subscribe({
-          error: ({ message }: Error) => notify(message, "error"),
+          error: ({ message }: Error) =>
+            notify(this.messageFormat(message), "error", 7000),
           complete: () => this.clearAndHidePopup(),
         });
     } else {
@@ -289,5 +291,15 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
           notify("Erreur lors du remplacement de l'article", "error", 3000),
       });
     }
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["ofInitArticle"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 }
