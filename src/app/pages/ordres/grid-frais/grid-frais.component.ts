@@ -40,8 +40,6 @@ import { ToggledGrid } from "../form/form.component";
 })
 export class GridFraisComponent implements ToggledGrid {
   @Input() public ordre: Ordre;
-  // @ViewChild(DxDataGridComponent, { static: true })
-  // dataGrid: DxDataGridComponent;
 
   public dataSource: DataSource;
   public fraisSource: DataSource;
@@ -195,6 +193,7 @@ export class GridFraisComponent implements ToggledGrid {
       id: this.currentCompanyService.getCompany().devise.id,
       description: this.currentCompanyService.getCompany().devise.description,
     };
+    e.data.achatQuantite = 1; // Par défaut
     e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
     setTimeout(() => this.datagrid.instance.saveEditData(), 1);
   }
@@ -291,9 +290,9 @@ export class GridFraisComponent implements ToggledGrid {
   }
 
   onCellClick(e) {
+    if (e.rowType !== "data") return;
     // Warning when no cost type
     if (!e.data?.frais?.id && e.column.dataField === "codePlus") {
-      console.log(e.data.frais);
       notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
     }
     // No DS is displayed
@@ -316,10 +315,8 @@ export class GridFraisComponent implements ToggledGrid {
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Higlight important columns
-      if (["deviseTaux", "montantTotal"].includes(e.column.dataField)) {
-        // Grey background
+      if (["montant", "montantTotal"].includes(e.column.dataField))
         e.cellElement.classList.add("grey-light");
-      }
     }
   }
 
@@ -328,6 +325,26 @@ export class GridFraisComponent implements ToggledGrid {
       field += `.${this[field + "Service"].model.getKeyField()}`;
     }
     return field;
+  }
+
+  onSaving(event) {
+    const rowData = this.datagrid.instance
+      .getVisibleRows()
+      .filter((r) => r.isEditing);
+    if (event.changes.length)
+      event.promise = this.processSaving(event.changes, rowData[0].data);
+  }
+
+  async processSaving(changes, entity) {
+    for (const change of changes) {
+      // We add calculated values to changes as they're only on client side
+      const calculated = {
+        achatPrixUnitaire: this.calculateAchatPU(entity),
+        montant: this.calculateMontant(entity),
+        montantTotal: this.calculateMontantTotal(entity),
+      };
+      change.data = { ...change.data, ...calculated };
+    }
   }
 
   onSaved() {
@@ -342,14 +359,16 @@ export class GridFraisComponent implements ToggledGrid {
   }
 
   public calculateAchatPU(entity: Partial<OrdreFrais>) {
-    return entity.achatDevisePrixUnitaire * entity.deviseTaux;
+    const PU = (entity.achatDevisePrixUnitaire ?? 0) * (entity.deviseTaux ?? 0);
+    entity.achatPrixUnitaire = PU;
+    return PU;
   }
 
   public calculateMontant(entity: Partial<OrdreFrais>) {
-    return entity.achatQuantite * entity.achatDevisePrixUnitaire;
+    return (entity.achatQuantite ?? 0) * (entity.achatDevisePrixUnitaire ?? 0);
   }
 
   public calculateMontantTotal(entity: Partial<OrdreFrais>) {
-    return entity.achatQuantite * entity.achatPrixUnitaire;
+    return (entity.achatQuantite ?? 0) * (entity.achatPrixUnitaire ?? 0);
   }
 }

@@ -1506,6 +1506,7 @@
     "ordreForfaitLitige-clientQuantite": "Client Qté",
     "ordreFrais-achatQuantite": "Achat Qté",
     "ordreFrais-achatPrixUnitaire": "PU Achat",
+    "ordreFrais-achatDevisePrixUnitaire": "PU Achat Devise",
     "ordreForfaitLitige-article-description-descriptionCourte": "Description",
     "ordreForfaitLitige-ventePrixUnitaire": "P.U.",
     "ordreForfaitLitige-venteUnite-id": "Unité",
