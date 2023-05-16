@@ -447,10 +447,9 @@ export class GridCommandesComponent
 
   private checkSummaries() {
     // Checking - adjusting summaries (due to colis <-> palettes interactions)
-    const datasource = this.grid.dataSource as DataSource;
     let palSum = 0;
     let colSum = 0;
-    datasource.items().map((d) => {
+    (this.grid.dataSource as DataSource).items().map((d) => {
       palSum += d.nombrePalettesCommandees ?? 0;
       colSum += d.nombreColisCommandes ?? 0;
     });
@@ -458,9 +457,8 @@ export class GridCommandesComponent
       palSum !==
         this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
       colSum !== this.grid.instance.getTotalSummaryValue("nombreColisCommandes")
-    ) {
+    )
       this.grid.instance.repaint();
-    }
   }
 
   private refreshData(columns: GridColumn[]) {
