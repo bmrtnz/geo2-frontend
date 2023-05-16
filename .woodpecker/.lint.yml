@@ -11,6 +11,9 @@ platform: ${PLATFORM}
 when:
   event: push
 
+depends_on:
+  - build
+
 pipeline:
   - name: fix
     image: node:18

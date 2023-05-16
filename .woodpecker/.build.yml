@@ -12,7 +12,6 @@ matrix:
 
 when:
   event: push
-  branch: [master, next, "#ci"]
 
 platform: ${PLATFORM}
 
