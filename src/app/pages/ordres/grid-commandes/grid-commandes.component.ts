@@ -405,6 +405,7 @@ export class GridCommandesComponent
             // build and push response data
             next: ({ data }) => {
               if (data.updateField) {
+                setTimeout(() => this.checkSummaries());
                 store.push([
                   change,
                   {
@@ -442,6 +443,24 @@ export class GridCommandesComponent
       });
 
     return Promise.resolve();
+  }
+
+  private checkSummaries() {
+    // Checking - adjusting summaries (due to colis <-> palettes interactions)
+    const datasource = this.grid.dataSource as DataSource;
+    let palSum = 0;
+    let colSum = 0;
+    datasource.items().map((d) => {
+      palSum += d.nombrePalettesCommandees ?? 0;
+      colSum += d.nombreColisCommandes ?? 0;
+    });
+    if (
+      palSum !==
+        this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
+      colSum !== this.grid.instance.getTotalSummaryValue("nombreColisCommandes")
+    ) {
+      this.grid.instance.repaint();
+    }
   }
 
   private refreshData(columns: GridColumn[]) {
