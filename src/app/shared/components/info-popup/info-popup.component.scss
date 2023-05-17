@@ -6,11 +6,15 @@
   float: right;
 }
 
-::ng-deep .save-popup-button {
+::ng-deep .understood-popup-button {
   display: inline-block;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+
+  .dx-button-content {
+    padding: 9px 16px 4px 16px;
+  }
 }
 
 ::ng-deep .info-popup {

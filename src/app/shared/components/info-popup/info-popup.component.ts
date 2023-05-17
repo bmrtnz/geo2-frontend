@@ -5,6 +5,7 @@ import {
   DxTemplateModule,
 } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
+import { SharedModule } from "../../shared.module";
 
 @Component({
   selector: "app-info-popup",
@@ -34,8 +35,14 @@ export class InfoPopupComponent {
 }
 
 @NgModule({
-  imports: [CommonModule, DxButtonModule, DxPopupModule, DxTemplateModule],
   declarations: [InfoPopupComponent],
   exports: [InfoPopupComponent],
+  imports: [
+    CommonModule,
+    DxButtonModule,
+    DxPopupModule,
+    DxTemplateModule,
+    SharedModule,
+  ],
 })
 export class InfoPopupModule {}
