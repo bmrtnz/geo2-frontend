@@ -381,8 +381,15 @@ body app-root.production {
 // Reduce vertical spacing in popup list items
 .dx-dropdownlist-popup-wrapper
   .dx-list:not(.dx-list-select-decorator-enabled)
+  .dx-list-item-content,
+.dx-lookup-popup-wrapper
+  .dx-list:not(.dx-list-select-decorator-enabled)
   .dx-list-item-content {
   padding: 6px 15px !important;
+}
+
+.dx-lookup-search-wrapper {
+  padding-top: 0px;
 }
 
 // Special case: title element to overcome datagrid edit cell no title
@@ -606,6 +613,15 @@ body app-root.production {
   background-color: transparent !important;
 }
 
+.dx-selectbox,
+.dx-datebox {
+  .dx-texteditor-input,
+  .dx-texteditor.dx-editor-filled .dx-texteditor-input,
+  .dx-texteditor.dx-editor-outlined .dx-texteditor-input {
+    padding: 7px 16px 6px !important;
+  }
+}
+
 .dx-field {
   .dx-texteditor-input,
   .dx-texteditor.dx-editor-filled .dx-texteditor-input,
@@ -621,10 +637,21 @@ body app-root.production {
 }
 
 .dx-datagrid-column-chooser,
-.dx-list-search {
+.dx-list-search,
+.dx-lookup-search {
   .dx-texteditor-container .dx-placeholder {
     padding-left: 46px !important;
   }
+}
+
+.dx-lookup.dx-editor-filled .dx-lookup-field,
+.dx-lookup.dx-editor-outlined .dx-lookup-field {
+  padding: 0px 40px 0px 16px;
+}
+
+.dx-lookup.dx-editor-filled,
+.dx-lookup.dx-editor-outlined {
+  height: 29px;
 }
 
 .dx-datagrid {

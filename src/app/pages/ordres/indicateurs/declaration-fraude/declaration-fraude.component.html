@@ -1,9 +1,11 @@
 <br />
+<br />
 <dx-form
   [(formData)]="preFilterData"
+  class="fraud-form"
   labelLocation="left"
-  (onFieldDataChanged)="onFieldDataChanged()"
 >
+  <!-- (onFieldDataChanged)="onFieldDataChanged()" -->
   <dxi-item
     itemType="group"
     [colCount]="6"
@@ -18,6 +20,7 @@
         searchExpr: ['id', 'description']
       }"
     >
+      <dxo-label text="{{ 'tiers-clients-secteur' | localize }}"></dxo-label>
     </dxi-item>
     <dxi-item
       dataField="client"
@@ -27,7 +30,9 @@
         showClearButton: true,
         displayExpr: 'code'
       }"
-    ></dxi-item>
+    >
+      <dxo-label text="{{ 'tiers-client' | localize }}"></dxo-label>
+    </dxi-item>
     <dxi-item
       dataField="entrepot"
       editorType="dxLookup"
@@ -36,7 +41,9 @@
         showClearButton: true,
         displayExpr: 'code'
       }"
-    ></dxi-item>
+    >
+      <dxo-label text="{{ 'tiers-entrepot' | localize }}"></dxo-label>
+    </dxi-item>
     <dxi-item
       dataField="transporteur"
       editorType="dxLookup"
@@ -45,7 +52,9 @@
         showClearButton: true,
         displayExpr: 'id'
       }"
-    ></dxi-item>
+    >
+      <dxo-label text="{{ 'ordres-transporteur' | localize }}"></dxo-label>
+    </dxi-item>
     <dxi-item
       dataField="bureauAchat"
       editorType="dxLookup"
@@ -54,23 +63,29 @@
         showClearButton: true,
         displayExpr: 'id'
       }"
-    ></dxi-item>
+    >
+      <dxo-label
+        text="{{ 'tiers-fournisseurs-bureauAchat' | localize }}"
+      ></dxo-label>
+    </dxi-item>
     <dxi-item
-      dataField="fourniseur"
+      dataField="fournisseur"
       editorType="dxLookup"
       [editorOptions]="{
         dataSource: fournisseurLookupStore,
         showClearButton: true,
         displayExpr: 'code'
       }"
-    ></dxi-item>
+    >
+      <dxo-label text="{{ 'tiers-fournisseur' | localize }}"></dxo-label>
+    </dxi-item>
   </dxi-item>
   <dxi-item
     itemType="group"
     [colCount]="3"
   >
     <dxi-item name="periode">
-      <dxo-label [text]="'Période'"></dxo-label>
+      <dxo-label text="{{ 'ordres-periode' | localize }}"></dxo-label>
       <div *dxTemplate>
         <dx-select-box
           [items]="periodes"
@@ -87,7 +102,11 @@
         displayFormat: 'dd/MM/yyyy',
         onValueChanged: manualDate.bind(this)
       }"
-    ></dxi-item>
+    >
+      <dxo-label
+        text="{{ 'packing-list-date-arrivee-prevue' | localize }}"
+      ></dxo-label>
+    </dxi-item>
     <dxi-item
       dataField="dateLivraisonPrevue"
       editorType="dxDateBox"
@@ -96,13 +115,19 @@
         displayFormat: 'dd/MM/yyyy',
         onValueChanged: manualDate.bind(this)
       }"
-    ></dxi-item>
+    >
+      <dxo-label
+        text="{{ 'packing-list-date-depart-prevue' | localize }}"
+      ></dxo-label>
+    </dxi-item>
   </dxi-item>
   <dxi-item
     itemType="group"
     [colCount]="2"
   >
-    <dxo-label [text]="'Filtrer les ordres modifiés depuis : '"></dxo-label>
+    <dxo-label
+      text="{{ 'filter-modified-orders-from' | localize }}"
+    ></dxo-label>
     <dxi-item
       dataField="dateModification"
       editorType="dxDateBox"
@@ -125,12 +150,13 @@
     ></dxi-item>
   </dxi-item>
 </dx-form>
+
 <br />
 <div class="labels">
   <span>{{ this.resumeLabel }}</span>
-  <span>{{ this.etatLabel }}</span>
+  <span class="label-right">{{ this.etatLabel }}</span>
 </div>
-<br />
+
 <dx-data-grid
   [dataSource]="dataSource"
   [width]="'100%'"
