@@ -1,9 +1,8 @@
 import {
-  AfterViewInit,
   Component,
   Input,
   OnChanges,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
@@ -12,12 +11,11 @@ import { HistoriqueLogistiqueService } from "app/shared/services/api/historique-
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { alert, confirm } from "devextreme/ui/dialog";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -26,7 +24,7 @@ import { DxDataGridComponent, DxTextBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable, PartialObserver } from "rxjs";
+import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
 @Component({
@@ -109,9 +107,11 @@ export class GridCqPhotosComponent implements OnChanges {
 
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
-    this.currentImgPath = e.row.data.cqDoc.uri;
-    if (!this.currentImgPath)
-      this.currentImgPath = "assets/images/BW-couleur-blanc.png";
+    if (e.row.data.cqDoc.isPresent) {
+      const targetURL = new URL(e.row.data.cqDoc.uri, environment.apiEndpoint);
+      this.currentImgPath = targetURL.href;
+    }
+    else this.currentImgPath = "assets/images/BW-couleur-blanc.png";
     this.currentImgComment = e.row.data.commentaire;
   }
 
