@@ -606,6 +606,16 @@ body app-root.production {
   background-color: transparent !important;
 }
 
+.dx-selectbox,
+.dx-datebox,
+.dx-numberbox {
+  .dx-texteditor-input,
+  .dx-texteditor.dx-editor-filled .dx-texteditor-input,
+  .dx-texteditor.dx-editor-outlined .dx-texteditor-input {
+    padding: 7px 16px 6px !important;
+  }
+}
+
 .dx-field {
   .dx-texteditor-input,
   .dx-texteditor.dx-editor-filled .dx-texteditor-input,
