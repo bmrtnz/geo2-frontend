@@ -274,7 +274,7 @@ export class GridCommandesComponent
       // Keep the setTimeout function in place!!!
       // It seems that not everything's really ready when event is triggered
       // Conclusion => without a timeOut, major risk of unsaved data!
-      return setTimeout(() => this.grid.instance.saveEditData(), 10);
+      return setTimeout(() => this.grid.instance.saveEditData(), 100);
     }
   }
 
@@ -304,11 +304,11 @@ export class GridCommandesComponent
       }, 100);
 
       // On attends que papy DX soit pret avant de lui demander gentiment de mettre à jour TOUT ses totaux
-      of()
-        .pipe(debounceTime(1000))
-        .subscribe({
-          complete: () => this.grid.instance.repaint(),
-        });
+      // of()
+      //   .pipe(debounceTime(1000))
+      //   .subscribe({
+      //     complete: () => this.grid.instance.repaint(),
+      //   });
 
       return this.handleMutations();
     }
@@ -405,6 +405,7 @@ export class GridCommandesComponent
             // build and push response data
             next: ({ data }) => {
               if (data.updateField) {
+                setTimeout(() => this.checkSummaries());
                 store.push([
                   change,
                   {
@@ -442,6 +443,22 @@ export class GridCommandesComponent
       });
 
     return Promise.resolve();
+  }
+
+  private checkSummaries() {
+    // Checking - adjusting summaries (due to colis <-> palettes interactions)
+    let palSum = 0;
+    let colSum = 0;
+    (this.grid.dataSource as DataSource).items().map((d) => {
+      palSum += d.nombrePalettesCommandees ?? 0;
+      colSum += d.nombreColisCommandes ?? 0;
+    });
+    if (
+      palSum !==
+        this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
+      colSum !== this.grid.instance.getTotalSummaryValue("nombreColisCommandes")
+    )
+      this.grid.instance.repaint();
   }
 
   private refreshData(columns: GridColumn[]) {
