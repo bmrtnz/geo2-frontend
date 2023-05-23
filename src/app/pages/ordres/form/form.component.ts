@@ -1500,7 +1500,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         map((params) =>
           this.tabContext.parseTabID(params.get(RouteParam.TabID))
         ),
-        filter((data) => data.every((v) => v !== null)),
+        filter((data) => data.every((v) => v !== null && v !== undefined)),
         concatMap(([numero, campagneID]) =>
           this.ordresService.getOneByNumeroAndSocieteAndCampagne(
             numero,
