@@ -269,6 +269,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public fragments = Fragments;
   public status: string;
   public ordreFacture: boolean;
+  public canChangeDateLiv: boolean;
   public numeroFacture: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
@@ -341,6 +342,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedLignes: string[];
   public selectedGridCdesRows: boolean;
   public cancelledOrder: boolean;
+  public promptPopupDateOnly: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -541,7 +543,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.comInt?.instance.option("hint", this.comInt.value);
   }
 
-  saveHeaderOnTheFly() {
+  saveHeaderOnTheFly(message?) {
     if (this.headerSaving) return;
     if (!this.formGroup.pristine && this.formGroup.valid) {
       this.headerSaving = true;
@@ -566,6 +568,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
           this.addLinkedOrders();
+          if (message) notify(this.localization.localize(message), "success");
 
           // ordre date depart has been mutated
           if (ordre.dateDepartPrevue)
@@ -879,6 +882,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.promptPopupTitle =
           this.localization.localize("ordre-cancel-title") + this.ordre?.numero;
         this.promptPopupPurpose = "cancel";
+        this.promptPopupDateOnly = false;
         this.promptPopup.show({
           validText: "btn-annulation-ordre",
           commentTitle: this.localization.localize("choose-cancel-reason"),
@@ -916,6 +920,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.promptPopupTitle =
       this.localization.localize("ordre-delete-title") + this.ordre?.numero;
     this.promptPopupPurpose = "delete";
+    this.promptPopupDateOnly = false;
     this.promptPopup.show({
       commentTitle: this.localization.localize("choose-delete-reason"),
       validText: "btn-suppression-ordre",
@@ -971,6 +976,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public onValidatePromptPopup(comment) {
     if (this.promptPopupPurpose === "delete") this.validateDeleteOrder(comment);
     if (this.promptPopupPurpose === "cancel") this.validateCancelOrder(comment);
+    if (this.promptPopupPurpose === "change-liv") this.changeDateLiv(comment);
   }
 
   private messageFormat(mess) {
@@ -1436,11 +1442,31 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshStatus(statut: Statut) {
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
+    this.canChangeDateLiv =
+      this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
     this.ordreBAFOuFacture =
       this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
+  }
+
+  openDateChangePopup() {
+    this.promptPopupPurpose = "change-liv";
+    this.promptPopupTitle = this.localization.localize(
+      "ordre-change-liv-title"
+    );
+    this.promptPopupDateOnly = true;
+    this.promptPopup.show({
+      validText: "btn-modification-change",
+      currentDate: this.ordre.dateLivraisonPrevue,
+    });
+  }
+
+  changeDateLiv(e) {
+    this.formGroup.get("dateLivraisonPrevue").patchValue(e);
+    this.formGroup.get("dateLivraisonPrevue").markAsDirty();
+    this.saveHeaderOnTheFly("modification-done");
   }
 
   openClientFilePopup() {

@@ -13,10 +13,12 @@ import {
   DxPopupModule,
   DxSelectBoxComponent,
   DxSelectBoxModule,
+  DxDateBoxComponent,
   DxTextBoxComponent,
   DxTextBoxModule,
   DxValidatorComponent,
   DxValidatorModule,
+  DxDateBoxModule,
 } from "devextreme-angular";
 import { SharedModule } from "../../shared.module";
 
@@ -32,15 +34,19 @@ export class PromptPopupComponent {
   @ViewChild("commentBox", { static: false }) commentBox: DxTextBoxComponent;
   @ViewChild("commentSelectBox", { static: false })
   commentSelectBox: DxSelectBoxComponent;
+  @ViewChild("dateBox", { static: false }) dateBox: DxDateBoxComponent;
 
   @ViewChild("validator", { static: false })
   commentValidator: DxValidatorComponent;
   @ViewChild("validatorSB", { static: false })
   commentSBValidator: DxValidatorComponent;
+  @ViewChild("validatorDate", { static: false })
+  dateValidator: DxValidatorComponent;
 
   @Input() title = "";
   @Input() purpose = "";
   @Input() placeholder = "";
+  @Input() dateOnly: boolean;
 
   @Output() whenValidate = new EventEmitter<string>();
   @Output() whenHiding = new EventEmitter<any>();
@@ -65,10 +71,15 @@ export class PromptPopupComponent {
     if (texts?.commentItemsList) this.commentItemsList = texts.commentItemsList;
     await this.popupComponent.instance.show();
     if (texts?.comment) this.setText(texts.comment);
+    if (texts?.currentDate) this.setDate(texts.currentDate);
   }
 
   setText(text: string) {
     this.commentBox.value = text;
+  }
+
+  setDate(date: Date) {
+    this.dateBox.value = date;
   }
 
   setValidationRules() {
@@ -93,6 +104,7 @@ export class PromptPopupComponent {
   onHidden() {
     this.commentBox.instance.reset();
     this.commentSelectBox.instance.reset();
+    this.dateBox.instance.reset();
   }
 
   onShown() {
@@ -104,10 +116,11 @@ export class PromptPopupComponent {
   onSubmit(form: NgForm) {
     if (
       this.commentValidator.instance.validate().isValid ||
-      this.commentSBValidator.instance.validate().isValid
+      this.commentSBValidator.instance.validate().isValid ||
+      this.dateValidator.instance.validate().isValid
     ) {
       this.whenValidate.emit(
-        form.value.commentaire || form.value.commentaireSB
+        form.value.commentaire || form.value.commentaireSB || this.dateBox.value
       );
       this.popupComponent.instance.hide();
     }
@@ -121,6 +134,7 @@ export class PromptPopupComponent {
     FormsModule,
     DxPopupModule,
     DxTextBoxModule,
+    DxDateBoxModule,
     DxButtonModule,
     DxSelectBoxModule,
     DxValidatorModule,
