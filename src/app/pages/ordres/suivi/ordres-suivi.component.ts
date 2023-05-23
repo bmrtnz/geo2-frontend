@@ -83,9 +83,14 @@ export class OrdresSuiviComponent implements AfterViewInit {
       "numeroFacture",
       "referenceClient",
       "client.code",
+      "codeChargement",
+      "logistiques.numeroImmatriculation",
+      "logistiques.numeroContainer",
+      "logistiques.certificatControle",
+      "logistiques.billOfLanding",
       "id",
     ];
-    // Léa CDT221021 Le critère de recherche "Réf. Ordre" n'a pas d'intérêt pour les utilisateurs et peut être supprimé
+    // Léa CDT221021 Le critère de recherche "Réf. Ordre" n'a pas d'intérêt pour les utilisateurs et doit être masqué
     if (!this.authService.isAdmin) this.searchItems.pop();
     this.campagneEnCours = this.currentCompanyService.getCompany().campagne;
   }
@@ -145,13 +150,11 @@ export class OrdresSuiviComponent implements AfterViewInit {
       ["valide", "=", true],
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
-      // 'and',
-      // ['facture', '=', false],
       "and",
       [criteria, operator, value],
     ];
 
-    // Current campaing filtering
+    // Current campain filtering
     if (this.currCampaign.instance.option("value")) {
       this.filter.push("and", ["campagne.id", "=", this.campagneEnCours.id]);
     }
