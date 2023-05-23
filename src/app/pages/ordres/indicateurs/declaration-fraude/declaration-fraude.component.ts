@@ -21,7 +21,7 @@ import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { DxFormComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxFormComponent } from "devextreme-angular";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { exportDataGrid } from "devextreme/excel_exporter";
@@ -29,7 +29,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
-import { concatMap } from "rxjs/operators";
+import { concatMap, finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-declaration-fraude",
@@ -37,6 +37,9 @@ import { concatMap } from "rxjs/operators";
   styleUrls: ["./declaration-fraude.component.scss"],
 })
 export class DeclarationFraudeComponent {
+
+  @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
@@ -72,15 +75,9 @@ export class DeclarationFraudeComponent {
     dateModification?: Date;
     periode?;
   } = {
-    // dateDepartPrevue: this.dateManagementService.startOfDay(),
-    // dateLivraisonPrevue: this.dateManagementService.endOfDay(),
-    // TODO VIRER CA
-    secteur: { id: "F" },
-    client: { id: "006784" },
-    dateDepartPrevue: new Date(Date.parse("2023-04-20")),
-    dateLivraisonPrevue: new Date(Date.parse("2023-04-22")),
-    dateModification: new Date(Date.parse("2023-04-20")),
-  };
+      dateDepartPrevue: this.dateManagementService.startOfDay(),
+      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+    };
 
   public periodes: string[];
   public dataSource: DataSource;
@@ -95,14 +92,12 @@ export class DeclarationFraudeComponent {
   );
   public clientLookupStore = this.clientsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public entrepotLookupStore = this.entrepotsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public transportLookupStore = this.transporteursService.getLookupStore(
@@ -133,10 +128,10 @@ export class DeclarationFraudeComponent {
         // La ligne a t'elle un plus gros calibre ?
         return !data.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
-              ...row,
-              nombrePalettesCommandees: commande.nombrePalettesCommandees,
-              nombreColisCommandes: commande.nombreColisCommandes,
-            }
+            ...row,
+            nombrePalettesCommandees: commande.nombrePalettesCommandees,
+            nombreColisCommandes: commande.nombreColisCommandes,
+          }
           : { ...row, nombreColisCommandes: 0, nombrePalettesCommandees: 0 };
       }
 
@@ -158,6 +153,7 @@ export class DeclarationFraudeComponent {
     if (!this.dxForm.instance.validate().isValid) return;
 
     this.setGridTitle();
+    this.grid.instance.beginCustomLoading("");
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
@@ -206,7 +202,8 @@ export class DeclarationFraudeComponent {
         this.preFilterData?.entrepot?.id
       )
       .pipe(
-        concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res)))
+        concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
+        finalize(() => this.grid.instance.endCustomLoading()),
       )
       .subscribe((res) => {
         this.dataSource = new DataSource({
