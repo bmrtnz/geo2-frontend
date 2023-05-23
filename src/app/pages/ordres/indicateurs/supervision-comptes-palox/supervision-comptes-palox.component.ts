@@ -479,10 +479,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     return "Solde : " + e.aggregates[0];
   }
 
-  getSoldeData(e) {
-    if (e.items?.length) return "Solde : " + e.items[0].sommeQuantiteInventaire;
-    if (e.collapsedItems?.length)
-      return "Solde : " + e.collapsedItems[0].sommeQuantiteInventaire;
+  getSoldeGeneralRecapClient(e) {
+    return "Solde général : " + e.aggregates[0];
   }
 
   getSoldeGeneralData(e) {
@@ -509,6 +507,16 @@ export class SupervisionComptesPaloxComponent implements OnInit {
         if (!options.totalValue)
           options.totalValue = options.value.quantiteInventaire;
         options.totalValue += options.value.sortie - options.value.entree;
+      }
+    }
+    if (options.name === "solde_recap") {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue +=
+          options.value.entree -
+          options.value.sortie -
+          options.value.quantiteInventaire;
       }
     }
   }

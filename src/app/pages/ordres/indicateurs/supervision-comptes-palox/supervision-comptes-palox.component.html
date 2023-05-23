@@ -295,6 +295,15 @@
   >
   </dxo-column-chooser>
   <dxo-group-panel [visible]="true"> </dxo-group-panel>
+
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      [name]="'solde_recap'"
+      [summaryType]="'custom'"
+      [displayFormat]="'Solde : {0}'"
+    ></dxi-group-item>
+  </dxo-summary>
+
   <dxi-column
     *ngFor="let column of this.columns[1] | async"
     [dataField]="column.dataField"
@@ -317,7 +326,7 @@
     <div class="group-text-1">
       {{ getInventoryData(cell.data) }}
     </div>
-    <div class="group-text-3">{{ getSoldeGeneralData(cell.data) }}</div>
+    <div class="group-text-3">{{ getSoldeGeneralRecapClient(cell.data) }}</div>
   </div>
 </dx-data-grid>
 
