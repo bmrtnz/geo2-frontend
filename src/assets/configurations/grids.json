@@ -6253,51 +6253,68 @@
   "ordre-frais": {
     "columns": [
       {
+        "visibleIndex": 0,
         "dataField": "id",
         "sortOrder": "desc",
         "allowEditing": false,
-        "width": 200,
         "visible": false
       },
       {
+        "visibleIndex": 1,
         "dataField": "frais",
         "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
+        "visibleIndex": 3,
         "dataField": "achatQuantite",
         "visible": true
       },
       {
+        "visibleIndex": 5,
         "dataField": "achatPrixUnitaire",
         "allowEditing": false,
-        "visible": true,
+        "cssClass": "multi-line-header",
+        "visible": false,
         "calculateCellValue": "calculateAchatPU"
       },
       {
+        "visibleIndex": 7,
         "dataField": "achatDevisePrixUnitaire",
-        "allowEditing": false,
-        "visible": false
+        "dataType": "number",
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
+        "allowEditing": true,
+        "visible": true
       },
       {
+        "visibleIndex": 9,
         "dataField": "devise",
         "editCellTemplate": "selectBoxTemplate",
         "width": 120,
         "visible": true
       },
       {
+        "visibleIndex": 11,
         "dataField": "montant",
         "allowEditing": false,
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
         "visible": true,
         "calculateCellValue": "calculateMontant"
       },
       {
+        "visibleIndex": 13,
         "dataField": "deviseTaux",
         "dataType": "number",
-        "format": {
-          "type": "fixedPoint",
-          "precision": 5
-        },
         "editorOptions": {
           "step": 0,
           "format": {
@@ -6309,17 +6326,26 @@
         "visible": true
       },
       {
+        "visibleIndex": 16,
         "dataField": "montantTotal",
         "visible": true,
         "allowEditing": false,
+        "editorOptions": {
+          "format": {
+            "type": "fixedPoint",
+            "precision": 2
+          }
+        },
         "calculateCellValue": "calculateMontantTotal"
       },
       {
+        "visibleIndex": 18,
         "dataField": "codePlus",
         "editCellTemplate": "customSelectBoxTemplate",
         "visible": true
       },
       {
+        "visibleIndex": 20,
         "dataField": "description",
         "visible": true
       }
