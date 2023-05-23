@@ -144,7 +144,7 @@ export class DeclarationFraudeComponent {
     });
   }
 
-  onFieldDataChanged() {
+  setGridTitle() {
     this.resumeLabel = this.localizer.localize(
       "fraude-grid-title",
       this.preFilterData.dateDepartPrevue.toLocaleDateString(),
@@ -156,6 +156,8 @@ export class DeclarationFraudeComponent {
 
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
+
+    this.setGridTitle();
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"

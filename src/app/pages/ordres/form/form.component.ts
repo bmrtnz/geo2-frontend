@@ -1521,7 +1521,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe({
       error: ({ message }: Error) => {
-        console.log(message);
         notify(this.messageFormat(message), "error", 7000);
       },
       next: (result) => {
