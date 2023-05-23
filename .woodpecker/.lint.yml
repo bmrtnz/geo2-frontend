@@ -22,10 +22,11 @@ pipeline:
       - npm run lint:fix
   - name: push
     image: woodpeckerci/plugin-git
+    failure: ignore
     secrets: [git_push_user_email, git_push_user_name, push_url]
     commands:
       - git config --local user.email $${GIT_PUSH_USER_EMAIL}
       - git config --local user.name $${GIT_PUSH_USER_NAME}
       - git remote set-url --push origin $${PUSH_URL}
-      - git commit --quiet -am "lint source [CI SKIP]" & true
-      - git push --quiet -u origin HEAD & true
+      - git commit --quiet -am "lint source [CI SKIP]"
+      - git push --quiet -u origin HEAD
