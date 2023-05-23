@@ -524,6 +524,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // Keep this, anchors may, in some cases, not created as they should
+    this.enableAnchors();
     // Show/hide left button panel
     this.leftAccessPanel.value =
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
@@ -1335,7 +1337,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         concatMap((fragment) =>
           of(
             this.anchors.find(
-              (item) => this.getAnchorElement(item).id === fragment
+              (item) =>
+                this.getAnchorElement(item).id === fragment &&
+                !!this.getAnchorElement(item).classList?.length
             )
           )
         ),
@@ -1474,7 +1478,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         map((params) =>
           this.tabContext.parseTabID(params.get(RouteParam.TabID))
         ),
-        filter((data) => data.every((v) => v !== null)),
+        filter((data) => data.every((v) => v !== null && v !== undefined)),
         concatMap(([numero, campagneID]) =>
           this.ordresService.getOneByNumeroAndSocieteAndCampagne(
             numero,
