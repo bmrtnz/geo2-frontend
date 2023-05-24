@@ -215,6 +215,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
+    (onRowDblClick)="onRowDblClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

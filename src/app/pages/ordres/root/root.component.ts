@@ -222,6 +222,14 @@ export class RootComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
+    const openOrder = window.sessionStorage.getItem("openOrder");
+    if (openOrder) {
+      this.tabContext.openOrdre(
+        openOrder.split("|")[0],
+        openOrder.split("|")[1]
+      );
+      window.sessionStorage.removeItem("openOrder");
+    }
 
     this.tabPanelInitialized
       .pipe(

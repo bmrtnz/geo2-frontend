@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -109,6 +110,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     private dateManagementService: DateManagementService,
     public authService: AuthService,
     public functionsService: FunctionsService,
+    private router: Router,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -232,6 +234,20 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
     }
+  }
+
+  // open selected ordre on group row double-click
+  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
+    if (rowType !== "group" || (!data.items && !data.collapsedItems)) return;
+    const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+    if (!dataItems.ordre) return;
+    window.sessionStorage.setItem(
+      "openOrder",
+      [data.key, dataItems.ordre.campagne.id].join("|")
+    );
+    this.hidePopup.emit();
+    // Timeout to let the popup close
+    setTimeout(() => this.router.navigateByUrl("pages/ordres"));
   }
 
   onCellPrepared(e) {

@@ -3354,6 +3354,11 @@
         "dataField": "ordre.transporteur.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
