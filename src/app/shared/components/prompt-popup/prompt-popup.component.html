@@ -19,7 +19,7 @@
         <br />
       </div>
 
-      <!-- We can show a simple text box or a selectbox with configurable items -->
+      <!-- We can show a simple text box, a date box or a select box with configurable items -->
 
       <dx-select-box
         ngModel
@@ -40,7 +40,7 @@
       <dx-text-box
         ngModel
         #commentBox
-        [visible]="!commentItemsList"
+        [visible]="!commentItemsList && !dateOnly"
         name="commentaire"
         valueChangeEvent="keyup"
         [showClearButton]="true"
@@ -52,6 +52,24 @@
           name="{{ 'valide-motif' | localize }}"
         ></dx-validator>
       </dx-text-box>
+
+      <dx-date-box
+        #dateBox
+        [visible]="dateOnly"
+        name="date"
+        [displayFormat]="'dd-MM-yy HH:mm (EEEE)'"
+        dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+        type="datetime"
+      >
+        <dx-validator
+          #validatorDate
+          [validationRules]="commentValidationRules"
+          name="{{ 'ordres-dateLivraisonPrevue' | localize }}"
+        >
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+
       <br />
       <br />
       <br />
@@ -67,7 +85,8 @@
           *ngIf="validator.instance"
           [disabled]="
             !validator.instance.validate().isValid &&
-            !validatorSB.instance.validate().isValid
+            !validatorSB.instance.validate().isValid &&
+            !validatorDate.instance.validate().isValid
           "
           (onClick)="onSubmit(form)"
         ></dx-button>

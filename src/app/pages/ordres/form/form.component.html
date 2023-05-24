@@ -437,6 +437,17 @@
                             </dx-validator>
                           </dx-date-box>
                         </div>
+                        <dx-button
+                          [visible]="canChangeDateLiv"
+                          stylingMode="text"
+                          class="form-zoom-button rightPositioned"
+                          type="default"
+                          icon="material-icons edit"
+                          [focusStateEnabled]="false"
+                          hint="{{ 'hint-click-change-date' | localize }}"
+                          (onClick)="openDateChangePopup()"
+                        >
+                        </dx-button>
                       </div>
                       <!-- incoterms -->
                       <div class="dx-field">
@@ -1411,6 +1422,7 @@
 <app-prompt-popup
   [purpose]="promptPopupPurpose"
   [title]="promptPopupTitle"
+  [dateOnly]="promptPopupDateOnly"
   (whenValidate)="onValidatePromptPopup($event)"
 ></app-prompt-popup>
 <app-motif-regularisation-ordre-popup
