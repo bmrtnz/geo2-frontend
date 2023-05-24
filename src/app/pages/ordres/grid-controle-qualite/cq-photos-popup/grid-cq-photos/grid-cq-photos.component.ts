@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  ViewChild
-} from "@angular/core";
+import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
 import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
@@ -15,7 +10,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService
+  GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
@@ -110,8 +105,7 @@ export class GridCqPhotosComponent implements OnChanges {
     if (e.row.data.cqDoc.isPresent) {
       const targetURL = new URL(e.row.data.cqDoc.uri, environment.apiEndpoint);
       this.currentImgPath = targetURL.href;
-    }
-    else this.currentImgPath = "assets/images/BW-couleur-blanc.png";
+    } else this.currentImgPath = "assets/images/BW-couleur-blanc.png";
     this.currentImgComment = e.row.data.commentaire;
   }
 

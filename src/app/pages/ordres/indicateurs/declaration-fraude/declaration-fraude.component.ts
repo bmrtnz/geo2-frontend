@@ -37,7 +37,6 @@ import { concatMap, finalize } from "rxjs/operators";
   styleUrls: ["./declaration-fraude.component.scss"],
 })
 export class DeclarationFraudeComponent {
-
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
 
   constructor(
@@ -75,9 +74,9 @@ export class DeclarationFraudeComponent {
     dateModification?: Date;
     periode?;
   } = {
-      dateDepartPrevue: this.dateManagementService.startOfDay(),
-      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
-    };
+    dateDepartPrevue: this.dateManagementService.startOfDay(),
+    dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+  };
 
   public periodes: string[];
   public dataSource: DataSource;
@@ -92,12 +91,14 @@ export class DeclarationFraudeComponent {
   );
   public clientLookupStore = this.clientsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${
+      this.currentCompanyService.getCompany().id
     }`
   );
   public entrepotLookupStore = this.entrepotsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${
+      this.currentCompanyService.getCompany().id
     }`
   );
   public transportLookupStore = this.transporteursService.getLookupStore(
@@ -128,10 +129,10 @@ export class DeclarationFraudeComponent {
         // La ligne a t'elle un plus gros calibre ?
         return !data.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
-            ...row,
-            nombrePalettesCommandees: commande.nombrePalettesCommandees,
-            nombreColisCommandes: commande.nombreColisCommandes,
-          }
+              ...row,
+              nombrePalettesCommandees: commande.nombrePalettesCommandees,
+              nombreColisCommandes: commande.nombreColisCommandes,
+            }
           : { ...row, nombreColisCommandes: 0, nombrePalettesCommandees: 0 };
       }
 
@@ -203,7 +204,7 @@ export class DeclarationFraudeComponent {
       )
       .pipe(
         concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
-        finalize(() => this.grid.instance.endCustomLoading()),
+        finalize(() => this.grid.instance.endCustomLoading())
       )
       .subscribe((res) => {
         this.dataSource = new DataSource({
