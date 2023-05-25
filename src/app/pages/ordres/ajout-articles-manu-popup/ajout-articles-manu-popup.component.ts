@@ -127,6 +127,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.nbArticlesOld = this.nbARticles;
     if (this.nbARticles)
       this.addButton.instance.option(
+        "hint",
         this.gridUtilsService.friendlyFormatList(this.chosenArticles)
       );
   }
