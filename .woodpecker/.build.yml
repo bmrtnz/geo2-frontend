@@ -16,11 +16,25 @@ when:
 platform: ${PLATFORM}
 
 pipeline:
-  - name: build ${TARGET_ENV} ${CI_COMMIT_BRANCH}
+  - name: build image ${TARGET_ENV} ${CI_COMMIT_BRANCH}
     image: docker:latest
     # Shared host Docker socket
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker build --build-arg env=${TARGET_ENV} -t geo2-frontend:${TARGET_ENV}-${CI_COMMIT_BRANCH###} .
-  # share-images: TODO registry
+  - name: push image ${TARGET_ENV} ${CI_COMMIT_BRANCH}
+    image: docker:latest
+    when:
+      - branch: [master, next]
+      - matrix:
+        PLATFORM:
+          - linux/amd64
+        TARGET_ENV:
+          - webdev
+    # Shared host Docker socket
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker tag geo2-frontend:${TARGET_ENV}-${CI_COMMIT_BRANCH###} registry.microtec.fr/geo2-frontend:${TARGET_ENV}-${CI_COMMIT_BRANCH###}
+      - docker push registry.microtec.fr/geo2-frontend:${TARGET_ENV}-${CI_COMMIT_BRANCH###}
