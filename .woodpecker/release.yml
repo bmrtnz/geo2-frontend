@@ -31,7 +31,7 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker tag geo2-frontend:${TARGET_ENV}-${CI_COMMIT_TAG} registry.microtec.fr/geo2-frontend:${TARGET_ENV}-${CI_COMMIT_TAG}
-      - docker push geo2-frontend:${TARGET_ENV}-${CI_COMMIT_TAG}
+      - docker push registry.microtec.fr/geo2-frontend:${TARGET_ENV}-${CI_COMMIT_TAG}
   - name: build archive ${TARGET_ENV} ${CI_COMMIT_TAG}
     image: node:18
     commands:
