@@ -1,9 +1,9 @@
 <dx-popup
   [title]="'duplicate-client' | localize : client?.code || ''"
-  [width]="'auto'"
-  [height]="'auto'"
-  [minWidth]="800"
-  [showCloseButton]="false"
+  [width]="600"
+  height="auto"
+  [showCloseButton]="true"
+  (onShowing)="onShowing($event)"
 >
   <!-- select button -->
   <dxi-toolbar-item
@@ -15,6 +15,7 @@
       [icon]="'exportselected'"
       [text]="'btn-duplicate' | localize"
       [disabled]="!societeInput?.selectedItem"
+      [type]="'success'"
       [stylingMode]="'contained'"
       (onClick)="onSelectClick()"
     ></dx-button>
@@ -52,29 +53,35 @@
         </div>
       </div>
       <!-- copy entrepots -->
-      <div class="dx-field field-large">
+      <div class="dx-field field-large switch-field">
         <div class="dx-field-label">{{ "copy-entreps" | localize }}</div>
         <div class="dx-field-value">
-          <dx-switch #copyEntrepsInput></dx-switch>
+          <dx-switch
+            #copyEntrepsInput
+            [disabled]="!societeInput?.selectedItem"
+          ></dx-switch>
         </div>
       </div>
       <!-- copy entrepots contacts -->
-      <div class="dx-field field-large">
+      <div class="dx-field field-large switch-field">
         <div class="dx-field-label">
           {{ "copy-entreps-contacts" | localize }}
         </div>
         <div class="dx-field-value">
           <dx-switch
             #copyEntrepsContactsInput
-            [disabled]="!copyEntrepsInput.value"
+            [disabled]="!copyEntrepsInput.value || !societeInput?.selectedItem"
           ></dx-switch>
         </div>
       </div>
       <!-- copy contacts -->
-      <div class="dx-field field-large">
+      <div class="dx-field field-large switch-field">
         <div class="dx-field-label">{{ "copy-contacts" | localize }}</div>
         <div class="dx-field-value">
-          <dx-switch #copyContactsInput></dx-switch>
+          <dx-switch
+            #copyContactsInput
+            [disabled]="!societeInput?.selectedItem"
+          ></dx-switch>
         </div>
       </div>
     </div>

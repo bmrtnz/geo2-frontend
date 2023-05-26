@@ -1,0 +1,27 @@
+::ng-deep .duplication-client-popup {
+  padding-bottom: 20px;
+
+  .dx-popup-content {
+    padding: 0 24px;
+
+    .switch-field {
+      margin-bottom: 0px;
+
+      .dx-field-label {
+        width: 80%;
+      }
+
+      .dx-field-value {
+        width: 20%;
+      }
+    }
+  }
+
+  dxi-toolbar-item {
+    .dx-button {
+      .dx-icon {
+        font-size: 18px !important;
+      }
+    }
+  }
+}
