@@ -1021,6 +1021,7 @@
     "ordres-ordresNonClotures": "Ordres non clôturés",
     "ordres-commandesTransit": "Commandes en transit",
     "ordres-commandes-edi": "Commandes EDI",
+    "ordres-programmes": "Programmes",
     "ordres-planningDepart": "Planning départ",
     "ordres-clientsDepEncours": "Clients en dépassement en-cours",
     "ordres-differenceQuantites": "Différence sur expédition et/ou sans détail client",

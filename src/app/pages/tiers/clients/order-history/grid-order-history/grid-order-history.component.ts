@@ -139,7 +139,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setDefaultPeriod("Mois à cheval");
+    this.setDefaultPeriod("MAC");
   }
 
   ngOnChanges() {
@@ -453,11 +453,14 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     });
   }
 
-  setDefaultPeriod(periodeName) {
-    const myPeriod = this.periodes[this.periodes.indexOf(periodeName)];
-    if (!myPeriod) return;
-    this.periodeSB.instance.option("value", myPeriod);
-    const datePeriod = this.dateManagementService.getDates({ value: myPeriod });
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.periodes.slice(0);
+    myPeriod = myPeriod.filter((p) => p.id === periodId);
+    if (!myPeriod.length) return;
+    this.periodeSB.instance.option("value", myPeriod[0]);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod[0],
+    });
     this.formGroup.patchValue({
       dateMin: datePeriod.dateDebut,
       dateMax: datePeriod.dateFin,
