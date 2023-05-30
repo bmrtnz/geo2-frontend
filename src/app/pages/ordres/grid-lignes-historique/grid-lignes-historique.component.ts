@@ -93,7 +93,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public idLigne: string;
   public hintClick: string;
   public hintNotValid: string;
-  public periodes: string[];
+  public periodes: any[];
   toRefresh: boolean;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
@@ -112,7 +112,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,

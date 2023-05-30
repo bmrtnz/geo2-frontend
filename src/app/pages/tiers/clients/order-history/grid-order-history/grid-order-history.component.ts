@@ -88,7 +88,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public idLigne: string;
   public hintClick: string;
   public hintNotValid: string;
-  public periodes: string[];
+  public periodes: any[];
   toRefresh: boolean;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
@@ -106,7 +106,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     public secteursService: SecteursService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService

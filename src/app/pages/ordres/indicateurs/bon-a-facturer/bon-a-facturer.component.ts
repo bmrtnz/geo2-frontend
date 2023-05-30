@@ -26,6 +26,7 @@ import {
 import { PersonnesService } from "app/shared/services/api/personnes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxSelectBoxComponent } from "devextreme-angular";
@@ -94,6 +95,7 @@ export class BonAFacturerComponent implements OnInit, AfterViewInit {
     public personnesService: PersonnesService,
     public entrepotsService: EntrepotsService,
     public clientsService: ClientsService,
+    public dateManagementService: DateManagementService,
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService

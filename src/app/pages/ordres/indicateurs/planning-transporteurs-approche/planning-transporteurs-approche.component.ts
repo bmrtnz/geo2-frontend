@@ -30,7 +30,6 @@ import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import notify from "devextreme/ui/notify";
 
 enum InputField {
   bureauAchat = "logistiques.fournisseur.bureauAchat",

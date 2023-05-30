@@ -65,7 +65,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public commerciaux: DataSource;
   public assistantes: DataSource;
   public promptPopupTitle: string;
-  public periodes: string[];
+  public periodes: any[];
   public columnChooser = environment.columnChooser;
   private gridConfig: Promise<GridConfig>;
   private currOrder: Partial<Ordre>;
@@ -98,7 +98,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     private entrepotsService: EntrepotsService,
     private clientsService: ClientsService,
     private localization: LocalizationService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
     private currentCompanyService: CurrentCompanyService,
     public ordresBafService: OrdresBafService,
     public authService: AuthService,

@@ -64,7 +64,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public titleElement: HTMLInputElement;
-  public periodes: string[];
+  public periodes: any[];
   public toRefresh: boolean;
 
   constructor(

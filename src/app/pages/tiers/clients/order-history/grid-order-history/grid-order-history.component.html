@@ -138,6 +138,7 @@
           <dx-select-box
             #periodeSB
             [items]="periodes"
+            [displayExpr]="dateManagementService.displayPeriodText"
             (onValueChanged)="setDates($event)"
           >
             <dxo-drop-down-options

@@ -30,7 +30,6 @@ import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
-
 @Component({
   selector: "app-declaration-fraude",
   templateUrl: "./declaration-fraude.component.html",
@@ -48,7 +47,7 @@ export class DeclarationFraudeComponent {
     private transporteursService: TransporteursService,
     private bureauxAchatService: BureauxAchatService,
     private fournisseursService: FournisseursService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
     private datePipe: DatePipe,
     private localizer: LocalizationService
   ) {
@@ -78,7 +77,7 @@ export class DeclarationFraudeComponent {
     dateLivraisonPrevue: this.dateManagementService.endOfDay(),
   };
 
-  public periodes: string[];
+  public periodes: any[];
   public dataSource: DataSource;
   public now: number = Date.now();
   public resumeLabel: string;
