@@ -176,6 +176,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.gridTitleInput = dxGridElement.querySelector(
       ".dx-toolbar .grid-title input"
     );
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
   }
 
   displayIDBefore(data) {
@@ -712,6 +713,22 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       data[0].initBlocageOrdre === true &&
       data[0].verifStatusEdi === true
     );
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
   }
 }
 

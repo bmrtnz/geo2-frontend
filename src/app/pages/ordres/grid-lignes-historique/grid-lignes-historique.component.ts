@@ -146,7 +146,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setDefaultPeriod("MAC");
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
     if (this.secteurId) {
       this.formGroup.get("valide").patchValue(true);
       this.formGroup.patchValue({
@@ -467,12 +467,14 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   setDefaultPeriod(periodId) {
-    let myPeriod = this.periodes.slice(0);
-    myPeriod = myPeriod.filter((p) => p.id === periodId);
-    if (!myPeriod.length) return;
-    this.periodeSB.instance.option("value", myPeriod[0]);
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
     const datePeriod = this.dateManagementService.getDates({
-      value: myPeriod[0],
+      value: myPeriod,
     });
     this.formGroup.patchValue({
       dateMin: datePeriod.dateDebut,

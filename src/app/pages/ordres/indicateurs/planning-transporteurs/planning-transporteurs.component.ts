@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { Statut } from "app/shared/models/ordre.model";
 import {
@@ -47,7 +47,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
   templateUrl: "./planning-transporteurs.component.html",
   styleUrls: ["./planning-transporteurs.component.scss"],
 })
-export class PlanningTransporteursComponent implements OnInit {
+export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   private gridConfig: Promise<GridConfig>;
   public periodes: any;
   public validRequiredEntity: {};
@@ -113,6 +113,26 @@ export class PlanningTransporteursComponent implements OnInit {
     this.formGroup.get("transporteurCode").reset();
     this.formGroup.get("valide").patchValue(true);
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+  }
+
+  ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
   }
 
   enableFilters() {

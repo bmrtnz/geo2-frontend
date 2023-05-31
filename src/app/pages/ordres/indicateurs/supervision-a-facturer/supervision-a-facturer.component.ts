@@ -174,6 +174,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         .patchValue(this.authService.currentUser.secteurCommercial);
     }
 
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+
     // Fill commercial/assistante input from user role
     if (
       !this.authService.isAdmin &&
@@ -194,6 +196,22 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           .get("codeAssistante")
           .setValue(this.authService.currentUser.commercial); // API Inverted, don't worry
     }
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
   }
 
   displayIDBefore(data) {

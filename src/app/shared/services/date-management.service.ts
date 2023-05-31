@@ -286,6 +286,12 @@ export class DateManagementService {
     return { dateDebut: deb, dateFin: fin };
   }
 
+  getPeriodFromId(periodId, periodes) {
+    let myPeriod = periodes.slice(0);
+    myPeriod = myPeriod.filter((p) => p.id === periodId);
+    if (myPeriod.length) return myPeriod[0];
+  }
+
   displayPeriodText(data) {
     return data ? self.localization.localize(data.code) : null;
   }
