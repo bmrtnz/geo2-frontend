@@ -82,6 +82,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     private tabContext: TabContext,
     private datePipe: DatePipe
   ) {
+    this.toRefresh = true;
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
@@ -108,7 +109,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.titleElement = this.datagrid.instance
       .$element()[0]
       .querySelector(".dx-toolbar-before .dx-placeholder") as HTMLInputElement;
-    this.updateFilters();
+    // this.updateFilters();
   }
 
   setDefaultPeriod(periodId) {
