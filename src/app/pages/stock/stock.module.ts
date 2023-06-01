@@ -13,6 +13,7 @@ import {
   DxTagBoxModule,
   DxFormModule,
 } from "devextreme-angular";
+import { OrdresModule } from "../ordres/ordres.module";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {
     DxTabPanelModule,
     DxTagBoxModule,
     DxTemplateModule,
+    OrdresModule,
   ],
   declarations: [StockListComponent],
 })
