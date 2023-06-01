@@ -313,5 +313,6 @@ import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/dec
     ConfirmationResultPopupModule,
     QuestionPopupModule,
   ],
+  exports: [GridStockComponent],
 })
 export class OrdresModule {}

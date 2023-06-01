@@ -31,13 +31,10 @@
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <div class="ajout-art-stock-content-container">
-        <h6 *ngIf="stock">
-          {{ "articles-catalogue-preFilter-stock-title" | localize }}
-        </h6>
-        <div style="clear: both"></div>
-
         <app-grid-stock
           [ordre]="ordre"
+          [reserv]="true"
+          [destock]="true"
           (selectChange)="clearAndHidePopup()"
         ></app-grid-stock>
         <br />

@@ -42,6 +42,8 @@ import { ReservationPopupComponent } from "./reservation-popup/reservation-popup
 })
 export class GridStockComponent implements OnInit {
   @Input() public ordre: Ordre;
+  @Input() public destock: boolean;
+  @Input() public reserv: boolean;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
   @Output() public article: Partial<Article>;

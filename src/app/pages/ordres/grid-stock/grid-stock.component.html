@@ -265,6 +265,7 @@
 
       <!-- Déstocker -->
       <dxi-column
+        *ngIf="destock"
         cssClass="small-horiz-padding"
         width="72"
         visibleIndex="12"
@@ -285,6 +286,7 @@
 
       <!-- Réserver -->
       <dxi-column
+        *ngIf="reserv"
         cssClass="small-horiz-padding"
         width="67"
         visibleIndex="14"
