@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import {
   BureauAchat,
   Client,
@@ -10,6 +10,7 @@ import {
 } from "app/shared/models";
 import DeclarationFraude from "app/shared/models/declaration-fraude.model";
 import {
+  AuthService,
   ClientsService,
   EntrepotsService,
   FournisseursService,
@@ -21,7 +22,11 @@ import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { DxDataGridComponent, DxFormComponent } from "devextreme-angular";
+import {
+  DxDataGridComponent,
+  DxFormComponent,
+  DxSelectBoxComponent,
+} from "devextreme-angular";
 import ArrayStore from "devextreme/data/array_store";
 import DataSource from "devextreme/data/data_source";
 import { exportDataGrid } from "devextreme/excel_exporter";
@@ -30,14 +35,14 @@ import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
-
 @Component({
   selector: "app-declaration-fraude",
   templateUrl: "./declaration-fraude.component.html",
   styleUrls: ["./declaration-fraude.component.scss"],
 })
-export class DeclarationFraudeComponent {
+export class DeclarationFraudeComponent implements AfterViewInit {
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
   constructor(
     private currentCompanyService: CurrentCompanyService,
@@ -48,7 +53,8 @@ export class DeclarationFraudeComponent {
     private transporteursService: TransporteursService,
     private bureauxAchatService: BureauxAchatService,
     private fournisseursService: FournisseursService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
+    private authService: AuthService,
     private datePipe: DatePipe,
     private localizer: LocalizationService
   ) {
@@ -78,7 +84,7 @@ export class DeclarationFraudeComponent {
     dateLivraisonPrevue: this.dateManagementService.endOfDay(),
   };
 
-  public periodes: string[];
+  public periodes: any[];
   public dataSource: DataSource;
   public now: number = Date.now();
   public resumeLabel: string;
@@ -113,6 +119,26 @@ export class DeclarationFraudeComponent {
     ["id", "code"],
     `valide==true`
   );
+
+  ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.dxForm.instance.updateData({
+      dateDepartPrevue: datePeriod.dateDebut,
+      dateLivraisonPrevue: datePeriod.dateFin,
+    });
+  }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
     const isCalibreOpening = (

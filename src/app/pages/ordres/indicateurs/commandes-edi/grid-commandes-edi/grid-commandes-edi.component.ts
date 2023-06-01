@@ -68,7 +68,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public commerciaux: DataSource;
   public assistantes: DataSource;
   private dataSourceOL: DataSource;
-  public periodes: string[];
+  public periodes: any[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
@@ -112,6 +112,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
     private ordreLignesService: OrdreLignesService,
+    public dateManagementService: DateManagementService,
     private localization: LocalizationService,
     private datePipe: DatePipe,
     public tabContext: TabContext,
@@ -175,7 +176,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.gridTitleInput = dxGridElement.querySelector(
       ".dx-toolbar .grid-title input"
     );
-    // this.etatRB.value = this.displayedEtat[0]; // A VIRER !!
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
   }
 
   displayIDBefore(data) {
@@ -712,6 +713,22 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       data[0].initBlocageOrdre === true &&
       data[0].verifStatusEdi === true
     );
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
   }
 }
 

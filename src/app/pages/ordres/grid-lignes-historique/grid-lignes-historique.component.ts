@@ -93,7 +93,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public idLigne: string;
   public hintClick: string;
   public hintNotValid: string;
-  public periodes: string[];
+  public periodes: any[];
   toRefresh: boolean;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
@@ -112,7 +112,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
-    private dateManagementService: DateManagementService,
+    public dateManagementService: DateManagementService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
@@ -146,7 +146,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setDefaultPeriod("Mois à cheval");
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
     if (this.secteurId) {
       this.formGroup.get("valide").patchValue(true);
       this.formGroup.patchValue({
@@ -466,11 +466,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     });
   }
 
-  setDefaultPeriod(periodeName) {
-    const myPeriod = this.periodes[this.periodes.indexOf(periodeName)];
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
     if (!myPeriod) return;
     this.periodeSB.instance.option("value", myPeriod);
-    const datePeriod = this.dateManagementService.getDates({ value: myPeriod });
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
     this.formGroup.patchValue({
       dateMin: datePeriod.dateDebut,
       dateMax: datePeriod.dateFin,

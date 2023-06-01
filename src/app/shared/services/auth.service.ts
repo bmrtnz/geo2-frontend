@@ -39,6 +39,7 @@ export class AuthService {
     // Configurations
     "configTuilesOrdres",
     "configTabsOrdres",
+    "periode",
 
     // Autres accès
     "indicateurVisualisationIncotermFournisseur",

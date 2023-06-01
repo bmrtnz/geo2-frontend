@@ -6,6 +6,7 @@ import {
   EventEmitter,
   HostListener,
   OnInit,
+  ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import DataSource from "devextreme/data/data_source";
@@ -17,6 +18,10 @@ import { DxButtonModule } from "devextreme-angular/ui/button";
 import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { FileManagerModule } from "../file-manager/file-manager-popup.component";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import {
+  ProfilePopupComponent,
+  ProfilePopupModule,
+} from "../profile-popup/profile-popup.component";
 
 @Component({
   selector: "app-header",
@@ -37,6 +42,8 @@ export class HeaderComponent implements OnInit {
   societeSource: DataSource;
   userMenuItems: any[];
 
+  @ViewChild(ProfilePopupComponent) profilePopup: ProfilePopupComponent;
+
   constructor(
     private localizeService: LocalizationService,
     private authService: AuthService,
@@ -48,6 +55,9 @@ export class HeaderComponent implements OnInit {
       {
         text: "Profil",
         icon: "user",
+        onClick: async () => {
+          this.profilePopup.visible = true;
+        },
       },
       {
         text: this.localizeService.localize("auth-logout"),
@@ -92,6 +102,7 @@ export class HeaderComponent implements OnInit {
     CompanyChooserModule,
     FileManagerModule,
     DxToolbarModule,
+    ProfilePopupModule,
   ],
   declarations: [HeaderComponent],
   exports: [HeaderComponent],
