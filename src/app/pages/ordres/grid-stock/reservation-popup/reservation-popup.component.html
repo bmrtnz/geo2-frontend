@@ -4,7 +4,7 @@
   [dragEnabled]="true"
   [title]="'Déstockage de stock : ' + rowData?.stockArticle?.articleID"
   (onHidden)="onHidden()"
-  (onShown)="onShowing()"
+  (onShown)="onShowing($event)"
   [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">

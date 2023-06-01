@@ -138,6 +138,7 @@
           <dx-select-box
             #periodeSB
             [items]="periodes"
+            [displayExpr]="dateManagementService.displayPeriodText"
             (onValueChanged)="setDates($event)"
           >
             <dxo-drop-down-options
@@ -215,6 +216,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onRowPrepared)="onRowPrepared($event)"
+    (onRowDblClick)="onRowDblClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

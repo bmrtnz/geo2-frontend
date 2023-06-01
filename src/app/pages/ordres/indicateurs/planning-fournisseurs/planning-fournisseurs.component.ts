@@ -57,7 +57,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.INDICATOR_NAME
   );
   private gridConfig: Promise<GridConfig>;
-  public periodes: any;
+  public periodes: any[];
   private priceColumns = ["ventePrixUnitaire", "achatPrixUnitaire"];
   public validRequiredEntity: {};
 
@@ -138,6 +138,23 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description,
       });
     }
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      from: datePeriod.dateDebut,
+      to: datePeriod.dateFin,
+    });
   }
 
   enableFilters() {

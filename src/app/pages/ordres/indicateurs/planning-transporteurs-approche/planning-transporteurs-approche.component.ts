@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import Ordre from "app/shared/models/ordre.model";
 import {
@@ -30,7 +30,6 @@ import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import notify from "devextreme/ui/notify";
 
 enum InputField {
   bureauAchat = "logistiques.fournisseur.bureauAchat",
@@ -52,7 +51,9 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   templateUrl: "./planning-transporteurs-approche.component.html",
   styleUrls: ["./planning-transporteurs-approche.component.scss"],
 })
-export class PlanningTransporteursApprocheComponent implements OnInit {
+export class PlanningTransporteursApprocheComponent
+  implements OnInit, AfterViewInit
+{
   readonly INDICATOR_NAME = "PlanningTransporteursApproche";
 
   private indicator = this.ordresIndicatorsService.getIndicatorByName(
@@ -122,6 +123,26 @@ export class PlanningTransporteursApprocheComponent implements OnInit {
     this.formGroup.get("transporteur").setValue("");
     this.formGroup.get("transporteur").reset();
     this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+  }
+
+  ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      from: datePeriod.dateDebut,
+      to: datePeriod.dateFin,
+    });
   }
 
   enableFilters() {

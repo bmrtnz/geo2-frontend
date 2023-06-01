@@ -29,6 +29,7 @@ export class Utilisateur extends Model {
   @Field() public adminClient?: boolean;
   @Field() public profileClient?: string;
   @Field() public email?: string;
+  @Field() public periode?: string;
   @Field() public commentaireStock?: boolean;
 
   public getSUP?() {

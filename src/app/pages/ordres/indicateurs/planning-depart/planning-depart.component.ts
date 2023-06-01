@@ -64,7 +64,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public titleElement: HTMLInputElement;
-  public periodes: string[];
+  public periodes: any[];
   public toRefresh: boolean;
 
   constructor(
@@ -82,6 +82,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     private tabContext: TabContext,
     private datePipe: DatePipe
   ) {
+    this.toRefresh = true;
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
@@ -96,8 +97,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dateMin.value = this.dateManagementService.startOfDay();
-    this.dateMax.value = this.dateManagementService.endOfDay();
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
 
     // Auto sector select from current user settings
     if (this.authService.currentUser.secteurCommercial) {
@@ -109,7 +109,21 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.titleElement = this.datagrid.instance
       .$element()[0]
       .querySelector(".dx-toolbar-before .dx-placeholder") as HTMLInputElement;
-    this.updateFilters();
+    // this.updateFilters();
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.dateMin.value = datePeriod.dateDebut;
+    this.dateMax.value = datePeriod.dateFin;
   }
 
   async updateFilters(e?) {
@@ -135,7 +149,6 @@ export class PlanningDepartComponent implements AfterViewInit {
       },
       new Set(await fields.toPromise())
     );
-
     this.dataSource.reload().then((res) => {
       let DsItems = JSON.parse(JSON.stringify(res));
       // Sort by numero ordre

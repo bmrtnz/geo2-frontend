@@ -261,8 +261,19 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
         )
       )
       .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
+        error: ({ message }: Error) =>
+          notify(this.messageFormat(message), "error", 7000),
         complete: () => this.clearAndHidePopup(),
       });
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["ofInitArticle"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 }

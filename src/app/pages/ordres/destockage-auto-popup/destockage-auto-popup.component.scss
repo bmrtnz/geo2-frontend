@@ -73,6 +73,10 @@
       .grid-destockage-auto {
         max-height: 400px;
 
+        .baseline {
+          vertical-align: baseline !important;
+        }
+
         .dx-toolbar-after {
           background-color: #fff;
         }

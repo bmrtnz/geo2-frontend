@@ -24,7 +24,6 @@ import DataSource from "devextreme/data/data_source";
 })
 export class AjoutArticlesStockPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
-  @Input() public stock: boolean;
   @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;

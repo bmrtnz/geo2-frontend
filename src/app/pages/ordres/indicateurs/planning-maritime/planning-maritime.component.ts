@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { LocalizePipe } from "app/shared/pipes";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import {
   PlanningMaritimeService,
   PlanningSide,
@@ -61,6 +61,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
     private localizePipe: LocalizePipe,
+    private authService: AuthService,
     public tabContext: TabContext
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -80,7 +81,24 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     this.titleElement = this.datagrid.instance
       .$element()[0]
       .querySelector(".dx-toolbar .dx-placeholder") as HTMLInputElement;
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.enableFilters();
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
   }
 
   async enableFilters() {

@@ -87,12 +87,14 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.column.dataField === "resa_desc") {
+      if (["resa_desc", "info_stock"].includes(e.column.dataField)) {
         if (e.value.includes("<br>"))
           e.cellElement.classList.add("lineHeight16");
       }
-      if (e.column.dataField === "info_stock")
+      if (e.column.dataField === "info_stock") {
         e.cellElement.classList.add("red-font");
+        e.cellElement.classList.add("baseline");
+      }
     }
   }
 
@@ -132,6 +134,10 @@ export class DestockageAutoPopupComponent implements OnChanges {
               .join("<br>")
               .split("ERREUR")
               .join("<br>ERREUR");
+            item.info_stock = item.info_stock
+              .replace("~n", "")
+              .split("~n")
+              .join("<br>");
           });
           this.applyErrorsFilter();
           setTimeout(() => this.datagrid.instance.endCustomLoading());

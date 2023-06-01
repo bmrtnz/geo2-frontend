@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { OrdresIndicatorsService } from "./ordres-indicators.service";
+import { LocalizationService } from "./localization.service";
+
+let self;
 
 @Injectable({
   providedIn: "root",
@@ -8,8 +11,11 @@ import { OrdresIndicatorsService } from "./ordres-indicators.service";
 export class DateManagementService {
   constructor(
     private datePipe: DatePipe,
+    public localization: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService
-  ) {}
+  ) {
+    self = this;
+  }
 
   formatDate(myDate, myFormat?) {
     return this.datePipe.transform(
@@ -39,34 +45,100 @@ export class DateManagementService {
 
   periods() {
     const periodChoice = [
-      "Hier",
-      "Aujourd'hui",
-      "Demain",
-      "Semaine dernière",
-      "Semaine en cours",
-      "Semaine prochaine",
-      "7 prochains jours",
-      "30 prochains jours",
-      "Mois à cheval",
-      "Depuis 30 jours",
-      "Depuis 1 mois",
-      "Depuis 2 mois",
-      "Depuis 3 mois",
-      "Depuis 12 mois",
-      "Mois dernier",
-      "Mois en cours",
-      "Trimestre dernier",
-      "Trimestre en cours",
-      "Année civile en cours",
-      "Campagne en cours",
-      "Même semaine année dernière",
-      "Même mois année dernière",
+      {
+        id: "J-1",
+        code: "yesterday",
+      },
+      {
+        id: "J",
+        code: "today",
+      },
+      {
+        id: "J+1",
+        code: "tomorrow",
+      },
+      {
+        id: "S-1",
+        code: "lastweek",
+      },
+      {
+        id: "S",
+        code: "currentweek",
+      },
+      {
+        id: "S+1",
+        code: "nextweek",
+      },
+      {
+        id: "7J",
+        code: "7nextdays",
+      },
+      {
+        id: "30J",
+        code: "30nextdays",
+      },
+      {
+        id: "MAC",
+        code: "continuedmonth",
+      },
+      {
+        id: "-30J",
+        code: "since30days",
+      },
+      {
+        id: "D1M",
+        code: "sinceamonth",
+      },
+      {
+        id: "D2M",
+        code: "since2months",
+      },
+      {
+        id: "D3M",
+        code: "since3months",
+      },
+      {
+        id: "D1A",
+        code: "since12months",
+      },
+      {
+        id: "M-1",
+        code: "lastmonth",
+      },
+      {
+        id: "M",
+        code: "currentmonth",
+      },
+      {
+        id: "T-1",
+        code: "lastquarter",
+      },
+      {
+        id: "T",
+        code: "currentquarter",
+      },
+      {
+        id: "DDA",
+        code: "calendaryear",
+      },
+      {
+        id: "DDC",
+        code: "currentcampaign",
+      },
+      {
+        id: "MSA-1",
+        code: "sameweeklastyear",
+      },
+      {
+        id: "MMA-1",
+        code: "samemonthlastyear",
+      },
     ];
     return periodChoice;
   }
 
   getDates(e) {
-    const periode = e.value;
+    const periode = e.value?.id;
 
     let deb: any;
     let fin: any;
@@ -84,61 +156,61 @@ export class DateManagementService {
     const prevQuarterStart = quarter === 1 ? 10 : quarterStart - 3; // Current quarter first month
 
     switch (periode) {
-      case "Hier":
+      case "J-1":
         deb = this.findDate(-1);
         break;
-      case "Aujourd'hui":
+      case "J":
         deb = now;
         break;
-      case "Demain":
+      case "J+1":
         deb = this.findDate(1);
         break;
-      case "Semaine dernière":
+      case "S-1":
         deb = this.findDate(-day - 6);
         fin = this.findDate(-day);
         break;
-      case "Semaine en cours":
+      case "S":
         deb = this.findDate(-day + 1);
         fin = this.findDate(-day + 7);
         break;
-      case "Semaine prochaine":
+      case "S+1":
         deb = this.findDate(-day + 8);
         fin = this.findDate(-day + 14);
         break;
-      case "7 prochains jours":
+      case "7J":
         deb = now;
         fin = this.findDate(7);
         break;
-      case "30 prochains jours":
+      case "30J":
         deb = now;
         fin = this.findDate(30);
         break;
-      case "Mois à cheval":
+      case "MAC":
         const dateTemp = dateNow;
         deb = dateTemp.setMonth(dateTemp.getMonth() - 1);
         fin = dateNow.setMonth(dateNow.getMonth() + 2);
         break;
-      case "Depuis 1 mois":
+      case "D1M":
         deb = dateNow.setMonth(dateNow.getMonth() - 1);
         fin = now;
         break;
-      case "Depuis 30 jours":
+      case "-30J":
         deb = this.findDate(-30);
         fin = now;
         break;
-      case "Depuis 2 mois":
+      case "D2M":
         deb = dateNow.setMonth(dateNow.getMonth() - 2);
         fin = now;
         break;
-      case "Depuis 3 mois":
+      case "D3M":
         deb = dateNow.setMonth(dateNow.getMonth() - 3);
         fin = now;
         break;
-      case "Depuis 12 mois":
+      case "D1A":
         deb = year - 1 + "-" + month + "-" + date;
         fin = now;
         break;
-      case "Mois dernier":
+      case "M-1":
         temp =
           (month === 1 ? year - 1 : year) +
           "-" +
@@ -152,12 +224,12 @@ export class DateManagementService {
             month === 1 ? 12 : month - 1
           );
         break;
-      case "Mois en cours":
+      case "M":
         temp = year + "-" + month;
         deb = temp + "-01";
         fin = temp + "-" + this.daysInMonth(year, month);
         break;
-      case "Trimestre dernier":
+      case "T-1":
         deb =
           (quarter === 1 ? year - 1 : year) + "-" + prevQuarterStart + "-01";
         fin =
@@ -170,7 +242,7 @@ export class DateManagementService {
             prevQuarterStart + 2
           );
         break;
-      case "Trimestre en cours":
+      case "T":
         deb = year + "-" + quarterStart + "-01";
         fin =
           year +
@@ -179,15 +251,15 @@ export class DateManagementService {
           "-" +
           this.daysInMonth(year, quarterStart + 2);
         break;
-      case "Année civile en cours":
+      case "DDA":
         deb = year + "-01-01";
         fin = year + "-12-31";
         break;
-      case "Campagne en cours":
+      case "DDC":
         deb = (month <= 6 ? year - 1 : year) + "-07-01";
         fin = (month > 6 ? year + 1 : year) + "-06-30";
         break;
-      case "Même semaine année dernière": {
+      case "MSA-1": {
         deb = this.getDateOfISOWeek(this.getWeekNumber(dateNow), year - 1);
         temp = new Date(deb);
         fin = temp.setDate(temp.getDate() + 6);
@@ -195,7 +267,7 @@ export class DateManagementService {
         fin = this.formatDate(fin);
         break;
       }
-      case "Même mois année dernière":
+      case "MMA-1":
         temp = year - 1 + "-" + month;
         deb = temp + "-01";
         fin = temp + "-" + this.daysInMonth(year - 1, month);
@@ -212,6 +284,16 @@ export class DateManagementService {
     fin = this.endOfDay(fin);
 
     return { dateDebut: deb, dateFin: fin };
+  }
+
+  getPeriodFromId(periodId, periodes) {
+    let myPeriod = periodes.slice(0);
+    myPeriod = myPeriod.filter((p) => p.id === periodId);
+    if (myPeriod.length) return myPeriod[0];
+  }
+
+  displayPeriodText(data) {
+    return data ? self.localization.localize(data.code) : null;
   }
 
   findDate(delta) {

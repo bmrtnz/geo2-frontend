@@ -121,7 +121,7 @@ export class GridOrdreLigneLogistiqueComponent
   }
 
   onContentReady(e) {
-    this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
+    this.gridRowsTotal = e.component.getVisibleRows()?.length;
   }
 
   onCellPrepared(e) {
@@ -138,7 +138,10 @@ export class GridOrdreLigneLogistiqueComponent
         e.cellElement.classList.add("cursor-pointer");
       }
 
-      if (e.column.dataField === "fournisseur.code") {
+      if (
+        e.column.dataField === "fournisseur.code" &&
+        e.component.getVisibleRows()?.length > 1
+      ) {
         e.cellElement.classList.add("text-underlined");
         e.cellElement.classList.add("cursor-pointer");
         e.cellElement.setAttribute(
@@ -204,6 +207,7 @@ export class GridOrdreLigneLogistiqueComponent
         break;
       }
       case "fournisseur.code": {
+        if (!e.cellElement.classList.contains("text-underlined")) return;
         const addFilter = ["fournisseur.code", "=", e.data.fournisseur.code];
         this.refreshGridLigneDetail.emit(addFilter);
         break;

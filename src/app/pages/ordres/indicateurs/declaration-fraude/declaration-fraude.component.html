@@ -86,13 +86,13 @@
   >
     <dxi-item name="periode">
       <dxo-label text="{{ 'ordres-periode' | localize }}"></dxo-label>
-      <div *dxTemplate>
-        <dx-select-box
-          [items]="periodes"
-          [value]="periodes[1]"
-          (onValueChanged)="setDates($event)"
-        ></dx-select-box>
-      </div>
+      <dx-select-box
+        #periodeSB
+        [items]="periodes"
+        [value]="periodes[1]"
+        [displayExpr]="dateManagementService.displayPeriodText"
+        (onValueChanged)="setDates($event)"
+      ></dx-select-box>
     </dxi-item>
     <dxi-item
       dataField="dateDepartPrevue"
