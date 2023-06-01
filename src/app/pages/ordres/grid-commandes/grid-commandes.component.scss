@@ -48,8 +48,6 @@
   }
 
   .dx-datagrid-headers.dx-datagrid-nowrap td:not(.dx-command-select) {
-    // pointer-events: none;
-
     &.headerCellBtnTemplate {
       padding-left: 0 !important;
       padding-right: 0 !important;
@@ -57,7 +55,6 @@
 
       .small-article-button {
         margin-top: 2px;
-        // pointer-events: auto;
       }
     }
   }

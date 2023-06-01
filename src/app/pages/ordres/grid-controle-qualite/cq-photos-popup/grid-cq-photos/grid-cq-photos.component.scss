@@ -7,6 +7,7 @@
   .small-CQ-button.download-photos.dx-button.dx-button-success.dx-button-mode-contained.dx-widget.dx-button-has-icon.dx-button-has-text {
     .dx-icon {
       color: #fff !important;
+      font-size: 16px !important;
     }
   }
 
@@ -50,5 +51,11 @@
     transform: translateX(-50%);
     max-height: 100%;
     max-width: 100%;
+  }
+}
+
+::ng-deep .download-all {
+  .dx-icon {
+    font-size: 18px !important;
   }
 }

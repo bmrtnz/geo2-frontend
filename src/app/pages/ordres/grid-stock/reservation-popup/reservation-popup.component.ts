@@ -90,7 +90,8 @@ export class ReservationPopupComponent {
     this.negativeStock = false;
   }
 
-  onShowing() {
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("destockage-popup");
     this.quantiteBox?.instance.focus();
   }
 

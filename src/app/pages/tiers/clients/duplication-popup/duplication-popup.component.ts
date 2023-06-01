@@ -71,13 +71,15 @@ export class DuplicationPopupComponent implements OnInit {
     );
   }
 
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("duplication-client-popup");
+  }
+
   public onSelectClick() {
-    // this.popup.visible = false;
     this.done.emit();
   }
 
   public onCancelClick() {
     this.popup.visible = false;
-    // this.done.emit();
   }
 }
