@@ -10,6 +10,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
   DxButtonComponent,
   DxPopupComponent,
@@ -60,6 +61,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   constructor(
     private functionsService: FunctionsService,
     private currentCompanyService: CurrentCompanyService,
+    private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
   ) {}
 
@@ -107,7 +109,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     }
     this.nbArticlesOld = this.nbARticles;
     if (this.nbARticles)
-      this.addButton.instance.option("hint", this.chosenArticles.join(" - "));
+      this.addButton.instance.option(
+        "hint",
+        this.gridUtilsService.friendlyFormatList(this.chosenArticles)
+      );
   }
 
   getGridSelectedArticles() {
@@ -178,8 +183,19 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
         )
       )
       .subscribe({
-        error: ({ message }: Error) => notify(message, "error"),
+        error: ({ message }: Error) =>
+          notify(this.messageFormat(message), "error", 7000),
         complete: () => this.clearAndHidePopup(),
       });
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["ofInitArticle"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 }
