@@ -17,6 +17,8 @@
             [dataSource]="especes | async"
             (valueChange)="onFieldValueChange($event, 'espece')"
             [searchExpr]="['node.key']"
+            [value]="{ node: { key: 'POMME' } }"
+            [acceptCustomValue]="true"
             [displayExpr]="'node.key'"
             valueExpr="node"
           >
@@ -71,7 +73,7 @@
       </div>
       <!-- Groupe emballage -->
       <div class="dx-field field-large">
-        <div class="dx-field-label">
+        <div class="dx-field-label noPadding">
           {{ "articles-emballage-groupe" | localize }}
         </div>
         <div class="dx-field-value">
@@ -135,7 +137,7 @@
 
       <!-- Bureau achat -->
       <div class="dx-field field-large">
-        <div class="dx-field-label noEllipsis">
+        <div class="dx-field-label noPadding">
           {{ "tiers-fournisseurs-bureauAchat" | localize }}
         </div>
         <div class="dx-field-value">
@@ -154,14 +156,21 @@
         </div>
       </div>
 
-      <dx-button
+      <!-- <dx-button
         class="refresh"
         [class]="toRefresh ? '' : 'inactive-button'"
         type="default"
         text="{{ 'btn-refresh' | localize }}"
         (onClick)="refreshArticlesGrid()"
-      ></dx-button>
+      ></dx-button> -->
     </div>
+    <dx-button
+      class="refresh floatRight"
+      [class]="toRefresh ? '' : 'inactive-button'"
+      type="default"
+      text="{{ 'btn-refresh' | localize }}"
+      (onClick)="refreshArticlesGrid()"
+    ></dx-button>
     <div style="clear: both"></div>
     <dx-button
       style="margin-right: 20px"
@@ -265,6 +274,7 @@
 
       <!-- Déstocker -->
       <dxi-column
+        *ngIf="destock"
         cssClass="small-horiz-padding"
         width="72"
         visibleIndex="12"
@@ -285,6 +295,7 @@
 
       <!-- Réserver -->
       <dxi-column
+        *ngIf="reserv"
         cssClass="small-horiz-padding"
         width="67"
         visibleIndex="14"

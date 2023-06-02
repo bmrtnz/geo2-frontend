@@ -42,6 +42,8 @@ import { ReservationPopupComponent } from "./reservation-popup/reservation-popup
 })
 export class GridStockComponent implements OnInit {
   @Input() public ordre: Ordre;
+  @Input() public destock: boolean;
+  @Input() public reserv: boolean;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
   @Output() public article: Partial<Article>;
@@ -117,7 +119,7 @@ export class GridStockComponent implements OnInit {
     this.articles = this.articlesService.getDataSource_v2(
       await fields.toPromise()
     );
-    this.toRefresh = !this.noEspeceSet;
+    this.toRefresh = true;
     this.gridTitle = this.localizeService.localize(
       "articles-catalogue-preFilter-stock-title"
     );
@@ -158,17 +160,17 @@ export class GridStockComponent implements OnInit {
       if (["emballage.emballage.groupe.id"].includes(dataField))
         this.emballagesSB.value = null;
 
-      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value.key}' and quantiteTotale > 0 and valide == true)`;
+      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value?.key}' and quantiteTotale > 0 and valide == true)`;
       if (this.varietesSB.value)
-        sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value.key}'`;
+        sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value?.key}'`;
       if (this.groupesSB.value)
-        sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value.key}'`;
+        sbFilters += ` and article.emballage.emballage.groupe.id == '${this.groupesSB.value?.key}'`;
       if (this.emballagesSB.value)
-        sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value.key}'`;
+        sbFilters += ` and article.emballage.emballage.id == '${this.emballagesSB.value?.key}'`;
       if (this.originesSB.value)
-        sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value.key}'`;
+        sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value?.key}'`;
       if (this.modesCultureSB.value)
-        sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value.key}'`;
+        sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value?.key}'`;
       const dataToLoad = [
         {
           var: "varietes",
@@ -222,12 +224,12 @@ export class GridStockComponent implements OnInit {
 
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -235,7 +237,7 @@ export class GridStockComponent implements OnInit {
     this.datagrid.instance.beginCustomLoading("");
     this.stocksService
       .allStockArticleList(
-        this.especeSB.value?.key,
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key,
         this.varietesSB.value?.key,
         this.originesSB.value?.key,
         this.modesCultureSB.value?.key,
@@ -254,6 +256,14 @@ export class GridStockComponent implements OnInit {
     this.articleLigneId = data.collapsedItems
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
+
+    // this.articlesService.getOne_v2(
+    //   this.articleLigneId,
+    //   new Set(["referencesClient.client.code", "referencesClient.client.raisonSocial"])
+    // ).subscribe((res) => {
+    //   console.log(res.data.article.referencesClient);
+    // });
+    // return;
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
