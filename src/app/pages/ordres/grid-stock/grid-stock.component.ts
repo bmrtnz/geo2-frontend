@@ -88,7 +88,7 @@ export class GridStockComponent implements OnInit {
   allGridFilters: any;
   toRefresh: boolean;
   gridTitle: string;
-  noEspeceSet = true;
+  noEspeceSet: boolean;
 
   constructor(
     public articlesService: ArticlesService,
@@ -123,6 +123,7 @@ export class GridStockComponent implements OnInit {
     this.gridTitle = this.localizeService.localize(
       "articles-catalogue-preFilter-stock-title"
     );
+    this.onFieldValueChange(null, "espece"); // First run: setting filters values
   }
 
   onFilterChange() {
@@ -160,7 +161,9 @@ export class GridStockComponent implements OnInit {
       if (["emballage.emballage.groupe.id"].includes(dataField))
         this.emballagesSB.value = null;
 
-      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value?.key}' and quantiteTotale > 0 and valide == true)`;
+      let sbFilters = `(article.cahierDesCharge.espece.id=='${
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key
+      }' and quantiteTotale > 0 and valide == true)`;
       if (this.varietesSB.value)
         sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value?.key}'`;
       if (this.groupesSB.value)
@@ -224,12 +227,12 @@ export class GridStockComponent implements OnInit {
 
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
@@ -257,13 +260,6 @@ export class GridStockComponent implements OnInit {
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
 
-    // this.articlesService.getOne_v2(
-    //   this.articleLigneId,
-    //   new Set(["referencesClient.client.code", "referencesClient.client.raisonSocial"])
-    // ).subscribe((res) => {
-    //   console.log(res.data.article.referencesClient);
-    // });
-    // return;
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
