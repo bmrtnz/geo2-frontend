@@ -28,9 +28,11 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 export type Reservation = [number, number, string];
 
+let self;
 @Component({
   selector: "app-grid-option-reservation-stock",
   templateUrl: "./grid-option-reservation-stock.component.html",
@@ -72,8 +74,11 @@ export class GridOptionReservationStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public authService: AuthService,
     private stocksService: StocksService,
+    public gridUtilsService: GridUtilsService,
     public gridsService: GridsService
-  ) {}
+  ) {
+    self = this;
+  }
 
   ngOnInit() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -267,8 +272,17 @@ export class GridOptionReservationStockComponent implements OnInit {
   }
 
   public calculateCustomSummary(options) {
-    if (options.name === "typePaletteCode")
-      if (options.summaryProcess === "calculate")
-        options.totalValue = options.value;
+    if (options.name === "typePaletteCode") {
+      if (options.summaryProcess === "start") {
+        options.totalValue = [];
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue.push(options.value);
+      } else if (options.summaryProcess === "finalize") {
+        options.totalValue = [...new Set(options.totalValue)].slice(0); // removes duplicates
+        options.totalValue = self.gridUtilsService.friendlyFormatList(
+          options.totalValue
+        );
+      }
+    }
   }
 }
