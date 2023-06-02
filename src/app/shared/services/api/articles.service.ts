@@ -10,7 +10,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { from } from "rxjs";
-import { mergeMap, take, takeUntil } from "rxjs/operators";
+import { mergeMap, take, takeUntil, takeWhile } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +28,15 @@ export class ArticlesService extends ApiService implements APIRead {
     type Response = { article: Article };
     const variables: OperationVariables = { id };
     return this.watchGetOneQuery<Response>({ variables }, 3);
+  }
+
+  getOne_v2(id: string, columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ article: Article }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      })
+      .pipe(takeWhile((res) => res.loading === false));
   }
 
   getDataSource_v2(columns: Array<string>, fetchPol?) {

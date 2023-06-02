@@ -83,11 +83,18 @@
   }
 
   .search-criteria-subcontainer {
-    // overflow: hidden;
+    width: calc(100% - 116px) !important;
+    overflow: hidden;
+    float: left;
+
     .dx-field {
       float: left;
       margin-right: 15px;
       width: 200px;
+
+      &:last-of-type {
+        margin-bottom: 10px;
+      }
 
       .dx-field-label {
         text-overflow: visible;

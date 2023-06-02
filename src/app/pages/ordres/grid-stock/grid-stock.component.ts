@@ -256,6 +256,14 @@ export class GridStockComponent implements OnInit {
     this.articleLigneId = data.collapsedItems
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
+
+    // this.articlesService.getOne_v2(
+    //   this.articleLigneId,
+    //   new Set(["referencesClient.client.code", "referencesClient.client.raisonSocial"])
+    // ).subscribe((res) => {
+    //   console.log(res.data.article.referencesClient);
+    // });
+    // return;
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
