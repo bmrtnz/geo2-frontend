@@ -17,6 +17,8 @@
             [dataSource]="especes | async"
             (valueChange)="onFieldValueChange($event, 'espece')"
             [searchExpr]="['node.key']"
+            [value]="{ node: { key: 'POMME' } }"
+            [acceptCustomValue]="true"
             [displayExpr]="'node.key'"
             valueExpr="node"
           >
@@ -312,6 +314,25 @@
         </dx-button>
       </div>
 
+      <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+        <div
+          class="group-text-1"
+          title="{{ 'hint-dblClick-file' | localize }}"
+        >
+          {{ cell.data.key }}
+        </div>
+        <!-- Clients référençant l'article -->
+        <dx-button
+          *ngIf="clientsRef"
+          [visible]="true"
+          class="small-action-button"
+          type="default"
+          (onClick)="openClientsPopup(cell.data)"
+          hint="{{ 'hint-clients-ref' | localize }}"
+          icon="material-icons person"
+        ></dx-button>
+      </div>
+
       <dxi-column
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
@@ -322,6 +343,7 @@
         "
         [dataType]="column?.dataType"
         [width]="column?.width"
+        [groupCellTemplate]="column.groupCellTemplate"
         [cellTemplate]="column.cellTemplate"
         [allowSearch]="
           column?.allowSearch || ['string'].includes(column?.dataType)
@@ -367,3 +389,7 @@
   [ligneStockArticle]="ligneStockArticle"
   (whenApplied)="refreshArticlesGrid()"
 ></app-option-stock-popup>
+
+<app-clients-article-ref-popup
+  [article]="article"
+></app-clients-article-ref-popup>

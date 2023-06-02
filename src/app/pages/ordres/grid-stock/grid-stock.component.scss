@@ -12,6 +12,28 @@
     float: left;
   }
 
+  .group-text-1 {
+    position: relative;
+    margin-top: 3px;
+    height: auto;
+    width: 400px;
+    white-space: initial;
+    line-height: 16px;
+    cursor: pointer;
+    float: left;
+  }
+
+  .small-action-button {
+    width: 20px !important;
+    min-width: 0 !important;
+    height: 20px !important;
+
+    .dx-icon {
+      font-size: 15px !important;
+      color: white !important;
+    }
+  }
+
   .highlight-stockJ21-cell {
     background: #ffdd00 !important;
     color: rgba(0, 0, 0, 0.7) !important;

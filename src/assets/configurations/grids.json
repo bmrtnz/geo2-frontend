@@ -1281,6 +1281,7 @@
         "dataField": "articleDescription",
         "dataType": "string",
         "groupIndex": 0,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "visible": true
       },
       {

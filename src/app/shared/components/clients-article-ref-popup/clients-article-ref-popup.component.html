@@ -36,11 +36,19 @@
           </div>
         </div>
         <br />
-        <app-grid-option-reservation-stock
-          [article]="article"
-          [ligneStock]="ligneStock"
-          (reservationChange)="reservationChange()"
-        ></app-grid-option-reservation-stock>
+
+        <div class="clients-list">
+          <ul class="modif-items-container">
+            <div *ngFor="let client of clients">
+              <li class="modif-item>">
+                <strong>{{ client.code }}</strong>
+                - {{ client.secteur.id }} - {{ client.raisonSocial }} -
+                {{ client.ville }}
+              </li>
+            </div>
+          </ul>
+        </div>
+
         <br />
         <div class="popup-buttons-container">
           <dx-button
