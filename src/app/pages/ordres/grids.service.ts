@@ -9,7 +9,14 @@ type OrdreGridId =
   | "GroupageChargement"
   | "OrdreMarge"
   | "LitigeLigne"
-  | "LitigeLignesLot";
+  | "LitigeLignesLot"
+  | "TotauxDetail"
+  | "DetailPalettes"
+  | "Frais"
+  | "Envois"
+  | "CQ"
+  | "Commentaires"
+  | "Log";
 
 /**
  * Helper service to perform actions on datagrids

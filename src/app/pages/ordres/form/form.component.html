@@ -152,6 +152,16 @@
                 class="order-loader"
               ></dx-load-indicator>
               <div class="order-number">{{ fullOrderNumber }}</div>
+              <dx-button
+                class="order-reload-btn"
+                [visible]="!linkedOrdersSearch"
+                type="default"
+                [focusStateEnabled]="false"
+                hint="{{ 'hint-click-reload-ordre' | localize }}"
+                icon="material-icons refresh"
+                (onClick)="refreshOrder()"
+              >
+              </dx-button>
               <div class="linkedOrders-container">
                 <div class="linkedOrders-subcontainer">
                   <span
@@ -300,7 +310,7 @@
                     #loadPanel
                     shadingColor="rgba(0,0,0,0.4)"
                     [position]="{ of: '#head' }"
-                    [visible]="headerSaving"
+                    [visible]="headerSaving || headerRefresh"
                     [showPane]="true"
                     [shading]="false"
                     [hideOnOutsideClick]="false"

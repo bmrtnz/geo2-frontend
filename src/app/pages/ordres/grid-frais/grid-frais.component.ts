@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Input,
   QueryList,
@@ -32,13 +33,14 @@ import { environment } from "environments/environment";
 import { Observable, from } from "rxjs";
 import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-frais",
   templateUrl: "./grid-frais.component.html",
   styleUrls: ["./grid-frais.component.scss"],
 })
-export class GridFraisComponent implements ToggledGrid {
+export class GridFraisComponent implements ToggledGrid, AfterViewInit {
   @Input() public ordre: Ordre;
 
   public dataSource: DataSource;
@@ -71,6 +73,7 @@ export class GridFraisComponent implements ToggledGrid {
     public deviseService: DevisesService,
     public gridConfiguratorService: GridConfiguratorService,
     public codePlusService: TransporteursService,
+    public gridsService: GridsService,
     public transporteursService: TransporteursService,
     public transitairesService: TransitairesService,
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
@@ -167,6 +170,10 @@ export class GridFraisComponent implements ToggledGrid {
       ];
       this.entrepotSource.filter(filtersEnt);
     }
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Frais", this.datagrid);
   }
 
   async enableFilters() {

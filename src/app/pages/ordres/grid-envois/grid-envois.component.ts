@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -26,13 +27,14 @@ import {
   Grid,
   GridConfig,
 } from "app/shared/services/grid-configurator.service";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-envois",
   templateUrl: "./grid-envois.component.html",
   styleUrls: ["./grid-envois.component.scss"],
 })
-export class GridEnvoisComponent implements ToggledGrid {
+export class GridEnvoisComponent implements ToggledGrid, AfterViewInit {
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -52,12 +54,17 @@ export class GridEnvoisComponent implements ToggledGrid {
     private envoisService: EnvoisService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
+    public gridsService: GridsService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.Envois
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Envois", this.dataGrid);
   }
 
   async enableFilters() {
