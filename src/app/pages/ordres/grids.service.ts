@@ -5,6 +5,7 @@ type OrdreGridId =
   | "Commande"
   | "SyntheseExpeditions"
   | "DetailExpeditions"
+  | "Logistique"
   | "CommandesEdi"
   | "GroupageChargement"
   | "OrdreMarge"

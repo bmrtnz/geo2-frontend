@@ -1206,6 +1206,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "LitigeLigne",
       "OrdreMarge",
       "TotauxDetail",
+      "Logistique",
       "Frais",
       "Envois",
       "CQ",
