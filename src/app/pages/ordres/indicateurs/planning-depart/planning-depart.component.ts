@@ -65,7 +65,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   private gridConfig: Promise<GridConfig>;
   public titleElement: HTMLInputElement;
   public periodes: any[];
-  public toRefresh: boolean;
 
   constructor(
     public transporteursService: TransporteursService,
@@ -82,7 +81,6 @@ export class PlanningDepartComponent implements AfterViewInit {
     private tabContext: TabContext,
     private datePipe: DatePipe
   ) {
-    this.toRefresh = true;
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
@@ -132,7 +130,6 @@ export class PlanningDepartComponent implements AfterViewInit {
       if (!e.event) return;
     }
 
-    this.toRefresh = false;
     this.dataSource = null;
 
     const fields = this.columns.pipe(
@@ -222,10 +219,6 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.titleElement.innerHTML = `${finalTitle} - ${this.localizePipe.transform(
       "tiers-clients-secteur"
     )}&nbsp;<strong>${this.secteurSB.value.description}</strong>`;
-  }
-
-  onFieldValueChange() {
-    this.toRefresh = true;
   }
 
   onRowDblClick(e) {
@@ -318,8 +311,6 @@ export class PlanningDepartComponent implements AfterViewInit {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
 
-    this.onFieldValueChange();
-
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.dateMin.value);
     const fin = new Date(this.dateMax.value);
@@ -356,8 +347,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   setDates(e) {
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     const datePeriod = this.dateManagementService.getDates(e);
 
