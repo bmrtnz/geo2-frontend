@@ -8,6 +8,7 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [noDataText]="'aucun-ordre' | localize"
+  (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowDblClick)="ordreSelected.emit($event.data.id)"
   (onToolbarPreparing)="
@@ -20,7 +21,6 @@
   "
 >
   <!-- Grid configuration -->
-  <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"

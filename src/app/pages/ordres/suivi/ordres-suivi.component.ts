@@ -57,6 +57,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   autocomplete: DxAutocompleteComponent;
   validatePopup: PushHistoryPopupComponent;
   ordresLignesViewExp: boolean;
+  canOpenUniqueOrder: boolean;
 
   refreshGrid = new EventEmitter();
 
@@ -124,6 +125,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
       setTimeout(() => {
         this.enableFilters(toSearch);
         this.showGridResults = true;
+        this.canOpenUniqueOrder = true;
       }, 100);
     }
   }
@@ -161,6 +163,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   }
 
   findOrder() {
+    this.canOpenUniqueOrder = true;
     setTimeout(() => {
       const toSearch = this.autocomplete.value;
       if (toSearch?.length) {
@@ -180,6 +183,12 @@ export class OrdresSuiviComponent implements AfterViewInit {
         );
     if (this.rowSelectionEventMode === "emit")
       this.whenRowSelected.emit(ordreID);
+  }
+
+  public openUniqueOrder(ordre) {
+    if (!this.canOpenUniqueOrder) return;
+    this.canOpenUniqueOrder = false;
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
   }
 }
 

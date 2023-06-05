@@ -52,6 +52,7 @@
   [filter]="filter"
   *ngIf="showGridResults"
   (ordreSelected)="handleOrdreSelection($event)"
+  (uniqueOrder)="openUniqueOrder($event)"
 ></app-grid-suivi>
 <br />
 <div class="histo-container">
