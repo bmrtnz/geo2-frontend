@@ -154,7 +154,7 @@
               <div class="order-number">{{ fullOrderNumber }}</div>
               <dx-button
                 class="order-reload-btn"
-                [visible]="!linkedOrdersSearch"
+                [visible]="!linkedOrdersSearch && !!fullOrderNumber"
                 type="default"
                 [focusStateEnabled]="false"
                 hint="{{ 'hint-click-reload-ordre' | localize }}"
