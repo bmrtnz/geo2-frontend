@@ -109,7 +109,6 @@
             [dataSource]="entrepots"
             [searchExpr]="['code']"
             [displayExpr]="displayCodeBefore"
-            (onValueChanged)="onEntrepotChanged($event)"
             (onFocusIn)="onEntrepotFocus($event)"
             [showClearButton]="true"
             itemTemplate="items"
@@ -190,7 +189,6 @@
   </dx-box>
   <dx-button
     class="refresh"
-    [class]="toRefresh ? '' : 'inactive-button'"
     type="default"
     text="{{ 'btn-refresh' | localize }}"
     (onClick)="enableFilters()"
