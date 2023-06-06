@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { CommentairesOrdresService } from "app/shared/services/api/commentaires-ordres.service";
 import {
@@ -17,13 +17,16 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { AuthService } from "app/shared/services";
 import CommentaireOrdre from "app/shared/models/commentaire-ordre.model";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-commentaire-ordre",
   templateUrl: "./grid-commentaire-ordre.component.html",
   styleUrls: ["./grid-commentaire-ordre.component.scss"],
 })
-export class GridCommentaireOrdreComponent implements ToggledGrid {
+export class GridCommentaireOrdreComponent
+  implements ToggledGrid, AfterViewInit
+{
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -38,10 +41,15 @@ export class GridCommentaireOrdreComponent implements ToggledGrid {
   constructor(
     private dateManagementService: DateManagementService,
     private authService: AuthService,
+    public gridsService: GridsService,
     private commentairesOrdresService: CommentairesOrdresService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.detailedFields = gridConfig["commentaire-ordre"].columns;
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Commentaires", this.dataGrid);
   }
 
   async updateGrid() {

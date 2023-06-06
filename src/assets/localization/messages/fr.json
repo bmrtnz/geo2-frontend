@@ -266,6 +266,7 @@
     "hint-click-file": "Cliquez pour voir la fiche",
     "hint-click-change-date": "Cliquez pour modifier la date",
     "hint-click-ordre": "Cliquez pour afficher l'ordre",
+    "hint-click-reload-ordre": "Cliquez pour recharger l'ordre",
     "hint-dblClick-ordre": "Double-cliquez pour afficher l'ordre",
     "hint-dblClick-select-client": "Double-cliquez pour sélectionner le client",
     "hint-click-change-refClt": "Modifier la référence client",

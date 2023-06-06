@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import {
@@ -28,6 +35,7 @@ import { AjoutEtapeLogistiquePopupComponent } from "../ajout-etape-logistique-po
 import { ToggledGrid } from "../form/form.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
+import { GridsService } from "../grids.service";
 import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
 
@@ -36,7 +44,9 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
   templateUrl: "./grid-logistiques.component.html",
   styleUrls: ["./grid-logistiques.component.scss"],
 })
-export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
+export class GridLogistiquesComponent
+  implements ToggledGrid, AfterViewInit, OnChanges
+{
   public dataSource: DataSource;
   public transporteurGroupageSource: DataSource;
   public groupageSource: DataSource;
@@ -73,6 +83,7 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
     public groupageService: LieuxPassageAQuaiService,
+    public gridsService: GridsService,
     public instructionsService: InstructionsService,
     public incotermFournisseurService: IncotermsService,
     public transporteurGroupageService: TransporteursService,
@@ -112,6 +123,10 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
           .filter((inst) => inst.valide)
           .map((inst) => this.instructionsList.push(inst.description));
       });
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Logistique", this.datagrid);
   }
 
   async enableFilters() {

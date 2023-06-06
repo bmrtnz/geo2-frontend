@@ -86,6 +86,7 @@ import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-d
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
+import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
@@ -159,6 +160,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private tabContext: TabContext,
     public authService: AuthService,
     private localization: LocalizationService,
+    private gridsService: GridsService,
     public gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
     public ordresLogistiquesService: OrdresLogistiquesService
@@ -317,7 +319,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public orderNumber: string;
   public fullOrderNumber: string;
   public allowMutations = false;
-  public headerSaving;
+  public headerSaving: boolean;
+  public headerRefresh: boolean;
   public instructionsList: string[];
 
   public clientsDS: DataSource;
@@ -1194,6 +1197,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.update();
   }
 
+  public refreshOrder() {
+    this.refreshHeader();
+    this.gridsService.reload(
+      "Commande",
+      "SyntheseExpeditions",
+      "DetailExpeditions",
+      "LitigeLigne",
+      "OrdreMarge",
+      "TotauxDetail",
+      "Logistique",
+      "Frais",
+      "Envois",
+      "CQ",
+      "Commentaires",
+      "Log"
+    );
+    this.formLitiges.loadForm();
+  }
+
   private initializeForm(fetchPol?) {
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
@@ -1218,6 +1240,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
               `Récupération des données de l'ordre impossible...`,
@@ -1270,6 +1293,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               : true);
         },
         error: (message: string) => notify({ message }, "error", 7000),
+        complete: () => {
+          this.headerRefresh = false;
+        },
       });
   }
 
@@ -1582,6 +1608,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public refreshHeader(e?) {
+    this.headerRefresh = true;
     this.initializeForm("no-cache");
   }
 
