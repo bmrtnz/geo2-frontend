@@ -149,8 +149,14 @@
                 >
                 </dx-button>
               </dxi-item>
-              <dxi-item [ratio]="10"></dxi-item>
+              <dxi-item [ratio]="10"> </dxi-item>
             </dx-box>
+            <dx-button
+              class="refresh"
+              type="default"
+              text="{{ 'btn-refresh' | localize }}"
+              (onClick)="enableFilters()"
+            ></dx-button>
           </div>
         </dxi-item>
       </dxi-item>

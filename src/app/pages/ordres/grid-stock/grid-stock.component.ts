@@ -258,7 +258,6 @@ export class GridStockComponent implements OnInit {
     this.articleLigneId = data.collapsedItems
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
-
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 

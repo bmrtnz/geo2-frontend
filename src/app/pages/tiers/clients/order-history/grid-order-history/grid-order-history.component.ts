@@ -90,7 +90,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public hintClick: string;
   public hintNotValid: string;
   public periodes: any[];
-  toRefresh: boolean;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     dateMin: new UntypedFormControl(),
@@ -145,7 +144,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
-    this.toRefresh = true;
     if (this.clientId && this.popupShown) {
       this.clients.filter(["secteur.id", "=", this.secteurId]);
       this.entrepots.filter(["client.id", "=", this.clientId]);
@@ -165,7 +163,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
 
   async enableFilters() {
     let dateType = "dateDepartPrevue";
-    this.toRefresh = false;
 
     const fields = this.columns.pipe(
       map((cols) =>
@@ -190,12 +187,13 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const filter = [
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
-      ["ordre.client.id", "=", values.client.id],
-      "and",
       [`ordre.${dateType}`, ">=", values.dateMin],
       "and",
       [`ordre.${dateType}`, "<=", values.dateMax],
     ];
+    if (values.client?.id) {
+      filter.push("and", ["ordre.client.id", "=", values.client.id]);
+    }
     if (values.entrepot?.id) {
       filter.push("and", ["ordre.entrepot.id", "=", values.entrepot?.id]);
     }
@@ -365,11 +363,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (this.formGroup.get("valide").value)
       filter.push("and", ["valide", "=", true]);
     this.clients.filter(filter);
-    this.onFieldValueChange();
   }
 
   onSecteurChanged(e) {
-    this.onFieldValueChange();
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
@@ -390,11 +386,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       client: null,
       entrepot: null,
     });
-    this.onFieldValueChange();
   }
 
   onClientChanged(e) {
-    this.onFieldValueChange();
     this.entrepots = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
@@ -416,12 +410,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     this.formGroup.patchValue({
       entrepot: null,
     });
-    this.onFieldValueChange();
-  }
-
-  onEntrepotChanged(e) {
-    if (!e.event) return;
-    this.onFieldValueChange();
   }
 
   onEntrepotFocus(e) {
@@ -433,8 +421,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   manualDate(e) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.formGroup.get("dateMin").value);
@@ -459,8 +445,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
 
-    this.onFieldValueChange();
-
     const datePeriod = this.dateManagementService.getDates(e);
 
     this.formGroup.patchValue({
@@ -483,12 +467,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       dateMin: datePeriod.dateDebut,
       dateMax: datePeriod.dateFin,
     });
-  }
-
-  onFieldValueChange() {
-    this.toRefresh =
-      !!this.formGroup.get("client").value &&
-      !!this.formGroup.get("secteur").value;
   }
 
   displayCodeBefore(data) {
