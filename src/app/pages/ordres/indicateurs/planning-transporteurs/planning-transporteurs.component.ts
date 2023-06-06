@@ -112,7 +112,6 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     this.formGroup.get("transporteurCode").setValue("");
     this.formGroup.get("transporteurCode").reset();
     this.formGroup.get("valide").patchValue(true);
-    this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
   }
 
   ngAfterViewInit() {
@@ -176,7 +175,6 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       !this.validRequiredEntity[e.element.dataset.entity];
     const Element = e.element as HTMLElement;
     Element.classList.toggle("lowOpacity");
-    this.enableFilters();
   }
 
   displayCodeBefore(data) {
