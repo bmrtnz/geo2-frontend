@@ -82,6 +82,7 @@ import { FormLitigesComponent } from "../form-litiges/form-litiges.component";
 import { GestionOperationsPopupComponent } from "../gestion-operations-popup/gestion-operations-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridDetailPalettesComponent } from "../grid-detail-palettes/grid-detail-palettes.component";
+import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-details.component";
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
@@ -98,14 +99,6 @@ import { SelectionComptePaloxPopupComponent } from "../selection-compte-palox-po
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-
-/**
- * Grid with loading toggled by parent
- * Don't forget to cancel datasource loading in your component
- */
-export interface ToggledGrid {
-  onToggling(active: boolean);
-}
 
 enum Fragments {
   Head = "head",
@@ -403,6 +396,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("dateDepartMutationPopup")
   dateDepartMutationPopup: QuestionPopupComponent;
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
+  @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -588,23 +582,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       });
     }
-  }
-
-  onAccordionToggled(
-    {
-      overrideTogglingTo = false,
-      itemElement,
-    }: { overrideTogglingTo: boolean; itemElement: HTMLElement },
-    grids: ToggledGrid[]
-  ) {
-    if (!itemElement.dataset.toggled) itemElement.dataset.toggled = "false";
-    itemElement.dataset.toggled =
-      itemElement.dataset.toggled === "true" ? "false" : "true";
-    if (overrideTogglingTo)
-      itemElement.dataset.toggled = overrideTogglingTo.toString();
-    grids.forEach((grid) =>
-      grid.onToggling(itemElement.dataset.toggled === "true")
-    );
   }
 
   warnNoSelectedRows() {
@@ -1168,21 +1145,21 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   deviseDisplayExpr(item) {
     return item
       ? item.id +
-          " - " +
-          item.description +
-          (item.taux !== null ? " (" + item.taux + ")" : "")
+      " - " +
+      item.description +
+      (item.taux !== null ? " (" + item.taux + ")" : "")
       : null;
   }
 
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -1376,13 +1353,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ? "Nouvel "
       : "";
 
-    this.fullOrderNumber += `Ordre N° ${
-      (this.ordre.campagne
-        ? (this.ordre.campagne.id
-            ? this.ordre.campagne.id
-            : this.ordre.campagne) + "-"
-        : "") + this.ordre.numero
-    }`;
+    this.fullOrderNumber += `Ordre N° ${(this.ordre.campagne
+      ? (this.ordre.campagne.id
+        ? this.ordre.campagne.id
+        : this.ordre.campagne) + "-"
+      : "") + this.ordre.numero
+      }`;
   }
 
   private refreshBadges() {
@@ -1636,9 +1612,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             return res.data.ordre?.client?.entrepotReferenceRegroupement
               ? false
               : confirm(
-                  this.localization.localize("entrepot-import-programme"),
-                  this.localization.localize("ordre-duplicate-BUK-SA")
-                );
+                this.localization.localize("entrepot-import-programme"),
+                this.localization.localize("ordre-duplicate-BUK-SA")
+              );
           })
         ),
         concatMap((generic) =>

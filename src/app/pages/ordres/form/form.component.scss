@@ -312,13 +312,13 @@ dx-button[type="normal"] {
 //   Lignes cloturées
 ::ng-deep .dx-row.dx-data-row {
   & {
-    &.sent-highlight-datagrid-row > td {
+    &.sent-highlight-datagrid-row>td {
       background: #66ff66;
     }
   }
 
   &.dx-row-focused {
-    &.sent-highlight-datagrid-row > td {
+    &.sent-highlight-datagrid-row>td {
       color: #66ff66;
     }
 
@@ -329,10 +329,7 @@ dx-button[type="normal"] {
 }
 
 ::ng-deep .accordion-title {
-  position: absolute;
-  z-index: 1;
-  top: auto;
-  margin: 12px 0 0 70px;
+  margin-left: 50px;
 }
 
 ::ng-deep .dx-accordion-item-title .dx-accordion-item-title-caption {
@@ -499,7 +496,7 @@ dx-button[type="normal"] {
     font-size: 14px;
   }
 
-  .dx-box .dx-field-value:not(.dx-widget) > .dx-checkbox {
+  .dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
     margin-top: 3px !important;
   }
 

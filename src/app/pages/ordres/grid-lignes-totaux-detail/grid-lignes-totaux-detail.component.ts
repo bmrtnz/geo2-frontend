@@ -1,15 +1,15 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import {
   OrdreLignesService,
-  SummaryOperation,
+  SummaryOperation
 } from "app/shared/services/api/ordres-lignes.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -17,14 +17,13 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ToggledGrid } from "../form/form.component";
 
 @Component({
   selector: "app-grid-lignes-totaux-detail",
   templateUrl: "./grid-lignes-totaux-detail.component.html",
   styleUrls: ["./grid-lignes-totaux-detail.component.scss"],
 })
-export class GridLignesTotauxDetailComponent implements ToggledGrid {
+export class GridLignesTotauxDetailComponent implements OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -45,6 +44,9 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
       Grid.OrdreLignesTotauxDetail
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+  ngOnInit(): void {
+    this.enableFilters();
   }
 
   async enableFilters() {
@@ -107,7 +109,4 @@ export class GridLignesTotauxDetailComponent implements ToggledGrid {
     this.dataGrid.instance.refresh();
   }
 
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
-  }
 }

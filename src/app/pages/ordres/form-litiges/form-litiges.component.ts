@@ -114,7 +114,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     public litigesLignesService: LitigesLignesService,
     public envoisService: EnvoisService,
     public fluxEnvoisService: FluxEnvoisService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     if (this.ordre) this.currOrdre = this.ordre;
@@ -143,6 +143,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       "fraisAnnexes",
       "totalMontantRistourne",
     ];
+    this.loadForm();
   }
 
   loadForm() {
@@ -288,10 +289,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       of("")
     ).subscribe({
       next: (numRegroupement) =>
-        (this.gestionOpPopup.lot = [
-          this.infosLitige.litige.id,
-          numRegroupement,
-        ]),
+      (this.gestionOpPopup.lot = [
+        this.infosLitige.litige.id,
+        numRegroupement,
+      ]),
       complete: () => (this.gestionOpPopup.visible = true),
     });
   }
@@ -305,10 +306,6 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.cloturePopup.visible = true;
   }
 
-  onToggling(toggled: boolean) {
-    if (toggled) this.loadForm();
-  }
-
   onClotureChanged() {
     // refresh the form
     this.loadForm();
@@ -320,9 +317,8 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       .pipe(filter((res) => res))
       .subscribe((res) => {
         this.docsPopup.setTitle();
-        this.docsPopup.titleEnd = `${
-          this.ordre.numero
-        } - ${this.localization.localize("tiers-contacts-flux")} ${flux}`;
+        this.docsPopup.titleEnd = `${this.ordre.numero
+          } - ${this.localization.localize("tiers-contacts-flux")} ${flux}`;
         this.docsPopup.ordre = this.ordre;
         this.docsPopup.flux = flux;
         this.docsPopup.visible = true;

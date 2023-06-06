@@ -1,21 +1,20 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { OrdresSaveLogsService } from "app/shared/services/api/ordres-save-logs.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
+import gridConfig from "assets/configurations/grids.json";
+import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import gridConfig from "assets/configurations/grids.json";
-import { ToggledGrid } from "../form/form.component";
-import { GridColumn } from "basic";
-import { DateManagementService } from "app/shared/services/date-management.service";
 
 @Component({
   selector: "app-grid-save-log",
   templateUrl: "./grid-save-log.component.html",
   styleUrls: ["./grid-save-log.component.scss"],
 })
-export class GridSaveLogComponent implements ToggledGrid {
+export class GridSaveLogComponent implements OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -30,6 +29,10 @@ export class GridSaveLogComponent implements ToggledGrid {
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.detailedFields = gridConfig["ordre-save-log"].columns;
+  }
+
+  ngOnInit(): void {
+    this.enableFilters();
   }
 
   enableFilters() {
@@ -52,7 +55,4 @@ export class GridSaveLogComponent implements ToggledGrid {
     }
   }
 
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
-  }
 }

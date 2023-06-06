@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
   LieuxPassageAQuaiService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
@@ -15,7 +15,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -25,7 +25,6 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { AjoutEtapeLogistiquePopupComponent } from "../ajout-etape-logistique-popup/ajout-etape-logistique-popup.component";
-import { ToggledGrid } from "../form/form.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { ZoomLieupassageaquaiPopupComponent } from "../zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
@@ -36,7 +35,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
   templateUrl: "./grid-logistiques.component.html",
   styleUrls: ["./grid-logistiques.component.scss"],
 })
-export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
+export class GridLogistiquesComponent implements OnInit, OnChanges {
   public dataSource: DataSource;
   public transporteurGroupageSource: DataSource;
   public groupageSource: DataSource;
@@ -114,6 +113,10 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
       });
   }
 
+  ngOnInit(): void {
+    this.enableFilters();
+  }
+
   async enableFilters() {
     if (this?.ordre?.id) {
       const fields = this.columns.pipe(
@@ -138,10 +141,6 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
 
   ngOnChanges() {
     this.enableFilters();
-  }
-
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
   }
 
   addKeyToField(field) {
@@ -203,12 +202,12 @@ export class GridLogistiquesComponent implements ToggledGrid, OnChanges {
   displayIdBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.raisonSocial
-            ? data.raisonSocial
-            : data.ville
-            ? data.ville
-            : data.description)
+      " - " +
+      (data.raisonSocial
+        ? data.raisonSocial
+        : data.ville
+          ? data.ville
+          : data.description)
       : null;
   }
 

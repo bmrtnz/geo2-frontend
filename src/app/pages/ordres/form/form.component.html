@@ -1094,9 +1094,6 @@
               <div
                 class="logistique-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-logistique" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1105,11 +1102,14 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLogistiques, gridFrais])
-                  "
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-logistique" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content log-transp">
                       <div class="dx-form-group-content">
                         <!-- transporteur -->
@@ -1132,26 +1132,19 @@
                       </div>
                     </div>
                     <app-grid-logistiques
-                      #gridLogistiques
                       [gridLignesLogistique]="gridLignesLogistique"
                       [gridCommandes]="gridCommandes"
-                      [ordre]="ordre"
+                      [ordre]="data"
                     ></app-grid-logistiques>
                     <div class="grid-separator"></div>
-                    <app-grid-frais
-                      #gridFrais
-                      [ordre]="ordre"
-                    ></app-grid-frais>
-                  </dxi-item>
+                    <app-grid-frais [ordre]="data"></app-grid-frais>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="litiges-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-litiges" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1160,14 +1153,17 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [gridLitigesLignes, formLitiges])
-                  "
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-litiges" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <app-form-litiges
                       #formLitiges
-                      [ordre]="ordre"
+                      [ordre]="data"
                       [gridCdeHasRows]="!!gridCommandes?.gridRowsTotal"
                       [grid]="gridLitigesLignes"
                       [selectedLitigeLigneKey]="
@@ -1178,20 +1174,17 @@
                     <app-grid-litiges-lignes
                       #gridLitigesLignes
                       [hidden]="!formLitiges.infosLitige"
-                      [ordre]="ordre"
+                      [ordre]="data"
                       (litigeLigneSelected)="formLitiges.modifierLot()"
                     >
                     </app-grid-litiges-lignes>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="synthese-field accordion3 dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-synthese" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1200,24 +1193,21 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [
-                      gridLTD,
-                      gridDetailPalettes,
-                      gridMarge
-                    ])
-                  "
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-synthese" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
                       <app-grid-lignes-totaux-detail
-                        #gridLTD
-                        [ordre]="ordre"
+                        [ordre]="data"
                       ></app-grid-lignes-totaux-detail>
                       <div class="grid-separator"></div>
                       <app-grid-detail-palettes
-                        #gridDetailPalettes
-                        [ordre]="ordre"
+                        [ordre]="data"
                       ></app-grid-detail-palettes>
                       <div class="grid-separator"></div>
                       <div class="grid-marge-container">
@@ -1228,23 +1218,17 @@
                           text="Bon à facturer"
                           (onClick)="bonAFacturer()"
                         ></dx-button>
-                        <app-grid-marge
-                          #gridMarge
-                          [ordre]="ordre"
-                        ></app-grid-marge>
+                        <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
                     </div>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="fluxdocs-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-fluxdocs" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1253,32 +1237,31 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="onAccordionToggled($event, [gridEnvois])"
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-fluxdocs" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div [hidden]="!gridCommandes?.gridRowsTotal">
                       <app-actions-documents-ordres
-                        [ordre]="ordre"
+                        [ordre]="data"
                         [gridEnvois]="gridEnvois"
                         [orderConfirmationOnly]="false"
                       ></app-actions-documents-ordres>
                     </div>
                     <div class="dx-form-group-content">
-                      <app-grid-envois
-                        #gridEnvois
-                        [ordre]="ordre"
-                      ></app-grid-envois>
+                      <app-grid-envois [ordre]="data"></app-grid-envois>
                     </div>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="CQ-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-CQ" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1287,25 +1270,26 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="onAccordionToggled($event, [gridCQ])"
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-CQ" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
                       <app-grid-controle-qualite
-                        #gridCQ
-                        [ordre]="ordre"
+                        [ordre]="data"
                       ></app-grid-controle-qualite>
                     </div>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="commentaires-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-commentaires" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1314,27 +1298,26 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="
-                    onAccordionToggled($event, [gridCommentaire])
-                  "
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-commentaires" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
                       <app-grid-commentaire-ordre
-                        #gridCommentaire
-                        [ordre]="ordre"
+                        [ordre]="data"
                       ></app-grid-commentaire-ordre>
                     </div>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
 
               <div
                 class="log-field dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
               >
-                <span class="dx-form-group-caption accordion-title">{{
-                  "ordres-suivi-groupe-log" | localize
-                }}</span>
                 <dx-accordion
                   #anchor
                   [disabled]="!ordre?.id"
@@ -1343,16 +1326,18 @@
                   [collapsible]="true"
                   [multiple]="false"
                   [selectedIndex]="-1"
-                  (onItemTitleClick)="onAccordionToggled($event, [gridSaveLog])"
+                  [dataSource]="[ordre]"
                 >
-                  <dxi-item>
+                  <div *dxTemplate="let prop of 'title'">
+                    <span class="dx-form-group-caption accordion-title">{{
+                      "ordres-suivi-groupe-log" | localize
+                    }}</span>
+                  </div>
+                  <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
-                      <app-grid-save-log
-                        #gridSaveLog
-                        [ordre]="ordre"
-                      ></app-grid-save-log>
+                      <app-grid-save-log [ordre]="data"></app-grid-save-log>
                     </div>
-                  </dxi-item>
+                  </div>
                 </dx-accordion>
               </div>
             </div>

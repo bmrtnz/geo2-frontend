@@ -1,26 +1,24 @@
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import {
   OrdreLignesService,
-  SummaryOperation,
+  SummaryOperation
 } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn, TotalItem } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ToggledGrid } from "../form/form.component";
 import { GridsService } from "../grids.service";
 
 @Component({
@@ -28,7 +26,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-marge.component.html",
   styleUrls: ["./grid-marge.component.scss"],
 })
-export class GridMargeComponent implements AfterViewInit, ToggledGrid {
+export class GridMargeComponent implements AfterViewInit, OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   public dataGrid: DxDataGridComponent;
@@ -52,6 +50,19 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
       Grid.OrdreMarge
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+  ngOnInit(): void {
+    if (this?.ordre?.id) {
+      this.functionsService
+        .fCalculMargePrevi(
+          this.ordre.id,
+          this.currentCompanyService.getCompany().id
+        )
+        .subscribe({
+          error: ({ message }: Error) => console.log(message),
+          complete: () => this.enableFilters(),
+        });
+    }
   }
 
   ngAfterViewInit() {
@@ -127,19 +138,4 @@ export class GridMargeComponent implements AfterViewInit, ToggledGrid {
     this.dataGrid.instance.refresh();
   }
 
-  onToggling(toggled: boolean) {
-    if (toggled && this?.ordre?.id) {
-      this.functionsService
-        .fCalculMargePrevi(
-          this.ordre.id,
-          this.currentCompanyService.getCompany().id
-        )
-        .subscribe({
-          error: ({ message }: Error) => console.log(message),
-          complete: () => this.enableFilters(),
-        });
-    } else {
-      this.dataSource = null;
-    }
-  }
 }

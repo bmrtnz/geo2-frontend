@@ -1,11 +1,11 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { TracabiliteLignesService } from "app/shared/services/api/tracabilite-lignes.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -13,14 +13,13 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ToggledGrid } from "../form/form.component";
 
 @Component({
   selector: "app-grid-detail-palettes",
   templateUrl: "./grid-detail-palettes.component.html",
   styleUrls: ["./grid-detail-palettes.component.scss"],
 })
-export class GridDetailPalettesComponent implements ToggledGrid {
+export class GridDetailPalettesComponent implements OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -39,6 +38,9 @@ export class GridDetailPalettesComponent implements ToggledGrid {
       Grid.OrdreDetailPalettes
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+  ngOnInit(): void {
+    this.enableFilters();
   }
 
   async enableFilters() {
@@ -65,7 +67,4 @@ export class GridDetailPalettesComponent implements ToggledGrid {
     this.dataGrid.instance.refresh();
   }
 
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
-  }
 }
