@@ -261,10 +261,13 @@ export class GridConfiguratorService {
         originalLookupSettings.displayExpr
       );
 
+    // assign `null` first to get a correct refresh
+    dataGrid.columnOption(dataField, "lookup", null);
     dataGrid.columnOption(dataField, "lookup", {
       ...originalLookupSettings,
       dataSource,
-    });
+    })
+
   }
 
   /**
@@ -375,20 +378,20 @@ export class GridConfiguratorService {
         // set defaults
         map(
           ([, config]) =>
-            ({
-              ...config,
-              columns: config?.columns
-                ? config.columns.map((column) => ({
-                    ...column,
-                    ...(column?.showInColumnChooser !== undefined
-                      ? { showInColumnChooser: column?.showInColumnChooser }
-                      : { showInColumnChooser: true }),
-                    ...(column?.visible
-                      ? { visible: column?.visible }
-                      : { visible: false }),
-                  }))
-                : [],
-            } as GridConfig)
+          ({
+            ...config,
+            columns: config?.columns
+              ? config.columns.map((column) => ({
+                ...column,
+                ...(column?.showInColumnChooser !== undefined
+                  ? { showInColumnChooser: column?.showInColumnChooser }
+                  : { showInColumnChooser: true }),
+                ...(column?.visible
+                  ? { visible: column?.visible }
+                  : { visible: false }),
+              }))
+              : [],
+          } as GridConfig)
         ),
         concatMap((config) => this.mergeExtraConfiguration(config, config)),
         reduce((previous, config) => ({ ...previous, ...config }))
@@ -456,18 +459,18 @@ export class GridConfiguratorService {
           ...userColumn,
           ...(defaultColumn
             ? extraConfigurations
-                .filter((param) => defaultColumn[param] !== undefined)
-                .map((param) => ({ [param]: defaultColumn[param] }))
-                .reduce((acm, crt) => ({ ...acm, ...crt }))
+              .filter((param) => defaultColumn[param] !== undefined)
+              .map((param) => ({ [param]: defaultColumn[param] }))
+              .reduce((acm, crt) => ({ ...acm, ...crt }))
             : {}),
         })),
         toArray(),
         map(
           (columns) =>
-            ({
-              ...inputConfig,
-              columns: columns ?? defaultConfig.columns,
-            } as GridConfig)
+          ({
+            ...inputConfig,
+            columns: columns ?? defaultConfig.columns,
+          } as GridConfig)
         )
       )
       .toPromise();
@@ -603,9 +606,8 @@ export class GridConfiguratorService {
       {
         location: "after",
         widget: "dxButton",
-        cssClass: `grid-refresh${
-          title ? "-" + title.toLowerCase().split(" ").join("-") : ""
-        }`,
+        cssClass: `grid-refresh${title ? "-" + title.toLowerCase().split(" ").join("-") : ""
+          }`,
         options: {
           icon: "material-icons settings_backup_restore",
           hint: "Réinitialiser les colonnes affichées",

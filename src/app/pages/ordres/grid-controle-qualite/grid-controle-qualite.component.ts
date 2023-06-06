@@ -1,4 +1,10 @@
-import { Component, Input, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
@@ -15,13 +21,16 @@ import notify from "devextreme/ui/notify";
 import { ToggledGrid } from "../form/form.component";
 import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.component";
 import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-controle-qualite",
   templateUrl: "./grid-controle-qualite.component.html",
   styleUrls: ["./grid-controle-qualite.component.scss"],
 })
-export class GridControleQualiteComponent implements ToggledGrid {
+export class GridControleQualiteComponent
+  implements ToggledGrid, AfterViewInit
+{
   @Input() public ordre: Ordre;
   @Output() public ordreLigne;
   @ViewChild(DxDataGridComponent, { static: true })
@@ -41,11 +50,16 @@ export class GridControleQualiteComponent implements ToggledGrid {
   constructor(
     private cqLignesService: CQLignesService,
     public localization: LocalizationService,
+    public gridsService: GridsService,
     public documentsNumService: DocumentsNumService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
     this.detailedFields = gridConfig["controle-qualite"].columns;
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("CQ", this.dataGrid);
   }
 
   enableFilters() {

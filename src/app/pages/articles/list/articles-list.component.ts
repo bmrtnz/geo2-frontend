@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -36,7 +37,9 @@ import { map } from "rxjs/operators";
   templateUrl: "./articles-list.component.html",
   styleUrls: ["./articles-list.component.scss"],
 })
-export class ArticlesListComponent implements OnInit, NestedMain {
+export class ArticlesListComponent
+  implements OnInit, AfterViewInit, NestedMain
+{
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -135,6 +138,11 @@ export class ArticlesListComponent implements OnInit, NestedMain {
       this.fetchPolicy
     );
     this.toRefresh = true;
+  }
+
+  ngAfterViewInit() {
+    // POMME as default
+    this.especeSB.value = ["POMME"];
   }
 
   onSelectionChanged(e) {

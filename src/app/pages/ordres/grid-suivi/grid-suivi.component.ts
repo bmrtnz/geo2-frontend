@@ -29,6 +29,7 @@ import Campagne from "app/shared/models/campagne.model";
 })
 export class GridSuiviComponent implements AfterViewInit {
   @Output() public ordreSelected = new EventEmitter<Ordre["id"]>();
+  @Output() public uniqueOrder = new EventEmitter();
   @Input() public filter: [];
   @ViewChild(DxDataGridComponent, { static: false })
   suivigrid: DxDataGridComponent;
@@ -54,6 +55,12 @@ export class GridSuiviComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.enableFilters();
     this.suivigrid.dataSource = this.dataSource;
+  }
+
+  onContentReady(e) {
+    // Emits order data to be opened when unique
+    const visibleRows = e.component.getVisibleRows();
+    if (visibleRows?.length === 1) this.uniqueOrder.emit(visibleRows[0].data);
   }
 
   enableFilters() {

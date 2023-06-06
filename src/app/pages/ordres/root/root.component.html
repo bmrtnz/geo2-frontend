@@ -19,6 +19,7 @@
         <i
           class="dx-icon"
           [ngClass]="tab.icon"
+          (click)="tabIconClick($event)"
         ></i>
         <span
           *ngIf="tab.title"
@@ -36,6 +37,12 @@
             >
           </ng-container>
         </span>
+        <div
+          *ngIf="tab.multiLineTitle"
+          class="dx-tab-text-multiLine"
+        >
+          {{ tab.multiLineTitle }}
+        </div>
         <i
           class="dx-icon dx-icon-close"
           *ngIf="!isStaticItem(tab)"

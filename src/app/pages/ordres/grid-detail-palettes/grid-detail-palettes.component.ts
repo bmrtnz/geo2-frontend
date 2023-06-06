@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { TracabiliteLignesService } from "app/shared/services/api/tracabilite-lignes.service";
@@ -14,13 +14,14 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ToggledGrid } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-grid-detail-palettes",
   templateUrl: "./grid-detail-palettes.component.html",
   styleUrls: ["./grid-detail-palettes.component.scss"],
 })
-export class GridDetailPalettesComponent implements ToggledGrid {
+export class GridDetailPalettesComponent implements ToggledGrid, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -33,12 +34,17 @@ export class GridDetailPalettesComponent implements ToggledGrid {
   constructor(
     private tracabiliteLignesService: TracabiliteLignesService,
     public gridConfiguratorService: GridConfiguratorService,
+    public gridsService: GridsService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreDetailPalettes
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+
+  ngAfterViewInit() {
+    this.gridsService.register("TotauxDetail", this.dataGrid);
   }
 
   async enableFilters() {

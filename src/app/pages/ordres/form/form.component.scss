@@ -136,6 +136,18 @@
     position: relative;
     width: calc(100% - 180px);
     left: 182px;
+
+    .order-reload-btn {
+      float: left;
+      margin: 7px 9px 0 0;
+      height: 26px;
+      width: 26px;
+      min-width: 0px;
+
+      .dx-icon {
+        font-size: 21px !important;
+      }
+    }
   }
 
   .ordres-page-fullscreen {
@@ -220,7 +232,7 @@
   .linkedOrders-container {
     display: flex;
     align-items: center;
-    max-width: 450px;
+    max-width: 470px;
     min-height: 38px;
     float: left;
     overflow: hidden;

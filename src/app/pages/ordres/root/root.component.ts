@@ -57,6 +57,7 @@ import { FormComponent } from "../form/form.component";
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
 const PREVIOUS_STATE = "previous_tab_id";
+const TAB_CLOSE_ALL_ORDRES = "close_all_orders";
 export const TAB_ORDRE_CREATE_ID = "create";
 export enum TabType {
   Indicator = "indicateur",
@@ -213,6 +214,7 @@ export class RootComponent implements OnInit, OnDestroy {
     public router: Router,
     public ordresIndicatorsService: OrdresIndicatorsService,
     private currentCompanyService: CurrentCompanyService,
+    private localizationService: LocalizationService,
     private ordresService: OrdresService,
     private functionsService: FunctionsService,
     private dateManagementService: DateManagementService,
@@ -222,14 +224,6 @@ export class RootComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
-    const openOrder = window.sessionStorage.getItem("openOrder");
-    if (openOrder) {
-      this.tabContext.openOrdre(
-        openOrder.split("|")[0],
-        openOrder.split("|")[1]
-      );
-      window.sessionStorage.removeItem("openOrder");
-    }
 
     this.tabPanelInitialized
       .pipe(
@@ -285,10 +279,13 @@ export class RootComponent implements OnInit, OnDestroy {
     } else {
       window.sessionStorage.removeItem("idOrdre");
     }
-    this.router.navigate(["pages/ordres", event.itemData.id], {
-      queryParamsHandling: "merge",
-      state: { [PREVIOUS_STATE]: previous },
-    });
+
+    if (event.itemData.id !== TAB_CLOSE_ALL_ORDRES) {
+      this.router.navigate(["pages/ordres", event.itemData.id], {
+        queryParamsHandling: "merge",
+        state: { [PREVIOUS_STATE]: previous },
+      });
+    }
   }
 
   onTabTitleRendered(event) {
@@ -352,6 +349,35 @@ export class RootComponent implements OnInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
+    // Update delete all orders tab
+    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
+      !!ordre?.length;
+  }
+
+  closeEveryOrdre() {
+    const indicateur = this.route.snapshot.queryParamMap.getAll(
+      TabType.Indicator
+    );
+
+    const ordre = [];
+    const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+
+    this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
+      this.router.navigate(["pages/ordres", navID], {
+        queryParams: { indicateur, ordre },
+      })
+    );
+    // Update delete all orders tab
+    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
+    notify(this.localizationService.localize("all-orders-were-closed"));
+  }
+
+  public tabIconClick(e) {
+    if (
+      (e.target as HTMLElement).parentElement.dataset?.itemId ===
+      TAB_CLOSE_ALL_ORDRES
+    )
+      this.closeEveryOrdre();
   }
 
   private handleRouting() {
@@ -408,6 +434,12 @@ export class RootComponent implements OnInit, OnDestroy {
         icon: "material-icons note_add",
         component: (await import("../nouvel-ordre/nouvel-ordre.component"))
           .NouvelOrdreComponent,
+        position: Position.Back,
+      },
+      {
+        id: TAB_CLOSE_ALL_ORDRES,
+        multiLineTitle: "Fermer tous les ordres",
+        icon: "material-icons disabled_by_default",
         position: Position.Back,
       },
     ];
@@ -494,6 +526,11 @@ export class RootComponent implements OnInit, OnDestroy {
     }
     this.items.push(data);
     this.items.sort((a, b) => a.position - b.position);
+
+    // Update delete all orders tab
+    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
+      !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
+
     return this.items.indexOf(data);
   }
 

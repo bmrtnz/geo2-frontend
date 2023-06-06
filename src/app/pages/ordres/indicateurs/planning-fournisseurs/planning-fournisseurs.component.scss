@@ -11,6 +11,11 @@
 ::ng-deep .orderTileFilterArea {
   width: 1024px;
 
+  .refresh {
+    float: right;
+    right: 19px;
+  }
+
   .dx-datebox .dx-texteditor-input {
     padding-right: 0 !important;
   }

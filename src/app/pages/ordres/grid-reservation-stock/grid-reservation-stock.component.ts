@@ -23,6 +23,7 @@ import {
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -40,6 +41,8 @@ import {
 } from "rxjs/operators";
 import { PromptPopupComponent } from "../../../shared/components/prompt-popup/prompt-popup.component";
 import { GridsService } from "../grids.service";
+
+let self;
 
 export type Reservation = [number, number, string];
 
@@ -84,9 +87,11 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
     private stockMouvementsService: StockMouvementsService,
     private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService,
+    public gridUtilsService: GridUtilsService,
     private fournisseursService: FournisseursService,
     public gridsService: GridsService
   ) {
+    self = this;
     this.gridReady = false;
   }
 
@@ -365,8 +370,17 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   }
 
   public calculateCustomSummary(options) {
-    if (options.name === "typePaletteCode")
-      if (options.summaryProcess === "calculate")
-        options.totalValue = options.value;
+    if (options.name === "typePaletteCode") {
+      if (options.summaryProcess === "start") {
+        options.totalValue = [];
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue.push(options.value);
+      } else if (options.summaryProcess === "finalize") {
+        options.totalValue = [...new Set(options.totalValue)].slice(0); // removes duplicates
+        options.totalValue = self.gridUtilsService.friendlyFormatList(
+          options.totalValue
+        );
+      }
+    }
   }
 }
