@@ -9,7 +9,7 @@
     -ms-user-select: none;
     user-select: none;
     padding: 15px;
-    border: 1px solid #00759c;
+    border: 1px solid #aaa;
     overflow: hidden;
     background: #fff;
   }
@@ -36,7 +36,7 @@
       font-size: 30px;
       top: 35px;
       right: 50%;
-      color: #00759c;
+      color: #aaa;
       content: "|";
       display: none;
     }
@@ -63,19 +63,11 @@
   }
 
   .search-criteria-container {
-    position: relative;
-    right: 0;
-    float: right;
-  }
-
-  .stock-grid-title {
-    margin: 15px 0 8px 0;
-    color: #00759c;
-    font-size: 20px;
-    font-weight: bold;
+    float: left;
+    width: 100%;
   }
 
   .grid-grouping-button {
-    margin: 13px 46px 0 0 !important;
+    margin: 13px 21px 0 0 !important;
   }
 }
