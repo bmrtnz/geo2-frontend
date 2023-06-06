@@ -21,6 +21,25 @@
       display: inline;
     }
 
+    .dx-tab-text-multiLine {
+      width: 43px;
+      overflow: hidden;
+      white-space: normal;
+      text-transform: none;
+      font-size: 11px;
+      line-height: 10px;
+      text-align: left;
+      margin-left: 5px;
+    }
+
+    .disabled_by_default {
+      color: $base-accent;
+
+      &:hover {
+        color: red;
+      }
+    }
+
     &:hover i.dx-icon-close {
       visibility: visible;
     }
