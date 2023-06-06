@@ -200,7 +200,8 @@ export class NouvelOrdreComponent implements OnInit {
     const instLogEnt = entrepot.instructionLogistique
       ? entrepot.instructionLogistique
       : "";
-    const instLog = instLogClt + (instLogEnt ? " " : "") + instLogEnt;
+    let instLog = instLogClt + (instLogEnt ? " " : "") + instLogEnt;
+    instLog = instLog.substring(0, 280);
 
     return this.fetchDeviseRef(entrepot.client?.devise).pipe(
       switchMap((deviseRef) =>
