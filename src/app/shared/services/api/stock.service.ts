@@ -12,11 +12,7 @@ const stockCategories: StockCategory[] = [
   },
   {
     id: 2,
-    stockName: "Prévisionnels",
-  },
-  {
-    id: 3,
-    stockName: "Entrepôts BWS",
+    stockName: "Préca",
   },
 ];
 
