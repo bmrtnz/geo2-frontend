@@ -127,7 +127,6 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.ordresLignesDataSource = this.ordresLignesService
       // .getDataSource_v2(await fields.toPromise(), Operation.PlanningFournisseurs);
       .getDataSource_v2(await fields.toPromise());
-    this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
     this.formGroup.updateValueAndValidity();
   }
 
