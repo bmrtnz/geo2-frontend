@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -34,7 +35,9 @@ import { map, tap } from "rxjs/operators";
   templateUrl: "./grid-articles-ref-client.component.html",
   styleUrls: ["./grid-articles-ref-client.component.scss"],
 })
-export class GridArticlesRefClientComponent implements OnInit, NestedMain {
+export class GridArticlesRefClientComponent
+  implements OnInit, AfterViewInit, NestedMain
+{
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -93,6 +96,18 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
+  ngAfterViewInit() {
+    // "POMME" as default
+    this.loadPreFilters();
+    this["especes"].subscribe((res) =>
+      res.load().then((result) => {
+        this["especesSB"].instance.option("value", [
+          result.filter((r) => r.node.key === "POMME")[0].node,
+        ]);
+      })
+    );
+  }
+
   loadPreFilters() {
     const refCltFilter = `(referencesClient.client.id=='${this.ordre.client.id}') and (valide == true)`;
     const dataToLoad = [
@@ -142,10 +157,6 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
         pimpedFilter ?? refCltFilter,
         "no-cache"
       );
-      // this[data.var].subscribe(res => res.load().then(result => {
-      //   const selectBox = data.var + "SB";
-      //   if (result?.length === 1) this[selectBox].instance.option("value", [result[0].node]);
-      // }));
     });
   }
 
@@ -159,7 +170,6 @@ export class GridArticlesRefClientComponent implements OnInit, NestedMain {
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
-    console.log(this.fetchPolicy);
     this.articles = this.articlesService.getDataSource_v2(
       await fields.toPromise(),
       this.fetchPolicy
