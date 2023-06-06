@@ -397,6 +397,7 @@
     "auth-societe": "Société",
     "valeurIncorrecte": "Valeur incorrecte",
     "MontantNonNul": "Saisir un montant non nul",
+    "all-orders-were-closed": "Tous les ordres ont été fermés",
     "date-depassee": "Date dépassée",
     "profil": "Profil",
     "text-palox-popup-title-ajuster": "Ajuster le nombre de palox",
