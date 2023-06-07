@@ -2,34 +2,20 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
-  Input,
   Output,
   ViewChild,
 } from "@angular/core";
-import { Article } from "app/shared/models";
-import Ordre from "app/shared/models/ordre.model";
-import notify from "devextreme/ui/notify";
-import {
-  AuthService,
-  ClientsService,
-  FournisseursService,
-  LocalizationService,
-} from "app/shared/services";
+import { FournisseursService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import {
-  Grid,
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
-import {
-  DxDataGridComponent,
-  DxNumberBoxComponent,
-  DxSelectBoxComponent,
-} from "devextreme-angular";
+import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -37,6 +23,7 @@ import { map } from "rxjs/operators";
 import { GridsService } from "../../ordres/grids.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
+import { GridPrecalibrePommeComponent } from "./grid-precalibre-pomme/grid-precalibre-pomme.component";
 
 @Component({
   selector: "app-stock-precalibre",
@@ -48,40 +35,30 @@ export class StockPrecalibreComponent implements AfterViewInit {
   @Output() public especeId: string;
   @Output() public varieteId: string;
   @Output() public modeCultureId: string;
+  @Output() public refreshGrid = new EventEmitter();
 
   @ViewChild("varieteSB", { static: false }) varieteSB: DxSelectBoxComponent;
   @ViewChild("especeSB", { static: false }) especeSB: DxSelectBoxComponent;
   @ViewChild("modesCultureSB", { static: false })
   modesCultureSB: DxSelectBoxComponent;
   @ViewChild("weekBox", { static: false }) weekBox: DxNumberBoxComponent;
+  @ViewChild(GridPrecalibrePommeComponent, { static: false })
+  gridPomme: GridPrecalibrePommeComponent;
 
-  public columns: Observable<GridColumn[]>;
-  private gridConfig: Promise<GridConfig>;
   public fournisseurs: DataSource;
   public modesCulture: DataSource;
-  columnChooser = environment.columnChooser;
-  tagFilters: { [path: string]: string[] } = {};
   especes: Observable<DataSource>;
   varietes: Observable<DataSource>;
-  trueFalse: any;
-  initialSpecy: any;
-  allGridFilters: any;
   toRefresh: boolean;
   gridTitle: string;
-  noEspeceSet: boolean;
-  date: Date = new Date();
   currentSpecy: string;
+  noEspeceSet: boolean;
 
   constructor(
-    public articlesService: ArticlesService,
     public localizeService: LocalizationService,
-    public gridConfiguratorService: GridConfiguratorService,
-    public gridRowStyleService: GridRowStyleService,
-    public clientsService: ClientsService,
     private fournisseursService: FournisseursService,
     private modesCultureService: ModesCultureService,
     private stocksService: StocksService,
-    public authService: AuthService,
     private dateManagementService: DateManagementService,
     public gridsService: GridsService
   ) {
@@ -133,7 +110,6 @@ export class StockPrecalibreComponent implements AfterViewInit {
     this.currentSpecy =
       this.especeSB.value?.node?.key ?? this.especeSB.value?.key;
     this.noEspeceSet = !this.currentSpecy;
-    console.log(this.currentSpecy);
   }
 
   /**
@@ -142,8 +118,6 @@ export class StockPrecalibreComponent implements AfterViewInit {
    * @param dataField Field path
    */
   onFieldValueChange(event, dataField: string) {
-    console.log(dataField);
-
     this.onFilterChange();
 
     // Filtering variete, emballage & origine selectBox list depending on specy
@@ -174,7 +148,11 @@ export class StockPrecalibreComponent implements AfterViewInit {
     }
   }
 
-  refreshArticlesGrid() {}
+  refreshArticlesGrid() {
+    if (!this.currentSpecy) return;
+    const grid = "grid" + this.capitalize(this.currentSpecy);
+    this[grid].enableFilters();
+  }
 
   displayCodeBefore(data) {
     if (data?.__typename === "DistinctEdge") {
@@ -190,5 +168,9 @@ export class StockPrecalibreComponent implements AfterViewInit {
             ? data.raisonSocial
             : data.description)
       : null;
+  }
+
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 }

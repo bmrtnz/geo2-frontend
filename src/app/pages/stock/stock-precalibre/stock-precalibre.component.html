@@ -100,7 +100,6 @@
     </div>
     <dx-button
       class="refresh floatRight"
-      [class]="toRefresh ? '' : 'inactive-button'"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="refreshArticlesGrid()"
@@ -115,5 +114,19 @@
       [varieteId]="varieteId"
       [modeCultureId]="modeCultureId"
     ></app-grid-precalibre-pomme>
+    <app-grid-precalibre-poire
+      *ngIf="currentSpecy === 'POIRE'"
+      [fournisseurId]="fournisseurId"
+      [especeId]="especeId"
+      [varieteId]="varieteId"
+      [modeCultureId]="modeCultureId"
+    ></app-grid-precalibre-poire>
+    <app-grid-precalibre-kiwi
+      *ngIf="currentSpecy === 'KIWI'"
+      [fournisseurId]="fournisseurId"
+      [especeId]="especeId"
+      [varieteId]="varieteId"
+      [modeCultureId]="modeCultureId"
+    ></app-grid-precalibre-kiwi>
   </div>
 </div>

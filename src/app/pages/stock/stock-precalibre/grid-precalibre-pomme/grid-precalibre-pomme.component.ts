@@ -35,7 +35,7 @@ import { GridsService } from "app/pages/ordres/grids.service";
   templateUrl: "./grid-precalibre-pomme.component.html",
   styleUrls: ["./grid-precalibre-pomme.component.scss"],
 })
-export class GridPrecalibrePommeComponent implements OnInit {
+export class GridPrecalibrePommeComponent {
   @Input() public fournisseurId: string;
   @Input() public especeId: string;
   @Input() public varieteId: string;
@@ -64,7 +64,7 @@ export class GridPrecalibrePommeComponent implements OnInit {
     this.apiService = this.articlesService;
   }
 
-  async ngOnInit() {
+  async enableFilters() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreStock
     );
@@ -75,6 +75,7 @@ export class GridPrecalibrePommeComponent implements OnInit {
     this.articles = this.articlesService.getDataSource_v2(
       await fields.toPromise()
     );
+    this.datagrid.dataSource = this.articles;
   }
 
   displayCodeBefore(data) {
