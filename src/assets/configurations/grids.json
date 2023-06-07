@@ -1340,7 +1340,7 @@
       {
         "visibleIndex": 20,
         "dataField": "quantiteCalculee3",
-        "width": 60,
+        "width": 70,
         "visible": true
       },
       {
@@ -1350,12 +1350,27 @@
         "visible": true
       },
       {
-        "visibleIndex": 24,
-        "dataField": "descriptionAbregee",
+        "visibleIndex": 26,
+        "dataField": "quantiteHebdomadaire",
         "visible": true
       },
       {
         "visibleIndex": 28,
+        "dataField": "prevision3j",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "prevision7j",
+        "visible": true
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "descriptionAbregee",
+        "visible": true
+      },
+      {
+        "visibleIndex": 40,
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"

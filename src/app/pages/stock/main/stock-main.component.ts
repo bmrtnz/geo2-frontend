@@ -18,11 +18,11 @@ import {
 } from "../../../shared/services/api/stock.service";
 
 @Component({
-  selector: "app-stock-list",
-  templateUrl: "./stock-list.component.html",
-  styleUrls: ["./stock-list.component.scss"],
+  selector: "app-stock-main",
+  templateUrl: "./stock-main.component.html",
+  styleUrls: ["./stock-main.component.scss"],
 })
-export class StockListComponent implements OnInit {
+export class StockMainComponent implements OnInit {
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent;
   now: number;
@@ -33,6 +33,6 @@ export class StockListComponent implements OnInit {
   constructor(public stocksService: StockService) {}
 
   ngOnInit() {
-    this.stockCategories = this.stocksService.getStockCategories();
+    this.stockCategories = this.stocksService.stockCategories;
   }
 }

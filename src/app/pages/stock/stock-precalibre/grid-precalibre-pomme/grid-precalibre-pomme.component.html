@@ -1,0 +1,85 @@
+<div class="grid-precalibre-pomme">
+  <dx-button
+    style="margin-right: 20px"
+    class="grid-grouping-button"
+    type="default"
+    icon="material-icons menu_open"
+    hint="{{ 'btn-grouping' | localize }}"
+    (onClick)="gridsService.expandCollapseGroups(this, false)"
+  ></dx-button>
+  <dx-data-grid
+    class="dx-card wide-card grid-ordre-ligne-stock"
+    [remoteOperations]="false"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdreStock
+      )
+    "
+  >
+    <dxo-paging></dxo-paging>
+    <dxo-search-panel
+      [visible]="true"
+      [width]="240"
+      placeholder="{{ 'search' | localize }}"
+    ></dxo-search-panel>
+    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export fileName="Articles"></dxo-export>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    ></dxo-pager>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.OrdreStock"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+    >
+    </dxo-column-chooser>
+
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [caption]="
+        ('ordreStock-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [dataType]="column?.dataType"
+      [width]="column?.width"
+      [groupCellTemplate]="column.groupCellTemplate"
+      [cellTemplate]="column.cellTemplate"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+  </dx-data-grid>
+</div>

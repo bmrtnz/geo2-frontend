@@ -1,4 +1,10 @@
+::ng-deep .stock-title {
+  margin-bottom: 5px !important;
+}
+
 ::ng-deep .stock-page {
+  margin-top: 0;
+
   .tabpanel-item {
     position: relative;
     margin-top: 12px;

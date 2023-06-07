@@ -1,4 +1,4 @@
-<h2 class="content-block">{{ "stocks-title" | localize }}</h2>
+<h2 class="content-block stock-title">{{ "stocks-title" | localize }}</h2>
 
 <div class="content-block stock-page">
   <dx-tab-panel
@@ -15,7 +15,7 @@
     <div *dxTemplate="let stockCategory of 'item'">
       <div
         class="tabpanel-item"
-        *ngIf="stockCategory.id === 1"
+        *ngIf="!stockCategory.id"
       >
         <app-grid-stock
           [reserv]="true"
@@ -25,9 +25,9 @@
       </div>
       <div
         class="tabpanel-item"
-        *ngIf="stockCategory.id === 2"
+        *ngIf="stockCategory.id === 1"
       >
-        <div>Coucou</div>
+        <app-stock-precalibre></app-stock-precalibre>
       </div>
     </div>
   </dx-tab-panel>

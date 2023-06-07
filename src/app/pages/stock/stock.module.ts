@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { StockListComponent } from "./list/stock-list.component";
+import { StockMainComponent } from "./main/stock-main.component";
 import { SharedModule } from "app/shared/shared.module";
 import { StockRoutingModule } from "./stock-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -12,8 +12,14 @@ import {
   DxTemplateModule,
   DxTagBoxModule,
   DxFormModule,
+  DxSelectBoxModule,
+  DxDateBoxModule,
+  DxValidatorModule,
+  DxNumberBoxModule,
 } from "devextreme-angular";
 import { OrdresModule } from "../ordres/ordres.module";
+import { StockPrecalibreComponent } from "./stock-precalibre/stock-precalibre.component";
+import { GridPrecalibrePommeComponent } from "./stock-precalibre/grid-precalibre-pomme/grid-precalibre-pomme.component";
 
 @NgModule({
   imports: [
@@ -24,6 +30,10 @@ import { OrdresModule } from "../ordres/ordres.module";
     StockRoutingModule,
     DxBoxModule,
     DxButtonModule,
+    DxSelectBoxModule,
+    DxDateBoxModule,
+    DxNumberBoxModule,
+    DxValidatorModule,
     DxDataGridModule,
     DxFormModule,
     DxTabPanelModule,
@@ -31,6 +41,10 @@ import { OrdresModule } from "../ordres/ordres.module";
     DxTemplateModule,
     OrdresModule,
   ],
-  declarations: [StockListComponent],
+  declarations: [
+    StockMainComponent,
+    StockPrecalibreComponent,
+    GridPrecalibrePommeComponent,
+  ],
 })
 export class StockModule {}

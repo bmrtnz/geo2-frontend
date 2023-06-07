@@ -1,0 +1,50 @@
+::ng-deep .grid-precalibre-pomme .dx-datagrid-search-panel {
+  display: none;
+}
+
+::ng-deep .grid-precalibre-pomme {
+  h6 {
+    margin: 0 0 7px 0;
+    float: left;
+  }
+
+  .small-action-button {
+    width: 20px !important;
+    min-width: 0 !important;
+    height: 20px !important;
+
+    .dx-icon {
+      font-size: 15px !important;
+      color: white !important;
+    }
+  }
+
+  .highlight-stockJ21-cell {
+    background: #ffdd00 !important;
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .highlight-negativeStock-cell {
+    background: #ff325a !important;
+    color: white !important;
+
+    .dx-datagrid-summary-item {
+      color: white !important;
+    }
+  }
+
+  .bio-article {
+    color: #39970e !important;
+  }
+
+  .dx-row-focused {
+    td:not(.highlight-stockJ21-cell):not(.bio-article)
+      .dx-datagrid-summary-item {
+      color: #fff !important;
+    }
+
+    .bio-article {
+      color: #a9f77e !important;
+    }
+  }
+}
