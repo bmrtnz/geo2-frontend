@@ -155,14 +155,6 @@
           </dx-select-box>
         </div>
       </div>
-
-      <!-- <dx-button
-        class="refresh"
-        [class]="toRefresh ? '' : 'inactive-button'"
-        type="default"
-        text="{{ 'btn-refresh' | localize }}"
-        (onClick)="refreshArticlesGrid()"
-      ></dx-button> -->
     </div>
     <dx-button
       class="refresh floatRight"
@@ -270,6 +262,20 @@
           displayFormat="{0}"
         >
         </dxi-group-item>
+        <dxi-group-item
+          column="prevision3j"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
+        <dxi-group-item
+          column="prevision7j"
+          summaryType="sum"
+          [alignByColumn]="true"
+          displayFormat="{0}"
+        >
+        </dxi-group-item>
       </dxo-summary>
 
       <!-- Déstocker -->
@@ -343,6 +349,7 @@
         "
         [dataType]="column?.dataType"
         [width]="column?.width"
+        [cssClass]="column?.cssClass"
         [groupCellTemplate]="column.groupCellTemplate"
         [cellTemplate]="column.cellTemplate"
         [allowSearch]="

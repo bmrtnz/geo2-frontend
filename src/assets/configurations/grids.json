@@ -1352,16 +1352,22 @@
       {
         "visibleIndex": 26,
         "dataField": "quantiteHebdomadaire",
+        "width": 40,
+        "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 28,
         "dataField": "prevision3j",
+        "width": 45,
+        "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 30,
         "dataField": "prevision7j",
+        "width": 45,
+        "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {

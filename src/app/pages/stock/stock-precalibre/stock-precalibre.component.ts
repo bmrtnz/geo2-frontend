@@ -6,20 +6,10 @@ import {
   ViewChild,
 } from "@angular/core";
 import { FournisseursService, LocalizationService } from "app/shared/services";
-import { ApiService } from "app/shared/services/api.service";
-import { ArticlesService } from "app/shared/services/api/articles.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import {
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
-import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
-import { GridColumn } from "basic";
 import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
 import { GridsService } from "../../ordres/grids.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
@@ -98,8 +88,15 @@ export class StockPrecalibreComponent implements AfterViewInit {
     const weekStr = e.value.toString();
     if (weekStr.slice(-2) === "00") {
       year = parseInt(weekStr.substring(0, 2)) - 1;
-      week = 53;
-    } else if (weekStr.slice(-2) === "53") {
+      week = this.dateManagementService.getWeeksInYear(2000 + year);
+    } else if (
+      weekStr.slice(-2) ===
+      (
+        this.dateManagementService.getWeeksInYear(
+          2000 + parseInt(weekStr.substring(0, 2))
+        ) + 1
+      ).toString()
+    ) {
       year = parseInt(weekStr.substring(0, 2)) + 1;
       week = 1;
     }

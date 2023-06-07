@@ -25,6 +25,12 @@
 
         &.week-field {
           width: 120px;
+
+          .week-value {
+            .dx-texteditor-input {
+              text-align: center;
+            }
+          }
         }
 
         &.fournisseur-field {

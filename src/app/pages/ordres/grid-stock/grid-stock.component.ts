@@ -381,7 +381,10 @@ export class GridStockComponent implements OnInit {
           data = data[0].commentaire;
           e.cellElement.innerText = data;
         }
-        if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
+        if (
+          e.column.dataField.indexOf("quantiteCalculee") === 0 ||
+          ["prevision3j", "prevision7j"].includes(e.column.dataField)
+        ) {
           let neg = false;
           if (e.rowType === "data") {
             if (e.value) if (e.value < 0) neg = true;
