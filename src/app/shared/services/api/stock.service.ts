@@ -22,7 +22,7 @@ export class StockService {
     {
       id: 1,
       stockName: this.localizationService.localize(
-        "ordreStock-stock-précalibre"
+        "ordreStock-stock-precalibre"
       ),
     },
   ];

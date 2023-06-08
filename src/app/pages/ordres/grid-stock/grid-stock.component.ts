@@ -101,12 +101,10 @@ export class GridStockComponent implements OnInit {
     "quantiteCalculee2",
     "quantiteCalculee3",
     "quantiteCalculee4",
-  ];
-  public customSummaryFields = [
-    "quantiteHebdomadaire",
     "prevision3j",
     "prevision7j",
   ];
+  public customSummaryFields = ["quantiteHebdomadaire"];
 
   constructor(
     public articlesService: ArticlesService,
