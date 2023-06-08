@@ -4821,7 +4821,8 @@
         "dataField": "logistique.dateDepartPrevueFournisseur",
         "sortIndex": 1,
         "sortOrder": "asc",
-        "dataType": "string",
+        "format": "dd-MM-yyyy à HH:mm:ss",
+        "dataType": "date",
         "visible": true
       },
       {
@@ -4872,7 +4873,8 @@
       {
         "visibleIndex": 16,
         "dataField": "ordre.dateLivraisonPrevue",
-        "dataType": "string",
+        "format": "dd-MM-yyyy à HH:mm:ss",
+        "dataType": "date",
         "visible": true
       },
       {

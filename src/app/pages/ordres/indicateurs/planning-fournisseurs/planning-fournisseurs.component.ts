@@ -57,7 +57,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.INDICATOR_NAME
   );
   private gridConfig: Promise<GridConfig>;
-  public periodes: any[];
+  public periodes: any;
   private priceColumns = ["ventePrixUnitaire", "achatPrixUnitaire"];
   public validRequiredEntity: {};
 
@@ -138,23 +138,6 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description,
       });
     }
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
-  }
-
-  setDefaultPeriod(periodId) {
-    let myPeriod = this.dateManagementService.getPeriodFromId(
-      periodId,
-      this.periodes
-    );
-    if (!myPeriod) return;
-    this.periodeSB.instance.option("value", myPeriod);
-    const datePeriod = this.dateManagementService.getDates({
-      value: myPeriod,
-    });
-    this.formGroup.patchValue({
-      from: datePeriod.dateDebut,
-      to: datePeriod.dateFin,
-    });
   }
 
   enableFilters() {
@@ -196,16 +179,16 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   onCellPrepared(e) {
     if (e.rowType === "data") {
       // Best expression for date/time
-      if (
-        e.column.dataField === "logistique.dateDepartPrevueFournisseur" ||
-        e.column.dataField === "ordre.dateLivraisonPrevue"
-      ) {
-        if (e.value)
-          e.cellElement.innerText = this.dateManagementService.friendlyDate(
-            e.value,
-            true
-          );
-      }
+      // if (
+      //   e.column.dataField === "logistique.dateDepartPrevueFournisseur" ||
+      //   e.column.dataField === "ordre.dateLivraisonPrevue"
+      // ) {
+      //   if (e.value)
+      //     e.cellElement.innerText = this.dateManagementService.friendlyDate(
+      //       e.value,
+      //       true
+      //     );
+      // }
       // Colis
       if (e.column.dataField === "nombreColisExpedies") {
         e.cellElement.innerText =

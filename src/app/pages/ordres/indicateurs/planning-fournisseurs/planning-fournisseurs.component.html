@@ -71,6 +71,7 @@
                 <dx-select-box
                   #periodeSB
                   [items]="periodes"
+                  [value]="periodes[1]"
                   [displayExpr]="dateManagementService.displayPeriodText"
                   (onValueChanged)="setDates($event)"
                 >
@@ -229,6 +230,7 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [format]="column.format"
       [showInColumnChooser]="column.showInColumnChooser"
       [cssClass]="column.cssClass"
       [caption]="
