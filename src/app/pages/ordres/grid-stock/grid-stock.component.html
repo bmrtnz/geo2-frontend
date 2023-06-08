@@ -233,49 +233,46 @@
       </dxo-column-chooser>
       <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
 
-      <dxo-summary>
+      <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
         <dxi-group-item
-          column="quantiteCalculee1"
+          *ngFor="let field of summaryFields"
+          [column]="field"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
         >
         </dxi-group-item>
+
         <dxi-group-item
-          column="quantiteCalculee2"
-          summaryType="sum"
+          *ngFor="let field of customSummaryFields"
+          [name]="field"
+          [column]="field"
+          summaryType="custom"
           [alignByColumn]="true"
-          displayFormat="{0}"
+        >
+        </dxi-group-item>
+
+        <!-- <dxi-group-item
+          name="quantiteHebdomadaire"
+          [column]="'quantiteHebdomadaire'"
+          summaryType="custom"
+          [alignByColumn]="true"
         >
         </dxi-group-item>
         <dxi-group-item
-          column="quantiteCalculee3"
-          summaryType="sum"
+          name="prevision3j"
+          [column]="'prevision3j'"
+          summaryType="custom"
           [alignByColumn]="true"
-          displayFormat="{0}"
         >
         </dxi-group-item>
         <dxi-group-item
-          column="quantiteCalculee4"
-          summaryType="sum"
+          name="prevision7j"
+          [column]="'prevision7j'"
+          summaryType="custom"
           [alignByColumn]="true"
-          displayFormat="{0}"
         >
-        </dxi-group-item>
-        <dxi-group-item
-          column="prevision3j"
-          summaryType="sum"
-          [alignByColumn]="true"
-          displayFormat="{0}"
-        >
-        </dxi-group-item>
-        <dxi-group-item
-          column="prevision7j"
-          summaryType="sum"
-          [alignByColumn]="true"
-          displayFormat="{0}"
-        >
-        </dxi-group-item>
+        </dxi-group-item> -->
       </dxo-summary>
 
       <!-- Déstocker -->

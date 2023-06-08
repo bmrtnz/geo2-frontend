@@ -37,6 +37,8 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 
+let self;
+
 @Component({
   selector: "app-grid-stock",
   templateUrl: "./grid-stock.component.html",
@@ -94,6 +96,17 @@ export class GridStockComponent implements OnInit {
   toRefresh: boolean;
   gridTitle: string;
   noEspeceSet: boolean;
+  public summaryFields = [
+    "quantiteCalculee1",
+    "quantiteCalculee2",
+    "quantiteCalculee3",
+    "quantiteCalculee4",
+  ];
+  public customSummaryFields = [
+    "quantiteHebdomadaire",
+    "prevision3j",
+    "prevision7j",
+  ];
 
   constructor(
     public articlesService: ArticlesService,
@@ -106,6 +119,7 @@ export class GridStockComponent implements OnInit {
     private stockConsolideService: StockConsolideService,
     public gridsService: GridsService
   ) {
+    self = this;
     this.apiService = this.articlesService;
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
@@ -418,5 +432,13 @@ export class GridStockComponent implements OnInit {
         commentaire: comment,
       })
       .subscribe(() => this.refreshArticlesGrid());
+  }
+
+  public calculateCustomSummary(options) {
+    if (self.customSummaryFields.includes(options.name)) {
+      if (options.summaryProcess === "calculate") {
+        options.totalValue = options.value;
+      }
+    }
   }
 }
