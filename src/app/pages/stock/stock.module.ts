@@ -19,9 +19,7 @@ import {
 } from "devextreme-angular";
 import { OrdresModule } from "../ordres/ordres.module";
 import { StockPrecalibreComponent } from "./stock-precalibre/stock-precalibre.component";
-import { GridPrecalibrePommeComponent } from "./stock-precalibre/grid-precalibre-pomme/grid-precalibre-pomme.component";
-import { GridPrecalibreKiwiComponent } from "./stock-precalibre/grid-precalibre-kiwi/grid-precalibre-kiwi.component";
-import { GridPrecalibrePoireComponent } from "./stock-precalibre/grid-precalibre-poire/grid-precalibre-poire.component";
+import { GridPrecalibreComponent } from "./stock-precalibre/grid-precalibre/grid-precalibre.component";
 
 @NgModule({
   imports: [
@@ -46,9 +44,7 @@ import { GridPrecalibrePoireComponent } from "./stock-precalibre/grid-precalibre
   declarations: [
     StockMainComponent,
     StockPrecalibreComponent,
-    GridPrecalibrePommeComponent,
-    GridPrecalibreKiwiComponent,
-    GridPrecalibrePoireComponent,
+    GridPrecalibreComponent,
   ],
 })
 export class StockModule {}

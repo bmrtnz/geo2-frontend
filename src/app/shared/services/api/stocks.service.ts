@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
+import Precal from "app/shared/models/precal.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import StockReservation from "app/shared/models/stock-reservation.model";
 import ArrayStore from "devextreme/data/array_store";
@@ -102,6 +103,58 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
         modeCulture,
         emballage,
         bureauAchat,
+      },
+      fetchPolicy: "network-only",
+    });
+  }
+
+  /** Query fetching stock precalibré */
+  allPreca(
+    codeEspece: string,
+    semaine: string,
+    codeVariete?: string,
+    codeFournisseur?: string
+  ) {
+    const columns = Precal.getFieldsName();
+    columns.delete("variete");
+    columns.delete("fournisseur");
+    columns.delete("modeCulture");
+    columns.add("variete.id");
+    columns.add("fournisseur.code");
+    columns.add("modeCulture.description");
+    return this.apollo.query<{ allPreca: Precal[] }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allPreca`,
+              body: columns,
+              params: [
+                { name: "codeEspece", value: "codeEspece", isVariable: true },
+                { name: "semaine", value: "semaine", isVariable: true },
+                { name: "codeVariete", value: "codeVariete", isVariable: true },
+                {
+                  name: "codeFournisseur",
+                  value: "codeFournisseur",
+                  isVariable: true,
+                },
+              ],
+            },
+          ],
+          [
+            { name: "codeEspece", type: "String", isOptionnal: false },
+            { name: "semaine", type: "String", isOptionnal: false },
+            { name: "codeVariete", type: "String", isOptionnal: true },
+            { name: "codeFournisseur", type: "String", isOptionnal: true },
+          ]
+        )
+      ),
+      variables: {
+        codeEspece,
+        semaine,
+        codeVariete,
+        codeFournisseur,
       },
       fetchPolicy: "network-only",
     });

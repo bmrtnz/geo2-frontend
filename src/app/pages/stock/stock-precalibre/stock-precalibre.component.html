@@ -29,6 +29,7 @@
         </div>
         <div class="dx-field-value">
           <dx-select-box
+            #fournisseurSB
             [dataSource]="fournisseurs"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['code']"
@@ -104,26 +105,11 @@
 
     <div style="clear: both"></div>
 
-    <app-grid-precalibre-pomme
-      *ngIf="currentSpecy === 'POMME'"
+    <app-grid-precalibre
       [fournisseurId]="fournisseurId"
       [especeId]="especeId"
       [varieteId]="varieteId"
       [modeCultureId]="modeCultureId"
-    ></app-grid-precalibre-pomme>
-    <app-grid-precalibre-poire
-      *ngIf="currentSpecy === 'POIRE'"
-      [fournisseurId]="fournisseurId"
-      [especeId]="especeId"
-      [varieteId]="varieteId"
-      [modeCultureId]="modeCultureId"
-    ></app-grid-precalibre-poire>
-    <app-grid-precalibre-kiwi
-      *ngIf="currentSpecy === 'KIWI'"
-      [fournisseurId]="fournisseurId"
-      [especeId]="especeId"
-      [varieteId]="varieteId"
-      [modeCultureId]="modeCultureId"
-    ></app-grid-precalibre-kiwi>
+    ></app-grid-precalibre>
   </div>
 </div>

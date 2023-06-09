@@ -13,7 +13,7 @@ import { Observable } from "rxjs";
 import { GridsService } from "../../ordres/grids.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
-import { GridPrecalibrePommeComponent } from "./grid-precalibre-pomme/grid-precalibre-pomme.component";
+import { GridPrecalibreComponent } from "./grid-precalibre/grid-precalibre.component";
 
 @Component({
   selector: "app-stock-precalibre",
@@ -32,8 +32,11 @@ export class StockPrecalibreComponent implements AfterViewInit {
   @ViewChild("modesCultureSB", { static: false })
   modesCultureSB: DxSelectBoxComponent;
   @ViewChild("weekBox", { static: false }) weekBox: DxNumberBoxComponent;
-  @ViewChild(GridPrecalibrePommeComponent, { static: false })
-  gridPomme: GridPrecalibrePommeComponent;
+  @ViewChild("fournisseurSB", { static: false })
+  fournisseurSB: DxSelectBoxComponent;
+  // @ViewChild(GridPrecalibrePommeComponent, { static: false }) gridPomme: GridPrecalibrePommeComponent;
+  @ViewChild(GridPrecalibreComponent, { static: false })
+  grid: GridPrecalibreComponent;
 
   public fournisseurs: DataSource;
   public modesCulture: DataSource;
@@ -43,6 +46,8 @@ export class StockPrecalibreComponent implements AfterViewInit {
   gridTitle: string;
   currentSpecy: string;
   noEspeceSet: boolean;
+  calibres: { pomme; poire; kiwi? };
+  calibresAll: any;
 
   constructor(
     public localizeService: LocalizationService,
@@ -52,7 +57,51 @@ export class StockPrecalibreComponent implements AfterViewInit {
     private dateManagementService: DateManagementService,
     public gridsService: GridsService
   ) {
+    this.calibres = {
+      pomme: [
+        "p100",
+        "p113",
+        "p125",
+        "p138",
+        "p150",
+        "p163",
+        "p175",
+        "p198",
+        "p204",
+        "p216",
+        "p232",
+        "p248",
+        "p267",
+        "p288",
+        "p327",
+        "p56",
+        "p64",
+        "p72",
+        "p80",
+        "p88",
+      ],
+      poire: [
+        "p100",
+        "p113",
+        "p125",
+        "p138",
+        "p150",
+        "p163",
+        "p175",
+        "p198",
+        "p216",
+        "p56",
+        "p64",
+        "p72",
+        "p80",
+        "p88",
+      ],
+    };
+    this.calibresAll = Array.from(
+      new Set(this.calibres.pomme.concat(this.calibres.poire))
+    );
     this.currentSpecy = "POMME";
+    this.noEspeceSet = false;
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
     );
@@ -77,7 +126,11 @@ export class StockPrecalibreComponent implements AfterViewInit {
     const year = parseInt(now.getFullYear().toString().slice(-2), 10);
     const week = this.dateManagementService.getWeekNumber(now);
     this.weekBox.value = week + year * 100;
+
+    this.weekBox.value = 2244; // A VIRER !!!
+
     this.onFieldValueChange(null, "espece"); // First run: setting filters values
+    this.grid.setColumns();
   }
 
   weekChanged(e) {
@@ -103,7 +156,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
     if (year) this.weekBox.value = week + year * 100;
   }
 
-  onFilterChange() {
+  onEspeceChange() {
     this.currentSpecy =
       this.especeSB.value?.node?.key ?? this.especeSB.value?.key;
     this.noEspeceSet = !this.currentSpecy;
@@ -115,7 +168,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
    * @param dataField Field path
    */
   onFieldValueChange(event, dataField: string) {
-    this.onFilterChange();
+    if (dataField === "espece") this.onEspeceChange();
 
     // Filtering variete, emballage & origine selectBox list depending on specy
     if (["espece", "variete"].includes(dataField)) {
@@ -147,8 +200,33 @@ export class StockPrecalibreComponent implements AfterViewInit {
 
   refreshArticlesGrid() {
     if (!this.currentSpecy) return;
-    const grid = "grid" + this.capitalize(this.currentSpecy);
-    this[grid].enableFilters();
+
+    setTimeout(() => this.grid.datagrid.instance.beginCustomLoading(""));
+    this.grid.datagrid.dataSource = null;
+    // Set calibres vs specy
+    this.setCalibres();
+
+    this.stocksService
+      .allPreca(
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key,
+        this.weekBox.value.toString(),
+        this.varieteSB.value?.key || "%",
+        this.fournisseurSB.value?.code || "%"
+      )
+      .subscribe((res) => {
+        this.grid.datagrid.dataSource = res.data.allPreca;
+        this.grid.datagrid.instance.endCustomLoading();
+      });
+  }
+
+  setCalibres() {
+    this.calibresAll.map((c) => {
+      this.grid.datagrid.instance.columnOption(
+        c,
+        "visible",
+        this.calibres[this.currentSpecy.toLowerCase()].includes(c)
+      );
+    });
   }
 
   displayCodeBefore(data) {

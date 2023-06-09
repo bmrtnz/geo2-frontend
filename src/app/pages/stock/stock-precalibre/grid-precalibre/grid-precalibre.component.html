@@ -1,4 +1,4 @@
-<div class="grid-precalibre-pomme">
+<div class="grid-stock-preca">
   <dx-button
     style="margin-right: 20px"
     class="grid-grouping-button"
@@ -8,12 +8,13 @@
     (onClick)="gridsService.expandCollapseGroups(this, false)"
   ></dx-button>
   <dx-data-grid
-    class="dx-card wide-card grid-ordre-ligne-stock"
+    class="dx-card wide-card"
     [remoteOperations]="false"
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
+    [keyExpr]="'id'"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
@@ -21,7 +22,7 @@
       gridConfiguratorService.onToolbarPreparing(
         '',
         $event,
-        gridConfiguratorService.Grid.OrdreStock
+        gridConfiguratorService.Grid.StockPreca
       )
     "
   >
@@ -44,7 +45,7 @@
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.OrdreStock"
+      [storageKey]="gridConfiguratorService.Grid.StockPreca"
       [enabled]="true"
       type="custom"
       [customLoad]="gridConfiguratorService.load"
@@ -65,12 +66,13 @@
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
       [visible]="false"
+      [cssClass]="column.cssClass"
       [caption]="
-        ('ordreStock-' + column.dataField?.split('.').join('-') | localize) ||
+        ('ordrePreca-' + column.dataField?.split('.').join('-') | localize) ||
         column.name
       "
       [dataType]="column?.dataType"
-      [width]="column?.width"
+      [width]="column?.width === 'auto' ? 35 : column?.width"
       [groupCellTemplate]="column.groupCellTemplate"
       [cellTemplate]="column.cellTemplate"
       [allowSearch]="
