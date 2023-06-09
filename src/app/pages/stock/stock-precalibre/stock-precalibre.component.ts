@@ -34,7 +34,6 @@ export class StockPrecalibreComponent implements AfterViewInit {
   @ViewChild("weekBox", { static: false }) weekBox: DxNumberBoxComponent;
   @ViewChild("fournisseurSB", { static: false })
   fournisseurSB: DxSelectBoxComponent;
-  // @ViewChild(GridPrecalibrePommeComponent, { static: false }) gridPomme: GridPrecalibrePommeComponent;
   @ViewChild(GridPrecalibreComponent, { static: false })
   grid: GridPrecalibreComponent;
 
@@ -42,11 +41,9 @@ export class StockPrecalibreComponent implements AfterViewInit {
   public modesCulture: DataSource;
   especes: Observable<DataSource>;
   varietes: Observable<DataSource>;
-  toRefresh: boolean;
-  gridTitle: string;
   currentSpecy: string;
   noEspeceSet: boolean;
-  calibres: { pomme; poire; kiwi? };
+  calibres: { pomme; poire; kiwi };
   calibresAll: any;
 
   constructor(
@@ -96,6 +93,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
         "p80",
         "p88",
       ],
+      kiwi: [],
     };
     this.calibresAll = Array.from(
       new Set(this.calibres.pomme.concat(this.calibres.poire))
@@ -204,7 +202,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
     setTimeout(() => this.grid.datagrid.instance.beginCustomLoading(""));
     this.grid.datagrid.dataSource = null;
     // Set calibres vs specy
-    this.setCalibres();
+    this.setGridCalibres();
 
     this.stocksService
       .allPreca(
@@ -219,7 +217,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
       });
   }
 
-  setCalibres() {
+  setGridCalibres() {
     this.calibresAll.map((c) => {
       this.grid.datagrid.instance.columnOption(
         c,
@@ -243,9 +241,5 @@ export class StockPrecalibreComponent implements AfterViewInit {
             ? data.raisonSocial
             : data.description)
       : null;
-  }
-
-  capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 }

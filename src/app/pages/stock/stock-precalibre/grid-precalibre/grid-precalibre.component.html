@@ -1,12 +1,4 @@
 <div class="grid-stock-preca">
-  <dx-button
-    style="margin-right: 20px"
-    class="grid-grouping-button"
-    type="default"
-    icon="material-icons menu_open"
-    hint="{{ 'btn-grouping' | localize }}"
-    (onClick)="gridsService.expandCollapseGroups(this, false)"
-  ></dx-button>
   <dx-data-grid
     class="dx-card wide-card"
     [remoteOperations]="false"
@@ -27,18 +19,13 @@
     "
   >
     <dxo-paging></dxo-paging>
-    <dxo-search-panel
-      [visible]="true"
-      [width]="240"
-      placeholder="{{ 'search' | localize }}"
-    ></dxo-search-panel>
-    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-group-panel [visible]="false"> </dxo-group-panel>
     <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
     ></dxo-header-filter>
-    <dxo-export fileName="Articles"></dxo-export>
+    <dxo-export fileName="Stock précalibré"></dxo-export>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
@@ -51,7 +38,7 @@
       [customLoad]="gridConfiguratorService.load"
       [customSave]="gridConfiguratorService.save"
     ></dxo-state-storing>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <!-- <dxo-filter-row [visible]="true"></dxo-filter-row> -->
     <dxo-column-chooser
       [enabled]="true"
       [width]="columnChooser.width"
