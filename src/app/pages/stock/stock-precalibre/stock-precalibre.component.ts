@@ -44,7 +44,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
   currentSpecy: string;
   noEspeceSet: boolean;
   calibres: { pomme; poire; kiwi };
-  calibresAll: any;
+  allCalibres: any;
 
   constructor(
     public localizeService: LocalizationService,
@@ -95,9 +95,9 @@ export class StockPrecalibreComponent implements AfterViewInit {
       ],
       kiwi: [],
     };
-    this.calibresAll = Array.from(
-      new Set(this.calibres.pomme.concat(this.calibres.poire))
-    );
+    this.allCalibres = [
+      ...new Set(this.calibres.pomme.concat(this.calibres.poire)),
+    ];
     this.currentSpecy = "POMME";
     this.noEspeceSet = false;
     this.especes = this.stocksService.getDistinctEntityDatasource(
@@ -160,11 +160,6 @@ export class StockPrecalibreComponent implements AfterViewInit {
     this.noEspeceSet = !this.currentSpecy;
   }
 
-  /**
-   * Apply filters from tag boxs
-   * @param event List of field values
-   * @param dataField Field path
-   */
   onFieldValueChange(event, dataField: string) {
     if (dataField === "espece") this.onEspeceChange();
 
@@ -218,11 +213,11 @@ export class StockPrecalibreComponent implements AfterViewInit {
   }
 
   setGridCalibres() {
-    this.calibresAll.map((c) => {
-      this.grid.datagrid.instance.columnOption(
-        c,
-        "visible",
-        this.calibres[this.currentSpecy.toLowerCase()].includes(c)
+    this.allCalibres.map((cal) => {
+      const visible =
+        this.calibres[this.currentSpecy.toLowerCase()].includes(cal);
+      ["visible", "showInColumnChooser"].map((prop) =>
+        this.grid.datagrid.instance.columnOption(cal, prop, visible)
       );
     });
   }
