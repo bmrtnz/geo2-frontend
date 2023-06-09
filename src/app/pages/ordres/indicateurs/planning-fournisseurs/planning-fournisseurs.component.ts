@@ -57,7 +57,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.INDICATOR_NAME
   );
   private gridConfig: Promise<GridConfig>;
-  public periodes: any;
+  public periodes: any[];
   private priceColumns = ["ventePrixUnitaire", "achatPrixUnitaire"];
   public validRequiredEntity: {};
 
@@ -124,10 +124,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    this.ordresLignesDataSource = this.ordresLignesService
-      // .getDataSource_v2(await fields.toPromise(), Operation.PlanningFournisseurs);
-      .getDataSource_v2(await fields.toPromise());
-    this.formGroup.valueChanges.subscribe((_) => this.enableFilters());
+    this.ordresLignesDataSource = this.ordresLignesService.getDataSource_v2(
+      await fields.toPromise()
+    );
     this.formGroup.updateValueAndValidity();
   }
 
@@ -138,6 +137,23 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         description: this.authService.currentUser.secteurCommercial.description,
       });
     }
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+  }
+
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      from: datePeriod.dateDebut,
+      to: datePeriod.dateFin,
+    });
   }
 
   enableFilters() {
@@ -149,7 +165,27 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         ? ["and", ...extraFilters]
         : []),
     ]);
-    this.datagrid.dataSource = this.ordresLignesDataSource;
+    this.datagrid.instance.beginCustomLoading("");
+    // Formating several fields
+    this.ordresLignesDataSource.load().then((res) => {
+      let DsItems = JSON.parse(JSON.stringify(res));
+      DsItems.map((data) => {
+        data.nombreColisExpedies += "/" + data.nombreColisCommandes; // Colis
+        // Prices
+        if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+          data.ventePrixUnitaire = "";
+        } else
+          data.ventePrixUnitaire +=
+            " " + data.ordre.devise?.id + " / " + data.venteUnite.description;
+        if (!data.achatPrixUnitaire || !data.achatUnite?.description) {
+          data.achatPrixUnitaire = "";
+        } else
+          data.achatPrixUnitaire +=
+            " " + data.ordre.devise?.id + " / " + data.achatUnite.description;
+      });
+      this.datagrid.dataSource = DsItems;
+      this.datagrid.instance.endCustomLoading();
+    });
   }
 
   filterFournisseurs(bureauAchat?) {
@@ -174,58 +210,6 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     const Element = e.element as HTMLElement;
     Element.classList.toggle("lowOpacity");
     this.enableFilters();
-  }
-
-  onCellPrepared(e) {
-    if (e.rowType === "data") {
-      // Best expression for date/time
-      // if (
-      //   e.column.dataField === "logistique.dateDepartPrevueFournisseur" ||
-      //   e.column.dataField === "ordre.dateLivraisonPrevue"
-      // ) {
-      //   if (e.value)
-      //     e.cellElement.innerText = this.dateManagementService.friendlyDate(
-      //       e.value,
-      //       true
-      //     );
-      // }
-      // Colis
-      if (e.column.dataField === "nombreColisExpedies") {
-        e.cellElement.innerText =
-          e.cellElement.innerText + "/" + e.data.nombreColisCommandes;
-      }
-      // Descript. article
-      if (e.column.dataField === "article.description") {
-        e.cellElement.innerHTML = this.articlesService.concatArtDescript(
-          e.data.article
-        ).concatDesc;
-      }
-      // Prix
-      if (e.column.dataField === "ventePrixUnitaire") {
-        if (!e.data?.ventePrixUnitaire || !e.data?.venteUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText +
-            " " +
-            e.data.ordre.devise?.id +
-            " / " +
-            e.data.venteUnite.description;
-        }
-      }
-      if (e.column.dataField === "achatPrixUnitaire") {
-        if (!e.data?.achatPrixUnitaire || !e.data?.achatUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText +
-            " " +
-            e.data.ordre.devise?.id +
-            " / " +
-            e.data.achatUnite.description;
-        }
-      }
-    }
   }
 
   onRowPrepared(e) {

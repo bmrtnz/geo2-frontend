@@ -71,7 +71,6 @@
                 <dx-select-box
                   #periodeSB
                   [items]="periodes"
-                  [value]="periodes[1]"
                   [displayExpr]="dateManagementService.displayPeriodText"
                   (onValueChanged)="setDates($event)"
                 >
@@ -150,8 +149,14 @@
                 >
                 </dx-button>
               </dxi-item>
-              <dxi-item [ratio]="10"></dxi-item>
+              <dxi-item [ratio]="10"> </dxi-item>
             </dx-box>
+            <dx-button
+              class="refresh"
+              type="default"
+              text="{{ 'btn-refresh' | localize }}"
+              (onClick)="enableFilters()"
+            ></dx-button>
           </div>
         </dxi-item>
       </dxi-item>
@@ -183,8 +188,8 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    [keyExpr]="'id'"
     (onContentReady)="showHidePrices()"
-    (onCellPrepared)="onCellPrepared($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onToolbarPreparing)="
