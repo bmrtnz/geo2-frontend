@@ -7691,6 +7691,7 @@
       {
         "visibleIndex": 10,
         "dataField": "quantite",
+        "cssClass": "bold-text",
         "visible": true
       },
       {

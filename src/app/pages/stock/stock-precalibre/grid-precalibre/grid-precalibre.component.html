@@ -54,10 +54,7 @@
       [dataField]="column.dataField"
       [visible]="false"
       [cssClass]="column.cssClass"
-      [caption]="
-        ('ordrePreca-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
-      "
+      [caption]="caption(column)"
       [dataType]="column?.dataType"
       [width]="column?.width === 'auto' ? 35 : column?.width"
       [groupCellTemplate]="column.groupCellTemplate"

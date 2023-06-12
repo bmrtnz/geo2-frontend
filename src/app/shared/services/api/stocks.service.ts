@@ -108,58 +108,6 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     });
   }
 
-  /** Query fetching stock precalibré */
-  allPreca(
-    codeEspece: string,
-    semaine: string,
-    codeVariete?: string,
-    codeFournisseur?: string
-  ) {
-    const columns = Precal.getFieldsName();
-    columns.delete("variete");
-    columns.delete("fournisseur");
-    columns.delete("modeCulture");
-    columns.add("variete.id");
-    columns.add("fournisseur.code");
-    columns.add("modeCulture.description");
-    return this.apollo.query<{ allPreca: Precal[] }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: `allPreca`,
-              body: columns,
-              params: [
-                { name: "codeEspece", value: "codeEspece", isVariable: true },
-                { name: "semaine", value: "semaine", isVariable: true },
-                { name: "codeVariete", value: "codeVariete", isVariable: true },
-                {
-                  name: "codeFournisseur",
-                  value: "codeFournisseur",
-                  isVariable: true,
-                },
-              ],
-            },
-          ],
-          [
-            { name: "codeEspece", type: "String", isOptionnal: false },
-            { name: "semaine", type: "String", isOptionnal: false },
-            { name: "codeVariete", type: "String", isOptionnal: true },
-            { name: "codeFournisseur", type: "String", isOptionnal: true },
-          ]
-        )
-      ),
-      variables: {
-        codeEspece,
-        semaine,
-        codeVariete,
-        codeFournisseur,
-      },
-      fetchPolicy: "network-only",
-    });
-  }
-
   /** Query fetching stock by article */
   allStockReservationList(article: string) {
     const columns = StockReservation.getFieldsName();
@@ -343,24 +291,83 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     );
   }
 
-  allPrecaEspece() {
-    return this.apollo.query<{ allPrecaEspece: String[] }>({
+  /** Query fetching stock precalibré */
+  allPreca(
+    codeEspece: string,
+    semaine: string,
+    codeModeCulture?: string,
+    codeVariete?: string,
+    codeFournisseur?: string
+  ) {
+    const columns = Precal.getFieldsName();
+    columns.delete("variete");
+    columns.delete("fournisseur");
+    columns.delete("modeCulture");
+    columns.add("variete.id");
+    columns.add("fournisseur.code");
+    columns.add("modeCulture.description");
+    return this.apollo.query<{ allPreca: Precal[] }>({
       query: gql(
         ApiService.buildGraph(
           "query",
           [
             {
-              name: `allPrecaEspece`,
+              name: `allPreca`,
+              body: columns,
+              params: [
+                { name: "codeEspece", value: "codeEspece", isVariable: true },
+                { name: "semaine", value: "semaine", isVariable: true },
+                {
+                  name: "codeModeCulture",
+                  value: "codeModeCulture",
+                  isVariable: true,
+                },
+                { name: "codeVariete", value: "codeVariete", isVariable: true },
+                {
+                  name: "codeFournisseur",
+                  value: "codeFournisseur",
+                  isVariable: true,
+                },
+              ],
             },
           ],
+          [
+            { name: "codeEspece", type: "String", isOptionnal: false },
+            { name: "semaine", type: "String", isOptionnal: false },
+            { name: "codeModeCulture", type: "String", isOptionnal: true },
+            { name: "codeVariete", type: "String", isOptionnal: true },
+            { name: "codeFournisseur", type: "String", isOptionnal: true },
+          ]
         )
+      ),
+      variables: {
+        codeEspece,
+        semaine,
+        codeModeCulture,
+        codeVariete,
+        codeFournisseur,
+      },
+      fetchPolicy: "network-only",
+    });
+  }
+
+  allPrecaEspece() {
+    return this.apollo.query<{ allPrecaEspece: String[] }>({
+      query: gql(
+        ApiService.buildGraph("query", [
+          {
+            name: `allPrecaEspece`,
+          },
+        ])
       ),
       fetchPolicy: "network-only",
     });
   }
 
   allPrecaVariete(espece: String) {
-    return this.apollo.query<{ allPrecaVariete: { id: String, description: String }[] }>({
+    return this.apollo.query<{
+      allPrecaVariete: { id: String; description: String }[];
+    }>({
       query: gql(
         ApiService.buildGraph(
           "query",
@@ -368,9 +375,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             {
               name: `allPrecaVariete`,
               body: new Set(["id", "description"]),
-              params: [
-                { name: "espece", value: "espece", isVariable: true },
-              ],
+              params: [{ name: "espece", value: "espece", isVariable: true }],
             },
           ],
           [{ name: "espece", type: "String", isOptionnal: false }]

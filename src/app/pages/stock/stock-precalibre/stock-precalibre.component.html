@@ -47,13 +47,9 @@
         <div class="dx-field-value">
           <dx-select-box
             #especeSB
-            [dataSource]="especes | async"
-            (valueChange)="onFieldValueChange($event, 'espece')"
-            [searchExpr]="['node.key']"
-            [acceptCustomValue]="true"
-            [displayExpr]="'node.key'"
-            [value]="{ node: { key: 'POMME' } }"
-            valueExpr="node"
+            [items]="especes"
+            [value]="'POMME'"
+            (valueChange)="onEspeceChange()"
           >
           </dx-select-box>
         </div>
@@ -66,14 +62,10 @@
         <div class="dx-field-value">
           <dx-select-box
             #varieteSB
-            [dataSource]="varietes | async"
+            [items]="varietes"
             [disabled]="noEspeceSet"
             [showClearButton]="true"
-            (valueChange)="onFieldValueChange($event, 'variete')"
-            [searchExpr]="['node.key']"
             [displayExpr]="displayCodeBefore"
-            [showClearButton]="true"
-            valueExpr="node"
           >
             <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
           </dx-select-box>
@@ -106,10 +98,8 @@
     <div style="clear: both"></div>
 
     <app-grid-precalibre
-      [fournisseurId]="fournisseurId"
-      [especeId]="especeId"
-      [varieteId]="varieteId"
-      [modeCultureId]="modeCultureId"
+      [especeId]="currentSpecy"
+      [corrPommeKiwi]="corrPommeKiwi"
     ></app-grid-precalibre>
   </div>
 </div>
