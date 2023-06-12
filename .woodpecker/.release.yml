@@ -14,7 +14,7 @@ platform: ${PLATFORM}
 
 when:
   event: tag
-  branch: [master, next, "#ci-push-image"]
+  branch: [master, next]
 
 pipeline:
   - name: build image ${TARGET_ENV} ${CI_COMMIT_TAG}
