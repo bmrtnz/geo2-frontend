@@ -358,4 +358,26 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       fetchPolicy: "network-only",
     });
   }
+
+  allPrecaVariete(espece: String) {
+    return this.apollo.query<{ allPrecaVariete: { id: String, description: String }[] }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allPrecaVariete`,
+              body: new Set(["id", "description"]),
+              params: [
+                { name: "espece", value: "espece", isVariable: true },
+              ],
+            },
+          ],
+          [{ name: "espece", type: "String", isOptionnal: false }]
+        )
+      ),
+      variables: { espece },
+      fetchPolicy: "network-only",
+    });
+  }
 }
