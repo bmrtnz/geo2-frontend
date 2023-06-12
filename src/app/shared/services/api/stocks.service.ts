@@ -342,4 +342,20 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       searchExpr
     );
   }
+
+  allPrecaEspece() {
+    return this.apollo.query<{ allPrecaEspece: String[] }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allPrecaEspece`,
+            },
+          ],
+        )
+      ),
+      fetchPolicy: "network-only",
+    });
+  }
 }
