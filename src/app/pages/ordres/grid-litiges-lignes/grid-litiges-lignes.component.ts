@@ -1,27 +1,23 @@
 import {
   Component,
   EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
+  Input, OnInit,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
-import {
-  GridConfiguratorService,
-  Grid,
-  GridConfig,
-} from "app/shared/services/grid-configurator.service";
-import { LocalizationService } from "app/shared/services/localization.service";
-import DataSource from "devextreme/data/data_source";
-import { environment } from "environments/environment";
-import { DxDataGridComponent } from "devextreme-angular";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Ordre from "app/shared/models/ordre.model";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
-import LitigeLigne from "app/shared/models/litige-ligne.model";
-import { ToggledGrid } from "../form/form.component";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import {
+  Grid,
+  GridConfig, GridConfiguratorService
+} from "app/shared/services/grid-configurator.service";
+import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
+import { DxDataGridComponent } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
+import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
@@ -31,7 +27,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-litiges-lignes.component.html",
   styleUrls: ["./grid-litiges-lignes.component.scss"],
 })
-export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
+export class GridLitigesLignesComponent implements OnInit {
   @Output() public litigeLigneSelected = new EventEmitter<LitigeLigne>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;
@@ -58,6 +54,7 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
 
   ngOnInit() {
     this.gridsService.register("LitigeLigne", this.datagrid);
+    this.enableFilters();
   }
 
   onRowPrepared(e) {
@@ -84,10 +81,6 @@ export class GridLitigesLignesComponent implements OnInit, ToggledGrid {
         ["valide", "=", true],
       ]);
     }
-  }
-
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
   }
 
   reload() {
