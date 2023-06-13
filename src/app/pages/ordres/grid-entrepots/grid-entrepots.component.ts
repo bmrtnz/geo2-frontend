@@ -33,6 +33,7 @@ export class GridEntrepotsComponent
   readonly gridID = Grid.OrdreEntrepot;
 
   @Output() public pulseButton = new EventEmitter();
+  @Output() public createOrder = new EventEmitter();
 
   @ViewChild(DxDataGridComponent, { static: false })
   private grid: DxDataGridComponent;
@@ -114,6 +115,10 @@ export class GridEntrepotsComponent
 
   onColumnsChange({ current }: { current: GridColumn[] }) {
     this.updateData(current);
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data") e.rowElement.classList.add("cursor-pointer");
   }
 
   getSelectedItem() {

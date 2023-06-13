@@ -36,6 +36,7 @@ export class GridHistoriqueEntrepotsComponent
 
   @Output() public pulseButton = new EventEmitter();
   @Output() public hideCreateButton = new EventEmitter();
+  @Output() public createOrder = new EventEmitter();
 
   @ViewChild(DxDataGridComponent, { static: false })
   public grid: DxDataGridComponent;
@@ -115,6 +116,10 @@ export class GridHistoriqueEntrepotsComponent
 
   onFocusedRowChanged(e) {
     this.pulseButton.emit();
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data") e.rowElement.classList.add("cursor-pointer");
   }
 
   onSelectionChanged(e) {
