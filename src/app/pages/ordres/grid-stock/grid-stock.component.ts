@@ -161,8 +161,9 @@ export class GridStockComponent implements OnInit {
       if (["emballage.emballage.groupe.id"].includes(dataField))
         this.emballagesSB.value = null;
 
-      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value?.node?.key ?? this.especeSB.value?.key
-        }' and quantiteTotale > 0 and valide == true)`;
+      let sbFilters = `(article.cahierDesCharge.espece.id=='${
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key
+      }' and quantiteTotale > 0 and valide == true)`;
       if (this.varietesSB.value)
         sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value?.key}'`;
       if (this.groupesSB.value)
@@ -226,12 +227,12 @@ export class GridStockComponent implements OnInit {
 
     return data
       ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.nomUtilisateur
-        ? data.nomUtilisateur
-        : data.raisonSocial
-          ? data.raisonSocial
-          : data.description)
+          " - " +
+          (data.nomUtilisateur
+            ? data.nomUtilisateur
+            : data.raisonSocial
+            ? data.raisonSocial
+            : data.description)
       : null;
   }
 
