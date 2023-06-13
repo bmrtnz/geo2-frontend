@@ -34,7 +34,7 @@ export class GridPrecalibreComponent {
     private localizationService: LocalizationService,
     public gridsService: GridsService,
     public authService: AuthService
-  ) {}
+  ) { }
 
   setColumns() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -42,6 +42,17 @@ export class GridPrecalibreComponent {
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.datagrid.instance.refresh();
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      if (e.value === 0 && !e.data.totalRow) e.cellElement.textContent = "";
+    }
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "data" && e.data.totalRow)
+      e.rowElement.classList.add("total-row");
   }
 
   caption(column) {

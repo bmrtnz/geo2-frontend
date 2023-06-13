@@ -7652,10 +7652,11 @@
     ]
   },
   "stock-preca": {
-    "pageSize": 10,
+    "pageSize": 100,
     "columns": [
       {
         "dataField": "id",
+        "sortOrder": "asc",
         "visible": false
       },
       {

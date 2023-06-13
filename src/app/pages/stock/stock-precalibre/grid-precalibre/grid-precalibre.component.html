@@ -10,6 +10,8 @@
     [noDataText]="'aucun-stock' | localize"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
     [rowAlternationEnabled]="true"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

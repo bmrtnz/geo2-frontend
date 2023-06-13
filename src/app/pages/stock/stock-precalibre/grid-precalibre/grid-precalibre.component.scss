@@ -1,3 +1,13 @@
 ::ng-deep .bold-text {
   font-weight: bold;
 }
+
+::ng-deep .total-row {
+  td {
+    background: rgba(0, 117, 156, 0.2) !important;
+  }
+
+  &.dx-row-focused {
+    background: rgba(0, 117, 156, 1) !important;
+  }
+}

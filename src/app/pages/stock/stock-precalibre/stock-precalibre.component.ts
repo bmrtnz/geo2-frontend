@@ -14,6 +14,7 @@ import { GridsService } from "../../ordres/grids.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { GridPrecalibreComponent } from "./grid-precalibre/grid-precalibre.component";
+import dxDataGrid from "devextreme/ui/data_grid";
 
 @Component({
   selector: "app-stock-precalibre",
@@ -149,10 +150,11 @@ export class StockPrecalibreComponent implements AfterViewInit {
     const week = this.dateManagementService.getWeekNumber(now);
     this.weekBox.value = week + year * 100;
 
-    this.weekBox.value = 1748; // A VIRER !!!
-
     this.onEspeceChange(); // First run: setting filters values
     this.grid.setColumns();
+
+    this.weekBox.value = 1748; // A VIRER !!!
+    setTimeout(() => this.refreshArticlesGrid(), 500); // A VIRER !!!
   }
 
   weekChanged(e) {
@@ -205,21 +207,80 @@ export class StockPrecalibreComponent implements AfterViewInit {
         this.especeSB.value,
         this.weekBox.value.toString(),
         this.modesCultureSB.value?.id.toString() || "%",
-        this.varieteSB.value?.key || "%",
+        this.varieteSB.value?.id || "%",
         this.fournisseurSB.value?.code || "%"
       )
       .subscribe((res) => {
         const DsItems = JSON.parse(JSON.stringify(res.data.allPreca));
+        let oldArticleMainInfo;
+        let id = -1;
+        let DsItems2 = []; // New array with additionnal total rows
+        let oldLastTotalId;
+        let sumQte;
         DsItems.map((data) => {
-          let sum = 0;
+          // Calculating sum of each calibres
+          let sumCal = 0;
           this.calibres[this.currentSpecy].map((cal) => {
             if (data[cal]) {
-              sum += data[cal];
+              sumCal += data[cal];
             } else data[cal] = 0;
           });
-          data.quantite = sum;
+          data.quantite = sumCal;
+
+          // Same kind of article ?
+          if (
+            oldArticleMainInfo?.variete?.id === data.variete.id &&
+            oldArticleMainInfo?.choix === data.choix &&
+            oldArticleMainInfo?.modeCulture.description ===
+              data.modeCulture.description &&
+            oldArticleMainInfo?.colo === data.colo
+          ) {
+            id++;
+          } else {
+            id += 2;
+            // Inserting total row
+            this.calibres[this.currentSpecy].map(
+              (cal) => (sumQte += this.calibres[this.currentSpecy][cal])
+            );
+            if (oldLastTotalId !== undefined)
+              DsItems2.push({
+                ...data,
+                ...oldArticleMainInfo,
+                id: oldLastTotalId,
+                fournisseur: { code: "Total" },
+                ...this.calibres[this.currentSpecy],
+                quantite: sumQte,
+                totalRow: true,
+              });
+            oldLastTotalId = id - 1;
+            // Reset total
+            sumQte = 0;
+            this.calibres[this.currentSpecy].map(
+              (cal) => (this.calibres[this.currentSpecy][cal] = 0)
+            );
+            oldArticleMainInfo = {
+              variete: { id: data.variete.id },
+              choix: data.choix,
+              modeCulture: { description: data.modeCulture.description },
+              colo: data.colo,
+            };
+          }
+          // Calculating each cal qty
+          this.calibres[this.currentSpecy].map((cal) => {
+            this.calibres[this.currentSpecy][cal] =
+              (this.calibres[this.currentSpecy][cal] ?? 0) + data[cal];
+          });
+          // Clear repeated fields
+          if (DsItems.length > 1) {
+            data.variete = { id: "" };
+            data.choix = "";
+            data.modeCulture = { description: "" };
+            data.colo = "";
+          }
+          data.id = id;
+          DsItems2.push(data);
         });
-        this.grid.datagrid.dataSource = DsItems;
+        this.grid.datagrid.dataSource = DsItems2;
         this.grid.datagrid.instance.endCustomLoading();
       });
   }
@@ -234,7 +295,6 @@ export class StockPrecalibreComponent implements AfterViewInit {
   }
 
   displayCodeBefore(data) {
-    // if (data && !data.id?.toString()) return data;
     return data
       ? (data.code ? data.code : data.id) +
           (data.description || data.raisonSocial
