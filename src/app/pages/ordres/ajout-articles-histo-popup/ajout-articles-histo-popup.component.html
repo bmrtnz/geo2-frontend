@@ -24,27 +24,28 @@
       [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
+
+    <dx-button
+      #addButton
+      [ngClass]="{ pulse: pulseBtnOn }"
+      class="articles-valid-button"
+      type="success"
+      [visible]="nbARticles > 0"
+      [text]="validBtnText"
+      (onClick)="insertArticles()"
+    ></dx-button>
   </div>
 
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <div class="ajout-art-histo-content-container">
-        <dx-button
+        <!-- <dx-button
           *ngIf="!readOnlyMode"
           class="cancel-button"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
           (onClick)="clearAndHidePopup()"
-        ></dx-button>
-        <dx-button
-          #addButton
-          [ngClass]="{ pulse: pulseBtnOn }"
-          class="articles-valid-button"
-          type="success"
-          [visible]="nbARticles > 0"
-          [text]="validBtnText"
-          (onClick)="insertArticles()"
-        ></dx-button>
+        ></dx-button> -->
 
         <div style="clear: both"></div>
 
