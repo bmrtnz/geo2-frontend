@@ -355,6 +355,7 @@ export class EntrepotDetailsComponent
     this.entrepot = res.data.entrepot;
     this.client = this.entrepot.client;
     this.formGroup.patchValue(this.entrepot);
+    this.idEntrepot = this.entrepot.id; // Used for bassins grid
     this.contentReadyEvent.emit();
     this.preSaisie = this.entrepot.preSaisie === true ? "preSaisie" : "";
     this.clientsService
