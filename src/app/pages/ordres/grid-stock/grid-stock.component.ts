@@ -209,8 +209,8 @@ export class GridStockComponent implements OnInit {
       dataToLoad
         .filter((data) => !this[`${data.var}SB`].value)
         .forEach((data) => {
-          if (data.var === "emballages")
-            sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
+          // if (data.var === "emballages")
+          //   sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
           this[data.var] = this.stocksService.getDistinctEntityDatasource(
             data.id,
             data.desc,
