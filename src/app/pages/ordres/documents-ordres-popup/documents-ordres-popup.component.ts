@@ -33,7 +33,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   @ViewChild(GridChoixEnvoisComponent)
   gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
-  constructor(public localizeService: LocalizationService) {}
+  constructor(public localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -86,7 +86,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
       complete: () => {
         this.closeConfirm = true; // Force close popup without confirmation
         this.popup.instance.hide();
-        this.gridEnvois.reload();
+        this.gridEnvois?.reload();
       },
     });
   }

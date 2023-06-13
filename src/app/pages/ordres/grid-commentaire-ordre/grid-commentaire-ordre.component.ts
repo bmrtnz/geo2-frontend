@@ -1,22 +1,20 @@
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
+import { AuthService } from "app/shared/services";
 import { CommentairesOrdresService } from "app/shared/services/api/commentaires-ordres.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
+import gridConfig from "assets/configurations/grids.json";
+import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import gridConfig from "assets/configurations/grids.json";
-import { ToggledGrid } from "../form/form.component";
-import { GridColumn } from "basic";
-import { DateManagementService } from "app/shared/services/date-management.service";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { AuthService } from "app/shared/services";
-import CommentaireOrdre from "app/shared/models/commentaire-ordre.model";
 import { GridsService } from "../grids.service";
 
 @Component({
@@ -24,9 +22,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-commentaire-ordre.component.html",
   styleUrls: ["./grid-commentaire-ordre.component.scss"],
 })
-export class GridCommentaireOrdreComponent
-  implements ToggledGrid, AfterViewInit
-{
+export class GridCommentaireOrdreComponent implements OnInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -48,8 +44,8 @@ export class GridCommentaireOrdreComponent
     this.detailedFields = gridConfig["commentaire-ordre"].columns;
   }
 
-  ngAfterViewInit() {
-    this.gridsService.register("Commentaires", this.dataGrid);
+  ngOnInit(): void {
+    this.enableFilters();
   }
 
   async updateGrid() {
@@ -103,7 +99,4 @@ export class GridCommentaireOrdreComponent
     }
   }
 
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
-  }
 }

@@ -1,36 +1,27 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
+import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import gridConfig from "assets/configurations/grids.json";
 import { GridColumn } from "basic";
 import { DxButtonComponent, DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { alert, confirm } from "devextreme/ui/dialog";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
-import notify from "devextreme/ui/notify";
-import { ToggledGrid } from "../form/form.component";
-import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.component";
-import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 import { GridsService } from "../grids.service";
+import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.component";
 
 @Component({
   selector: "app-grid-controle-qualite",
   templateUrl: "./grid-controle-qualite.component.html",
   styleUrls: ["./grid-controle-qualite.component.scss"],
 })
-export class GridControleQualiteComponent
-  implements ToggledGrid, AfterViewInit
-{
+export class GridControleQualiteComponent implements OnInit {
   @Input() public ordre: Ordre;
   @Output() public ordreLigne;
   @ViewChild(DxDataGridComponent, { static: true })
@@ -56,6 +47,9 @@ export class GridControleQualiteComponent
     public localizeService: LocalizationService
   ) {
     this.detailedFields = gridConfig["controle-qualite"].columns;
+  }
+  ngOnInit(): void {
+    this.enableFilters();
   }
 
   ngAfterViewInit() {
@@ -104,10 +98,6 @@ export class GridControleQualiteComponent
       if (e.data.cq === "NON")
         e.rowElement.classList.add("yellow-datagrid-row");
     }
-  }
-
-  onToggling(toggled: boolean) {
-    toggled ? this.enableFilters() : (this.dataSource = null);
   }
 
   downloadPhotosClick() {

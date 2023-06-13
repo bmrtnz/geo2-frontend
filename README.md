@@ -1,7 +1,7 @@
-| branch | status                                                                                                                                          |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| master | [![status-badge](http://192.168.2.162/api/badges/Microtec/geo2-frontend/status.svg?branch=master)](http://192.168.2.162/Microtec/geo2-frontend) |
-| next   | [![status-badge](http://192.168.2.162/api/badges/Microtec/geo2-frontend/status.svg?branch=next)](http://192.168.2.162/Microtec/geo2-frontend)   |
+| branch | status                                                                                                                                              |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| master | [![status-badge](https://ci.microtec.fr/api/badges/Microtec/geo2-frontend/status.svg?branch=master)](https://ci.microtec.fr/Microtec/geo2-frontend) |
+| next   | [![status-badge](https://ci.microtec.fr/api/badges/Microtec/geo2-frontend/status.svg?branch=next)](https://ci.microtec.fr/Microtec/geo2-frontend)   |
 
 # Geo2
 

@@ -2,9 +2,10 @@ import {
   AfterViewInit,
   Component,
   Input,
+  OnInit,
   QueryList,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from "@angular/core";
 import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -13,7 +14,7 @@ import {
   EntrepotsService,
   LieuxPassageAQuaiService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { DevisesService } from "app/shared/services/api/devises.service";
 import { OrdresFraisService } from "app/shared/services/api/ordres-frais.service";
@@ -23,16 +24,15 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { Observable, from } from "rxjs";
+import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { ToggledGrid } from "../form/form.component";
 import { GridsService } from "../grids.service";
 
 @Component({
@@ -40,7 +40,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-frais.component.html",
   styleUrls: ["./grid-frais.component.scss"],
 })
-export class GridFraisComponent implements ToggledGrid, AfterViewInit {
+export class GridFraisComponent implements OnInit {
   @Input() public ordre: Ordre;
 
   public dataSource: DataSource;
@@ -106,6 +106,10 @@ export class GridFraisComponent implements ToggledGrid, AfterViewInit {
     this.deviseSource.filter(["valide", "=", true]);
     this.initializeFournDataSources();
     this.selectPhase = false;
+  }
+
+  ngOnInit(): void {
+    if (this?.ordre?.id) this.enableFilters();
   }
 
   initializeFournDataSources() {
@@ -246,12 +250,12 @@ export class GridFraisComponent implements ToggledGrid, AfterViewInit {
     if (data && !data.id) return data;
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.raisonSocial
-            ? data.raisonSocial
-            : data.ville
-            ? data.ville
-            : data.description)
+      " - " +
+      (data.raisonSocial
+        ? data.raisonSocial
+        : data.ville
+          ? data.ville
+          : data.description)
       : null;
   }
 
@@ -357,12 +361,6 @@ export class GridFraisComponent implements ToggledGrid, AfterViewInit {
   onSaved() {
     this.selectPhase = false;
     this.datagrid.instance.repaint();
-  }
-
-  onToggling(toggled: boolean) {
-    toggled && this?.ordre?.id
-      ? this.enableFilters()
-      : (this.dataSource = null);
   }
 
   public calculateAchatPU(entity: Partial<OrdreFrais>) {
