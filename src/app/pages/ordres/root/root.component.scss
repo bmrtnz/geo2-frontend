@@ -8,6 +8,12 @@
       padding: 12px 15px 12px 13px;
       margin: 0 1px;
 
+      &:hover {
+        i.dx-icon-close {
+          color: #fe3d2c
+        }
+      }
+
       &.create-order-tab {
         color: #FFF;
         background: #8FC459;
@@ -22,11 +28,11 @@
           color: $base-accent;
         }
 
-        &:hover {
-          .dx-icon {
-            color: #fe3d2c;
-          }
-        }
+        // &:hover {
+        //   .dx-icon {
+        //     color: #fe3d2c;
+        //   }
+        // }
       }
 
     }
