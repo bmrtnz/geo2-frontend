@@ -7,6 +7,8 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onRowPrepared)="onRowPrepared($event)"
+  (onCellDblClick)="createOrder.emit()"
   (onFocusedRowChanged)="onFocusedRowChanged($event)"
   (onToolbarPreparing)="gridConfigHandler($event)"
 >

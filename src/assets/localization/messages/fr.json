@@ -1125,7 +1125,7 @@
     "ordresFournisseur-ordre-transporteur-id": "Transporteur",
     "ordresFournisseur-nombrePalettesCommandees": "Pal",
     "ordresFournisseur-nombreColisExpedies": "Colis",
-    "ordresFournisseur-article-description": "Description article résumée",
+    "ordresFournisseur-article-articleDescription-descriptionReferenceLongue": "Description article résumée",
     "ordresFournisseur-ordre-dateLivraisonPrevue": "Livraison",
     "ordresFournisseur-ordre-client-code": "Client",
     "ordresFournisseur-ordre-entrepot-code": "Entrepôt",

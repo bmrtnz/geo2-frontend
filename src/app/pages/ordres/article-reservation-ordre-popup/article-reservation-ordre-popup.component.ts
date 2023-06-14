@@ -14,7 +14,6 @@ import {
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
 import { LocalizationService } from "app/shared/services";
-import { CalibresFournisseurService } from "app/shared/services/api/calibres-fournisseur.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
@@ -58,14 +57,13 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   gridResaEnCours: GridReservationStockEnCoursComponent;
 
   constructor(
-    private calibresFournisseurService: CalibresFournisseurService,
     private localizeService: LocalizationService,
     private cd: ChangeDetectorRef,
     private gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService,
     private grids: GridsService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ordreLigne.currentValue !== undefined) {
@@ -159,8 +157,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     if (article.description) this.pushText(article.description);
     this.pushText(
       article.matierePremiere.variete.description +
-        " " +
-        article.matierePremiere.origine.description
+      " " +
+      article.matierePremiere.origine.description
     );
     if (article.cahierDesCharge.categorie?.description)
       this.pushText(article.cahierDesCharge.categorie.description);

@@ -144,13 +144,13 @@
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [visible]="allowMutations"
-        [disabled]="!cell.data.nombreColisCommandes"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
       >
       </dx-button>
     </div>
   </ng-container>
+  <!-- [disabled]="!cell.data.nombreColisCommandes" -->
 
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">

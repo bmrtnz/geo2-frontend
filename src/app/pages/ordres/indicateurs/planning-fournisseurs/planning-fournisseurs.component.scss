@@ -9,7 +9,12 @@
 }
 
 ::ng-deep .orderTileFilterArea {
-  width: 1024px;
+  width: 1100px;
+
+  .refresh {
+    float: right;
+    right: 19px;
+  }
 
   .refresh {
     float: right;

@@ -277,7 +277,9 @@
       [cssClass]="column?.cssClass"
       [calculateGroupValue]="column.calculateGroupValue"
       allowSearch="false"
-      [allowHeaderFiltering]="false"
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
       [showInColumnChooser]="column?.showInColumnChooser"
     >
     </dxi-column>

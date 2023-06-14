@@ -120,6 +120,8 @@ export class NouvelOrdreComponent implements OnInit {
   }
 
   onButtonLoaderClick() {
+    if (!this.getSelectedEntrepot() || this.hideButton) return;
+
     this.resolver = this.ofValideEntrepotForOrdreRef.pipe(
       mapTo(this.getSelectedEntrepot()),
       switchMap((entrepot) =>
