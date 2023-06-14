@@ -29,7 +29,7 @@ import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { Observable } from "rxjs";
-import { concatMap, filter, map, takeWhile, tap } from "rxjs/operators";
+import { filter, map, takeWhile, tap } from "rxjs/operators";
 
 const BASSINS = ["UDC", "VDL", "SE", "SW", "IMP"];
 

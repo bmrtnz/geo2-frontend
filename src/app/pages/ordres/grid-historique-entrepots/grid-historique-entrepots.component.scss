@@ -8,3 +8,7 @@
     margin: 0 5px;
   }
 }
+
+::ng-deep .cursor-pointer {
+  cursor: pointer !important;
+}

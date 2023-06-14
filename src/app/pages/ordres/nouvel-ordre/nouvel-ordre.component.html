@@ -32,11 +32,13 @@
   #grid
   (pulseButton)="pulseButton($event)"
   (hideCreateButton)="hideCreateButton($event)"
+  (createOrder)="onButtonLoaderClick()"
   *ngIf="favorites"
 ></app-grid-historique-entrepots>
 <app-grid-entrepots
   #grid
   (pulseButton)="pulseButton($event)"
+  (createOrder)="onButtonLoaderClick()"
   *ngIf="!favorites"
 ></app-grid-entrepots>
 <app-info-popup [customText]="errorText"></app-info-popup>
