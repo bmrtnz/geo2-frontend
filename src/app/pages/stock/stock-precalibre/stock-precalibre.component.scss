@@ -1,0 +1,100 @@
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+::ng-deep .stock-preca {
+  .search-criteria-container {
+    h6 {
+      margin: 0 0 9px 0;
+    }
+
+    .search-criteria-subcontainer {
+      width: calc(100% - 116px) !important;
+      overflow: hidden;
+      float: left;
+
+      .week {
+        width: 45% !important;
+        text-transform: capitalize;
+      }
+
+      .dx-field {
+        float: left;
+        margin-right: 15px;
+        width: 200px;
+
+        &.week-field {
+          width: 120px;
+
+          .week-value {
+            .dx-texteditor-input {
+              text-align: center;
+            }
+          }
+        }
+
+        &.fournisseur-field {
+          width: 400px;
+
+          .dx-field-value {
+            width: 250%;
+          }
+        }
+
+        .dx-field-label {
+          text-overflow: visible;
+          white-space: normal;
+          font-size: 12px;
+          line-height: 12px;
+          padding: 10px 0;
+          text-align: left;
+          margin-right: 10px;
+          overflow: visible;
+          align-self: baseline;
+
+          &.noPadding {
+            padding: 0 !important;
+          }
+        }
+
+        .dx-texteditor {
+          font-size: 12px;
+
+          .dx-texteditor-input {
+            font-size: 13px;
+          }
+        }
+
+        .dx-field-value {
+          width: 70%;
+
+          &.small-field {
+            width: 30%;
+          }
+        }
+
+        .dx-field-label {
+          width: 30%;
+        }
+      }
+
+      .dx-field-value {
+        width: 70%;
+
+        &.small-field {
+          width: 30%;
+        }
+      }
+
+      .refresh {
+        top: 0;
+        margin-left: 10px;
+        float: right;
+      }
+    }
+  }
+
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+}
