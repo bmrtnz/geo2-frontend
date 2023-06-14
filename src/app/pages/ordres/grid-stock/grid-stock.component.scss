@@ -53,8 +53,7 @@
   }
 
   .dx-row-focused {
-    td:not(.highlight-stockJ21-cell):not(.bio-article)
-      .dx-datagrid-summary-item {
+    td:not(.highlight-stockJ21-cell):not(.bio-article) .dx-datagrid-summary-item {
       color: #fff !important;
     }
 
@@ -177,4 +176,20 @@
 
 ::ng-deep .cursor-pointer {
   cursor: pointer !important;
+}
+
+::ng-deep .refresh-prev-stock-btn {
+  position: absolute;
+  margin-top: 11px;
+  right: 210px;
+  z-index: 1;
+
+  .dx-button {
+    height: 29px;
+    font-size: 12px;
+
+    .dx-button-content {
+      padding: 0 12px;
+    }
+  }
 }

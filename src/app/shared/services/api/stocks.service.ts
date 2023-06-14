@@ -385,4 +385,19 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       fetchPolicy: "network-only",
     });
   }
+
+  refreshStockHebdo() {
+    return this.apollo.query<{ refreshStockHebdo }>({
+      query: gql(
+        ApiService.buildGraph("query", [
+          {
+            name: `refreshStockHebdo`,
+            body: functionBody,
+          },
+        ])
+      ),
+      fetchPolicy: "network-only",
+    });
+  }
+
 }

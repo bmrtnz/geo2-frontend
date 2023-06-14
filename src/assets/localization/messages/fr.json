@@ -92,6 +92,7 @@
     "btn-transfer": "Transférer",
     "btn-cloneorder": "Dupliquer",
     "btn-stock": "Stock",
+    "btn-refresh-prev-stock": "Actualiser les prévisions",
     "btn-manuel": "Manuel",
     "btn-referenceClt": "Réf. Client",
     "btn-detailExp": "+ Détail expéd.",

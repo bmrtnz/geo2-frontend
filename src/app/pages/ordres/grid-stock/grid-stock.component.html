@@ -159,6 +159,7 @@
     <dx-button
       class="refresh floatRight"
       type="default"
+      [class]="toRefresh ? '' : 'inactive-button'"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="refreshArticlesGrid()"
     ></dx-button>
@@ -171,6 +172,16 @@
       hint="{{ 'btn-grouping' | localize }}"
       (onClick)="gridsService.expandCollapseGroups(this, false)"
     ></dx-button>
+
+    <div class="refresh-prev-stock-btn">
+      <dx-button
+        text="{{ 'btn-refresh-prev-stock' | localize }}"
+        type="success"
+        [disabled]="calculate"
+        (onClick)="refreshPrevStock()"
+      ></dx-button>
+    </div>
+
     <dx-data-grid
       class="dx-card wide-card grid-ordre-ligne-stock"
       [remoteOperations]="false"
@@ -183,6 +194,7 @@
       [rowAlternationEnabled]="true"
       [noDataText]="'aucun-stock' | localize"
       [keyExpr]="'id'"
+      (onContentReady)="onContentReady($event)"
       (onRowPrepared)="onRowPrepared($event)"
       (onCellPrepared)="onCellPrepared($event)"
       (onCellDblClick)="onCellDblClick($event)"

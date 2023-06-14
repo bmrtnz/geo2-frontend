@@ -92,10 +92,12 @@ export class GridStockComponent implements OnInit {
   bureauxAchat: Observable<DataSource>;
   trueFalse: any;
   initialSpecy: any;
+  calculate: boolean;
   allGridFilters: any;
   toRefresh: boolean;
   gridTitle: string;
   noEspeceSet: boolean;
+  gridRowsTotal: number;
   public summaryFields = [
     "quantiteCalculee1",
     "quantiteCalculee2",
@@ -118,6 +120,7 @@ export class GridStockComponent implements OnInit {
     public gridsService: GridsService
   ) {
     self = this;
+    this.gridRowsTotal = 0;
     this.apiService = this.articlesService;
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
@@ -267,7 +270,7 @@ export class GridStockComponent implements OnInit {
         this.datagrid.dataSource = res.data.allStockArticleList;
         this.datagrid.instance.refresh();
         this.datagrid.instance.endCustomLoading();
-        this.toRefresh = false;
+        this.calculate = false;
       });
   }
 
@@ -350,7 +353,6 @@ export class GridStockComponent implements OnInit {
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
-    this.toRefresh = true;
     this.gridsService.reload("SyntheseExpeditions");
   }
 
@@ -364,6 +366,10 @@ export class GridStockComponent implements OnInit {
     if (e.column.dataField === "articleDescription") {
       this.openFilePopup(e.data);
     }
+  }
+
+  onContentReady(e) {
+    this.gridRowsTotal = this.datagrid.instance.getVisibleRows()?.length;
   }
 
   onRowPrepared(e) {
@@ -429,6 +435,14 @@ export class GridStockComponent implements OnInit {
         commentaire: comment,
       })
       .subscribe(() => this.refreshArticlesGrid());
+  }
+
+  refreshPrevStock() {
+    this.calculate = true;
+    this.datagrid.instance.beginCustomLoading("calculate prev");
+    this.stocksService.refreshStockHebdo().subscribe(() => {
+      this.refreshArticlesGrid();
+    });
   }
 
   public calculateCustomSummary(options) {
