@@ -1,0 +1,79 @@
+::ng-deep .stock-title {
+  margin-bottom: 5px !important;
+}
+
+::ng-deep .stock-page {
+  margin-top: 0;
+
+  .tabpanel-item {
+    position: relative;
+    margin-top: 12px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 15px;
+    border: 1px solid #aaa;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .mobile .tabpanel-item {
+    padding-top: 10px;
+  }
+
+  .tabpanel-item p {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .item-box {
+    font-size: 16px;
+    margin: 15px 0 45px 10px;
+  }
+
+  .dx-tabs-wrapper {
+    background: #f2f2f2;
+
+    .dx-tab:after {
+      position: absolute;
+      font-size: 30px;
+      top: 35px;
+      right: 50%;
+      color: #aaa;
+      content: "|";
+      display: none;
+    }
+  }
+
+  .dx-tab-content {
+    span {
+      font-size: 24px;
+      text-transform: none;
+    }
+  }
+
+  .dx-tab-selected:before {
+    display: none;
+  }
+
+  .dx-tab-selected,
+  .dx-tabs-wrapper .dx-tab:hover {
+    background: #f2f2f2;
+  }
+
+  .dx-tabs-wrapper .dx-tab-selected:after {
+    display: block;
+  }
+
+  .search-criteria-container {
+    float: left;
+    width: 100%;
+  }
+
+  .grid-grouping-button {
+    margin: 13px 21px 0 0 !important;
+  }
+}

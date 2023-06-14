@@ -976,8 +976,16 @@
         "cssClass": "no-padding largeDropDown",
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "raisonSocial", "ville"],
-          "searchExpr": ["id", "raisonSocial", "ville"]
+          "displayExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
+          ],
+          "searchExpr": [
+            "id",
+            "raisonSocial",
+            "ville"
+          ]
         }
       },
       {
@@ -988,8 +996,14 @@
         "cssClass": "mediumDropDown",
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id", "description"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
         }
       },
       {
@@ -1281,6 +1295,7 @@
         "dataField": "articleDescription",
         "dataType": "string",
         "groupIndex": 0,
+        "groupCellTemplate": "groupCellButtonsTemplate",
         "visible": true
       },
       {
@@ -1339,7 +1354,7 @@
       {
         "visibleIndex": 20,
         "dataField": "quantiteCalculee3",
-        "width": 60,
+        "width": 70,
         "visible": true
       },
       {
@@ -1349,12 +1364,33 @@
         "visible": true
       },
       {
-        "visibleIndex": 24,
-        "dataField": "descriptionAbregee",
+        "visibleIndex": 26,
+        "dataField": "quantiteHebdomadaire",
+        "width": 40,
+        "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 28,
+        "dataField": "prevision3j",
+        "width": 45,
+        "cssClass": "no-padding multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "prevision7j",
+        "width": 45,
+        "cssClass": "no-padding multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "descriptionAbregee",
+        "visible": true
+      },
+      {
+        "visibleIndex": 40,
         "dataField": "commentaire",
         "visible": true,
         "cellTemplate": "editButtonTemplate"
@@ -2656,8 +2692,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["code", "raisonSocial"],
-          "searchExpr": ["code"]
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
         },
         "width": 170
       },
@@ -2674,8 +2715,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["code", "raisonSocial"],
-          "searchExpr": ["code"]
+          "displayExpr": [
+            "code",
+            "raisonSocial"
+          ],
+          "searchExpr": [
+            "code"
+          ]
         },
         "width": 170
       },
@@ -2698,7 +2744,10 @@
       },
       {
         "dataField": "venteUnite.id",
-        "calculateDisplayValue": ["venteUnite.id", "venteUnite.description"],
+        "calculateDisplayValue": [
+          "venteUnite.id",
+          "venteUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "venteUnite.id",
         "editorOptions": {
@@ -2706,8 +2755,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2718,7 +2772,10 @@
       },
       {
         "dataField": "codePromo.id",
-        "calculateDisplayValue": ["codePromo.id", "codePromo.description"],
+        "calculateDisplayValue": [
+          "codePromo.id",
+          "codePromo.description"
+        ],
         "visible": true,
         "calculateSortValue": "codePromo.id",
         "editorOptions": {
@@ -2726,8 +2783,14 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id", "description"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id",
+            "description"
+          ]
         },
         "cssClass": "small-header-right",
         "allowEditing": true,
@@ -2752,7 +2815,10 @@
       },
       {
         "dataField": "achatUnite.id",
-        "calculateDisplayValue": ["achatUnite.id", "achatUnite.description"],
+        "calculateDisplayValue": [
+          "achatUnite.id",
+          "achatUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
@@ -2760,8 +2826,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2773,7 +2844,10 @@
       },
       {
         "dataField": "typePalette.id",
-        "calculateDisplayValue": ["typePalette.id", "typePalette.description"],
+        "calculateDisplayValue": [
+          "typePalette.id",
+          "typePalette.description"
+        ],
         "visible": true,
         "calculateSortValue": "typePalette.id",
         "editorOptions": {
@@ -2782,8 +2856,13 @@
         "lookup": {
           "searchMode": "startswith",
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2800,8 +2879,13 @@
         "lookup": {
           "searchMode": "startswith",
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -2829,7 +2913,10 @@
       },
       {
         "dataField": "fraisUnite.id",
-        "calculateDisplayValue": ["fraisUnite.id", "fraisUnite.description"],
+        "calculateDisplayValue": [
+          "fraisUnite.id",
+          "fraisUnite.description"
+        ],
         "visible": true,
         "calculateSortValue": "fraisUnite.id",
         "editorOptions": {
@@ -2837,8 +2924,13 @@
         },
         "lookup": {
           "valueExpr": "id",
-          "displayExpr": ["id", "description"],
-          "searchExpr": ["id"]
+          "displayExpr": [
+            "id",
+            "description"
+          ],
+          "searchExpr": [
+            "id"
+          ]
         }
       },
       {
@@ -7630,6 +7722,207 @@
       {
         "dataField": "valide",
         "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
+  "stock-preca": {
+    "pageSize": 100,
+    "columns": [
+      {
+        "dataField": "id",
+        "sortOrder": "asc",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "variete.id",
+        "dataType": "string",
+        "cssClass": "no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "choix",
+        "dataType": "string",
+        "cssClass": "no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "modeCulture.description",
+        "dataType": "string",
+        "cssClass": "no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "colo",
+        "dataType": "string",
+        "cssClass": "no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "fournisseur.code",
+        "dataType": "string",
+        "cssClass": "no-padding-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "quantite",
+        "cssClass": "bold-text",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "p327",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "p288",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "p267",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "p248",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "p232",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 21,
+        "dataField": "p216",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "p204",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
+        "dataField": "p198",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "p175",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 28,
+        "dataField": "p163",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "p150",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "p138",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 36,
+        "dataField": "p125",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 38,
+        "dataField": "p113",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 40,
+        "dataField": "p100",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 42,
+        "dataField": "p88",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 44,
+        "dataField": "p80",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 46,
+        "dataField": "p72",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 48,
+        "dataField": "p64",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 50,
+        "dataField": "p56",
+        "width": "auto",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 52,
+        "dataField": "commentaire",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "dataField": "valide",
         "visible": false
       }
     ]

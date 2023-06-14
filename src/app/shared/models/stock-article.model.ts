@@ -70,6 +70,15 @@ export class StockArticle extends StockQuantite {
 
   @Field()
   commentaire: string;
+
+  @Field()
+  quantiteHebdomadaire: number;
+
+  @Field()
+  prevision3j: number;
+
+  @Field()
+  prevision7j: number;
 }
 
 export default StockArticle;

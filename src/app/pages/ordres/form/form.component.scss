@@ -484,9 +484,7 @@ dx-button[type="normal"] {
 
     .dx-button-text {
       margin-top: 0 !important;
-      // white-space: nowrap !important;
-      // text-overflow: ellipsis;
-      // overflow: hidden;
+      line-height: 12px !important;
     }
   }
 }

@@ -1,0 +1,105 @@
+<div class="stock-preca">
+  <div class="search-criteria-container">
+    <h6>{{ "articles-preFilter-title" | localize }}</h6>
+    <div style="clear: both"></div>
+    <div
+      class="search-criteria-subcontainer"
+      style="width: auto"
+    >
+      <!-- semaine -->
+      <div class="dx-field week-field">
+        <div class="dx-field-label week">
+          {{ "week" | localize }}
+        </div>
+        <div class="dx-field-value week-value">
+          <dx-number-box
+            #weekBox
+            [showSpinButtons]="true"
+            (onValueChanged)="weekChanged($event)"
+          >
+            <dxi-button name="spins"></dxi-button>
+          </dx-number-box>
+        </div>
+      </div>
+
+      <!-- Fournisseur -->
+      <div class="dx-field fournisseur-field">
+        <div class="dx-field-label capitalize noEllipsis">
+          {{ "fournisseur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #fournisseurSB
+            [dataSource]="fournisseurs"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+            [showClearButton]="true"
+          >
+          </dx-select-box>
+        </div>
+      </div>
+
+      <!-- espèce -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "articles-matierePremiere-espece" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #especeSB
+            [items]="especes"
+            [value]="'POMME'"
+            (valueChange)="onEspeceChange()"
+          >
+          </dx-select-box>
+        </div>
+      </div>
+      <!-- variété -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "articles-matierePremiere-variete" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #varieteSB
+            [items]="varietes"
+            [disabled]="noEspeceSet"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
+      <!-- Mode Culture -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label noPadding">
+          {{ "articles-matierePremiere-modeCulture" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #modesCultureSB
+            [dataSource]="modesCulture"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+          >
+            <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
+    </div>
+    <dx-button
+      class="refresh floatRight"
+      type="default"
+      text="{{ 'btn-refresh' | localize }}"
+      (onClick)="refreshArticlesGrid()"
+    ></dx-button>
+
+    <div style="clear: both"></div>
+
+    <app-grid-precalibre
+      [especeId]="currentSpecy"
+      [corrPommeKiwi]="corrPommeKiwi"
+    ></app-grid-precalibre>
+  </div>
+</div>
