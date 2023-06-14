@@ -10,7 +10,10 @@
     (onTitleRendered)="onTabTitleRendered($event)"
     noDataText="{{ 'loading-progress' | localize }}"
   >
-    <div *dxTemplate="let tab of 'title'">
+    <div
+      *dxTemplate="let tab of 'title'"
+      [ngClass]="tab.class"
+    >
       <div
         [hidden]="tab.hideTab"
         class="dx-item-content dx-tab-content"
@@ -19,8 +22,8 @@
         <i
           class="dx-icon"
           [ngClass]="tab.icon"
-          (click)="tabIconClick($event)"
         ></i>
+        <!-- (click)="tabIconClick($event)" -->
         <span
           *ngIf="tab.title"
           class="tab-separator"

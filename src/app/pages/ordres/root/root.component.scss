@@ -2,7 +2,34 @@
 
 ::ng-deep .tabs-ordres-page {
   .dx-tab {
-    padding: 12px 16px 12px 14px;
+    padding: 0;
+
+    .dx-template-wrapper.dx-tab-content {
+      padding: 12px 15px 12px 13px;
+      margin: 0 1px;
+
+      &.create-order-tab {
+        color: #FFF;
+        background: #8FC459;
+
+        .dx-icon {
+          color: #FFF;
+        }
+      }
+
+      &.close-all-orders-tab {
+        .dx-icon {
+          color: $base-accent;
+        }
+
+        &:hover {
+          .dx-icon {
+            color: #fe3d2c;
+          }
+        }
+      }
+
+    }
 
     i.dx-icon-close {
       position: absolute;
@@ -12,11 +39,11 @@
       visibility: hidden;
 
       &:hover {
-        color: red;
+        color: #fe3d2c
       }
     }
 
-    .dx-tab-text > i {
+    .dx-tab-text>i {
       margin-right: 5px;
       display: inline;
     }
@@ -34,10 +61,6 @@
 
     .disabled_by_default {
       color: $base-accent;
-
-      &:hover {
-        color: red;
-      }
     }
 
     &:hover i.dx-icon-close {
