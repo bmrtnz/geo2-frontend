@@ -10,7 +10,8 @@
 
       &:hover {
         i.dx-icon-close {
-          color: #fe3d2c
+          color: #fe3d2c;
+          visibility: visible;
         }
       }
 
@@ -28,11 +29,11 @@
           color: $base-accent;
         }
 
-        // &:hover {
-        //   .dx-icon {
-        //     color: #fe3d2c;
-        //   }
-        // }
+        &:hover {
+          .dx-icon {
+            color: #fe3d2c;
+          }
+        }
       }
 
     }
@@ -43,10 +44,6 @@
       right: -2px;
       font-size: 17px;
       visibility: hidden;
-
-      &:hover {
-        color: #fe3d2c
-      }
     }
 
     .dx-tab-text>i {
@@ -67,10 +64,6 @@
 
     .disabled_by_default {
       color: $base-accent;
-    }
-
-    &:hover i.dx-icon-close {
-      visibility: visible;
     }
 
     .dx-badge {
