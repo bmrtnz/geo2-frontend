@@ -28,7 +28,6 @@ import { StockMouvementsService } from "app/shared/services/api/stock-mouvements
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { OrdreLigne } from "app/shared/models";
 import { StocksService } from "app/shared/services/api/stocks.service";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
 @Component({
   selector: "app-destockage-auto-popup",
@@ -63,7 +62,6 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   constructor(
     private stockMouvementsService: StockMouvementsService,
-    private ordreLignesService: OrdreLignesService,
     private authService: AuthService,
     private stocksService: StocksService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -198,6 +196,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   quitPopup() {
     this.popup.visible = false;
+    this.gridCommandes.update();
   }
 
   private messageFormat(mess) {
