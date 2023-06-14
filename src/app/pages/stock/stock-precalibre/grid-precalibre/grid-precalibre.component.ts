@@ -34,7 +34,7 @@ export class GridPrecalibreComponent {
     private localizationService: LocalizationService,
     public gridsService: GridsService,
     public authService: AuthService
-  ) { }
+  ) {}
 
   setColumns() {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -46,7 +46,15 @@ export class GridPrecalibreComponent {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.value === 0 && !e.data.totalRow) e.cellElement.textContent = "";
+      if (!e.data.totalRow) {
+        if (e.value === 0) e.cellElement.textContent = "";
+      } else {
+        if (e.column.dataField === "fournisseur.code") {
+          ["text-align-right", "bold-text"].map((c) =>
+            e.cellElement.classList.add(c)
+          );
+        }
+      }
     }
   }
 

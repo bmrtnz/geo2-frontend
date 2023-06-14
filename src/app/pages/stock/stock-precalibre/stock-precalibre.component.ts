@@ -153,8 +153,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
     this.onEspeceChange(); // First run: setting filters values
     this.grid.setColumns();
 
-    this.weekBox.value = 1748; // A VIRER !!!
-    setTimeout(() => this.refreshArticlesGrid(), 500); // A VIRER !!!
+    // this.weekBox.value = 1748; // A VIRER !!!
   }
 
   weekChanged(e) {
@@ -247,7 +246,9 @@ export class StockPrecalibreComponent implements AfterViewInit {
                 ...data,
                 ...oldArticleMainInfo,
                 id: oldLastTotalId,
-                fournisseur: { code: "Total" },
+                fournisseur: {
+                  code: `${this.localizeService.localize("total")} :`,
+                },
                 ...this.calibres[this.currentSpecy],
                 quantite: sumQte,
                 totalRow: true,
