@@ -1,20 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { FournisseursService, LocalizationService } from "app/shared/services";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import { Observable } from "rxjs";
 import { GridsService } from "../../ordres/grids.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { ModesCultureService } from "app/shared/services/api/modes-culture.service";
 import { GridPrecalibreComponent } from "./grid-precalibre/grid-precalibre.component";
-import dxDataGrid from "devextreme/ui/data_grid";
+
 
 @Component({
   selector: "app-stock-precalibre",
@@ -154,6 +147,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
     this.grid.setColumns();
 
     // this.weekBox.value = 1748; // A VIRER !!!
+    // setTimeout(() => this.refreshArticlesGrid(), 500) // A VIRER !!!
   }
 
   weekChanged(e) {
@@ -216,6 +210,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
         let DsItems2 = []; // New array with additionnal total rows
         let oldLastTotalId;
         let sumQte;
+        let dataItems;
         DsItems.map((data) => {
           // Calculating sum of each calibres
           let sumCal = 0;
@@ -231,7 +226,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
             oldArticleMainInfo?.variete?.id === data.variete.id &&
             oldArticleMainInfo?.choix === data.choix &&
             oldArticleMainInfo?.modeCulture.description ===
-              data.modeCulture.description &&
+            data.modeCulture.description &&
             oldArticleMainInfo?.colo === data.colo
           ) {
             id++;
@@ -239,7 +234,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
             id += 2;
             // Inserting total row
             this.calibres[this.currentSpecy].map(
-              (cal) => (sumQte += this.calibres[this.currentSpecy][cal])
+              cal => (sumQte += this.calibres[this.currentSpecy][cal])
             );
             if (oldLastTotalId !== undefined)
               DsItems2.push({
@@ -257,7 +252,7 @@ export class StockPrecalibreComponent implements AfterViewInit {
             // Reset total
             sumQte = 0;
             this.calibres[this.currentSpecy].map(
-              (cal) => (this.calibres[this.currentSpecy][cal] = 0)
+              cal => (this.calibres[this.currentSpecy][cal] = 0)
             );
             oldArticleMainInfo = {
               variete: { id: data.variete.id },
@@ -272,15 +267,34 @@ export class StockPrecalibreComponent implements AfterViewInit {
               (this.calibres[this.currentSpecy][cal] ?? 0) + data[cal];
           });
           // Clear repeated fields
-          if (DsItems.length > 1) {
-            data.variete = { id: "" };
-            data.choix = "";
-            data.modeCulture = { description: "" };
-            data.colo = "";
-          }
+          data.variete = { id: "" };
+          data.choix = "";
+          data.modeCulture = { description: "" };
+          data.colo = "";
+
           data.id = id;
           DsItems2.push(data);
+          dataItems = data;
         });
+
+        if (DsItems2.length) {
+          // Last total row, has to be set separately
+          this.calibres[this.currentSpecy].map(
+            cal => (sumQte += this.calibres[this.currentSpecy][cal])
+          );
+          DsItems2.push({
+            ...dataItems,
+            ...oldArticleMainInfo,
+            id: oldLastTotalId,
+            fournisseur: {
+              code: `${this.localizeService.localize("total")} :`,
+            },
+            ...this.calibres[this.currentSpecy],
+            quantite: sumQte,
+            totalRow: true,
+          });
+        }
+
         this.grid.datagrid.dataSource = DsItems2;
         this.grid.datagrid.instance.endCustomLoading();
       });
@@ -298,9 +312,9 @@ export class StockPrecalibreComponent implements AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          (data.description || data.raisonSocial
-            ? " - " + (data.raisonSocial ? data.raisonSocial : data.description)
-            : "")
+      (data.description || data.raisonSocial
+        ? " - " + (data.raisonSocial ? data.raisonSocial : data.description)
+        : "")
       : null;
   }
 }
