@@ -1,6 +1,11 @@
 @import "src/themes/generated/variables.base.scss";
 
 ::ng-deep .tabs-ordres-page {
+
+  .dx-tabs-nav-button {
+    height: 100% !important;
+  }
+
   .dx-tab {
     padding: 0;
 
@@ -15,16 +20,34 @@
         }
       }
 
+      &.home-tab {
+        height: 55px;
+
+        .dx-icon {
+          margin-top: 4px;
+        }
+      }
+
       &.create-order-tab {
         color: #FFF;
         background: #8FC459;
 
+        small {
+          color: #FFF;
+        }
+
         .dx-icon {
           color: #FFF;
+        }
+
+        &:hover {
+          background: #79B23F;
         }
       }
 
       &.close-all-orders-tab {
+        height: 55px;
+
         .dx-icon {
           color: $base-accent;
         }
@@ -72,8 +95,10 @@
       top: 4px;
     }
 
-    &.dx-tab-selected small {
-      color: $base-accent;
+    &.dx-tab-selected {
+      small {
+        color: $base-accent;
+      }
     }
 
     .dx-template-wrapper {

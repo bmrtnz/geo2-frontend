@@ -75,6 +75,7 @@ enum Position {
 export type TabPanelItem = dxTabPanelItem & {
   id: string;
   icon?: string;
+  title?: string;
   details?: string;
   position: number;
   component?: FormComponent | any;
@@ -420,6 +421,7 @@ export class RootComponent implements OnInit, OnDestroy {
       {
         id: TAB_HOME_ID,
         icon: "material-icons home",
+        class: "home-tab",
         component: (await import("../accueil/ordres-accueil.component"))
           .OrdresAccueilComponent,
         position: Position.Front,
