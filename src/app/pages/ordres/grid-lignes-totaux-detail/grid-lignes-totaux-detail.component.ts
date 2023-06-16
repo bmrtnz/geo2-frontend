@@ -26,8 +26,7 @@ import { GridsService } from "../grids.service";
   styleUrls: ["./grid-lignes-totaux-detail.component.scss"],
 })
 export class GridLignesTotauxDetailComponent
-  implements ToggledGrid, AfterViewInit
-{
+  implements ToggledGrid, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -104,7 +103,7 @@ export class GridLignesTotauxDetailComponent
         e.column.dataField === "fournisseur.code" &&
         e.cellElement.textContent
       ) {
-        e.cellElement.textContent = e.data?.items[0]?.nombrePalettesExpediees;
+        e.cellElement.textContent = e.data?.aggregates[0];
       } else {
         if (e.columnIndex === 0) e.cellElement.textContent = e.data.key;
       }
