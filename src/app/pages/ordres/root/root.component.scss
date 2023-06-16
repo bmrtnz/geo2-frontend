@@ -2,7 +2,30 @@
 
 ::ng-deep .tabs-ordres-page {
 
-  .dx-tabs-nav-button {
+  .dx-fast-prev-btn,
+  .dx-fast-next-btn {
+    top: 20px;
+    width: 28px !important;
+    height: 55px;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .dx-fast-prev-btn {
+    left: 12px;
+  }
+
+  .dx-fast-next-btn {
+    right: 12px;
+  }
+
+  .dx-tabs-nav-button-left,
+  .dx-tabs-nav-button-right {
+    width: 28px !important;
+    min-width: 0 !important;
+  }
+
+  .dx-tabs-nav-button:not(.dx-fast-prev-btn):not(.dx-fast-next-btn) {
     height: 100% !important;
   }
 

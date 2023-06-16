@@ -145,6 +145,8 @@
     "tous-encours": "Tous en-cours",
     "depassement-encours": "Dépassements",
     "indicateur-stock": "Indicateur stock",
+    "list-start": "Aller en début de liste",
+    "list-end": "Aller en fin de liste",
     "title-start-article-reservation-ordre-popup": "Déstockage sur ordre ",
     "title-end-article-reservation-ordre-popup": "- article &A - &C colis",
     "title-option-stock-popup": "Réservation de stock",

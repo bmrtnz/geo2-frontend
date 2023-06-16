@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   HostListener,
@@ -54,6 +55,8 @@ import {
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
 
+let self;
+
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
 const PREVIOUS_STATE = "previous_tab_id";
@@ -97,7 +100,9 @@ export class TabContext {
     private localization: LocalizationService,
     private router: Router,
     private currentCompanyService: CurrentCompanyService
-  ) { }
+  ) {
+    self = this;
+  }
 
   public registerComponent(instance: RootComponent) {
     this.componentRef = instance;
@@ -197,12 +202,14 @@ export class TabContext {
   templateUrl: "./root.component.html",
   styleUrls: ["./root.component.scss"],
 })
-export class RootComponent implements OnInit, OnDestroy {
+export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy = new Subject<boolean>();
 
   public tabChangeEvent = new EventEmitter<TabChangeData>();
   public tabPanelInitialized = new EventEmitter<any>();
   public tabPanelReady = new EventEmitter<any>();
+  private fastPrevButton: HTMLElement;
+  private fastNextButton: HTMLElement;
   public activeStateEnabled = false;
   public typeTab = TabType;
 
@@ -239,6 +246,17 @@ export class RootComponent implements OnInit, OnDestroy {
       .subscribe();
     this.surveyBlockage();
     window.sessionStorage.removeItem("idOrdre");
+    setInterval(() => {
+      const leftArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-left") as HTMLElement;
+      this.fastPrevButton.style.visibility = (leftArrow && !leftArrow.classList.contains("dx-state-disabled")) ? "visible" : "hidden";
+      const rightArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-right") as HTMLElement;
+      this.fastNextButton.style.visibility = (rightArrow && !rightArrow.classList.contains("dx-state-disabled")) ? "visible" : "hidden";
+    }, 500);
+  }
+
+  ngAfterViewInit() {
+    this.fastPrevButton = document.querySelector(".dx-fast-prev-btn");
+    this.fastNextButton = document.querySelector(".dx-fast-next-btn");
   }
 
   ngOnDestroy() {
@@ -267,6 +285,14 @@ export class RootComponent implements OnInit, OnDestroy {
           });
       }
     }, 10000);
+  }
+
+  onFastPrevNextClick(dir) {
+    let pos;
+    const tabCont = this.tabPanel.instance.$element()[0].querySelector(".dx-scrollable-container") as HTMLElement;
+    const tabSubCont = tabCont.querySelector(".dx-scrollable-content") as HTMLElement;
+    pos = (dir === "prev") ? 0 : tabSubCont?.offsetWidth - tabCont?.offsetWidth + 2;
+    tabCont.scrollTo({ left: pos, behavior: "smooth" });
   }
 
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {

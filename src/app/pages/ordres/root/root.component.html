@@ -1,4 +1,14 @@
 <div class="tabs-ordres-page">
+  <dx-button
+    type="default"
+    [focusStateEnabled]="false"
+    class="dx-fast-prev-btn visibility-hidden dx-tabs-nav-button dx-tabs-nav-button-left"
+    icon="material-icons keyboard_double_arrow_left"
+    hint="{{ 'list-start' | localize }}"
+    (onClick)="onFastPrevNextClick('prev')"
+  >
+  </dx-button>
+
   <dx-tab-panel
     class="content-block"
     [items]="items"
@@ -57,4 +67,14 @@
       <ng-template [ngComponentOutlet]="item.component"></ng-template>
     </div>
   </dx-tab-panel>
+
+  <dx-button
+    type="default"
+    [focusStateEnabled]="false"
+    class="dx-fast-next-btn visibility-hidden dx-tabs-nav-button dx-tabs-nav-button-right"
+    icon="material-icons keyboard_double_arrow_right"
+    hint="{{ 'list-end' | localize }}"
+    (onClick)="onFastPrevNextClick('next')"
+  >
+  </dx-button>
 </div>
