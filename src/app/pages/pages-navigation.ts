@@ -31,7 +31,6 @@ export const navigation = [
     path: "pages/nested/n/(articles/list)",
   },
   {
-    dev: true,
     text: "Stock",
     icon: "material-icons dashboard",
     path: "pages/stock",
