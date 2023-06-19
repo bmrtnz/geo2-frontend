@@ -50,10 +50,9 @@ export class SideNavOuterToolbarComponent implements OnInit {
     private screen: ScreenService,
     private router: Router,
     private validationService: ValidationService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.filterMenuItems();
     this.menuOpened = this.screen.sizes["screen-large"];
     if (window.localStorage.getItem("HideMainDrawer") === "true") {
       this.menuOpened = false;
@@ -164,11 +163,6 @@ export class SideNavOuterToolbarComponent implements OnInit {
     }
   }
 
-  private filterMenuItems() {
-    if (!isDevMode()) {
-      this.menuItems = this.menuItems.filter((item) => !item.dev);
-    }
-  }
 }
 
 @NgModule({
@@ -183,4 +177,4 @@ export class SideNavOuterToolbarComponent implements OnInit {
   exports: [SideNavOuterToolbarComponent],
   declarations: [SideNavOuterToolbarComponent],
 })
-export class SideNavOuterToolbarModule {}
+export class SideNavOuterToolbarModule { }
