@@ -51,10 +51,10 @@ export class OptionStockPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("option-stock-popup");
-    this.okDisabled = false;
   }
 
   onShown(e) {
+    this.okDisabled = false;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     if (this.gridResa) {
       this.gridResa.initFields();
