@@ -31,7 +31,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMap, map, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-contacts",
@@ -73,7 +73,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     // Zooms client, fournisseur, transporteur...
@@ -204,12 +204,12 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -259,13 +259,16 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
 
   async fetchRefClientEntrepot(fluxComplement: string) {
     const fetchEntrepot = (codeEntrepot: string) =>
-      this.entrepotsService
-        .getOneByCodeAndSocieteId(
-          new Set(["id", "client.id"]),
-          codeEntrepot,
-          this.currentCompanyService.getCompany().id
-        )
-        .pipe(map((res) => res.data.entrepotByCodeAndSocieteId))
+      this.route.parent.firstChild.paramMap.pipe(
+        map(params => params.get("client")),
+        concatMap(clientId => this.entrepotsService
+          .getOneByCodeAndSocieteIdAndClientId(
+            new Set(["id", "client.id"]),
+            codeEntrepot,
+            this.currentCompanyService.getCompany().id,
+            clientId,
+          )),
+        map((res) => res.data.entrepotByCodeAndSocieteIdAndClientId))
         .toPromise();
     const entrepot = await fetchEntrepot(this.codeTiers);
     const partialContact: Partial<Contact> = {};
