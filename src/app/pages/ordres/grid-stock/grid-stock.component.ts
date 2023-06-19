@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { Article } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
+import notify from "devextreme/ui/notify";
 import {
   AuthService,
   ClientsService,
@@ -34,6 +35,9 @@ import { GridsService } from "../grids.service";
 import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-popup.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
+import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
+
+let self;
 
 @Component({
   selector: "app-grid-stock",
@@ -44,6 +48,7 @@ export class GridStockComponent implements OnInit {
   @Input() public ordre: Ordre;
   @Input() public destock: boolean;
   @Input() public reserv: boolean;
+  @Input() public clientsRef: boolean;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
   @Output() public article: Partial<Article>;
@@ -71,6 +76,8 @@ export class GridStockComponent implements OnInit {
   @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false })
   promptPopupComponent: PromptPopupComponent;
+  @ViewChild(ClientsArticleRefPopupComponent, { static: false })
+  clientsRefPopup: ClientsArticleRefPopupComponent;
 
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -89,6 +96,15 @@ export class GridStockComponent implements OnInit {
   toRefresh: boolean;
   gridTitle: string;
   noEspeceSet: boolean;
+  public summaryFields = [
+    "quantiteCalculee1",
+    "quantiteCalculee2",
+    "quantiteCalculee3",
+    "quantiteCalculee4",
+    "prevision3j",
+    "prevision7j",
+  ];
+  public customSummaryFields = ["quantiteHebdomadaire"];
 
   constructor(
     public articlesService: ArticlesService,
@@ -101,6 +117,7 @@ export class GridStockComponent implements OnInit {
     private stockConsolideService: StockConsolideService,
     public gridsService: GridsService
   ) {
+    self = this;
     this.apiService = this.articlesService;
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
@@ -119,11 +136,11 @@ export class GridStockComponent implements OnInit {
     this.articles = this.articlesService.getDataSource_v2(
       await fields.toPromise()
     );
-    this.toRefresh = true;
     this.gridTitle = this.localizeService.localize(
       "articles-catalogue-preFilter-stock-title"
     );
     this.onFieldValueChange(null, "espece"); // First run: setting filters values
+    // setTimeout(() => this.refreshArticlesGrid(), 1000) // A VIRER !!!!
   }
 
   onFilterChange() {
@@ -161,9 +178,8 @@ export class GridStockComponent implements OnInit {
       if (["emballage.emballage.groupe.id"].includes(dataField))
         this.emballagesSB.value = null;
 
-      let sbFilters = `(article.cahierDesCharge.espece.id=='${
-        this.especeSB.value?.node?.key ?? this.especeSB.value?.key
-      }' and quantiteTotale > 0 and valide == true)`;
+      let sbFilters = `(article.cahierDesCharge.espece.id=='${this.especeSB.value?.node?.key ?? this.especeSB.value?.key
+        }' and quantiteTotale > 0 and valide == true)`;
       if (this.varietesSB.value)
         sbFilters += ` and article.matierePremiere.variete.id == '${this.varietesSB.value?.key}'`;
       if (this.groupesSB.value)
@@ -227,12 +243,12 @@ export class GridStockComponent implements OnInit {
 
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -260,6 +276,61 @@ export class GridStockComponent implements OnInit {
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
+  }
+
+  openClientsPopup(data) {
+    this.articleLigneId = data.collapsedItems
+      ? data.collapsedItems[0]?.articleID
+      : data.items[0]?.articleID;
+
+    this.articlesService
+      .getOne_v2(
+        this.articleLigneId,
+        new Set([
+          "id",
+          "description",
+          "referencesClient.client.code",
+          "referencesClient.client.secteur.id",
+          "referencesClient.client.raisonSocial",
+          "referencesClient.client.ville",
+          "matierePremiere.variete.description",
+          "matierePremiere.origine.description",
+          "cahierDesCharge.categorie.description",
+          "cahierDesCharge.coloration.description",
+          "cahierDesCharge.sucre.description",
+          "cahierDesCharge.penetro.description",
+          "cahierDesCharge.cirage.description",
+          "cahierDesCharge.rangement.description",
+          "emballage.emballage.descriptionTechnique",
+          "emballage.emballage.idSymbolique",
+          "emballage.conditionSpecial.description",
+          "emballage.alveole.description",
+          "normalisation.etiquetteEvenementielle.description",
+          "normalisation.etiquetteColis.description",
+          "normalisation.etiquetteUc.description",
+          "normalisation.gtinUc",
+          "normalisation.gtinColis",
+          "normalisation.produitMdd",
+          "normalisation.articleClient",
+          "normalisation.calibreMarquage.description",
+          "normalisation.stickeur.description",
+          "gtinUcBlueWhale",
+          "gtinColisBlueWhale",
+          "instructionStation",
+        ])
+      )
+      .subscribe((res) => {
+        this.article = res.data.article;
+        if (!res.data.article.referencesClient?.length) {
+          notify(
+            this.localizeService.localize("no-client-ref-article"),
+            "warning",
+            4500
+          );
+        } else {
+          this.clientsRefPopup.visible = true;
+        }
+      });
   }
 
   openReservationPopup(data) {
@@ -304,9 +375,6 @@ export class GridStockComponent implements OnInit {
         e.column.dataField === "articleDescription" &&
         e.cellElement.textContent
       ) {
-        e.cellElement.title =
-          this.localizeService.localize("hint-dblClick-file");
-        e.cellElement.classList.add("cursor-pointer");
         const data = e.data.items ?? e.data.collapsedItems;
         if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
@@ -323,7 +391,10 @@ export class GridStockComponent implements OnInit {
           data = data[0].commentaire;
           e.cellElement.innerText = data;
         }
-        if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
+        if (
+          e.column.dataField.indexOf("quantiteCalculee") === 0 ||
+          ["prevision3j", "prevision7j"].includes(e.column.dataField)
+        ) {
           let neg = false;
           if (e.rowType === "data") {
             if (e.value) if (e.value < 0) neg = true;
@@ -357,5 +428,13 @@ export class GridStockComponent implements OnInit {
         commentaire: comment,
       })
       .subscribe(() => this.refreshArticlesGrid());
+  }
+
+  public calculateCustomSummary(options) {
+    if (self.customSummaryFields.includes(options.name)) {
+      if (options.summaryProcess === "calculate") {
+        options.totalValue = options.value;
+      }
+    }
   }
 }

@@ -154,6 +154,10 @@ import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fou
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/declaration-fraude.component";
+import {
+  ClientsArticleRefPopupComponent,
+  ClientsArticleRefPopupModule,
+} from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 
 @NgModule({
   declarations: [
@@ -312,6 +316,7 @@ import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/dec
     OrdresSuiviModule,
     ConfirmationResultPopupModule,
     QuestionPopupModule,
+    ClientsArticleRefPopupModule,
   ],
   exports: [GridStockComponent],
 })

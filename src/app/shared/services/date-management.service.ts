@@ -318,6 +318,17 @@ export class DateManagementService {
     return Math.ceil(((d - yearStart.valueOf()) / 86400000 + 1) / 7);
   }
 
+  getWeeksInYear(year) {
+    let month = 11,
+      day = 31,
+      week;
+    do {
+      const d = new Date(year, month, day--);
+      week = this.getWeekNumber(d);
+    } while (week == 1);
+    return week;
+  }
+
   getDateOfISOWeek(w, y) {
     const simple = new Date(y, 0, 1 + (w - 1) * 7);
     const dow = simple.getDay();
