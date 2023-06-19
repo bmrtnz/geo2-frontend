@@ -170,7 +170,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     this.ordresLignesDataSource.load().then((res) => {
       let DsItems = JSON.parse(JSON.stringify(res));
       DsItems.map((data) => {
-        data.nombreColisExpedies += "/" + data.nombreColisCommandes; // Colis
+        // data.nombreColisExpedies += "/" + data.nombreColisCommandes; // Colis
         // Prices
         if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
           data.ventePrixUnitaire = "";
