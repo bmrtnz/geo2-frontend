@@ -24,7 +24,7 @@ export class OrderHistoryPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor() {}
+  constructor() { }
 
   ngOnChanges() {
     this.setTitle();
@@ -42,11 +42,11 @@ export class OrderHistoryPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("order-histo-popup");
-    this.popupShown = true;
   }
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.popupShown = true;
   }
 
   hidePopup() {

@@ -1,8 +1,88 @@
 @import "src/themes/generated/variables.base.scss";
 
 ::ng-deep .tabs-ordres-page {
+
+  .dx-fast-prev-btn,
+  .dx-fast-next-btn {
+    top: 20px;
+    width: 28px !important;
+    height: 55px;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .dx-fast-prev-btn {
+    left: 12px;
+  }
+
+  .dx-fast-next-btn {
+    right: 12px;
+  }
+
+  .dx-tabs-nav-button-left,
+  .dx-tabs-nav-button-right {
+    width: 28px !important;
+    min-width: 0 !important;
+  }
+
+  .dx-tabs-nav-button:not(.dx-fast-prev-btn):not(.dx-fast-next-btn) {
+    height: 100% !important;
+  }
+
   .dx-tab {
-    padding: 12px 16px 12px 14px;
+    padding: 0;
+
+    .dx-template-wrapper.dx-tab-content {
+      padding: 12px 15px 12px 13px;
+      margin: 0 1px;
+
+      &:hover {
+        i.dx-icon-close {
+          color: #fe3d2c;
+          visibility: visible;
+        }
+      }
+
+      &.home-tab {
+        height: 55px;
+
+        .dx-icon {
+          margin-top: 4px;
+        }
+      }
+
+      &.create-order-tab {
+        color: #FFF;
+        background: #8FC459;
+
+        small {
+          color: #FFF;
+        }
+
+        .dx-icon {
+          color: #FFF;
+        }
+
+        &:hover {
+          background: #79B23F;
+        }
+      }
+
+      &.close-all-orders-tab {
+        height: 55px;
+
+        .dx-icon {
+          color: $base-accent;
+        }
+
+        &:hover {
+          .dx-icon {
+            color: #fe3d2c;
+          }
+        }
+      }
+
+    }
 
     i.dx-icon-close {
       position: absolute;
@@ -10,13 +90,9 @@
       right: -2px;
       font-size: 17px;
       visibility: hidden;
-
-      &:hover {
-        color: red;
-      }
     }
 
-    .dx-tab-text > i {
+    .dx-tab-text>i {
       margin-right: 5px;
       display: inline;
     }
@@ -34,14 +110,6 @@
 
     .disabled_by_default {
       color: $base-accent;
-
-      &:hover {
-        color: red;
-      }
-    }
-
-    &:hover i.dx-icon-close {
-      visibility: visible;
     }
 
     .dx-badge {
@@ -50,8 +118,10 @@
       top: 4px;
     }
 
-    &.dx-tab-selected small {
-      color: $base-accent;
+    &.dx-tab-selected {
+      small {
+        color: $base-accent;
+      }
     }
 
     .dx-template-wrapper {

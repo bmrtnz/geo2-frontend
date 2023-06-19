@@ -4921,6 +4921,13 @@
         "visible": true
       },
       {
+        "visibleIndex": 1,
+        "dataField": "ordre.dateCreation",
+        "format": "dd-MM-yyyy à HH:mm:ss",
+        "dataType": "date",
+        "visible": false
+      },
+      {
         "visibleIndex": 2,
         "dataField": "ordre.numero",
         "sortIndex": 3,
@@ -4955,15 +4962,36 @@
         "visible": true
       },
       {
+        "visibleIndex": 11,
+        "dataField": "nombreColisCommandes",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
         "visibleIndex": 12,
         "dataField": "nombreColisExpedies",
+        "dataType": "number",
+        "width": 45,
+        "cssClass": "multi-line-header",
         "visible": true
+      },
+      {
+        "visibleIndex": 13,
+        "dataField": "article.matierePremiere.espece.id",
+        "visible": false
       },
       {
         "visibleIndex": 14,
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "visible": false
       },
       {
         "visibleIndex": 16,
@@ -5028,11 +5056,6 @@
         "visible": false
       },
       {
-        "dataField": "nombreColisCommandes",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
         "dataField": "article.id",
         "showInColumnChooser": false,
         "visible": false
@@ -5064,11 +5087,6 @@
       },
       {
         "dataField": "article.emballage.prepese",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "article.matierePremiere.modeCulture.id",
         "showInColumnChooser": false,
         "visible": false
       },

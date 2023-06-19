@@ -35,7 +35,7 @@ export class OptionStockPopupComponent implements OnChanges {
   @ViewChild(GridOptionReservationStockComponent)
   gridResa: GridOptionReservationStockComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -51,10 +51,10 @@ export class OptionStockPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("option-stock-popup");
-    this.okDisabled = false;
   }
 
   onShown(e) {
+    this.okDisabled = false;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     if (this.gridResa) {
       this.gridResa.initFields();
@@ -63,6 +63,7 @@ export class OptionStockPopupComponent implements OnChanges {
   }
 
   hidePopup() {
+    this.gridResa.datagrid.dataSource = null;
     this.popup.visible = false;
   }
 
@@ -90,8 +91,8 @@ export class OptionStockPopupComponent implements OnChanges {
     if (article.description) this.pushText(article.description);
     this.pushText(
       article.matierePremiere.variete.description +
-        " " +
-        article.matierePremiere.origine.description
+      " " +
+      article.matierePremiere.origine.description
     );
     if (article.cahierDesCharge.categorie?.description)
       this.pushText(article.cahierDesCharge.categorie.description);

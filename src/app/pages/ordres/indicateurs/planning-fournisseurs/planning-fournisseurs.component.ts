@@ -71,6 +71,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   public secteurs: DataSource;
   public fournisseurs: DataSource;
   public bureauxAchat: DataSource;
+  private oldOrderNumber: string;
+  private alternateOrder: boolean;
+
 
   public formGroup = new UntypedFormGroup({
     bureauAchat: new UntypedFormControl(),
@@ -218,6 +221,12 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       if (e.data?.ordre.flagAnnule === true) {
         e.rowElement.classList.add("canceled-orders");
         e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
+      if (e.data?.ordre?.numero !== this.oldOrderNumber) {
+        this.alternateOrder = !this.alternateOrder;
+        this.oldOrderNumber = e.data?.ordre?.numero;
+        if (this.alternateOrder)
+          e.rowElement.classList.add("alternate-row");
       }
     }
   }
