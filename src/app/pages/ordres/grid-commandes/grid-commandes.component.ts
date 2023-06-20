@@ -75,8 +75,7 @@ let self: GridCommandesComponent; // thank's DX
   styleUrls: ["./grid-commandes.component.scss"],
 })
 export class GridCommandesComponent
-  implements OnInit, OnChanges, AfterViewInit
-{
+  implements OnInit, OnChanges, AfterViewInit {
   constructor(
     public injector: Injector,
     private gridConfigurator: GridConfiguratorService,
@@ -243,7 +242,6 @@ export class GridCommandesComponent
 
   onSelectionChanged(e) {
     this.selectedRowsChange.emit(this.grid?.instance.getSelectedRowKeys());
-    this.grid?.instance.getSelectedRowKeys();
   }
 
   ngOnChanges() {
@@ -263,7 +261,7 @@ export class GridCommandesComponent
     // from proprietaire to fournisseur
     if (
       e.columns[e.prevColumnIndex]?.dataField ===
-        "proprietaireMarchandise.id" &&
+      "proprietaireMarchandise.id" &&
       e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
     ) {
       const row = e.rows[e.newRowIndex];
@@ -302,14 +300,6 @@ export class GridCommandesComponent
             });
         }
       }, 100);
-
-      // On attends que papy DX soit pret avant de lui demander gentiment de mettre à jour TOUT ses totaux
-      // of()
-      //   .pipe(debounceTime(1000))
-      //   .subscribe({
-      //     complete: () => this.grid.instance.repaint(),
-      //   });
-
       return this.handleMutations();
     }
   }
@@ -380,8 +370,6 @@ export class GridCommandesComponent
         if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
           this.priceChange.emit();
 
-        if (["fournisseur"].includes(name)) this.transporteurChange.emit();
-
         // map object value
         if (typeof value === "object") value = value.id;
 
@@ -438,6 +426,7 @@ export class GridCommandesComponent
                   "DetailExpeditions"
                 );
               this.handleMutations();
+              if (["fournisseur"].includes(name)) this.transporteurChange.emit();
             },
           });
       });
@@ -455,7 +444,7 @@ export class GridCommandesComponent
     });
     if (
       palSum !==
-        this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
+      this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
       colSum !== this.grid.instance.getTotalSummaryValue("nombreColisCommandes")
     )
       this.grid.instance.repaint();
@@ -485,49 +474,49 @@ export class GridCommandesComponent
                 : []),
               ...(this.FEATURE.highlightBio
                 ? [
-                    "article.matierePremiere.modeCulture.description",
-                    "article.articleDescription.bio",
-                  ]
+                  "article.matierePremiere.modeCulture.description",
+                  "article.articleDescription.bio",
+                ]
                 : []),
               ...(this.FEATURE.zoom
                 ? [
-                    "article.id",
-                    "proprietaireMarchandise.code",
-                    "fournisseur.code",
-                  ]
+                  "article.id",
+                  "proprietaireMarchandise.code",
+                  "fournisseur.code",
+                ]
                 : []),
               ...(this.FEATURE.destockage
                 ? [
-                    "ordre.numero",
-                    "ordre.entrepot.code",
-                    "article.description",
-                    "article.matierePremiere.variete.description",
-                    "article.matierePremiere.origine.description",
-                    "article.cahierDesCharge.categorie.description",
-                    "article.normalisation.calibreMarquage.description",
-                    "article.cahierDesCharge.coloration.description",
-                    "article.cahierDesCharge.sucre.description",
-                    "article.cahierDesCharge.penetro.description",
-                    "article.normalisation.stickeur.description",
-                    "article.cahierDesCharge.cirage.description",
-                    "article.cahierDesCharge.rangement.description",
-                    "article.emballage.emballage.descriptionTechnique",
-                    "article.normalisation.etiquetteEvenementielle.description",
-                    "article.normalisation.etiquetteColis.description",
-                    "article.normalisation.etiquetteUc.description",
-                    "article.emballage.conditionSpecial.description",
-                    "article.emballage.alveole.description",
-                    "article.normalisation.gtinUc",
-                    "article.normalisation.gtinColis",
-                    "article.gtinUcBlueWhale",
-                    "article.gtinColisBlueWhale",
-                    "article.normalisation.produitMdd",
-                    "article.normalisation.articleClient",
-                    "article.instructionStation",
-                    "article.emballage.emballage.idSymbolique",
-                    "article.matierePremiere.espece.id",
-                    "nombreReservationsSurStock",
-                  ]
+                  "ordre.numero",
+                  "ordre.entrepot.code",
+                  "article.description",
+                  "article.matierePremiere.variete.description",
+                  "article.matierePremiere.origine.description",
+                  "article.cahierDesCharge.categorie.description",
+                  "article.normalisation.calibreMarquage.description",
+                  "article.cahierDesCharge.coloration.description",
+                  "article.cahierDesCharge.sucre.description",
+                  "article.cahierDesCharge.penetro.description",
+                  "article.normalisation.stickeur.description",
+                  "article.cahierDesCharge.cirage.description",
+                  "article.cahierDesCharge.rangement.description",
+                  "article.emballage.emballage.descriptionTechnique",
+                  "article.normalisation.etiquetteEvenementielle.description",
+                  "article.normalisation.etiquetteColis.description",
+                  "article.normalisation.etiquetteUc.description",
+                  "article.emballage.conditionSpecial.description",
+                  "article.emballage.alveole.description",
+                  "article.normalisation.gtinUc",
+                  "article.normalisation.gtinColis",
+                  "article.gtinUcBlueWhale",
+                  "article.gtinColisBlueWhale",
+                  "article.normalisation.produitMdd",
+                  "article.normalisation.articleClient",
+                  "article.instructionStation",
+                  "article.emballage.emballage.idSymbolique",
+                  "article.matierePremiere.espece.id",
+                  "nombreReservationsSurStock",
+                ]
                 : []),
               // Used to lock fields
               ...[
@@ -672,9 +661,8 @@ export class GridCommandesComponent
   openDestockagePopup(ligne) {
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
-    const current = `${ligne.fournisseur?.code ?? "-"} / ${
-      ligne.proprietaireMarchandise?.code ?? "-"
-    }`;
+    const current = `${ligne.fournisseur?.code ?? "-"} / ${ligne.proprietaireMarchandise?.code ?? "-"
+      }`;
     const showConfirm = (resas: LigneReservation[]) =>
       of(resas).pipe(
         concatMap((res) =>
@@ -829,6 +817,21 @@ export class GridCommandesComponent
     this.lastRowFocused = this.currentfocusedRow === this.gridRowsTotal - 1;
   }
 
+  async deleteArticles() {
+
+    if (await confirm(
+      this.localizeService.localize("text-popup-supprimer-lignes"),
+      this.localizeService.localize("grid-title-lignes-cde")
+    )) {
+      this.grid.instance.getSelectedRowKeys()
+        .map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
+      this.grid.instance.saveEditData();
+    } else {
+      notify(this.localizeService.localize("delete-canceled"), "warning");
+    }
+
+  }
+
   onReorder(e: {
     component: dxDataGrid;
     itemData: Partial<OrdreLigne>; // dragged item
@@ -959,7 +962,7 @@ export class GridCommandesComponent
     ) {
       const { id: idFour, code } =
         this.grid.instance.getVisibleRows()[e.rowIndex].data[
-          e.column.dataField.split(".")[0]
+        e.column.dataField.split(".")[0]
         ];
       if (idFour === null) return;
       this.fournisseurLigneId = idFour;
