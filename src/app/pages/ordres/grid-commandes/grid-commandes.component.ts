@@ -827,7 +827,7 @@ export class GridCommandesComponent
         .map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
       this.grid.instance.saveEditData();
     } else {
-      notify(this.localizeService.localize("delete-canceled"), "warning");
+      notify(this.localizeService.localize("delete-canceled"), "warning", 1500);
     }
 
   }
