@@ -2,14 +2,12 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-::ng-deep .delete-document-button {
-  position: absolute;
-  right: 147px;
-  margin-top: 7px;
-  z-index: 1;
-}
 
 ::ng-deep .grid-choix-envois {
+  .grid-title .dx-textbox {
+    width: 1000px !important;
+  }
+
   .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
     padding: 0 !important;
   }

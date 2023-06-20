@@ -50,7 +50,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
     private ar: FluxArService
-  ) {}
+  ) { }
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public fluxID: string;
@@ -76,6 +76,8 @@ export class GridChoixEnvoisComponent implements OnInit {
     "dateSoumission",
     "dateDemande",
   ];
+
+  readonly USER_MAIL = this.authService.currentUser.email;
 
   gridData: DataSource;
   rowKeys: any[];
@@ -158,6 +160,20 @@ export class GridChoixEnvoisComponent implements OnInit {
         map((config) => config.columns)
       );
     }
+
+    console.log(this.authService.currentUser)
+  }
+
+  onEditorPreparing(e) {
+    // If the user types "@", its mail address is automatically typed
+    if (e.parentType === "dataRow") {
+      e.editorOptions.onKeyUp = (elem) => {
+        if (e.dataField === "numeroAcces1" && this.USER_MAIL) {
+          const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+          if (myInput.value === "@") myInput.value = this.USER_MAIL
+        }
+      }
+    }
   }
 
   onContentReady(event) {
@@ -174,12 +190,12 @@ export class GridChoixEnvoisComponent implements OnInit {
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
