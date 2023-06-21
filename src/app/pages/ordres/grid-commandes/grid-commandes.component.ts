@@ -157,6 +157,7 @@ export class GridCommandesComponent
   public proprietairesDataSource: DataSource;
   public fournisseursDataSource: DataSource;
   public embalExp: string[];
+  private lastingRows: number;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -191,7 +192,7 @@ export class GridCommandesComponent
             hint: "Renuméroter les lignes",
             onClick: () => {
               this.reindexRows();
-              this.grid.instance.saveEditData();
+              this.grid.instance.refresh();
             },
           },
         },
@@ -552,6 +553,9 @@ export class GridCommandesComponent
    * Recalculate rows numero and push changes
    */
   private reindexRows(startIndex?: number, endIndex?: number) {
+
+    if (this.lastingRows) return;
+
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
@@ -818,18 +822,32 @@ export class GridCommandesComponent
   }
 
   async deleteArticles() {
-
     if (await confirm(
       this.localizeService.localize("text-popup-supprimer-lignes"),
       this.localizeService.localize("grid-title-lignes-cde")
     )) {
-      this.grid.instance.getSelectedRowKeys()
-        .map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
+      // Looping through rows
+      const rowsToDelete = this.grid.instance.getSelectedRowKeys();
+      const finalRows = this.grid.instance.getVisibleRows().length - rowsToDelete.length;
+      rowsToDelete.map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
       this.grid.instance.saveEditData();
+      // Preventing reindexing before all rows are removed
+      let secureLoop = 0;
+      const saveInterval = setInterval(() => {
+        secureLoop++;
+        this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
+        if (!this.lastingRows || secureLoop === 300) {
+          clearInterval(saveInterval);
+          setTimeout(() => {
+            console.log("reindexRows")
+            this.reindexRows();
+            this.grid.instance.refresh();
+          }, 2100);
+        }
+      }, 100);
     } else {
       notify(this.localizeService.localize("delete-canceled"), "warning", 1500);
     }
-
   }
 
   onReorder(e: {
