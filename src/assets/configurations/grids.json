@@ -5380,7 +5380,7 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "sommeQuantiteInventaire",
+        "dataField": "solde",
         "visible": true
       },
       {
