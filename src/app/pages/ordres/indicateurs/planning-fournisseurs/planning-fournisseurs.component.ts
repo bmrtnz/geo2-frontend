@@ -131,6 +131,15 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       await fields.toPromise()
     );
     this.formGroup.updateValueAndValidity();
+
+
+    this.formGroup.get("fournisseur").patchValue({ id: "000610" }) // A VIRER !!
+    const d = new Date("2023-01-02T00:00:00"); // A VIRER !!
+    this.formGroup.get("from").setValue(d); // A VIRER !!
+    const f = new Date("2023-06-20T23:59:59"); // A VIRER !!
+    this.formGroup.get("to").setValue(f); // A VIRER !!
+    this.enableFilters(); // A VIRER
+
   }
 
   ngAfterViewInit() {
