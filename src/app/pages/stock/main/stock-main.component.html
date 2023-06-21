@@ -1,0 +1,34 @@
+<h2 class="content-block stock-title">{{ "stocks-title" | localize }}</h2>
+
+<div class="content-block stock-page">
+  <dx-tab-panel
+    #tabPanel
+    [items]="stockCategories"
+    [selectedIndex]="0"
+    [loop]="false"
+    [animationEnabled]="true"
+    [swipeEnabled]="true"
+  >
+    <div *dxTemplate="let stockCategory of 'title'">
+      <span>{{ stockCategory.stockName }}</span>
+    </div>
+    <div *dxTemplate="let stockCategory of 'item'">
+      <div
+        class="tabpanel-item"
+        *ngIf="!stockCategory.id"
+      >
+        <app-grid-stock
+          [reserv]="true"
+          [destock]="false"
+          [clientsRef]="true"
+        ></app-grid-stock>
+      </div>
+      <div
+        class="tabpanel-item"
+        *ngIf="stockCategory.id === 1"
+      >
+        <app-stock-precalibre></app-stock-precalibre>
+      </div>
+    </div>
+  </dx-tab-panel>
+</div>

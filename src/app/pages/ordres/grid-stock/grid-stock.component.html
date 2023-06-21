@@ -155,18 +155,9 @@
           </dx-select-box>
         </div>
       </div>
-
-      <!-- <dx-button
-        class="refresh"
-        [class]="toRefresh ? '' : 'inactive-button'"
-        type="default"
-        text="{{ 'btn-refresh' | localize }}"
-        (onClick)="refreshArticlesGrid()"
-      ></dx-button> -->
     </div>
     <dx-button
       class="refresh floatRight"
-      [class]="toRefresh ? '' : 'inactive-button'"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="refreshArticlesGrid()"
@@ -190,6 +181,7 @@
       [columnHidingEnabled]="false"
       [allowColumnReordering]="true"
       [rowAlternationEnabled]="true"
+      [noDataText]="'aucun-stock' | localize"
       [keyExpr]="'id'"
       (onRowPrepared)="onRowPrepared($event)"
       (onCellPrepared)="onCellPrepared($event)"
@@ -241,33 +233,22 @@
       </dxo-column-chooser>
       <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
 
-      <dxo-summary>
+      <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
         <dxi-group-item
-          column="quantiteCalculee1"
+          *ngFor="let field of summaryFields"
+          [column]="field"
           summaryType="sum"
           [alignByColumn]="true"
           displayFormat="{0}"
         >
         </dxi-group-item>
+
         <dxi-group-item
-          column="quantiteCalculee2"
-          summaryType="sum"
+          *ngFor="let field of customSummaryFields"
+          [name]="field"
+          [column]="field"
+          summaryType="custom"
           [alignByColumn]="true"
-          displayFormat="{0}"
-        >
-        </dxi-group-item>
-        <dxi-group-item
-          column="quantiteCalculee3"
-          summaryType="sum"
-          [alignByColumn]="true"
-          displayFormat="{0}"
-        >
-        </dxi-group-item>
-        <dxi-group-item
-          column="quantiteCalculee4"
-          summaryType="sum"
-          [alignByColumn]="true"
-          displayFormat="{0}"
         >
         </dxi-group-item>
       </dxo-summary>
@@ -314,6 +295,25 @@
         </dx-button>
       </div>
 
+      <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+        <div
+          class="group-text-1"
+          title="{{ 'hint-dblClick-file' | localize }}"
+        >
+          {{ cell.data.key }}
+        </div>
+        <!-- Clients référençant l'article -->
+        <dx-button
+          *ngIf="clientsRef"
+          [visible]="true"
+          class="small-action-button"
+          type="default"
+          (onClick)="openClientsPopup(cell.data)"
+          hint="{{ 'hint-clients-ref' | localize }}"
+          icon="material-icons person"
+        ></dx-button>
+      </div>
+
       <dxi-column
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
@@ -324,6 +324,8 @@
         "
         [dataType]="column?.dataType"
         [width]="column?.width"
+        [cssClass]="column?.cssClass"
+        [groupCellTemplate]="column.groupCellTemplate"
         [cellTemplate]="column.cellTemplate"
         [allowSearch]="
           column?.allowSearch || ['string'].includes(column?.dataType)
@@ -369,3 +371,7 @@
   [ligneStockArticle]="ligneStockArticle"
   (whenApplied)="refreshArticlesGrid()"
 ></app-option-stock-popup>
+
+<app-clients-article-ref-popup
+  [article]="article"
+></app-clients-article-ref-popup>
