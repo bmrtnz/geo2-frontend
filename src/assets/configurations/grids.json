@@ -2747,9 +2747,9 @@
       {
         "dataField": "venteUnite.id",
         "calculateDisplayValue": [
-          "venteUnite.id",
-          "venteUnite.description"
+          "venteUnite.id"
         ],
+        "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "venteUnite.id",
         "editorOptions": {
@@ -2758,8 +2758,7 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
-            "id",
-            "description"
+            "id"
           ],
           "searchExpr": [
             "id"
@@ -2818,9 +2817,9 @@
       {
         "dataField": "achatUnite.id",
         "calculateDisplayValue": [
-          "achatUnite.id",
-          "achatUnite.description"
+          "achatUnite.id"
         ],
+        "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
@@ -2829,8 +2828,7 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
-            "id",
-            "description"
+            "id"
           ],
           "searchExpr": [
             "id"
@@ -2847,9 +2845,9 @@
       {
         "dataField": "typePalette.id",
         "calculateDisplayValue": [
-          "typePalette.id",
-          "typePalette.description"
+          "typePalette.id"
         ],
+        "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "typePalette.id",
         "editorOptions": {
@@ -2859,8 +2857,7 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id",
-            "description"
+            "id"
           ],
           "searchExpr": [
             "id"
@@ -2882,8 +2879,7 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id",
-            "description"
+            "id"
           ],
           "searchExpr": [
             "id"
@@ -2916,9 +2912,9 @@
       {
         "dataField": "fraisUnite.id",
         "calculateDisplayValue": [
-          "fraisUnite.id",
-          "fraisUnite.description"
+          "fraisUnite.id"
         ],
+        "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "fraisUnite.id",
         "editorOptions": {
@@ -2927,8 +2923,7 @@
         "lookup": {
           "valueExpr": "id",
           "displayExpr": [
-            "id",
-            "description"
+            "id"
           ],
           "searchExpr": [
             "id"
