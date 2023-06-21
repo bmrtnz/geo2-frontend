@@ -407,6 +407,14 @@ body app-root.production {
 }
 
 .dx-actionsheet-popover-wrapper {
+
+  .dx-actionsheet-container {
+    .dx-actionsheet-item {
+      margin: 0 0 10px 0;
+    }
+  }
+
+
   .dx-button {
     height: 34px;
     font-size: 13px;
