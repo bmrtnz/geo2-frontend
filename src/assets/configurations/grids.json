@@ -4879,6 +4879,11 @@
         "dataField": "ordre.campagne.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": true,
+        "visible": false
       }
     ]
   },

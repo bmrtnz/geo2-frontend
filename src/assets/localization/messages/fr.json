@@ -1122,6 +1122,7 @@
     "ordresTransporteur-ordre-societe-id": "Société",
     "ordresTransporteur-ordre-flagAnnule": "Annulé ?",
     "ordresTransporteur-groupage-text": "Départ groupé chez &T le &D",
+    "ordresTransporteur-ordre-type-id": "Type Ordre",
     "ordresFournisseur-ordre-societe-id": "Société",
     "ordresFournisseur-ordre-flagAnnule": "Annulé ?",
     "ordresFournisseur-logistique-dateDepartPrevueFournisseur": "Chargement",
