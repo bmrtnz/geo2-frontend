@@ -268,7 +268,7 @@ export class GridCommandesComponent
       this.buildFournisseurFilter(row.data.proprietaireMarchandise.id).then(
         ({ filters }) => this.bindFournisseurSource(filters)
       );
-    } else if (e.prevColumnIndex !== e.newColumnIndex) {
+    } else if ((e.prevColumnIndex !== e.newColumnIndex) && e.prevColumnIndex !== -1) {
       // Keep the setTimeout function in place!!!
       // It seems that not everything's really ready when event is triggered
       // Conclusion => without a timeOut, major risk of unsaved data!
