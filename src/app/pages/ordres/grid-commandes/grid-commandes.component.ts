@@ -838,11 +838,12 @@ export class GridCommandesComponent
         this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
         if (!this.lastingRows || secureLoop === 300) {
           clearInterval(saveInterval);
-          setTimeout(() => {
-            console.log("reindexRows")
-            this.reindexRows();
-            this.grid.instance.refresh();
-          }, 2100);
+          if (finalRows) {
+            setTimeout(() => {
+              this.reindexRows();
+              this.grid.instance.refresh();
+            }, 2100);
+          }
         }
       }, 100);
     } else {
