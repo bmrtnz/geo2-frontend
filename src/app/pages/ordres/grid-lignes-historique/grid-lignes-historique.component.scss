@@ -18,6 +18,7 @@
 }
 
 ::ng-deep .secteur-histo-ligne-field {
+
   .dx-field-label,
   .dx-field-value {
     width: 50% !important;
@@ -52,6 +53,8 @@
   .valideCheckboxField {
     .dx-field-label {
       width: 224px !important;
+      text-overflow: initial;
+      white-space: normal;
     }
 
     .dx-field-value {
@@ -76,7 +79,6 @@
 
       &.dx-field-label-left {
         margin-right: 10px;
-        width: 23% !important;
         text-align: right !important;
       }
 

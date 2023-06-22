@@ -50,6 +50,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   public raisonsList: string[];
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public canBeSent: boolean;
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
   @Input() ordre: { id: string } & Partial<Ordre>;
@@ -90,6 +91,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     setTimeout(() => {
       event.component.selectAll();
       this.canSelectAll = false;
+      this.canBeSent = true;
     }, 500);
   }
 
@@ -129,6 +131,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   reload() {
+    this.canBeSent = false;
     this.functionsService
       .ofAREnvois(this.ordre.id)
       .pipe(

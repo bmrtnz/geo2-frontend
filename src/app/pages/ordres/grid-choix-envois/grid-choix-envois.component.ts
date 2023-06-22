@@ -77,6 +77,8 @@ export class GridChoixEnvoisComponent implements OnInit {
     "dateDemande",
   ];
 
+  readonly USER_MAIL = this.authService.currentUser.email;
+
   gridData: DataSource;
   rowKeys: any[];
   fluxSource: DataSource;
@@ -87,6 +89,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   typeTiers: string;
   typeTiersLabel: string;
   canSelectAll: boolean;
+  public canBeSent: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -160,6 +163,18 @@ export class GridChoixEnvoisComponent implements OnInit {
     }
   }
 
+  onEditorPreparing(e) {
+    // If the user types "@", its mail address is automatically typed
+    if (e.parentType === "dataRow") {
+      e.editorOptions.onKeyUp = (elem) => {
+        if (e.dataField === "numeroAcces1" && this.USER_MAIL) {
+          const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+          if (myInput.value === "@") myInput.value = this.USER_MAIL
+        }
+      }
+    }
+  }
+
   onContentReady(event) {
     this.contentReadyEvent.emit(event);
 
@@ -168,6 +183,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     setTimeout(() => {
       event.component.selectAll();
       this.canSelectAll = false;
+      this.canBeSent = true;
     }, 500);
   }
 
@@ -201,6 +217,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   reload(annuleOrdre?) {
+    this.canBeSent = false;
     this.functionsService
       .geoPrepareEnvois(
         this.ordre.id,

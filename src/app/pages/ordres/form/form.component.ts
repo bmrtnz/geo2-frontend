@@ -570,13 +570,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           if (message) notify(this.localization.localize(message), "success");
 
           // ordre date depart has been mutated
-          if (ordre.dateDepartPrevue)
+          if (ordre.dateDepartPrevue) {
+
             this.dateDepartMutationPopup
               .prompt(this.localization.localize("ordre-date-depart-mutate"))
               .subscribe(
-                (result) =>
-                  result && this.updateLogistiquesDates(ordre.dateDepartPrevue)
+                (result) => {
+                  result && this.updateLogistiquesDates(ordre.dateDepartPrevue);
+                  // Check date and change if needed with info toast
+                  if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
+                    this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
+                }
               );
+          }
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -1217,6 +1223,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          if (this.ordre.secteurCommercial.id === "F")
+            this.incotermsDS.filter([
+              ["id", "=", "CPT"],
+              "or",
+              ["id", "=", "EXW"],
+            ])
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
@@ -1481,10 +1493,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  changeDateLiv(e) {
+  changeDateLiv(e, message?) {
     this.formGroup.get("dateLivraisonPrevue").patchValue(e);
     this.formGroup.get("dateLivraisonPrevue").markAsDirty();
-    this.saveHeaderOnTheFly("modification-done");
+    this.saveHeaderOnTheFly(message ?? "modification-done");
   }
 
   openClientFilePopup() {

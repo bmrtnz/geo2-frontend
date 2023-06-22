@@ -15,6 +15,7 @@ import {
   ClientsService,
   EntrepotsService,
 } from "app/shared/services";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -46,6 +47,7 @@ enum InputField {
   secteur = "secteur",
   client = "client",
   entrepot = "entrepot",
+  bureauAchat = "bureauAchat"
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -75,6 +77,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public secteurs: DataSource;
   public clients: DataSource;
   public entrepots: DataSource;
+  public bureauxAchat: DataSource;
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -97,6 +100,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     secteur: new UntypedFormControl(),
     client: new UntypedFormControl(),
     entrepot: new UntypedFormControl(),
+    bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -104,6 +108,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     public entrepotsService: EntrepotsService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
+    public bureauxAchatService: BureauxAchatService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
@@ -137,6 +142,11 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       "raisonSocial",
       "valide",
     ]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
   }
 
   ngAfterViewInit() {
@@ -196,6 +206,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
     if (values.entrepot?.id) {
       filter.push("and", ["ordre.entrepot.id", "=", values.entrepot?.id]);
+    }
+    if (values.bureauAchat?.id) {
+      filter.push("and", ["bureauAchat.id", "=", values.bureauAchat.id]);
     }
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
@@ -472,12 +485,12 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 }

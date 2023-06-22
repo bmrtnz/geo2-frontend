@@ -6,6 +6,7 @@
   [allowColumnReordering]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="false"
+  [columnFixing]="{ enabled: false }"
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
@@ -255,7 +256,17 @@
     type="buttons"
     [width]="30"
     [showInColumnChooser]="false"
+    [headerCellTemplate]="'headerDeleteTemplate'"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'headerDeleteTemplate'">
+    <button
+      *ngIf="!!grid?.instance.getSelectedRowKeys()?.length"
+      class="dx-link dx-icon-trash dx-link-icon multi-delete"
+      title="{{ 'btn-delete-selected' | localize }}"
+      (click)="deleteArticles()"
+    ></button>
+  </div>
 </dx-data-grid>
 
 <!-- marge previsionelle -->

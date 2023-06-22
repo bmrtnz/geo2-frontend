@@ -4901,6 +4901,11 @@
         "dataField": "ordre.campagne.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": true,
+        "visible": false
       }
     ]
   },
@@ -4916,14 +4921,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "ordre.dateCreation",
         "format": "dd-MM-yyyy à HH:mm:ss",
         "dataType": "date",
         "visible": false
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "ordre.numero",
         "sortIndex": 3,
         "sortOrder": "asc",
@@ -4931,14 +4936,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 6,
         "dataField": "ordre.societe.id",
         "cssClass": "no-padding",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 8,
         "dataField": "logistique.fournisseur.code",
         "sortIndex": 4,
         "sortOrder": "asc",
@@ -4946,18 +4951,18 @@
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 10,
         "dataField": "ordre.transporteur.id",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "nombrePalettesCommandees",
         "visible": true
       },
       {
-        "visibleIndex": 11,
+        "visibleIndex": 14,
         "dataField": "nombreColisCommandes",
         "dataType": "number",
         "width": 45,
@@ -4965,7 +4970,7 @@
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 16,
         "dataField": "nombreColisExpedies",
         "dataType": "number",
         "width": 45,
@@ -4973,58 +4978,73 @@
         "visible": true
       },
       {
-        "visibleIndex": 13,
+        "visibleIndex": 18,
         "dataField": "article.matierePremiere.espece.id",
         "visible": false
       },
       {
-        "visibleIndex": 14,
-        "dataField": "article.articleDescription.descriptionReferenceLongue",
+        "visibleIndex": 20,
+        "dataField": "article.id",
+        "cssClass": "small-side-padding text-align-right",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 15,
+        "visibleIndex": 21,
+        "dataField": "article.matierePremiere.variete.groupe.description",
+        "cssClass": "small-side-padding text-align-left",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "article.articleDescription.descriptionLongue",
+        "cssClass": "small-side-padding",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 24,
         "dataField": "article.matierePremiere.modeCulture.description",
         "visible": false
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 26,
         "dataField": "ordre.dateLivraisonPrevue",
         "format": "dd-MM-yyyy à HH:mm:ss",
         "dataType": "date",
         "visible": true
       },
       {
-        "visibleIndex": 18,
+        "visibleIndex": 28,
         "dataField": "ordre.client.code",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 20,
+        "visibleIndex": 30,
         "dataField": "ordre.entrepot.code",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 22,
+        "visibleIndex": 32,
         "dataField": "ordre.referenceClient",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 24,
+        "visibleIndex": 34,
         "dataField": "ventePrixUnitaire",
         "visible": false
       },
       {
-        "visibleIndex": 26,
+        "visibleIndex": 36,
         "dataField": "achatPrixUnitaire",
         "visible": false
       },
       {
-        "visibleIndex": 28,
+        "visibleIndex": 38,
         "dataField": "ordre.flagAnnule",
         "dataType": "boolean",
         "visible": false
@@ -5048,11 +5068,6 @@
       {
         "dataField": "logistique.fournisseur.id",
         "dataType": "string",
-        "visible": false
-      },
-      {
-        "dataField": "article.id",
-        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -5082,11 +5097,6 @@
       },
       {
         "dataField": "article.emballage.prepese",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "article.matierePremiere.modeCulture.description",
         "showInColumnChooser": false,
         "visible": false
       },

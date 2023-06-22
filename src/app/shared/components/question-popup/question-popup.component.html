@@ -5,11 +5,23 @@
   [showCloseButton]="false"
   [hideOnOutsideClick]="false"
 >
+  <!-- cancel button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="center"
+  >
+    <dx-button
+      [text]="'falseText' | localize"
+      (onClick)="onCancelClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+
   <!-- select button -->
   <dxi-toolbar-item
     widget="dxButton"
     toolbar="bottom"
-    location="after"
+    location="center"
   >
     <dx-button
       [text]="'trueText' | localize"
@@ -18,17 +30,6 @@
     ></dx-button>
   </dxi-toolbar-item>
 
-  <!-- cancel button -->
-  <dxi-toolbar-item
-    widget="dxButton"
-    toolbar="bottom"
-    location="before"
-  >
-    <dx-button
-      [text]="'falseText' | localize"
-      (onClick)="onCancelClick()"
-    ></dx-button>
-  </dxi-toolbar-item>
   <div *dxTemplate="let data of 'content'">
     {{ question }}
   </div>

@@ -16,9 +16,10 @@
     }"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="onContentReady($event)"
+    (onEditorPreparing)="onEditorPreparing($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        'Liste des documents',
+        localizeService.localize('documents-list'),
         $event,
         gridConfiguratorService.Grid.ChoixEnvois
       )

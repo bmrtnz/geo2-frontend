@@ -149,15 +149,18 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
         dateMin: values.dateMin,
         dateMax: values.dateMax,
         societeCode: "%", // All companies
-        // societeCode: this.currentCompanyService.getCompany().id,
         transporteurCode: values.transporteurCode,
         // valideClient: values.valideClient,
         // valideEntrepot: values.valideEntrepot,
         // valideFournisseur: values.valideFournisseur,
       } as Inputs);
 
+      // Filtering vs company
+      const societe = this.currentCompanyService.getCompany().id;
+      if (societe === "BUK") this.ordresDataSource.filter(["ordre.type.id", "<>", "RGP"]);
+      if (societe === "SA") this.ordresDataSource.filter(["ordre.type.id", "<>", "ORI"]);
+
       this.datagrid.dataSource = this.ordresDataSource;
-      // this.ordresDataSource.filter(["sommeColisPaletteBis", "<>", 0]);
     }
   }
 
@@ -180,12 +183,12 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 

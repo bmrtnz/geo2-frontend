@@ -29,6 +29,7 @@
     ></dx-button>
     <dx-button
       #validButton
+      [disabled]="!gridChoixEnvoisComponent?.canBeSent"
       class="documents-valid-button"
       type="success"
       text="OK"
