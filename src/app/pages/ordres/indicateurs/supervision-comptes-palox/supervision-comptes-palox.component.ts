@@ -200,6 +200,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     });
     const index = this.getActiveGridIndex();
     this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
+    this.datasources[index].filter([
+      // ["codeFournisseur", "=", "BURATTI"],
+      ["solde", "<>", 0],
+    ]);
     // this.datasources[index].filter([
     //   [
     //     ["entree", "=", 0],
@@ -229,12 +233,12 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
