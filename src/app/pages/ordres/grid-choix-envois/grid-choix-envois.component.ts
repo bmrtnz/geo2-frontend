@@ -89,6 +89,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   typeTiers: string;
   typeTiersLabel: string;
   canSelectAll: boolean;
+  public canBeSent: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -160,8 +161,6 @@ export class GridChoixEnvoisComponent implements OnInit {
         map((config) => config.columns)
       );
     }
-
-    console.log(this.authService.currentUser)
   }
 
   onEditorPreparing(e) {
@@ -184,6 +183,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     setTimeout(() => {
       event.component.selectAll();
       this.canSelectAll = false;
+      this.canBeSent = true;
     }, 500);
   }
 
@@ -217,6 +217,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   reload(annuleOrdre?) {
+    this.canBeSent = false;
     this.functionsService
       .geoPrepareEnvois(
         this.ordre.id,
