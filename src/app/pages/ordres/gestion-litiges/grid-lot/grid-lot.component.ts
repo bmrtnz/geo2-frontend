@@ -1,14 +1,12 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
-import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { BaseTarif } from "app/shared/models";
 import LitigeCause from "app/shared/models/litige-cause.model";
 import LitigeConsequence from "app/shared/models/litige-consequence.model";
@@ -20,26 +18,22 @@ import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.ser
 import {
   ColumnsChangeSelection,
   Grid,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import DevExpress from "devextreme";
 import { DxDataGridComponent } from "devextreme-angular";
-import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { formatNumber } from "devextreme/localization";
-import dxDataGrid from "devextreme/ui/data_grid";
-import { defer, EMPTY, from, interval, Observable, of, throwError } from "rxjs";
+import { defer, from, interval, Observable, of, throwError } from "rxjs";
 import {
   concatMap,
   concatMapTo,
   filter,
   map,
   mergeMap,
-  takeWhile,
-  tap,
-  timeout,
-  toArray,
+  takeWhile, tap, timeout,
+  toArray
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 
@@ -292,12 +286,16 @@ export class GridLotComponent implements OnInit, OnChanges {
   public persist() {
     const hasEditData = this.grid.instance.hasEditData();
     return defer(() => this.grid.instance.saveEditData()).pipe(
-      concatMapTo(of(hasEditData))
+      concatMapTo(of(hasEditData)),
     );
   }
 
   /** Reloads grid data and repaints data rows, wrapper around `dxDataGrid.refresh` */
   public refresh() {
+    // needed to reinitialize the datasource query parameters
+    this.fillGrid(
+      this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot)
+    );
     return this.grid.instance.refresh();
   }
 
@@ -386,8 +384,8 @@ export class GridLotComponent implements OnInit, OnChanges {
                 res
                   ? of(row)
                   : throwError(
-                      Error(this.localize.transform("validation-canceled"))
-                    )
+                    Error(this.localize.transform("validation-canceled"))
+                  )
               )
             );
         }

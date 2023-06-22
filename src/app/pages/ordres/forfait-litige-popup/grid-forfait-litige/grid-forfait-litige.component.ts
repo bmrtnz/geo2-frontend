@@ -87,7 +87,7 @@ export class GridForfaitLitigeComponent {
           new Set(["numeroGroupementLitige", ...(await fields.toPromise())])
         );
       this.dataSource.filter([
-        ["numeroGroupementLitige", lotNum ? "=" : "=isnull=", lotNum],
+        ["numeroGroupementLitige", "=", lotNum],
       ]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
@@ -188,21 +188,21 @@ export class GridForfaitLitigeComponent {
         id: change.key,
         ...(change.data.forfaitClient
           ? {
-              clientPrixUnitaire: change.data.clientPrixUnitaire,
-              clientQuantite: change.data.clientQuantite,
-              clientUniteFactureCode: change.data.clientUniteFactureCode,
-              clientIndicateurForfait: true,
-            }
+            clientPrixUnitaire: change.data.clientPrixUnitaire,
+            clientQuantite: change.data.clientQuantite,
+            clientUniteFactureCode: change.data.clientUniteFactureCode,
+            clientIndicateurForfait: true,
+          }
           : {}),
         ...(change.data.forfaitResponsable
           ? {
-              responsablePrixUnitaire: change.data.responsablePrixUnitaire,
-              devisePrixUnitaire: change.data.forfaitResponsable,
-              responsableQuantite: change.data.responsableQuantite,
-              responsableUniteFactureCode:
-                change.data.responsableUniteFactureCode,
-              responsableIndicateurForfait: true,
-            }
+            responsablePrixUnitaire: change.data.responsablePrixUnitaire,
+            devisePrixUnitaire: change.data.forfaitResponsable,
+            responsableQuantite: change.data.responsableQuantite,
+            responsableUniteFactureCode:
+              change.data.responsableUniteFactureCode,
+            responsableIndicateurForfait: true,
+          }
           : {}),
         envoisIncident: false,
       }))

@@ -1390,10 +1390,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshBadges() {
     // Gestion des pastilles infos boutons gauche
     if (this.ordre) {
-      this.dotLitiges = this.ordre.hasLitige ? "!" : "";
+      this.dotLitiges = this.getLitigeBadgeIndicator(this.ordre.hasLitige);
       this.dotCQ = this.ordre.cqLignesCount;
       this.dotCommentaires = this.ordre.commentairesOrdreCount;
     }
+  }
+
+  private getLitigeBadgeIndicator(hasLitige: boolean) {
+    return hasLitige ? "!" : "";
+  }
+
+  public refreshLitigeIndicator() {
+    this.ordresService
+      .getOne_v2(this.ordre.id, ["id", "hasLitige"])
+      .subscribe(res => {
+        this.dotLitiges = this.getLitigeBadgeIndicator(res.data.ordre.hasLitige);
+      });
   }
 
   leftPanelChange(e) {
