@@ -36,7 +36,7 @@
     background: #5d484d;
     color: white;
     padding: 0 8px 2px 8px;
-    height: 17px;
+    min-height: 19px;
     line-height: 16px;
   }
 
@@ -97,6 +97,10 @@
 
     .dx-button-content {
       padding: 0 10px !important;
+
+      .dx-button-text {
+        padding-bottom: 3px;
+      }
     }
   }
 
@@ -110,7 +114,7 @@
       padding: 0 !important;
 
       .dx-icon {
-        font-size: 18px;
+        font-size: 18px !important;
       }
     }
   }

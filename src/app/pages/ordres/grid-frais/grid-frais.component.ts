@@ -40,7 +40,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-frais.component.html",
   styleUrls: ["./grid-frais.component.scss"],
 })
-export class GridFraisComponent implements OnInit {
+export class GridFraisComponent implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
 
   public dataSource: DataSource;
@@ -60,6 +60,7 @@ export class GridFraisComponent implements OnInit {
   public itemsWithSelectBox: string[];
   public descriptionOnlyDisplaySB: string[];
   public SelectBoxPopupWidth: number;
+  public showDecDedouan: boolean;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -110,6 +111,11 @@ export class GridFraisComponent implements OnInit {
 
   ngOnInit(): void {
     if (this?.ordre?.id) this.enableFilters();
+    this.showDecDedouan = this.currentCompanyService.getCompany().id === "BUK";
+  }
+
+  decDedouan() {
+
   }
 
   initializeFournDataSources() {
