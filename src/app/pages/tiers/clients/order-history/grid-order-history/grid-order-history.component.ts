@@ -174,6 +174,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const gridFields = await fields.toPromise();
     const dataSource = this.ordreLignesService.getListDataSource([
       ...gridFields,
+      "ordre.id",
       "ordre.statut",
     ]);
 
@@ -472,12 +473,12 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 }
