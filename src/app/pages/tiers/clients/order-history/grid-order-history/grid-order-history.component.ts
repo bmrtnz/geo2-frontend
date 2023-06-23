@@ -184,6 +184,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const gridFields = await fields.toPromise();
     const dataSource = this.ordreLignesService.getListDataSource([
       ...gridFields,
+      "ordre.id",
       "ordre.statut",
     ]);
 

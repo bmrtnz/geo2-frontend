@@ -4,7 +4,7 @@ import {
   Input,
   OnChanges,
   OnInit,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NestedPart } from "app/pages/nested/nested.component";
@@ -13,7 +13,7 @@ import { TypeTiers } from "app/shared/models/tier.model";
 import {
   AuthService,
   EntrepotsService,
-  LocalizationService,
+  LocalizationService
 } from "app/shared/services";
 import { ContactsService } from "app/shared/services/api/contacts.service";
 import { FluxService } from "app/shared/services/api/flux.service";
@@ -23,15 +23,15 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { firstValueFrom, from, Observable } from "rxjs";
+import { concatMap, first, map } from "rxjs/operators";
 
 @Component({
   selector: "app-contacts",
@@ -73,7 +73,7 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     // Zooms client, fournisseur, transporteur...
@@ -204,12 +204,12 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -259,15 +259,19 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
 
   async fetchRefClientEntrepot(fluxComplement: string) {
     const fetchEntrepot = (codeEntrepot: string) =>
-      this.entrepotsService
-        .getOneByCodeAndSocieteId(
-          new Set(["id", "client.id"]),
-          codeEntrepot,
-          this.currentCompanyService.getCompany().id
-        )
-        .pipe(map((res) => res.data.entrepotByCodeAndSocieteId))
-        .toPromise();
-    const entrepot = await fetchEntrepot(this.codeTiers);
+      this.route.parent.firstChild.paramMap.pipe(
+        map(params => params.get("client")),
+        concatMap(clientId => this.entrepotsService
+          .getOneByCodeAndSocieteIdAndClientId(
+            new Set(["id", "client.id"]),
+            codeEntrepot,
+            this.currentCompanyService.getCompany().id,
+            clientId,
+          )),
+        map((res) => res.data.entrepotByCodeAndSocieteIdAndClientId),
+        first(),
+      );
+    const entrepot = await firstValueFrom(fetchEntrepot(this.codeTiers));
     const partialContact: Partial<Contact> = {};
 
     partialContact.refClientEntrepot = ["DEMAT", "AGP"].includes(fluxComplement)

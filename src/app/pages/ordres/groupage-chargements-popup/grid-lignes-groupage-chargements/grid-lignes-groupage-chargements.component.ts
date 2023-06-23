@@ -39,8 +39,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
   styleUrls: ["./grid-lignes-groupage-chargements.component.scss"],
 })
 export class GridLignesGroupageChargementsComponent
-  implements AfterViewInit, OnChanges
-{
+  implements AfterViewInit, OnChanges {
   @Input() public ordre: Ordre;
   @Input() public gridCdes: any;
   @Input() public gridEnv: any;
