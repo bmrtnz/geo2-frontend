@@ -15,6 +15,11 @@
       pointer-events: auto;
     }
   }
+
+  .first-group+.colisCommandes div {
+    color: transparent;
+  }
+
 }
 
 ::ng-deep .secteur-histo-ligne-field {
