@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -8,7 +7,6 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
-import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { BaseTarif } from "app/shared/models";
 import LitigeCause from "app/shared/models/litige-cause.model";
 import LitigeConsequence from "app/shared/models/litige-consequence.model";
@@ -25,11 +23,9 @@ import {
 import { GridColumn } from "basic";
 import DevExpress from "devextreme";
 import { DxDataGridComponent } from "devextreme-angular";
-import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { formatNumber } from "devextreme/localization";
-import dxDataGrid from "devextreme/ui/data_grid";
-import { defer, EMPTY, from, interval, Observable, of, throwError } from "rxjs";
+import { defer, from, interval, Observable, of, throwError } from "rxjs";
 import {
   concatMap,
   concatMapTo,
@@ -37,7 +33,6 @@ import {
   map,
   mergeMap,
   takeWhile,
-  tap,
   timeout,
   toArray,
 } from "rxjs/operators";
@@ -386,8 +381,8 @@ export class GridLotComponent implements OnInit, OnChanges {
                 res
                   ? of(row)
                   : throwError(
-                      Error(this.localize.transform("validation-canceled"))
-                    )
+                    Error(this.localize.transform("validation-canceled"))
+                  )
               )
             );
         }

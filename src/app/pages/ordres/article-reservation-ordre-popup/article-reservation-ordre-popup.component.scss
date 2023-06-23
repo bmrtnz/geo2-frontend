@@ -74,8 +74,13 @@
         text-justify: distribute;
       }
 
+      .grid-reservation-stock-en-cours {
+        min-height: 159px;
+      }
+
       .grid-ordre-ligne-stock {
         max-height: 280px;
+        min-height: 159px;
         margin-left: 2px;
       }
 
