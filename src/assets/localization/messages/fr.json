@@ -220,6 +220,7 @@
     "dereferencer-article": "déréférencer cet article",
     "dereferencer-articles": "déréférencer ces articles",
     "references-client": "Références client",
+    "article-overflow": "Impossible d'ajouter (dépassement max autorisé) ces lignes d'articles",
     "zoom-article": "Zoom article n°",
     "zoom-fournisseur": "Zoom fournisseur",
     "zoom-transporteur": "Zoom transporteur",
