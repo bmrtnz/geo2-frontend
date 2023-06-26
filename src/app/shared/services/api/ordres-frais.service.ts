@@ -4,12 +4,16 @@ import OrdreFrais from "app/shared/models/ordre-frais.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { APIRead, ApiService, RelayPage } from "../api.service";
+import { FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class OrdresFraisService extends ApiService implements APIRead {
-  constructor(apollo: Apollo) {
+  constructor(
+    apollo: Apollo,
+    public functionsService: FunctionsService,
+  ) {
     super(apollo, OrdreFrais);
   }
 
@@ -110,4 +114,14 @@ export class OrdresFraisService extends ApiService implements APIRead {
       }),
     });
   }
+
+  /**
+ * Déclaration dédouanement
+ */
+  public prcGenFraisDedimp(ordRef: string) {
+    return this.functionsService.queryFunction("prcGenFraisDedimp", [
+      { name: "ordRef", type: "String", value: ordRef },
+    ]);
+  }
+
 }

@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
+import { alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   EntrepotsService,
@@ -115,7 +116,17 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   }
 
   decDedouan() {
-
+    this.ordresFraisService.prcGenFraisDedimp(this.ordre.id).subscribe({
+      next: () => {
+        this.datagrid.instance.refresh();
+      },
+      error: (error: Error) => {
+        alert(
+          error.message,
+          this.localizeService.localize("declaration-dedouan")
+        );
+      },
+    });
   }
 
   initializeFournDataSources() {
