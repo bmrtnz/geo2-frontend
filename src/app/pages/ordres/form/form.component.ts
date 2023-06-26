@@ -1715,7 +1715,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onClickCreateLitige() {
     this.litigesBtn.nativeElement.click();
-    this.formLitiges.createLitige();
+    setTimeout(() => this.formLitiges.createLitige());
   }
 
   private updateLogistiquesDates(date: Date) {
