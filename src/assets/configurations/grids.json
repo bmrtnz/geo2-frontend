@@ -7376,6 +7376,7 @@
       {
         "dataField": "prixUnitaire",
         "visible": true,
+        "cssClass": "text-align-right no-padding-right",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7397,6 +7398,7 @@
       {
         "dataField": "uniteFactureCode",
         "visible": true,
+        "cssClass": "text-align-right no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7418,6 +7420,7 @@
       {
         "dataField": "devise",
         "visible": true,
+        "cssClass": "text-align-center no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7439,6 +7442,7 @@
       {
         "dataField": "quantite",
         "visible": true,
+        "cssClass": "text-align-right no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7461,6 +7465,7 @@
       {
         "dataField": "forfait",
         "visible": true,
+        "cssClass": "text-align-right no-padding-left",
         "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "editCellTemplate": "mergeEditCellsTemplate",
