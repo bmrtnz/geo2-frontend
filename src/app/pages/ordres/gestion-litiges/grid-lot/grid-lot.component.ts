@@ -159,8 +159,10 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   private setQuantite(newData, value, rowData) {
-    this.setClientQuantite(newData, value, rowData);
-    this.setResponsableQuantite(newData, value, rowData);
+    if (rowData.ligne.clientUniteFactureCode !== "UNITE")
+      this.setClientQuantite(newData, value, rowData);
+    if (rowData.ligne.responsableUniteFactureCode !== "UNITE")
+      this.setResponsableQuantite(newData, value, rowData);
   }
 
   public gridConfigHandler = (event) =>
