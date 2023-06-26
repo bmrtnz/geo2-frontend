@@ -184,6 +184,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const gridFields = await fields.toPromise();
     const dataSource = this.ordreLignesService.getListDataSource([
       ...gridFields,
+      "ordre.id",
       "ordre.statut",
     ]);
 
@@ -247,18 +248,27 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  // open selected ordre on group row double-click
+  // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    if (rowType !== "group" || (!data.items && !data.collapsedItems)) return;
-    const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-    if (!dataItems.ordre) return;
-    window.sessionStorage.setItem(
-      "openOrder",
-      [data.key, dataItems.ordre.campagne.id].join("|")
-    );
-    this.hidePopup.emit();
-    // Timeout to let the popup close
-    setTimeout(() => this.router.navigateByUrl("pages/ordres"));
+    let numero, campagneId;
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      numero = data.key;
+      campagneId = dataItems.ordre.campagne.id;
+    } else {
+      numero = data.ordre.numero;
+      campagneId = data.ordre.campagne.id;
+    }
+    if (numero && campagneId) {
+      window.sessionStorage.setItem(
+        "openOrder",
+        [numero, campagneId].join("|")
+      );
+      this.hidePopup.emit();
+      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+    }
   }
 
   onCellPrepared(e) {
