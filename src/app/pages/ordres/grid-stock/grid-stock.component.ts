@@ -382,7 +382,9 @@ export class GridStockComponent implements OnInit {
         e.cellElement.textContent
       ) {
         const data = e.data.items ?? e.data.collapsedItems;
-        if (data[0].bio) e.cellElement.classList.add("bio-article");
+        if (data[0].origineID && data[0].origineID != "F") {
+          e.cellElement.classList.add("not-france-origin");
+        } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
     }
 
