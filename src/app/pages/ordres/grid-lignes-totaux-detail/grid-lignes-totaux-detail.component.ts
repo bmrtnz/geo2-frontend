@@ -25,7 +25,7 @@ import { GridsService } from "../grids.service";
   styleUrls: ["./grid-lignes-totaux-detail.component.scss"],
 })
 export class GridLignesTotauxDetailComponent
-  implements AfterViewInit {
+  implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -47,6 +47,10 @@ export class GridLignesTotauxDetailComponent
       Grid.OrdreLignesTotauxDetail
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+  }
+
+  ngOnInit() {
+    this.enableFilters();
   }
 
   ngAfterViewInit() {
