@@ -387,6 +387,21 @@ export class GridStockComponent implements OnInit {
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
+
+      // Soulignage des quantités réservées
+      if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
+        const index = e.column.dataField[e.column.dataField.length - 1];
+        let data = e.data;
+        if (e.rowType === "group") {
+          data = data.items ?? data.collapsedItems;
+          let underline = false;
+          data.map(d => { if (d["quantiteReservee" + index] !== 0) underline = true; });
+          if (underline) e.cellElement.classList.add("underlined-text")
+        } else {
+          if (data["quantiteReservee" + index] !== 0) e.cellElement.classList.add("underlined-text")
+        }
+      }
+
       // Fond jaune pour les stocks J21
       if (e.column.dataField === "quantiteCalculee4") {
         e.cellElement.classList.add("highlight-stockJ21-cell");
