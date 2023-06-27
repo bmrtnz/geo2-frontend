@@ -40,6 +40,7 @@ import { EncoursClientPopupComponent } from "./encours-client/encours-client-pop
 import { GridEncoursClientComponent } from "./encours-client/grid-encours-client/grid-encours-client.component";
 import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-article-popup/zoom-client-article-popup.component";
 import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup.component";
+import { PromptPopupComponent, PromptPopupModule } from "app/shared/components/prompt-popup/prompt-popup.component";
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup
     ModificationListModule,
     FileManagerModule,
     ArticlesModule,
+    PromptPopupModule
   ],
   declarations: [
     ClientsListComponent,
@@ -82,7 +84,6 @@ import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup
     EncoursClientPopupComponent,
     GridEncoursClientComponent,
     ZoomClientArticlePopupComponent,
-    EncoursClientPopupComponent,
     DuplicationPopupComponent,
   ],
   providers: [NestedGuard, EditingGuard],
@@ -92,6 +93,7 @@ import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup
     GridOrderHistoryComponent,
     ZoomClientArticlePopupComponent,
     EncoursClientPopupComponent,
+    PromptPopupComponent
   ],
 })
-export class ClientsModule {}
+export class ClientsModule { }

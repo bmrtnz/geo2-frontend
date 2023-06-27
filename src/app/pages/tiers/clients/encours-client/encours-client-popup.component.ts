@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
@@ -17,6 +18,7 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 export class EncoursClientPopupComponent implements OnChanges {
   @Input() public client: Partial<Client>;
   @Input() public readOnlyMode: boolean;
+  @Input() public comingFromOrdreModule: boolean;
   @Output() public clientInfo: any;
   @Output() public popupShown: boolean;
   @Output() openEncoursOrder = new EventEmitter<any>();
@@ -29,7 +31,9 @@ export class EncoursClientPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor() {}
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -57,6 +61,15 @@ export class EncoursClientPopupComponent implements OnChanges {
   }
 
   openOrder(ordre) {
-    this.openEncoursOrder.emit(ordre);
+    if (this.comingFromOrdreModule) {
+      this.openEncoursOrder.emit(ordre);
+    } else {
+      window.sessionStorage.setItem(
+        "openOrder",
+        [ordre.numero, ordre.campagne.id].join("|")
+      );
+      this.hidePopup();
+      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+    }
   }
 }

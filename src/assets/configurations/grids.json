@@ -6874,11 +6874,13 @@
       {
         "visibleIndex": 24,
         "dataField": "ordre.numero",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
         "visibleIndex": 26,
         "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
