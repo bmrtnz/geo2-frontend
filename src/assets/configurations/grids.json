@@ -2061,6 +2061,7 @@
         "visibleIndex": 1,
         "dataField": "entrepot.client.secteur.id",
         "dataType": "string",
+        "cssClass": "small-right-padding",
         "visible": true
       },
       {
@@ -2068,48 +2069,56 @@
         "dataField": "codeEntrepot",
         "sortOrder": "asc",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "entrepot.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "entrepot.client.code",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "entrepot.client.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "entrepot.client.commercial.nomUtilisateur",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 7,
         "dataField": "entrepot.client.assistante.nomUtilisateur",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "entrepot.commercial.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 9,
         "dataField": "entrepot.assistante.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -2121,9 +2130,10 @@
   "ordre-entrepot": {
     "columns": [
       {
-        "visibleIndex": 1,
+        "visibleIndex": 0,
         "dataField": "client.secteur.id",
         "dataType": "string",
+        "cssClass": "small-right-padding",
         "visible": true
       },
       {
@@ -2131,48 +2141,63 @@
         "dataField": "code",
         "sortOrder": "asc",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "raisonSocial",
+        "dataField": "ville",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "client.code",
+        "dataField": "raisonSocial",
         "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "client.raisonSocial",
-        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "client.commercial.nomUtilisateur",
+        "dataField": "client.code",
         "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "client.assistante.nomUtilisateur",
-        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "commercial.id",
+        "dataField": "client.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 10,
+        "dataField": "client.commercial.nomUtilisateur",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "client.assistante.nomUtilisateur",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "commercial.id",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
         "dataField": "assistante.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
