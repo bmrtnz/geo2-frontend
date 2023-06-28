@@ -29,6 +29,7 @@
   <dxi-column
     *ngFor="let field of this.columns | async"
     [dataField]="field.dataField"
+    [cssClass]="field.cssClass"
     [caption]="
       ('choixEntrepot-' + field.dataField?.split('.').join('-') | localize) ||
       field.name

@@ -508,13 +508,18 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       : null;
   }
 
-  // open selected ordre on group row double-click
+  // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    if (rowType !== "group" || (!data.items && !data.collapsedItems)) return;
-    const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-    if (!dataItems.ordre) return;
-    this.hidePopup.emit();
-    this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      this.hidePopup.emit();
+      this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+    } else {
+      this.hidePopup.emit();
+      this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
+    }
   }
 
 }

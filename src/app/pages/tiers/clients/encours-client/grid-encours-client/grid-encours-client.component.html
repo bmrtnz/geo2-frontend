@@ -249,3 +249,9 @@
     ></dxi-total-item>
   </dxo-summary>
 </dx-data-grid>
+
+<app-prompt-popup
+  [title]="this.localizeService.localize('choose-ordre')"
+  [dateOnly]="false"
+  (whenValidate)="onValidatePromptPopup($event)"
+></app-prompt-popup>

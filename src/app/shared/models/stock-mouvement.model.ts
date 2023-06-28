@@ -12,7 +12,9 @@ export class StockMouvement extends Model {
   @Field({ model: import("./article.model") }) article: Article;
   @Field() quantite: number;
   @Field() type: string;
+  @Field() parQui: string;
   @Field() nomUtilisateur: string;
+  @Field({ dataType: "datetime" }) public dateModification?: string;
 }
 
 export default StockMouvement;

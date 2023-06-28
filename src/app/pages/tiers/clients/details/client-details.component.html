@@ -2095,7 +2095,10 @@
   [readOnlyMode]="true"
 >
 </app-order-history-popup>
-<app-encours-client-popup [client]="client"> </app-encours-client-popup>
+<app-encours-client-popup
+  [client]="client"
+  [comingFromOrdreModule]="false"
+></app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
   [subTitle]="client?.code"

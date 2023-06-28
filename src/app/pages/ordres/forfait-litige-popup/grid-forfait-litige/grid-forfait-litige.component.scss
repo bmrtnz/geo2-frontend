@@ -1,3 +1,35 @@
+@import "themes/generated/variables.base";
+
+
 ::ng-deep .grid-forfait-litige {
   max-width: 100% !important;
+
+  .merged div {
+    width: 100%;
+    border-bottom: 0;
+    color: darken($base-success, 20%);
+
+    &:first-child {
+      border-bottom: 1px solid #CCC;
+      color: darken($base-danger, 10%);
+    }
+  }
+
+  .dx-editor-cell .dx-texteditor-input {
+    text-align: right;
+  }
+
+
+}
+
+.client-cell {
+  color: darken($base-danger, 10%);
+}
+
+.responsable-cell {
+  color: darken($base-success, 20%);
+}
+
+.tiers-legend {
+  margin-left: 14px;
 }

@@ -48,6 +48,10 @@
     color: rgba(0, 0, 0, 0.7) !important;
   }
 
+  .underlined-text {
+    text-decoration: underline;
+  }
+
   .highlight-negativeStock-cell {
     background: #ff325a !important;
     color: white !important;
@@ -59,6 +63,10 @@
 
   .bio-article {
     color: #39970e !important;
+  }
+
+  .not-france-origin {
+    color: #FFA8CA !important;
   }
 
   .dx-row-focused {
@@ -96,6 +104,14 @@
 
       &:hover {
         background-color: $BW-purple-dark !important;
+      }
+    }
+
+    &.recapitulatif {
+      background-color: $BW-orange-medium !important;
+
+      &:hover {
+        background-color: $BW-orange-dark !important;
       }
     }
   }

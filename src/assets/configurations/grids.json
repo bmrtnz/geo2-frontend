@@ -1337,6 +1337,7 @@
       {
         "visibleIndex": 11,
         "dataField": "stockID",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -1693,6 +1694,128 @@
       {
         "dataField": "stock.statutStock",
         "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
+  "ordre-recap-stock": {
+    "pageSize": 10000,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "stock.fournisseur.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "stock.typePalette.id",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "stock.age",
+        "cssClass": "small-side-padding text-align-center",
+        "width": 75,
+        "sortOrder": "asc",
+        "sortIndex": 2,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "stock.quantiteDisponible",
+        "cssClass": "no-padding",
+        "width": 40,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "mouvement.quantite",
+        "cssClass": "no-padding",
+        "width": 40,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "mouvement.dateModification",
+        "dataType": "datetime",
+        "format": "HH:mm",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "mouvement.parQui",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "stock.proprietaire.code",
+        "cssClass": "small-side-padding",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "stock.quantiteInitiale",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "stock.dateFabrication",
+        "dataType": "date",
+        "width": 90,
+        "cssClass": "multi-line-header",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "dataField": "mouvement.nomUtilisateur",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "mouvement.description",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.statutStock",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.dateInfo",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.utilisateurInfo",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.totalMouvements",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.quantiteReservee",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.id",
+        "showInColumnChooser": false,
+        "sortOrder": "asc",
+        "sortIndex": 3,
         "visible": false
       }
     ]
@@ -2061,6 +2184,7 @@
         "visibleIndex": 1,
         "dataField": "entrepot.client.secteur.id",
         "dataType": "string",
+        "cssClass": "small-right-padding",
         "visible": true
       },
       {
@@ -2068,48 +2192,56 @@
         "dataField": "codeEntrepot",
         "sortOrder": "asc",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "entrepot.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "entrepot.client.code",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "entrepot.client.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "entrepot.client.commercial.nomUtilisateur",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 7,
         "dataField": "entrepot.client.assistante.nomUtilisateur",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "entrepot.commercial.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 9,
         "dataField": "entrepot.assistante.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -2121,9 +2253,10 @@
   "ordre-entrepot": {
     "columns": [
       {
-        "visibleIndex": 1,
+        "visibleIndex": 0,
         "dataField": "client.secteur.id",
         "dataType": "string",
+        "cssClass": "small-right-padding",
         "visible": true
       },
       {
@@ -2131,48 +2264,63 @@
         "dataField": "code",
         "sortOrder": "asc",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 3,
-        "dataField": "raisonSocial",
+        "dataField": "ville",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "client.code",
+        "dataField": "raisonSocial",
         "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 5,
-        "dataField": "client.raisonSocial",
-        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 6,
-        "dataField": "client.commercial.nomUtilisateur",
+        "dataField": "client.code",
         "dataType": "string",
-        "visible": true
-      },
-      {
-        "visibleIndex": 7,
-        "dataField": "client.assistante.nomUtilisateur",
-        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 8,
-        "dataField": "commercial.id",
+        "dataField": "client.raisonSocial",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
-        "visibleIndex": 9,
+        "visibleIndex": 10,
+        "dataField": "client.commercial.nomUtilisateur",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "client.assistante.nomUtilisateur",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "commercial.id",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
         "dataField": "assistante.id",
         "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -4609,6 +4757,13 @@
     "columns": [
       {
         "visibleIndex": 0,
+        "dataField": "dateDepartPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "visibleIndex": 0,
         "dataField": "ordreLogistique.ordre.numero",
         "width": 80,
         "visible": true
@@ -6388,6 +6543,7 @@
         "visibleIndex": 1,
         "dataField": "frais",
         "editCellTemplate": "selectBoxTemplate",
+        "width": 200,
         "visible": true
       },
       {
@@ -6848,11 +7004,13 @@
       {
         "visibleIndex": 24,
         "dataField": "ordre.numero",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
         "visibleIndex": 26,
         "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -7376,6 +7534,7 @@
       {
         "dataField": "prixUnitaire",
         "visible": true,
+        "cssClass": "text-align-right no-padding-right",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7397,6 +7556,7 @@
       {
         "dataField": "uniteFactureCode",
         "visible": true,
+        "cssClass": "text-align-right no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7418,6 +7578,7 @@
       {
         "dataField": "devise",
         "visible": true,
+        "cssClass": "text-align-center no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7439,6 +7600,7 @@
       {
         "dataField": "quantite",
         "visible": true,
+        "cssClass": "text-align-right no-padding",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7461,6 +7623,7 @@
       {
         "dataField": "forfait",
         "visible": true,
+        "cssClass": "text-align-right no-padding-left",
         "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "editCellTemplate": "mergeEditCellsTemplate",

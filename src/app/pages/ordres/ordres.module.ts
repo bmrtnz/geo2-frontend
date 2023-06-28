@@ -158,6 +158,8 @@ import {
   ClientsArticleRefPopupComponent,
   ClientsArticleRefPopupModule,
 } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
+import { RecapStockPopupComponent } from './recap-stock-popup/recap-stock-popup.component';
+import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/grid-recap-stock.component';
 
 @NgModule({
   declarations: [
@@ -252,6 +254,8 @@ import {
     SelectionComptePaloxPopupComponent,
     FormLitigesComponent,
     DeclarationFraudeComponent,
+    RecapStockPopupComponent,
+    GridRecapStockComponent,
   ],
   providers: [
     OrdresIndicatorsService,

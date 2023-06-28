@@ -80,9 +80,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     dateModification?: Date;
     periode?;
   } = {
-    dateDepartPrevue: this.dateManagementService.startOfDay(),
-    dateLivraisonPrevue: this.dateManagementService.endOfDay(),
-  };
+      dateDepartPrevue: this.dateManagementService.startOfDay(),
+      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+    };
 
   public periodes: any[];
   public dataSource: DataSource;
@@ -97,14 +97,12 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   );
   public clientLookupStore = this.clientsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public entrepotLookupStore = this.entrepotsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public transportLookupStore = this.transporteursService.getLookupStore(
@@ -141,6 +139,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
+    // return data;
     const isCalibreOpening = (
       r1: Partial<DeclarationFraude>,
       r2: Partial<DeclarationFraude>
@@ -150,16 +149,24 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       r1.fournisseurCode === r2.fournisseurCode;
 
     return data.map((row) => {
-      // La ligne fait elle partie d'une ouverture de calibre ?
-      if (data.filter((r) => isCalibreOpening(r, row)).length > 1) {
-        const commande = data.find((r) => r.nombreColisCommandes);
-        // La ligne a t'elle un plus gros calibre ?
-        return !data.find((r) => r.poidsNetClient > row.poidsNetClient)
+      // Quelles sont les ouvertures de calibre ?
+      const calibres = data.filter((r) => isCalibreOpening(r, row));
+      if (calibres.length > 1) {
+        // Il peut y avoir x lignes différentes sur la même variété donc on somme
+        let commandes = calibres.filter((r) => r.nombreColisCommandes);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const commande = {
+          nombrePalettesCommandees: nbPalettesCommandees,
+          nombreColisCommandes: nbColisCommandes
+        }
+        // Quelle ligne a le plus gros calibre ?
+        return !calibres.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
-              ...row,
-              nombrePalettesCommandees: commande.nombrePalettesCommandees,
-              nombreColisCommandes: commande.nombreColisCommandes,
-            }
+            ...row,
+            nombrePalettesCommandees: commande.nombrePalettesCommandees,
+            nombreColisCommandes: commande.nombreColisCommandes,
+          }
           : { ...row, nombreColisCommandes: 0, nombrePalettesCommandees: 0 };
       }
 
@@ -270,26 +277,34 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           this.dateManagementService.startOfDay(fin);
       }
     }
-    this.preFilterData.periode = null;
+    this.periodeSB.value = null;
   }
 
-  onRowPrepared(event) {
+  onRowPrepared(e) {
     // hide `groupFooter` rows values with `groupIndex=0`
     // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
-    if (event.rowType === "groupFooter" && event.groupIndex !== 2)
-      event.rowElement.classList.add("hide-row");
+    if (e.rowType === "groupFooter" && e.groupIndex !== 2)
+      e.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
-    if (event.rowType === "group" && event.groupIndex === 0)
-      event.rowElement.classList.add("justified-row");
+    if (e.rowType === "group" && e.groupIndex === 0)
+      e.rowElement.classList.add("justified-row");
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      // console.log(e);
+      if (e.data.nombreColisCommandes)
+        e.cellElement.classList.add("bold-black");
+    }
   }
 
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
-    return `${rowData.varieteCode} ${rowData.colisCode} ${rowData.poidsNetClient}kg ${rowData.origineDescription}`;
+    return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetClient} kg - ${rowData.origineDescription}`;
   }
 
   calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {
-    return rowData.nombreColisCommandes * rowData.poidsNetClient;
+    return Math.ceil(rowData.nombreColisCommandes * rowData.poidsNetClient);
   }
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {

@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import StockMouvement from "app/shared/models/stock-mouvement.model";
-import { ApiService } from "../api.service";
+import DataSource from "devextreme/data/data_source";
+import { LoadOptions } from "devextreme/data/load_options";
+import { ApiService, RelayPage } from "../api.service";
 import { functionBody, FunctionResponse } from "./functions.service";
 
 @Injectable({
@@ -10,6 +12,45 @@ import { functionBody, FunctionResponse } from "./functions.service";
 export class StockMouvementsService extends ApiService {
   constructor(apollo: Apollo) {
     super(apollo, StockMouvement);
+  }
+
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { stockMouvement: StockMouvement };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, (res) => {
+          if (res.data && res.data.stockMouvement)
+            resolve(new StockMouvement(res.data.stockMouvement));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [{ selector: this.model.getKeyField() as string }],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
+
+            type Response = { allStockMouvement: RelayPage<StockMouvement> };
+            const query = await this.buildGetAll_v2(columns);
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allStockMouvement) {
+                resolve(this.asInstancedListCount(res.data.allStockMouvement));
+              }
+            });
+          }),
+        byKey: this.byKey(columns),
+      }),
+    });
   }
 
   public saveStockMouvement(
