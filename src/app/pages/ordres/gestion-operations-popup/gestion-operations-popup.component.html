@@ -10,7 +10,7 @@
   [resizeEnabled]="true"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
-  (onShown)="onShown()"
+  (onShown)="onShown($event)"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}</div>

@@ -1223,12 +1223,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          // France: 2 Incoterms only
           if (this.ordre.secteurCommercial.id === "F")
             this.incotermsDS.filter([
               ["id", "=", "CPT"],
               "or",
               ["id", "=", "EXW"],
             ])
+
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(

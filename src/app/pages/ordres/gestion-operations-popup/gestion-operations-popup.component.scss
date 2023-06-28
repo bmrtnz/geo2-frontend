@@ -1,4 +1,9 @@
+::ng-deep .no-opacity {
+  opacity: 0 !important;
+}
+
 ::ng-deep .gestion-operations-popup {
+
   .dx-template-wrapper.dx-popup-title {
     background-color: #fff;
     overflow: hidden;

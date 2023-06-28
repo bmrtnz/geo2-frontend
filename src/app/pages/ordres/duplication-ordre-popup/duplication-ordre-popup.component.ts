@@ -67,6 +67,9 @@ export class DuplicationOrdrePopupComponent {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("duplication-ordre-popup");
+  }
+
+  onShown(e) {
     this.setDefaultValues();
     this.showModify = false;
     if (this.ordre) {

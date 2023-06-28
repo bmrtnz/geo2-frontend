@@ -32,7 +32,7 @@ import {
   filter,
   map,
   mergeMap,
-  takeWhile, tap, timeout,
+  takeWhile, timeout,
   toArray
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";

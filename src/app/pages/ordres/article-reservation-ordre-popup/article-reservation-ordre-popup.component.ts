@@ -98,12 +98,12 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     e.component
       .content()
       .parentNode.classList.add("article-reservation-ordre-popup");
-    this.clearAll();
-    this.okDisabled = false;
   }
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.clearAll();
+    this.okDisabled = false;
     this.gridResaEnCours.reloadSource(this.ordreLigne.id);
   }
 
