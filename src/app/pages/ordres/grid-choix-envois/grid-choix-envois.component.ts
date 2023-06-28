@@ -223,7 +223,7 @@ export class GridChoixEnvoisComponent implements OnInit {
         this.ordre.id,
         this.fluxID,
         true,
-        annuleOrdre ? annuleOrdre : false,
+        !!annuleOrdre ? !!annuleOrdre : false,
         this.authService.currentUser.nomUtilisateur
       )
       .pipe(
@@ -234,7 +234,7 @@ export class GridChoixEnvoisComponent implements OnInit {
             this.ordre.id,
             this.fluxID,
             true,
-            !annuleOrdre ? annuleOrdre : false,
+            !annuleOrdre ? !!annuleOrdre : false,
             this.authService.currentUser.nomUtilisateur
           )),
         concatMapTo(
