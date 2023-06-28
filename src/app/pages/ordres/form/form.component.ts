@@ -1470,6 +1470,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refreshStatus(statut: Statut) {
+    if (!this.ordre) return;
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     this.canChangeDateLiv =
