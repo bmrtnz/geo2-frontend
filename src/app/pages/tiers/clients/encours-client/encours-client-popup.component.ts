@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
+
 @Component({
   selector: "app-encours-client-popup",
   templateUrl: "./encours-client-popup.component.html",
@@ -18,7 +19,7 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 export class EncoursClientPopupComponent implements OnChanges {
   @Input() public client: Partial<Client>;
   @Input() public readOnlyMode: boolean;
-  @Input() public comingFromOrdreModule: boolean;
+  @Input() public comingFrom: string;
   @Output() public clientInfo: any;
   @Output() public popupShown: boolean;
   @Output() openEncoursOrder = new EventEmitter<any>();
@@ -61,9 +62,9 @@ export class EncoursClientPopupComponent implements OnChanges {
   }
 
   openOrder(ordre) {
-    if (this.comingFromOrdreModule) {
+    if (["detailEncours", "zoomClient"].includes(this.comingFrom))
       this.openEncoursOrder.emit(ordre);
-    } else {
+    if (["client"].includes(this.comingFrom)) {
       window.sessionStorage.setItem(
         "openOrder",
         [ordre.numero, ordre.campagne.id].join("|")

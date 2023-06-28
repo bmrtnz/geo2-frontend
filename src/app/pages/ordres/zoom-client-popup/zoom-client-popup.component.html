@@ -9,7 +9,10 @@
 >
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
-      <app-client-details [clientId]="clientId"></app-client-details>
+      <app-client-details
+        [clientId]="clientId"
+        (openEncoursOrder)="openOrder($event)"
+      ></app-client-details>
       <app-contacts [clientCode]="clientCode"></app-contacts>
       <br />
     </dx-scroll-view>
