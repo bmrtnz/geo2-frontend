@@ -152,7 +152,14 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       // Quelles sont les ouvertures de calibre ?
       const calibres = data.filter((r) => isCalibreOpening(r, row));
       if (calibres.length > 1) {
-        const commande = calibres.find((r) => r.nombreColisCommandes);
+        // Il peut y avoir x lignes différentes sur la même variété donc on somme
+        let commandes = calibres.filter((r) => r.nombreColisCommandes);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const commande = {
+          nombrePalettesCommandees: nbPalettesCommandees,
+          nombreColisCommandes: nbColisCommandes
+        }
         // Quelle ligne a le plus gros calibre ?
         return !calibres.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
@@ -273,19 +280,27 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     this.periodeSB.value = null;
   }
 
-  onRowPrepared(event) {
+  onRowPrepared(e) {
     // hide `groupFooter` rows values with `groupIndex=0`
     // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
-    if (event.rowType === "groupFooter" && event.groupIndex !== 2)
-      event.rowElement.classList.add("hide-row");
+    if (e.rowType === "groupFooter" && e.groupIndex !== 2)
+      e.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
-    if (event.rowType === "group" && event.groupIndex === 0)
-      event.rowElement.classList.add("justified-row");
+    if (e.rowType === "group" && e.groupIndex === 0)
+      e.rowElement.classList.add("justified-row");
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      // console.log(e);
+      if (e.data.nombreColisCommandes)
+        e.cellElement.classList.add("bold-black");
+    }
   }
 
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
-    return `${rowData.varieteCode} ${rowData.colisCode} ${rowData.poidsNetClient}kg ${rowData.origineDescription}`;
+    return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetClient} kg - ${rowData.origineDescription}`;
   }
 
   calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {

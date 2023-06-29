@@ -160,6 +160,7 @@
 <dx-data-grid
   [dataSource]="dataSource"
   [width]="'100%'"
+  (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onExporting)="onExporting($event)"
 >
@@ -215,8 +216,9 @@
   <dxi-column
     [dataField]="'poidsNet'"
     [caption]="'fraude-column-poidsNet' | localize"
+    [cssClass]="'multi-line-header'"
     [calculateCellValue]="calculatePoidsNetValue"
-    [width]="'auto'"
+    [width]="50"
   ></dxi-column>
   <dxi-column
     [dataField]="'articleDescription'"
@@ -235,7 +237,7 @@
     [width]="'auto'"
   ></dxi-column>
 
-  <dxo-summary [recalculateWhileEditing]="true">
+  <!-- <dxo-summary [recalculateWhileEditing]="true">
     <dxi-group-item
       [showInColumn]="'nombrePalettesCommandees'"
       [displayFormat]="'fraude-total-variete-station' | localize"
@@ -255,7 +257,7 @@
       [displayFormat]="'{0}'"
     >
     </dxi-group-item>
-  </dxo-summary>
+  </dxo-summary> -->
 
   <div *dxTemplate="let data of 'groupDPFTemplate'">
     <div>
