@@ -67,11 +67,6 @@ export class RecapStockPopupComponent implements OnChanges {
     this.popupFullscreen = !this.popupFullscreen;
   }
 
-  reservationChange() {
-    this.whenApplied.emit();
-    this.hidePopup();
-  }
-
   pushText(info) {
     this.detailedArticleDescription += info + this.separator;
   }

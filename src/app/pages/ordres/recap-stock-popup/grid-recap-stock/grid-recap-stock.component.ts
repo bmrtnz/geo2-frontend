@@ -32,16 +32,6 @@ export class GridRecapStockComponent {
   public recapSource: DataSource;
   public requiredFields: string[];
 
-  public summaryFields = [
-    "quantiteDisponible",
-    "quantiteInitiale",
-    "quantiteReservee",
-    "quantiteCalculee1",
-    "quantiteCalculee2",
-    "quantiteCalculee3",
-    "quantiteCalculee4",
-  ];
-
   constructor(
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,
