@@ -80,9 +80,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     dateModification?: Date;
     periode?;
   } = {
-    dateDepartPrevue: this.dateManagementService.startOfDay(),
-    dateLivraisonPrevue: this.dateManagementService.endOfDay(),
-  };
+      dateDepartPrevue: this.dateManagementService.startOfDay(),
+      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+    };
 
   public periodes: any[];
   public dataSource: DataSource;
@@ -97,14 +97,12 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   );
   public clientLookupStore = this.clientsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public entrepotLookupStore = this.entrepotsService.getLookupStore(
     ["id", "code"],
-    `valide==true and societe.id == ${
-      this.currentCompanyService.getCompany().id
+    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
     }`
   );
   public transportLookupStore = this.transporteursService.getLookupStore(
@@ -141,6 +139,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
+    // return data;
     const isCalibreOpening = (
       r1: Partial<DeclarationFraude>,
       r2: Partial<DeclarationFraude>
@@ -150,16 +149,17 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       r1.fournisseurCode === r2.fournisseurCode;
 
     return data.map((row) => {
-      // La ligne fait elle partie d'une ouverture de calibre ?
-      if (data.filter((r) => isCalibreOpening(r, row)).length > 1) {
-        const commande = data.find((r) => r.nombreColisCommandes);
-        // La ligne a t'elle un plus gros calibre ?
-        return !data.find((r) => r.poidsNetClient > row.poidsNetClient)
+      // Quelles sont les ouvertures de calibre ?
+      const calibres = data.filter((r) => isCalibreOpening(r, row));
+      if (calibres.length > 1) {
+        const commande = calibres.find((r) => r.nombreColisCommandes);
+        // Quelle ligne a le plus gros calibre ?
+        return !calibres.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
-              ...row,
-              nombrePalettesCommandees: commande.nombrePalettesCommandees,
-              nombreColisCommandes: commande.nombreColisCommandes,
-            }
+            ...row,
+            nombrePalettesCommandees: commande.nombrePalettesCommandees,
+            nombreColisCommandes: commande.nombreColisCommandes,
+          }
           : { ...row, nombreColisCommandes: 0, nombrePalettesCommandees: 0 };
       }
 
@@ -270,7 +270,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           this.dateManagementService.startOfDay(fin);
       }
     }
-    this.preFilterData.periode = null;
+    this.periodeSB.value = null;
   }
 
   onRowPrepared(event) {
@@ -289,7 +289,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   }
 
   calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {
-    return rowData.nombreColisCommandes * rowData.poidsNetClient;
+    return Math.ceil(rowData.nombreColisCommandes * rowData.poidsNetClient);
   }
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {
