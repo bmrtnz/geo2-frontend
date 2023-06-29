@@ -307,6 +307,27 @@
         </dx-button>
       </div>
 
+      <!-- Récapitulatif -->
+      <dxi-column
+        *ngIf="recap"
+        cssClass="small-horiz-padding"
+        width="auto"
+        visibleIndex="14"
+        [showInColumnChooser]="false"
+        [cellTemplate]="'recapitulatifTemplate'"
+      >
+      </dxi-column>
+      <div *dxTemplate="let cell of 'recapitulatifTemplate'">
+        <dx-button
+          class="small-article-button recapitulatif"
+          type="success"
+          [focusStateEnabled]="false"
+          [text]="'Récap'"
+          (onClick)="openRecapPopup(cell.data)"
+        >
+        </dx-button>
+      </div>
+
       <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
         <div
           class="group-text-1"
@@ -383,6 +404,11 @@
   [ligneStockArticle]="ligneStockArticle"
   (whenApplied)="refreshArticlesGrid()"
 ></app-option-stock-popup>
+
+<app-recap-stock-popup
+  [article]="article"
+  [ligneStockArticle]="ligneStockArticle"
+></app-recap-stock-popup>
 
 <app-clients-article-ref-popup
   [article]="article"

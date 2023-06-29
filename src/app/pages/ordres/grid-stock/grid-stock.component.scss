@@ -101,6 +101,14 @@
         background-color: $BW-purple-dark !important;
       }
     }
+
+    &.recapitulatif {
+      background-color: $BW-orange-medium !important;
+
+      &:hover {
+        background-color: $BW-orange-dark !important;
+      }
+    }
   }
 
   .grid-pen-button {

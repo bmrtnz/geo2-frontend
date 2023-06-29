@@ -36,6 +36,7 @@ import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-po
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
+import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
 
 let self;
 
@@ -48,6 +49,7 @@ export class GridStockComponent implements OnInit {
   @Input() public ordre: Ordre;
   @Input() public destock: boolean;
   @Input() public reserv: boolean;
+  @Input() public recap: boolean;
   @Input() public clientsRef: boolean;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
@@ -74,6 +76,7 @@ export class GridStockComponent implements OnInit {
   @ViewChild(ReservationPopupComponent)
   destockagePopup: ReservationPopupComponent;
   @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
+  @ViewChild(RecapStockPopupComponent) recapPopup: RecapStockPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false })
   promptPopupComponent: PromptPopupComponent;
   @ViewChild(ClientsArticleRefPopupComponent, { static: false })
@@ -143,7 +146,8 @@ export class GridStockComponent implements OnInit {
       "articles-catalogue-preFilter-stock-title"
     );
     this.onFieldValueChange(null, "espece"); // First run: setting filters values
-    // setTimeout(() => this.refreshArticlesGrid(), 1000) // A VIRER !!!!
+    // setTimeout(() => this.refreshArticlesGrid(), 500) // A VIRER !!!!
+    // this.refreshArticlesGrid() // A VIRER !!!!
   }
 
   onFilterChange() {
@@ -347,6 +351,15 @@ export class GridStockComponent implements OnInit {
 
   openDestockagePopup(data) {
     if (data?.articleID) this.destockagePopup.present(data, this.ordre);
+  }
+
+  openRecapPopup(data) {
+    if (!data?.articleID) return;
+    this.ligneStockArticle = data;
+    this.articlesService.getOne(data.articleID).subscribe((res) => {
+      this.article = res.data.article;
+      this.recapPopup.visible = true;
+    });
   }
 
   ajoutReservation() {

@@ -1337,6 +1337,7 @@
       {
         "visibleIndex": 11,
         "dataField": "stockID",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -1693,6 +1694,128 @@
       {
         "dataField": "stock.statutStock",
         "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
+  },
+  "ordre-recap-stock": {
+    "pageSize": 10000,
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "stock.fournisseur.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "sortIndex": 1,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "stock.typePalette.id",
+        "cssClass": "multi-line-header",
+        "width": 60,
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "stock.age",
+        "cssClass": "small-side-padding text-align-center",
+        "width": 40,
+        "sortOrder": "asc",
+        "sortIndex": 2,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "stock.quantiteDisponible",
+        "cssClass": "no-padding",
+        "width": 40,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "mouvement.quantite",
+        "cssClass": "no-padding",
+        "width": 40,
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "mouvement.dateModification",
+        "dataType": "datetime",
+        "format": "HH:mm",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "mouvement.parQui",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "stock.proprietaire.code",
+        "cssClass": "small-side-padding",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "stock.quantiteInitiale",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
+        "dataField": "stock.dateFabrication",
+        "dataType": "date",
+        "width": 90,
+        "cssClass": "multi-line-header",
+        "format": "dd-MM-yyyy",
+        "visible": true
+      },
+      {
+        "dataField": "mouvement.nomUtilisateur",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "mouvement.description",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.statutStock",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.dateInfo",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.utilisateurInfo",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.totalMouvements",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.quantiteReservee",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.id",
+        "showInColumnChooser": false,
+        "sortOrder": "asc",
+        "sortIndex": 3,
         "visible": false
       }
     ]
