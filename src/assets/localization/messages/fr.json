@@ -1885,6 +1885,7 @@
     "ordre-date-depart-mutate": "Date de départ de l'ordre modifiée, voulez-vous également modifier les dates de départ station / lieu de passage à quai (logistique départ) ?",
     "fraude-depart-station": "Départs de station du",
     "fraude-total-variete-station": "Total par Variété/Station :",
+    "fraude-douane": "DOUANE",
     "order": "ordre",
     "declaration-fraude": "declaration fraude",
     "state-from": "État du",

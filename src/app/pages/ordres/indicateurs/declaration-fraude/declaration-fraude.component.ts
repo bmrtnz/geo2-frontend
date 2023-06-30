@@ -139,7 +139,6 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
-    // return data;
     const isCalibreOpening = (
       r1: Partial<DeclarationFraude>,
       r2: Partial<DeclarationFraude>
@@ -215,6 +214,14 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "origineDescription",
           "transporteurCode",
           "dateModification",
+          "referenceClient",
+          "codeChargement",
+          "etdLocation",
+          "etdDate",
+          "etaLocation",
+          "etaDate",
+          "commentaireInterne",
+          "entrepotCode"
         ]),
         this.preFilterData?.secteur?.id,
         this.currentCompanyService.getCompany().id,
@@ -247,6 +254,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           }),
         });
       });
+  }
+
+  isValue(data, field) {
+    const value = data.data.items[0].items[0][field];
+    return value !== null && value !== undefined;
   }
 
   setDates(e) {
