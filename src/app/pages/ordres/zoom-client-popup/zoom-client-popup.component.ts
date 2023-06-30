@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxScrollViewComponent } from "devextreme-angular";
+import { TabContext } from "../root/root.component";
 
 @Component({
   selector: "app-zoom-client-popup",
@@ -17,7 +18,10 @@ export class ZoomClientPopupComponent implements OnChanges {
   visible: boolean;
   title: string;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(
+    private localizeService: LocalizationService,
+    private tabContext: TabContext,
+  ) { }
 
   ngOnChanges() {
     if (!this.clientId) return;
@@ -34,5 +38,10 @@ export class ZoomClientPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("zoom-client-popup");
+  }
+
+  openOrder(ordre) {
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
+    this.visible = false;
   }
 }

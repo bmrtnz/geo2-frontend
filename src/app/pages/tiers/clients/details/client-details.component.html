@@ -2097,7 +2097,8 @@
 </app-order-history-popup>
 <app-encours-client-popup
   [client]="client"
-  [comingFromOrdreModule]="false"
+  [comingFrom]="clientId ? 'zoomClient' : 'client'"
+  (openEncoursOrder)="openOrder($event)"
 ></app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
