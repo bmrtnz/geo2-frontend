@@ -1212,14 +1212,6 @@
                   </div>
                   <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
-                      <app-grid-lignes-totaux-detail
-                        [ordre]="data"
-                      ></app-grid-lignes-totaux-detail>
-                      <div class="grid-separator"></div>
-                      <app-grid-detail-palettes
-                        [ordre]="data"
-                      ></app-grid-detail-palettes>
-                      <div class="grid-separator"></div>
                       <div class="grid-marge-container">
                         <dx-button
                           class="margin-btn-baf"
@@ -1231,6 +1223,13 @@
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
+                      <app-grid-lignes-totaux-detail
+                        [ordre]="data"
+                      ></app-grid-lignes-totaux-detail>
+                      <div class="grid-separator"></div>
+                      <app-grid-detail-palettes
+                        [ordre]="data"
+                      ></app-grid-detail-palettes>
                     </div>
                   </div>
                 </dx-accordion>
