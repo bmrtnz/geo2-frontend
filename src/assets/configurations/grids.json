@@ -4563,6 +4563,10 @@
         "visible": true
       },
       {
+        "dataField": "numeroAcces2",
+        "visible": false
+      },
+      {
         "dataField": "document.isPresent",
         "visible": false
       },
@@ -4633,7 +4637,7 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "commentairesAvancement",
+        "dataField": "numeroAcces2",
         "dataType": "string",
         "width": "300",
         "visible": true
@@ -4724,7 +4728,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "commentairesAvancement",
+        "dataField": "numeroAcces2",
         "dataType": "string",
         "width": "300",
         "editCellTemplate": "customSelectBoxTemplate",
