@@ -1196,7 +1196,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "Commentaires",
       "Log"
     );
-    this.formLitiges.loadForm();
+    this.formLitiges?.loadForm();
   }
 
   private initializeForm(fetchPol?) {

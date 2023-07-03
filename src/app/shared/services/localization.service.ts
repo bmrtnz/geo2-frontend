@@ -22,7 +22,10 @@ export class LocalizationService {
     loadMessages(frDxMessage);
     loadMessages(frMessage);
 
-    config({ defaultCurrency: "EUR" });
+    config({
+      defaultCurrency: "EUR",
+      defaultUseCurrencyAccountingStyle: false
+    });
     locale(navigator.language);
   }
 
