@@ -610,9 +610,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("gestion-operations-popup");
+    e.component.content().parentNode.classList.add("no-opacity"); // To avoid flash effect (Dx bug)
   }
 
-  onShown() {
+  onShown(e) {
+    e.component.content().parentNode.classList.remove("no-opacity"); // To avoid flash effect (Dx bug)
     if (!this.lot[1]) {
       // lot creation
       this.firstShown = true;

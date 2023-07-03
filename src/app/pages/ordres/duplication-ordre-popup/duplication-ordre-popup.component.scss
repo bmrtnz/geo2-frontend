@@ -3,6 +3,7 @@
 @import "scss/variables.scss";
 
 ::ng-deep .duplication-ordre-popup {
+
   .midLarge {
     width: 100%;
 
@@ -16,7 +17,7 @@
     }
   }
 
-  .dx-field-value:not(.dx-widget) > .dx-checkbox {
+  .dx-field-value:not(.dx-widget)>.dx-checkbox {
     margin: 0 !important;
   }
 
@@ -28,6 +29,10 @@
 
       .dx-button-content {
         padding-left: 12px;
+      }
+
+      .dx-icon {
+        font-size: 18px !important;
       }
     }
 

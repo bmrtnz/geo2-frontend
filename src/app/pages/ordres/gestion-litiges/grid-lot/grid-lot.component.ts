@@ -32,7 +32,7 @@ import {
   filter,
   map,
   mergeMap,
-  takeWhile, tap, timeout,
+  takeWhile, timeout,
   toArray
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
@@ -101,7 +101,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     ligne: Partial<LitigeLigne>
   ) {
     if (baseTarif === "PAL") return ligne.clientNombrePalettes;
-    if (baseTarif === "COL") return ligne.clientNombreColisReclamation;
+    if (["COL", "COLIS"].includes(baseTarif)) return ligne.clientNombreColisReclamation;
     if (baseTarif === "KILO") return ligne.clientPoidsNet;
     if (baseTarif === "TONNE") return ligne.clientPoidsNet / 1_000;
     if (baseTarif === "CAMION") return 0;
@@ -159,8 +159,17 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   private setQuantite(newData, value, rowData) {
-    this.setClientQuantite(newData, value, rowData);
-    this.setResponsableQuantite(newData, value, rowData);
+    const clientForfait = newData.ligne.clientIndicateurForfait ?? rowData.ligne.clientIndicateurForfait;
+    if (clientForfait)
+      newData.ligne.clientQuantite = 1;
+    else
+      this.setClientQuantite(newData, value, rowData);
+
+    const responsableForfait = newData.ligne.responsableIndicateurForfait ?? rowData.ligne.responsableIndicateurForfait;
+    if (responsableForfait)
+      newData.ligne.responsableQuantite = 1;
+    else
+      this.setResponsableQuantite(newData, value, rowData);
   }
 
   public gridConfigHandler = (event) =>

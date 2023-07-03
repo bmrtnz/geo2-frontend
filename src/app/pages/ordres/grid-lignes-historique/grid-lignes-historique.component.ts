@@ -42,6 +42,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
+
 enum InputField {
   valide = "valide",
   dateMin = "dateMin",
@@ -85,7 +86,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public totalItems: TotalItem[] = [];
   private gridConfig: Promise<GridConfig>;
   public env = environment;
   public nbInsertedArticles: number;
@@ -106,6 +106,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     entrepot: new UntypedFormControl(),
     bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
+
+  public summaryFields = ["nombreColisCommandes"];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -266,7 +268,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         let data = e.data.items ?? e.data.collapsedItems;
         if (!data[0]) return;
         data = data[0].ordre;
-        e.cellElement.textContent =
+        e.rowElement.textContent =
           data.numero +
           " - " +
           (data.entrepot?.code ?? "") +
@@ -277,6 +279,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
             : "") +
           ` - ${Statut[data.statut]}`;
       }
+      if (e.column.dataField === "ordre.dateDepartPrevue")
+        e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
       // Descript. article
@@ -517,4 +521,5 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
     }
   }
+
 }

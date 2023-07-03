@@ -291,7 +291,16 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-summary [totalItems]="totalItems"></dxo-summary>
+    <dxo-summary>
+      <dxi-group-item
+        *ngFor="let field of summaryFields"
+        [column]="field"
+        summaryType="sum"
+        [alignByColumn]="true"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+    </dxo-summary>
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
