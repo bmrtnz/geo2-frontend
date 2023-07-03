@@ -501,6 +501,17 @@ dx-button[type="normal"] {
   margin-top: 0 !important;
   padding: 2px 0 0 0 !important;
 
+  .dx-selectbox-container .dx-clear-button-area {
+    margin-right: -10px;
+
+    .dx-icon-clear {
+      margin-top: -7px;
+      width: 15px;
+      height: 15px;
+      font-size: 8px;
+    }
+  }
+
   .dx-field-value {
     height: 23px;
   }

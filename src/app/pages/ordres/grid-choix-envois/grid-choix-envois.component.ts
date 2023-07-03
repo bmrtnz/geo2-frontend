@@ -70,7 +70,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     "numeroAcces1",
     "imprimante.id",
     "nomContact",
-    "commentairesAvancement",
+    "numeroAcces2",
     "traite",
     "dateEnvoi",
     "dateSoumission",
@@ -265,13 +265,13 @@ export class GridChoixEnvoisComponent implements OnInit {
             uniqueEnvois = uniqueEnvois
               .filter((e) => !ignoredTiers.includes(e.codeTiers))
               .map((e) => {
-                e.commentairesAvancement = reasons?.[e.codeTiers];
+                e.numeroAcces2 = reasons?.[e.codeTiers];
                 return e;
               });
           } else {
             if (this.annuleOrdre) {
               uniqueEnvois = uniqueEnvois.map((e) => {
-                e.commentairesAvancement = "COMMANDE ANNULEE";
+                e.numeroAcces2 = "COMMANDE ANNULEE";
                 return e;
               });
             }
@@ -290,7 +290,7 @@ export class GridChoixEnvoisComponent implements OnInit {
       const comInt = this.ordre.commentaireUsageInterne;
       const typeTiers = e.typeTiers.id;
       if (typeTiers === "C") {
-        e.commentairesAvancement = comInt;
+        e.numeroAcces2 = comInt;
       } else {
         let filter = `ordre.numero==${comInt.slice(
           -6
@@ -298,7 +298,7 @@ export class GridChoixEnvoisComponent implements OnInit {
         filter += `codeTiers==${e.codeTiers} and (traite==N or traite==O)`;
         this.envoisService.countBy(filter).subscribe((res) => {
           if (res.data.countBy) {
-            e.commentairesAvancement = comInt;
+            e.numeroAcces2 = comInt;
             this.dataGrid.instance.selectAll();
           }
         });

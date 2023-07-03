@@ -1198,6 +1198,76 @@
         "width": 50,
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.coloration.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.sucre.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.penetro.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.cirage.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "cahierDesCharge.rangement.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.stickeur.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteColis.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteUc.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteEvenementielle.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.identificationSymbolique.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "emballage.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "emballage.conditionSpecial.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "emballage.alveole.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "matierePremiere.codePlu",
+        "dataType": "string",
+        "visible": false
       }
     ]
   },
@@ -4563,6 +4633,10 @@
         "visible": true
       },
       {
+        "dataField": "numeroAcces2",
+        "visible": false
+      },
+      {
         "dataField": "document.isPresent",
         "visible": false
       },
@@ -4633,7 +4707,7 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "commentairesAvancement",
+        "dataField": "numeroAcces2",
         "dataType": "string",
         "width": "300",
         "visible": true
@@ -4724,7 +4798,7 @@
       },
       {
         "visibleIndex": 10,
-        "dataField": "commentairesAvancement",
+        "dataField": "numeroAcces2",
         "dataType": "string",
         "width": "300",
         "editCellTemplate": "customSelectBoxTemplate",
