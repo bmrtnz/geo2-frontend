@@ -268,7 +268,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         let data = e.data.items ?? e.data.collapsedItems;
         if (!data[0]) return;
         data = data[0].ordre;
-        e.rowElement.textContent =
+        e.cellElement.textContent =
           data.numero +
           " - " +
           (data.entrepot?.code ?? "") +
