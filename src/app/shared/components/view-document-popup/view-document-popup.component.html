@@ -1,9 +1,10 @@
 <dx-popup
   [showTitle]="true"
   [title]="this.document?.title"
-  [hideOnOutsideClick]="true"
+  [hideOnOutsideClick]="false"
   [(visible)]="this.visible"
   (onHidden)="this.onClose()"
+  [shading]="false"
   [fullScreen]="this.fullScreen"
 >
   <div *dxTemplate="let data of 'content'">

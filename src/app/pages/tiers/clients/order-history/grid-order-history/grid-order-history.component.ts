@@ -27,7 +27,7 @@ import {
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { GridColumn, TotalItem } from "basic";
+import { GridColumn } from "basic";
 import {
   DxDataGridComponent,
   DxSelectBoxComponent,
@@ -81,7 +81,6 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public totalItems: TotalItem[] = [];
   private gridConfig: Promise<GridConfig>;
   public env = environment;
   public nbInsertedArticles: number;
@@ -102,6 +101,8 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     entrepot: new UntypedFormControl(),
     bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
+
+  public summaryFields = ["nombreColisCommandes"];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -152,6 +153,8 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
   }
+
+
 
   ngOnChanges() {
     if (this.clientId && this.popupShown) {
@@ -289,6 +292,8 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
             : "") +
           ` - ${Statut[data.statut]}`;
       }
+      if (e.column.dataField === "ordre.dateDepartPrevue")
+        e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
       // Descript. article

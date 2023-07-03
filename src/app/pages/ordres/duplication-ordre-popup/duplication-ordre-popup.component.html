@@ -7,6 +7,7 @@
   title="{{ 'ordre-duplicate-creation' | localize }}"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
 >
   <form [formGroup]="formGroup">
     <div class="entrepot-dates-container">

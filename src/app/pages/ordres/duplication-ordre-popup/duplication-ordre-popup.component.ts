@@ -14,6 +14,7 @@ import { DxPopupComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { TabContext } from "../root/root.component";
+import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 
 @Component({
   selector: "app-duplication-ordre-popup",
@@ -26,6 +27,7 @@ export class DuplicationOrdrePopupComponent {
     public ordresService: OrdresService,
     public currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
+    public ordresIndicatorsService: OrdresIndicatorsService,
     private tabContext: TabContext,
     private entrepotsService: EntrepotsService,
     private localization: LocalizationService
@@ -67,6 +69,9 @@ export class DuplicationOrdrePopupComponent {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("duplication-ordre-popup");
+  }
+
+  onShown(e) {
     this.setDefaultValues();
     this.showModify = false;
     if (this.ordre) {
@@ -100,6 +105,12 @@ export class DuplicationOrdrePopupComponent {
     this.formGroup
       .get("dateLivraisonPrevue")
       .patchValue(this.ordre.dateLivraisonPrevue);
+    // this.formGroup
+    //   .get("dateDepartPrevue")
+    //   .patchValue(this.dateManagementService.findDate(0) + "T00:00");
+    // this.formGroup
+    //   .get("dateLivraisonPrevue")
+    //   .patchValue(this.dateManagementService.findDate(1));
     this.formGroup.get("entrepot").patchValue({
       id: this.ordre.entrepot.id,
       code: this.ordre.entrepot.code,
@@ -123,6 +134,14 @@ export class DuplicationOrdrePopupComponent {
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.formGroup.get("dateDepartPrevue").value);
+
+    if (e.element.classList.contains("dateStart")) {
+      this.formGroup
+        .get("dateLivraisonPrevue")
+        .patchValue(this.ordresIndicatorsService.getFormatedDate(
+          new Date(deb).setDate(new Date(deb).getDate() + 1).valueOf()));
+    }
+
     const fin = new Date(this.formGroup.get("dateLivraisonPrevue").value);
     const diffJours = fin.getDate() - deb.getDate();
 

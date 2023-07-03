@@ -3473,7 +3473,7 @@
         "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "width": 100,
-        "cssClass": "multi-line-header",
+        "cssClass": "multi-line-header colisCommandes",
         "visible": true
       },
       {

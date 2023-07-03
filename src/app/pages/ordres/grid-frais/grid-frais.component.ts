@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
+import { alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   EntrepotsService,
@@ -40,7 +41,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-frais.component.html",
   styleUrls: ["./grid-frais.component.scss"],
 })
-export class GridFraisComponent implements OnInit {
+export class GridFraisComponent implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
 
   public dataSource: DataSource;
@@ -60,6 +61,7 @@ export class GridFraisComponent implements OnInit {
   public itemsWithSelectBox: string[];
   public descriptionOnlyDisplaySB: string[];
   public SelectBoxPopupWidth: number;
+  public showDecDedouan: boolean;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -110,6 +112,21 @@ export class GridFraisComponent implements OnInit {
 
   ngOnInit(): void {
     if (this?.ordre?.id) this.enableFilters();
+    this.showDecDedouan = this.currentCompanyService.getCompany().id === "BUK";
+  }
+
+  decDedouan() {
+    this.ordresFraisService.prcGenFraisDedimp(this.ordre.id).subscribe({
+      next: () => {
+        this.datagrid.instance.refresh();
+      },
+      error: (error: Error) => {
+        alert(
+          error.message,
+          this.localizeService.localize("declaration-dedouan")
+        );
+      },
+    });
   }
 
   initializeFournDataSources() {

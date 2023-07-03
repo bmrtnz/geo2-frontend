@@ -1,3 +1,17 @@
+::ng-deep .dec-dedouan-button {
+  top: 48px;
+  margin: -38px 194px 0 0;
+  height: 34px;
+  font-size: 12px;
+  z-index: 1 !important;
+  float: right;
+
+  .dx-button-content {
+    padding: 0 13px 5px 13px !important;
+  }
+}
+
+
 ::ng-deep .grid-frais {
   .grey-light {
     background-color: #eee !important;
