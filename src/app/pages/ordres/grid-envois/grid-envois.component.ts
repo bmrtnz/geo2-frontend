@@ -31,7 +31,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-envois.component.html",
   styleUrls: ["./grid-envois.component.scss"],
 })
-export class GridEnvoisComponent implements OnInit {
+export class GridEnvoisComponent implements OnInit, AfterViewInit {
   @Output() public ordreSelected = new EventEmitter<Envois>();
   @Input() public filter: [];
   @Input() public ordre: Ordre;

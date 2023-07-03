@@ -312,10 +312,14 @@ export class GridChoixEnvoisComponent implements OnInit {
       .getSelectedRowsData()
       .map(
         (envoi: Partial<Envois>) =>
-          new Envois({ ...envoi, traite: "N" }, { deepFetch: true })
+          new Envois({
+            ...envoi,
+            ...envoi.imprimante?.id !== null ? { imprimante: envoi.imprimante } : { imprimante: null },
+            traite: "N"
+          }, { deepFetch: true })
       );
-    const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
 
+    const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
     const allNonEnvois = this.dataGrid.instance
       .getDataSource()
       .items()

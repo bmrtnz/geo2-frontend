@@ -208,7 +208,7 @@
       [allowSearch]="true"
     ></dxo-header-filter>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-    <dxo-paging></dxo-paging>
+    <dxo-paging [enabled]="true"></dxo-paging>
     <dxo-pager
       [showPageSizeSelector]="true"
       [showInfo]="true"
@@ -238,6 +238,7 @@
       [format]="column.format"
       [showInColumnChooser]="column.showInColumnChooser"
       [cssClass]="column.cssClass"
+      [calculateCellValue]="this[column?.calculateCellValue]"
       [caption]="
         ('ordresFournisseur-' + column.dataField?.split('.').join('-')
           | localize) || column.name

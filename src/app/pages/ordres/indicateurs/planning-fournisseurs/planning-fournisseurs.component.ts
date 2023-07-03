@@ -168,27 +168,19 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         ? ["and", ...extraFilters]
         : []),
     ]);
-    this.datagrid.instance.beginCustomLoading("");
-    // Formating several fields
-    this.ordresLignesDataSource.load().then((res) => {
-      let DsItems = JSON.parse(JSON.stringify(res));
-      DsItems.map((data) => {
-        data.nombreColisExpedies += "/" + data.nombreColisCommandes; // Colis
-        // Prices
-        if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
-          data.ventePrixUnitaire = "";
-        } else
-          data.ventePrixUnitaire +=
-            " " + data.ordre.devise?.id + " / " + data.venteUnite.description;
-        if (!data.achatPrixUnitaire || !data.achatUnite?.description) {
-          data.achatPrixUnitaire = "";
-        } else
-          data.achatPrixUnitaire +=
-            " " + data.ordre.devise?.id + " / " + data.achatUnite.description;
-      });
-      this.datagrid.dataSource = DsItems;
-      this.datagrid.instance.endCustomLoading();
-    });
+    this.datagrid.dataSource = this.ordresLignesDataSource;
+  }
+
+  calculateVentePrixUnitaire(data) {
+    if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+      return "";
+    } else return data.ventePrixUnitaire + " " + data.ordre.devise?.id + " / " + data.venteUnite.description;
+  }
+
+  calculateAchatPrixUnitaire(data) {
+    if (!data.achatPrixUnitaire || !data.achatUnite?.description) {
+      return "";
+    } else return data.achatPrixUnitaire + " " + data.ordre.devise?.id + " / " + data.achatUnite.description;
   }
 
   filterFournisseurs(bureauAchat?) {

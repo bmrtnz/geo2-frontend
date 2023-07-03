@@ -4757,9 +4757,11 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "dateDepartPrevue",
+        "dataField": "ordreLogistique.dateDepartPrevueFournisseur",
         "dataType": "date",
         "format": "dd-MM-yyyy",
+        "cssClass": "no-padding text-align-center multi-line-header",
+        "width": 115,
         "visible": true
       },
       {
@@ -5065,6 +5067,7 @@
     ]
   },
   "planning-fournisseurs": {
+    "pageSize": 50,
     "columns": [
       {
         "visibleIndex": 0,
@@ -5191,11 +5194,13 @@
       {
         "visibleIndex": 34,
         "dataField": "ventePrixUnitaire",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "visible": false
       },
       {
         "visibleIndex": 36,
         "dataField": "achatPrixUnitaire",
+        "calculateCellValue": "calculateAchatPrixUnitaire",
         "visible": false
       },
       {
