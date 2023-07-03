@@ -5065,6 +5065,7 @@
     ]
   },
   "planning-fournisseurs": {
+    "pageSize": 50,
     "columns": [
       {
         "visibleIndex": 0,
@@ -5191,11 +5192,13 @@
       {
         "visibleIndex": 34,
         "dataField": "ventePrixUnitaire",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "visible": false
       },
       {
         "visibleIndex": 36,
         "dataField": "achatPrixUnitaire",
+        "calculateCellValue": "calculateAchatPrixUnitaire",
         "visible": false
       },
       {
