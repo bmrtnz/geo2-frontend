@@ -4757,9 +4757,11 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "dateDepartPrevue",
+        "dataField": "ordreLogistique.dateDepartPrevueFournisseur",
         "dataType": "date",
         "format": "dd-MM-yyyy",
+        "cssClass": "no-padding text-align-center multi-line-header",
+        "width": 115,
         "visible": true
       },
       {

@@ -1066,7 +1066,7 @@
     "ordres-dateMaxMouvements": "Mvts jusqu'au",
     "ordres-planningDepart-ordreLogistique-ordre-numero": "N° ordre",
     "ordres-planningDepart-ordreLogistique-ordre-codeClient": "Client",
-    "ordres-planningDepart-dateDepartPrevue": "Date départ",
+    "ordres-planningDepart-ordreLogistique-dateDepartPrevueFournisseur": "Date de départ",
     "ordres-planningDepart-ordreLogistique-ordre-client-code": "Client",
     "ordres-planningDepart-codeAlphaEntrepot": "Entrepôt",
     "ordres-planningDepart-ordreLogistique-ordre-id": "Réf. ordre",
