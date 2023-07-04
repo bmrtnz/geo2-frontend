@@ -238,7 +238,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
             .pipe(
               map((res) =>
                 JSON.parse(JSON.stringify(res.data.allLitigeLigneFait)).map(
-                  (i) => this.formUtils.cleanTypenames(i)
+                  (i) => FormUtilsService.cleanTypenames(i)
                 )
               )
             )
@@ -260,7 +260,7 @@ export class LitigesLignesService extends ApiService implements APIRead {
             .pipe(
               map((res) =>
                 JSON.parse(JSON.stringify(res.data.allLitigeLigneForfait)).map(
-                  (i) => this.formUtils.cleanTypenames(i)
+                  (i) => FormUtilsService.cleanTypenames(i)
                 )
               )
             )
