@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import Campagne from "app/shared/models/campagne.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -87,6 +87,13 @@ export class CampagnesService extends ApiService implements APIRead {
           }),
         byKey: this.byKey(columns),
       }),
+    });
+  }
+
+  getOne_v2(id: Campagne["id"], columns: Set<string>) {
+    return this.apollo.query<{ campagne: Campagne }>({
+      query: gql(this.buildGetOneGraph(columns)),
+      variables: { id },
     });
   }
 }
