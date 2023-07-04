@@ -28,7 +28,7 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
-import { FunctionResult } from "app/shared/services/api/functions.service";
+import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
@@ -63,6 +63,7 @@ import {
   filter,
   first,
   map,
+  mapTo,
   startWith,
   switchMap,
   takeUntil,
@@ -156,7 +157,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private gridsService: GridsService,
     public gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
-    public ordresLogistiquesService: OrdresLogistiquesService
+    public ordresLogistiquesService: OrdresLogistiquesService,
+    private functionsService: FunctionsService,
   ) {
     this.handleTabChange().subscribe((event) => {
       this.initializeAnchors(event);
@@ -510,7 +512,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             transporteurDEVCode,
             incoterm,
           })
-        )
+        ),
+        concatMap(ordre => this.functionsService.onChangeTrpDevCode(
+          ordre.id,
+          ordre.transporteurDEVCode.id,
+          this.currentCompanyService.getCompany().id,
+          ordre.transporteurDEVPrixUnitaire).pipe(map(() => ordre))),
       )
       .subscribe((res) => {
         this.formGroup
