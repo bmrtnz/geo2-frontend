@@ -59,6 +59,7 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
+  <dxo-editing [allowDeleting]="true"></dxo-editing>
 
   <dxi-column
     *ngFor="let column of this.columns | async"
