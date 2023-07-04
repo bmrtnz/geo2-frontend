@@ -19,7 +19,7 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { EMPTY, of } from "rxjs";
-import { concatMap, first } from "rxjs/operators";
+import { concatMap, first, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-choose-entrepot-popup",
@@ -40,7 +40,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     private societesService: SocietesService,
     private entrepotsService: EntrepotsService,
     private clientsService: ClientsService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.societesSource = this.societesService.getDataSource();
@@ -106,7 +106,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     ]);
     // Auto-select when only one entrepot assigned to the client
     this.entrepotsSource.load().then((res) => {
-      if (res?.length === 1) this.entrepotInput.value = { id: res[0].id };
+      if (res?.length === 1) this.entrepotInput.value = res[0].id;
     });
   }
 
@@ -124,4 +124,4 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   declarations: [ChooseEntrepotPopupComponent],
   exports: [ChooseEntrepotPopupComponent],
 })
-export class ChooseEntrepotPopupModule {}
+export class ChooseEntrepotPopupModule { }
