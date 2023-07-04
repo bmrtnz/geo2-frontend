@@ -6,7 +6,6 @@
     <h6>{{ "preFilter-title" | localize }}</h6>
     <dx-button
       class="refresh"
-      [class]="toRefresh ? '' : 'inactive-button'"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
@@ -75,7 +74,6 @@
               [showClearButton]="true"
               displayExpr="raisonSocial"
               [searchExpr]="['code']"
-              (onValueChanged)="onFieldValueChange($event)"
               [displayExpr]="displayIDBefore"
               >">
             </dx-select-box>
@@ -96,7 +94,6 @@
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
               [searchExpr]="['id', 'nomUtilisateur']"
-              (valueChange)="onFieldValueChange($event)"
             >
             </dx-select-box>
           </div>
@@ -117,7 +114,6 @@
               [showClearButton]="true"
               [displayExpr]="displayIDBefore"
               [searchExpr]="['id', 'nomUtilisateur']"
-              (valueChange)="onFieldValueChange($event)"
             >
             </dx-select-box>
           </div>
@@ -153,8 +149,8 @@
             <dx-date-box
               formControlName="dateMin"
               class="dateStart"
-              type="datetime"
-              [displayFormat]="'dd-MM-yy  HH:mm'"
+              type="date"
+              [displayFormat]="'dd-MM-yy'"
               (onValueChanged)="manualDate($event)"
             ></dx-date-box>
           </div>
@@ -171,8 +167,8 @@
             <dx-date-box
               formControlName="dateMax"
               class="dateEnd"
-              type="datetime"
-              [displayFormat]="'dd-MM-yy  HH:mm'"
+              type="date"
+              [displayFormat]="'dd-MM-yy'"
               (onValueChanged)="manualDate($event)"
             ></dx-date-box>
           </div>

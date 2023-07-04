@@ -448,7 +448,7 @@
                           </dx-date-box>
                         </div>
                         <dx-button
-                          [visible]="canChangeDateLiv"
+                          [visible]="canChangeDateLiv && !!fullOrderNumber"
                           stylingMode="text"
                           class="form-zoom-button rightPositioned"
                           type="default"
