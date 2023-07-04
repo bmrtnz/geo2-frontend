@@ -12,6 +12,7 @@ import LitigeLigne from "app/shared/models/litige-ligne.model";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { lastValueFrom } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
@@ -119,7 +120,15 @@ export class LitigesLignesService extends ApiService implements APIRead {
             );
           }),
         byKey: this.byKey(columns),
+        remove: key => lastValueFrom(this.delete(key).pipe(map(() => null))),
       }),
+    });
+  }
+
+  delete(id: LitigeLigne["id"]) {
+    return this.apollo.mutate<{ deleteLitigeLigne }>({
+      mutation: gql(this.buildDeleteGraph()),
+      variables: { id },
     });
   }
 
