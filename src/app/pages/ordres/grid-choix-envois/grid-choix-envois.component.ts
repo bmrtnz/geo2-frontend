@@ -16,6 +16,7 @@ import { ImprimantesService } from "app/shared/services/api/imprimantes.service"
 import { MoyenCommunicationService } from "app/shared/services/api/moyens-communication.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
@@ -28,7 +29,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, finalize, map, tap } from "rxjs/operators";
+import { concatMapTo, delay, finalize, map, tap } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
 
 @Component({
@@ -49,7 +50,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
-    private ar: FluxArService
+    private ar: FluxArService,
   ) { }
 
   @Input() public ordre: Partial<Ordre>;
@@ -312,11 +313,13 @@ export class GridChoixEnvoisComponent implements OnInit {
       .getSelectedRowsData()
       .map(
         (envoi: Partial<Envois>) =>
-          new Envois({
+          FormUtilsService.cleanTypenames({
             ...envoi,
             ...envoi.imprimante?.id !== null ? { imprimante: envoi.imprimante } : { imprimante: null },
+            ...envoi.moyenCommunication?.id !== null ? { moyenCommunication: envoi.moyenCommunication } : { moyenCommunication: null },
+            ...envoi.typeTiers?.id !== null ? { typeTiers: envoi.typeTiers } : { typeTiers: null },
             traite: "N"
-          }, { deepFetch: true })
+          })
       );
 
     const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
