@@ -31,7 +31,6 @@
 
   <dx-button
     class="dx-button order-home-up-button program-button"
-    p
     type="default"
     hint="{{ 'hint-open-program' | localize }}"
   >
@@ -51,7 +50,6 @@
     type="default"
     text="{{ 'ordres-commandes-edi' | localize }}"
     [disabled]="!authService.currentUser.accessCommandeEdi"
-    [disabled]="true"
     (onClick)="openCommandesEdi()"
   >
   </dx-button>
