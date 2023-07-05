@@ -1413,24 +1413,28 @@
       {
         "visibleIndex": 16,
         "dataField": "quantiteCalculee1",
+        "cssClass": "small-side-padding",
         "width": 60,
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "quantiteCalculee2",
+        "cssClass": "small-side-padding",
         "width": 60,
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "quantiteCalculee3",
+        "cssClass": "small-side-padding",
         "width": 70,
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "quantiteCalculee4",
+        "cssClass": "small-side-padding",
         "width": 60,
         "visible": true
       },
