@@ -5367,7 +5367,7 @@
     ]
   },
   "mouv-clients-comptes-palox": {
-    "pageSize": 10,
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 1,
@@ -5473,7 +5473,7 @@
     ]
   },
   "mouv-fournisseurs-comptes-palox": {
-    "pageSize": 10,
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 1,
@@ -5577,7 +5577,7 @@
     ]
   },
   "recap-clients-comptes-palox": {
-    "pageSize": 10,
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 1,
@@ -5659,7 +5659,7 @@
     ]
   },
   "recap-fournisseurs-comptes-palox": {
-    "pageSize": 10,
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 1,
