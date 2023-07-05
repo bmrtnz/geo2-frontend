@@ -1008,7 +1008,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onDestockAutoClick() {
-    this.destockageAutoPopup.visible = true;
+    this.gridCommandes.grid.instance.saveEditData();
+    // Wait until grid has been totally saved
+    const saveInterval = setInterval(() => {
+      if (!this.gridCommandes.grid.instance.hasEditData()) {
+        clearInterval(saveInterval);
+        this.destockageAutoPopup.visible = true;
+      }
+    }, 100);
   }
 
   updateDestockAuto() {
