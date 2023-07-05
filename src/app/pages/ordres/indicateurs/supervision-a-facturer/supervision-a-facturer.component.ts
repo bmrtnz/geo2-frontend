@@ -71,7 +71,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   private currOrder: Partial<Ordre>;
   private currCell: any;
   public columns: Observable<GridColumn[]>;
-  public toRefresh: boolean;
   public gridItemsSelected: boolean;
   public launchEnabled: boolean;
 
@@ -153,7 +152,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.toRefresh = true;
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
@@ -217,12 +215,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -231,7 +229,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       notify("Veuillez spécifier un secteur", "error");
     } else {
       this.datagrid.instance.clearSelection();
-      this.toRefresh = false;
       this.launchEnabled = true;
       this.datagrid.dataSource = null;
 
@@ -254,12 +251,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onFieldValueChange(e?) {
-    this.toRefresh = true;
-  }
-
   onSecteurChange(e) {
-    this.onFieldValueChange();
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
@@ -275,7 +267,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   onClientChange(e) {
-    this.onFieldValueChange();
     this.entrepots = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
@@ -285,13 +276,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.value) this.entrepots.filter(["client.id", "=", e.value.id]);
   }
 
-  onGridContentReady(e) {}
+  onGridContentReady(e) { }
 
   manualDate(e) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.formGroup.get("dateMin").value);
@@ -315,8 +304,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   setDates(e) {
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     const datePeriod = this.dateManagementService.getDates(e);
 
@@ -501,7 +488,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add(this.colorizeCell(e.value));
         e.cellElement.innerText =
           Object.keys(status)[
-            (Object.values(status) as string[]).indexOf(e.value)
+          (Object.values(status) as string[]).indexOf(e.value)
           ];
         if (e.data.description) {
           e.cellElement.setAttribute(
