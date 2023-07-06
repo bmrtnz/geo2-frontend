@@ -1079,6 +1079,7 @@
                   <app-grid-commandes
                     *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
+                    [venteACommission]="ordre?.venteACommission"
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
                     (transporteurChange)="refreshTransporteur()"

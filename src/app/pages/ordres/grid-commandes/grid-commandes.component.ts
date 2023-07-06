@@ -134,6 +134,7 @@ export class GridCommandesComponent
   public contentReadyEvent = new EventEmitter<any>();
 
   @Input() ordreID: string;
+  @Input() venteACommission: boolean;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
   @Output() allowMutations = false;
@@ -936,7 +937,7 @@ export class GridCommandesComponent
 
   onEditingStart(e) {
     if (!e.column || !e.data.numero || !this.gridRowsTotal) return;
-    this.ordreLignesService.lockFields(e);
+    this.ordreLignesService.lockFields(e, this.allowMutations);
   }
 
   createStringNumero(num) {
