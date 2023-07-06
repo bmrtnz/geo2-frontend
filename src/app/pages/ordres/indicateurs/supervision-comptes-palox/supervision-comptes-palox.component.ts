@@ -91,7 +91,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   } as Inputs<UntypedFormControl>);
 
   private datasources: DataSource[] = [];
-  public toRefresh: boolean;
   public paloxPopupPurpose: string;
   public info: any;
 
@@ -150,7 +149,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.toRefresh = true;
     this.columns = [
       Grid.MouvClientsComptesPalox,
       Grid.RecapClientsComptesPalox,
@@ -178,7 +176,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
       )
     );
 
-    this.formGroup.valueChanges.subscribe((_) => (this.toRefresh = true));
   }
 
   ngAfterViewInit() {
@@ -186,7 +183,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   }
 
   enableFilters() {
-    this.toRefresh = false;
     const values: Inputs = this.formGroup.value;
     this.supervisionPaloxsService.setPersisantVariables({
       codeSociete: this.currentCompanyService.getCompany().id,
@@ -244,7 +240,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   }
 
   switchChange() {
-    this.toRefresh = true;
     this.paloxGrids.map((component) => {
       component.dataSource = null;
       component.visible = false;

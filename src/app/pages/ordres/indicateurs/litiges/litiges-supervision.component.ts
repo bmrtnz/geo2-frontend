@@ -147,12 +147,12 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -257,9 +257,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
           if (!data[0]) return;
           data = data[0].items ?? data[0].collapsedItems;
           if (!data[0]) return;
-          e.cellElement.textContent = `Commercial(e) : ${
-            data[0].prenomPersonne
-          } ${data[0].nomPersonne.toUpperCase()}`;
+          e.cellElement.textContent = `Commercial(e) : ${data[0].prenomPersonne
+            } ${data[0].nomPersonne.toUpperCase()}`;
         }
       }
       if (e.column.dataField === "litige.id") {
@@ -276,9 +275,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       ) {
         // Showing cloture checkboxes in group header
         // Not the cleanest way to do things! but no Dx native solution
-        e.cellElement.innerHTML = `<div class='dx-datagrid-checkbox-size dx-checkbox ${
-          e.summaryItems[0].value ? "dx-checkbox-checked" : ""
-        }
+        e.cellElement.innerHTML = `<div class='dx-datagrid-checkbox-size dx-checkbox ${e.summaryItems[0].value ? "dx-checkbox-checked" : ""
+          }
          dx-state-readonly dx-widget'>
         <input type="hidden" value="${!!e.summaryItems[0].value}">
         <div class='dx-checkbox-container'>

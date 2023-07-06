@@ -40,7 +40,6 @@
             [dataSource]="clients"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['code']"
-            (onValueChanged)="onClientChanged($event)"
             itemTemplate="items"
           >
             <div *dxTemplate="let data of 'items'">
@@ -64,7 +63,7 @@
   <dx-button
     class="refresh"
     [visible]="false"
-    [class]="toRefresh && readyToRefresh ? '' : 'inactive-button'"
+    [class]="readyToRefresh ? '' : 'inactive-button'"
     type="default"
     text="{{ 'btn-refresh' | localize }}"
     (onClick)="enableFilters()"
