@@ -19,6 +19,7 @@ import {
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
+import { DxCheckBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { dxDataGridRowObject } from "devextreme/ui/data_grid";
 import { environment } from "environments/environment";
@@ -35,6 +36,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() client: any;
   @Input() commercialId: any;
   @Input() showAllClients: boolean;
+  @Input() onlyValidClients: boolean;
   @Input() secteurId: any;
   @Output() openEncoursOrder = new EventEmitter<any>();
 
@@ -44,8 +46,8 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   private gridConfig: Promise<GridConfig>;
   public title: string;
 
-  @ViewChild(EncoursClientPopupComponent, { static: false })
-  encoursPopup: EncoursClientPopupComponent;
+  @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
+  @ViewChild("validClients", { static: false }) valideSB: DxCheckBoxComponent;
 
   constructor(
     private localizePipe: LocalizePipe,
@@ -78,6 +80,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       ["pays.id", "=", this.masterRow.data.id],
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
+      ...(this.onlyValidClients ? ["and", ["valide", "=", true]] : []),
       ...(this.showAllClients ? [] : ["and", ["depassement", ">", 0]]),
       ...(this.secteurId ? ["and", ["secteur.id", "=", this.secteurId]] : []),
       ...(this.commercialId

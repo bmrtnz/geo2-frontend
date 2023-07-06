@@ -17,10 +17,15 @@
       width: 56% !important;
 
       &.dx-field-label-left {
-        width: 32% !important;
+        width: 45% !important;
       }
     }
   }
+
+  .valideCheckboxField {
+    top: -3px;
+  }
+
 }
 
 ::ng-deep {
@@ -29,6 +34,7 @@
   }
 
   .dx-datagrid .dx-row.dx-header-row {
+
     .green-encours,
     .yellow-encours,
     .orange-encours {
