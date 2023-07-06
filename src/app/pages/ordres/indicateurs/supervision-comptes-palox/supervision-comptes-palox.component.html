@@ -267,7 +267,7 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-export fileName="Comptes Palox"></dxo-export>
+  <dxo-export fileName="Récapitulatif palox clients"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -358,6 +358,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Mouvements palox fournisseurs"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -448,6 +449,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Récapitulatif palox fournisseurs"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -489,6 +491,7 @@
         | localize) || column.name
     "
     [dataType]="column?.dataType"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)

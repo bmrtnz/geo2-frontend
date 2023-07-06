@@ -261,22 +261,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Best expression for date
-      if (
-        e.column.dataField === "dateInventaire" ||
-        e.column.dataField === "dateDepartOrdre"
-      ) {
-        if (e.value)
-          e.cellElement.innerText = this.dateManagementService.formatDate(
-            e.value,
-            "dd-MM-yyyy"
-          );
-      }
-      if (e.column.dataField === "sommeQuantiteInventaire") {
-        e.cellElement.innerText =
-          e.data.entree - e.data.sortie - e.data.quantiteInventaire;
+      if (e.column.dataField === "sommeQuantiteInventaire")
         e.cellElement.classList.add("bold-text");
-      }
     }
 
     // Highlight groups
@@ -501,6 +487,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     datagrid.instance.option("grouping", {
       autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll,
     });
+  }
+
+  public calculateSoldeRecapFou(data) {
+    return data.entree - data.sortie + data.quantiteInventaire;
   }
 
   public calculateCustomSummary(options) {
