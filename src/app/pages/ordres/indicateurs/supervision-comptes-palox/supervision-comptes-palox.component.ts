@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   OnInit,
   QueryList,
@@ -61,7 +62,7 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   templateUrl: "./supervision-comptes-palox.component.html",
   styleUrls: ["./supervision-comptes-palox.component.scss"],
 })
-export class SupervisionComptesPaloxComponent implements OnInit {
+export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = "SupervisionComptesPalox";
 
   public validRequiredEntity: {};
@@ -178,10 +179,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     );
 
     this.formGroup.valueChanges.subscribe((_) => (this.toRefresh = true));
-    // if (!this.authService.isAdmin && this.authService.currentUser?.commercial)
-    //   this.formGroup
-    //     .get("commercial")
-    //     .setValue(this.authService.currentUser.commercial);
+  }
+
+  ngAfterViewInit() {
+    this.switchChange();
   }
 
   enableFilters() {
@@ -242,7 +243,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       : null;
   }
 
-  switchChange(e) {
+  switchChange() {
     this.toRefresh = true;
     this.paloxGrids.map((component) => {
       component.dataSource = null;

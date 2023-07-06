@@ -13,9 +13,10 @@
             <dx-switch
               #switchType
               data-name="recapitulatif"
+              [value]="true"
               [switchedOnText]=""
               [switchedOffText]=""
-              (onValueChanged)="switchChange($event)"
+              (onValueChanged)="switchChange()"
             ></dx-switch>
           </div>
           <div class="dx-field-label dx-field-label-right">
@@ -33,7 +34,7 @@
               data-name="fournisseurs"
               [switchedOnText]=""
               [switchedOffText]=""
-              (onValueChanged)="switchChange($event)"
+              (onValueChanged)="switchChange()"
             ></dx-switch>
           </div>
           <div class="dx-field-label dx-field-label-right">
