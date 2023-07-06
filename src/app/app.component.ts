@@ -10,6 +10,8 @@ import dxPopup from "devextreme/ui/popup";
 import { environment } from "../environments/environment";
 import { LocalizationService, ScreenService } from "./shared/services";
 import { FormUtilsService } from "./shared/services/form-utils.service";
+import { DateManagementService } from "./shared/services/date-management.service";
+import { GridUtilsService } from "./shared/services/grid-utils.service";
 
 @Component({
   selector: "app-root",
@@ -31,7 +33,9 @@ export class AppComponent {
 
   constructor(
     public formUtilsService: FormUtilsService,
+    public gridUtilsService: GridUtilsService,
     private localization: LocalizationService,
+    public dateManagementService: DateManagementService,
     private screen: ScreenService
   ) {
     // Close columnchooser on outside click (non standard)
@@ -109,6 +113,7 @@ export class AppComponent {
           trueText: this.localization.localize("trueText"),
           falseText: this.localization.localize("falseText"),
         },
+        onExporting: this.gridUtilsService.onExporting, // E.g. add date to fileName
         pager: {
           showPageSizeSelector: true,
           showInfo: true,
