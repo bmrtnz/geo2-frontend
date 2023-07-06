@@ -358,10 +358,13 @@ body app-root.production {
     display: none;
   }
 
-  // Disable filter builder
-  // .dx-icon-filter {
-  //   display: none;
-  // }
+  .dx-icon-filter {
+    display: none;
+  }
+
+  .dx-datagrid-filter-panel-checkbox+.dx-icon-filter {
+    display: block;
+  }
 
   .dx-datagrid-filter-panel-checkbox~.dx-datagrid-filter-panel-text {
     display: block;
