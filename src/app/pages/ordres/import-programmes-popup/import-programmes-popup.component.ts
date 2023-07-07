@@ -40,7 +40,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   constructor(
     private localizeService: LocalizationService,
     private programService: ProgramService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     this.loadingMessage = "";
@@ -55,12 +55,9 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     const chooseFileButton = document.querySelector(
       ".import-programme-popup .dx-fileuploader-button"
     ) as HTMLElement;
-    if (this.programID === "tesco") {
+    if (this.programID === "tesco")
       this.customUploadData = this.programService.buildCustomData(false);
-      chooseFileButton.click();
-    } else {
-      chooseFileButton.click();
-    }
+    chooseFileButton.click();
   }
 
   onBeforeSend(e) {
