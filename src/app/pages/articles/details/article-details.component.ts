@@ -267,6 +267,7 @@ export class ArticleDetailsComponent
 
   afterLoadInitForm(res) {
     this.article = new Article(res.data.article);
+    this.formGroup.reset();
     this.formGroup.patchValue(this.article);
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
