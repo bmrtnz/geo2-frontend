@@ -281,9 +281,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.fastPrevButton = document.querySelector(".dx-fast-prev-btn");
     this.fastNextButton = document.querySelector(".dx-fast-next-btn");
-    // Don't ask me why we need this timeout
-    setTimeout(() => this.updateAllTabsStatusDots(), 100);
-
+    setTimeout(() => this.updateAllTabsStatusDots(), 1000);
   }
 
   ngOnDestroy() {
