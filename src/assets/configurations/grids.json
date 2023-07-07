@@ -3498,7 +3498,7 @@
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "sortOrder": "desc",
-        "width": 110,
+        "width": 130,
         "visible": true
       },
       {
@@ -3578,7 +3578,18 @@
         "visible": true
       },
       {
+        "visibleIndex": 26,
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "dataField": "ordre.client.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "logistique.numeroContainer",
         "showInColumnChooser": false,
         "visible": false
       },

@@ -53,8 +53,8 @@ export class Indicator implements dxButtonOptions {
   component?: Promise<any>;
   detailedFields?:
     | Observable<
-        ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
-      >
+      ModelFieldOptions<typeof Model> | ModelFieldOptions<typeof Model>[]
+    >
     | GridColumn[];
   constructor(args) {
     Object.assign(this, args);
@@ -372,7 +372,7 @@ export class OrdresIndicatorsService {
       instance.filter = [
         ["valide", "=", true],
         "and",
-        ["societeCode", "=", this.currentCompanyService.getCompany().id],
+        ["societeCode", "=", this.currentCompanyService.getCompany()?.id],
       ];
 
       // Supervision livraison
@@ -419,7 +419,7 @@ export class OrdresIndicatorsService {
           [
             "clients.societe.id",
             "=",
-            this.currentCompanyService.getCompany().id,
+            this.currentCompanyService.getCompany()?.id,
           ],
           "and",
           ["clients.depassement", ">", 0],

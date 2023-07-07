@@ -267,15 +267,21 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
         let data = e.data.items ?? e.data.collapsedItems;
         if (!data[0]) return;
+        let numeroContainerArray = [];
+        let numeroContainer;
+        data.map(ol => numeroContainerArray.push(ol.logistique.numeroContainer));
+        numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+        if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
         data = data[0].ordre;
         e.cellElement.textContent =
           data.numero +
           " - " +
           (data.entrepot?.code ?? "") +
-          " - " +
-          (data.referenceClient ? data.referenceClient + " " : "") +
+          (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+          (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+          (numeroContainer ? " - " + numeroContainer + " " : "") +
           (data.transporteur?.id
-            ? "(Transporteur : " + data.transporteur.id + ")"
+            ? " (Transporteur : " + data.transporteur.id + ")"
             : "") +
           ` - ${Statut[data.statut]}`;
       }
