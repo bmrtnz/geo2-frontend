@@ -5,7 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
@@ -294,6 +294,16 @@ export class FormLitigesComponent implements OnInit, OnChanges {
         numRegroupement,
       ]),
       complete: () => (this.gestionOpPopup.visible = true),
+    });
+  }
+
+  supprimerLot() {
+    this.litigesLignesService.deleteLot(
+      this.infosLitige.litige.id,
+      this.grid.getSelectedRowData().numeroGroupementLitige,
+    ).subscribe({
+      error: (err: Error) => notify(err.message, "warning"),
+      complete: () => this.grid.reload(),
     });
   }
 
