@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { AuthService } from "app/shared/services";
@@ -103,8 +104,8 @@ export class GridCqPhotosComponent implements OnChanges {
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
     if (e.row.data.cqDoc.isPresent) {
-      const targetURL = new URL(e.row.data.cqDoc.uri, environment.apiEndpoint);
-      this.currentImgPath = targetURL.href;
+      const targetURL = Location.joinWithSlash(environment.apiEndpoint, e.row.data.cqDoc.uri)
+      this.currentImgPath = targetURL;
     } else this.currentImgPath = "assets/images/BW-couleur-blanc.png";
     this.currentImgComment = e.row.data.commentaire;
   }
