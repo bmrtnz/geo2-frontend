@@ -93,4 +93,8 @@ export class GridLitigesLignesComponent implements OnInit {
       : null;
     if (key && this.datagrid.instance.getRowIndexByKey(key) >= 0) return key;
   }
+
+  public getSelectedRowData(): Partial<LitigeLigne> {
+    return this.datagrid.instance.getVisibleRows()[this.datagrid.focusedRowIndex]?.data;
+  }
 }
