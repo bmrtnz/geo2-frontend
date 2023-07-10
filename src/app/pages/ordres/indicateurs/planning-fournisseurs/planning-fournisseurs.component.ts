@@ -58,7 +58,13 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   );
   private gridConfig: Promise<GridConfig>;
   public periodes: any[];
-  private priceColumns = ["ventePrixUnitaire", "achatPrixUnitaire"];
+  private priceColumns = [
+    "ventePrixUnitaire",
+    "venteUnite.description",
+    "achatPrixUnitaire",
+    "achatUnite.description",
+    "ordre.devise.id"
+  ];
   public validRequiredEntity: {};
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -174,14 +180,26 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   calculateVentePrixUnitaire(data) {
     if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
       return "";
-    } else return data.ventePrixUnitaire + " " + data.ordre.devise?.id + " / " + data.venteUnite.description;
+    } else return data.ventePrixUnitaire;
   }
 
   calculateAchatPrixUnitaire(data) {
     if (!data.achatPrixUnitaire || !data.achatUnite?.description) {
       return "";
-    } else return data.achatPrixUnitaire + " " + data.ordre.devise?.id + " / " + data.achatUnite.description;
+    } else return data.achatPrixUnitaire;
   }
+
+  // calculateAchatUnite(data) {
+  //   if (!data.achatUnite?.description) {
+  //     return "";
+  //   } else return data.ordre.devise?.id + " / " + data.achatUnite.description;
+  // }
+
+  // calculateVenteUnite(data) {
+  //   if (!data.venteUnite?.description) {
+  //     return "";
+  //   } else return data.ordre.devise?.id + " / " + data.achatUnite.description;
+  // }
 
   filterFournisseurs(bureauAchat?) {
     bureauAchat = bureauAchat?.value ? bureauAchat.value : null;

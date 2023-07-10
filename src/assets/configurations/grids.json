@@ -5283,17 +5283,42 @@
       {
         "visibleIndex": 34,
         "dataField": "ventePrixUnitaire",
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
         "calculateCellValue": "calculateVentePrixUnitaire",
+        "visible": false
+      },
+      {
+        "visibleIndex": 35,
+        "dataField": "venteUnite.description",
+        "calculateCellValue": "calculateVenteUnite",
         "visible": false
       },
       {
         "visibleIndex": 36,
         "dataField": "achatPrixUnitaire",
-        "calculateCellValue": "calculateAchatPrixUnitaire",
+        "dataType": "number",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
+        "visible": false
+      },
+      {
+        "visibleIndex": 37,
+        "dataField": "achatUnite.description",
         "visible": false
       },
       {
         "visibleIndex": 38,
+        "dataField": "ordre.devise.id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 39,
         "dataField": "ordre.flagAnnule",
         "dataType": "boolean",
         "visible": false
@@ -5356,21 +5381,6 @@
       },
       {
         "dataField": "article.matierePremiere.origine.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordre.devise.id",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "achatUnite.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "venteUnite.description",
         "showInColumnChooser": false,
         "visible": false
       },

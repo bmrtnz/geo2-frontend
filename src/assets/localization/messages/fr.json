@@ -1170,6 +1170,8 @@
     "ordresFournisseur-ordre-referenceClient": "Réf. client",
     "ordresFournisseur-ventePrixUnitaire": "PU Vente",
     "ordresFournisseur-achatPrixUnitaire": "PU Achat",
+    "ordresFournisseur-achatUnite-description": "Unité achat",
+    "ordresFournisseur-venteUnite-description": "Unité vente",
     "ordresFournisseur-ordre-pays-id": "Pays",
     "ordresFournisseur-ordre-campagne-id": "Campagne",
     "ordresFournisseur-ordre-devise-id": "Devise",
