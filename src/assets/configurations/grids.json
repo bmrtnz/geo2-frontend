@@ -7993,6 +7993,12 @@
         "visible": false,
         "showInColumnChooser": false,
         "allowEditing": false
+      },
+      {
+        "dataField": "ligne.devisePrixUnitaire",
+        "visible": false,
+        "showInColumnChooser": false,
+        "allowEditing": false
       }
     ]
   },
