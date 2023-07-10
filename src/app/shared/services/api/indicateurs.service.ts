@@ -26,7 +26,7 @@ export class IndicateursService {
   constructor(
     private apollo: Apollo,
     private currentCompanyService: CurrentCompanyService
-  ) {}
+  ) { }
 
   /**
    * Request entities count from specified indicators
@@ -37,7 +37,7 @@ export class IndicateursService {
         query: gql(this.buildCountsGraph(...indicateurs)),
         fetchPolicy: "network-only",
         variables: {
-          societeCode: this.currentCompanyService.getCompany().id,
+          societeCode: this.currentCompanyService.getCompany()?.id,
           secteurCode: this.secteur,
           ...indicateurs.reduce((acm, crt) => ({ ...acm, [crt]: crt }), {}),
         },

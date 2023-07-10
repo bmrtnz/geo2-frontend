@@ -215,11 +215,18 @@ export class OrdreLignesService extends ApiService implements APIRead {
     cell.cancel = true;
   }
 
-  lockFields(e) {
+  lockFields(e, allowMutations?) {
     // Locking step
     const data = e.data;
     const bloquer =
       window.sessionStorage.getItem("blockage") === "true" ? true : false;
+
+    // Special case: lock every cell except some when vente à commission is true
+    if (!allowMutations &&
+      data.ordre.venteACommission === true &&
+      !["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)
+    )
+      return this.lock(e);
 
     switch (e.column.dataField) {
       case "nombrePalettesCommandees": {
@@ -255,7 +262,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "proprietaireMarchandise": {
+      case "proprietaireMarchandise.id": {
         if (
           data.logistique?.expedieStation === true ||
           bloquer === true ||
@@ -268,7 +275,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "fournisseur": {
+      case "fournisseur.id": {
         // Emballeur/Expéditeur
         if (
           data.logistique?.expedieStation === true ||
@@ -292,7 +299,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "venteUnite": {
+      case "venteUnite.id": {
         if (
           data.ordre.venteACommission !== true &&
           data.ordre.type?.id !== "REP" &&
@@ -320,7 +327,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "achatUnite": {
+      case "achatUnite.id": {
         if (
           data.ordre.venteACommission !== true &&
           data.ordre.type?.id !== "REP" &&
@@ -330,7 +337,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "typePalette": {
+      case "typePalette.id": {
         if (
           data.logistique?.expedieStation === true ||
           data.ordre.type?.id === "REP" ||
@@ -340,7 +347,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "paletteInter": {
+      case "paletteInter.id": {
         if (
           data.logistique?.expedieStation === true ||
           data.ordre.type?.id === "REP" ||
@@ -405,7 +412,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
             data.ordre.societe.id === "IMP" ||
             data.ordre.societe.id === "UDC" ||
             data.article.cahierDesCharge?.espece?.id.substring(0, 5) ===
-              "EMBAL" ||
+            "EMBAL" ||
             data.ordre.type.id === "RPR" ||
             data.ordre.type.id === "RPO" ||
             data.article.matierePremiere?.variete?.modificationDetail ||

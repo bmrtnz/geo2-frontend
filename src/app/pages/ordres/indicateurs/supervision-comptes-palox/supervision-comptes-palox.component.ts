@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   OnInit,
   QueryList,
@@ -61,7 +62,7 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   templateUrl: "./supervision-comptes-palox.component.html",
   styleUrls: ["./supervision-comptes-palox.component.scss"],
 })
-export class SupervisionComptesPaloxComponent implements OnInit {
+export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = "SupervisionComptesPalox";
 
   public validRequiredEntity: {};
@@ -90,7 +91,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   } as Inputs<UntypedFormControl>);
 
   private datasources: DataSource[] = [];
-  public toRefresh: boolean;
   public paloxPopupPurpose: string;
   public info: any;
 
@@ -149,7 +149,6 @@ export class SupervisionComptesPaloxComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.toRefresh = true;
     this.columns = [
       Grid.MouvClientsComptesPalox,
       Grid.RecapClientsComptesPalox,
@@ -177,15 +176,13 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       )
     );
 
-    this.formGroup.valueChanges.subscribe((_) => (this.toRefresh = true));
-    // if (!this.authService.isAdmin && this.authService.currentUser?.commercial)
-    //   this.formGroup
-    //     .get("commercial")
-    //     .setValue(this.authService.currentUser.commercial);
+  }
+
+  ngAfterViewInit() {
+    this.switchChange();
   }
 
   enableFilters() {
-    this.toRefresh = false;
     const values: Inputs = this.formGroup.value;
     this.supervisionPaloxsService.setPersisantVariables({
       codeSociete: this.currentCompanyService.getCompany().id,
@@ -242,8 +239,7 @@ export class SupervisionComptesPaloxComponent implements OnInit {
       : null;
   }
 
-  switchChange(e) {
-    this.toRefresh = true;
+  switchChange() {
     this.paloxGrids.map((component) => {
       component.dataSource = null;
       component.visible = false;
@@ -261,22 +257,8 @@ export class SupervisionComptesPaloxComponent implements OnInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Best expression for date
-      if (
-        e.column.dataField === "dateInventaire" ||
-        e.column.dataField === "dateDepartOrdre"
-      ) {
-        if (e.value)
-          e.cellElement.innerText = this.dateManagementService.formatDate(
-            e.value,
-            "dd-MM-yyyy"
-          );
-      }
-      if (e.column.dataField === "sommeQuantiteInventaire") {
-        e.cellElement.innerText =
-          e.data.entree - e.data.sortie - e.data.quantiteInventaire;
+      if (e.column.dataField === "sommeQuantiteInventaire")
         e.cellElement.classList.add("bold-text");
-      }
     }
 
     // Highlight groups
@@ -501,6 +483,10 @@ export class SupervisionComptesPaloxComponent implements OnInit {
     datagrid.instance.option("grouping", {
       autoExpandAll: !datagrid.instance.option("grouping").autoExpandAll,
     });
+  }
+
+  public calculateSoldeRecapFou(data) {
+    return data.entree - data.sortie + data.quantiteInventaire;
   }
 
   public calculateCustomSummary(options) {

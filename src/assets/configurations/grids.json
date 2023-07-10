@@ -3498,7 +3498,7 @@
         "dataType": "date",
         "format": "dd-MM-yyyy",
         "sortOrder": "desc",
-        "width": 110,
+        "width": 130,
         "visible": true
       },
       {
@@ -3578,7 +3578,18 @@
         "visible": true
       },
       {
+        "visibleIndex": 26,
+        "dataField": "ordre.codeChargement",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "dataField": "ordre.client.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "logistique.numeroContainer",
         "showInColumnChooser": false,
         "visible": false
       },
@@ -5401,6 +5412,8 @@
       {
         "visibleIndex": 4,
         "dataField": "dateDepartOrdre",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "sortIndex": 5,
         "sortOrder": "desc",
         "visible": true
@@ -5507,6 +5520,8 @@
       {
         "visibleIndex": 4,
         "dataField": "dateDepartOrdre",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "sortIndex": 5,
         "sortOrder": "desc",
         "visible": true
@@ -5619,6 +5634,8 @@
       {
         "visibleIndex": 6,
         "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
@@ -5701,6 +5718,8 @@
       {
         "visibleIndex": 6,
         "dataField": "dateInventaire",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
@@ -5711,6 +5730,7 @@
       {
         "visibleIndex": 8,
         "dataField": "sommeQuantiteInventaire",
+        "calculateCellValue": "calculateSoldeRecapFou",
         "visible": true
       },
       {

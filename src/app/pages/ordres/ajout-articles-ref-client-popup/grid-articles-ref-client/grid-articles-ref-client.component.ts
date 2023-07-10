@@ -36,8 +36,7 @@ import { map, tap } from "rxjs/operators";
   styleUrls: ["./grid-articles-ref-client.component.scss"],
 })
 export class GridArticlesRefClientComponent
-  implements OnInit, AfterViewInit, NestedMain
-{
+  implements OnInit, AfterViewInit, NestedMain {
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -70,7 +69,6 @@ export class GridArticlesRefClientComponent
   origines: Observable<DataSource>;
   trueFalse: any;
   allGridFilters: any;
-  toRefresh: boolean;
 
   constructor(
     public articlesService: ArticlesService,
@@ -165,7 +163,6 @@ export class GridArticlesRefClientComponent
   }
 
   async refreshArticlesGrid() {
-    this.toRefresh = false;
     this.loadPreFilters();
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
@@ -199,7 +196,6 @@ export class GridArticlesRefClientComponent
    * @param dataField Field path
    */
   onFieldValueChange(event: any[], dataField: any) {
-    this.toRefresh = this.dataGrid.dataSource !== null;
 
     // No value cases
     if (event !== null) {
@@ -262,12 +258,12 @@ export class GridArticlesRefClientComponent
 
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 }

@@ -532,6 +532,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     // Keep this, anchors may, in some cases, not created as they should
     this.enableAnchors();
+    this.updateTabStatusDot();
     // Show/hide left button panel
     this.leftAccessPanel.value =
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
@@ -1496,6 +1497,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
+    this.updateTabStatusDot();
+  }
+
+  updateTabStatusDot() {
+    // Update green dot on order tab (Statut.CONFIRME)
+    this.tabContext.getSelectedItem().subscribe(res => {
+      if (!this.ordre || res.id.split("-")[1] !== this.ordre.numero) return;
+      res.status = Statut[this.ordre?.statut] === Statut.CONFIRME.toString();
+    });
   }
 
   openDateChangePopup() {

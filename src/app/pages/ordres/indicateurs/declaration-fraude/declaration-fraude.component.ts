@@ -341,7 +341,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       workbook.xlsx.writeBuffer().then((buffer: BlobPart) => {
         const name = `${this.localizer.localize(
           "declaration-fraude"
-        )} - ${new Date().toLocaleDateString()}`;
+        )} - ${this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
         saveAs(
           new Blob([buffer], { type: "application/octet-stream" }),
           `${name}.xlsx`

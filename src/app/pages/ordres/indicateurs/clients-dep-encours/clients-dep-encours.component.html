@@ -1,7 +1,7 @@
 <br />
 <div class="encours-filter-area">
   <dx-box>
-    <dxi-item [ratio]="2">
+    <dxi-item [ratio]="1.5">
       <div class="dx-field encours-switch">
         <div class="dx-field-label dx-field-label-left">
           {{ "tous-encours" | localize }}
@@ -18,7 +18,23 @@
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="3"></dxi-item>
+    <dxi-item [ratio]="3">
+      <!-- Valides/non valides -->
+      <div class="dx-field valideCheckboxField">
+        <div class="dx-field-label text-align-right">
+          {{ "clients-valides" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-check-box
+            #validClients
+            class="float-left"
+            [value]="true"
+            (onValueChanged)="enableFilters()"
+          >
+          </dx-check-box>
+        </div>
+      </div>
+    </dxi-item>
   </dx-box>
   <dx-box>
     <dxi-item [ratio]="3">
@@ -106,7 +122,7 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-export fileName="Dépass. encours clients"></dxo-export>
+  <dxo-export fileName="Encours clients"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -167,6 +183,7 @@
       [masterRow]="masterRow"
       [commercialId]="commercialId"
       [showAllClients]="!switchType.value"
+      [onlyValidClients]="validClients.value"
       [secteurId]="secteurId"
       (openEncoursOrder)="openOrder($event)"
     ></app-grid-clients-dep-encours-detail>

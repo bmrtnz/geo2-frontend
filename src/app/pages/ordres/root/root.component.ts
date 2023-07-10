@@ -24,6 +24,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxTabPanelComponent } from "devextreme-angular";
 import { on } from "devextreme/events";
+import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
 import { dxTabPanelItem } from "devextreme/ui/tab_panel";
 import {
@@ -82,6 +83,7 @@ export type TabPanelItem = dxTabPanelItem & {
   details?: string;
   position: number;
   component?: FormComponent | any;
+  status?: boolean;
   type?: string;
 };
 
@@ -121,6 +123,19 @@ export class TabContext {
       map((params) => {
         const selected = params.get(RouteParam.TabID);
         return this.componentRef.items.find((item) => item.id === selected);
+      })
+    );
+  }
+
+  /**
+   * Return All tab panel unselected items
+   */
+  public getNotSelectedItems() {
+    return this.componentRef.route.paramMap.pipe(
+      share(),
+      map((params) => {
+        const selected = params.get(RouteParam.TabID);
+        return this.componentRef.items.filter((item) => item.id !== selected);
       })
     );
   }
@@ -266,6 +281,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.fastPrevButton = document.querySelector(".dx-fast-prev-btn");
     this.fastNextButton = document.querySelector(".dx-fast-next-btn");
+    setTimeout(() => this.updateAllTabsStatusDots(), 1000);
   }
 
   ngOnDestroy() {
@@ -276,6 +292,27 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener("window:unload")
   windowUnload() {
     window.sessionStorage.removeItem("surveyRunning");
+  }
+
+  updateAllTabsStatusDots() {
+    this.tabContext.getNotSelectedItems().subscribe(tabs =>
+      tabs
+        .filter((tab) => tab.type === "ordre")
+        .map(t => {
+          this.ordresService
+            .getOneByNumeroAndSocieteAndCampagne(
+              t.id.split("-")[1],
+              this.currentCompanyService.getCompany().id,
+              t.id.split("-")[0],
+              ["statut"]
+            )
+            .subscribe((res) => {
+              const result = res.data.ordreByNumeroAndSocieteAndCampagne;
+              if (!result) return;
+              t.status = Statut[result.statut] === Statut.CONFIRME.toString()
+            });
+        })
+    );
   }
 
   surveyBlockage() {

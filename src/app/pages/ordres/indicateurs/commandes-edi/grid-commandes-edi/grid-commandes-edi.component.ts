@@ -79,7 +79,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public gridTitle: string;
   public gridTitleCount: string;
   public gridTitleInput: HTMLInputElement;
-  toRefresh: boolean;
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
@@ -182,17 +181,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
   enableFilters() {
-    this.toRefresh = false;
     this.datagrid.dataSource = null;
 
     const values: Inputs = {
@@ -267,8 +265,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   onFieldValueChange(e?) {
     if (e) {
       this.enableFilters();
-    } else {
-      this.toRefresh = true;
     }
   }
 
@@ -661,13 +657,13 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         leftTextContent += " - Version " + (data.version ?? "");
         leftTextContent +=
           " du " +
-            this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
+          this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
 
         // Fill right text of the group row
         e.cellElement.childNodes[0].children[2].innerText =
           "Livraison : " +
-            this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
+          this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
           "";
 
         // Fill indicator button text and sets its bck depending on the status

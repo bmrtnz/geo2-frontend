@@ -60,7 +60,6 @@ export class GridEncoursClientComponent implements OnChanges {
   public depassement: boolean;
   public retard: boolean;
   private today: Date;
-  public toRefresh: boolean;
   public readyToRefresh: boolean;
   private requiredFields: string[];
   private sumDebit: number;
@@ -138,7 +137,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.toRefresh = true;
     if (this.client && this.popupShown) {
       this.formGroup.patchValue({
         client: {
@@ -157,7 +155,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   enableFilters() {
-    this.toRefresh = false;
     this.readyToRefresh = false;
     this.datagrid.dataSource = null;
 
@@ -328,7 +325,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onSecteurChanged(e) {
-    this.onFieldValueChange();
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
@@ -351,17 +347,6 @@ export class GridEncoursClientComponent implements OnChanges {
     this.formGroup.patchValue({
       client: null,
     });
-    this.onFieldValueChange();
-  }
-
-  onClientChanged(e) {
-    this.onFieldValueChange();
-  }
-
-  onFieldValueChange() {
-    this.toRefresh =
-      !!this.formGroup.get("client").value &&
-      !!this.formGroup.get("secteur").value;
   }
 
   displayCodeBefore(data) {

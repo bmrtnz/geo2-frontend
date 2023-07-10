@@ -38,8 +38,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./articles-list.component.scss"],
 })
 export class ArticlesListComponent
-  implements OnInit, AfterViewInit, NestedMain
-{
+  implements OnInit, AfterViewInit, NestedMain {
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -75,7 +74,6 @@ export class ArticlesListComponent
   trueFalse: any;
   initialSpecy: any;
   allGridFilters: any;
-  toRefresh: boolean;
 
   constructor(
     public articlesService: ArticlesService,
@@ -137,7 +135,6 @@ export class ArticlesListComponent
       await fields.toPromise(),
       this.fetchPolicy
     );
-    this.toRefresh = true;
   }
 
   ngAfterViewInit() {
@@ -158,7 +155,6 @@ export class ArticlesListComponent
       this.dataGrid.dataSource = this.articles;
     this.dataGrid.instance.refresh();
     this.dataGrid.instance.filter(this.allGridFilters);
-    this.toRefresh = false;
   }
 
   onRowDblClick(e) {
@@ -191,7 +187,6 @@ export class ArticlesListComponent
    * @param dataField Field path
    */
   onFieldValueChange(event: string[], dataField: string) {
-    this.toRefresh = true;
 
     // No value cases
     if (event !== null) {

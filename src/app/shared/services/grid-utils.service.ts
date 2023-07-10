@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { DateManagementService } from "./date-management.service";
 import { LocalizationService } from "./localization.service";
 
+let self;
 @Injectable({
   providedIn: "root",
 })
@@ -12,7 +13,9 @@ export class GridUtilsService {
   constructor(
     private localizeService: LocalizationService,
     private dateManagementService: DateManagementService
-  ) {}
+  ) {
+    self = this;
+  }
 
   // Reset (go to left) datagrid horizontal scroll bar
   public resetGridScrollBar(grid) {
@@ -104,4 +107,11 @@ export class GridUtilsService {
       .replace(/\B(?=(\d{3})+(?!\d))/g, " ")
       .replace(".", ",");
   }
+
+  // Add date to datagrid xlsx export file name
+  onExporting(e) {
+    if (e.fileName)
+      e.fileName += ` - ${self.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
+  }
+
 }

@@ -27,7 +27,7 @@
   <dxo-editing
     [selectTextOnEditStart]="true"
     [mode]="'batch'"
-    [allowUpdating]="allowMutations"
+    [allowUpdating]="allowMutations || venteACommission"
     [allowDeleting]="allowMutations"
     [(changes)]="changes"
     [refreshMode]="'reshape'"
