@@ -117,6 +117,20 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (!this.authService.isAdmin)
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
+    // Retrieves last user configuration
+    const depConfig = window.localStorage.getItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`);
+    if (["true", "false"].includes(depConfig)) {
+      this.switchType.value = depConfig === "true" ? true : false;
+    } else {
+      this.switchType.value = true;
+    }
+    this.enableFilters();
+  }
+
+  switchAllDepChange(e) {
+    // Save user configuration
+    window.localStorage
+      .setItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`, e.value.toString());
     this.enableFilters();
   }
 
