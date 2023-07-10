@@ -53,6 +53,14 @@
     (onClick)="openCommandesEdi()"
   >
   </dx-button>
+  <dx-button
+    class="order-home-up-button"
+    type="default"
+    text="{{ 'ordres-articles-edi-colibri' | localize }}"
+    [disabled]="!authService.currentUser.accessCommandeEdi"
+    (onClick)="openArticlesCltEDI()"
+  >
+  </dx-button>
 </h2>
 
 <div class="inputs-container content-block">
@@ -130,7 +138,7 @@
 </div>
 
 <app-commandes-edi></app-commandes-edi>
-<!-- <app-commandes-edi></app-commandes-edi> -->
 <app-import-programmes-popup
   [program]="programChosen"
 ></app-import-programmes-popup>
+<app-gestion-articles-edi-colibri-popup></app-gestion-articles-edi-colibri-popup>

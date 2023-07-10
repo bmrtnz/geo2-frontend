@@ -160,6 +160,9 @@ import {
 } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 import { RecapStockPopupComponent } from './recap-stock-popup/recap-stock-popup.component';
 import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/grid-recap-stock.component';
+import { GestionArticlesEDICOLIBRIPopupComponent } from './gestion-articles-edi-colibri-popup/gestion-articles-edi-colibri-popup.component';
+import { GridArticlesEdiColibriComponent } from './gestion-articles-edi-colibri-popup/grid-articles-edi-colibri/grid-articles-edi-colibri.component';
+import { ModificationArticleEdiPopupComponent } from './gestion-articles-edi-colibri-popup/modification-article-edi-popup/modification-article-edi-popup.component';
 
 @NgModule({
   declarations: [
@@ -256,6 +259,9 @@ import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/gr
     DeclarationFraudeComponent,
     RecapStockPopupComponent,
     GridRecapStockComponent,
+    GestionArticlesEDICOLIBRIPopupComponent,
+    GridArticlesEdiColibriComponent,
+    ModificationArticleEdiPopupComponent,
   ],
   providers: [
     OrdresIndicatorsService,

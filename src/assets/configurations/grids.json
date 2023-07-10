@@ -8200,5 +8200,44 @@
         "visible": false
       }
     ]
+  },
+  "gestion-articles-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "entrepotRaisonSocial",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "numero",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "groupage",
+        "cssClass": "no-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "fournisseur",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "sommeColisPaletteBis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "sommeColisCommandes",
+        "visible": true
+      },
+      {
+        "dataField": "id",
+        "visible": false
+      }
+    ]
   }
 }

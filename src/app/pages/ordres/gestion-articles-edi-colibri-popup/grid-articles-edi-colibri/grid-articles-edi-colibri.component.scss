@@ -1,0 +1,45 @@
+::ng-deep app-grid-articles-edi-colibri {
+  .dx-fieldset {
+    display: flex;
+    margin-top: 0;
+  }
+
+  .plus-button {
+    width: 28px;
+    height: 28px;
+    min-width: 0;
+  }
+
+  .dx-field {
+    margin-right: 20px;
+  }
+
+  .EDIArticleFilterArea {
+    width: 900px;
+    margin-right: 30px;
+
+    .client-label {
+      width: 20% !important;
+    }
+
+    .activeCheckboxField {
+      .dx-field-label {
+        position: relative;
+        top: -1px;
+        width: 90px !important;
+        white-space: inherit;
+        text-overflow: initial;
+      }
+
+      .dx-field-value {
+        width: 33px !important;
+      }
+
+    }
+
+    .dx-invalid-message-content {
+      padding: 0;
+    }
+  }
+
+}

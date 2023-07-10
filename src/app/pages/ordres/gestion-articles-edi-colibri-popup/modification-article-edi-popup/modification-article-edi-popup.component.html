@@ -1,0 +1,77 @@
+<dx-popup
+  width="500"
+  height="auto"
+  [dragEnabled]="true"
+  [title]="title"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShown)="onShowing($event)"
+  [hideOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <form
+      #form="ngForm"
+      class="inputs"
+    >
+      <!-- Entrepôt, station & type palox -->
+      <div class="EDI-info-boxes">
+        <div class="dx-field valide-EDI-checkbox">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-valide" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-check-box #valideBox></dx-check-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-codeArtBW" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-text-box #codeArtBWBox></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-GTINArtClient" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-text-box #GTINArtClientBox></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-codeArtClient" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-text-box #codeArtClientBox></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-priorite" | localize }}
+          </div>
+          <div class="dx-field-value prioriteEdi">
+            <dx-text-box #prioriteBox></dx-text-box>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <br />
+      <div class="popup-action">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="popupComponent.instance.hide()"
+        ></dx-button>
+        <dx-button
+          text="{{ 'btn-enregistrer' | localize }}"
+          type="default"
+          (onClick)="onSave(form)"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

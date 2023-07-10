@@ -26,6 +26,7 @@ import {
   switchMap,
   tap,
 } from "rxjs/operators";
+import { GestionArticlesEDICOLIBRIPopupComponent } from "../gestion-articles-edi-colibri-popup/gestion-articles-edi-colibri-popup.component";
 import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
 import { CommandesEdiComponent } from "../indicateurs/commandes-edi/commandes-edi.component";
 import { TabContext } from "../root/root.component";
@@ -52,6 +53,8 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
   @ViewChild(CommandesEdiComponent, { static: false })
   cdesEdiPopup: CommandesEdiComponent;
+  @ViewChild(GestionArticlesEDICOLIBRIPopupComponent, { static: false })
+  gestionArtEDI: GestionArticlesEDICOLIBRIPopupComponent;
   @ViewChild(CommandesEdiComponent, { static: false })
   cdesEDI: CommandesEdiComponent;
   @ViewChild(ImportProgrammesPopupComponent, { static: false })
@@ -65,7 +68,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
     private secteursService: SecteursService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.programs = [];
@@ -125,6 +128,10 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   openCommandesEdi() {
     this.cdesEdiPopup.visible = true;
+  }
+
+  openArticlesCltEDI() {
+    this.gestionArtEDI.visible = true;
   }
 
   configureIndicator() {
