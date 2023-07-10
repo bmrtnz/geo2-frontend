@@ -2,13 +2,14 @@ import { Injectable } from "@angular/core";
 import {
   gql,
   OperationVariables,
-  WatchQueryOptions,
+  WatchQueryOptions
 } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import LitigeLigneFait from "app/shared/models/litige-ligne-fait.model";
 import LitigeLigneForfait from "app/shared/models/litige-ligne-forfait.model";
 import LitigeLigneTotaux from "app/shared/models/litige-ligne-totaux.model";
 import LitigeLigne from "app/shared/models/litige-ligne.model";
+import Litige from "app/shared/models/litige.model";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -129,6 +130,28 @@ export class LitigesLignesService extends ApiService implements APIRead {
     return this.apollo.mutate<{ deleteLitigeLigne }>({
       mutation: gql(this.buildDeleteGraph()),
       variables: { id },
+    });
+  }
+
+  deleteLot(litigeID: Litige["id"], groupementID: LitigeLigne["numeroGroupementLitige"]) {
+    return this.apollo.mutate<{ deleteLot }>({
+      mutation: gql(ApiService.buildGraph(
+        "mutation",
+        [
+          {
+            name: 'deleteLot',
+            params: [
+              { name: "litigeID", value: "litigeID", isVariable: true },
+              { name: "groupementID", value: "groupementID", isVariable: true },
+            ],
+          },
+        ],
+        [
+          { name: "litigeID", type: "String", isOptionnal: false },
+          { name: "groupementID", type: "String", isOptionnal: false },
+        ]
+      )),
+      variables: { litigeID, groupementID },
     });
   }
 
