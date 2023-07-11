@@ -3,6 +3,7 @@ import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { GridsService } from "app/pages/ordres/grids.service";
 import {
   AuthService,
+  ClientsService,
   LocalizationService,
   TransporteursService,
 } from "app/shared/services";
@@ -47,7 +48,7 @@ export class GridArticlesEdiColibriComponent implements OnInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
-  public transporteursDataSource: DataSource;
+  public clients: DataSource;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     clientCode: new UntypedFormControl(),
@@ -57,7 +58,7 @@ export class GridArticlesEdiColibriComponent implements OnInit {
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public planningTransporteursService: PlanningTransporteursService,
-    public transporteursService: TransporteursService,
+    public clientsService: ClientsService,
     public authService: AuthService,
     public gridsService: GridsService,
     public localizeService: LocalizationService,
@@ -65,15 +66,25 @@ export class GridArticlesEdiColibriComponent implements OnInit {
     private currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchConfig(
-      Grid.PlanningTransporteurs
+      Grid.GestionArticleEdi
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
-    this.transporteursDataSource = this.transporteursService.getDataSource_v2([
+    this.clients = this.clientsService.getDataSource_v2([
       "id",
+      "code",
       "raisonSocial",
       "valide",
     ]);
-    this.transporteursDataSource.filter(["valide", "=", true]);
+    const filter: any = [
+      ["societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
+      ["valide", "=", true]
+    ];
+    // Admin: do not filter vs comm sector
+    if (!this.authService.isAdmin && this.authService.currentUser.secteurCommercial) {
+      filter.push("and", ["secteur.id", "=", this.authService.currentUser.secteurCommercial.id])
+    };
+    this.clients.filter(filter);
   }
 
   async ngOnInit() {

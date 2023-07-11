@@ -13,20 +13,11 @@
           <div class="dx-field-value">
             <dx-select-box
               formControlName="clientCode"
-              [dataSource]="transporteursDataSource"
-              valueExpr="id"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id']"
-              itemTemplate="items"
+              [dataSource]="clients"
+              valueExpr="code"
+              [displayExpr]="displayCodeBefore"
+              [searchExpr]="['code']"
             >
-              <div *dxTemplate="let data of 'items'">
-                <div
-                  [title]="!data.valide ? 'non valide' : ''"
-                  [ngClass]="{ 'not-valid': !data.valide }"
-                >
-                  {{ displayCodeBefore(data) }}
-                </div>
-              </div>
               <dx-validator>
                 <dxi-validation-rule
                   type="required"
