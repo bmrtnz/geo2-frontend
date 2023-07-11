@@ -38,8 +38,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./articles-list.component.scss"],
 })
 export class ArticlesListComponent
-  implements OnInit, AfterViewInit, NestedMain
-{
+  implements OnInit, AfterViewInit, NestedMain {
   @Output() selectChange = new EventEmitter<any>();
   @Input() public ordre: Ordre;
   @Input() public preFilterTitle: string;
@@ -91,6 +90,7 @@ export class ArticlesListComponent
     public modesCultureService: ModesCultureService,
     public originesService: OriginesService
   ) {
+    this.toRefresh = true;
     this.apiService = this.articlesService;
     this.especes = this.especesService.getDistinctDataSource(["id"]);
     this.especes.filter(["valide", "=", true]);
@@ -137,7 +137,6 @@ export class ArticlesListComponent
       await fields.toPromise(),
       this.fetchPolicy
     );
-    this.toRefresh = true;
   }
 
   ngAfterViewInit() {

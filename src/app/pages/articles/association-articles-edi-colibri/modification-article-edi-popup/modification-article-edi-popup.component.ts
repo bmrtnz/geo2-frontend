@@ -1,26 +1,14 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import {
-  DxPopupComponent,
-  DxTextBoxComponent,
-  DxCheckBoxComponent,
-} from "devextreme-angular";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { DxPopupComponent, DxTextBoxComponent, DxCheckBoxComponent } from "devextreme-angular";
 import { NgForm } from "@angular/forms";
 import { LocalizationService } from "app/shared/services";
-import { DateManagementService } from "app/shared/services/date-management.service";
 
 @Component({
   selector: 'app-modification-article-edi-popup',
   templateUrl: './modification-article-edi-popup.component.html',
   styleUrls: ['./modification-article-edi-popup.component.scss']
 })
-export class ModificationArticleEdiPopupComponent implements OnChanges {
+export class ModificationArticleEdiPopupComponent {
   constructor(
     private localizeService: LocalizationService,
   ) { }
@@ -34,18 +22,13 @@ export class ModificationArticleEdiPopupComponent implements OnChanges {
   @ViewChild("codeArtClientBox", { static: false }) codeArtClientBox: DxTextBoxComponent;
   @ViewChild("prioriteBox", { static: false }) prioriteBox: DxTextBoxComponent;
 
-  @Input() info: any;
-
+  @Input() article: any;
   @Output() whenValidate = new EventEmitter<any>();
-  @Output() whenShown = new EventEmitter<any>();
 
   public title: string;
   public visible: boolean;
   public purpose: string;
 
-  ngOnChanges() {
-    console.log("")
-  }
 
   show(mode) {
     this.purpose = mode;
@@ -68,10 +51,14 @@ export class ModificationArticleEdiPopupComponent implements OnChanges {
     e.component
       .content()
       .parentNode.classList.add("modification-article-edi-popup");
-    // this.paloxBox?.instance.focus();
-    // this.entrepotBox.value = this.info?.entrepotCode;
-    // this.stationBox.value = this.info?.stationCode;
-    // this.typePaloxBox.value = this.info?.paloxCode;
+
+    if (this.article) {
+      this.valideBox.value = this.article.valide;
+      this.codeArtBWBox.value = this.article.codeArtBW;
+      this.GTINArtClientBox.value = this.article.GTINArtClient;
+      this.codeArtClientBox.value = this.article.codeArtClient;
+      this.prioriteBox.value = this.article.prioriteBox;
+    }
   }
 
   onSave(form: NgForm) {

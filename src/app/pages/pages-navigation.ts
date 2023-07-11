@@ -34,7 +34,7 @@ export const navigation = [
         path: "pages/nested/n/(articles/list)",
       },
       {
-        html: '<div>Association articles EDI/COLIBRI</div>',
+        html: '<div>Association des articles EDI/COLIBRI</div>',
         path: "pages/articles/association-edi-colibri",
       },
     ],

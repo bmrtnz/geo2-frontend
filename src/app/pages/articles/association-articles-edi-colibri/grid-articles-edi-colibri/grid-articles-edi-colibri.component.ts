@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { GridsService } from "app/pages/ordres/grids.service";
 import {
@@ -26,7 +26,7 @@ import { ModificationArticleEdiPopupComponent } from "../modification-article-ed
 
 enum FormInput {
   valide = "valide",
-  clientCode = "transporteur",
+  clientCode = "client",
   search = "dateDepartPrevueFournisseur",
 }
 
@@ -37,18 +37,20 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
   templateUrl: './grid-articles-edi-colibri.component.html',
   styleUrls: ['./grid-articles-edi-colibri.component.scss']
 })
-export class GridArticlesEdiColibriComponent implements OnInit {
-  private gridConfig: Promise<GridConfig>;
-  public validRequiredEntity: {};
+export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
+
+  @Output() public article: any;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModificationArticleEdiPopupComponent) private modifPopup: ModificationArticleEdiPopupComponent;
   @ViewChild("filterForm") filterForm: NgForm;
 
+  private gridConfig: Promise<GridConfig>;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public clients: DataSource;
+
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     clientCode: new UntypedFormControl(),
@@ -57,7 +59,6 @@ export class GridArticlesEdiColibriComponent implements OnInit {
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
-    public planningTransporteursService: PlanningTransporteursService,
     public clientsService: ClientsService,
     public authService: AuthService,
     public gridsService: GridsService,
@@ -92,13 +93,16 @@ export class GridArticlesEdiColibriComponent implements OnInit {
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    this.ordresDataSource = this.planningTransporteursService.getDataSource_v2(
-      await fields.toPromise()
-    );
+    // this.ordresDataSource = this.planningTransporteursService.getDataSource_v2(
+    //   await fields.toPromise()
+    // );
+  }
 
+  ngAfterViewInit() {
     // Only way found to validate and show Warning icon
     this.formGroup.get("clientCode").setValue("");
     this.formGroup.get("clientCode").reset();
+    this.formGroup.get("valide").setValue(true);
   }
 
   enableFilters() {
@@ -109,24 +113,29 @@ export class GridArticlesEdiColibriComponent implements OnInit {
         ...this.formGroup.value,
       };
 
-      // Filtering vs company
-      const societe = this.currentCompanyService.getCompany().id;
-      if (societe === "BUK") this.ordresDataSource.filter(["ordre.type.id", "<>", "RGP"]);
-      if (societe === "SA") this.ordresDataSource.filter(["ordre.type.id", "<>", "ORI"]);
-
       this.datagrid.dataSource = this.ordresDataSource;
     }
   }
 
   onRowDblClick(e) {
+    this.article = e?.data;
     this.modifPopup.show("modification");
   }
 
   onCellClick(e) {
-    this.modifPopup.show("modification");
+    // FAKE // A VIRER !!
+    this.article = {
+      valide: true,
+      codeArtBW: "034579",
+      GTINArtClient: "54654646464",
+      codeArtClient: "F4566",
+      prioriteBox: 6
+    }
+    this.modifPopup.show("modification");// A VIRER !!
   }
 
   addEDIArticle() {
+    this.article = null;
     this.modifPopup.show("ajout");
   }
 
@@ -148,26 +157,11 @@ export class GridArticlesEdiColibriComponent implements OnInit {
   }
 
   onRowPrepared(e) {
-    // Highlight canceled orders
-    if (["data", "group"].includes(e.rowType)) {
-      let data = e.data.items ?? e.data.collapsedItems;
-      if (e.rowType === "data") {
-        data = e.data;
-      } else {
-        data = data[0];
-      }
-      if (data?.ordre?.flagAnnule === true) {
-        e.rowElement.classList.add("canceled-orders");
-        e.rowElement.title = this.localizeService.localize("ordre-annule");
-      }
-    }
+
   }
 
   onValideChanged(e) {
     if (!e.event) return; // Only user event
   }
 
-  displayIDBefore(data) {
-    return data ? data.id + " - " + data.raisonSocial : null;
-  }
 }

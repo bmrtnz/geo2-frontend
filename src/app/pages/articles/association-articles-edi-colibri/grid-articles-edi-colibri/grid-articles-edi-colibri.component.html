@@ -39,7 +39,6 @@
             <dx-check-box
               formControlName="valide"
               class="float-left"
-              value="true"
               (onValueChanged)="onValideChanged($event)"
             >
             </dx-check-box>
@@ -151,4 +150,6 @@
   ></dxi-column>
 </dx-data-grid>
 
-<app-modification-article-edi-popup></app-modification-article-edi-popup>
+<app-modification-article-edi-popup
+  [article]="article"
+></app-modification-article-edi-popup>
