@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
+import { GridsService } from "app/pages/ordres/grids.service";
 import {
   AuthService,
   LocalizationService,
@@ -20,8 +21,6 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { GridsService } from "../../grids.service";
-import { TabContext } from "../../root/root.component";
 import { ModificationArticleEdiPopupComponent } from "../modification-article-edi-popup/modification-article-edi-popup.component";
 
 enum FormInput {
@@ -63,7 +62,6 @@ export class GridArticlesEdiColibriComponent implements OnInit {
     public gridsService: GridsService,
     public localizeService: LocalizationService,
     public dateManagementService: DateManagementService,
-    private tabContext: TabContext,
     private currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchConfig(

@@ -12,6 +12,33 @@
   </div>
 </div>
 
+<div class="buttons-right-container">
+  <dx-button
+    class="dx-button order-home-up-button program-button"
+    type="default"
+    hint="{{ 'hint-open-program' | localize }}"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <span class="dx-button-text prog-btn">{{
+        "ordres-programmes" | localize
+      }}</span>
+      <app-program-chooser
+        [programs]="programs"
+        (programChosen)="openProgramPopup($event)"
+        menuMode="context"
+      ></app-program-chooser>
+    </div>
+  </dx-button>
+  <dx-button
+    class="order-home-up-button"
+    type="default"
+    text="{{ 'ordres-commandes-edi' | localize }}"
+    [disabled]="!authService.currentUser.accessCommandeEdi"
+    (onClick)="openCommandesEdi()"
+  >
+  </dx-button>
+</div>
+
 <app-button-loader
   [text]="
     ('create' | localize) +
@@ -27,6 +54,7 @@
   [resolver]="resolver"
   (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>
+
 <div style="clear: both"></div>
 <app-grid-historique-entrepots
   #grid
@@ -41,4 +69,9 @@
   (createOrder)="onButtonLoaderClick()"
   *ngIf="!favorites"
 ></app-grid-entrepots>
+
 <app-info-popup [customText]="errorText"></app-info-popup>
+<app-commandes-edi></app-commandes-edi>
+<app-import-programmes-popup
+  [program]="programChosen"
+></app-import-programmes-popup>

@@ -31,6 +31,11 @@ import { EditingAlertModule } from "app/shared/components/editing-alert/editing-
 import { HistoriqueValideModule } from "app/shared/components/historique-valide/historique-valide.component";
 import { FileManagerModule } from "app/shared/components/file-manager/file-manager-popup.component";
 import { ViewDocumentPopupModule } from "app/shared/components/view-document-popup/view-document-popup.component";
+import { AssociationArticlesEDICOLIBRIComponent } from './association-articles-edi-colibri/association-articles-edi-colibri.component';
+import { GridArticlesEdiColibriComponent } from "./association-articles-edi-colibri/grid-articles-edi-colibri/grid-articles-edi-colibri.component";
+import { ModificationArticleEdiPopupComponent } from "./association-articles-edi-colibri/modification-article-edi-popup/modification-article-edi-popup.component";
+import { GridsService } from "../ordres/grids.service";
+
 
 @NgModule({
   imports: [
@@ -60,9 +65,23 @@ import { ViewDocumentPopupModule } from "app/shared/components/view-document-pop
     HistoriqueValideModule,
     FileManagerModule,
     ViewDocumentPopupModule,
+    DxPopupModule
   ],
-  declarations: [ArticleDetailsComponent, ArticlesListComponent],
-  providers: [NestedGuard, EditingGuard],
-  exports: [ArticlesListComponent, ArticleDetailsComponent],
+  declarations: [
+    ArticleDetailsComponent,
+    ArticlesListComponent,
+    AssociationArticlesEDICOLIBRIComponent,
+    GridArticlesEdiColibriComponent,
+    ModificationArticleEdiPopupComponent
+  ],
+
+  providers: [NestedGuard, EditingGuard, GridsService],
+  exports: [
+    ArticleDetailsComponent,
+    ArticlesListComponent,
+    AssociationArticlesEDICOLIBRIComponent,
+    GridArticlesEdiColibriComponent,
+    ModificationArticleEdiPopupComponent
+  ],
 })
-export class ArticlesModule {}
+export class ArticlesModule { }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { Devise, Entrepot, Societe } from "app/shared/models";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
@@ -7,6 +7,7 @@ import { AuthService, EntrepotsService } from "app/shared/services";
 import { DevisesRefsService } from "app/shared/services/api/devises-refs.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { Program } from "app/shared/services/program.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -23,6 +24,8 @@ import {
 } from "rxjs/operators";
 import { GridEntrepotsComponent } from "../grid-entrepots/grid-entrepots.component";
 import { GridHistoriqueEntrepotsComponent } from "../grid-historique-entrepots/grid-historique-entrepots.component";
+import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
+import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
 import { TabContext } from "../root/root.component";
 
 @Component({
@@ -76,7 +79,7 @@ export class NouvelOrdreComponent implements OnInit {
   public errorText: string;
   public codeEnt: any;
   public hideButton: boolean;
-
+  public programs: any[];
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(
     () =>
@@ -89,14 +92,17 @@ export class NouvelOrdreComponent implements OnInit {
   );
 
   @Input() pulseBtnOn: boolean;
+  @Output() public programChosen: any;
 
   @ViewChild(GridEntrepotsComponent, { static: false })
   EntrepotGrid: GridEntrepotsComponent;
   @ViewChild(GridHistoriqueEntrepotsComponent, { static: false })
   historiqueEntrepotGrid: GridHistoriqueEntrepotsComponent;
   @ViewChild("grid") private grid: SingleSelection<Entrepot | MRUEntrepot>;
-  @ViewChild(InfoPopupComponent, { static: true })
-  infoComponent: InfoPopupComponent;
+  @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
+  @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
+  @ViewChild(ImportProgrammesPopupComponent, { static: false })
+  importProgPopup: ImportProgrammesPopupComponent;
 
   constructor(
     private functionsService: FunctionsService,
@@ -107,7 +113,7 @@ export class NouvelOrdreComponent implements OnInit {
     private entrepotsService: EntrepotsService,
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -117,6 +123,14 @@ export class NouvelOrdreComponent implements OnInit {
       .subscribe((res) => {
         this.societe = res.data.societe;
       });
+    this.programs = [];
+    Object.keys(Program).map((prog) => {
+      this.programs.push({
+        id: Program[prog],
+        name: prog,
+        text: prog,
+      });
+    });
   }
 
   onButtonLoaderClick() {
@@ -146,6 +160,15 @@ export class NouvelOrdreComponent implements OnInit {
       debounceTime(2000),
       first()
     );
+  }
+
+  openCommandesEdi() {
+    this.cdesEdiPopup.visible = true;
+  }
+
+  openProgramPopup(e) {
+    this.programChosen = e;
+    this.importProgPopup.visible = true;
   }
 
   showError(errorInfo) {

@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { EditingGuard } from "app/shared/guards/editing-guard";
+import { AssociationArticlesEDICOLIBRIComponent } from "../articles/association-articles-edi-colibri/association-articles-edi-colibri.component";
 import { ArticleDetailsComponent } from "../articles/details/article-details.component";
 import { ArticlesListComponent } from "../articles/list/articles-list.component";
 import { ClientDetailsComponent } from "../tiers/clients/details/client-details.component";
@@ -141,6 +142,10 @@ const routes: Routes = [
         component: ArticlesListComponent,
       },
       {
+        path: "articles/association-articles-edi-colibri",
+        component: AssociationArticlesEDICOLIBRIComponent,
+      },
+      {
         path: "articles/create",
         component: ArticleDetailsComponent,
         outlet: "details",
@@ -160,4 +165,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class NestedRoutingModule {}
+export class NestedRoutingModule { }
