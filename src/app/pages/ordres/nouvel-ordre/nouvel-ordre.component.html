@@ -4,7 +4,7 @@
   <div class="dx-field-value">
     <dx-radio-group
       [items]="typeEntrepots"
-      [value]="typeEntrepots[0]"
+      [value]="typeEntrepots[!favorites ? 1 : 0]"
       layout="horizontal"
       (onValueChanged)="onTypeChange($event)"
     >
@@ -32,11 +32,13 @@
   #grid
   (pulseButton)="pulseButton($event)"
   (hideCreateButton)="hideCreateButton($event)"
+  (createOrder)="onButtonLoaderClick()"
   *ngIf="favorites"
 ></app-grid-historique-entrepots>
 <app-grid-entrepots
   #grid
   (pulseButton)="pulseButton($event)"
+  (createOrder)="onButtonLoaderClick()"
   *ngIf="!favorites"
 ></app-grid-entrepots>
 <app-info-popup [customText]="errorText"></app-info-popup>

@@ -60,6 +60,45 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     });
   }
 
+  private byKey(columns: Array<string>) {
+    return (key) =>
+      new Promise(async (resolve) => {
+        const query = await this.buildGetOne_v2(columns);
+        type Response = { stock: Stock };
+        const variables = { id: key };
+        this.listenQuery<Response>(query, { variables }, (res) => {
+          if (res.data && res.data.stock)
+            resolve(new Stock(res.data.stock));
+        });
+      });
+  }
+
+  getDataSource_v2(columns: Array<string>) {
+    return new DataSource({
+      sort: [{ selector: this.model.getKeyField() as string }],
+      store: this.createCustomStore({
+        load: (options: LoadOptions) =>
+          new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
+
+            type Response = { allStock: RelayPage<Stock> };
+            const query = await this.buildGetAll_v2(columns);
+            const variables = this.mapLoadOptionsToVariables(options);
+            this.listenQuery<Response>(query, { variables }, (res) => {
+              if (res.data && res.data.allStock) {
+                resolve(this.asInstancedListCount(res.data.allStock));
+              }
+            });
+          }),
+        byKey: this.byKey(columns),
+      }),
+    });
+  }
+
   allStockArticleList(
     columns: Array<string> | Set<string>,
     espece: string,
@@ -400,5 +439,39 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
       fetchPolicy: "network-only",
     });
   }
+
+  /**
+   * Récupération du récap stock article
+   */
+  public allDetailStockResa(
+    article: string,
+    fournisseur: string,
+    columns: string[]
+  ) {
+    return this.apollo.query<{ allDetailStockResa }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: `allDetailStockResa`,
+              body: columns,
+              params: [
+                { name: "article", value: "article", isVariable: true },
+                { name: "fournisseur", value: "fournisseur", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "article", type: "String", isOptionnal: false },
+            { name: "fournisseur", type: "String", isOptionnal: true },
+          ]
+        )
+      ),
+      variables: { article, fournisseur },
+      fetchPolicy: "no-cache",
+    });
+  }
+
 
 }

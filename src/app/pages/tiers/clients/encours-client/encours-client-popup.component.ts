@@ -6,8 +6,10 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
+
 
 @Component({
   selector: "app-encours-client-popup",
@@ -17,6 +19,7 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 export class EncoursClientPopupComponent implements OnChanges {
   @Input() public client: Partial<Client>;
   @Input() public readOnlyMode: boolean;
+  @Input() public comingFrom: string;
   @Output() public clientInfo: any;
   @Output() public popupShown: boolean;
   @Output() openEncoursOrder = new EventEmitter<any>();
@@ -29,7 +32,9 @@ export class EncoursClientPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor() {}
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -57,6 +62,15 @@ export class EncoursClientPopupComponent implements OnChanges {
   }
 
   openOrder(ordre) {
-    this.openEncoursOrder.emit(ordre);
+    if (["detailEncours", "zoomClient"].includes(this.comingFrom))
+      this.openEncoursOrder.emit(ordre);
+    if (["client"].includes(this.comingFrom)) {
+      window.sessionStorage.setItem(
+        "openOrder",
+        [ordre.numero, ordre.campagne.id].join("|")
+      );
+      this.hidePopup();
+      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+    }
   }
 }

@@ -23,6 +23,7 @@
 }
 
 ::ng-deep .secteur-histo-ligne-field {
+
   .dx-field-label,
   .dx-field-value {
     width: 50% !important;
@@ -43,6 +44,7 @@
 ::ng-deep .filter-container {
   margin-bottom: 15px;
   overflow: hidden;
+  max-width: 1790px;
 
   dx-box {
     width: 600px;

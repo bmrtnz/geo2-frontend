@@ -148,11 +148,19 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       r1.fournisseurCode === r2.fournisseurCode;
 
     return data.map((row) => {
-      // La ligne fait elle partie d'une ouverture de calibre ?
-      if (data.filter((r) => isCalibreOpening(r, row)).length > 1) {
-        const commande = data.find((r) => r.nombreColisCommandes);
-        // La ligne a t'elle un plus gros calibre ?
-        return !data.find((r) => r.poidsNetClient > row.poidsNetClient)
+      // Quelles sont les ouvertures de calibre ?
+      const calibres = data.filter((r) => isCalibreOpening(r, row));
+      if (calibres.length > 1) {
+        // Il peut y avoir x lignes différentes sur la même variété donc on somme
+        let commandes = calibres.filter((r) => r.nombreColisCommandes);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const commande = {
+          nombrePalettesCommandees: nbPalettesCommandees,
+          nombreColisCommandes: nbColisCommandes
+        }
+        // Quelle ligne a le plus gros calibre ?
+        return !calibres.find((r) => r.poidsNetClient > row.poidsNetClient)
           ? {
             ...row,
             nombrePalettesCommandees: commande.nombrePalettesCommandees,
@@ -206,6 +214,14 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "origineDescription",
           "transporteurCode",
           "dateModification",
+          "referenceClient",
+          "codeChargement",
+          "etdLocation",
+          "etdDate",
+          "etaLocation",
+          "etaDate",
+          "commentaireInterne",
+          "entrepotCode"
         ]),
         this.preFilterData?.secteur?.id,
         this.currentCompanyService.getCompany().id,
@@ -240,6 +256,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       });
   }
 
+  isValue(data, field) {
+    const value = data.data.items[0].items[0][field];
+    return value !== null && value !== undefined;
+  }
+
   setDates(e) {
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
@@ -268,26 +289,34 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           this.dateManagementService.startOfDay(fin);
       }
     }
-    this.preFilterData.periode = null;
+    this.periodeSB.value = null;
   }
 
-  onRowPrepared(event) {
+  onRowPrepared(e) {
     // hide `groupFooter` rows values with `groupIndex=0`
     // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
-    if (event.rowType === "groupFooter" && event.groupIndex !== 2)
-      event.rowElement.classList.add("hide-row");
+    if (e.rowType === "groupFooter" && e.groupIndex !== 2)
+      e.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
-    if (event.rowType === "group" && event.groupIndex === 0)
-      event.rowElement.classList.add("justified-row");
+    if (e.rowType === "group" && e.groupIndex === 0)
+      e.rowElement.classList.add("justified-row");
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "data") {
+      // console.log(e);
+      if (e.data.nombreColisCommandes)
+        e.cellElement.classList.add("bold-black");
+    }
   }
 
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
-    return `${rowData.varieteCode} ${rowData.colisCode} ${rowData.poidsNetClient}kg ${rowData.origineDescription}`;
+    return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetClient} kg - ${rowData.origineDescription}`;
   }
 
   calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {
-    return rowData.nombreColisCommandes * rowData.poidsNetClient;
+    return Math.ceil(rowData.nombreColisCommandes * rowData.poidsNetClient);
   }
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {
@@ -312,7 +341,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       workbook.xlsx.writeBuffer().then((buffer: BlobPart) => {
         const name = `${this.localizer.localize(
           "declaration-fraude"
-        )} - ${new Date().toLocaleDateString()}`;
+        )} - ${this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
         saveAs(
           new Blob([buffer], { type: "application/octet-stream" }),
           `${name}.xlsx`

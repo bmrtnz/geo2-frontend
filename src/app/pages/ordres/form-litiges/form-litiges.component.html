@@ -429,6 +429,13 @@
       (onClick)="modifierLot()"
     ></dx-button>
     <dx-button
+      type="normal"
+      text="{{ 'btn-supprimerLot' | localize }}"
+      [focusStateEnabled]="false"
+      [disabled]="!selectedLitigeLigneKey?.length || litigeClosed"
+      (onClick)="supprimerLot()"
+    ></dx-button>
+    <dx-button
       type="success"
       text="{{ 'btn-close' | localize }}"
       [focusStateEnabled]="false"

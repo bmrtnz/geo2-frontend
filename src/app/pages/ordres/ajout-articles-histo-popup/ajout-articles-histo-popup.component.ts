@@ -63,7 +63,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     private currentCompanyService: CurrentCompanyService,
     private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -127,10 +127,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     e.component
       .content()
       .parentNode.classList.add("ajout-articles-histo-popup");
-    this.popupShown = true;
   }
 
   onShown(e) {
+    this.popupShown = true;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 

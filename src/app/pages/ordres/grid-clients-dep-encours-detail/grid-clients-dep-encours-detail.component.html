@@ -20,6 +20,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Encours clients (détail)"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -74,5 +75,6 @@
 
 <app-encours-client-popup
   [client]="client"
+  [comingFrom]="'detailEncours'"
   (openEncoursOrder)="openOrder($event)"
 ></app-encours-client-popup>

@@ -6,6 +6,7 @@
   [allowColumnReordering]="true"
   [repaintChangesOnly]="true"
   [highlightChanges]="false"
+  [columnFixing]="{ enabled: false }"
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
@@ -26,7 +27,7 @@
   <dxo-editing
     [selectTextOnEditStart]="true"
     [mode]="'batch'"
-    [allowUpdating]="allowMutations"
+    [allowUpdating]="allowMutations || venteACommission"
     [allowDeleting]="allowMutations"
     [(changes)]="changes"
     [refreshMode]="'reshape'"
@@ -144,13 +145,13 @@
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [visible]="allowMutations"
-        [disabled]="!cell.data.nombreColisCommandes"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
       >
       </dx-button>
     </div>
   </ng-container>
+  <!-- [disabled]="!cell.data.nombreColisCommandes" -->
 
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">
@@ -243,7 +244,6 @@
     <dxi-validation-rule
       *ngIf="column.dataField === 'nombreColisCommandes'"
       type="range"
-      [min]="0"
       [max]="9999"
       message="{{ 'valeurIncorrecte' | localize }}"
     ></dxi-validation-rule>
@@ -255,7 +255,17 @@
     type="buttons"
     [width]="30"
     [showInColumnChooser]="false"
+    [headerCellTemplate]="'headerDeleteTemplate'"
   ></dxi-column>
+
+  <div *dxTemplate="let cell of 'headerDeleteTemplate'">
+    <button
+      *ngIf="!!grid?.instance.getSelectedRowKeys()?.length"
+      class="dx-link dx-icon-trash dx-link-icon multi-delete"
+      title="{{ 'btn-delete-selected' | localize }}"
+      (click)="deleteArticles()"
+    ></button>
+  </div>
 </dx-data-grid>
 
 <!-- marge previsionelle -->

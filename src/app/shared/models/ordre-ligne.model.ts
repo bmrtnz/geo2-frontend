@@ -2,6 +2,7 @@ import { EdiLigne } from "./edi-ligne.model";
 import { Article } from "./article.model";
 import { BaseTarif } from "./base-tarif.model";
 import CodePromo from "./code-promo.model";
+import { BureauAchat } from "./bureau-achat.model";
 import Fournisseur from "./fournisseur.model";
 import { Field, Model, ModelName } from "./model";
 import OrdreLogistique from "./ordre-logistique.model";
@@ -18,6 +19,7 @@ export class OrdreLigne extends Model {
   @Field() public venteQuantite: number;
   @Field() public achatQuantite: number;
   @Field({ model: import("./base-tarif.model") }) public venteUnite: BaseTarif;
+  @Field({ model: import("./bureau-achat.model") }) public bureauAchat: BureauAchat;
   @Field({ asKey: true, asLabel: true }) public id?: string;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
   @Field({ model: import("./edi-ligne.model") }) public ediLigne?: EdiLigne;

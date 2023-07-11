@@ -280,6 +280,7 @@ export class ClientDetailsComponent
   };
 
   @Output() modifUserIds: string[];
+  @Output() openEncoursOrder = new EventEmitter<any>();
   @Input() clientId: string;
 
   @ViewChild(EditingAlertComponent, { static: true })
@@ -1002,5 +1003,9 @@ export class ClientDetailsComponent
       complete: () =>
         notify(this.localizationService.localize("copy-done"), "success", 3500),
     });
+  }
+
+  openOrder(ordre) {
+    this.openEncoursOrder.emit(ordre);
   }
 }

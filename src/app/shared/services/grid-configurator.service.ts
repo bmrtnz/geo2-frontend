@@ -106,6 +106,7 @@ export enum Grid {
   OrdreReservationStock = "ordre-reservation-stock",
   OrdreReservationStockEnCours = "ordre-reservation-stock-en-cours",
   OrdreOptionReservationStock = "ordre-option-reservation-stock",
+  OrdreRecapitulatifStock = "ordre-recap-stock",
   OrdreDestockageAuto = "ordre-destockage-auto",
   CommentaireOrdre = "commentaire-ordre",
   LitigeLigne = "litige-ligne",
@@ -267,8 +268,7 @@ export class GridConfiguratorService {
     dataGrid.columnOption(dataField, "lookup", {
       ...originalLookupSettings,
       dataSource,
-    })
-
+    });
   }
 
   /**

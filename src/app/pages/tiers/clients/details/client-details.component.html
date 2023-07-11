@@ -44,7 +44,6 @@
           (onClick)="onCancel()"
         ></dx-button>
         <dx-button
-          *ngIf="!clientId"
           class="upperButton"
           type="success"
           [visible]="!createMode"
@@ -2096,7 +2095,11 @@
   [readOnlyMode]="true"
 >
 </app-order-history-popup>
-<app-encours-client-popup [client]="client"> </app-encours-client-popup>
+<app-encours-client-popup
+  [client]="client"
+  [comingFrom]="clientId ? 'zoomClient' : 'client'"
+  (openEncoursOrder)="openOrder($event)"
+></app-encours-client-popup>
 <app-file-manager-popup
   key="clients"
   [subTitle]="client?.code"

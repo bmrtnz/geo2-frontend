@@ -13,8 +13,7 @@ import { FormUtilsService } from "../form-utils.service";
 })
 export class EntrepotsTransporteursBassinsService
   extends ApiService
-  implements APIRead
-{
+  implements APIRead {
   constructor(apollo: Apollo, private formUtils: FormUtilsService) {
     super(apollo, EntrepotTransporteurBassin);
   }
@@ -93,7 +92,7 @@ export class EntrepotsTransporteursBassinsService
               variables: {
                 entrepotTransporteurBassin: {
                   id: null,
-                  ...this.formUtils.cleanTypenames(values),
+                  ...FormUtilsService.cleanTypenames(values),
                 },
               },
             })
@@ -113,7 +112,7 @@ export class EntrepotsTransporteursBassinsService
               variables: {
                 entrepotTransporteurBassin: {
                   id,
-                  ...this.formUtils.cleanTypenames(values),
+                  ...FormUtilsService.cleanTypenames(values),
                 },
               },
             })

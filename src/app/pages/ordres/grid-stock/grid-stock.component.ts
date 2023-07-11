@@ -36,6 +36,7 @@ import { OptionStockPopupComponent } from "../option-stock-popup/option-stock-po
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
+import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
 
 let self;
 
@@ -48,6 +49,7 @@ export class GridStockComponent implements OnInit {
   @Input() public ordre: Ordre;
   @Input() public destock: boolean;
   @Input() public reserv: boolean;
+  @Input() public recap: boolean;
   @Input() public clientsRef: boolean;
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
@@ -74,6 +76,7 @@ export class GridStockComponent implements OnInit {
   @ViewChild(ReservationPopupComponent)
   destockagePopup: ReservationPopupComponent;
   @ViewChild(OptionStockPopupComponent) optionPopup: OptionStockPopupComponent;
+  @ViewChild(RecapStockPopupComponent) recapPopup: RecapStockPopupComponent;
   @ViewChild(PromptPopupComponent, { static: false })
   promptPopupComponent: PromptPopupComponent;
   @ViewChild(ClientsArticleRefPopupComponent, { static: false })
@@ -176,7 +179,8 @@ export class GridStockComponent implements OnInit {
       "articles-catalogue-preFilter-stock-title"
     );
     this.onFieldValueChange(null, "espece"); // First run: setting filters values
-    // setTimeout(() => this.refreshArticlesGrid(), 1000) // A VIRER !!!!
+    // setTimeout(() => this.refreshArticlesGrid(), 500) // A VIRER !!!!
+    // this.refreshArticlesGrid() // A VIRER !!!!
   }
 
   onFilterChange() {
@@ -261,8 +265,8 @@ export class GridStockComponent implements OnInit {
       dataToLoad
         .filter((data) => !this[`${data.var}SB`].value)
         .forEach((data) => {
-          if (data.var === "emballages")
-            sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
+          // if (data.var === "emballages")
+          //   sbFilters += ` and article.emballage.emballage.groupe.id == ${this.groupesSB.value?.key}`;
           this[data.var] = this.stocksService.getDistinctEntityDatasource(
             data.id,
             data.desc,
@@ -312,7 +316,6 @@ export class GridStockComponent implements OnInit {
     this.articleLigneId = data.collapsedItems
       ? data.collapsedItems[0]?.articleID
       : data.items[0]?.articleID;
-
     if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
@@ -384,6 +387,15 @@ export class GridStockComponent implements OnInit {
     if (data?.articleID) this.destockagePopup.present(data, this.ordre);
   }
 
+  openRecapPopup(data) {
+    if (!data?.articleID) return;
+    this.ligneStockArticle = data;
+    this.articlesService.getOne(data.articleID).subscribe((res) => {
+      this.article = res.data.article;
+      this.recapPopup.visible = true;
+    });
+  }
+
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
@@ -417,11 +429,28 @@ export class GridStockComponent implements OnInit {
         e.cellElement.textContent
       ) {
         const data = e.data.items ?? e.data.collapsedItems;
-        if (data[0].bio) e.cellElement.classList.add("bio-article");
+        if (data[0].origineID && data[0].origineID != "F") {
+          e.cellElement.classList.add("not-france-origin");
+        } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
+
+      // Soulignage des quantités réservées
+      if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
+        const index = e.column.dataField[e.column.dataField.length - 1];
+        let data = e.data;
+        if (e.rowType === "group") {
+          data = data.items ?? data.collapsedItems;
+          let underline = false;
+          data.map(d => { if (d["quantiteReservee" + index] !== 0) underline = true; });
+          if (underline) e.cellElement.classList.add("underlined-text")
+        } else {
+          if (data["quantiteReservee" + index] !== 0) e.cellElement.classList.add("underlined-text")
+        }
+      }
+
       // Fond jaune pour les stocks J21
       if (e.column.dataField === "quantiteCalculee4") {
         e.cellElement.classList.add("highlight-stockJ21-cell");

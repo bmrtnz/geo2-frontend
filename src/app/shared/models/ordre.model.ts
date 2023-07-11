@@ -184,4 +184,10 @@ export class Ordre extends Model {
   }
 }
 
+// etaLocation/etdLocation vs portTypeA/portTypeD
+// GEO2 & GEO1 fonctionnement un peu différemment sur ces champs.
+// GEO1 s'appuie sur eta/d_location
+// GEO2 sur portTypeA/D
+// Mais on s'assure de la compatibilité lors de la sauvegarde.
+
 export default Ordre;

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   HostListener,
@@ -23,6 +24,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxTabPanelComponent } from "devextreme-angular";
 import { on } from "devextreme/events";
+import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
 import { dxTabPanelItem } from "devextreme/ui/tab_panel";
 import {
@@ -54,6 +56,8 @@ import {
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
 
+let self;
+
 const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
 const PREVIOUS_STATE = "previous_tab_id";
@@ -75,9 +79,11 @@ enum Position {
 export type TabPanelItem = dxTabPanelItem & {
   id: string;
   icon?: string;
+  title?: string;
   details?: string;
   position: number;
   component?: FormComponent | any;
+  status?: boolean;
   type?: string;
 };
 
@@ -96,7 +102,9 @@ export class TabContext {
     private localization: LocalizationService,
     private router: Router,
     private currentCompanyService: CurrentCompanyService
-  ) {}
+  ) {
+    self = this;
+  }
 
   public registerComponent(instance: RootComponent) {
     this.componentRef = instance;
@@ -115,6 +123,19 @@ export class TabContext {
       map((params) => {
         const selected = params.get(RouteParam.TabID);
         return this.componentRef.items.find((item) => item.id === selected);
+      })
+    );
+  }
+
+  /**
+   * Return All tab panel unselected items
+   */
+  public getNotSelectedItems() {
+    return this.componentRef.route.paramMap.pipe(
+      share(),
+      map((params) => {
+        const selected = params.get(RouteParam.TabID);
+        return this.componentRef.items.filter((item) => item.id !== selected);
       })
     );
   }
@@ -196,12 +217,14 @@ export class TabContext {
   templateUrl: "./root.component.html",
   styleUrls: ["./root.component.scss"],
 })
-export class RootComponent implements OnInit, OnDestroy {
+export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy = new Subject<boolean>();
 
   public tabChangeEvent = new EventEmitter<TabChangeData>();
   public tabPanelInitialized = new EventEmitter<any>();
   public tabPanelReady = new EventEmitter<any>();
+  private fastPrevButton: HTMLElement;
+  private fastNextButton: HTMLElement;
   public activeStateEnabled = false;
   public typeTab = TabType;
 
@@ -220,10 +243,19 @@ export class RootComponent implements OnInit, OnDestroy {
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
+
+    const openOrder = window.sessionStorage.getItem("openOrder");
+    if (openOrder) {
+      this.tabContext.openOrdre(
+        openOrder.split("|")[0],
+        openOrder.split("|")[1]
+      );
+      window.sessionStorage.removeItem("openOrder");
+    }
 
     this.tabPanelInitialized
       .pipe(
@@ -238,6 +270,18 @@ export class RootComponent implements OnInit, OnDestroy {
       .subscribe();
     this.surveyBlockage();
     window.sessionStorage.removeItem("idOrdre");
+    setInterval(() => {
+      const leftArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-left") as HTMLElement;
+      this.fastPrevButton.style.visibility = (leftArrow && !leftArrow.classList.contains("dx-state-disabled")) ? "visible" : "hidden";
+      const rightArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-right") as HTMLElement;
+      this.fastNextButton.style.visibility = (rightArrow && !rightArrow.classList.contains("dx-state-disabled")) ? "visible" : "hidden";
+    }, 500);
+  }
+
+  ngAfterViewInit() {
+    this.fastPrevButton = document.querySelector(".dx-fast-prev-btn");
+    this.fastNextButton = document.querySelector(".dx-fast-next-btn");
+    setTimeout(() => this.updateAllTabsStatusDots(), 1000);
   }
 
   ngOnDestroy() {
@@ -248,6 +292,27 @@ export class RootComponent implements OnInit, OnDestroy {
   @HostListener("window:unload")
   windowUnload() {
     window.sessionStorage.removeItem("surveyRunning");
+  }
+
+  updateAllTabsStatusDots() {
+    this.tabContext.getNotSelectedItems().subscribe(tabs =>
+      tabs
+        .filter((tab) => tab.type === "ordre")
+        .map(t => {
+          this.ordresService
+            .getOneByNumeroAndSocieteAndCampagne(
+              t.id.split("-")[1],
+              this.currentCompanyService.getCompany().id,
+              t.id.split("-")[0],
+              ["statut"]
+            )
+            .subscribe((res) => {
+              const result = res.data.ordreByNumeroAndSocieteAndCampagne;
+              if (!result) return;
+              t.status = Statut[result.statut] === Statut.CONFIRME.toString()
+            });
+        })
+    );
   }
 
   surveyBlockage() {
@@ -268,23 +333,36 @@ export class RootComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
-  onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
-    const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
-    const numeroOrdre = isNaN(parseInt(event.itemData.id, 10))
-      ? null
-      : event.itemData.id;
-    const idOrdre = window.sessionStorage.getItem("numeroOrdre" + numeroOrdre);
-    if (numeroOrdre && idOrdre) {
-      window.sessionStorage.setItem("idOrdre", idOrdre);
-    } else {
-      window.sessionStorage.removeItem("idOrdre");
-    }
+  onFastPrevNextClick(dir) {
+    let pos;
+    const tabCont = this.tabPanel.instance.$element()[0].querySelector(".dx-scrollable-container") as HTMLElement;
+    const tabSubCont = tabCont.querySelector(".dx-scrollable-content") as HTMLElement;
+    pos = (dir === "prev") ? 0 : tabSubCont?.offsetWidth - tabCont?.offsetWidth + 2;
+    tabCont.scrollTo({ left: pos, behavior: "smooth" });
+  }
 
-    if (event.itemData.id !== TAB_CLOSE_ALL_ORDRES) {
-      this.router.navigate(["pages/ordres", event.itemData.id], {
-        queryParamsHandling: "merge",
-        state: { [PREVIOUS_STATE]: previous },
-      });
+  onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
+
+    if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
+      this.closeEveryOrdre();
+    } else {
+      const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
+      const numeroOrdre = isNaN(parseInt(event.itemData.id, 10))
+        ? null
+        : event.itemData.id;
+      const idOrdre = window.sessionStorage.getItem("numeroOrdre" + numeroOrdre);
+      if (numeroOrdre && idOrdre) {
+        window.sessionStorage.setItem("idOrdre", idOrdre);
+      } else {
+        window.sessionStorage.removeItem("idOrdre");
+      }
+
+      if (event.itemData.id !== TAB_CLOSE_ALL_ORDRES) {
+        this.router.navigate(["pages/ordres", event.itemData.id], {
+          queryParamsHandling: "merge",
+          state: { [PREVIOUS_STATE]: previous },
+        });
+      }
     }
   }
 
@@ -372,14 +450,6 @@ export class RootComponent implements OnInit, OnDestroy {
     notify(this.localizationService.localize("all-orders-were-closed"));
   }
 
-  public tabIconClick(e) {
-    if (
-      (e.target as HTMLElement).parentElement.dataset?.itemId ===
-      TAB_CLOSE_ALL_ORDRES
-    )
-      this.closeEveryOrdre();
-  }
-
   private handleRouting() {
     return of(this.selectTab(TAB_LOAD_ID)).pipe(
       switchMapTo(this.route.queryParamMap.pipe(first())),
@@ -423,6 +493,7 @@ export class RootComponent implements OnInit, OnDestroy {
       {
         id: TAB_HOME_ID,
         icon: "material-icons home",
+        class: "home-tab",
         component: (await import("../accueil/ordres-accueil.component"))
           .OrdresAccueilComponent,
         position: Position.Front,
@@ -431,16 +502,18 @@ export class RootComponent implements OnInit, OnDestroy {
         id: TAB_ORDRE_CREATE_ID,
         title: "nouvel",
         details: "ordre",
+        class: "create-order-tab",
         icon: "material-icons note_add",
         component: (await import("../nouvel-ordre/nouvel-ordre.component"))
           .NouvelOrdreComponent,
-        position: Position.Back,
+        position: Position.Front,
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
+        class: "close-all-orders-tab",
         multiLineTitle: "Fermer tous les ordres",
         icon: "material-icons disabled_by_default",
-        position: Position.Back,
+        position: Position.Front,
       },
     ];
     return concat(
@@ -572,4 +645,4 @@ export class RootComponent implements OnInit, OnDestroy {
     ></dx-load-panel>
   `,
 })
-export class LoadingTabComponent {}
+export class LoadingTabComponent { }

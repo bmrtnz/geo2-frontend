@@ -5,7 +5,7 @@ import { AbstractControl } from "@angular/forms";
   providedIn: "root",
 })
 export class FormUtilsService {
-  constructor() {}
+  constructor() { }
 
   /**
    * Filter dirty controls and map them to their field value
@@ -54,7 +54,7 @@ export class FormUtilsService {
    * Remove `__typename` fields recursively from an entity
    * @param entity Entity data
    */
-  public cleanTypenames<E = {}>(entity: E): E {
+  public static cleanTypenames<E = {}>(entity: E): E {
     return JSON.parse(
       JSON.stringify(entity, (key, value) => {
         if (key === "__typename") delete value[key];

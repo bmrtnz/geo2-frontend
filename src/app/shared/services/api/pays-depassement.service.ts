@@ -23,6 +23,7 @@ export class PaysDepassementService extends ApiService {
       societeCode: Societe["id"];
       commercialCode: Personne["id"];
       depassementOnly: boolean;
+      clientValide?: boolean;
     }
   ) {
     return new DataSource({
@@ -58,6 +59,11 @@ export class PaysDepassementService extends ApiService {
                           value: "depassementOnly",
                           isVariable: true,
                         },
+                        {
+                          name: "clientValide",
+                          value: "clientValide",
+                          isVariable: true,
+                        },
                       ],
                     },
                   ],
@@ -71,6 +77,11 @@ export class PaysDepassementService extends ApiService {
                     },
                     {
                       name: "depassementOnly",
+                      type: "Boolean",
+                      isOptionnal: true,
+                    },
+                    {
+                      name: "clientValide",
                       type: "Boolean",
                       isOptionnal: true,
                     },

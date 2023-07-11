@@ -26,6 +26,7 @@
     ></dx-button>
     <dx-button
       #validButton
+      [disabled]="!gridAnnuleRemplaceComponent?.canBeSent"
       class="documents-valid-button"
       type="success"
       text="OK"

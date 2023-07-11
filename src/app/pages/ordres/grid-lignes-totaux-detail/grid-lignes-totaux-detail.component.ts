@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
@@ -24,7 +24,8 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-lignes-totaux-detail.component.html",
   styleUrls: ["./grid-lignes-totaux-detail.component.scss"],
 })
-export class GridLignesTotauxDetailComponent implements OnInit {
+export class GridLignesTotauxDetailComponent
+  implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -47,7 +48,8 @@ export class GridLignesTotauxDetailComponent implements OnInit {
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
-  ngOnInit(): void {
+
+  ngOnInit() {
     this.enableFilters();
   }
 
@@ -104,7 +106,7 @@ export class GridLignesTotauxDetailComponent implements OnInit {
         e.column.dataField === "fournisseur.code" &&
         e.cellElement.textContent
       ) {
-        e.cellElement.textContent = e.data?.items[0]?.nombrePalettesExpediees;
+        e.cellElement.textContent = e.data?.aggregates[0];
       } else {
         if (e.columnIndex === 0) e.cellElement.textContent = e.data.key;
       }

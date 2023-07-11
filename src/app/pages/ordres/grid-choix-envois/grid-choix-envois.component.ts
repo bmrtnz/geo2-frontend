@@ -16,6 +16,7 @@ import { ImprimantesService } from "app/shared/services/api/imprimantes.service"
 import { MoyenCommunicationService } from "app/shared/services/api/moyens-communication.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
@@ -28,7 +29,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, finalize, map } from "rxjs/operators";
+import { concatMapTo, delay, finalize, map, tap } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
 
 @Component({
@@ -49,8 +50,8 @@ export class GridChoixEnvoisComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
-    private ar: FluxArService
-  ) {}
+    private ar: FluxArService,
+  ) { }
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public fluxID: string;
@@ -70,12 +71,14 @@ export class GridChoixEnvoisComponent implements OnInit {
     "numeroAcces1",
     "imprimante.id",
     "nomContact",
-    "commentairesAvancement",
+    "numeroAcces2",
     "traite",
     "dateEnvoi",
     "dateSoumission",
     "dateDemande",
   ];
+
+  readonly USER_MAIL = this.authService.currentUser.email;
 
   gridData: DataSource;
   rowKeys: any[];
@@ -87,6 +90,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   typeTiers: string;
   typeTiersLabel: string;
   canSelectAll: boolean;
+  public canBeSent: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -160,6 +164,18 @@ export class GridChoixEnvoisComponent implements OnInit {
     }
   }
 
+  onEditorPreparing(e) {
+    // If the user types "@", its mail address is automatically typed
+    if (e.parentType === "dataRow") {
+      e.editorOptions.onKeyUp = (elem) => {
+        if (e.dataField === "numeroAcces1" && this.USER_MAIL) {
+          const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+          if (myInput.value === "@") myInput.value = this.USER_MAIL
+        }
+      }
+    }
+  }
+
   onContentReady(event) {
     this.contentReadyEvent.emit(event);
 
@@ -168,18 +184,19 @@ export class GridChoixEnvoisComponent implements OnInit {
     setTimeout(() => {
       event.component.selectAll();
       this.canSelectAll = false;
+      this.canBeSent = true;
     }, 500);
   }
 
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -201,15 +218,26 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   reload(annuleOrdre?) {
+    this.canBeSent = false;
     this.functionsService
       .geoPrepareEnvois(
         this.ordre.id,
         this.fluxID,
         true,
-        annuleOrdre ? annuleOrdre : false,
+        !!annuleOrdre ? !!annuleOrdre : false,
         this.authService.currentUser.nomUtilisateur
       )
       .pipe(
+        // on prepare aussi les envois en mode non annulation
+        // de ce fait, on est sure d'avoir tout les tiers possibles
+        concatMapTo(this.functionsService
+          .geoPrepareEnvois(
+            this.ordre.id,
+            this.fluxID,
+            true,
+            !annuleOrdre ? !!annuleOrdre : false,
+            this.authService.currentUser.nomUtilisateur
+          )),
         concatMapTo(
           this.envoisService.getList(
             `ordre.id==${this.ordre.id} and traite==A`,
@@ -225,27 +253,34 @@ export class GridChoixEnvoisComponent implements OnInit {
         next: (data) => {
           this.canSelectAll = true;
 
+          // on retire les duplicats
+          let uniqueEnvois = [];
+          data.forEach(value => {
+            if (!uniqueEnvois.find(v => value.codeTiers === v.codeTiers && value.numeroAcces1 === v.numeroAcces1))
+              uniqueEnvois.push(value);
+          });
+
           // handle annule&remplace
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();
-            data = data
+            uniqueEnvois = uniqueEnvois
               .filter((e) => !ignoredTiers.includes(e.codeTiers))
               .map((e) => {
-                e.commentairesAvancement = reasons?.[e.codeTiers];
+                e.numeroAcces2 = reasons?.[e.codeTiers];
                 return e;
               });
           } else {
             if (this.annuleOrdre) {
-              data = data.map((e) => {
-                e.commentairesAvancement = "COMMANDE ANNULEE";
+              uniqueEnvois = uniqueEnvois.map((e) => {
+                e.numeroAcces2 = "COMMANDE ANNULEE";
                 return e;
               });
             }
             // We pre-fill comments when complementary order
             if (this.fluxID === "ORDRE" && this.ordre.type.id === "COM")
-              this.addComplComment(data);
+              this.addComplComment(uniqueEnvois);
           }
-          this.gridData = new DataSource(data);
+          this.gridData = new DataSource(uniqueEnvois);
         },
         error: (message) => notify({ message }, "error", 7000),
       });
@@ -256,7 +291,7 @@ export class GridChoixEnvoisComponent implements OnInit {
       const comInt = this.ordre.commentaireUsageInterne;
       const typeTiers = e.typeTiers.id;
       if (typeTiers === "C") {
-        e.commentairesAvancement = comInt;
+        e.numeroAcces2 = comInt;
       } else {
         let filter = `ordre.numero==${comInt.slice(
           -6
@@ -264,7 +299,7 @@ export class GridChoixEnvoisComponent implements OnInit {
         filter += `codeTiers==${e.codeTiers} and (traite==N or traite==O)`;
         this.envoisService.countBy(filter).subscribe((res) => {
           if (res.data.countBy) {
-            e.commentairesAvancement = comInt;
+            e.numeroAcces2 = comInt;
             this.dataGrid.instance.selectAll();
           }
         });
@@ -278,10 +313,16 @@ export class GridChoixEnvoisComponent implements OnInit {
       .getSelectedRowsData()
       .map(
         (envoi: Partial<Envois>) =>
-          new Envois({ ...envoi, traite: "N" }, { deepFetch: true })
+          FormUtilsService.cleanTypenames({
+            ...envoi,
+            ...envoi.imprimante?.id !== null ? { imprimante: envoi.imprimante } : { imprimante: null },
+            ...envoi.moyenCommunication?.id !== null ? { moyenCommunication: envoi.moyenCommunication } : { moyenCommunication: null },
+            ...envoi.typeTiers?.id !== null ? { typeTiers: envoi.typeTiers } : { typeTiers: null },
+            traite: "N"
+          })
       );
-    const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
 
+    const action = this.ar.hasData ? "duplicateMergeAllEnvois" : "saveAll";
     const allNonEnvois = this.dataGrid.instance
       .getDataSource()
       .items()

@@ -29,6 +29,7 @@ import notify from "devextreme/ui/notify";
 import { from } from "rxjs";
 import { concatMap, takeWhile, tap } from "rxjs/operators";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
 @Component({
@@ -39,6 +40,7 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
+  @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public articleLigneId: string;
 
@@ -56,6 +58,8 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   pulseBtnOn: boolean;
   remplacementArticle: boolean;
   popupFullscreen = true;
+  multipleItems: number;
+  maxRowNumber: number;
 
   @ViewChild(ArticlesListComponent, { static: false })
   catalogue: ArticlesListComponent;
@@ -78,7 +82,9 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
-  ) {}
+  ) {
+    this.maxRowNumber = 100;
+  }
 
   ngOnChanges() {
     this.remplacementArticle = !!this.articleRowKey;
@@ -106,8 +112,31 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.zoomArticlePopup.visible = true;
   }
 
+  articleOverflow() {
+    this.saisieCode.value.pop();
+    this.saisieCode.instance.repaint();
+    this.saisieCode.instance.focus();
+    notify(this.localizeService.localize("article-overflow"), "warning");
+  }
+
   updateChosenArticles() {
     const articleTags: any = this.saisieCode.value ? this.saisieCode.value : [];
+
+    // Ex 96000x6
+    if (this.multipleItems) {
+      const lastArt = articleTags[articleTags.length - 1]
+      if ((this.gridCommandes.gridRowsTotal + this.multipleItems + this.saisieCode.value.length - 1) > this.maxRowNumber) {
+        this.multipleItems = 0;
+        return this.articleOverflow();
+      }
+      for (let i = 0; i < this.multipleItems - 1; i++) articleTags.push(lastArt);
+      this.multipleItems = 0;
+    } else {
+      if ((this.gridCommandes.gridRowsTotal + this.saisieCode.value.length) > this.maxRowNumber) {
+        return this.articleOverflow();
+      }
+    }
+
     this.chosenArticles = articleTags.concat(this.getGridSelectedArticles());
     this.nbARticles = this.chosenArticles.length;
     this.articlesKO = !this.nbARticles;
@@ -183,9 +212,14 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   onValueChanged(e) {
     if (this.codeChangeProcess) return; // To avoid infinite loop
     this.codeChangeProcess = true;
+    this.multipleItems = 0;
     const tagArray = e.component.option("value");
     if (tagArray?.length) {
       let myValue = tagArray.pop();
+      if (myValue.indexOf("x")) {
+        this.multipleItems = parseInt(myValue.split("x")[1]);
+        myValue = myValue.split("x")[0];
+      }
       if (myValue.length > 6) {
         notify(myValue + ": format/type incorrects", "error", 3000);
       } else {

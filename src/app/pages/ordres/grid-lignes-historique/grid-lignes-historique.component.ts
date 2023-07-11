@@ -15,6 +15,7 @@ import {
   ClientsService,
   EntrepotsService,
 } from "app/shared/services";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -41,6 +42,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
+
 enum InputField {
   valide = "valide",
   dateMin = "dateMin",
@@ -48,6 +50,7 @@ enum InputField {
   secteur = "secteur",
   client = "client",
   entrepot = "entrepot",
+  bureauAchat = "bureauAchat"
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -79,10 +82,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public secteurs: DataSource;
   public clients: DataSource;
   public entrepots: DataSource;
+  public bureauxAchat: DataSource;
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public totalItems: TotalItem[] = [];
   private gridConfig: Promise<GridConfig>;
   public env = environment;
   public nbInsertedArticles: number;
@@ -101,11 +104,15 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     secteur: new UntypedFormControl(),
     client: new UntypedFormControl(),
     entrepot: new UntypedFormControl(),
+    bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
+
+  public summaryFields = ["nombreColisCommandes"];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
     public entrepotsService: EntrepotsService,
+    public bureauxAchatService: BureauxAchatService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
     public gridConfiguratorService: GridConfiguratorService,
@@ -142,6 +149,11 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       "raisonSocial",
       "valide",
     ]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
   }
 
   ngAfterViewInit() {
@@ -185,6 +197,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     const gridFields = await fields.toPromise();
     const dataSource = this.ordreLignesService.getListDataSource([
       ...gridFields,
+      "ordre.id",
       "ordre.statut",
     ]);
 
@@ -207,6 +220,9 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     }
     if (values.entrepot?.id) {
       filter.push("and", ["ordre.entrepot.id", "=", values.entrepot.id]);
+    }
+    if (values.bureauAchat?.id) {
+      filter.push("and", ["bureauAchat.id", "=", values.bureauAchat.id]);
     }
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
@@ -251,18 +267,26 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
         let data = e.data.items ?? e.data.collapsedItems;
         if (!data[0]) return;
+        let numeroContainerArray = [];
+        let numeroContainer;
+        data.map(ol => numeroContainerArray.push(ol.logistique.numeroContainer));
+        numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+        if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
         data = data[0].ordre;
         e.cellElement.textContent =
           data.numero +
           " - " +
           (data.entrepot?.code ?? "") +
-          " - " +
-          (data.referenceClient ? data.referenceClient + " " : "") +
+          (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+          (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+          (numeroContainer ? " - " + numeroContainer + " " : "") +
           (data.transporteur?.id
-            ? "(Transporteur : " + data.transporteur.id + ")"
+            ? " (Transporteur : " + data.transporteur.id + ")"
             : "") +
           ` - ${Statut[data.statut]}`;
       }
+      if (e.column.dataField === "ordre.dateDepartPrevue")
+        e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
       // Descript. article
@@ -481,21 +505,27 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
-  // open selected ordre on group row double-click
+  // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    if (rowType !== "group" || (!data.items && !data.collapsedItems)) return;
-    const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-    if (!dataItems.ordre) return;
-    this.hidePopup.emit();
-    this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      this.hidePopup.emit();
+      this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+    } else {
+      this.hidePopup.emit();
+      this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
+    }
   }
+
 }

@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChild,
   AfterViewInit,
@@ -19,8 +18,7 @@ import { environment } from "environments/environment";
 import gridsConfig from "assets/configurations/grids.json";
 import { TabContext } from "../root/root.component";
 import { GridColumn } from "basic";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import Campagne from "app/shared/models/campagne.model";
+
 
 @Component({
   selector: "app-grid-suivi",
@@ -42,7 +40,6 @@ export class GridSuiviComponent implements AfterViewInit {
     public ordresService: OrdresService,
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
-    private dateManagementService: DateManagementService,
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext
   ) {
@@ -73,7 +70,6 @@ export class GridSuiviComponent implements AfterViewInit {
     ];
 
     if (this.filter) filters = this.filter;
-
     this.dataSource.filter(filters);
   }
 

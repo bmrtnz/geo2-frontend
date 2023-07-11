@@ -3,7 +3,7 @@
   [formGroup]="formGroup"
 >
   <dx-box>
-    <dxi-item [ratio]="1">
+    <dxi-item [ratio]="0.8">
       <!-- Valides/non valides -->
       <div class="dx-field valideCheckboxField">
         <div class="dx-field-label">
@@ -35,6 +35,25 @@
         </div>
         <div class="dx-field-label dx-field-label-right">
           {{ "ordreLignes-dateLivraisonPrevue" | localize }}
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="2">
+      <!-- Bureau achat -->
+      <div class="dx-field">
+        <div class="dx-field-label noEllipsis">
+          {{ "tiers-fournisseurs-bureauAchat" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            formControlName="bureauAchat"
+            [dataSource]="bureauxAchat"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id']"
+            [showClearButton]="true"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
         </div>
       </div>
     </dxi-item>
@@ -213,6 +232,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    [noDataText]="'aucun-ordre' | localize"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
@@ -261,7 +281,16 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-summary [totalItems]="totalItems"></dxo-summary>
+    <dxo-summary>
+      <dxi-group-item
+        *ngFor="let field of summaryFields"
+        [column]="field"
+        summaryType="sum"
+        [alignByColumn]="true"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+    </dxo-summary>
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
@@ -277,7 +306,9 @@
       [cssClass]="column?.cssClass"
       [calculateGroupValue]="column.calculateGroupValue"
       allowSearch="false"
-      [allowHeaderFiltering]="false"
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
       [showInColumnChooser]="column?.showInColumnChooser"
     >
     </dxi-column>

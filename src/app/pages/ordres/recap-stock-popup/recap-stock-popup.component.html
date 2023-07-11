@@ -1,0 +1,51 @@
+<dx-popup
+  [width]="1120"
+  height="auto"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [resizeEnabled]="true"
+  [fullScreen]="popupFullscreen"
+  [(visible)]="visible"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown($event)"
+>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="option-stock-content-container">
+        <div class="article-detail-container">
+          <span class="blue-style">Article réf. :&nbsp;</span
+          ><span class="bold-text">{{ article?.id }}</span>
+          <div class="article-resa-description">
+            {{ detailedArticleDescription }}
+          </div>
+        </div>
+        <br />
+        <app-grid-recap-stock [article]="article"></app-grid-recap-stock>
+        <br />
+        <div class="popup-buttons-container">
+          <dx-button
+            text="{{ 'btn-fermer' | localize }}"
+            type="default"
+            (onClick)="hidePopup()"
+          ></dx-button>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

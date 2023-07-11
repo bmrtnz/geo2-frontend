@@ -163,7 +163,7 @@ export class PlanningDepartComponent implements AfterViewInit {
         if (
           this.diffSumColisOrNotDetail.value &&
           data.ordreLogistique.ordre.sommeColisCommandes ===
-            data.ordreLogistique.ordre.sommeColisExpedies &&
+          data.ordreLogistique.ordre.sommeColisExpedies &&
           data.ordreLogistique.ordre.versionDetail
         ) {
           data.id = 0; // Sums are equal and there's a version number
@@ -323,7 +323,7 @@ export class PlanningDepartComponent implements AfterViewInit {
         this.dateMax.value = deb;
         // Set time for correct value on view
         this.dateMax.value = new Date(
-          (this.dateMax.value as Date).setUTCHours(22, 59, 59)
+          (this.dateMax.value as Date).setUTCHours(21, 59, 59)
         );
         // Adapt to 24h periode
         this.dateMax.value = new Date(this.dateMax.value.valueOf() + ONE_DAY);
@@ -334,7 +334,7 @@ export class PlanningDepartComponent implements AfterViewInit {
         this.dateMin.value = fin;
         // Set time for correct value on view
         this.dateMin.value = new Date(
-          (this.dateMin.value as Date).setUTCHours(23, 0, 0)
+          (this.dateMin.value as Date).setUTCHours(22, 0, 0)
         );
         // Adapt to 24h periode
         this.dateMin.value = new Date(this.dateMin.value.valueOf() - ONE_DAY);

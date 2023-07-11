@@ -28,7 +28,7 @@ import {
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
-import { FunctionResult } from "app/shared/services/api/functions.service";
+import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
@@ -63,6 +63,7 @@ import {
   filter,
   first,
   map,
+  mapTo,
   startWith,
   switchMap,
   takeUntil,
@@ -156,7 +157,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private gridsService: GridsService,
     public gridUtilsService: GridUtilsService,
     public regimesTvaService: RegimesTvaService,
-    public ordresLogistiquesService: OrdresLogistiquesService
+    public ordresLogistiquesService: OrdresLogistiquesService,
+    private functionsService: FunctionsService,
   ) {
     this.handleTabChange().subscribe((event) => {
       this.initializeAnchors(event);
@@ -510,7 +512,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             transporteurDEVCode,
             incoterm,
           })
-        )
+        ),
+        concatMap(ordre => this.functionsService.onChangeTrpDevCode(
+          ordre.id,
+          ordre.transporteurDEVCode.id,
+          this.currentCompanyService.getCompany().id,
+          ordre.transporteurDEVPrixUnitaire).pipe(map(() => ordre))),
       )
       .subscribe((res) => {
         this.formGroup
@@ -525,6 +532,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     // Keep this, anchors may, in some cases, not created as they should
     this.enableAnchors();
+    this.updateTabStatusDot();
     // Show/hide left button panel
     this.leftAccessPanel.value =
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
@@ -570,13 +578,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           if (message) notify(this.localization.localize(message), "success");
 
           // ordre date depart has been mutated
-          if (ordre.dateDepartPrevue)
+          if (ordre.dateDepartPrevue) {
+
             this.dateDepartMutationPopup
               .prompt(this.localization.localize("ordre-date-depart-mutate"))
               .subscribe(
-                (result) =>
-                  result && this.updateLogistiquesDates(ordre.dateDepartPrevue)
+                (result) => {
+                  result && this.updateLogistiquesDates(ordre.dateDepartPrevue);
+                  // Check date and change if needed with info toast
+                  if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
+                    this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
+                }
               );
+          }
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -1002,7 +1016,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onDestockAutoClick() {
-    this.destockageAutoPopup.visible = true;
+    this.gridCommandes.grid.instance.saveEditData();
+    // Wait until grid has been totally saved
+    const saveInterval = setInterval(() => {
+      if (!this.gridCommandes.grid.instance.hasEditData()) {
+        clearInterval(saveInterval);
+        this.destockageAutoPopup.visible = true;
+      }
+    }, 100);
   }
 
   updateDestockAuto() {
@@ -1190,7 +1211,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "Commentaires",
       "Log"
     );
-    this.formLitiges.loadForm();
+    this.formLitiges?.loadForm();
   }
 
   private initializeForm(fetchPol?) {
@@ -1217,6 +1238,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          // France: 2 Incoterms only
+          if (this.ordre.secteurCommercial.id === "F")
+            this.incotermsDS.filter([
+              ["id", "=", "CPT"],
+              "or",
+              ["id", "=", "EXW"],
+            ])
+
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
@@ -1390,10 +1419,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private refreshBadges() {
     // Gestion des pastilles infos boutons gauche
     if (this.ordre) {
-      this.dotLitiges = this.ordre.hasLitige ? "!" : "";
+      this.dotLitiges = this.getLitigeBadgeIndicator(this.ordre.hasLitige);
       this.dotCQ = this.ordre.cqLignesCount;
       this.dotCommentaires = this.ordre.commentairesOrdreCount;
     }
+  }
+
+  private getLitigeBadgeIndicator(hasLitige: boolean) {
+    return hasLitige ? "!" : "";
+  }
+
+  public refreshLitigeIndicator() {
+    this.ordresService
+      .getOne_v2(this.ordre.id, ["id", "hasLitige"])
+      .subscribe(res => {
+        this.dotLitiges = this.getLitigeBadgeIndicator(res.data.ordre.hasLitige);
+      });
   }
 
   leftPanelChange(e) {
@@ -1446,6 +1487,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refreshStatus(statut: Statut) {
+    if (!this.ordre) return;
     this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
     this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     this.canChangeDateLiv =
@@ -1455,6 +1497,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
+    this.updateTabStatusDot();
+  }
+
+  updateTabStatusDot() {
+    // Update green dot on order tab (Statut.CONFIRME)
+    this.tabContext.getSelectedItem().subscribe(res => {
+      if (!this.ordre || res.id.split("-")[1] !== this.ordre.numero) return;
+      res.status = Statut[this.ordre?.statut] === Statut.CONFIRME.toString();
+    });
   }
 
   openDateChangePopup() {
@@ -1469,10 +1520,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  changeDateLiv(e) {
+  changeDateLiv(e, message?) {
     this.formGroup.get("dateLivraisonPrevue").patchValue(e);
     this.formGroup.get("dateLivraisonPrevue").markAsDirty();
-    this.saveHeaderOnTheFly("modification-done");
+    this.saveHeaderOnTheFly(message ?? "modification-done");
   }
 
   openClientFilePopup() {
@@ -1691,7 +1742,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onClickCreateLitige() {
     this.litigesBtn.nativeElement.click();
-    this.formLitiges.createLitige();
+    setTimeout(() => this.formLitiges.createLitige());
   }
 
   private updateLogistiquesDates(date: Date) {

@@ -71,7 +71,7 @@ export class NouvelOrdreComponent implements OnInit {
   ]);
 
   public typeEntrepots = ["Favoris", "Tous"];
-  public favorites = true;
+  public favorites = false;
   public resolver: Observable<Ordre>;
   public errorText: string;
   public codeEnt: any;
@@ -108,7 +108,7 @@ export class NouvelOrdreComponent implements OnInit {
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const { id } = this.currentCompanyService.getCompany();
@@ -120,6 +120,8 @@ export class NouvelOrdreComponent implements OnInit {
   }
 
   onButtonLoaderClick() {
+    if (!this.getSelectedEntrepot() || this.hideButton) return;
+
     this.resolver = this.ofValideEntrepotForOrdreRef.pipe(
       mapTo(this.getSelectedEntrepot()),
       switchMap((entrepot) =>
@@ -186,13 +188,13 @@ export class NouvelOrdreComponent implements OnInit {
     const assistante = entrepot.assistante
       ? { id: entrepot.assistante.id }
       : entrepot.client.assistante
-      ? { id: entrepot.client.assistante.id }
-      : null;
+        ? { id: entrepot.client.assistante.id }
+        : null;
     const commercial = entrepot.commercial
       ? { id: entrepot.commercial.id }
       : entrepot.client.commercial
-      ? { id: entrepot.client.commercial.id }
-      : null;
+        ? { id: entrepot.client.commercial.id }
+        : null;
 
     const instLogClt = entrepot.client.instructionLogistique
       ? entrepot.client.instructionLogistique
@@ -232,18 +234,18 @@ export class NouvelOrdreComponent implements OnInit {
               : null,
             ...(this.societe.id !== "BUK"
               ? {
-                  transporteur: { id: "-" },
-                  bassinTransporteur: "",
-                  prixUnitaireTarifTransport: 0,
-                  transporteurDEVPrixUnitaire: 0,
-                }
+                transporteur: { id: "-" },
+                bassinTransporteur: "",
+                prixUnitaireTarifTransport: 0,
+                transporteurDEVPrixUnitaire: 0,
+              }
               : {
-                  transporteur: { id: entrepot.transporteur?.id ?? "-" },
-                  prixUnitaireTarifTransport:
-                    entrepot?.prixUnitaireTarifTransport,
-                  transporteurDEVPrixUnitaire:
-                    entrepot?.prixUnitaireTarifTransport,
-                }),
+                transporteur: { id: entrepot.transporteur?.id ?? "-" },
+                prixUnitaireTarifTransport:
+                  entrepot?.prixUnitaireTarifTransport,
+                transporteurDEVPrixUnitaire:
+                  entrepot?.prixUnitaireTarifTransport,
+              }),
             transporteurDEVTaux: 1,
             transporteurDEVCode: {
               id: this.currentCompanyService.getCompany().devise.id,
@@ -254,19 +256,19 @@ export class NouvelOrdreComponent implements OnInit {
               ? { id: entrepot.typeCamion.id }
               : null,
             ...(this.societe.id === "SA" &&
-            this.authService.currentUser.getSUP()
+              this.authService.currentUser.getSUP()
               ? {
-                  assistante: this.authService.currentUser?.assistante
-                    ? {
-                        id: this.authService.currentUser?.assistante?.id,
-                      }
-                    : assistante,
-                  commercial: this.authService.currentUser?.commercial
-                    ? {
-                        id: this.authService.currentUser?.commercial?.id,
-                      }
-                    : commercial,
-                }
+                assistante: this.authService.currentUser?.assistante
+                  ? {
+                    id: this.authService.currentUser?.assistante?.id,
+                  }
+                  : assistante,
+                commercial: this.authService.currentUser?.commercial
+                  ? {
+                    id: this.authService.currentUser?.commercial?.id,
+                  }
+                  : commercial,
+              }
               : {}),
             // from `heriteClient.pbl`
             codeClient: entrepot?.client.code,
@@ -307,41 +309,41 @@ export class NouvelOrdreComponent implements OnInit {
               : null,
             fraisUnite: entrepot?.client?.fraisMarketingModeCalcul
               ? {
-                  id: entrepot?.client?.fraisMarketingModeCalcul.id,
-                }
+                id: entrepot?.client?.fraisMarketingModeCalcul.id,
+              }
               : null,
             ...(this.societe.id === "SA" &&
-            this.authService.currentUser.getSUP() === "SUP" &&
-            entrepot?.client?.courtier?.id === "LAPARRA"
+              this.authService.currentUser.getSUP() === "SUP" &&
+              entrepot?.client?.courtier?.id === "LAPARRA"
               ? {
-                  // On supprime les frais de courtage
-                  courtier: { id: "" },
-                  baseTarifCourtage: { id: "" },
-                  prixUnitaireTarifCourtage: 0,
-                }
+                // On supprime les frais de courtage
+                courtier: { id: "" },
+                baseTarifCourtage: { id: "" },
+                prixUnitaireTarifCourtage: 0,
+              }
               : {}),
             // Gestion de la devise par société
             ...(entrepot?.client?.devise.id === this.societe?.devise.id
               ? {
-                  tauxDevise: 1,
-                }
+                tauxDevise: 1,
+              }
               : {
-                  ...(entrepot?.client?.deviseTauxFix
-                    ? {
-                        ...(entrepot?.client?.dateDeviseTauxFix &&
-                          Date.parse(entrepot.client.dateDeviseTauxFix) <
-                            Date.now() &&
-                          ((entrepot.client.dateDeviseTauxFix = null), {})),
-                        ...(entrepot?.client?.dateDeviseTauxFix
-                          ? {
-                              tauxDevise: deviseRef?.taux,
-                            }
-                          : {
-                              tauxDevise: entrepot.client.dateDeviseTauxFix,
-                            }),
+                ...(entrepot?.client?.deviseTauxFix
+                  ? {
+                    ...(entrepot?.client?.dateDeviseTauxFix &&
+                      Date.parse(entrepot.client.dateDeviseTauxFix) <
+                      Date.now() &&
+                      ((entrepot.client.dateDeviseTauxFix = null), {})),
+                    ...(entrepot?.client?.dateDeviseTauxFix
+                      ? {
+                        tauxDevise: deviseRef?.taux,
                       }
-                    : { tauxDevise: deviseRef?.taux }),
-                }),
+                      : {
+                        tauxDevise: entrepot.client.dateDeviseTauxFix,
+                      }),
+                  }
+                  : { tauxDevise: deviseRef?.taux }),
+              }),
           } as Partial<Ordre>,
         })
       ),

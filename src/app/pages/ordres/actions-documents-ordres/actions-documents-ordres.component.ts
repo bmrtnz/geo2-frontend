@@ -199,11 +199,11 @@ export class ActionsDocumentsOrdresComponent {
         )
       )
       .subscribe((res) => {
-        const popup =
-          res.data.countBy && this.flux === "ORDRE" && !annulation
-            ? "remplacePopup"
-            : "docsPopup";
-        this.docsPopup.annuleOrdre = annulation;
+        const remplacement = res.data.countBy && this.flux === "ORDRE";
+        const popup = remplacement
+          ? "remplacePopup"
+          : "docsPopup";
+        this.docsPopup.annuleOrdre = annulation ?? remplacement;
         this[popup].visible = true;
       });
   }

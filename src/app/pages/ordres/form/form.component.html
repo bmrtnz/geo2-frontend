@@ -448,7 +448,7 @@
                           </dx-date-box>
                         </div>
                         <dx-button
-                          [visible]="canChangeDateLiv"
+                          [visible]="canChangeDateLiv && !!fullOrderNumber"
                           stylingMode="text"
                           class="form-zoom-button rightPositioned"
                           type="default"
@@ -495,6 +495,7 @@
                                 formControlName="transporteur"
                                 [dataSource]="transporteursDS"
                                 [displayExpr]="displayIDBefore"
+                                [showClearButton]="true"
                                 [searchExpr]="['id']"
                               >
                                 <dxo-drop-down-options [width]="400">
@@ -1078,6 +1079,7 @@
                   <app-grid-commandes
                     *ngIf="ordre?.id"
                     [ordreID]="ordre?.id"
+                    [venteACommission]="ordre?.venteACommission"
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
                     (transporteurChange)="refreshTransporteur()"
@@ -1179,7 +1181,7 @@
                       [selectedLitigeLigneKey]="
                         gridLitigesLignes.getFocusedRowKey()
                       "
-                      (litigeCreated)="refreshHeader()"
+                      (litigeCreated)="refreshLitigeIndicator()"
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
                       #gridLitigesLignes
@@ -1212,14 +1214,6 @@
                   </div>
                   <div *dxTemplate="let data of 'item'">
                     <div class="dx-form-group-content">
-                      <app-grid-lignes-totaux-detail
-                        [ordre]="data"
-                      ></app-grid-lignes-totaux-detail>
-                      <div class="grid-separator"></div>
-                      <app-grid-detail-palettes
-                        [ordre]="data"
-                      ></app-grid-detail-palettes>
-                      <div class="grid-separator"></div>
                       <div class="grid-marge-container">
                         <dx-button
                           class="margin-btn-baf"
@@ -1231,6 +1225,13 @@
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
+                      <app-grid-lignes-totaux-detail
+                        [ordre]="data"
+                      ></app-grid-lignes-totaux-detail>
+                      <div class="grid-separator"></div>
+                      <app-grid-detail-palettes
+                        [ordre]="data"
+                      ></app-grid-detail-palettes>
                     </div>
                   </div>
                 </dx-accordion>
@@ -1370,6 +1371,7 @@
   ></app-destockage-auto-popup>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
+    [gridCommandes]="gridCommandes"
     [articleRowKey]="articleRowKey"
     (lignesChanged)="onLignesChanged($event)"
   >

@@ -291,8 +291,8 @@ export class OrdresService
       query OrdreByNumeroAndSociete($numero: String!, $societe: String!) {
         ordreByNumeroAndSociete(numero:$numero, societe:$societe) {
           ${await this.model
-            .getGQLFields(depth, fieldsFilter, null, { noList: true })
-            .toPromise()}
+        .getGQLFields(depth, fieldsFilter, null, { noList: true })
+        .toPromise()}
         }
       }
     `;
@@ -311,8 +311,8 @@ export class OrdresService
           edges {
             node {
               ${await this.model
-                .getGQLFields(depth, regExpFilter, null, { noList: true })
-                .toPromise()}
+        .getGQLFields(depth, regExpFilter, null, { noList: true })
+        .toPromise()}
             }
           }
           pageInfo {
@@ -653,20 +653,20 @@ export class OrdresService
                 concatMap((res) =>
                   !res.data.allDeviseRefList?.[0].taux
                     ? throwError(
-                        new Error("Le taux de cette devise n'est pas renseigné")
-                      )
+                      new Error("Le taux de cette devise n'est pas renseigné")
+                    )
                     : of({
-                        transporteurDEVPrixUnitaire:
-                          context.trpDevPu /
-                          res.data.allDeviseRefList?.[0].taux,
-                        prixUnitaireTarifTransport: context.trpDevPu,
-                        transporteurDEVCode: {
-                          id:
-                            res.data.allDeviseRefList?.[0].devise.id ??
-                            context.devCode,
-                        },
-                        baseTarifTransport: { id: context.btaCode },
-                      })
+                      transporteurDEVPrixUnitaire:
+                        context.trpDevPu /
+                        res.data.allDeviseRefList?.[0].taux,
+                      prixUnitaireTarifTransport: context.trpDevPu,
+                      transporteurDEVCode: {
+                        id:
+                          res.data.allDeviseRefList?.[0].devise.id ??
+                          context.devCode,
+                      },
+                      baseTarifTransport: { id: context.btaCode },
+                    })
                 ),
                 catchError((err, catched) => {
                   notify(err.message, "warning");

@@ -12,6 +12,15 @@
     float: left;
   }
 
+  .dx-group-row td {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .grid-ordre-ligne-stock {
+    max-height: 650px;
+  }
+
   .group-text-1 {
     position: relative;
     margin-top: 3px;
@@ -28,6 +37,10 @@
     min-width: 0 !important;
     height: 20px !important;
 
+    .dx-button-content {
+      padding: 0;
+    }
+
     .dx-icon {
       font-size: 15px !important;
       color: white !important;
@@ -37,6 +50,10 @@
   .highlight-stockJ21-cell {
     background: #ffdd00 !important;
     color: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .underlined-text {
+    text-decoration: underline;
   }
 
   .highlight-negativeStock-cell {
@@ -50,6 +67,10 @@
 
   .bio-article {
     color: #39970e !important;
+  }
+
+  .not-france-origin {
+    color: #FFA8CA !important;
   }
 
   .dx-row-focused {
@@ -87,6 +108,14 @@
 
       &:hover {
         background-color: $BW-purple-dark !important;
+      }
+    }
+
+    &.recapitulatif {
+      background-color: $BW-orange-medium !important;
+
+      &:hover {
+        background-color: $BW-orange-dark !important;
       }
     }
   }

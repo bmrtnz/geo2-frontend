@@ -19,7 +19,7 @@ export const functionBody = ["res", "msg", "data"];
   providedIn: "root",
 })
 export class FunctionsService {
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo) { }
 
   /**
    * Vérifie si la création de l'ordre pour l'entrepot est autorisé
@@ -907,6 +907,47 @@ export class FunctionsService {
         cenRef,
         incCode,
         typeOrd,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public onChangeTrpDevCode = (
+    ordreID: string,
+    transporteurDevCode: string,
+    societeID: string,
+    transporteurPU: number,
+  ) =>
+    this.apollo.query<{
+      onChangeTrpDevCode: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "onChangeTrpDevCode",
+              body: functionBody,
+              params: [
+                { name: "ordreID", value: "ordreID", isVariable: true },
+                { name: "transporteurDevCode", value: "transporteurDevCode", isVariable: true },
+                { name: "societeID", value: "societeID", isVariable: true },
+                { name: "transporteurPU", value: "transporteurPU", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ordreID", type: "String", isOptionnal: false },
+            { name: "transporteurDevCode", type: "String", isOptionnal: false },
+            { name: "societeID", type: "String", isOptionnal: false },
+            { name: "transporteurPU", type: "Float", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        ordreID,
+        transporteurDevCode,
+        societeID,
+        transporteurPU,
       },
       fetchPolicy: "network-only",
     });

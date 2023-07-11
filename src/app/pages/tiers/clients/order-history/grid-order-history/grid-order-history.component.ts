@@ -15,6 +15,7 @@ import {
   ClientsService,
   EntrepotsService,
 } from "app/shared/services";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
@@ -26,7 +27,7 @@ import {
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { GridColumn, TotalItem } from "basic";
+import { GridColumn } from "basic";
 import {
   DxDataGridComponent,
   DxSelectBoxComponent,
@@ -46,6 +47,7 @@ enum InputField {
   secteur = "secteur",
   client = "client",
   entrepot = "entrepot",
+  bureauAchat = "bureauAchat"
 }
 
 type Inputs<T = any> = { [key in keyof typeof InputField]: T };
@@ -75,10 +77,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   public secteurs: DataSource;
   public clients: DataSource;
   public entrepots: DataSource;
+  public bureauxAchat: DataSource;
   public certifMDDS: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public totalItems: TotalItem[] = [];
   private gridConfig: Promise<GridConfig>;
   public env = environment;
   public nbInsertedArticles: number;
@@ -97,13 +99,17 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     secteur: new UntypedFormControl(),
     client: new UntypedFormControl(),
     entrepot: new UntypedFormControl(),
+    bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
+
+  public summaryFields = ["nombreColisCommandes"];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
     public entrepotsService: EntrepotsService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
+    public bureauxAchatService: BureauxAchatService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
@@ -137,11 +143,18 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       "raisonSocial",
       "valide",
     ]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
   }
 
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
   }
+
+
 
   ngOnChanges() {
     if (this.clientId && this.popupShown) {
@@ -174,6 +187,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const gridFields = await fields.toPromise();
     const dataSource = this.ordreLignesService.getListDataSource([
       ...gridFields,
+      "ordre.id",
       "ordre.statut",
     ]);
 
@@ -196,6 +210,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
     if (values.entrepot?.id) {
       filter.push("and", ["ordre.entrepot.id", "=", values.entrepot?.id]);
+    }
+    if (values.bureauAchat?.id) {
+      filter.push("and", ["bureauAchat.id", "=", values.bureauAchat.id]);
     }
     dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
@@ -234,18 +251,27 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  // open selected ordre on group row double-click
+  // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    if (rowType !== "group" || (!data.items && !data.collapsedItems)) return;
-    const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-    if (!dataItems.ordre) return;
-    window.sessionStorage.setItem(
-      "openOrder",
-      [data.key, dataItems.ordre.campagne.id].join("|")
-    );
-    this.hidePopup.emit();
-    // Timeout to let the popup close
-    setTimeout(() => this.router.navigateByUrl("pages/ordres"));
+    let numero, campagneId;
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      numero = data.key;
+      campagneId = dataItems.ordre.campagne.id;
+    } else {
+      numero = data.ordre.numero;
+      campagneId = data.ordre.campagne.id;
+    }
+    if (numero && campagneId) {
+      window.sessionStorage.setItem(
+        "openOrder",
+        [numero, campagneId].join("|")
+      );
+      this.hidePopup.emit();
+      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+    }
   }
 
   onCellPrepared(e) {
@@ -254,18 +280,26 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
         let data = e.data.items ?? e.data.collapsedItems;
         if (!data[0]) return;
+        let numeroContainerArray = [];
+        let numeroContainer;
+        data.map(ol => numeroContainerArray.push(ol.logistique.numeroContainer));
+        numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+        if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
         data = data[0].ordre;
         e.cellElement.textContent =
           data.numero +
           " - " +
           (data.entrepot?.code ?? "") +
-          " - " +
-          (data.referenceClient ? data.referenceClient + " " : "") +
+          (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+          (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+          (numeroContainer ? " - " + numeroContainer + " " : "") +
           (data.transporteur?.id
-            ? "(Transporteur : " + data.transporteur.id + ")"
+            ? " (Transporteur : " + data.transporteur.id + ")"
             : "") +
           ` - ${Statut[data.statut]}`;
       }
+      if (e.column.dataField === "ordre.dateDepartPrevue")
+        e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
       // Descript. article
@@ -472,12 +506,12 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 }

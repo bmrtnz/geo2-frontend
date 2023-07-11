@@ -14,7 +14,20 @@
   }
 }
 
+::ng-deep .multi-delete {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
 ::ng-deep .grid-commandes {
+
+  .dx-row.dx-header-row td {
+    .dx-datagrid-text-content {
+      text-overflow: initial;
+    }
+  }
+
   .small-stock-button {
     margin-top: -1px !important;
     pointer-events: none !important;
@@ -76,6 +89,7 @@
   }
 
   .dx-row-focused:not(.dx-edit-row) td:not(.dx-focused):first-of-type {
+
     input,
     div {
       color: #fff;
@@ -99,10 +113,7 @@
     background: rgba(51, 145, 176, 0.26);
   }
 
-  .dx-row-focused.dx-data-row
-    > td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(
-      .dx-cell-modified
-    ) {
+  .dx-row-focused.dx-data-row>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(.dx-cell-modified) {
     color: #000;
     background-color: transparent !important;
   }
@@ -121,7 +132,7 @@
     }
   }
 
-  .dx-row-focused.dx-data-row > td {
+  .dx-row-focused.dx-data-row>td {
     &.dx-cell-modified {
       background-color: #dbecca !important;
       color: #000;
@@ -136,11 +147,12 @@
     text-align: center !important;
   }
 
-  .dx-row-focused.dx-data-row > td {
+  .dx-row-focused.dx-data-row>td {
     border-bottom-color: $base-accent !important;
   }
 
   .dx-link-delete {
+    padding-left: 1px !important;
     color: $base-accent !important;
     background-color: transparent !important;
   }

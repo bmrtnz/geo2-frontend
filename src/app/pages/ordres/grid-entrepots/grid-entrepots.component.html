@@ -7,6 +7,8 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onRowPrepared)="onRowPrepared($event)"
+  (onCellDblClick)="createOrder.emit()"
   (onFocusedRowChanged)="onFocusedRowChanged($event)"
   (onToolbarPreparing)="gridConfigHandler($event)"
 >
@@ -27,6 +29,7 @@
   <dxi-column
     *ngFor="let field of this.columns | async"
     [dataField]="field.dataField"
+    [cssClass]="field.cssClass"
     [caption]="
       ('choixEntrepot-' + field.dataField?.split('.').join('-') | localize) ||
       field.name

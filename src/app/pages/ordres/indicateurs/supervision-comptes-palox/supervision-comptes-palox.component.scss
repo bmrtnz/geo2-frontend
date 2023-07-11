@@ -55,6 +55,10 @@
   }
 }
 
+.palox-grids {
+  max-height: 550px;
+}
+
 // Highlight client groups
 ::ng-deep {
   .dx-row:not(.dx-row-focused) {

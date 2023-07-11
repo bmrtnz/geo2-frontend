@@ -31,7 +31,6 @@
 
   <dx-button
     class="dx-button order-home-up-button program-button"
-    p
     type="default"
     hint="{{ 'hint-open-program' | localize }}"
   >
@@ -51,7 +50,6 @@
     type="default"
     text="{{ 'ordres-commandes-edi' | localize }}"
     [disabled]="!authService.currentUser.accessCommandeEdi"
-    [disabled]="true"
     (onClick)="openCommandesEdi()"
   >
   </dx-button>
@@ -81,8 +79,8 @@
     class="dx-tile-content"
     width="100%"
     height="100%"
-    [baseItemWidth]="120"
-    [baseItemHeight]="120"
+    [baseItemWidth]="118"
+    [baseItemHeight]="118"
     [itemMargin]="20"
     direction="vertical"
     (onItemClick)="onTileClick($event)"

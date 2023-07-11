@@ -142,7 +142,7 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
         data = data[0];
         if (
           data.proprietaireCode ===
-            this.ordreLigneInfo.proprietaireMarchandise?.code &&
+          this.ordreLigneInfo.proprietaireMarchandise?.code &&
           data.fournisseurCode === this.ordreLigneInfo.fournisseur?.code
         ) {
           this.datagrid.instance.option("focusedRowIndex", e.rowIndex);
@@ -204,10 +204,10 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
       concatMap((prediction) =>
         prediction < 0
           ? // eslint-disable-next-line max-len
-            confirm(
-              `le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, voulez-vous quand même déstocker ?`,
-              "Attention"
-            )
+          confirm(
+            `le fournisseur ${fournisseur} va passer en dispo négatif de ${prediction} colis, voulez-vous quand même déstocker ?`,
+            "Attention"
+          )
           : of(true)
       ),
       filter((result) => !!result)
@@ -220,9 +220,9 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
       concatMap((prediction) =>
         prediction
           ? confirm(
-              `Voulez-vous vraiment déstocker en utilisant une réservation prise par ${other} ?`,
-              "Attention"
-            )
+            `Voulez-vous vraiment déstocker en utilisant une réservation prise par ${other} ?`,
+            "Attention"
+          )
           : of(true)
       ),
       filter((result) => !!result)
@@ -240,8 +240,9 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
   }
 
   onCellClick(e) {
-    // do nothing on expand cell click
-    if (e.cellElement.classList.contains("dx-command-expand")) return;
+
+    // Do nothing if there's no colis or on expand cell click
+    if (!this.ordreLigneInfo.nombreColisCommandes || e.cellElement.classList.contains("dx-command-expand")) return;
 
     // do nothing on expanded rows
     if (!e?.data || e.rowType === "group") return;

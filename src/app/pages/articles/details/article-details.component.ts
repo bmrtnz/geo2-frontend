@@ -62,8 +62,7 @@ import { switchMap } from "rxjs/operators";
   styleUrls: ["./article-details.component.scss"],
 })
 export class ArticleDetailsComponent
-  implements OnInit, NestedPart, Editable, OnChanges
-{
+  implements OnInit, NestedPart, Editable, OnChanges {
   @Input() public articleLigneId: string;
 
   formGroup = this.fb.group({
@@ -229,7 +228,7 @@ export class ArticleDetailsComponent
     private formUtils: FormUtilsService,
     public authService: AuthService,
     private localization: LocalizationService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.formGroup.reset();
@@ -268,6 +267,7 @@ export class ArticleDetailsComponent
 
   afterLoadInitForm(res) {
     this.article = new Article(res.data.article);
+    this.formGroup.reset();
     this.formGroup.patchValue(this.article);
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
@@ -334,12 +334,12 @@ export class ArticleDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -373,12 +373,12 @@ export class ArticleDetailsComponent
       }
 
       (article.valide !== undefined &&
-      this.article.valide !== article.valide &&
-      !this.cloneMode
+        this.article.valide !== article.valide &&
+        !this.cloneMode
         ? this.validatePopup.present(HistoryType.ARTICLE, {
-            article: { id: article.id },
-            valide: article.valide,
-          })
+          article: { id: article.id },
+          valide: article.valide,
+        })
         : of(undefined)
       )
         .pipe(

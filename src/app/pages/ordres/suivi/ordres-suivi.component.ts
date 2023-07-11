@@ -11,6 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 import { PushHistoryPopupComponent } from "app/shared/components/push-history-popup/push-history-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
+import { CampagnesService } from "app/shared/services/api/campagnes.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { SharedModule } from "app/shared/shared.module";
@@ -52,6 +53,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   filter: any;
   campagnes: DataSource;
   campagneEnCours: any;
+  prevCampagneEnCours: any;
   showGridResults = false;
   @ViewChild(DxAutocompleteComponent, { static: false })
   autocomplete: DxAutocompleteComponent;
@@ -72,6 +74,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   constructor(
     public localizeService: LocalizationService,
+    public campagnesService: CampagnesService,
     public currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     public tabContext: TabContext,
@@ -94,6 +97,9 @@ export class OrdresSuiviComponent implements AfterViewInit {
     // Léa CDT221021 Le critère de recherche "Réf. Ordre" n'a pas d'intérêt pour les utilisateurs et doit être masqué
     if (!this.authService.isAdmin) this.searchItems.pop();
     this.campagneEnCours = this.currentCompanyService.getCompany().campagne;
+    this.campagnesService
+      .getOne_v2((parseInt(this.campagneEnCours.id) - 1).toString(), new Set(["id", "description"]))
+      .subscribe(res => this.prevCampagneEnCours = res.data.campagne)
   }
 
   ngAfterViewInit() {
@@ -156,9 +162,9 @@ export class OrdresSuiviComponent implements AfterViewInit {
       [criteria, operator, value],
     ];
 
-    // Current campain filtering
+    // Current + prev campains filtering
     if (this.currCampaign.instance.option("value")) {
-      this.filter.push("and", ["campagne.id", "=", this.campagneEnCours.id]);
+      this.filter.push("and", [["campagne.id", "=", this.campagneEnCours.id], "or", ["campagne.id", "=", this.prevCampagneEnCours.id]]);
     }
   }
 
@@ -210,4 +216,4 @@ export default OrdresSuiviComponent;
   ],
   exports: [OrdresSuiviComponent],
 })
-export class OrdresSuiviModule {}
+export class OrdresSuiviModule { }

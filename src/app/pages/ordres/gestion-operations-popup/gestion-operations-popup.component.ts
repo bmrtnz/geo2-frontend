@@ -35,7 +35,9 @@ import {
   catchError,
   concatMap,
   concatMapTo,
+  finalize,
   map,
+  mapTo,
   mergeMap,
   tap,
   toArray,
@@ -182,7 +184,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           );
           this.consequenceItems.sort((a, b) =>
             this.fUtils.noDiacritics(a.description) >
-            this.fUtils.noDiacritics(b.description)
+              this.fUtils.noDiacritics(b.description)
               ? 1
               : 0
           );
@@ -357,8 +359,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => {
           const [litigeID, lotNum] = this.lot;
           return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${
-              lotNum ? "==" : "=isnull="
+            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
             }${lotNum}`,
             ["id", "ordreLigne.id"]
           );
@@ -413,8 +414,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap(() => {
           const [litigeID, lotNum] = this.lot;
           return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${
-              lotNum ? "==" : "=isnull="
+            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
             }${lotNum}`,
             ["id", "ordreLigne.id"]
           );
@@ -463,8 +463,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
-        `litige.id==${litigeID} and numeroGroupementLitige${
-          lotNum ? "==" : "=isnull="
+        `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
         }${lotNum}`,
         [
           "id",
@@ -479,16 +478,16 @@ export class GestionOperationsPopupComponent implements OnChanges {
         mergeMap((res) => res.data.allLitigeLigneList),
         map(
           (res) =>
-            ({
-              id: res.id,
-              clientNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
-              responsableNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
-              clientNombreColisReclamation: res.ordreLigne.nombreColisExpedies,
-              responsableNombreColis: res.ordreLigne.nombreColisExpedies,
-              clientPoidsNet: res.ordreLigne.poidsNetExpedie,
-              clientQuantite: res.ordreLigne.venteQuantite,
-              responsableQuantite: res.ordreLigne.achatQuantite,
-            } as LitigeLigne)
+          ({
+            id: res.id,
+            clientNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+            responsableNombrePalettes: res.ordreLigne.nombrePalettesExpediees,
+            clientNombreColisReclamation: res.ordreLigne.nombreColisExpedies,
+            responsableNombreColis: res.ordreLigne.nombreColisExpedies,
+            clientPoidsNet: res.ordreLigne.poidsNetExpedie,
+            clientQuantite: res.ordreLigne.venteQuantite,
+            responsableQuantite: res.ordreLigne.achatQuantite,
+          } as LitigeLigne)
         ),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
@@ -511,15 +510,20 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     if (this.checkEmptyCauseConseq()) return;
 
-    this.forfaitPopup.visible = true;
+    this.fetchLot().pipe(
+      concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
+      finalize(() => this.gridLot.refresh()),
+    ).subscribe(lot => {
+      this.lot[1] = lot;
+      this.forfaitPopup.visible = true;
+    });
   }
 
   reInitialize() {
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
-        `litige.id==${litigeID} and numeroGroupementLitige${
-          lotNum ? "==" : "=isnull="
+        `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
         }${lotNum}`,
         [
           "id",
@@ -534,15 +538,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
         mergeMap((res) => res.data.allLitigeLigneList),
         map(
           (res) =>
-            ({
-              id: res.id,
-              clientUniteFactureCode: res.ordreLigne.venteUnite?.id ?? null,
-              responsableUniteFactureCode:
-                res.ordreLigne.achatUnite?.id ?? null,
-              clientPrixUnitaire: res.ordreLigne.ventePrixUnitaire,
-              responsablePrixUnitaire: res.ordreLigne.achatPrixUnitaire,
-              devisePrixUnitaire: res.ordreLigne.achatDevisePrixUnitaire,
-            } as LitigeLigne)
+          ({
+            id: res.id,
+            clientUniteFactureCode: res.ordreLigne.venteUnite?.id ?? null,
+            responsableUniteFactureCode:
+              res.ordreLigne.achatUnite?.id ?? null,
+            clientPrixUnitaire: res.ordreLigne.ventePrixUnitaire,
+            responsablePrixUnitaire: res.ordreLigne.achatPrixUnitaire,
+            devisePrixUnitaire: res.ordreLigne.achatDevisePrixUnitaire,
+          } as LitigeLigne)
         ),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
@@ -592,23 +596,25 @@ export class GestionOperationsPopupComponent implements OnChanges {
   displayResp(data) {
     return data
       ? this.localizeService.localize(
-          "gestion-operations-responsable-" + data.id
-        )
+        "gestion-operations-responsable-" + data.id
+      )
       : null;
   }
 
   displayCapitalize(data) {
     return data
       ? data.description.charAt(0).toUpperCase() +
-          data.description.slice(1).toLowerCase()
+      data.description.slice(1).toLowerCase()
       : null;
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("gestion-operations-popup");
+    e.component.content().parentNode.classList.add("no-opacity"); // To avoid flash effect (Dx bug)
   }
 
-  onShown() {
+  onShown(e) {
+    e.component.content().parentNode.classList.remove("no-opacity"); // To avoid flash effect (Dx bug)
     if (!this.lot[1]) {
       // lot creation
       this.firstShown = true;
@@ -665,14 +671,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   /** Update temporary rows with `numero lot`, `ordre replacement` and `validity` */
   private setupLot() {
-    const fetchLot = iif(
-      () => !!this?.lot[1],
-      of(this.lot[1]),
-      this.litigesService
-        .genNumLot(this.infosLitige.litige.id)
-        .pipe(map((genLot) => genLot.data.genNumLot))
-    );
-
     const fetchOrdreRep = this.fetchLotInfo().pipe(
       map((res) => [
         res?.ordreReferenceRemplacement,
@@ -680,18 +678,18 @@ export class GestionOperationsPopupComponent implements OnChanges {
       ])
     );
 
-    return zip(fetchLot, fetchOrdreRep).pipe(
+    return zip(this.fetchLot(), fetchOrdreRep).pipe(
       map(
         ([
           numeroGroupementLitige,
           [ordreReferenceRemplacement, numeroOrdreReplacement],
         ]) =>
-          ({
-            numeroGroupementLitige,
-            ordreReferenceRemplacement,
-            numeroOrdreReplacement,
-            valide: true,
-          } as Partial<LitigeLigne>)
+        ({
+          numeroGroupementLitige,
+          ordreReferenceRemplacement,
+          numeroOrdreReplacement,
+          valide: true,
+        } as Partial<LitigeLigne>)
       )
     );
   }
@@ -704,11 +702,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
     ).pipe(
       map(
         ([responsableTypeCode, cause, consequence]) =>
-          ({
-            responsableTypeCode,
-            cause: { id: cause.id },
-            consequence: { id: consequence.id },
-          } as Partial<LitigeLigne>)
+        ({
+          responsableTypeCode,
+          cause: { id: cause.id },
+          consequence: { id: consequence.id },
+        } as Partial<LitigeLigne>)
       ),
       catchError((res) =>
         throwError(
@@ -779,5 +777,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
           });
         })
       );
+  }
+
+  private fetchLot() {
+    return iif(
+      () => !!this?.lot[1],
+      of(this.lot[1]),
+      this.litigesService
+        .genNumLot(this.infosLitige.litige.id)
+        .pipe(map((genLot) => genLot.data.genNumLot))
+    );
   }
 }

@@ -15,9 +15,15 @@
       pointer-events: auto;
     }
   }
+
+  .first-group+.colisCommandes div {
+    color: transparent;
+  }
+
 }
 
 ::ng-deep .secteur-histo-ligne-field {
+
   .dx-field-label,
   .dx-field-value {
     width: 50% !important;
@@ -38,9 +44,10 @@
 ::ng-deep .filter-container {
   margin-bottom: 15px;
   overflow: hidden;
+  max-width: 1790px;
 
   dx-box {
-    width: 820px;
+    width: 900px;
     padding: 0 20px;
     float: left;
 
@@ -52,6 +59,8 @@
   .valideCheckboxField {
     .dx-field-label {
       width: 224px !important;
+      text-overflow: initial;
+      white-space: normal;
     }
 
     .dx-field-value {
@@ -76,7 +85,6 @@
 
       &.dx-field-label-left {
         margin-right: 10px;
-        width: 23% !important;
         text-align: right !important;
       }
 

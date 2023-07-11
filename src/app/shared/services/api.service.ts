@@ -1386,6 +1386,7 @@ export abstract class ApiService implements OnDestroy {
           type,
           search: searchExpr,
           pageable: {
+            sort: { orders: [{ property: fieldName }] },
             pageNumber: 0,
             pageSize: 500,
           } as Pageable,

@@ -25,6 +25,9 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import notify from "devextreme/ui/notify";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 
 enum InputField {
   client = "client",
@@ -45,6 +48,7 @@ export class GridEncoursClientComponent implements OnChanges {
   @Output() openOrder = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
+  @ViewChild(PromptPopupComponent, { static: false }) promptPopup: PromptPopupComponent;
 
   public secteurs: DataSource;
   public clients: DataSource;
@@ -56,7 +60,6 @@ export class GridEncoursClientComponent implements OnChanges {
   public depassement: boolean;
   public retard: boolean;
   private today: Date;
-  public toRefresh: boolean;
   public readyToRefresh: boolean;
   private requiredFields: string[];
   private sumDebit: number;
@@ -79,6 +82,7 @@ export class GridEncoursClientComponent implements OnChanges {
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
+    public ordresService: OrdresService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
     public gridUtilsService: GridUtilsService
@@ -133,7 +137,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.toRefresh = true;
     if (this.client && this.popupShown) {
       this.formGroup.patchValue({
         client: {
@@ -152,7 +155,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   enableFilters() {
-    this.toRefresh = false;
     this.readyToRefresh = false;
     this.datagrid.dataSource = null;
 
@@ -270,11 +272,48 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onCellDblClick(e) {
-    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id)
-      return;
+    if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id || !e.data?.entrepot) return;
+    const ordresSource = this.ordresService.getDataSource_v2([
+      "id",
+      "numero",
+      "campagne.id",
+      "type.id"
+    ]);
+    const ordfilter = [
+      ["numeroFacture", "=", e.data.ecPiece],
+      "and",
+      ["entrepot.code", "=", e.data.entrepot.code],
+    ];
+    ordresSource.filter(ordfilter);
+    ordresSource.load().then((res) => {
+      const nbrOrdres = res.length;
+      if (!nbrOrdres) return notify(this.localizeService.localize("aucun-ordre-encours"), "warning", 4000);
+      if (nbrOrdres === 1) {
+        if (e.data?.societe?.id !== this.currentCompanyService.getCompany().id)
+          return;
+        const ordre = {
+          numero: res[0].numero,
+          campagne: { id: res[0].campagne?.id },
+        };
+        this.openOrder.emit(ordre);
+      } else {
+        // We need to choose which order to open
+        const orderList = [];
+        res.map(ord => orderList.push(`${ord.campagne.id}-${ord.numero} (${ord.type.id})`));
+        this.promptPopup.show({
+          commentTitle: this.localizeService.localize('choose-order-text'),
+          commentItemsList: orderList,
+          validText: "btn-ouvrir",
+        });
+      }
+    });
+  }
+
+  onValidatePromptPopup(e) {
+    const ordreInfo = e.split(" ")[0].split("-");
     const ordre = {
-      numero: e.data.ordre?.numero,
-      campagne: { id: e.data.ordre?.campagne?.id },
+      numero: ordreInfo[1],
+      campagne: { id: ordreInfo[0] },
     };
     this.openOrder.emit(ordre);
   }
@@ -286,7 +325,6 @@ export class GridEncoursClientComponent implements OnChanges {
   }
 
   onSecteurChanged(e) {
-    this.onFieldValueChange();
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
@@ -309,28 +347,17 @@ export class GridEncoursClientComponent implements OnChanges {
     this.formGroup.patchValue({
       client: null,
     });
-    this.onFieldValueChange();
-  }
-
-  onClientChanged(e) {
-    this.onFieldValueChange();
-  }
-
-  onFieldValueChange() {
-    this.toRefresh =
-      !!this.formGroup.get("client").value &&
-      !!this.formGroup.get("secteur").value;
   }
 
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -340,7 +367,8 @@ export class GridEncoursClientComponent implements OnChanges {
         "encoursClient-" + column.dataField?.split(".").join("-")
       ) || column.name;
     if (["cfcMontantEuros", "cfcMontantDevise"].includes(column.dataField))
-      localized += ` ${this.deviseTodisplay()}`;
+      localized += ` ${this.deviseTodisplay() ?? ""}`;
     return localized;
   }
+
 }

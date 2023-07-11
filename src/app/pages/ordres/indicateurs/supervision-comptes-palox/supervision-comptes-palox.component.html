@@ -13,9 +13,10 @@
             <dx-switch
               #switchType
               data-name="recapitulatif"
+              [value]="true"
               [switchedOnText]=""
               [switchedOffText]=""
-              (onValueChanged)="switchChange($event)"
+              (onValueChanged)="switchChange()"
             ></dx-switch>
           </div>
           <div class="dx-field-label dx-field-label-right">
@@ -33,7 +34,7 @@
               data-name="fournisseurs"
               [switchedOnText]=""
               [switchedOffText]=""
-              (onValueChanged)="switchChange($event)"
+              (onValueChanged)="switchChange()"
             ></dx-switch>
           </div>
           <div class="dx-field-label dx-field-label-right">
@@ -118,7 +119,6 @@
         <dx-button
           class="refresh"
           [width]="130"
-          [class]="toRefresh ? '' : 'inactive-button'"
           type="default"
           text="{{ 'btn-refresh' | localize }}"
           (onClick)="enableFilters()"
@@ -142,6 +142,7 @@
 <!-- ------------------------ -->
 <dx-data-grid
   #MouvClientsComptesPalox
+  class="palox-grids"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="false"
@@ -162,6 +163,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Mouvements palox clients"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -245,6 +247,7 @@
 <!-- --------------------------- -->
 <dx-data-grid
   #RecapClientsComptesPalox
+  class="palox-grids"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -265,7 +268,7 @@
   "
 >
   <!-- Grid configuration -->
-  <dxo-export fileName="Comptes Palox"></dxo-export>
+  <dxo-export fileName="Récapitulatif palox clients"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -335,6 +338,7 @@
 <!-- ----------------------------- -->
 <dx-data-grid
   #MouvFournisseursComptesPalox
+  class="palox-grids"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -355,6 +359,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Mouvements palox fournisseurs"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -424,6 +429,7 @@
 <!-- -------------------------------- -->
 <dx-data-grid
   #RecapFournisseursComptesPalox
+  class="palox-grids"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -444,6 +450,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Récapitulatif palox fournisseurs"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -485,6 +492,7 @@
         | localize) || column.name
     "
     [dataType]="column?.dataType"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)

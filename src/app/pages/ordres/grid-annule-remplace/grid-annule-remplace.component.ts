@@ -35,7 +35,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     "dateDemande", // date_entete
     "dateSoumission", // date_lignes
     "dateEnvoi", // date_envois
-    "commentairesAvancement", // raison anule et remplace
+    "numeroAcces2", // raison anule et remplace
     // extra fields for other grids display
     "flux.id",
     "nomContact",
@@ -50,6 +50,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   public raisonsList: string[];
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public canBeSent: boolean;
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
   @Input() ordre: { id: string } & Partial<Ordre>;
@@ -90,6 +91,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     setTimeout(() => {
       event.component.selectAll();
       this.canSelectAll = false;
+      this.canBeSent = true;
     }, 500);
   }
 
@@ -104,10 +106,10 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   handleRaisonAR() {
     this.firstReason = (
       this.dataGrid?.dataSource as DataSource
-    ).items()[0].commentairesAvancement;
+    ).items()[0].numeroAcces2;
     let sameText = true;
     (this.dataGrid?.dataSource as DataSource).items().map((ds) => {
-      if (ds.commentairesAvancement !== this.firstReason) sameText = false;
+      if (ds.numeroAcces2 !== this.firstReason) sameText = false;
     });
     this.copyPasteVisible =
       !!this.firstReason &&
@@ -124,11 +126,12 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   copyPasteFirstRow() {
     (this.dataGrid.dataSource as DataSource)
       .items()
-      .map((ds) => (ds.commentairesAvancement = this.firstReason));
+      .map((ds) => (ds.numeroAcces2 = this.firstReason));
     this.dataGrid.instance.refresh();
   }
 
   reload() {
+    this.canBeSent = false;
     this.functionsService
       .ofAREnvois(this.ordre.id)
       .pipe(
@@ -159,7 +162,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   public done() {
     const selection: Array<Partial<Envois>> =
       this.dataGrid.instance.getSelectedRowsData();
-    if (!selection.every((envoi) => envoi.commentairesAvancement))
+    if (!selection.every((envoi) => envoi.numeroAcces2))
       return throwError(
         Error(
           "Le motif d'annulation est obligatoire pour les envois sélectionnés"
@@ -167,7 +170,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       );
     this.dataGrid.instance.getVisibleRows().forEach((row) => {
       if (row.isSelected)
-        this.ar.setReason(row.data.codeTiers, row.data.commentairesAvancement);
+        this.ar.setReason(row.data.codeTiers, row.data.numeroAcces2);
       else this.ar.pushIgnoredTier(row.data.codeTiers);
     });
     return of(selection);

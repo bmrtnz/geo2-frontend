@@ -9,7 +9,12 @@
 }
 
 ::ng-deep .orderTileFilterArea {
-  width: 1024px;
+  width: 1100px;
+
+  .refresh {
+    float: right;
+    right: 19px;
+  }
 
   .refresh {
     float: right;
@@ -63,4 +68,9 @@
 ::ng-deep .canceled-orders td {
   color: #ff325a !important;
   text-shadow: 1px 1px 15px #fff;
+}
+
+// Alternate row
+::ng-deep .alternate-row td {
+  background-color: #DDD;
 }

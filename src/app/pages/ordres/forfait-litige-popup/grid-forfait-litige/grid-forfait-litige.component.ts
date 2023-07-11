@@ -87,7 +87,7 @@ export class GridForfaitLitigeComponent {
           new Set(["numeroGroupementLitige", ...(await fields.toPromise())])
         );
       this.dataSource.filter([
-        ["numeroGroupementLitige", lotNum ? "=" : "=isnull=", lotNum],
+        ["numeroGroupementLitige", "=", lotNum],
       ]);
       this.datagrid.dataSource = this.dataSource;
     } else if (this.datagrid) this.datagrid.dataSource = null;
@@ -148,7 +148,7 @@ export class GridForfaitLitigeComponent {
 
   public calcValue(newData, value, currentRowData) {
     if (currentRowData.forfaitClient) {
-      newData.clientPrixUnitaire = currentRowData.forfaitClient;
+      newData.clientPrixUnitaire = parseFloat(currentRowData.forfaitClient);
       newData.clientQuantite = 1;
       newData.clientUniteFactureCode = "UNITE";
       // Focus on forfait responsable - Uggly but works
@@ -167,14 +167,11 @@ export class GridForfaitLitigeComponent {
     if (currentRowData.forfaitResponsable) {
       newData.responsablePrixUnitaire =
         currentRowData.forfaitResponsable * (currentRowData.taux ?? 1);
-      newData.devisePrixUnitaire = currentRowData.forfaitResponsable;
+      newData.devisePrixUnitaire = parseFloat(currentRowData.forfaitResponsable);
       newData.responsableQuantite = 1;
       newData.responsableUniteFactureCode = "UNITE";
     }
 
-    newData.prixUnitaire = 666;
-    newData.quantite = 69;
-    newData.uniteFactureCode = "YOHO";
   }
 
   public onSaving(event: {
@@ -188,21 +185,21 @@ export class GridForfaitLitigeComponent {
         id: change.key,
         ...(change.data.forfaitClient
           ? {
-              clientPrixUnitaire: change.data.clientPrixUnitaire,
-              clientQuantite: change.data.clientQuantite,
-              clientUniteFactureCode: change.data.clientUniteFactureCode,
-              clientIndicateurForfait: true,
-            }
+            clientPrixUnitaire: change.data.clientPrixUnitaire,
+            clientQuantite: change.data.clientQuantite,
+            clientUniteFactureCode: change.data.clientUniteFactureCode,
+            clientIndicateurForfait: true,
+          }
           : {}),
         ...(change.data.forfaitResponsable
           ? {
-              responsablePrixUnitaire: change.data.responsablePrixUnitaire,
-              devisePrixUnitaire: change.data.forfaitResponsable,
-              responsableQuantite: change.data.responsableQuantite,
-              responsableUniteFactureCode:
-                change.data.responsableUniteFactureCode,
-              responsableIndicateurForfait: true,
-            }
+            responsablePrixUnitaire: change.data.responsablePrixUnitaire,
+            devisePrixUnitaire: change.data.forfaitResponsable,
+            responsableQuantite: change.data.responsableQuantite,
+            responsableUniteFactureCode:
+              change.data.responsableUniteFactureCode,
+            responsableIndicateurForfait: true,
+          }
           : {}),
         envoisIncident: false,
       }))

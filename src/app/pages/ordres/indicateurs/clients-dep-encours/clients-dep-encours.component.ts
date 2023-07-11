@@ -25,6 +25,7 @@ import {
 } from "app/shared/services/ordres-indicators.service";
 import { GridColumn } from "basic";
 import {
+  DxCheckBoxComponent,
   DxDataGridComponent,
   DxSelectBoxComponent,
   DxSwitchComponent,
@@ -61,6 +62,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   @ViewChild("commercialValue", { static: false })
   commercialSB: DxSelectBoxComponent;
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
+  @ViewChild("validClients", { static: false }) validClients: DxCheckBoxComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   public title: string;
@@ -115,6 +117,20 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (!this.authService.isAdmin)
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
+    // Retrieves last user configuration
+    const depConfig = window.localStorage.getItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`);
+    if (["true", "false"].includes(depConfig)) {
+      this.switchType.value = depConfig === "true" ? true : false;
+    } else {
+      this.switchType.value = true;
+    }
+    this.enableFilters();
+  }
+
+  switchAllDepChange(e) {
+    // Save user configuration
+    window.localStorage
+      .setItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`, e.value.toString());
     this.enableFilters();
   }
 
@@ -131,6 +147,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         societeCode: this.currentCompanyService.getCompany().id,
         commercialCode: this.commercialId ?? "%",
         depassementOnly: this.switchType.value,
+        clientValide: this.validClients.value === true ? true : null
       }
     );
     if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
@@ -240,12 +257,12 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 

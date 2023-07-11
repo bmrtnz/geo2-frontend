@@ -134,6 +134,7 @@ export class GridCommandesComponent
   public contentReadyEvent = new EventEmitter<any>();
 
   @Input() ordreID: string;
+  @Input() venteACommission: boolean;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
   @Output() allowMutations = false;
@@ -157,6 +158,7 @@ export class GridCommandesComponent
   public proprietairesDataSource: DataSource;
   public fournisseursDataSource: DataSource;
   public embalExp: string[];
+  private lastingRows: number;
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -191,7 +193,7 @@ export class GridCommandesComponent
             hint: "Renuméroter les lignes",
             onClick: () => {
               this.reindexRows();
-              this.grid.instance.saveEditData();
+              this.grid.instance.refresh();
             },
           },
         },
@@ -242,7 +244,6 @@ export class GridCommandesComponent
 
   onSelectionChanged(e) {
     this.selectedRowsChange.emit(this.grid?.instance.getSelectedRowKeys());
-    this.grid?.instance.getSelectedRowKeys();
   }
 
   ngOnChanges() {
@@ -259,17 +260,17 @@ export class GridCommandesComponent
   }
 
   onFocusedCellChanging(e) {
-    // from proprietaire to fournisseur
+    // Setting the embal/exp list depending on propri&taire
     if (
-      e.columns[e.prevColumnIndex]?.dataField ===
-      "proprietaireMarchandise.id" &&
+      e.columns[e.prevColumnIndex]?.dataField !==
+      "fournisseur.id" &&
       e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
     ) {
       const row = e.rows[e.newRowIndex];
       this.buildFournisseurFilter(row.data.proprietaireMarchandise.id).then(
         ({ filters }) => this.bindFournisseurSource(filters)
       );
-    } else if (e.prevColumnIndex !== e.newColumnIndex) {
+    } else if ((e.prevColumnIndex !== e.newColumnIndex) && e.prevColumnIndex !== -1) {
       // Keep the setTimeout function in place!!!
       // It seems that not everything's really ready when event is triggered
       // Conclusion => without a timeOut, major risk of unsaved data!
@@ -301,14 +302,6 @@ export class GridCommandesComponent
             });
         }
       }, 100);
-
-      // On attends que papy DX soit pret avant de lui demander gentiment de mettre à jour TOUT ses totaux
-      // of()
-      //   .pipe(debounceTime(1000))
-      //   .subscribe({
-      //     complete: () => this.grid.instance.repaint(),
-      //   });
-
       return this.handleMutations();
     }
   }
@@ -379,8 +372,6 @@ export class GridCommandesComponent
         if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
           this.priceChange.emit();
 
-        if (["fournisseur"].includes(name)) this.transporteurChange.emit();
-
         // map object value
         if (typeof value === "object") value = value.id;
 
@@ -437,6 +428,7 @@ export class GridCommandesComponent
                   "DetailExpeditions"
                 );
               this.handleMutations();
+              if (["fournisseur"].includes(name)) this.transporteurChange.emit();
             },
           });
       });
@@ -562,6 +554,9 @@ export class GridCommandesComponent
    * Recalculate rows numero and push changes
    */
   private reindexRows(startIndex?: number, endIndex?: number) {
+
+    if (this.lastingRows) return;
+
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
@@ -827,6 +822,36 @@ export class GridCommandesComponent
     this.lastRowFocused = this.currentfocusedRow === this.gridRowsTotal - 1;
   }
 
+  async deleteArticles() {
+    if (await confirm(
+      this.localizeService.localize("text-popup-supprimer-lignes"),
+      this.localizeService.localize("grid-title-lignes-cde")
+    )) {
+      // Looping through rows
+      const rowsToDelete = this.grid.instance.getSelectedRowKeys();
+      const finalRows = this.grid.instance.getVisibleRows().length - rowsToDelete.length;
+      rowsToDelete.map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
+      this.grid.instance.saveEditData();
+      // Preventing reindexing before all rows are removed
+      let secureLoop = 0;
+      const saveInterval = setInterval(() => {
+        secureLoop++;
+        this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
+        if (!this.lastingRows || secureLoop === 300) {
+          clearInterval(saveInterval);
+          if (finalRows) {
+            setTimeout(() => {
+              this.reindexRows();
+              this.grid.instance.refresh();
+            }, 2100);
+          }
+        }
+      }, 100);
+    } else {
+      notify(this.localizeService.localize("delete-canceled"), "warning", 1500);
+    }
+  }
+
   onReorder(e: {
     component: dxDataGrid;
     itemData: Partial<OrdreLigne>; // dragged item
@@ -912,7 +937,7 @@ export class GridCommandesComponent
 
   onEditingStart(e) {
     if (!e.column || !e.data.numero || !this.gridRowsTotal) return;
-    this.ordreLignesService.lockFields(e);
+    this.ordreLignesService.lockFields(e, this.allowMutations);
   }
 
   createStringNumero(num) {

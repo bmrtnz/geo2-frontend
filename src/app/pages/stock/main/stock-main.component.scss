@@ -5,6 +5,10 @@
 ::ng-deep .stock-page {
   margin-top: 0;
 
+  .grid-ordre-ligne-stock {
+    max-height: 550px;
+  }
+
   .tabpanel-item {
     position: relative;
     margin-top: 12px;
