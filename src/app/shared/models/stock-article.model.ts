@@ -1,5 +1,6 @@
 import { Field, Model, ModelName } from "./model";
 import StockQuantite from "./stock-quantite.model";
+import Stock from "./stock.model";
 
 @ModelName("StockArticle")
 export class StockArticle extends StockQuantite {
@@ -11,6 +12,8 @@ export class StockArticle extends StockQuantite {
 
   @Field()
   articleID: string;
+
+  @Field({ model: import("./stock.model") }) stock: Stock;
 
   @Field()
   descriptionAbregee: string;

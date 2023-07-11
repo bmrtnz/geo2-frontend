@@ -61,12 +61,13 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
   }
 
   allStockArticleList(
+    columns: Array<string> | Set<string>,
     espece: string,
     variete?: string,
     origine?: string,
     modeCulture?: string,
     emballage?: string,
-    bureauAchat?: string
+    bureauAchat?: string,
   ) {
     return this.apollo.query<{ allStockArticleList: StockArticle[] }>({
       query: gql(
@@ -75,7 +76,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
           [
             {
               name: `allStockArticleList`,
-              body: StockArticle.getFieldsName(),
+              body: columns,
               params: [
                 { name: "espece", value: "espece", isVariable: true },
                 { name: "variete", value: "variete", isVariable: true },

@@ -82,8 +82,7 @@ enum descriptDetRegimeTva {
   styleUrls: ["./client-details.component.scss"],
 })
 export class ClientDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
-{
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
   private requiredFields = ["soumisCtifl"];
 
   preSaisie: string;
@@ -575,8 +574,8 @@ export class ClientDetailsComponent
       .load()
       .then(
         (res) =>
-          (this.CCexists =
-            res.length && !res.filter((r) => r.id === this.client.id)?.length)
+        (this.CCexists =
+          res.length && !res.filter((r) => r.id === this.client.id)?.length)
       );
   }
 
@@ -599,12 +598,12 @@ export class ClientDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -768,12 +767,12 @@ export class ClientDetailsComponent
     );
 
     (client.valide !== undefined &&
-    (this.client.valide !== client.valide || validModif) &&
-    !this.createMode
+      (this.client.valide !== client.valide || validModif) &&
+      !this.createMode
       ? this.validatePopup.present(HistoryType.CLIENT, {
-          client: { id: client.id },
-          valide: client.valide,
-        })
+        client: { id: client.id },
+        valide: client.valide,
+      })
       : of(undefined)
     )
       .pipe(

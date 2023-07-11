@@ -1364,6 +1364,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 24,
+        "dataField": "stock.quantiteTotale",
+        "width": 60,
+        "visible": true
+      },
+      {
         "visibleIndex": 26,
         "dataField": "quantiteHebdomadaire",
         "width": 40,
