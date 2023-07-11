@@ -260,10 +260,10 @@ export class GridCommandesComponent
   }
 
   onFocusedCellChanging(e) {
-    // from proprietaire to fournisseur
+    // Setting the embal/exp list depending on propri&taire
     if (
-      e.columns[e.prevColumnIndex]?.dataField ===
-      "proprietaireMarchandise.id" &&
+      e.columns[e.prevColumnIndex]?.dataField !==
+      "fournisseur.id" &&
       e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
     ) {
       const row = e.rows[e.newRowIndex];
