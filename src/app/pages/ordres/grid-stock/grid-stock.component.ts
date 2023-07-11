@@ -433,6 +433,9 @@ export class GridStockComponent implements OnInit {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
+    } else if (e.rowType === "data") {
+      if (e.column.dataField === "stock.quantiteTotale")
+        e.cellElement.classList.add("grey-light");
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {

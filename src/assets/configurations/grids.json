@@ -1441,6 +1441,7 @@
       {
         "visibleIndex": 24,
         "dataField": "stock.quantiteTotale",
+        "cssClass": "small-side-padding",
         "width": 60,
         "visible": true
       },
