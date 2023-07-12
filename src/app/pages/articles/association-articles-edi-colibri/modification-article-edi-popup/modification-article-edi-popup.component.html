@@ -39,7 +39,17 @@
             {{ "articlesEdi-label-GTINArtClient" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box #GTINArtClientBox></dx-text-box>
+            <dx-text-box #GTINArtClientBox>
+              <dx-validator
+                name="{{ 'articlesEdi-label-GTINArtClient' | localize }}"
+              >
+                <dxi-validation-rule
+                  type="stringLength"
+                  [min]="8"
+                  [max]="13"
+                ></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
           </div>
         </div>
         <div class="dx-field">
@@ -55,7 +65,7 @@
             {{ "articlesEdi-label-priorite" | localize }}
           </div>
           <div class="dx-field-value prioriteEdi">
-            <dx-text-box #prioriteBox></dx-text-box>
+            <dx-number-box #prioriteBox></dx-number-box>
           </div>
         </div>
       </div>

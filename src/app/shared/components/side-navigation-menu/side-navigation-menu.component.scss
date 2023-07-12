@@ -57,13 +57,21 @@
         }
 
         &[aria-level="2"] {
-          .dx-treeview-item-content {
-            font-weight: normal;
-            line-height: 19px;
-            padding: 0 0 0 $side-panel-min-width;
-            width: 250px;
-            overflow: hidden;
-            white-space: normal;
+
+          .dx-treeview-item {
+            height: 48px;
+
+            .dx-treeview-item-content {
+              position: relative;
+              top: 50%;
+              transform: translateY(-50%);
+              font-weight: normal;
+              line-height: 20px;
+              padding: 0 0 0 $side-panel-min-width;
+              width: 250px;
+              overflow: hidden;
+              white-space: normal;
+            }
           }
         }
       }

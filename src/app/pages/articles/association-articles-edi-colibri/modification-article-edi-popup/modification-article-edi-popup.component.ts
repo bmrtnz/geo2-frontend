@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { DxPopupComponent, DxTextBoxComponent, DxCheckBoxComponent } from "devextreme-angular";
+import { DxPopupComponent, DxTextBoxComponent, DxCheckBoxComponent, DxNumberBoxComponent } from "devextreme-angular";
 import { NgForm } from "@angular/forms";
 import { LocalizationService } from "app/shared/services";
 
@@ -20,7 +20,7 @@ export class ModificationArticleEdiPopupComponent {
   @ViewChild("codeArtBWBox", { static: false }) codeArtBWBox: DxTextBoxComponent;
   @ViewChild("GTINArtClientBox", { static: false }) GTINArtClientBox: DxTextBoxComponent;
   @ViewChild("codeArtClientBox", { static: false }) codeArtClientBox: DxTextBoxComponent;
-  @ViewChild("prioriteBox", { static: false }) prioriteBox: DxTextBoxComponent;
+  @ViewChild("prioriteBox", { static: false }) prioriteBox: DxNumberBoxComponent;
 
   @Input() article: any;
   @Output() whenValidate = new EventEmitter<any>();
