@@ -150,10 +150,9 @@ export class ArticleDetailsComponent
   alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
-  @ViewChild(PushHistoryPopupComponent, { static: false })
+  @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
   @ViewChildren(DxAccordionComponent)
   accordion: any;
-  validatePopup: PushHistoryPopupComponent;
   editing = false;
   public ucBW: boolean;
 
@@ -273,7 +272,6 @@ export class ArticleDetailsComponent
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
     this.palettesConfig = {
-      palette100x120: "",
       palette80x120: "",
       palette60x80: "",
     };
