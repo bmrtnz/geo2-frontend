@@ -13,7 +13,7 @@
       #form="ngForm"
       class="inputs"
     >
-      <!-- Entrepôt, station & type palox -->
+      <!-- Validité, Code art BW, GTIN, code art Clt et Priorité -->
       <div class="EDI-info-boxes">
         <div class="dx-field valide-EDI-checkbox">
           <div class="dx-field-label text-align-right">
@@ -28,7 +28,10 @@
             {{ "articlesEdi-label-codeArtBW" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box #codeArtBWBox></dx-text-box>
+            <dx-text-box
+              #codeArtBWBox
+              [readOnly]="purpose === 'modification'"
+            ></dx-text-box>
           </div>
         </div>
         <div class="dx-field">

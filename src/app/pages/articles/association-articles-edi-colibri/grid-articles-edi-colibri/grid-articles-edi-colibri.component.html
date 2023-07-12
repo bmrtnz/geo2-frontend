@@ -51,7 +51,10 @@
             {{ "searchFor" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box formControlName="search"> </dx-text-box>
+            <dx-text-box
+              formControlName="search"
+              (onEnterKey)="enableFilters()"
+            ></dx-text-box>
           </div>
         </div>
       </dxi-item>
@@ -79,7 +82,7 @@
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
-      '',
+      this.localizeService.localize('articles-edi-colibri-list'),
       $event,
       gridConfiguratorService.Grid.GestionArticleEdi,
       enableFilters.bind(this)

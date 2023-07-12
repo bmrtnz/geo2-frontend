@@ -25,25 +25,35 @@
 .EDI-info-boxes {
   padding-right: 70px;
 
-  .valide-EDI-checkbox .dx-checkbox {
-    float: left;
-  }
 
-  .dx-field-label {
-    width: 46% !important;
-    white-space: initial;
-    margin-right: 10px;
+  .dx-field {
+    margin-bottom: 3px;
 
-    &.large-padding-left {
-      padding-left: 50px;
+    &.valide-EDI-checkbox {
+      height: 34px;
+
+      .dx-checkbox {
+        margin: 9px 0;
+        float: left;
+      }
     }
-  }
 
-  .dx-field-value {
-    width: 200px !important;
+    .dx-field-label {
+      width: 46% !important;
+      white-space: initial;
+      margin-right: 10px;
 
-    &.prioriteEdi {
-      width: 50px !important;
+      &.large-padding-left {
+        padding-left: 50px;
+      }
+    }
+
+    .dx-field-value {
+      width: 200px !important;
+
+      &.prioriteEdi {
+        width: 50px !important;
+      }
     }
   }
 }
