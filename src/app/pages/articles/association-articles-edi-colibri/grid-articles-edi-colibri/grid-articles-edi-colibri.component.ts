@@ -1,20 +1,16 @@
 import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { GridsService } from "app/pages/ordres/grids.service";
+import EdiArticleClient from "app/shared/models/article-edi.model";
 import {
   AuthService,
   ClientsService,
   LocalizationService,
-  TransporteursService,
 } from "app/shared/services";
-import { PlanningTransporteursService } from "app/shared/services/api/planning-transporteurs.service";
+import { ArticlesEdiService } from "app/shared/services/api/articles-edi.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
+import { Grid, GridConfig, GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -26,8 +22,8 @@ import { ModificationArticleEdiPopupComponent } from "../modification-article-ed
 
 enum FormInput {
   valide = "valide",
-  clientCode = "client",
-  search = "dateDepartPrevueFournisseur",
+  client = "client",
+  search = "search",
 }
 
 type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
@@ -39,7 +35,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 })
 export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
-  @Output() public article: any;
+  @Output() public EdiArticle: Partial<EdiArticleClient>;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModificationArticleEdiPopupComponent) private modifPopup: ModificationArticleEdiPopupComponent;
@@ -48,18 +44,33 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   private gridConfig: Promise<GridConfig>;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
-  public ordresDataSource: DataSource;
+  public dataSource: DataSource;
   public clients: DataSource;
 
   public formGroup = new UntypedFormGroup({
+    client: new UntypedFormControl(),
     valide: new UntypedFormControl(),
-    clientCode: new UntypedFormControl(),
     search: new UntypedFormControl()
   } as Inputs<UntypedFormControl>);
+
+  readonly inheritedFields = [
+    "id",
+    "article.id",
+    "article.emballage.emballage.description",
+    "article.matierePremiere.variete.description",
+    "valide",
+    "gtinColisClient",
+    "client.code",
+    "priorite",
+    "article.normalisation.calibreMarquage.description",
+    "article.normalisation.articleClient",
+    "article.valide"
+  ];
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public clientsService: ClientsService,
+    public articlesEdiService: ArticlesEdiService,
     public authService: AuthService,
     public gridsService: GridsService,
     public localizeService: LocalizationService,
@@ -67,7 +78,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     private currentCompanyService: CurrentCompanyService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchConfig(
-      Grid.GestionArticleEdi
+      Grid.AssociationArticleEdi
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.clients = this.clientsService.getDataSource_v2([
@@ -93,49 +104,52 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    // this.ordresDataSource = this.planningTransporteursService.getDataSource_v2(
-    //   await fields.toPromise()
-    // );
+    this.dataSource = this.articlesEdiService.getDataSource_v2(
+      this.inheritedFields
+      // await fields.toPromise()
+    );
   }
 
   ngAfterViewInit() {
     // Only way found to validate and show Warning icon
-    this.formGroup.get("clientCode").setValue("");
-    this.formGroup.get("clientCode").reset();
+    // this.formGroup.get("client").setValue("");
+    // this.formGroup.get("client").reset();
     this.formGroup.get("valide").setValue(true);
+
+    this.formGroup.get("client").patchValue("000448"); // A VIRER !!
+    setTimeout(() => this.enableFilters(), 500); // A VIRER !!
   }
 
   enableFilters() {
-    if (!this.formGroup.get("clientCode").value) {
+    if (!this.formGroup.get("client").value) {
       notify(this.localizeService.localize("please-select-client"), "error", 1500);
     } else {
       const values: Inputs = {
         ...this.formGroup.value,
       };
-
-      this.datagrid.dataSource = this.ordresDataSource;
+      const filter = [
+        ["client.id", "=", values.client],
+        "and",
+        ["valide", "=", values.valide]
+      ];
+      if (values.search?.length) {
+        filter.push("and", [["article.id", "contains", values.search], "or", ["article.normalisation.articleClient", "contains", values.search], "or", ["gtinColisClient", "contains", values.search]]);
+      }
+      this.dataSource.filter(filter);
+      this.datagrid.dataSource = this.dataSource;
     }
   }
 
   onRowDblClick(e) {
-    this.article = e?.data;
+    this.EdiArticle = e?.data;
     this.modifPopup.show("modification");
   }
 
   onCellClick(e) {
-    // FAKE // A VIRER !!
-    this.article = {
-      valide: true,
-      codeArtBW: "034579",
-      GTINArtClient: "54654646464",
-      codeArtClient: "F4566",
-      prioriteBox: 6
-    }
-    this.modifPopup.show("modification");// A VIRER !!
   }
 
   addEDIArticle() {
-    this.article = null;
+    this.EdiArticle = null;
     this.modifPopup.show("ajout");
   }
 
@@ -153,6 +167,8 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
+      if (e.column.dataField === "valide" && e.value)
+        e.cellElement.classList.add("validity");
     }
   }
 
@@ -162,6 +178,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   onValideChanged(e) {
     if (!e.event) return; // Only user event
+    this.enableFilters();
   }
 
 }

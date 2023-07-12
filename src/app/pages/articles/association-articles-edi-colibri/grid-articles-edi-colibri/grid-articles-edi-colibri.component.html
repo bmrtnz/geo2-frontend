@@ -12,11 +12,12 @@
           </div>
           <div class="dx-field-value">
             <dx-select-box
-              formControlName="clientCode"
+              formControlName="client"
               [dataSource]="clients"
-              valueExpr="code"
+              valueExpr="id"
               [displayExpr]="displayCodeBefore"
               [searchExpr]="['code']"
+              [showClearButton]="true"
             >
               <dx-validator>
                 <dxi-validation-rule
@@ -69,13 +70,15 @@
 </form>
 
 <dx-data-grid
-  [remoteOperations]="{ paging: true }"
+  class="grid-articles-edi-colibri"
+  [remoteOperations]="true"
   [showBorders]="false"
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [noDataText]="'aucun-article-EDI-COLIBRI' | localize"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
   (onRowPrepared)="onRowPrepared($event)"
@@ -84,7 +87,7 @@
     gridConfiguratorService.onToolbarPreparing(
       this.localizeService.localize('articles-edi-colibri-list'),
       $event,
-      gridConfiguratorService.Grid.GestionArticleEdi,
+      gridConfiguratorService.Grid.AssociationArticleEdi,
       enableFilters.bind(this)
     )
   "
@@ -95,7 +98,7 @@
     [allowSearch]="true"
   ></dxo-header-filter>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-paging></dxo-paging>
+  <dxo-paging [enabled]="true"></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
     [showInfo]="true"
@@ -103,7 +106,7 @@
     [showPageSizeSelector]="true"
   ></dxo-pager>
   <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.GestionArticleEdi"
+    [storageKey]="gridConfiguratorService.Grid.AssociationArticleEdi"
     [enabled]="true"
     type="custom"
     [customLoad]="gridConfiguratorService.load"
@@ -139,6 +142,7 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [cssClass]="column.cssClass"
+    [width]="column.width"
     [caption]="
       ('articlesEdi-' + column.dataField?.split('.').join('-') | localize) ||
       column.name
@@ -154,5 +158,5 @@
 </dx-data-grid>
 
 <app-modification-article-edi-popup
-  [article]="article"
+  [EdiArticle]="EdiArticle"
 ></app-modification-article-edi-popup>

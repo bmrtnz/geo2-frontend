@@ -5,7 +5,7 @@
   [title]="title"
   [visible]="visible"
   (onHidden)="onHidden()"
-  (onShown)="onShowing($event)"
+  (onShown)="onShown($event)"
   [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
@@ -40,15 +40,16 @@
           </div>
           <div class="dx-field-value">
             <dx-text-box #GTINArtClientBox>
-              <dx-validator
+              <!-- <dx-validator
                 name="{{ 'articlesEdi-label-GTINArtClient' | localize }}"
               >
                 <dxi-validation-rule
+                  *ngIf="shown"
                   type="stringLength"
                   [min]="8"
                   [max]="13"
                 ></dxi-validation-rule>
-              </dx-validator>
+              </dx-validator> -->
             </dx-text-box>
           </div>
         </div>

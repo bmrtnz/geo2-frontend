@@ -1,16 +1,39 @@
+// Var
+@import "themes/generated/variables.base";
+
+
 ::ng-deep app-grid-articles-edi-colibri {
+
+
   .dx-fieldset {
     display: flex;
     margin-top: 0;
   }
 
-  .plus-button {
-    width: 24px;
-    height: 24px;
-    min-width: 0;
+  .grid-articles-edi-colibri {
+    max-height: 550px;
 
-    .dx-icon {
-      font-size: 18px !important;
+    .dx-datagrid-nodata {
+      width: 110px;
+      overflow: hidden;
+      white-space: normal;
+    }
+
+    td.validity {
+      .dx-checkbox-icon {
+        background-color: $base-accent !important;
+        cursor: pointer;
+      }
+    }
+
+    .plus-button {
+      width: 24px;
+      height: 24px;
+      min-width: 0;
+
+      .dx-icon {
+        font-size: 18px !important;
+      }
     }
   }
 
