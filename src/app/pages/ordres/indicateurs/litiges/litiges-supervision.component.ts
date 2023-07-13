@@ -67,7 +67,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public typeFiltrage: string;
   public codeFiltrage: string;
   public fields: string[];
-  public firstRun = true;
   public currCompanyId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -92,6 +91,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     private tabContext: TabContext
   ) {
+    this.toRefresh = true;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.Litiges
     );
@@ -157,7 +157,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   }
 
   enableFilters() {
-    this.toRefresh = false;
     this.datagrid.dataSource = null;
 
     const values: Inputs = {
@@ -180,7 +179,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
 
   onFieldValueChange(e?) {
     if (!e.event) return; // Only user event
-    this.toRefresh = !!e.value;
+    this.toRefresh = !!e.value; // A field is filled
     if (this.toRefresh) {
       // Clear other filters
       (Object.keys(searchType) as Array<keyof typeof searchType>).map((key) => {
@@ -189,11 +188,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       this.typeFiltrage = searchType[e.element?.id.split("-")[1]];
       this.codeFiltrage = e.value.id;
     }
-  }
-
-  onContentReady() {
-    if (this.firstRun) this.toRefresh = true;
-    this.firstRun = false;
   }
 
   onCellClick(e) {
