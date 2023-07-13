@@ -120,7 +120,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     if (["true", "false"].includes(depConfig)) {
       this.switchType.value = depConfig === "true" ? true : false;
     } else {
-      this.switchType.value = true;
+      this.switchType.value = false;
     }
     this.enableFilters();
   }
