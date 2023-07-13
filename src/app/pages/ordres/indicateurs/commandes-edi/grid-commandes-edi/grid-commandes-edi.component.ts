@@ -50,6 +50,8 @@ enum InputField {
   codeAssistante = "assistante",
   dateMin = "dateMin",
   dateMax = "dateMax",
+  typeDate = "typeDate",
+  filtreStock = "filtreStock"
 }
 
 const ALL = "%";
@@ -70,6 +72,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   private dataSourceOL: DataSource;
   public periodes: any[];
   public typesDates: string[];
+  public filtresStock: string[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
@@ -80,7 +83,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public gridTitle: string;
   public gridTitleCount: string;
   public gridTitleInput: HTMLInputElement;
-  toRefresh: boolean;
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
@@ -90,6 +92,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild("typeDatesSB", { static: false }) typeDatesSB: DxSelectBoxComponent;
+  @ViewChild("filtreStockSB", { static: false }) filtreStockSB: DxSelectBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false })
@@ -106,6 +109,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     dateMin: new UntypedFormControl(this.dateMgtService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateMgtService.endOfDay()),
     typeDate: new UntypedFormControl(),
+    filtreStock: new UntypedFormControl()
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -127,6 +131,11 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       this.localization.localize("date-livraison"),
       this.localization.localize("date-creation")
     ];
+    this.filtresStock = [
+      this.localization.localize("simplifie"),
+      this.localization.localize("detaille")
+    ]
+    this.formGroup.get("typeDate").setValue(this.typesDates[0]);
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi
@@ -184,6 +193,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       ".dx-toolbar .grid-title input"
     );
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+
+    this.formGroup.get("filtreStock").setValue(this.filtresStock[0]);
   }
 
   displayIDBefore(data) {
@@ -199,7 +210,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   enableFilters() {
-    this.toRefresh = false;
     this.datagrid.dataSource = null;
 
     const values: Inputs = {
@@ -272,11 +282,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   onFieldValueChange(e?) {
-    if (e) {
-      this.enableFilters();
-    } else {
-      this.toRefresh = true;
-    }
+    if (e) this.enableFilters();
   }
 
   setClientDataSource() {
