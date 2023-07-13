@@ -69,6 +69,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public assistantes: DataSource;
   private dataSourceOL: DataSource;
   public periodes: any[];
+  public typesDates: string[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
@@ -88,6 +89,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @Output() ordresNumeros: string[];
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
+  @ViewChild("typeDatesSB", { static: false }) typeDatesSB: DxSelectBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false })
@@ -103,6 +105,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     codeCommercial: new UntypedFormControl(),
     dateMin: new UntypedFormControl(this.dateMgtService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateMgtService.endOfDay()),
+    typeDate: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -120,6 +123,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private dateMgtService: DateManagementService,
     public authService: AuthService
   ) {
+    this.typesDates = [
+      this.localization.localize("date-livraison"),
+      this.localization.localize("date-creation")
+    ];
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi
@@ -182,12 +189,12 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -661,13 +668,13 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         leftTextContent += " - Version " + (data.version ?? "");
         leftTextContent +=
           " du " +
-            this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
+          this.dateMgtService.formatDate(data.dateDocument, DATEFORMAT) ?? "";
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
 
         // Fill right text of the group row
         e.cellElement.childNodes[0].children[2].innerText =
           "Livraison : " +
-            this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
+          this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
           "";
 
         // Fill indicator button text and sets its bck depending on the status

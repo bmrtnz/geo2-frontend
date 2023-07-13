@@ -98,9 +98,31 @@
         </div>
       </dxi-item>
       <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
+      <dxi-item [ratio]="1.9">
+        <!-- Type recherche date -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label noEllipsis typeRech">
+            {{ "ordresEdi-type-recherche" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              #typeDatesSB
+              formControlName="typeDate"
+              [items]="typesDates"
+              [value]="typesDates[0]"
+            >
+              <dxo-drop-down-options
+                [width]="200"
+                [elementAttr]="{ class: 'period-list' }"
+              >
+              </dxo-drop-down-options>
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="1.7">
         <!-- Période -->
-        <div class="dx-field">
+        <div class="dx-field date-field">
           <div class="dx-field-label noEllipsis">
             {{ "ordres-periode" | localize }}
           </div>
@@ -121,7 +143,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="1.8">
+      <dxi-item [ratio]="1.5">
         <!-- Date de début -->
         <div class="dx-field date-field">
           <div class="dx-field-label">
@@ -142,7 +164,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="1.8">
+      <dxi-item [ratio]="1.5">
         <!-- Date de fin -->
         <div class="dx-field field date-field">
           <div class="dx-field-label">
