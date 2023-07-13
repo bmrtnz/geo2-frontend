@@ -101,10 +101,10 @@
     </dxi-column>
     <div *dxTemplate="let cell of 'origineTemplate'">
       <dx-button
+        [visible]="showOriginButton(cell)"
         class="small-article-button origin"
         type="default"
         [focusStateEnabled]="false"
-        [visible]="showOriginButton(cell)"
         [text]="showOriginCheck(cell.data)"
         (onClick)="openOriginePopup(cell.data)"
       >
@@ -115,15 +115,16 @@
   <!-- Indicateur stock -->
   <ng-container *ngIf="FEATURE.indicateurStock">
     <dxi-column
-      cssClass="small-horiz-padding"
+      [visible]="allowMutations"
+      cssClass="small-horiz-padding toto"
       [showInColumnChooser]="false"
       [cellTemplate]="'indicateurStockTemplate'"
     >
     </dxi-column>
     <div *dxTemplate="let cell of 'indicateurStockTemplate'">
       <dx-button
+        [visible]="cell.data.nombreReservationsSurStock"
         class="small-article-button small-stock-button"
-        [visible]="allowMutations && cell.data.nombreReservationsSurStock"
         [text]="cell.data.nombreReservationsSurStock"
       >
       </dx-button>
@@ -133,6 +134,7 @@
   <!-- Déstockage -->
   <ng-container *ngIf="FEATURE.destockage">
     <dxi-column
+      [visible]="allowMutations"
       cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'destockageTemplate'"
@@ -144,20 +146,18 @@
         type="success"
         [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
-        [visible]="allowMutations"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
       >
       </dx-button>
     </div>
   </ng-container>
-  <!-- [disabled]="!cell.data.nombreColisCommandes" -->
 
   <!-- switch article -->
   <ng-container *ngIf="FEATURE.quickSwitch">
     <dxi-column
+      [visible]="allowMutations"
       cssClass="small-horiz-padding"
-      *ngIf="allowMutations"
       [showInColumnChooser]="false"
       [cellTemplate]="'swapButtonTemplate'"
     >
@@ -168,7 +168,6 @@
         type="default"
         [focusStateEnabled]="false"
         icon="material-icons swap_horizontal_circle"
-        [disabled]="!allowMutations"
         hint="Remplacer"
         (onClick)="swapArticle(cell.data)"
       ></dx-button>
