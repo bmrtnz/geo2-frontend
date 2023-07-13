@@ -1509,6 +1509,7 @@
     "ordres-supervision-litiges-secteurCommercial-id": "Secteur",
     "ordres-supervision-litiges-client-commercial-nomUtilisateur": "Commercial",
     "ordres-supervision-litiges-dateDepartPrevueFournisseur": "Date de départ",
+    "ordres-supervision-litiges-litige-ordreOrigine-assistante-nomUtilisateur": "Assistante",
     "litige": "litige",
     "ordres-program-loadRef": "Load référence",
     "ordres-program-depot": "Dépôt",

@@ -4388,6 +4388,13 @@
   "litiges": {
     "columns": [
       {
+        "visibleIndex": 0,
+        "dataField": "secteurCommercial.id",
+        "cssClass": "small-side-padding",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "visibleIndex": 1,
         "dataField": "nomPersonne",
         "dataType": "string",
@@ -4399,6 +4406,13 @@
         "visibleIndex": 3,
         "dataField": "prenomPersonne",
         "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "litige.ordreOrigine.assistante.nomUtilisateur",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": false
       },
       {
@@ -4506,10 +4520,6 @@
         "visibleIndex": 30,
         "dataField": "immatriculation",
         "dataType": "string",
-        "visible": false
-      },
-      {
-        "dataField": "secteurCommercial.id",
         "visible": false
       },
       {
