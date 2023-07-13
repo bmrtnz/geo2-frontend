@@ -20,6 +20,7 @@ import {
   DxTextBoxModule,
   DxValidatorModule,
   DxPopupModule,
+  DxAutocompleteModule,
 } from "devextreme-angular";
 import { ArticlesRoutingModule } from "./articles-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -61,6 +62,7 @@ import { GridsService } from "../ordres/grids.service";
     DxTextBoxModule,
     DxValidatorModule,
     EditingAlertModule,
+    DxAutocompleteModule,
     PushHistoryPopupModule,
     HistoriqueValideModule,
     FileManagerModule,

@@ -47,15 +47,20 @@
         </div>
       </dxi-item>
       <dxi-item [ratio]="2.5">
+        <!-- Recherche -->
         <div class="dx-field">
           <div class="dx-field-label">
             {{ "searchFor" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box
+            <dx-autocomplete
+              placeholder="..."
               formControlName="search"
-              (onEnterKey)="enableFilters()"
-            ></dx-text-box>
+              (onValueChanged)="enableFilters()"
+              valueChangeEvent="keyup"
+              [showClearButton]="true"
+              hint="{{ 'hint-search-edi-articles' | localize }}"
+            ></dx-autocomplete>
           </div>
         </div>
       </dxi-item>
@@ -81,7 +86,6 @@
   [noDataText]="'aucun-article-EDI-COLIBRI' | localize"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
-  (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -159,4 +163,5 @@
 
 <app-modification-article-edi-popup
   [EdiArticle]="EdiArticle"
+  (whenValidate)="enableFilters()"
 ></app-modification-article-edi-popup>

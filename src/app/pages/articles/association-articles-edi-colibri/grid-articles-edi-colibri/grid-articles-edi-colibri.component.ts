@@ -3,6 +3,7 @@ import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { GridsService } from "app/pages/ordres/grids.service";
 import EdiArticleClient from "app/shared/models/article-edi.model";
 import {
+  ArticlesService,
   AuthService,
   ClientsService,
   LocalizationService,
@@ -146,6 +147,16 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   }
 
   onCellClick(e) {
+    if (e.rowType !== "data") return;
+    if (e.column?.dataField === "valide") {
+      if (!e.data.article.valide && !e.value) {
+        notify(this.localizeService.localize("warn-article-non-valid", e.data.article.id), "warning", 5000);
+      } else {
+        // Change valide status & save it
+        // Reload DS
+        this.enableFilters();
+      }
+    }
   }
 
   addEDIArticle() {
@@ -167,13 +178,12 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.column.dataField === "valide" && e.value)
-        e.cellElement.classList.add("validity");
+      if (e.column.dataField === "valide") {
+        if (e.value)
+          e.cellElement.classList.add("validity");
+        e.cellElement.classList.add("cursor-pointer")
+      }
     }
-  }
-
-  onRowPrepared(e) {
-
   }
 
   onValideChanged(e) {

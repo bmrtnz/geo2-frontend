@@ -8219,7 +8219,7 @@
       {
         "visibleIndex": 4,
         "dataField": "gtinColisClient",
-        "width": 100,
+        "width": 125,
         "cssClass": "small-side-padding",
         "visible": true
       },

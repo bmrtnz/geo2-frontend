@@ -22,6 +22,11 @@
     td.validity {
       .dx-checkbox-icon {
         background-color: $base-accent !important;
+      }
+    }
+
+    .cursor-pointer {
+      .dx-checkbox-icon {
         cursor: pointer;
       }
     }

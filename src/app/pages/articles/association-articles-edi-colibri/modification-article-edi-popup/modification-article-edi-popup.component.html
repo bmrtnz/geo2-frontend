@@ -27,11 +27,22 @@
           <div class="dx-field-label text-align-right">
             {{ "articlesEdi-label-codeArtBW" | localize }}
           </div>
-          <div class="dx-field-value">
-            <dx-text-box
+          <div class="dx-field-value codeArtBW">
+            <dx-select-box
               #codeArtBWBox
               [readOnly]="purpose === 'modification'"
-            ></dx-text-box>
+              [dataSource]="articlesDS"
+              displayExpr="id"
+              [searchMode]="'contains'"
+              [showClearButton]="true"
+            >
+              <dx-validator>
+                <dxi-validation-rule
+                  *ngIf="purpose === 'ajout'"
+                  type="required"
+                ></dxi-validation-rule>
+              </dx-validator>
+            </dx-select-box>
           </div>
         </div>
         <div class="dx-field">
@@ -39,18 +50,7 @@
             {{ "articlesEdi-label-GTINArtClient" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box #GTINArtClientBox>
-              <!-- <dx-validator
-                name="{{ 'articlesEdi-label-GTINArtClient' | localize }}"
-              >
-                <dxi-validation-rule
-                  *ngIf="shown"
-                  type="stringLength"
-                  [min]="8"
-                  [max]="13"
-                ></dxi-validation-rule>
-              </dx-validator> -->
-            </dx-text-box>
+            <dx-text-box #GTINArtClientBox> </dx-text-box>
           </div>
         </div>
         <div class="dx-field">

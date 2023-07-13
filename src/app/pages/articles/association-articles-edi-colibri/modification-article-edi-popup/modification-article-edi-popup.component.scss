@@ -9,6 +9,10 @@
   .dx-state-disabled {
     opacity: 1 !important;
   }
+
+  .dx-texteditor-input-container::after {
+    right: 0 !important;
+  }
 }
 
 .popup-action {
@@ -24,7 +28,6 @@
 
 .EDI-info-boxes {
   padding-right: 70px;
-
 
   .dx-field {
     margin-bottom: 3px;
@@ -54,16 +57,10 @@
       &.prioriteEdi {
         width: 50px !important;
       }
+
+      &.codeArtBW {
+        width: 140px !important;
+      }
     }
   }
-}
-
-.palox-inputs {
-  .dx-field-value {
-    width: 130px !important;
-  }
-}
-
-.comment-palox {
-  width: 25% !important;
 }
