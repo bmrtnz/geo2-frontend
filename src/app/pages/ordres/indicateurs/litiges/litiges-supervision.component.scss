@@ -19,7 +19,17 @@ h6 {
 }
 
 .litiges-superv-filter-area {
-  width: 980px;
+  width: 1024px;
+
+  .or-field {
+    position: relative;
+    top: 6px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 15px;
+    color: #666;
+    font-weight: bold;
+  }
 }
 
 ::ng-deep .period-list .dx-list-item {
@@ -36,7 +46,7 @@ h6 {
       background: $base-accent;
       color: white;
 
-      & ~ td {
+      &~td {
         background: $base-accent;
 
         .dx-checkbox,
@@ -54,7 +64,7 @@ h6 {
       color: $base-accent;
       background: rgba(0, 117, 156, 0.3);
 
-      & ~ td {
+      &~td {
         background: rgba(0, 117, 156, 0.3);
 
         .dx-checkbox-checked .dx-checkbox-icon {

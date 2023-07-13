@@ -4509,6 +4509,10 @@
         "visible": false
       },
       {
+        "dataField": "secteurCommercial.id",
+        "visible": false
+      },
+      {
         "dataField": "descriptionCause",
         "showInColumnChooser": false
       },
