@@ -33,9 +33,14 @@
     <dxi-item [ratio]="1"></dxi-item>
     <dxi-item [ratio]="13">
       <div class="dx-field field-large">
-        <div class="dx-field-label campagne-label text-align-right">
-          {{ campagneEnCours?.description }}<br />
-          {{ prevCampagneEnCours?.description }}
+        <div class="dx-field-label campagne-title-label text-align-right">
+          {{ "rechOrdres-campagnes" | localize }}
+        </div>
+        <div
+          *ngIf="anneesCampagnes?.length"
+          class="dx-field-label campagne-label text-align-left"
+        >
+          {{ anneesCampagnes[0] }}<br />{{ anneesCampagnes[1] }}
         </div>
         <div class="dx-field-value width0pct">
           <dx-check-box

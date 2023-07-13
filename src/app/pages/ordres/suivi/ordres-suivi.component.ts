@@ -54,6 +54,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
   campagnes: DataSource;
   campagneEnCours: any;
   prevCampagneEnCours: any;
+  anneesCampagnes: string[];
   showGridResults = false;
   @ViewChild(DxAutocompleteComponent, { static: false })
   autocomplete: DxAutocompleteComponent;
@@ -82,6 +83,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     private ordresService: OrdresService
   ) {
     self = this;
+    this.anneesCampagnes = [];
     this.searchItems = [
       "numero",
       "numeroFacture",
@@ -99,7 +101,10 @@ export class OrdresSuiviComponent implements AfterViewInit {
     this.campagneEnCours = this.currentCompanyService.getCompany().campagne;
     this.campagnesService
       .getOne_v2((parseInt(this.campagneEnCours.id) - 1).toString(), new Set(["id", "description"]))
-      .subscribe(res => this.prevCampagneEnCours = res.data.campagne)
+      .subscribe(res => {
+        this.prevCampagneEnCours = res.data.campagne;
+        this.anneesCampagnes.push(this.campagneEnCours?.description.split(" ")[1], this.prevCampagneEnCours?.description.split(" ")[1]);
+      });
   }
 
   ngAfterViewInit() {
