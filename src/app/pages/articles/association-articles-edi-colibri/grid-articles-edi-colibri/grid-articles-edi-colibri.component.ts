@@ -37,6 +37,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   @Output() public EdiArticle: Partial<EdiArticleClient>;
+  @Output() public clientId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModificationArticleEdiPopupComponent) private modifPopup: ModificationArticleEdiPopupComponent;
@@ -114,12 +115,13 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Only way found to validate and show Warning icon
-    // this.formGroup.get("client").setValue("");
-    // this.formGroup.get("client").reset();
+    this.formGroup.get("client").setValue("");
+    this.formGroup.get("client").reset();
+
     this.formGroup.get("valide").setValue(true);
 
-    this.formGroup.get("client").patchValue("000448"); // A VIRER !!
-    setTimeout(() => this.enableFilters(), 500); // A VIRER !!
+    // this.formGroup.get("client").patchValue("000448"); // A VIRER !!
+    // setTimeout(() => this.enableFilters(), 500); // A VIRER !!
   }
 
   enableFilters() {
@@ -177,6 +179,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   addEDIArticle() {
     this.EdiArticle = null;
+    this.clientId = this.formGroup.get("client").value;
     this.modifPopup.show("ajout");
   }
 

@@ -31,6 +31,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
 
 
   @Input() EdiArticle: Partial<EdiArticleClient>;
+  @Input() clientId: string;
   @Output() whenValidate = new EventEmitter<any>();
 
   public articlesDS: DataSource;
@@ -62,6 +63,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
   }
 
   onShown(e) {
+
     e.component
       .content()
       .parentNode.classList.add("modification-article-edi-popup");
@@ -91,7 +93,9 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
 
   onArticleChanged(e) {
     if (!e.event) return; // Only user event
-    console.log(e);
+    // this.codeArtClientBox.instance.reset();
+    // if (e.value?.normalisation?.articleClient)
+    this.codeArtClientBox.value = e.value?.normalisation?.articleClient;
   }
 
   onSave(form: NgForm) {
@@ -115,6 +119,8 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
       message += `${this.CR}Il faut un GTIN article client ET/OU une référence article client de renseigné`;
     }
 
+    if (!this.prioriteBox.value) message += `${this.CR}La priorité n'est pas définie`;
+
     if (messageLength !== message.length) {
       alert(`${message}<br>`, this.localizeService.localize(`ordres-${this.purpose}-article`))
     } else {
@@ -126,7 +132,8 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
         valide: this.valideBox.value,
         gtinColisClient: this.GTINArtClientBox.value,
         priorite: this.prioriteBox.value,
-        article: { id: this.codeArtBWBox.value.id }
+        article: { id: this.codeArtBWBox.value.id },
+        client: { id: this.clientId }
       }
       const ediArticleClientModif = {
         id: this.EdiArticle?.id,
@@ -136,6 +143,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
       }
 
       // Need for saving the new code article client in article table
+      console.log(this.codeArtBWBox.value, this.EdiArticle?.article.id)
       if (this.purpose === "modification") {
         const article = {
           id: this.EdiArticle?.article.id,
