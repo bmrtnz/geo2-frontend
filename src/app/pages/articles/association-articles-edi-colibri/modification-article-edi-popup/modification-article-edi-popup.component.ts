@@ -89,6 +89,11 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
     }
   }
 
+  onArticleChanged(e) {
+    if (!e.event) return; // Only user event
+    console.log(e);
+  }
+
   onSave(form: NgForm) {
 
     // Check everything's OK
