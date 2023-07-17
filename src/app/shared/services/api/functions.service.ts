@@ -73,7 +73,8 @@ export class FunctionsService {
   public ofInitArticle = (
     ordreRef: string,
     articleRef: string,
-    societeCode: string
+    societeCode: string,
+    orlRefUpdate?: string,
   ) =>
     this.apollo.watchQuery<{ ofInitArticle: FunctionResponse }>({
       query: gql(
@@ -87,6 +88,7 @@ export class FunctionsService {
                 { name: "ordreRef", value: "ordreRef", isVariable: true },
                 { name: "articleRef", value: "articleRef", isVariable: true },
                 { name: "societeCode", value: "societeCode", isVariable: true },
+                { name: "orlRefUpdate", value: "orlRefUpdate", isVariable: true },
               ],
             },
           ],
@@ -94,10 +96,11 @@ export class FunctionsService {
             { name: "ordreRef", type: "String", isOptionnal: false },
             { name: "articleRef", type: "String", isOptionnal: false },
             { name: "societeCode", type: "String", isOptionnal: false },
+            { name: "orlRefUpdate", type: "String", isOptionnal: true },
           ]
         )
       ),
-      variables: { ordreRef, articleRef, societeCode },
+      variables: { ordreRef, articleRef, societeCode, orlRefUpdate },
       fetchPolicy: "network-only",
     });
 
