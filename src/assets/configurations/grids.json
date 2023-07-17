@@ -8256,5 +8256,74 @@
         "visible": false
       }
     ]
+  },
+  "association-articles-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "valide",
+        "dataType": "boolean",
+        "width": 60,
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "gtinColisClient",
+        "width": 125,
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "article.id",
+        "width": 75,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "article.normalisation.articleClient",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "article.matierePremiere.variete.description",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "article.emballage.emballage.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "article.normalisation.calibreMarquage.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 16,
+        "dataField": "priorite",
+        "cssClass": "text-align-center",
+        "visible": true
+      },
+      {
+        "visibleIndex": 18,
+        "dataField": "client.code"
+      },
+      {
+        "dataField": "article.valide",
+        "visible": false,
+        "showInColumnChooser": false
+      }
+    ]
   }
 }

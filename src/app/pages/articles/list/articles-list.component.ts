@@ -89,6 +89,7 @@ export class ArticlesListComponent
     public modesCultureService: ModesCultureService,
     public originesService: OriginesService
   ) {
+    this.toRefresh = true;
     this.apiService = this.articlesService;
     this.especes = this.especesService.getDistinctDataSource(["id"]);
     this.especes.filter(["valide", "=", true]);

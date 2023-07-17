@@ -29,3 +29,29 @@ h2.nouvelOrdre-title {
 ::ng-deep .pulse .dx-button {
   animation: pulse 0.5s;
 }
+
+::ng-deep .buttons-right-container {
+  margin-top: 8px;
+  width: auto;
+  float: right;
+  overflow: hidden;
+
+  .program-button,
+  .order-home-up-button {
+    margin: 0 5px;
+    float: right;
+
+    .prog-btn {
+      padding: 0 16px;
+    }
+
+    .button-programs {
+      display: inline;
+      vertical-align: middle;
+      line-height: 13px;
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+  }
+}

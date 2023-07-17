@@ -1,0 +1,167 @@
+<form
+  class="dx-fieldset"
+  [formGroup]="formGroup"
+>
+  <div class="EDIArticleFilterArea">
+    <dx-box>
+      <dxi-item [ratio]="3">
+        <!-- Clients -->
+        <div class="dx-field">
+          <div class="dx-field-label client-label">
+            {{ "tiers-client" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              formControlName="client"
+              [dataSource]="clients"
+              valueExpr="id"
+              [displayExpr]="displayCodeBefore"
+              [searchExpr]="['code']"
+              [showClearButton]="true"
+            >
+              <dx-validator>
+                <dxi-validation-rule
+                  type="required"
+                  message=""
+                ></dxi-validation-rule>
+              </dx-validator>
+              <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="1.5">
+        <!-- Actifs/non actifs -->
+        <div class="dx-field activeCheckboxField">
+          <div class="dx-field-label">
+            {{ "actif-uniq" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-check-box
+              formControlName="valide"
+              class="float-left"
+              (onValueChanged)="onValideChanged($event)"
+            >
+            </dx-check-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="2.5">
+        <!-- Recherche -->
+        <div class="dx-field">
+          <div class="dx-field-label">
+            {{ "searchFor" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-autocomplete
+              placeholder="..."
+              formControlName="search"
+              (onValueChanged)="enableFilters()"
+              valueChangeEvent="keyup"
+              [showClearButton]="true"
+              hint="{{ 'hint-search-edi-articles' | localize }}"
+            ></dx-autocomplete>
+          </div>
+        </div>
+      </dxi-item>
+    </dx-box>
+  </div>
+  <dx-button
+    class="refresh"
+    type="default"
+    text="{{ 'btn-refresh' | localize }}"
+    (onClick)="enableFilters()"
+  ></dx-button>
+</form>
+
+<dx-data-grid
+  class="grid-articles-edi-colibri"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [focusedRowEnabled]="true"
+  [focusedRowIndex]="0"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  [noDataText]="'aucun-article-EDI-COLIBRI' | localize"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onCellClick)="onCellClick($event)"
+  (onRowDblClick)="onRowDblClick($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      this.localizeService.localize('articles-edi-colibri-list'),
+      $event,
+      gridConfiguratorService.Grid.AssociationArticleEdi,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [enabled]="true"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.AssociationArticleEdi"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+
+  <dxo-toolbar>
+    <dxi-item location="after">
+      <div *dxTemplate>
+        <dx-button
+          class="plus-button"
+          icon="plus"
+          type="success"
+          hint="{{ 'hint-add-article' | localize }}"
+          (onClick)="addEDIArticle()"
+        >
+        </dx-button>
+      </div>
+    </dxi-item>
+  </dxo-toolbar>
+
+  <dxo-group-panel [visible]="false"> </dxo-group-panel>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
+    [caption]="
+      ('articlesEdi-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [visible]="false"
+    [dataType]="column?.dataType"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+</dx-data-grid>
+
+<app-modification-article-edi-popup
+  [EdiArticle]="EdiArticle"
+  (whenValidate)="enableFilters()"
+></app-modification-article-edi-popup>

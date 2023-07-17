@@ -1,0 +1,66 @@
+// Var
+@import "themes/generated/variables.base";
+
+::ng-deep .modification-article-edi-popup {
+  .dx-invalid-message {
+    visibility: hidden !important;
+  }
+
+  .dx-state-disabled {
+    opacity: 1 !important;
+  }
+
+  .dx-texteditor-input-container::after {
+    right: 0 !important;
+  }
+}
+
+.popup-action {
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &>.dx-button {
+    margin-left: 10px;
+  }
+}
+
+.EDI-info-boxes {
+  padding-right: 70px;
+
+  .dx-field {
+    margin-bottom: 3px;
+
+    &.valide-EDI-checkbox {
+      height: 34px;
+
+      .dx-checkbox {
+        margin: 9px 0;
+        float: left;
+      }
+    }
+
+    .dx-field-label {
+      width: 46% !important;
+      white-space: initial;
+      margin-right: 10px;
+
+      &.large-padding-left {
+        padding-left: 50px;
+      }
+    }
+
+    .dx-field-value {
+      width: 200px !important;
+
+      &.prioriteEdi {
+        width: 50px !important;
+      }
+
+      &.codeArtBW {
+        width: 140px !important;
+      }
+    }
+  }
+}

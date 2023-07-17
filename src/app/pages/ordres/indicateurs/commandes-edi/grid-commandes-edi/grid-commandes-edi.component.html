@@ -36,7 +36,7 @@
         </div>
       </dxi-item>
       <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
+      <dxi-item [ratio]="2.4">
         <!-- Assistante -->
         <div class="dx-field">
           <div class="dx-field-label">
@@ -56,7 +56,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="3.6">
+      <dxi-item [ratio]="2.4">
         <!-- Commercial -->
         <div class="dx-field commercial-field">
           <div class="dx-field-label">
@@ -71,6 +71,22 @@
               [displayExpr]="displayIDBefore"
               [searchExpr]="['id', 'nomUtilisateur']"
               (onValueChanged)="setClientDataSource()"
+            >
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="1.8">
+        <!-- Filtre stock -->
+        <div class="dx-field field-large text-align-right">
+          <div class="dx-field-label">
+            {{ "filter-stock" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              #filtreStockSB
+              formControlName="filtreStock"
+              [dataSource]="filtresStock"
             >
             </dx-select-box>
           </div>
@@ -97,9 +113,30 @@
         </div>
       </dxi-item>
       <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
+      <dxi-item [ratio]="1.9">
+        <!-- Type recherche date -->
+        <div class="dx-field field-large">
+          <div class="dx-field-label noEllipsis typeRech">
+            {{ "ordresEdi-type-recherche" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-select-box
+              #typeDatesSB
+              formControlName="typeDate"
+              [items]="typesDates"
+            >
+              <dxo-drop-down-options
+                [width]="200"
+                [elementAttr]="{ class: 'period-list' }"
+              >
+              </dxo-drop-down-options>
+            </dx-select-box>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item [ratio]="1.7">
         <!-- Période -->
-        <div class="dx-field">
+        <div class="dx-field date-field">
           <div class="dx-field-label noEllipsis">
             {{ "ordres-periode" | localize }}
           </div>
@@ -120,7 +157,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="1.8">
+      <dxi-item [ratio]="1.5">
         <!-- Date de début -->
         <div class="dx-field date-field">
           <div class="dx-field-label">
@@ -141,7 +178,7 @@
           </div>
         </div>
       </dxi-item>
-      <dxi-item [ratio]="1.8">
+      <dxi-item [ratio]="1.5">
         <!-- Date de fin -->
         <div class="dx-field field date-field">
           <div class="dx-field-label">

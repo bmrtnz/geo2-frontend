@@ -324,4 +324,4 @@ import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/gr
   ],
   exports: [GridStockComponent],
 })
-export class OrdresModule {}
+export class OrdresModule { }

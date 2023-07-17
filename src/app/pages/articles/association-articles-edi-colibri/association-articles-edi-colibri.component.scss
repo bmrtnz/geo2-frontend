@@ -1,0 +1,7 @@
+// Var
+@import "themes/generated/variables.base";
+
+
+::ng-deep .blue-font {
+  color: $base-accent !important;
+}

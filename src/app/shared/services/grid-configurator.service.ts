@@ -142,6 +142,7 @@ export enum Grid {
   CommandesEdi = "commandes-edi",
   ModifCommandeEdi = "modif-commande-edi",
   LignesEdi = "lignes-edi",
+  AssociationArticleEdi = "association-articles-edi",
   EncoursClient = "encours-client",
   LignesGroupageChargements = "lignes-groupage-chargements",
   ImportProgramme = "import-programme",

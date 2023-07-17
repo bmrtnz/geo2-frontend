@@ -28,31 +28,6 @@
     >
     </dx-button>
   </div>
-
-  <dx-button
-    class="dx-button order-home-up-button program-button"
-    type="default"
-    hint="{{ 'hint-open-program' | localize }}"
-  >
-    <div *dxTemplate="let data of 'content'">
-      <span class="dx-button-text prog-btn">{{
-        "ordres-programmes" | localize
-      }}</span>
-      <app-program-chooser
-        [programs]="programs"
-        (programChosen)="openProgramPopup($event)"
-        menuMode="context"
-      ></app-program-chooser>
-    </div>
-  </dx-button>
-  <dx-button
-    class="order-home-up-button"
-    type="default"
-    text="{{ 'ordres-commandes-edi' | localize }}"
-    [disabled]="!authService.currentUser.accessCommandeEdi"
-    (onClick)="openCommandesEdi()"
-  >
-  </dx-button>
 </h2>
 
 <div class="inputs-container content-block">
@@ -128,9 +103,3 @@
     </dxi-item>
   </dx-tile-view>
 </div>
-
-<app-commandes-edi></app-commandes-edi>
-<!-- <app-commandes-edi></app-commandes-edi> -->
-<app-import-programmes-popup
-  [program]="programChosen"
-></app-import-programmes-popup>

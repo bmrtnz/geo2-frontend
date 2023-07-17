@@ -39,9 +39,9 @@ export class ArticlesService extends ApiService implements APIRead {
       .pipe(takeWhile((res) => res.loading === false));
   }
 
-  getDataSource_v2(columns: Array<string>, fetchPol?) {
+  getDataSource_v2(columns: Array<string>, fetchPol?, sortField?) {
     return new DataSource({
-      sort: [{ selector: this.model.getLabelField() as string }],
+      sort: [{ selector: sortField ?? this.model.getLabelField() as string }],
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

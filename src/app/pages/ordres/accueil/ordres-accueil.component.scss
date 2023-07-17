@@ -55,6 +55,7 @@
     }
 
     .tile-button {
+
       &:hover,
       &:focus {
         background-color: transparent !important;
@@ -105,7 +106,6 @@
   float: right;
   top: 0;
   margin: 0 35px 5px 6px !important;
-  border-left: 1px solid #ccc;
 
   .dx-tag {
     display: none;
@@ -142,25 +142,6 @@
 
 ::ng-deep .dx-list-select-all {
   display: none;
-}
-
-::ng-deep .program-button,
-.order-home-up-button {
-  margin: 0 5px;
-  float: right;
-
-  .prog-btn {
-    padding: 0 16px;
-  }
-
-  .button-programs {
-    display: inline;
-    vertical-align: middle;
-    line-height: 13px;
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
 }
 
 ::ng-deep .inputs-container {

@@ -50,6 +50,8 @@ enum InputField {
   codeAssistante = "assistante",
   dateMin = "dateMin",
   dateMax = "dateMax",
+  typeDate = "typeDate",
+  filtreStock = "filtreStock"
 }
 
 const ALL = "%";
@@ -69,6 +71,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public assistantes: DataSource;
   private dataSourceOL: DataSource;
   public periodes: any[];
+  public typesDates: string[];
+  public filtresStock: string[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
@@ -87,6 +91,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @Output() ordresNumeros: string[];
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
+  @ViewChild("typeDatesSB", { static: false }) typeDatesSB: DxSelectBoxComponent;
+  @ViewChild("filtreStockSB", { static: false }) filtreStockSB: DxSelectBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("etatRB", { static: false }) etatRB: DxRadioGroupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false })
@@ -102,6 +108,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     codeCommercial: new UntypedFormControl(),
     dateMin: new UntypedFormControl(this.dateMgtService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateMgtService.endOfDay()),
+    typeDate: new UntypedFormControl(),
+    filtreStock: new UntypedFormControl()
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -119,6 +127,15 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private dateMgtService: DateManagementService,
     public authService: AuthService
   ) {
+    this.typesDates = [
+      this.localization.localize("date-livraison"),
+      this.localization.localize("date-creation")
+    ];
+    this.filtresStock = [
+      this.localization.localize("simplifie"),
+      this.localization.localize("detaille")
+    ]
+    this.formGroup.get("typeDate").setValue(this.typesDates[0]);
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi
@@ -176,6 +193,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       ".dx-toolbar .grid-title input"
     );
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+
+    this.formGroup.get("filtreStock").setValue(this.filtresStock[0]);
   }
 
   displayIDBefore(data) {
@@ -263,9 +282,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   onFieldValueChange(e?) {
-    if (e) {
-      this.enableFilters();
-    }
+    if (e) this.enableFilters();
   }
 
   setClientDataSource() {
@@ -288,7 +305,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .subscribe((res) => {
         const clientList = res.data.allClientEdi;
         if (clientList?.length) {
-          const filters: any = [
+          const filters: any = this.authService.isAdmin ? [] : [
             [
               "secteur.id",
               "=",
@@ -296,16 +313,28 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             ],
           ];
           const filter = [];
-          clientList.map((clt) => {
-            filter.push(["id", "=", clt.client.id], "or");
-          });
+
+          // A VIRER !! MIS TEMPORAIREMENT SUITE DOUBLONS ASTRONOMIQUES RENVOYES
+          // Voir https://redmine.microtec.fr/issues/21576
+          const setClts = new Set();
+          clientList.map(clt => setClts.add(clt.client.id));
+          Array.from(setClts).map(cltIds => filter.push(["id", "=", cltIds], "or"));
+          ////////////////////////////////////////////////////////////////////////
+
+          // A REMETTRE
+          // clientList.map((clt) => {
+          //   filter.push(["id", "=", clt.client.id], "or");
+          // });
+          /////////////
           filter.pop();
-          filters.push("and", filter);
+          if (filters.length) filters.push("and");
+          filters.push(filter);
           this.clients = this.clientsService.getDataSource_v2([
             "code",
             "raisonSocial",
           ]);
           this.clients.filter(filters);
+          console.log(filters)
         }
       });
   }

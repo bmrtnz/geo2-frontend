@@ -1,0 +1,91 @@
+<dx-popup
+  width="500"
+  height="auto"
+  [dragEnabled]="true"
+  [title]="title"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShown)="onShown($event)"
+  [hideOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <form
+      #form="ngForm"
+      class="inputs"
+    >
+      <!-- Validité, Code art BW, GTIN, code art Clt et Priorité -->
+      <div class="EDI-info-boxes">
+        <div class="dx-field valide-EDI-checkbox">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-valide" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-check-box #valideBox></dx-check-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-codeArtBW" | localize }}
+          </div>
+          <div class="dx-field-value codeArtBW">
+            <dx-select-box
+              #codeArtBWBox
+              [readOnly]="purpose === 'modification'"
+              [dataSource]="articlesDS"
+              displayExpr="id"
+              [searchMode]="'contains'"
+              [showClearButton]="true"
+            >
+              <dx-validator>
+                <dxi-validation-rule
+                  *ngIf="purpose === 'ajout'"
+                  type="required"
+                ></dxi-validation-rule>
+              </dx-validator>
+            </dx-select-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-GTINArtClient" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-number-box #GTINArtClientBox></dx-number-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-codeArtClient" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-text-box #codeArtClientBox></dx-text-box>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "articlesEdi-label-priorite" | localize }}
+          </div>
+          <div class="dx-field-value prioriteEdi">
+            <dx-number-box #prioriteBox></dx-number-box>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <br />
+      <div class="popup-action">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="popupComponent.instance.hide()"
+        ></dx-button>
+        <dx-button
+          text="{{ 'btn-enregistrer' | localize }}"
+          type="default"
+          (onClick)="onSave(form)"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>

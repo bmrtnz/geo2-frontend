@@ -56,9 +56,23 @@
           border-bottom: 1px solid $base-border-color;
         }
 
-        &[aria-level="2"] .dx-treeview-item-content {
-          font-weight: normal;
-          padding: 0 $side-panel-min-width;
+        &[aria-level="2"] {
+
+          .dx-treeview-item {
+            height: 48px;
+
+            .dx-treeview-item-content {
+              position: relative;
+              top: 50%;
+              transform: translateY(-50%);
+              font-weight: normal;
+              line-height: 20px;
+              padding: 0 0 0 $side-panel-min-width;
+              width: 250px;
+              overflow: hidden;
+              white-space: normal;
+            }
+          }
         }
       }
 
@@ -69,15 +83,15 @@
     ::ng-deep .dx-treeview {
       .dx-treeview-node-container {
         .dx-treeview-node {
-          &.dx-state-selected:not(.dx-state-focused) > .dx-treeview-item {
+          &.dx-state-selected:not(.dx-state-focused)>.dx-treeview-item {
             background: transparent;
           }
 
-          &.dx-state-selected > .dx-treeview-item * {
+          &.dx-state-selected>.dx-treeview-item * {
             color: $base-accent;
           }
 
-          &:not(.dx-state-focused) > .dx-treeview-item.dx-state-hover {
+          &:not(.dx-state-focused)>.dx-treeview-item.dx-state-hover {
             background-color: lighten($base-bg, 4);
           }
         }
@@ -85,10 +99,7 @@
     }
 
     :host-context(.dx-theme-generic) ::ng-deep.dx-treeview {
-      .dx-treeview-node-container
-        .dx-treeview-node.dx-state-selected.dx-state-focused
-        > .dx-treeview-item
-        * {
+      .dx-treeview-node-container .dx-treeview-node.dx-state-selected.dx-state-focused>.dx-treeview-item * {
         color: inherit;
       }
     }

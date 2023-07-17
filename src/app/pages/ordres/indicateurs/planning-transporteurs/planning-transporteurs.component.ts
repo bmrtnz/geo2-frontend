@@ -136,7 +136,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   enableFilters() {
     if (!this.formGroup.get("transporteurCode").value) {
-      notify("Veuillez spécifier un transporteur", "error");
+      notify(this.localizeService.localize("please-select-transporteur"), "error", 1500);
     } else {
       const values: Inputs = {
         ...this.formGroup.value,

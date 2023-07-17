@@ -28,7 +28,16 @@ export const navigation = [
   {
     /* eslint-disable-next-line  max-len */
     html: '<i class="dx-icon dx-icon-box"></i><div>Articles</div><div class="countArticle toValidate-indicator display-none"></div>',
-    path: "pages/nested/n/(articles/list)",
+    items: [
+      {
+        html: '<div>Gestion des articles BW</div><div class="countClient toValidate-indicator display-none"></div>',
+        path: "pages/nested/n/(articles/list)",
+      },
+      {
+        html: '<div>Association des articles EDI/COLIBRI</div>',
+        path: "pages/articles/association-edi-colibri",
+      },
+    ],
   },
   {
     text: "Stock",
