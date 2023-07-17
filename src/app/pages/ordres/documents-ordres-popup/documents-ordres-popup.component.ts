@@ -1,5 +1,6 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
@@ -24,6 +25,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   @Input() public gridEnvois: GridEnvoisComponent;
   @Output() public annuleOrdre: boolean;
   @Output() public currOrdre: Partial<Ordre>;
+  @Output() public whenDone = new EventEmitter();
 
   visible: boolean;
   closeConfirm = false;
@@ -53,6 +55,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
   async hidePopup() {
     this.popup.instance.hide();
+    this.whenDone.emit();
   }
 
   onShowing(e) {
@@ -66,6 +69,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
   async onHiding(event) {
     if (!this.closeConfirm) {
+      console.log("hiding ?")
       event.cancel = true; // cancel popup hiding
 
       const result = confirm(
@@ -76,7 +80,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
       this.closeConfirm = await result;
       if (this.closeConfirm) {
         await this.gridChoixEnvoisComponent.clearTemps();
-        this.popup.instance.hide();
+        this.hidePopup();
       }
     }
   }
@@ -85,7 +89,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
     this.gridChoixEnvoisComponent.done().subscribe({
       complete: () => {
         this.closeConfirm = true; // Force close popup without confirmation
-        this.popup.instance.hide();
+        this.hidePopup();
         this.gridEnvois?.reload();
       },
     });

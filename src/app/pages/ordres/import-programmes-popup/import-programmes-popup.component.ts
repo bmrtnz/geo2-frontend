@@ -1,5 +1,11 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
+import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
+import { EnvoisService } from "app/shared/services/api/envois.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 import { Program, ProgramService } from "app/shared/services/program.service";
 import {
   DxFileUploaderComponent,
@@ -8,7 +14,9 @@ import {
 } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import { concatMap, defer, delay, exhaustMap, filter, firstValueFrom, from, iif, lastValueFrom, mergeMap, of, switchMap, tap } from "rxjs";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
+import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 
 @Component({
   selector: "app-import-programmes-popup",
@@ -19,6 +27,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   @Input() program: { id: string; name: string; text: string };
   @Output() programID: string;
   @Output() title: string;
+
+  @ViewChild(ConfirmationResultPopupComponent)
+  resultPopup: ConfirmationResultPopupComponent;
+  @ViewChild(DocumentsOrdresPopupComponent)
+  docsPopup: DocumentsOrdresPopupComponent;
 
   public visible: boolean;
   public gridHasData: boolean;
@@ -39,7 +52,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   constructor(
     private localizeService: LocalizationService,
-    private programService: ProgramService
+    private programService: ProgramService,
+    private fluxEnvoisService: FluxEnvoisService,
+    private envoisService: EnvoisService,
+    private ordresService: OrdresService,
+    private currentCompanyService: CurrentCompanyService,
   ) { }
 
   ngOnChanges() {
@@ -78,13 +95,25 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     }
   }
 
-  onUploaded(e: { request: XMLHttpRequest }) {
+  async onUploaded(e: { request: XMLHttpRequest }) {
     const DSitems = e.request?.response?.rows;
 
     if (e.request.status !== 200)
       return notify("L'import du programme a échoué", "error", 7000);
 
     if (!DSitems?.length) return this.noDataError();
+
+    if (this.programID === Program.PRÉORDRES) {
+      const ordreNums = DSitems.filter(item => !item.erreurs.length).map(item => item.ordreNum);
+      const response = await this.handleConfirmationsCommande(ordreNums);
+      response.forEach(({ ordreNum, envoisDone }) => {
+        const row = DSitems.find(item => item.ordreNum === ordreNum);
+        if (row) row.messages.push(envoisDone
+          ? "Confirmation d'ordre envoyée !!"
+          : "Confirmation d'ordre N'EST PAS envoyée !!",
+        )
+      });
+    }
 
     DSitems.map((item, index) => {
       item.id = index;
@@ -171,5 +200,28 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     } else {
       this.popup.visible = false;
     }
+  }
+
+  /** Handle "confirmation popup" for the provided orders */
+  private async handleConfirmationsCommande(ordreNums: Array<Ordre["numero"]>) {
+    const response: { ordreNum: Ordre["numero"], envoisDone: boolean }[] = [];
+    const flux = "ORDRE";
+    const { id, campagne } = this.currentCompanyService.getCompany();
+    for (const num of ordreNums) {
+      const res = await lastValueFrom(this.ordresService
+        .getOneByNumeroAndSocieteAndCampagne(num, id, campagne.id, ["id", "numero", "type.id"]));
+      const ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
+      const promptResult = await lastValueFrom(this.fluxEnvoisService
+        .prompt(flux, ordre.id, this.resultPopup, false));
+      if (promptResult) {
+        this.docsPopup.ordre = ordre;
+        this.docsPopup.flux = flux;
+        this.docsPopup.visible = true;
+        await firstValueFrom(this.docsPopup.whenDone.asObservable());
+      }
+      const envoisDone = !!(await lastValueFrom(this.envoisService.countReals(ordre.id, flux)));
+      response.push({ ordreNum: num, envoisDone: envoisDone });
+    }
+    return response;
   }
 }
