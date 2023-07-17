@@ -6,6 +6,7 @@ import { alert } from "devextreme/ui/dialog";
 import EdiArticleClient from "app/shared/models/article-edi.model";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { ArticlesEdiService } from "app/shared/services/api/articles-edi.service";
 
 @Component({
   selector: 'app-modification-article-edi-popup',
@@ -16,6 +17,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
   constructor(
     private localizeService: LocalizationService,
     private articlesService: ArticlesService,
+    private articlesEdiService: ArticlesEdiService,
   ) { }
 
   @ViewChild(DxPopupComponent, { static: false })
@@ -38,7 +40,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
   private CR = "<br>● ";
 
   ngOnInit() {
-    this.articlesDS = this.articlesService.getDataSource_v2(["id"], "cache-first", "id");
+    this.articlesDS = this.articlesService.getDataSource_v2(["id", "normalisation.articleClient"], "cache-first", "id");
     this.articlesDS.filter(["valide", "=", true]);
   }
 
@@ -101,7 +103,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
         message += `${this.CR}Le code article est non-renseigné`;
     }
 
-    if (this.GTINArtClientBox.value?.length) {
+    if (this.GTINArtClientBox.value) {
       if (this.GTINArtClientBox.value.length < 8 || this.GTINArtClientBox.value.length > 13)
         message += `${this.CR}Le GTIN doit être au minimum de 8 chiffres et maximum de 13 chiffres`;
     } else if (!this.codeArtClientBox.value) {
@@ -111,13 +113,49 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
     if (messageLength !== message.length) {
       alert(`${message}<br>`, this.localizeService.localize(`ordres-${this.purpose}-article`))
     } else {
-      // Save : ajout or modification?
-      notify(
-        this.localizeService.localize(this.purpose === "ajout" ? 'article-created' : 'saveOK'),
-        "success", 3000
-      );
-      this.visible = false;
-      this.whenValidate.emit(); // Refresh grid
+      // Save : ajout & modification
+
+
+      const ediArticleClientAjout = {
+        id: null,
+        valide: this.valideBox.value,
+        gtinColisClient: this.GTINArtClientBox.value,
+        priorite: this.prioriteBox.value,
+        article: { id: this.codeArtBWBox.value.id }
+      }
+      const ediArticleClientModif = {
+        id: this.EdiArticle?.id,
+        valide: this.valideBox.value,
+        gtinColisClient: this.GTINArtClientBox.value,
+        priorite: this.prioriteBox.value,
+      }
+
+      // Need for saving the new code article client in article table
+      if (this.purpose === "modification") {
+        const article = {
+          id: this.EdiArticle?.article.id,
+          normalisation: { id: this.EdiArticle?.article.normalisation.id, articleClient: this.codeArtClientBox.value }
+        }
+        this.articlesService.save_v2(["id"], { article, clone: false }).subscribe({
+          error: () => notify("Erreur lors de la sauvegarde article", "error", 3000)
+        });
+      }
+
+      const ediArticleClient = this.purpose === "ajout" ? ediArticleClientAjout : ediArticleClientModif;
+
+      this.articlesEdiService.save(new Set(["id"]), ediArticleClient).subscribe({
+        next: (e) => {
+          notify(
+            this.localizeService.localize(this.purpose === "ajout" ? 'article-created' : 'saveOK'),
+            "success", 3000
+          );
+          this.visible = false;
+          this.whenValidate.emit(); // Refresh grid
+        },
+        error: () =>
+          notify("Erreur lors de la sauvegarde", "error", 3000),
+      });
+
     }
 
   }

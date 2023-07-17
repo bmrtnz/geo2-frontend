@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import EdiArticleClient from "app/shared/models/article-edi.model";
 import DataSource from "devextreme/data/data_source";
@@ -41,7 +42,7 @@ export class ArticlesEdiService extends ApiService {
             type Response = { allEdiArticleClient: RelayPage<EdiArticleClient> };
             const query = await this.buildGetAll_v2(columns);
             const variables = this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(query, { variables }, (res) => {
+            this.listenQuery<Response>(query, { variables, fetchPolicy: "no-cache" }, (res) => {
               if (res.data && res.data.allEdiArticleClient) {
                 resolve(this.asInstancedListCount(res.data.allEdiArticleClient));
               }
@@ -52,10 +53,7 @@ export class ArticlesEdiService extends ApiService {
     });
   }
 
-  public saveEdiArticleClient(
-    ediArticleClient: Partial<EdiArticleClient>,
-    body: Set<string>
-  ) {
+  save(body: Set<string>, ediArticleClient: Partial<EdiArticleClient>) {
     return this.apollo.mutate<{ saveEdiArticleClient: Partial<EdiArticleClient> }>({
       mutation: gql(this.buildSaveGraph([...body])),
       variables: { ediArticleClient },

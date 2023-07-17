@@ -65,6 +65,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     "priorite",
     "article.normalisation.calibreMarquage.description",
     "article.normalisation.articleClient",
+    "article.normalisation.id",
     "article.valide"
   ];
 
@@ -154,7 +155,22 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       } else {
         // Change valide status & save it
         // Reload DS
-        this.enableFilters();
+        const ediArticleClient = {
+          id: e.data.id,
+          valide: !e.data.valide
+        }
+
+        this.articlesEdiService.save(new Set(["id", "valide"]), ediArticleClient).subscribe({
+          next: () => {
+            notify(
+              `${this.localizeService.localize("ordresEdi-article-id")} ${e.data.article.id} ${this.localizeService.localize(e.data.valide ? "desactive" : "active")}`,
+              "success"
+            ),
+              this.enableFilters();
+          },
+          error: () =>
+            notify("Erreur lors de la modification du statut", "error", 3000),
+        });
       }
     }
   }

@@ -28,6 +28,8 @@
     "week": "semaine",
     "depuis": "depuis",
     "avec": "avec",
+    "active": "activé",
+    "desactive": "désactivé",
     "compris": "compris !",
     "quantite": "Quantité",
     "preFilter-title": "Pré-filtrage",
