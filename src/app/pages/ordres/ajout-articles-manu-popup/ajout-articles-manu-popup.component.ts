@@ -276,55 +276,45 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   insertReplaceArticles() {
-    if (!this.remplacementArticle) {
-      const info =
-        this.localizeService.localize(
-          "ajout-article" + (this.nbARticles > 1 ? "s" : "")
-        ) + "...";
-      notify(info, "info", 3000);
-      from(this.chosenArticles)
-        .pipe(
-          concatMap((articleID) =>
-            this.functionsService
-              .ofInitArticle(
-                this.ordre.id,
-                articleID,
-                this.currentCompanyService.getCompany().id
-              )
-              .valueChanges.pipe(
-                concatMap((res) => {
-                  this.associatedPrompt.ordreLigneID =
-                    res.data.ofInitArticle.data.new_orl_ref;
-                  this.associatedPrompt.articleAssocieID =
-                    res.data.ofInitArticle.data.art_ass;
-                  return this.associatedPrompt.tryPrompt();
-                }),
-                takeWhile((res) => res.loading)
-              )
-          )
+
+    let info =
+      this.localizeService.localize(
+        "ajout-article" + (this.nbARticles > 1 ? "s" : "")
+      ) + "...";
+
+    if (this.remplacementArticle)
+      info = this.localizeService.localize("remplacement-article") + "...";
+    notify(info, "info", 3000);
+
+    from(this.chosenArticles)
+      .pipe(
+        concatMap((articleID) =>
+          this.functionsService
+            .ofInitArticle(
+              this.ordre.id,
+              articleID,
+              this.currentCompanyService.getCompany().id,
+              this.remplacementArticle ? this.articleRowKey : null
+            )
+            .valueChanges.pipe(
+              concatMap((res) => {
+                this.associatedPrompt.ordreLigneID =
+                  res.data.ofInitArticle.data.new_orl_ref;
+                this.associatedPrompt.articleAssocieID =
+                  res.data.ofInitArticle.data.art_ass;
+                return this.associatedPrompt.tryPrompt();
+              }),
+              takeWhile((res) => res.loading)
+            )
         )
-        .subscribe({
-          error: ({ message }: Error) =>
-            notify(this.messageFormat(message), "error", 7000),
-          complete: () => this.clearAndHidePopup(),
-        });
-    } else {
-      const ordreLigne = {
-        id: this.articleRowKey,
-        article: { id: this.chosenArticles[0] },
-        listeCertifications: "0",
-        origineCertification: null,
-      };
-      this.OrdreLigneService.save_v2(["id"], { ordreLigne }).subscribe({
-        next: (res) => {
-          notify("Article remplacé", "success", 3000);
-          this.nbARticles = 0;
-          this.clearAndHidePopup();
-        },
-        error: () =>
-          notify("Erreur lors du remplacement de l'article", "error", 3000),
+      )
+      .subscribe({
+        next: () => this.nbARticles = 0,
+        error: ({ message }: Error) =>
+          notify(this.messageFormat(message), "error", 7000),
+        complete: () => this.clearAndHidePopup(),
       });
-    }
+
   }
 
   private messageFormat(mess) {
