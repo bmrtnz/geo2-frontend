@@ -305,7 +305,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .subscribe((res) => {
         const clientList = res.data.allClientEdi;
         if (clientList?.length) {
-          const filters: any = [
+          const filters: any = this.authService.isAdmin ? [] : [
             [
               "secteur.id",
               "=",
@@ -313,16 +313,28 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             ],
           ];
           const filter = [];
-          clientList.map((clt) => {
-            filter.push(["id", "=", clt.client.id], "or");
-          });
+
+          // A VIRER !! MIS TEMPORAIREMENT SUITE DOUBLONS ASTRONOMIQUES RENVOYES
+          // Voir https://redmine.microtec.fr/issues/21576
+          const setClts = new Set();
+          clientList.map(clt => setClts.add(clt.client.id));
+          Array.from(setClts).map(cltIds => filter.push(["id", "=", cltIds], "or"));
+          ////////////////////////////////////////////////////////////////////////
+
+          // A REMETTRE
+          // clientList.map((clt) => {
+          //   filter.push(["id", "=", clt.client.id], "or");
+          // });
+          /////////////
           filter.pop();
-          filters.push("and", filter);
+          if (filters.length) filters.push("and");
+          filters.push(filter);
           this.clients = this.clientsService.getDataSource_v2([
             "code",
             "raisonSocial",
           ]);
           this.clients.filter(filters);
+          console.log(filters)
         }
       });
   }
