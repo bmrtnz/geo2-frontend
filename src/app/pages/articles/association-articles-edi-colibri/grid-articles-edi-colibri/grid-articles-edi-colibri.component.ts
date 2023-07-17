@@ -131,11 +131,9 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       const values: Inputs = {
         ...this.formGroup.value,
       };
-      const filter = [
-        ["client.id", "=", values.client],
-        "and",
-        ["valide", "=", values.valide]
-      ];
+      const filter = [];
+      filter.push(["client.id", "=", values.client]);
+      if (values.valide) filter.push("and", ["valide", "=", values.valide]);
       if (values.search?.length) {
         filter.push("and", [["article.id", "contains", values.search], "or", ["article.normalisation.articleClient", "contains", values.search], "or", ["gtinColisClient", "contains", values.search]]);
       }
