@@ -37,6 +37,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   @Output() public EdiArticle: Partial<EdiArticleClient>;
+  @Output() public clientId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ModificationArticleEdiPopupComponent) private modifPopup: ModificationArticleEdiPopupComponent;
@@ -114,12 +115,13 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Only way found to validate and show Warning icon
-    // this.formGroup.get("client").setValue("");
-    // this.formGroup.get("client").reset();
+    this.formGroup.get("client").setValue("");
+    this.formGroup.get("client").reset();
+
     this.formGroup.get("valide").setValue(true);
 
-    this.formGroup.get("client").patchValue("000448"); // A VIRER !!
-    setTimeout(() => this.enableFilters(), 500); // A VIRER !!
+    // this.formGroup.get("client").patchValue("000448"); // A VIRER !!
+    // setTimeout(() => this.enableFilters(), 500); // A VIRER !!
   }
 
   enableFilters() {
@@ -129,11 +131,9 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       const values: Inputs = {
         ...this.formGroup.value,
       };
-      const filter = [
-        ["client.id", "=", values.client],
-        "and",
-        ["valide", "=", values.valide]
-      ];
+      const filter = [];
+      filter.push(["client.id", "=", values.client]);
+      if (values.valide) filter.push("and", ["valide", "=", values.valide]);
       if (values.search?.length) {
         filter.push("and", [["article.id", "contains", values.search], "or", ["article.normalisation.articleClient", "contains", values.search], "or", ["gtinColisClient", "contains", values.search]]);
       }
@@ -177,6 +177,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   addEDIArticle() {
     this.EdiArticle = null;
+    this.clientId = this.formGroup.get("client").value;
     this.modifPopup.show("ajout");
   }
 

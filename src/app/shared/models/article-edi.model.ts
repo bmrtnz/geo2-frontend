@@ -6,7 +6,7 @@ import { Field, Model, ModelName } from "./model";
 export class EdiArticleClient extends Model {
   @Field({ asKey: true, asLabel: true }) public id: number;
   @Field({ model: import("./article.model") }) public article?: Partial<Article>;
-  @Field({ model: import("./client.model") }) public client?: Client;
+  @Field({ model: import("./client.model") }) public client?: Partial<Client>;
   @Field({ dataType: "datetime" }) public dateModification?: string;
   @Field() public dernierOrdre?: string;
   @Field() public description?: string;
