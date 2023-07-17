@@ -6,6 +6,7 @@ import { CurrentCompanyService } from "./current-company.service";
 export enum Program {
   TESCO = "tesco",
   ORCHARD = "orchard",
+  PRÉORDRES = "preordres"
 }
 
 export const SUPPORTED_MIMES = [
@@ -20,7 +21,7 @@ export class ProgramService {
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   /** Name of the body parameter in the backend */
   public static bodyName = "chunk";

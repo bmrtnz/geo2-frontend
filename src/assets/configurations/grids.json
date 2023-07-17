@@ -7157,6 +7157,12 @@
         "visible": false
       },
       {
+        "visibleIndex": 1,
+        "dataField": "refCli",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "visibleIndex": 2,
         "dataField": "loadRef",
         "dataType": "string",

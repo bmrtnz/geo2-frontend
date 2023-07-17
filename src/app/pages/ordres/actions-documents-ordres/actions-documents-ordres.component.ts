@@ -192,14 +192,10 @@ export class ActionsDocumentsOrdresComponent {
           );
         }),
         filter((res) => res),
-        concatMapTo(
-          this.envoisService.countBy(
-            `ordre.id==${this.ordre.id} and flux.id==${this.flux} and (traite==N or traite==O or traite=isnull=null)`
-          )
-        )
+        concatMapTo(this.envoisService.countReals(this.ordre.id, this.flux))
       )
-      .subscribe((res) => {
-        const remplacement = res.data.countBy && this.flux === "ORDRE";
+      .subscribe((countedReals) => {
+        const remplacement = countedReals && this.flux === "ORDRE";
         const popup = remplacement
           ? "remplacePopup"
           : "docsPopup";

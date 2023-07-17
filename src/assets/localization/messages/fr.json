@@ -1512,6 +1512,7 @@
     "ordres-supervision-litiges-litige-ordreOrigine-assistante-nomUtilisateur": "Assistante",
     "litige": "litige",
     "ordres-program-loadRef": "Load référence",
+    "ordres-program-refCli": "Référence client",
     "ordres-program-depot": "Dépôt",
     "ordres-program-dateDepart": "Date départ",
     "ordres-program-dateLivraison": "Date livraison",
