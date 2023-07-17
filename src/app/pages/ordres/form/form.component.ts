@@ -398,8 +398,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   gestionOpPopup: GestionOperationsPopupComponent;
   @ViewChild(SelectionComptePaloxPopupComponent)
   comptePaloxPopup: SelectionComptePaloxPopupComponent;
-  @ViewChild("dateDepartMutationPopup")
-  dateDepartMutationPopup: QuestionPopupComponent;
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
 
@@ -577,20 +575,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.addLinkedOrders();
           if (message) notify(this.localization.localize(message), "success");
 
-          // ordre date depart has been mutated
-          if (ordre.dateDepartPrevue) {
-
-            this.dateDepartMutationPopup
-              .prompt(this.localization.localize("ordre-date-depart-mutate"))
-              .subscribe(
-                (result) => {
-                  result && this.updateLogistiquesDates(ordre.dateDepartPrevue);
-                  // Check date and change if needed with info toast
-                  if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
-                    this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
-                }
-              );
-          }
+          // Ordre date depart has been mutated
+          if (ordre.dateDepartPrevue) this.changeDateDepart(ordre.dateDepartPrevue);
         },
         error: (err) => {
           notify("Erreur sauvegarde entête", "error", 3000);
@@ -598,6 +584,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.headerSaving = false;
         },
       });
+    }
+  }
+
+  async changeDateDepart(dateDepartPrevue) {
+    if (await confirm(
+      this.localization.localize("ordre-date-depart-mutate"),
+      this.localization.localize("ordre-date-depart-mutate-title")
+    )) {
+      this.updateLogistiquesDates(dateDepartPrevue);
+      // Check date and change if needed with info toast
+      if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
+        this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
     }
   }
 
@@ -1764,6 +1762,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           );
         })
       )
-      .subscribe(() => this.gridLogistiques.refresh());
+      .subscribe(() => this.gridLogistiques?.refresh());
   }
 }
