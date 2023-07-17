@@ -74,6 +74,7 @@ export class ArticlesListComponent
   trueFalse: any;
   initialSpecy: any;
   allGridFilters: any;
+  toRefresh: boolean;
 
   constructor(
     public articlesService: ArticlesService,
