@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -17,6 +17,7 @@ import notify from "devextreme/ui/notify";
 import { concatMap, defer, delay, exhaustMap, filter, firstValueFrom, from, iif, lastValueFrom, mergeMap, of, switchMap, tap } from "rxjs";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 
 @Component({
   selector: "app-import-programmes-popup",
@@ -53,10 +54,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   constructor(
     private localizeService: LocalizationService,
     private programService: ProgramService,
-    private fluxEnvoisService: FluxEnvoisService,
     private envoisService: EnvoisService,
     private ordresService: OrdresService,
     private currentCompanyService: CurrentCompanyService,
+    private functionsService: FunctionsService,
+    private authService: AuthService,
   ) { }
 
   ngOnChanges() {
@@ -124,7 +126,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = DSitems;
 
     // Downloading modified Excel file
-    ProgramService.downloadAndSave();
+    // ProgramService.downloadAndSave();
     notify(
       this.localizeService.localize("telechargement-fichier-retour"),
       "success",
@@ -208,19 +210,29 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     const flux = "ORDRE";
     const { id, campagne } = this.currentCompanyService.getCompany();
     for (const num of ordreNums) {
-      const res = await lastValueFrom(this.ordresService
-        .getOneByNumeroAndSocieteAndCampagne(num, id, campagne.id, ["id", "numero", "type.id"]));
-      const ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
-      const promptResult = await lastValueFrom(this.fluxEnvoisService
-        .prompt(flux, ordre.id, this.resultPopup, false));
-      if (promptResult) {
-        this.docsPopup.ordre = ordre;
-        this.docsPopup.flux = flux;
-        this.docsPopup.visible = true;
-        await firstValueFrom(this.docsPopup.whenDone.asObservable());
+      try {
+        const res = await lastValueFrom(this.ordresService
+          .getOneByNumeroAndSocieteAndCampagne(num, id, campagne.id, ["id", "numero", "type.id"]));
+        const ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
+        await lastValueFrom(this.functionsService
+          .geoPrepareEnvois(
+            ordre.id,
+            flux,
+            true,
+            false,
+            this.authService.currentUser.nomUtilisateur
+          ));
+        const envois = await lastValueFrom(this.envoisService.getList(
+          `ordre.id==${ordre.id} and traite==A and flux.id==${flux}`,
+          ["id"],
+        ));
+        await lastValueFrom(this.envoisService
+          .saveAll(envois.data.allEnvoisList.map(({ id }) => ({ id, traite: 'N' })), new Set(["id"])));
+        response.push({ ordreNum: num, envoisDone: true });
+      } catch (error) {
+        console.error(`Erreur lors de l'envoi automatique pour l'ordre numero ${num}`, error);
+        response.push({ ordreNum: num, envoisDone: false });
       }
-      const envoisDone = !!(await lastValueFrom(this.envoisService.countReals(ordre.id, flux)));
-      response.push({ ordreNum: num, envoisDone: envoisDone });
     }
     return response;
   }
