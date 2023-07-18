@@ -1,0 +1,49 @@
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+::ng-deep .grid-recap-stock-cde-edi-colibri {
+
+  .dx-command-select {
+    padding: 0 !important;
+  }
+
+  .green-row {
+    background-color: #D7FF97 !important;
+
+    &.dx-row-focused td {
+      color: #333 !important;
+      background-color: #9CDF33 !important;
+    }
+  }
+
+  .blue-row {
+    background-color: #DDFFFC !important;
+  }
+
+  .textArticleTemplate {
+    position: relative;
+    top: 11px;
+    float: left;
+  }
+
+  .grid-add-button {
+    display: block !important;
+    width: 22px !important;
+    height: 22px;
+    min-width: 22px !important;
+    float: right;
+
+    .dx-icon {
+      color: white !important;
+      font-size: 18px !important;
+      padding: 2px;
+    }
+
+    .dx-button-content {
+      padding: 0;
+
+    }
+  }
+
+}

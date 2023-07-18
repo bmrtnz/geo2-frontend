@@ -73,7 +73,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
       this.valideBox.value = this.EdiArticle.valide;
       this.codeArtBWBox.value = this.EdiArticle.article.id;
       this.GTINArtClientBox.value = this.EdiArticle.gtinColisClient;
-      this.codeArtClientBox.value = this.EdiArticle.article.normalisation.articleClient;
+      this.codeArtClientBox.value = this.EdiArticle.codeArticleClient;
       this.prioriteBox.value = this.EdiArticle.priorite;
       if (!this.GTINArtClientBox.value?.length) {
         this.GTINArtClientBox.instance.focus();
@@ -91,13 +91,6 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
     }
   }
 
-  onArticleChanged(e) {
-    if (!e.event) return; // Only user event
-    // this.codeArtClientBox.instance.reset();
-    // if (e.value?.normalisation?.articleClient)
-    this.codeArtClientBox.value = e.value?.normalisation?.articleClient;
-  }
-
   onSave(form: NgForm) {
 
     // Check everything's OK
@@ -113,7 +106,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
     }
 
     if (this.GTINArtClientBox.value) {
-      if (this.GTINArtClientBox.value.length < 8 || this.GTINArtClientBox.value.length > 13)
+      if (this.GTINArtClientBox.value.toString().length < 8 || this.GTINArtClientBox.value.toString().length > 13)
         message += `${this.CR}Le GTIN doit être au minimum de 8 chiffres et maximum de 13 chiffres`;
     } else if (!this.codeArtClientBox.value) {
       message += `${this.CR}Il faut un GTIN article client ET/OU une référence article client de renseigné`;
@@ -122,7 +115,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
     if (!this.prioriteBox.value) message += `${this.CR}La priorité n'est pas définie`;
 
     if (messageLength !== message.length) {
-      alert(`${message}<br>`, this.localizeService.localize(`ordres-${this.purpose}-article`))
+      alert(`${message}<br><br>`, this.localizeService.localize(`ordres-${this.purpose}-article`))
     } else {
       // Save : ajout & modification
 
@@ -131,6 +124,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
         id: null,
         valide: this.valideBox.value,
         gtinColisClient: this.GTINArtClientBox.value,
+        codeArticleClient: this.codeArtClientBox.value,
         priorite: this.prioriteBox.value,
         article: { id: this.codeArtBWBox.value.id },
         client: { id: this.clientId }
@@ -138,20 +132,9 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
       const ediArticleClientModif = {
         id: this.EdiArticle?.id,
         valide: this.valideBox.value,
+        codeArticleClient: this.codeArtClientBox.value,
         gtinColisClient: this.GTINArtClientBox.value,
         priorite: this.prioriteBox.value,
-      }
-
-      // Need for saving the new code article client in article table
-      console.log(this.codeArtBWBox.value, this.EdiArticle?.article.id)
-      if (this.purpose === "modification") {
-        const article = {
-          id: this.EdiArticle?.article.id,
-          normalisation: { id: this.EdiArticle?.article.normalisation.id, articleClient: this.codeArtClientBox.value }
-        }
-        this.articlesService.save_v2(["id"], { article, clone: false }).subscribe({
-          error: () => notify("Erreur lors de la sauvegarde article", "error", 3000)
-        });
       }
 
       const ediArticleClient = this.purpose === "ajout" ? ediArticleClientAjout : ediArticleClientModif;

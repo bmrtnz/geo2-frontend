@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  isDevMode
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
@@ -43,6 +44,7 @@ import { Societe } from "app/shared/models";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { GridsService } from "app/pages/ordres/grids.service";
+import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component";
 
 enum InputField {
   clientCode = "client",
@@ -83,6 +85,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public gridTitle: string;
   public gridTitleCount: string;
   public gridTitleInput: HTMLInputElement;
+  public devMode = isDevMode();
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
@@ -101,6 +104,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
   @ViewChild(VisualiserOrdresPopupComponent, { static: false })
   visuCdeEdiPopup: VisualiserOrdresPopupComponent;
+
+  @ViewChild(RecapStockCdeEdiColibriPopupComponent, { static: false })
+  TOREMOVEPOPUP: RecapStockCdeEdiColibriPopupComponent;
 
   public formGroup = new UntypedFormGroup({
     clientCode: new UntypedFormControl(),
@@ -195,6 +201,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
 
     this.formGroup.get("filtreStock").setValue(this.filtresStock[0]);
+  }
+
+  showGridTOREMOVE() {
+    this.TOREMOVEPOPUP.visible = true;
   }
 
   displayIDBefore(data) {
@@ -334,7 +344,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             "raisonSocial",
           ]);
           this.clients.filter(filters);
-          console.log(filters)
         }
       });
   }

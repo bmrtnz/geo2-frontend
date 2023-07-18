@@ -1,0 +1,38 @@
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+::ng-deep .ajout-article-edi-colibri-popup {
+
+  .popup-buttons-container {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .dx-button {
+      margin: 5px;
+    }
+  }
+
+  .dx-field-label {
+    text-transform: capitalize;
+  }
+
+  .dx-field-value {
+
+    &.quantite {
+      width: 50px !important;
+    }
+
+    &.codeArticle {
+      width: 140px !important;
+    }
+
+    .dx-invalid-message-content {
+      max-width: none !important;
+      padding-left: 0 !important;
+    }
+
+  }
+}

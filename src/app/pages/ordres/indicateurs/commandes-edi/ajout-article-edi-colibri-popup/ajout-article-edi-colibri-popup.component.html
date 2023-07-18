@@ -1,0 +1,102 @@
+<dx-popup
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [hideOnOutsideClick]="true"
+  [(visible)]="visible"
+  title="{{ 'add-article-cde' | localize }} {{ 'edi-colibri' | localize }}"
+  [width]="500"
+  height="auto"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
+  (onHidden)="onHidden()"
+  [resizeEnabled]="false"
+>
+  <div *dxTemplate="let data of 'content'">
+    <div class="ajout-article-edi-colibri-popup">
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "articlesEdi-label-codeArtBW" | localize }}
+        </div>
+        <div class="dx-field-value codeArticle">
+          <dx-select-box
+            #codeArticleSB
+            [dataSource]="articlesDS"
+            displayExpr="id"
+            [searchMode]="'contains'"
+            [showClearButton]="true"
+          >
+            <dx-validator>
+              <dxi-validation-rule
+                *ngIf="popupShown"
+                type="required"
+              ></dxi-validation-rule>
+            </dx-validator>
+          </dx-select-box>
+        </div>
+      </div>
+
+      <!-- Propriétaire -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "proprietaire" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #proprietaireSB
+            [dataSource]="proprietaireSource"
+            [displayExpr]="displayCodeBefore"
+            [showClearButton]="true"
+            [searchExpr]="['code']"
+            (onValueChanged)="onProprietaireChanged($event)"
+          >
+          </dx-select-box>
+        </div>
+      </div>
+      <!-- Emballeur/Expéditeur -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "fournisseur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #fournisseurSB
+            [dataSource]="fournisseurSource"
+            [value]="ligneEdi?.fournisseur?.code"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+            [showClearButton]="true"
+          >
+          </dx-select-box>
+        </div>
+      </div>
+      <!-- Quantité validée -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "quantite-validee" | localize }}
+        </div>
+        <div class="dx-field-value quantite">
+          <dx-number-box #quantiteSB> </dx-number-box>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="popup-buttons-container">
+        <dx-button
+          text="{{ 'btn-annuler' | localize }}"
+          type="normal"
+          (onClick)="visible = false"
+        ></dx-button>
+        <dx-button
+          type="default"
+          text="{{ 'btn-enregistrer' | localize }}"
+          [disabled]="
+            !codeArticleSB.value?.id ||
+            !proprietaireSB.value?.id ||
+            !fournisseurSB.value?.id
+          "
+          (onClick)="save()"
+        ></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

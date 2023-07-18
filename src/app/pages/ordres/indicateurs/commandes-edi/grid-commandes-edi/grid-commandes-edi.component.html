@@ -10,6 +10,13 @@
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
     ></dx-button>
+    <dx-button
+      class="toremovebutton"
+      type="default"
+      text="grid récapitulatif stock"
+      [visible]="false"
+      (onClick)="showGridTOREMOVE()"
+    ></dx-button>
   </div>
   <div style="clear: both"></div>
   <div class="BAFFilterArea">
@@ -336,3 +343,5 @@
   [ordresNumeros]="ordresNumeros"
 >
 </app-visualiser-ordres-popup>
+
+<app-recap-stock-cde-edi-colibri-popup></app-recap-stock-cde-edi-colibri-popup>

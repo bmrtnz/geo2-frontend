@@ -12,6 +12,7 @@ export class EdiArticleClient extends Model {
   @Field() public description?: string;
   @Field() public gtinColisClient?: string;
   @Field() public userModification?: string;
+  @Field() public codeArticleClient?: string;
   @Field() public priorite?: number;
   @Field() public valide?: boolean;
 
