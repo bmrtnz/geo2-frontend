@@ -123,8 +123,8 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
     this.formGroup.get("valide").setValue(true);
 
-    this.formGroup.get("client").patchValue("000463"); // A VIRER !!
-    setTimeout(() => this.enableFilters(), 500); // A VIRER !!
+    // this.formGroup.get("client").patchValue("000463"); // A VIRER !!
+    // setTimeout(() => this.enableFilters(), 500); // A VIRER !!
   }
 
 
