@@ -123,7 +123,7 @@ export class ModificationArticleEdiPopupComponent implements OnInit {
       const ediArticleClientAjout = {
         id: null,
         valide: this.valideBox.value,
-        gtinColisClient: this.GTINArtClientBox.value || undefined,
+        gtinColisClient: this.GTINArtClientBox.value,
         codeArticleClient: this.codeArtClientBox.value,
         priorite: this.prioriteBox.value,
         article: { id: this.codeArtBWBox.value.id },
