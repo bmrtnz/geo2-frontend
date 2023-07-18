@@ -1,0 +1,61 @@
+// Var
+@import "themes/generated/variables.base";
+
+::ng-deep .recap-stock-cde-edi-colibri-popup {
+  &:not(.dx-popup-fullscreen) {
+    max-width: 1320px;
+  }
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+    padding: 0 8px 0 24px;
+
+    .title-start,
+    .title-mid {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .title-mid {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+    .recap-stock-cde-edi-colibri-content-container {
+      background: #fff !important;
+      padding: 0 15px 0 2px;
+
+      .valid-field {
+        display: none;
+      }
+    }
+  }
+
+  .create-order-button {
+    top: 13px;
+    margin-right: 15px;
+    transition: transform 0.5s;
+    transform: scale(1);
+    float: right;
+  }
+
+  .cancel-button {
+    margin-top: 2px;
+  }
+
+  .pulse {
+    animation: pulse 0.5s;
+  }
+}

@@ -8269,5 +8269,88 @@
         "showInColumnChooser": false
       }
     ]
+  },
+  "recap-stock-cde-edi": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "ordre.numero",
+        "dataType": "string",
+        "width": 80,
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "gtinColisKit",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "article.id",
+        "showInColumnChooser": false,
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "article.articleDescription.descriptionLongue",
+        "dataType": "string",
+        "cssClass": "small-left-padding",
+        "cellTemplate": "addArticleBtnTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "fournisseur.code",
+        "dataType": "string",
+        "width": 150,
+        "visible": true
+      },
+      {
+        "dataField": "ordre.client.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "venteUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "achatUnite.description",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nombreColisExpedies",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.entrepot.code",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.referenceClient",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.transporteur.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      }
+    ]
   }
 }
