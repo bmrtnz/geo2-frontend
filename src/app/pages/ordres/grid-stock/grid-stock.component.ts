@@ -108,8 +108,41 @@ export class GridStockComponent implements OnInit {
     "quantiteCalculee4",
     "prevision3j",
     "prevision7j",
+    "stock.quantiteTotale"
   ];
   public customSummaryFields = ["quantiteHebdomadaire"];
+
+  readonly inheritedFields = new Set([
+    "id",
+    "articleID",
+    "articleDescription",
+    "valide",
+    "stock.quantiteTotale",
+    "age",
+    "fournisseurCode",
+    "proprietaireCode",
+    "dateFabrication",
+    "typePaletteID",
+    "stockID",
+    "quantiteCalculee1",
+    "quantiteCalculee2",
+    "quantiteCalculee3",
+    "quantiteCalculee4",
+    "quantiteHebdomadaire",
+    "prevision3j",
+    "prevision7j",
+    "descriptionAbregee",
+    "commentaire",
+    "origineID",
+    "varieteID",
+    "especeID",
+    "categorieID",
+    "colisID",
+    "calibreMarquageID",
+    "calibreFournisseurID",
+    "statut",
+    "dateStatut",
+  ]);
 
   constructor(
     public articlesService: ArticlesService,
@@ -263,6 +296,7 @@ export class GridStockComponent implements OnInit {
     this.datagrid.instance.beginCustomLoading("");
     this.stocksService
       .allStockArticleList(
+        this.inheritedFields,
         this.especeSB.value?.node?.key ?? this.especeSB.value?.key,
         this.varietesSB.value?.key,
         this.originesSB.value?.key,
@@ -399,6 +433,9 @@ export class GridStockComponent implements OnInit {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
+    } else if (e.rowType === "data") {
+      if (e.column.dataField === "stock.quantiteTotale")
+        e.cellElement.classList.add("grey-light");
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {

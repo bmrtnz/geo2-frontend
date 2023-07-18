@@ -1409,6 +1409,7 @@
     "ordreStock-quantiteCalculee2": "J1-8",
     "ordreStock-quantiteCalculee3": "J9-20",
     "ordreStock-quantiteCalculee4": "J21+",
+    "ordreStock-stock-quantiteTotale": "Total",
     "ordreStock-total": "Total",
     "ordreStock-descriptionAbregee": "Situation",
     "ordreStock-colisID": "Emballage",
