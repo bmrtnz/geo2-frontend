@@ -8232,7 +8232,7 @@
       },
       {
         "visibleIndex": 8,
-        "dataField": "article.normalisation.articleClient",
+        "dataField": "codeArticleClient",
         "dataType": "string",
         "visible": true
       },

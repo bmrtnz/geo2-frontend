@@ -150,10 +150,9 @@ export class ArticleDetailsComponent
   alertComponent: EditingAlertComponent;
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
-  @ViewChild(PushHistoryPopupComponent, { static: false })
+  @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
   @ViewChildren(DxAccordionComponent)
   accordion: any;
-  validatePopup: PushHistoryPopupComponent;
   editing = false;
   public ucBW: boolean;
 

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, Output, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
+import { Data } from "@angular/router";
 import { GridsService } from "app/pages/ordres/grids.service";
 import EdiArticleClient from "app/shared/models/article-edi.model";
 import {
@@ -48,6 +49,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   public dataSource: DataSource;
   public clients: DataSource;
+  public gridHasData: boolean;
 
   public formGroup = new UntypedFormGroup({
     client: new UntypedFormControl(),
@@ -62,10 +64,11 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     "article.matierePremiere.variete.description",
     "valide",
     "gtinColisClient",
+    "client.id",
     "client.code",
     "priorite",
     "article.normalisation.calibreMarquage.description",
-    "article.normalisation.articleClient",
+    "codeArticleClient",
     "article.normalisation.id",
     "article.valide"
   ];
@@ -120,8 +123,13 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
     this.formGroup.get("valide").setValue(true);
 
-    // this.formGroup.get("client").patchValue("000448"); // A VIRER !!
-    // setTimeout(() => this.enableFilters(), 500); // A VIRER !!
+    this.formGroup.get("client").patchValue("000463"); // A VIRER !!
+    setTimeout(() => this.enableFilters(), 500); // A VIRER !!
+  }
+
+
+  refreshGrid() {
+    this.datagrid.instance.refresh();
   }
 
   enableFilters() {
@@ -140,6 +148,10 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       this.dataSource.filter(filter);
       this.datagrid.dataSource = this.dataSource;
     }
+  }
+
+  onContentReady(e) {
+    this.gridHasData = (this.datagrid.dataSource as DataSource)?.items()?.length > 0;
   }
 
   onRowDblClick(e) {
@@ -176,9 +188,12 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   }
 
   addEDIArticle() {
-    this.EdiArticle = null;
-    this.clientId = this.formGroup.get("client").value;
-    this.modifPopup.show("ajout");
+    const lignesDS = (this.datagrid.dataSource as DataSource)?.items();
+    if (lignesDS?.length) {
+      this.EdiArticle = null;
+      this.clientId = lignesDS[0].client?.id;
+      this.modifPopup.show("ajout");
+    }
   }
 
   displayCodeBefore(data) {

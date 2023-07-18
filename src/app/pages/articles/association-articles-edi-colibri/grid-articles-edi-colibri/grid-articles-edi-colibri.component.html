@@ -79,11 +79,11 @@
   [remoteOperations]="true"
   [showBorders]="false"
   [focusedRowEnabled]="true"
-  [focusedRowIndex]="0"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [noDataText]="'aucun-article-EDI-COLIBRI' | localize"
+  (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
   (onRowDblClick)="onRowDblClick($event)"
@@ -133,6 +133,7 @@
           class="plus-button"
           icon="plus"
           type="success"
+          [visible]="!!gridHasData"
           hint="{{ 'hint-add-article' | localize }}"
           (onClick)="addEDIArticle()"
         >
@@ -164,5 +165,5 @@
 <app-modification-article-edi-popup
   [EdiArticle]="EdiArticle"
   [clientId]="clientId"
-  (whenValidate)="enableFilters()"
+  (whenValidate)="refreshGrid()"
 ></app-modification-article-edi-popup>

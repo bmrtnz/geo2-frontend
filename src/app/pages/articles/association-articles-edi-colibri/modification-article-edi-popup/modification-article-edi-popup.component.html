@@ -34,7 +34,6 @@
               [dataSource]="articlesDS"
               displayExpr="id"
               [searchMode]="'contains'"
-              (onValueChanged)="onArticleChanged($event)"
               [showClearButton]="true"
             >
               <dx-validator>
@@ -59,10 +58,7 @@
             {{ "articlesEdi-label-codeArtClient" | localize }}
           </div>
           <div class="dx-field-value">
-            <dx-text-box
-              #codeArtClientBox
-              [readOnly]="purpose === 'ajout'"
-            ></dx-text-box>
+            <dx-text-box #codeArtClientBox></dx-text-box>
           </div>
         </div>
         <div class="dx-field">

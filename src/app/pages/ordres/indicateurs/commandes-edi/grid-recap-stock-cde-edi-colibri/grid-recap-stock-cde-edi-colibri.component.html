@@ -86,9 +86,10 @@
     <div *dxTemplate="let cell of 'addArticleBtnTemplate'">
       <div class="textArticleTemplate">{{ cell.value }}</div>
       <dx-button
-        class="grid-add-button"
+        class="grid-add-button display-none"
         type="default"
-        icon="material-icons search"
+        icon="plus"
+        hint="{{ 'hint-add-article' | localize }}"
         [focusStateEnabled]="false"
         (onClick)="openFilePopup(cell, $event)"
       >

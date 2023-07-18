@@ -21,28 +21,24 @@
     top: 11px;
   }
 
-  .grid-add-button {
-    width: 22px !important;
-    height: 22px;
-    min-width: 22px !important;
-    background-color: transparent !important;
-    float: right;
+  .dx-row-focused {
+    .grid-add-button {
+      display: block !important;
+      width: 22px !important;
+      height: 22px;
+      min-width: 22px !important;
+      float: right;
 
-    .dx-button-content {
-      padding: 0;
+      .dx-icon {
+        color: white !important;
+        font-size: 18px !important;
+      }
+
+      .dx-button-content {
+        padding: 0;
+
+      }
     }
   }
 
 }
-
-// ::ng-deep .grid-add-button {
-//   width: 22px !important;
-//   height: 22px;
-//   min-width: 22px !important;
-//   background-color: transparent !important;
-//   float: right;
-
-//   .dx-button-content {
-//     padding: 0;
-//   }
-// }
