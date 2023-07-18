@@ -1304,6 +1304,7 @@
     "ordreLignesHisto-fournisseur-code": "Emballeur / Expéditeur",
     "ordreLignesHisto-gtinColisKit": "GTIN Kit",
     "ordreLignesHisto-article-matierePremiere-origine-id": " ",
+    "ordreLignesHisto-achatDevise": "Devise achat",
     "ordreHistoModifDetail-userModification": "Qui",
     "ordreHistoModifDetail-dateModification": "Quand",
     "ordreHistoModifDetail-nombrePalettesExpedieesAvant": "Nb Pal anc.",
