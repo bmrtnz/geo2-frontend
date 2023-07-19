@@ -72,7 +72,10 @@
           {{ "quantite-validee" | localize }}
         </div>
         <div class="dx-field-value quantite">
-          <dx-number-box #quantiteSB>
+          <dx-number-box
+            #quantiteSB
+            valueChangeEvent="keyup"
+          >
             <dx-validator>
               <dxi-validation-rule type="required"></dxi-validation-rule>
             </dx-validator>

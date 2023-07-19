@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  isDevMode
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
@@ -84,6 +85,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public gridTitle: string;
   public gridTitleCount: string;
   public gridTitleInput: HTMLInputElement;
+  public devMode = isDevMode();
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
