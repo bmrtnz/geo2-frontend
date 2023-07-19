@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import EdiArticleClient from "app/shared/models/article-edi.model";
+import StockArticleEdiBassin from "app/shared/models/article-edi.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { ApiService, RelayPage } from "../api.service";
@@ -8,20 +8,20 @@ import { ApiService, RelayPage } from "../api.service";
 @Injectable({
   providedIn: 'root'
 })
-export class ArticlesEdiService extends ApiService {
+export class StockArticleEdiBassinService extends ApiService {
   constructor(apollo: Apollo) {
-    super(apollo, EdiArticleClient);
+    super(apollo, StockArticleEdiBassin);
   }
 
   private byKey(columns: Array<string>) {
     return (key) =>
       new Promise(async (resolve) => {
         const query = await this.buildGetOne_v2(columns);
-        type Response = { ediArticleClient: EdiArticleClient };
+        type Response = { stockArticleEdiBassin: StockArticleEdiBassin };
         const variables = { id: key };
         this.listenQuery<Response>(query, { variables }, (res) => {
-          if (res.data && res.data.ediArticleClient)
-            resolve(new EdiArticleClient(res.data.ediArticleClient));
+          if (res.data && res.data.stockArticleEdiBassin)
+            resolve(new StockArticleEdiBassin(res.data.stockArticleEdiBassin));
         });
       });
   }
@@ -38,24 +38,38 @@ export class ArticlesEdiService extends ApiService {
                   resolve(this.asListCount(res.data.distinct));
               });
 
-            type Response = { allEdiArticleClient: RelayPage<EdiArticleClient> };
+            type Response = { allStockArticleEdiBassin: RelayPage<StockArticleEdiBassin> };
             const query = await this.buildGetAll_v2(columns);
             const variables = this.mapLoadOptionsToVariables(options);
             this.listenQuery<Response>(query, { variables, fetchPolicy: "no-cache" }, (res) => {
-              if (res.data && res.data.allEdiArticleClient) {
-                resolve(this.asInstancedListCount(res.data.allEdiArticleClient));
+              if (res.data && res.data.allStockArticleEdiBassin) {
+                resolve(this.asInstancedListCount(res.data.allStockArticleEdiBassin));
               }
             });
           }),
         byKey: this.byKey(columns),
+        insert: (values) => {
+          const variables = { stockArticleEdiBassin: values };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        update: (key, values) => {
+          const variables = { stockArticleEdiBassin: { id: key, ...values } };
+          return this.watchSaveQuery({ variables }).toPromise();
+        },
+        remove: (key) => {
+          const variables = { id: key };
+          return this.watchDeleteQuery({
+            variables,
+          }).toPromise() as unknown as PromiseLike<void>;
+        },
       }),
     });
   }
 
-  save(body: Set<string>, ediArticleClient: Partial<EdiArticleClient>) {
-    return this.apollo.mutate<{ saveEdiArticleClient: Partial<EdiArticleClient> }>({
+  save(body: Set<string>, stockArticleEdiBassin: Partial<StockArticleEdiBassin>) {
+    return this.apollo.mutate<{ saveStockArticleEdiBassin: Partial<StockArticleEdiBassin> }>({
       mutation: gql(this.buildSaveGraph([...body])),
-      variables: { ediArticleClient },
+      variables: { stockArticleEdiBassin },
     });
   }
 
