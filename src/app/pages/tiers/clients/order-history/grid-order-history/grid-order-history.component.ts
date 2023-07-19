@@ -204,6 +204,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       [`ordre.${dateType}`, ">=", values.dateMin],
       "and",
       [`ordre.${dateType}`, "<=", values.dateMax],
+      "and",
+      [[`nombreColisCommandes`, ">", 0], "or", [`nombreColisExpedies`, ">", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
+
     ];
     if (values.client?.id) {
       filter.push("and", ["ordre.client.id", "=", values.client.id]);

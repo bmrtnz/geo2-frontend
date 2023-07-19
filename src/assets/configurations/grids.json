@@ -3565,10 +3565,17 @@
         "visible": true
       },
       {
+        "visibleIndex": 21,
+        "dataField": "achatDevise",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "visible": true
+      },
+      {
         "visibleIndex": 22,
         "dataField": "fournisseur.code",
         "dataType": "string",
-        "width": 150,
+        "cssClass": "multi-line-header text-align-left",
         "visible": true
       },
       {
