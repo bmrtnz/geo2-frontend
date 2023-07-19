@@ -16,6 +16,7 @@ export class AjoutArticleEdiColibriPopupComponent {
   public proprietaireSource: DataSource;
   public fournisseurSource: DataSource;
   public articlesDS: DataSource;
+  public popupShown: boolean;
 
 
   @ViewChild("codeArticleSB", { static: false }) codeArticleSB: DxSelectBoxComponent;
@@ -82,6 +83,7 @@ export class AjoutArticleEdiColibriPopupComponent {
   }
 
   onShowing(e) {
+    this.popupShown = false;
     e.component
       .content()
       .parentNode.classList.add("choix-entrepot-commande-edi-popup");
@@ -102,6 +104,7 @@ export class AjoutArticleEdiColibriPopupComponent {
         this.updateFilterFournisseurDS(this.proprietaireSB.value)
       }
     }
+    this.popupShown = true;
   }
 
   displayCodeBefore(data) {
