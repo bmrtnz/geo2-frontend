@@ -126,7 +126,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = DSitems;
 
     // Downloading modified Excel file
-    // ProgramService.downloadAndSave();
+    ProgramService.downloadAndSave();
     notify(
       this.localizeService.localize("telechargement-fichier-retour"),
       "success",
