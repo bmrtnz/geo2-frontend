@@ -8312,6 +8312,16 @@
         "visible": false
       },
       {
+        "dataField": "fournisseur.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "fournisseur.listeExpediteurs",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
         "dataField": "id",
         "showInColumnChooser": false,
         "visible": false

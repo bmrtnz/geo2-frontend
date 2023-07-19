@@ -24,6 +24,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../../grids.service";
+import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component";
 
 
 @Component({
@@ -35,10 +36,12 @@ export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
   @Input() public ordreId: string;
   @Output() public articleLigneId: string;
+  @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
   @Output() hidePopup = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
+  @ViewChild(AjoutArticleEdiColibriPopupComponent) public ajoutArtPopup: AjoutArticleEdiColibriPopupComponent;
 
 
   public columnChooser = environment.columnChooser;
@@ -111,7 +114,9 @@ export class GridRecapStockCdeEdiColibriComponent {
     }
   }
 
-  openFilePopup(cell, e) {
+  addArticlePopup(cell) {
+    this.ligneEdi = cell.data;
+    this.ajoutArtPopup.visible = true;
   }
 
 }

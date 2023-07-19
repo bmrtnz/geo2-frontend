@@ -86,14 +86,18 @@
     <div *dxTemplate="let cell of 'addArticleBtnTemplate'">
       <div class="textArticleTemplate">{{ cell.value }}</div>
       <dx-button
-        class="grid-add-button display-none"
+        class="grid-add-button"
         type="default"
         icon="plus"
         hint="{{ 'hint-add-article' | localize }}"
         [focusStateEnabled]="false"
-        (onClick)="openFilePopup(cell, $event)"
+        (onClick)="addArticlePopup(cell)"
       >
       </dx-button>
     </div>
   </dx-data-grid>
 </div>
+
+<app-ajout-article-edi-colibri-popup
+  [ligneEdi]="ligneEdi"
+></app-ajout-article-edi-colibri-popup>

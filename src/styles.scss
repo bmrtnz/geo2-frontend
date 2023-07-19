@@ -26,6 +26,10 @@
   visibility: hidden;
 }
 
+.display-none {
+  display: none !important;
+}
+
 .capitalize {
   text-transform: capitalize;
 }
