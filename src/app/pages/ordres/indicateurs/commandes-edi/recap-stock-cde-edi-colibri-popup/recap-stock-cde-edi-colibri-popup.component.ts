@@ -47,17 +47,11 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   dxScrollView: DxScrollViewComponent;
 
   constructor(
-    private functionsService: FunctionsService,
-    private currentCompanyService: CurrentCompanyService,
     private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
   ) { }
 
   ngOnInit() {
-    this.setTitle();
-  }
-
-  setTitle() {
     this.titleStart = this.localizeService.localize("recap-stock-cde");
     this.titleMid = this.localizeService.localize("edi-colibri");
   }
@@ -117,7 +111,10 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   createOrder() {
-
+    //////////////////////////////////////////////////////////////////
+    // Implémentation
+    // Création ordre
+    //////////////////////////////////////////////////////////////////
   }
 
   private messageFormat(mess) {

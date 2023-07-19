@@ -223,6 +223,17 @@
   }
 }
 
+::ng-deep .edi-order-ref {
+  position: relative;
+  top: -2px;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  background: #A34BB4;
+  padding: 2px 8px;
+  margin: 0px 7px;
+}
+
 ::ng-deep .top-panel-order {
   margin-bottom: 6px;
 

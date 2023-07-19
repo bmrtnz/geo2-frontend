@@ -4,7 +4,7 @@ import { Field, Model, ModelName } from "./model";
 
 @ModelName("EdiLigne")
 export class EdiLigne extends Model {
-  @Field({ asKey: true, asLabel: true }) public id?: string;
+  @Field({ asKey: true, asLabel: true }) public id?: number;
   @Field() public codeInterneProduitBlueWhale?: string;
   @Field() public codeInterneProduitClient?: string;
   @Field() public eanColisBlueWhale?: string;
@@ -22,6 +22,7 @@ export class EdiLigne extends Model {
   @Field() public quantite?: number;
   @Field() public quantiteColis?: number;
   @Field() public status?: string;
+  @Field() public alertePrix?: string;
   @Field() public typeColis?: string;
   @Field() public uniteQtt?: string;
 }

@@ -13,7 +13,7 @@ export class ArticlesEdiService extends ApiService {
     super(apollo, EdiArticleClient);
   }
 
-  private byKey(columns: Array<string>) {
+  private byKey(columns: Set<string>) {
     return (key) =>
       new Promise(async (resolve) => {
         const query = await this.buildGetOne_v2(columns);
@@ -26,7 +26,7 @@ export class ArticlesEdiService extends ApiService {
       });
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Set<string>) {
     return new DataSource({
       sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({

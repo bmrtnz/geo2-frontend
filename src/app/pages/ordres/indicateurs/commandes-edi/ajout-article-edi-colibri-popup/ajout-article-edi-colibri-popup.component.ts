@@ -11,6 +11,7 @@ import DataSource from "devextreme/data/data_source";
 })
 export class AjoutArticleEdiColibriPopupComponent {
   @Input() public ligneEdi: any;
+  @Output() whenValidate = new EventEmitter();
 
   public visible: boolean;
   public proprietaireSource: DataSource;
@@ -79,6 +80,13 @@ export class AjoutArticleEdiColibriPopupComponent {
   }
 
   save() {
+
+    //////////////////////////////////////////////////////////////////
+    // Implémentation
+    // w_ajout_art_recap_edi_colibri_EVENT_click_button_enregistrer
+    //////////////////////////////////////////////////////////////////
+
+    this.whenValidate.emit();
     this.visible = false;
   }
 
@@ -93,16 +101,18 @@ export class AjoutArticleEdiColibriPopupComponent {
     if (this.ligneEdi) {
       // Set values from grid
       this.codeArticleSB.value = { id: this.ligneEdi.article?.id };
-      this.proprietaireSB.value = { id: this.ligneEdi.fournisseur?.id, listeExpediteurs: this.ligneEdi.fournisseur?.listeExpediteurs };
+      this.proprietaireSB.value = { id: this.ligneEdi.proprietaire?.id, listeExpediteurs: this.ligneEdi.proprietaire?.listeExpediteurs };
       this.fournisseurSB.value = { id: this.ligneEdi.fournisseur?.id };
       this.quantiteSB.instance.reset();
       // Set filters for proprietaire & fournisseur
       this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
-      if (!this.proprietaireSB.value) {
-        this.filterFournisseurDS();
+      this.updateFilterFournisseurDS(this.proprietaireSB.value);
+      if (!this.proprietaireSB.value?.id) {
+        this.proprietaireSB.instance.focus();
       } else {
-        this.updateFilterFournisseurDS(this.proprietaireSB.value)
+        this.quantiteSB.instance.focus();
       }
+
     }
     this.popupShown = true;
   }

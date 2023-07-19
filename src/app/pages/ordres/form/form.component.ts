@@ -257,6 +257,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "listeOrdreRefPalox",
     "ordreRefPaloxPere",
     "factureAvoir",
+    "ordreEDI.id",
+    "ordreEDI.canalCde"
   ];
 
   private destroy = new Subject<boolean>();
@@ -267,6 +269,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public status: string;
   public ordreFacture: boolean;
   public canChangeDateLiv: boolean;
+  public refOrdreEdi: any;
+  public canalOrdreEdi: any;
   public numeroFacture: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
@@ -1280,6 +1284,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             this.saveHeaderOnTheFly();
           });
 
+          this.refOrdreEdi = this.ordre.ordreEDI?.id;
+          this.canalOrdreEdi = this.ordre.ordreEDI?.canalCde;
           this.cancelledOrder =
             Statut[this.ordre.statut] === Statut.ANNULE.toString();
           this.histoLigneOrdreText = `${this.localization.localize(

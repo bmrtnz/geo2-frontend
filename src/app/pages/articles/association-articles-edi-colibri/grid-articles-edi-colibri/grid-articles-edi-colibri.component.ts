@@ -57,20 +57,8 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     search: new UntypedFormControl()
   } as Inputs<UntypedFormControl>);
 
-  readonly inheritedFields = [
-    "id",
-    "article.id",
-    "article.emballage.emballage.description",
-    "article.matierePremiere.variete.description",
-    "valide",
-    "gtinColisClient",
-    "client.id",
-    "client.code",
-    "priorite",
-    "article.normalisation.calibreMarquage.description",
-    "codeArticleClient",
-    "article.normalisation.id",
-    "article.valide"
+  readonly specialFields = [
+    "client.id"
   ];
 
   constructor(
@@ -111,8 +99,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     );
 
     this.dataSource = this.articlesEdiService.getDataSource_v2(
-      this.inheritedFields
-      // await fields.toPromise()
+      new Set([...this.specialFields, ...await fields.toPromise()])
     );
   }
 
@@ -143,7 +130,14 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       filter.push(["client.id", "=", values.client]);
       if (values.valide) filter.push("and", ["valide", "=", values.valide]);
       if (values.search?.length) {
-        filter.push("and", [["article.id", "contains", values.search], "or", ["article.normalisation.articleClient", "contains", values.search], "or", ["gtinColisClient", "contains", values.search]]);
+        filter.push(
+          "and",
+          [["article.id", "contains", values.search],
+            "or",
+          ["article.normalisation.articleClient", "contains", values.search],
+            "or",
+          ["gtinColisClient", "contains", values.search]]
+        );
       }
       this.dataSource.filter(filter);
       this.datagrid.dataSource = this.dataSource;
@@ -178,7 +172,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
               `${this.localizeService.localize("ordresEdi-article-id")} ${e.data.article.id} ${this.localizeService.localize(e.data.valide ? "desactive" : "active")}`,
               "success"
             ),
-              this.enableFilters();
+              this.refreshGrid();
           },
           error: () =>
             notify("Erreur lors de la modification du statut", "error", 3000),

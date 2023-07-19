@@ -253,12 +253,11 @@
                   "
                 >
                 </dx-button>
-                <!--<span
-                *ngIf="ordreFacture && numeroFacture?.length"
-                  class="dx-form-group-caption invoice-number red-font-imp"
-                  >
-                  &nbsp;({{ numeroFacture }})
-                </span>-->
+                <span
+                  *ngIf="!!refOrdreEdi"
+                  class="edi-order-ref"
+                  >{{ canalOrdreEdi }} : {{ refOrdreEdi }}</span
+                >
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
@@ -975,6 +974,7 @@
                 }}</span>
                 <dx-button
                   class="upperButton subButton"
+                  [visible]="!refOrdreEdi"
                   [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
@@ -985,6 +985,7 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
+                  [visible]="!refOrdreEdi"
                   [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
@@ -995,6 +996,7 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
+                  [visible]="!refOrdreEdi"
                   [disabled]="!fullOrderNumber || !allowMutations"
                   type="success"
                   hint="{{ 'hint-ajout-ordre' | localize }} {{
@@ -1005,6 +1007,7 @@
                 ></dx-button>
                 <dx-button
                   class="upperButton subButton"
+                  [visible]="!refOrdreEdi"
                   [disabled]="false"
                   type="success"
                   [hint]="

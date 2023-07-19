@@ -52,6 +52,10 @@
       transform: translateX(-50%);
       margin: 0 auto;
       background-color: transparent;
+
+      .dx-icon {
+        font-size: 30px !important;
+      }
     }
 
     .tile-button {
@@ -69,6 +73,10 @@
         .warning {
           font-size: 22px !important;
           line-height: 22px !important;
+
+          .dx-icon {
+            padding-bottom: 3px;
+          }
         }
 
         &:hover {

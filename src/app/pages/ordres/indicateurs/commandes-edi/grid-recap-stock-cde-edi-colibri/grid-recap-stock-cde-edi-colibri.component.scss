@@ -4,8 +4,18 @@
 
 ::ng-deep .grid-recap-stock-cde-edi-colibri {
 
+  max-height: 750px;
+
   .dx-command-select {
     padding: 0 !important;
+  }
+
+  .quantiteValidee {
+    cursor: pointer !important;
+  }
+
+  .bold-text {
+    font-weight: bold !important;
   }
 
   .green-row {
@@ -29,15 +39,17 @@
 
   .grid-add-button {
     display: block !important;
-    width: 22px !important;
-    height: 22px;
-    min-width: 22px !important;
+    width: 20px !important;
+    height: 20px;
+    min-width: 20px !important;
+    left: 35px;
+    border-radius: 0 !important;
     float: right;
 
     .dx-icon {
       color: white !important;
       font-size: 18px !important;
-      padding: 2px;
+      padding: 1px;
     }
 
     .dx-button-content {

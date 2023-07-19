@@ -8,6 +8,7 @@ import {
 import { AuthService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import {
@@ -15,10 +16,10 @@ import {
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -34,7 +35,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
-  @Input() public ordreId: string;
+  @Input() public ordreEdiId: string;
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
@@ -51,12 +52,20 @@ export class GridRecapStockCdeEdiColibriComponent {
   private oldgtin: string;
   private alternateOrder: boolean;
 
+  readonly specialFields = [
+    "fournisseur.id",
+    "proprietaire.id",
+    "proprietaire.listeExpediteurs",
+  ];
+
   constructor(
     public ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
+    private gridUtilsService: GridUtilsService,
+    private stockArticleEdiBassinService: StockArticleEdiBassinService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
@@ -70,46 +79,55 @@ export class GridRecapStockCdeEdiColibriComponent {
   async enableFilters() {
 
     const fields = this.columns.pipe(
-      map((cols) =>
-        cols.map((column) => {
-          return column.dataField;
-        })
-      )
+      map((columns) => columns.map((column) => column.dataField))
     );
-    const gridFields = await fields.toPromise();
-    const dataSource = this.ordreLignesService.getListDataSource([
-      ...gridFields,
-      "ordre.id",
-      "ordre.statut",
-    ]);
 
-    const filter = [
-      [`ordre.id`, "=", this.ordreId]
-    ];
-    dataSource.filter(filter);
+    const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
+      new Set([...this.specialFields, ...await fields.toPromise()])
+    );
     this.datagrid.dataSource = dataSource;
   }
 
+  refreshGrid() {
+    this.datagrid.instance.refresh();
+  }
+
+  onEditorPreparing(e) {
+    // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
+    if (e.parentType === "dataRow")
+      e.editorOptions.onInput = elem => this.gridUtilsService.secureTypedValueWithEditGrid(elem);
+  }
+
   onRowPrepared(e) {
-    // Highlight canceled orders
     if (e.rowType === "data") {
-      if (e.data?.gtinColisKit !== this.oldgtin) {
+      // Alternate colors vs gtin
+      if (e.data?.gtin !== this.oldgtin) {
         this.alternateOrder = !this.alternateOrder;
-        this.oldgtin = e.data?.gtinColisKit;
+        this.oldgtin = e.data?.gtin;
       }
       e.rowElement.classList.add(this.alternateOrder ? "green-row" : "blue-row");
+
+      // Hiding checkboxes when there's no fournisseur assigned
+      if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
     }
   }
 
-
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Descript. article
-      if (
-        e.column.dataField ===
-        "article.articleDescription.descriptionReferenceLongue"
-      ) {
-        e.cellElement.title = e.value;
+      // Column formatting
+      if (["article.articleDescription.descriptionLongue", "article.id"].includes(e.column.dataField)) {
+        if (!e.data.fournisseur?.id)
+          e.cellElement.classList.add("red-font");
+        if (e.data.flagHorsBassin === "BWS")
+          e.cellElement.classList.add("bold-text");
+      }
+      if (e.column.dataField === "flagHorsBassin") {
+        if (["BWS", "PLA", "ABS"].includes(e.value) ||
+          e.data.bureauAchat.id === e.data.ordreEdi.bureauAchat.id ||
+          (e.value === "DB" && e.data.age === "4")
+        )
+          e.cellElement.classList.add("bold-text");
+        if (e.value === "HB") e.cellElement.classList.add("red-font");
       }
     }
   }
