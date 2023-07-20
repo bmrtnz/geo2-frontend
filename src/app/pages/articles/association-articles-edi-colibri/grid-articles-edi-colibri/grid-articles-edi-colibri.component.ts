@@ -178,7 +178,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
               `${this.localizeService.localize("ordresEdi-article-id")} ${e.data.article.id} ${this.localizeService.localize(e.data.valide ? "desactive" : "active")}`,
               "success"
             ),
-              this.enableFilters();
+              this.refreshGrid();
           },
           error: () =>
             notify("Erreur lors de la modification du statut", "error", 3000),
