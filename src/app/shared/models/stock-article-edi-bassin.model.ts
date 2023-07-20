@@ -21,7 +21,7 @@ export class StockArticleEdiBassin extends Model {
   @Field() public numeroOrdreEDI?: number;
   @Field() public quantiteRestante?: number;
   @Field() public quantiteValidee?: number;
-  @Field() public flagHorsBassin?: boolean;
+  @Field() public flagHorsBassin?: string;
   @Field() public ventePrixUnitaire?: number;
   @Field() public ventePrixUnitaireNet?: number;
   @Field({ model: import("./base-tarif.model") }) public venteUnite: BaseTarif;

@@ -1,4 +1,4 @@
-import { Client, Entrepot } from ".";
+import { BureauAchat, Client, Entrepot } from ".";
 import { Field, Model, ModelName } from "./model";
 import Ordre from "./ordre.model";
 
@@ -26,6 +26,7 @@ export class CommandeEdi extends Model {
   @Field() public operationMarketing?: string;
   @Field({ model: import("./entrepot.model") }) public entrepot?: Entrepot;
   @Field({ model: import("./ordre.model") }) public ordre?: Ordre;
+  @Field({ model: import("./bureau-achat.model") }) public bureauAchat?: BureauAchat;
   @Field() public fichierSource?: string;
   @Field() public libelleProduit?: string;
   @Field() public listArticleId?: string;
