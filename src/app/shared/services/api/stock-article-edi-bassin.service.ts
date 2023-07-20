@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import StockArticleEdiBassin from "app/shared/models/stock-article-Edi-bassin.model";
+import StockArticleEdiBassin from "app/shared/models/stock-article-edi-bassin.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { ApiService, RelayPage } from "../api.service";

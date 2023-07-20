@@ -5,6 +5,7 @@ import { Client } from "./client.model";
 import Courtier from "./courtier.model";
 import { Devise } from "./devise.model";
 import Document from "./document.model";
+import EdiOrdre from "./edi-ordre.model";
 import Entrepot from "./entrepot.model";
 import Incoterm from "./incoterm.model";
 import { Field, Model, ModelName } from "./model";
@@ -56,6 +57,7 @@ export class Ordre extends Model {
   @Field({ model: import("./devise.model") }) public devise?: Devise;
   @Field() public commentaireUsageInterne?: string;
   @Field({ model: import("./campagne.model") }) public campagne?: Campagne;
+  @Field({ model: import("./edi-ordre.model") }) public ordreEDI?;
   @Field({ model: import("./secteur.model") })
   public secteurCommercial?: Secteur;
   @Field({ model: import("./client.model") }) public client?: Client;
