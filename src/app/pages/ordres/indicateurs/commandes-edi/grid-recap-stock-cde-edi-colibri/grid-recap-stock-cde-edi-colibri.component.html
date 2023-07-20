@@ -10,6 +10,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onEditorPreparing)="onEditorPreparing($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="selectChange.emit($event)"

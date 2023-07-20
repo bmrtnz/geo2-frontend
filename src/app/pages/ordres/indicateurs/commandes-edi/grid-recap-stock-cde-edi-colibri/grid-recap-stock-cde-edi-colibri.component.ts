@@ -16,6 +16,7 @@ import {
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
@@ -81,6 +82,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
+    private gridUtilsService: GridUtilsService,
     private stockArticleEdiBassinService: StockArticleEdiBassinService,
     public authService: AuthService,
     public functionsService: FunctionsService,
@@ -110,6 +112,12 @@ export class GridRecapStockCdeEdiColibriComponent {
     this.datagrid.dataSource = dataSource;
   }
 
+  onEditorPreparing(e) {
+    // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
+    if (e.parentType === "dataRow")
+      e.editorOptions.onInput = elem => this.gridUtilsService.secureTypedValueWithEditGrid(elem);
+  }
+
   onRowPrepared(e) {
     // Highlight canceled orders
     if (e.rowType === "data") {
@@ -120,7 +128,6 @@ export class GridRecapStockCdeEdiColibriComponent {
       e.rowElement.classList.add(this.alternateOrder ? "green-row" : "blue-row");
     }
   }
-
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
