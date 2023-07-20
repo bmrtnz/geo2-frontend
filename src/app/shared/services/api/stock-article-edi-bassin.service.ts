@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
-import StockArticleEdiBassin from "app/shared/models/article-edi.model";
+import StockArticleEdiBassin from "app/shared/models/stock-article-Edi-bassin.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { ApiService, RelayPage } from "../api.service";
@@ -13,7 +13,7 @@ export class StockArticleEdiBassinService extends ApiService {
     super(apollo, StockArticleEdiBassin);
   }
 
-  private byKey(columns: Array<string>) {
+  private byKey(columns: Set<string>) {
     return (key) =>
       new Promise(async (resolve) => {
         const query = await this.buildGetOne_v2(columns);
@@ -26,7 +26,7 @@ export class StockArticleEdiBassinService extends ApiService {
       });
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Set<string>) {
     return new DataSource({
       sort: [{ selector: this.model.getKeyField() as string }],
       store: this.createCustomStore({

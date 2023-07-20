@@ -4,6 +4,8 @@
 
 ::ng-deep .grid-recap-stock-cde-edi-colibri {
 
+  max-height: 750px;
+
   .dx-command-select {
     padding: 0 !important;
   }
@@ -32,6 +34,7 @@
     width: 22px !important;
     height: 22px;
     min-width: 22px !important;
+    left: 35px;
     float: right;
 
     .dx-icon {

@@ -93,16 +93,18 @@ export class AjoutArticleEdiColibriPopupComponent {
     if (this.ligneEdi) {
       // Set values from grid
       this.codeArticleSB.value = { id: this.ligneEdi.article?.id };
-      this.proprietaireSB.value = { id: this.ligneEdi.fournisseur?.id, listeExpediteurs: this.ligneEdi.fournisseur?.listeExpediteurs };
+      this.proprietaireSB.value = { id: this.ligneEdi.proprietaire?.id, listeExpediteurs: this.ligneEdi.proprietaire?.listeExpediteurs };
       this.fournisseurSB.value = { id: this.ligneEdi.fournisseur?.id };
       this.quantiteSB.instance.reset();
       // Set filters for proprietaire & fournisseur
       this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
-      if (!this.proprietaireSB.value) {
-        this.filterFournisseurDS();
+      this.updateFilterFournisseurDS(this.proprietaireSB.value);
+      if (!this.proprietaireSB.value?.id) {
+        this.proprietaireSB.instance.focus();
       } else {
-        this.updateFilterFournisseurDS(this.proprietaireSB.value)
+        this.quantiteSB.instance.focus();
       }
+
     }
     this.popupShown = true;
   }

@@ -8270,24 +8270,38 @@
       }
     ]
   },
-  "recap-stock-cde-edi": {
+  "recap-stock-cdes-edi": {
+    "pageSize": 100,
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "ordre.numero",
-        "dataType": "string",
-        "width": 80,
+        "dataField": "numeroOrdreEDI",
+        "width": 60,
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "numeroLigneEDI",
+        "width": 75,
+        "sortIndex": 0,
+        "sortOrder": "asc",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 4,
-        "dataField": "gtinColisKit",
+        "dataField": "gtin",
         "dataType": "string",
+        "width": 110,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "article.id",
+        "width": 75,
+        "cssClass": "multi-line-header",
         "showInColumnChooser": false,
         "visible": true
       },
@@ -8295,70 +8309,99 @@
         "visibleIndex": 8,
         "dataField": "article.articleDescription.descriptionLongue",
         "dataType": "string",
-        "cssClass": "small-left-padding",
+        "cssClass": "small-left-padding large-right-side-padding",
         "cellTemplate": "addArticleBtnTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "article.normalisation.calibreMarquage.description",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "fournisseur.code",
         "dataType": "string",
-        "width": 150,
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
-        "dataField": "ordre.client.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "visibleIndex": 14,
+        "dataField": "proprietaire.code",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
       },
       {
-        "dataField": "fournisseur.id",
-        "showInColumnChooser": false,
-        "visible": false
+        "visibleIndex": 16,
+        "dataField": "bureauAchat.id",
+        "dataType": "string",
+        "cssClass": "small-side-padding",
+        "visible": true
       },
       {
-        "dataField": "fournisseur.listeExpediteurs",
-        "showInColumnChooser": false,
-        "visible": false
+        "visibleIndex": 18,
+        "dataField": "quantiteRestante",
+        "dataType": "number",
+        "width": 80,
+        "cssClass": "multi-line-header text-align-right",
+        "visible": true
+      },
+      {
+        "visibleIndex": 21,
+        "dataField": "ligneEdi.quantiteColis",
+        "dataType": "number",
+        "cssClass": "multi-line-header small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 22,
+        "dataField": "quantiteValidee",
+        "dataType": "number",
+        "width": 55,
+        "cssClass": "multi-line-header small-side-padding",
+        "allowEditing": true,
+        "visible": true
+      },
+      {
+        "visibleIndex": 25,
+        "dataField": "ordreEdi.bureauAchat.id",
+        "cssClass": "multi-line-header small-side-padding",
+        "width": 90,
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "age",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "flagHorsBassin",
+        "width": 50,
+        "cssClass": "multi-line-header",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "ventePrixUnitaire",
+        "cssClass": "multi-line-header text-align-right",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 31,
+        "dataField": "ligneEdi.alertePrix",
+        "dataType": "string",
+        "visible": true
       },
       {
         "dataField": "id",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "venteUnite.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "achatUnite.description",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "nombreColisExpedies",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordre.entrepot.code",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordre.referenceClient",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordre.transporteur.id",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordre.campagne.id",
-        "showInColumnChooser": false,
         "visible": false
       }
     ]

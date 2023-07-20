@@ -8,6 +8,7 @@ import {
 import { AuthService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import {
@@ -51,12 +52,36 @@ export class GridRecapStockCdeEdiColibriComponent {
   private oldgtin: string;
   private alternateOrder: boolean;
 
+  readonly inheritedFields = new Set([
+    "numeroOrdreEDI",
+    "numeroLigneEDI",
+    "gtin",
+    "article.id",
+    "article.articleDescription.descriptionLongue",
+    "article.normalisation.calibreMarquage.description",
+    "fournisseur.id",
+    "fournisseur.code",
+    "proprietaire.id",
+    "proprietaire.code",
+    "proprietaire.listeExpediteurs",
+    "bureauAchat.id",
+    "quantiteRestante",
+    "ligneEdi.quantiteColis",
+    "quantiteValidee",
+    "ordreEdi.bureauAchat.id",
+    "age",
+    "ventePrixUnitaire",
+    "ligneEdi.alertePrix",
+    "id",
+  ]);
+
   constructor(
     public ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
+    private stockArticleEdiBassinService: StockArticleEdiBassinService,
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
@@ -70,32 +95,27 @@ export class GridRecapStockCdeEdiColibriComponent {
   async enableFilters() {
 
     const fields = this.columns.pipe(
-      map((cols) =>
-        cols.map((column) => {
-          return column.dataField;
-        })
-      )
+      map((columns) => columns.map((column) => column.dataField))
     );
-    const gridFields = await fields.toPromise();
-    const dataSource = this.ordreLignesService.getListDataSource([
-      ...gridFields,
-      "ordre.id",
-      "ordre.statut",
-    ]);
 
-    const filter = [
-      [`ordre.id`, "=", this.ordreId]
-    ];
-    dataSource.filter(filter);
+    const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
+      this.inheritedFields
+      // await fields.toPromise()
+    );
+
+    // const filter = [
+    //   [`ordre.id`, "=", this.ordreId]
+    // ];
+    // dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
   }
 
   onRowPrepared(e) {
     // Highlight canceled orders
     if (e.rowType === "data") {
-      if (e.data?.gtinColisKit !== this.oldgtin) {
+      if (e.data?.gtin !== this.oldgtin) {
         this.alternateOrder = !this.alternateOrder;
-        this.oldgtin = e.data?.gtinColisKit;
+        this.oldgtin = e.data?.gtin;
       }
       e.rowElement.classList.add(this.alternateOrder ? "green-row" : "blue-row");
     }
@@ -104,13 +124,6 @@ export class GridRecapStockCdeEdiColibriComponent {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Descript. article
-      if (
-        e.column.dataField ===
-        "article.articleDescription.descriptionReferenceLongue"
-      ) {
-        e.cellElement.title = e.value;
-      }
     }
   }
 

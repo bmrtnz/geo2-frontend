@@ -2,26 +2,28 @@ import { EdiLigne } from "./edi-ligne.model";
 import { Article } from "./article.model";
 import { BaseTarif } from "./base-tarif.model";
 import { BureauAchat } from "./bureau-achat.model";
-import Fournisseur from "./fournisseur.model";
-import EdiOrdre from "./edi-ordre.model";
-import Client from "./client.model";
-import Campagne from "./campagne.model";
+import { Fournisseur } from "./fournisseur.model";
+import { EdiOrdre } from "./edi-ordre.model";
+import { Client } from "./client.model";
+import { Campagne } from "./campagne.model";
 import { Field, Model, ModelName } from "./model";
 
 @ModelName("StockArticleEdiBassin")
 export class StockArticleEdiBassin extends Model {
 
   @Field({ asKey: true, asLabel: true }) public id?: number;
-  @Field() public achatDevisePrixUnitaire: number;
-  @Field() public achatDeviseTaux: number;
-  @Field() public achatPrixUnitaire: number;
-  @Field() public age: string;
-  @Field() public gtin: string;
-  @Field() public numeroLigneEDI: number;
-  @Field() public numeroOrdreEDI: number;
-  @Field() public quantiteReservee: number;
-  @Field() public ventePrixUnitaire: number;
-  @Field() public ventePrixUnitaireNet: number;
+  @Field() public achatDevisePrixUnitaire?: number;
+  @Field() public achatDeviseTaux?: number;
+  @Field() public achatPrixUnitaire?: number;
+  @Field() public age?: string;
+  @Field() public gtin?: string;
+  @Field() public numeroLigneEDI?: number;
+  @Field() public numeroOrdreEDI?: number;
+  @Field() public quantiteRestante?: number;
+  @Field() public quantiteValidee?: number;
+  @Field() public flagHorsBassin?: boolean;
+  @Field() public ventePrixUnitaire?: number;
+  @Field() public ventePrixUnitaireNet?: number;
   @Field({ model: import("./base-tarif.model") }) public venteUnite: BaseTarif;
   @Field({ model: import("./base-tarif.model") }) public achatUnite: BaseTarif;
   @Field({ model: import("./edi-ordre.model") }) public ordreEdi: EdiOrdre;

@@ -108,7 +108,7 @@ export enum Grid {
   OrdreOptionReservationStock = "ordre-option-reservation-stock",
   OrdreRecapitulatifStock = "ordre-recap-stock",
   OrdreDestockageAuto = "ordre-destockage-auto",
-  RecapStockCdeEdi = "recap-stock-cde-edi",
+  RecapStockCdeEdi = "recap-stock-cdes-edi",
   CommentaireOrdre = "commentaire-ordre",
   LitigeLigne = "litige-ligne",
   Litiges = "litiges",

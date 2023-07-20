@@ -3,14 +3,7 @@
     class="dx-card wide-card"
     [width]="'100%'"
     [focusedRowEnabled]="false"
-    [remoteOperations]="{
-      filtering: true,
-      grouping: false,
-      groupPaging: false,
-      paging: false,
-      sorting: false,
-      summary: false
-    }"
+    [remoteOperations]="true"
     [showBorders]="false"
     [elementAttr]="{ class: 'grid-recap-stock-cde-edi-colibri' }"
     [focusedRowIndex]="0"
@@ -30,6 +23,18 @@
     "
   >
     <!-- Grid configuration -->
+    <dxo-editing
+      [mode]="'batch'"
+      [allowUpdating]="true"
+      [allowAdding]="false"
+      [selectTextOnEditStart]="true"
+    >
+    </dxo-editing>
+    <dxo-keyboard-navigation
+      [enterKeyAction]="'moveFocus'"
+      [enterKeyDirection]="'column'"
+      [editOnKeyPress]="true"
+    ></dxo-keyboard-navigation>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -71,6 +76,7 @@
           | localize) || column.name
       "
       [cellTemplate]="column.cellTemplate"
+      [allowEditing]="column.allowEditing ? column.allowEditing : false"
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
