@@ -35,7 +35,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
-  @Input() public ordreId: string;
+  @Input() public ordreEdiId: string;
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
