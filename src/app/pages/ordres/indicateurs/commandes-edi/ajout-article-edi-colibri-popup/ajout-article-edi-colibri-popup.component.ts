@@ -11,6 +11,7 @@ import DataSource from "devextreme/data/data_source";
 })
 export class AjoutArticleEdiColibriPopupComponent {
   @Input() public ligneEdi: any;
+  @Output() whenValidate = new EventEmitter();
 
   public visible: boolean;
   public proprietaireSource: DataSource;
@@ -79,6 +80,13 @@ export class AjoutArticleEdiColibriPopupComponent {
   }
 
   save() {
+
+    //////////////////////////////////////////////////////////////////
+    // Implémentation
+    // w_ajout_art_recap_edi_colibri_EVENT_click_button_enregistrer
+    //////////////////////////////////////////////////////////////////
+
+    this.whenValidate.emit();
     this.visible = false;
   }
 

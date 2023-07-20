@@ -8317,7 +8317,7 @@
         "visibleIndex": 10,
         "dataField": "article.normalisation.calibreMarquage.description",
         "dataType": "string",
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding medium-left-side-padding",
         "visible": true
       },
       {
@@ -8345,15 +8345,15 @@
         "visibleIndex": 18,
         "dataField": "quantiteRestante",
         "dataType": "number",
-        "width": 80,
-        "cssClass": "multi-line-header text-align-right",
+        "width": 60,
+        "cssClass": "multi-line-header small-side-padding text-align-right",
         "visible": true
       },
       {
-        "visibleIndex": 21,
+        "visibleIndex": 20,
         "dataField": "ligneEdi.quantiteColis",
         "dataType": "number",
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding text-align-right",
         "visible": true
       },
       {
@@ -8361,12 +8361,12 @@
         "dataField": "quantiteValidee",
         "dataType": "number",
         "width": 55,
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding quantiteValidee",
         "allowEditing": true,
         "visible": true
       },
       {
-        "visibleIndex": 25,
+        "visibleIndex": 24,
         "dataField": "ordreEdi.bureauAchat.id",
         "cssClass": "multi-line-header small-side-padding",
         "width": 90,
@@ -8376,15 +8376,16 @@
       {
         "visibleIndex": 26,
         "dataField": "age",
+        "cssClass": "small-side-padding text-align-center",
         "dataType": "string",
         "visible": true
       },
       {
-        "visibleIndex": 30,
+        "visibleIndex": 28,
         "dataField": "flagHorsBassin",
-        "width": 50,
-        "cssClass": "multi-line-header",
+        "width": 55,
         "dataType": "string",
+        "cssClass": "small-side-padding text-align-center",
         "visible": true
       },
       {
@@ -8395,10 +8396,17 @@
         "visible": true
       },
       {
-        "visibleIndex": 31,
+        "visibleIndex": 32,
         "dataField": "ligneEdi.alertePrix",
         "dataType": "string",
+        "cssClass": "red-font",
         "visible": true
+      },
+      {
+        "visibleIndex": 34,
+        "dataField": "campagne.id",
+        "dataType": "string",
+        "visible": false
       },
       {
         "dataField": "id",

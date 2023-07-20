@@ -20,7 +20,6 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -53,28 +52,11 @@ export class GridRecapStockCdeEdiColibriComponent {
   private oldgtin: string;
   private alternateOrder: boolean;
 
-  readonly inheritedFields = new Set([
-    "numeroOrdreEDI",
-    "numeroLigneEDI",
-    "gtin",
-    "article.id",
-    "article.articleDescription.descriptionLongue",
-    "article.normalisation.calibreMarquage.description",
+  readonly specialFields = [
     "fournisseur.id",
-    "fournisseur.code",
     "proprietaire.id",
-    "proprietaire.code",
     "proprietaire.listeExpediteurs",
-    "bureauAchat.id",
-    "quantiteRestante",
-    "ligneEdi.quantiteColis",
-    "quantiteValidee",
-    "ordreEdi.bureauAchat.id",
-    "age",
-    "ventePrixUnitaire",
-    "ligneEdi.alertePrix",
-    "id",
-  ]);
+  ];
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -101,15 +83,13 @@ export class GridRecapStockCdeEdiColibriComponent {
     );
 
     const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
-      this.inheritedFields
-      // await fields.toPromise()
+      new Set([...this.specialFields, ...await fields.toPromise()])
     );
-
-    // const filter = [
-    //   [`ordre.id`, "=", this.ordreId]
-    // ];
-    // dataSource.filter(filter);
     this.datagrid.dataSource = dataSource;
+  }
+
+  refreshGrid() {
+    this.datagrid.instance.refresh();
   }
 
   onEditorPreparing(e) {
@@ -119,18 +99,36 @@ export class GridRecapStockCdeEdiColibriComponent {
   }
 
   onRowPrepared(e) {
-    // Highlight canceled orders
     if (e.rowType === "data") {
+      // Alternate colors vs gtin
       if (e.data?.gtin !== this.oldgtin) {
         this.alternateOrder = !this.alternateOrder;
         this.oldgtin = e.data?.gtin;
       }
       e.rowElement.classList.add(this.alternateOrder ? "green-row" : "blue-row");
+
+      // Hiding checkboxes when there's no fournisseur assigned
+      if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
     }
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
+      // Column formatting
+      if (["article.articleDescription.descriptionLongue", "article.id"].includes(e.column.dataField)) {
+        if (!e.data.fournisseur?.id)
+          e.cellElement.classList.add("red-font");
+        if (e.data.flagHorsBassin === "BWS")
+          e.cellElement.classList.add("bold-text");
+      }
+      if (e.column.dataField === "flagHorsBassin") {
+        if (["BWS", "PLA", "ABS"].includes(e.value) ||
+          e.data.bureauAchat.id === e.data.ordreEdi.bureauAchat.id ||
+          (e.value === "DB" && e.data.age === "4")
+        )
+          e.cellElement.classList.add("bold-text");
+        if (e.value === "HB") e.cellElement.classList.add("red-font");
+      }
     }
   }
 

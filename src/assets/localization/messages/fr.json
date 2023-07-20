@@ -1321,6 +1321,7 @@
     "ordreRecapCdeEdi-flagHorsBassin": "Type",
     "ordreRecapCdeEdi-ventePrixUnitaire": "Prix vente",
     "ordreRecapCdeEdi-ligneEdi-alertePrix": "Alerte prix",
+    "ordreRecapCdeEdi-campagne-id": "Campagne",
     "ordreHistoModifDetail-userModification": "Qui",
     "ordreHistoModifDetail-dateModification": "Quand",
     "ordreHistoModifDetail-nombrePalettesExpedieesAvant": "Nb Pal anc.",

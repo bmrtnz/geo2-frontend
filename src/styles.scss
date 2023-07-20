@@ -309,6 +309,11 @@ body app-root.production {
   }
 }
 
+// To hide datagrid select checkboxes
+.hide-select-checkbox .dx-command-select {
+  visibility: hidden;
+}
+
 // Dark grey header background
 .dx-datagrid .dx-row.dx-header-row {
   td {
@@ -497,6 +502,10 @@ body app-root.production {
 
 .large-right-side-padding {
   padding-right: 40px !important;
+}
+
+.medium-left-side-padding {
+  padding-left: 20px !important;
 }
 
 .text-align-center {
