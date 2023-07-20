@@ -972,6 +972,16 @@
                 <span class="dx-form-group-caption">{{
                   "ordres-suivi-groupe-articles" | localize
                 }}</span>
+
+                <dx-button
+                  class="upperButton subButton edi-colibri-button"
+                  [visible]="!!refOrdreEdi"
+                  [disabled]="!fullOrderNumber"
+                  type="success"
+                  text="{{ 'btn-show-order' | localize }} {{ canalOrdreEdi }}"
+                  (onClick)="onShowEdiColibriOrderClick()"
+                ></dx-button>
+
                 <dx-button
                   class="upperButton subButton"
                   [visible]="!refOrdreEdi"

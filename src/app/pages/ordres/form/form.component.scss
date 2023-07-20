@@ -229,9 +229,18 @@
   color: white;
   font-size: 13px;
   font-weight: bold;
-  background: #A34BB4;
+  background: $BW-violet-light;
+  letter-spacing: .06em;
   padding: 2px 8px;
   margin: 0px 7px;
+}
+
+.edi-colibri-button {
+  background-color: $BW-violet-light !important;
+
+  &:hover {
+    background-color: $BW-violet-medium !important;
+  }
 }
 
 ::ng-deep .top-panel-order {

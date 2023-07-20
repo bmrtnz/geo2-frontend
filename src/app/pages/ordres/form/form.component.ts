@@ -1000,6 +1000,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
+  onShowEdiColibriOrderClick() {
+
+  }
+
   onArticleManClick(e?) {
     this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
