@@ -22,13 +22,14 @@
     [keyExpr]="'id'"
     [showBorders]="false"
     [focusedRowEnabled]="true"
-    [focusedRowIndex]="0"
+    [focusedRowIndex]="-1"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
     (onCellPrepared)="onCellPrepared($event)"
     (onCellClick)="onEdiCellClick($event)"
+    (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',

@@ -255,7 +255,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
     this.catalogue.dataGrid.instance.clearSelection();
-    this.catalogue.especeSB.instance.reset();
+    this.catalogue.especeSB.value = ["POMME"];
     this.catalogue.varieteSB.instance.reset();
     this.catalogue.modesCultureSB.instance.reset();
     this.catalogue.emballageSB.instance.reset();

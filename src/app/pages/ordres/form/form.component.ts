@@ -409,7 +409,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
   @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
 
-  ModifCommandeEdiPopupComponent
+
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -1013,18 +1013,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ajoutArtManu.visible = true;
   }
 
-  onArticleHistoClick() {
-    this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-    this.ajoutArtHisto.visible = true;
-  }
+  // onArticleHistoClick() {
+  //   this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
+  //   this.ajoutArtHisto.visible = true;
+  // }
 
-  onArticleStockClick() {
-    this.ajoutArtStock.visible = true;
-  }
+  // onArticleStockClick() {
+  //   this.ajoutArtStock.visible = true;
+  // }
 
-  onRefClientClick() {
-    this.ajoutArtRefClt.visible = true;
-  }
+  // onRefClientClick() {
+  //   this.ajoutArtRefClt.visible = true;
+  // }
 
   onDestockAutoClick() {
     this.gridCommandes.grid.instance.saveEditData();

@@ -44,6 +44,7 @@ export class GridModifCommandeEdiComponent {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public ediLigneIdSelected;
 
 
   @Input() ordreEdiId: string;
@@ -135,6 +136,10 @@ export class GridModifCommandeEdiComponent {
         this.datagrid.instance.refresh();
         this.datagrid.instance.endCustomLoading();
       });
+  }
+
+  onFocusedRowChanged(e) {
+    this.ediLigneIdSelected = e.row?.data?.refEdiLigne;
   }
 
   onCellPrepared(e) {

@@ -3,6 +3,18 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .form-ordres-page {
+
+  .action-article-container {
+    position: relative;
+    top: -10px;
+    float: right;
+
+    .dx-button {
+      margin-left: 10px;
+      float: right;
+    }
+  }
+
   .top-grid-cde-buttons {
     position: absolute;
     right: 289px;

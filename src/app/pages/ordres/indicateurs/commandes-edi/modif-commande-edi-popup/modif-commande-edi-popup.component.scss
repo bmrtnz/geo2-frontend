@@ -30,11 +30,22 @@
   }
 
   .dx-popup-content {
-    padding: 10px 24px 24px 24px;
+    padding: 20px 24px 24px 24px;
 
     .grid-modif-commande-edi-container {
       background: #FFF !important;
       padding: 0 15px 0 2px;
+
+      .action-article-container {
+        position: absolute;
+        z-index: 1;
+
+        .dx-button {
+          margin-right: 10px;
+          float: right;
+        }
+      }
+
     }
 
     .popup-action {

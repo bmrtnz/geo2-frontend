@@ -31,6 +31,24 @@
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <div class="grid-modif-commande-edi-container">
+        <div
+          class="action-article-container"
+          [ngClass]="{ 'inactive-box': !gridComponent?.ediLigneIdSelected }"
+        >
+          <app-add-article-to-order-buttons
+            [gridCommandesAlias]="gridCommandes"
+            [articleRowKeyAlias]="articleRowKey"
+            [singleAlias]="true"
+            [fullOrderNumberAlias]="fullOrderNumber"
+            [allowMutationsAlias]="allowMutations"
+            [histoLigneOrdreTextAlias]="histoLigneOrdreText"
+            [histoLigneOrdreROTextAlias]="histoLigneOrdreReadOnlyText"
+            [ordreAlias]="ordre"
+            (lignesChanged)="onLignesChanged($event)"
+          >
+          </app-add-article-to-order-buttons>
+        </div>
+
         <app-grid-modif-commande-edi
           [ordreEdiId]="ordreEdiId"
           [ordreId]="ordreId"

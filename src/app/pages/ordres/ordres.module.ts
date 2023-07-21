@@ -163,6 +163,8 @@ import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/gr
 import { RecapStockCdeEdiColibriPopupComponent } from './indicateurs/commandes-edi/recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component';
 import { GridRecapStockCdeEdiColibriComponent } from './indicateurs/commandes-edi/grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component';
 import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-edi/ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component';
+import { AddArticleToOrderButtonsComponent } from "./add-article-to-order-buttons/add-article-to-order-buttons.component";
+
 
 @NgModule({
   declarations: [
@@ -262,6 +264,8 @@ import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-ed
     RecapStockCdeEdiColibriPopupComponent,
     GridRecapStockCdeEdiColibriComponent,
     AjoutArticleEdiColibriPopupComponent,
+    AjoutArticlesRefClientPopupComponent,
+    AddArticleToOrderButtonsComponent
   ],
   providers: [
     OrdresIndicatorsService,
@@ -326,8 +330,10 @@ import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-ed
     OrdresSuiviModule,
     ConfirmationResultPopupModule,
     QuestionPopupModule,
-    ClientsArticleRefPopupModule,
+    ClientsArticleRefPopupModule
   ],
-  exports: [GridStockComponent],
+  exports: [
+    GridStockComponent,
+  ],
 })
 export class OrdresModule { }

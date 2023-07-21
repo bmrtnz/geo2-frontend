@@ -982,52 +982,22 @@
                   (onClick)="onShowEdiColibriOrderClick()"
                 ></dx-button>
 
-                <dx-button
-                  class="upperButton subButton"
-                  [visible]="!refOrdreEdi"
-                  [disabled]="!fullOrderNumber || !allowMutations"
-                  type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-refClt' | localize
-                  }}"
-                  text="{{ 'btn-referenceClt' | localize }}"
-                  (onClick)="onRefClientClick()"
-                ></dx-button>
-                <dx-button
-                  class="upperButton subButton"
-                  [visible]="!refOrdreEdi"
-                  [disabled]="!fullOrderNumber || !allowMutations"
-                  type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-stock' | localize
-                  }}"
-                  text="{{ 'btn-stock' | localize }}"
-                  (onClick)="onArticleStockClick()"
-                ></dx-button>
-                <dx-button
-                  class="upperButton subButton"
-                  [visible]="!refOrdreEdi"
-                  [disabled]="!fullOrderNumber || !allowMutations"
-                  type="success"
-                  hint="{{ 'hint-ajout-ordre' | localize }} {{
-                    'hint-source-manuel' | localize
-                  }}"
-                  (onClick)="onArticleManClick()"
-                  text="{{ 'btn-manuel' | localize }}"
-                ></dx-button>
-                <dx-button
-                  class="upperButton subButton"
-                  [visible]="!refOrdreEdi"
-                  [disabled]="false"
-                  type="success"
-                  [hint]="
-                    !fullOrderNumber || !allowMutations
-                      ? histoLigneOrdreReadOnlyText
-                      : histoLigneOrdreText
-                  "
-                  (onClick)="onArticleHistoClick()"
-                  text="{{ 'btn-historique' | localize }}"
-                ></dx-button>
+                <div class="action-article-container">
+                  <app-add-article-to-order-buttons
+                    *ngIf="!refOrdreEdi"
+                    [gridCommandesAlias]="gridCommandes"
+                    [articleRowKeyAlias]="articleRowKey"
+                    [singleAlias]="false"
+                    [fullOrderNumberAlias]="fullOrderNumber"
+                    [allowMutationsAlias]="allowMutations"
+                    [histoLigneOrdreTextAlias]="histoLigneOrdreText"
+                    [histoLigneOrdreROTextAlias]="histoLigneOrdreReadOnlyText"
+                    [ordreAlias]="ordre"
+                    (lignesChanged)="onLignesChanged($event)"
+                  >
+                  </app-add-article-to-order-buttons>
+                </div>
+
                 <dx-button
                   class="upperButton subButton shiftedRight"
                   [disabled]="!fullOrderNumber"
@@ -1370,17 +1340,6 @@
     </dx-validation-group>
   </form>
 
-  <app-ajout-articles-ref-client-popup
-    [ordre]="ordre"
-    [single]="false"
-    (lignesChanged)="onLignesChanged($event)"
-  >
-  </app-ajout-articles-ref-client-popup>
-  <app-destockage-auto-popup
-    [ordreId]="ordre?.id"
-    [gridCommandes]="gridCommandes"
-    (updateGridCde)="gridCommandes.update()"
-  ></app-destockage-auto-popup>
   <app-ajout-articles-manu-popup
     [ordre]="ordre"
     [gridCommandes]="gridCommandes"
@@ -1389,18 +1348,12 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>
-  <app-ajout-articles-histo-popup
-    [ordre]="ordre"
-    [readOnlyMode]="readOnlyMode"
-    [single]="false"
-    (lignesChanged)="onLignesChanged($event)"
-  >
-  </app-ajout-articles-histo-popup>
-  <app-ajout-articles-stock-popup
-    [ordre]="ordre"
-    (lignesChanged)="onLignesChanged($event)"
-  >
-  </app-ajout-articles-stock-popup>
+
+  <app-destockage-auto-popup
+    [ordreId]="ordre?.id"
+    [gridCommandes]="gridCommandes"
+    (updateGridCde)="gridCommandes.update()"
+  ></app-destockage-auto-popup>
 
   <app-editing-alert></app-editing-alert>
 
@@ -1460,6 +1413,15 @@
   [commandeId]="ordre?.id"
   [showMode]="true"
   [canalCde]="canalOrdreEdi"
+  [gridCommandes]="gridCommandes"
+  [articleRowKey]="articleRowKey"
+  [single]="true"
+  [fullOrderNumber]="fullOrderNumber"
+  [allowMutations]="allowMutations"
+  [histoLigneOrdreText]="histoLigneOrdreText"
+  [histoLigneOrdreReadOnlyText]="histoLigneOrdreReadOnlyText"
+  [ordre]="ordre"
+  (lignesChanged)="onLignesChanged($event)"
 ></app-modif-commande-edi-popup>
 <app-confirmation-result-popup></app-confirmation-result-popup>
 

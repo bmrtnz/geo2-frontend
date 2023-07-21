@@ -18,14 +18,24 @@ import GridModifCommandeEdiComponent from "../grid-modif-commande-edi/grid-modif
 export class ModifCommandeEdiPopupComponent implements OnChanges {
   @Input() public commandeEdiId: string;
   @Input() public commandeId: string;
-  @Input() showMode: boolean;
-  @Input() canalCde: string;
+  @Input() public showMode: boolean;
+  @Input() public canalCde: string;
+  @Input() public gridCommandes;
+  @Input() public articleRowKey;
+  @Input() public single;
+  @Input() public fullOrderNumber;
+  @Input() public allowMutations;
+  @Input() public histoLigneOrdreText;
+  @Input() public histoLigneOrdreReadOnlyText;
+  @Input() public ordre
+
   @Output() public ordreEdiId: string;
   @Output() public ordreId: string;
   @Output() refreshGrid = new EventEmitter();
   @Output() gridTitle = "";
+  @Output() public lignesChanged = new EventEmitter();
 
-  @ViewChild(GridModifCommandeEdiComponent) private datagrid: GridModifCommandeEdiComponent;
+  @ViewChild(GridModifCommandeEdiComponent) public gridComponent: GridModifCommandeEdiComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
   public visible: boolean;
@@ -59,11 +69,12 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   }
 
   onShown() {
-    this.datagrid.enableFilters();
+    this.gridComponent.enableFilters();
   }
 
   hidePopup() {
-    this.datagrid.datagrid.dataSource = null;
+    this.gridComponent.datagrid.dataSource = null;
+    this.gridComponent.ediLigneIdSelected = null;
     this.popup.visible = false;
   }
 
@@ -71,6 +82,9 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
     this.popupFullscreen = !this.popupFullscreen;
   }
 
+  onLignesChanged(e) {
+    this.lignesChanged.emit(e);
+  }
 
   clotureOrdreEdi() {
     this.refreshGrid.emit();
