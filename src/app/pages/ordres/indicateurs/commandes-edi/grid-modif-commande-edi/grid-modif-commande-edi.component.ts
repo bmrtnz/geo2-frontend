@@ -205,7 +205,7 @@ export class GridModifCommandeEdiComponent {
   }
 
   onEdiCellClick(e) {
-    if (!e?.data) return;
+    if (e.rowType !== "data" || !e?.data) return;
     const dataSource = this.ordreLignesService.getDataSource_v2(["ediLigne.id", "ordre.numero", "ordre.campagne.id"]);
     dataSource.filter(["ediLigne.id", "=", e.data.refEdiLigne]);
     dataSource.load().then(res => {
