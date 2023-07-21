@@ -1,92 +1,94 @@
-<!-- EDI Traité -->
-<dx-button
-  class="order-edi-complete-button"
-  type="default"
-  [focusStateEnabled]="false"
-  text="{{ 'btn-completeOrderEdi' | localize }}"
-  (onClick)="onCompleteOrderEdiClick()"
-></dx-button>
+<div class="grid-container-edi-cde">
+  <!-- EDI Traité -->
+  <dx-button
+    class="order-edi-complete-button"
+    type="default"
+    [focusStateEnabled]="false"
+    text="{{ 'btn-completeOrderEdi' | localize }}"
+    (onClick)="onCompleteOrderEdiClick()"
+  ></dx-button>
 
-<dx-button
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this, false)"
-></dx-button>
-<dx-data-grid
-  class="grid-modif-commande-Edi"
-  [height]="'auto'"
-  [remoteOperations]="false"
-  [keyExpr]="'id'"
-  [showBorders]="false"
-  [focusedRowEnabled]="true"
-  [focusedRowIndex]="0"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onCellClick)="onEdiCellClick($event)"
-  (onToolbarPreparing)="
-    gridConfiguratorService.onToolbarPreparing(
-      gridTitle,
-      $event,
-      gridConfiguratorService.Grid.ModifCommandeEdi,
-      enableFilters.bind(this)
-    )
-  "
->
-  <!-- Grid configuration -->
-  <dxo-group-panel [visible]="true"> </dxo-group-panel>
-  <dxo-paging [enabled]="false"></dxo-paging>
-  <dxo-export fileName="Modif Commande EDI"></dxo-export>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.ModifCommandeEdi"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="false"></dxo-filter-row>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
-  >
-  </dxo-column-chooser>
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [width]="column?.width"
-    [cssClass]="column?.cssClass"
-    trueText="Oui"
-    falseText="Non"
-    [caption]="
-      ('ordresEdi-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
+  <dx-button
+    class="grid-grouping-button"
+    type="default"
+    icon="material-icons menu_open"
+    hint="{{ 'btn-grouping' | localize }}"
+    (onClick)="gridsService.expandCollapseGroups(this, false)"
+  ></dx-button>
+
+  <dx-data-grid
+    class="grid-modif-commande-Edi"
+    [remoteOperations]="false"
+    [keyExpr]="'id'"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onEdiCellClick($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        gridTitle,
+        $event,
+        gridConfiguratorService.Grid.ModifCommandeEdi,
+        enableFilters.bind(this)
+      )
     "
-    [allowGrouping]="column?.allowGrouping ? column.allowGrouping : false"
-    [dataType]="column?.dataType"
-    [groupCellTemplate]="column.groupCellTemplate"
-    [allowSearch]="false"
-    [allowHeaderFiltering]="false"
-    [showInColumnChooser]="column.showInColumnChooser"
   >
-  </dxi-column>
+    <!-- Grid configuration -->
+    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-paging [enabled]="false"></dxo-paging>
+    <dxo-export fileName="Modif Commande EDI"></dxo-export>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.ModifCommandeEdi"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="false"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [width]="column?.width"
+      [cssClass]="column?.cssClass"
+      trueText="Oui"
+      falseText="Non"
+      [caption]="
+        ('ordresEdi-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [allowGrouping]="column?.allowGrouping ? column.allowGrouping : false"
+      [dataType]="column?.dataType"
+      [groupCellTemplate]="column.groupCellTemplate"
+      [allowSearch]="false"
+      [allowHeaderFiltering]="false"
+      [showInColumnChooser]="column.showInColumnChooser"
+    >
+    </dxi-column>
 
-  <div *dxTemplate="let cell of 'groupCellStatusTemplate'">
-    <dx-button
-      class="small-status-button"
-      [visible]="false"
-      type="default"
-      [focusStateEnabled]="false"
-      [text]="'-'"
-    ></dx-button>
-    <div class="group-text-1"></div>
-    <div class="group-text-2 group-back-color"></div>
-  </div>
-</dx-data-grid>
+    <div *dxTemplate="let cell of 'groupCellStatusTemplate'">
+      <dx-button
+        class="small-status-button"
+        [visible]="false"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="'-'"
+      ></dx-button>
+      <div class="group-text-1"></div>
+      <div class="group-text-2 group-back-color"></div>
+    </div>
+  </dx-data-grid>
+</div>

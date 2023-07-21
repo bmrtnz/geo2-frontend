@@ -28,6 +28,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
 const ALL = "%";
 const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
@@ -37,26 +38,26 @@ const DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
   templateUrl: "./grid-modif-commande-edi.component.html",
   styleUrls: ["./grid-modif-commande-edi.component.scss"],
 })
-export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
+export class GridModifCommandeEdiComponent {
   public readonly env = environment;
 
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public gridTitle: string;
-  public openedOrders: string[];
-  toRefresh: boolean;
+
 
   @Input() ordreEdiId: string;
   @Input() ordreId: string;
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() clotureOrdreEdi = new EventEmitter();
 
-  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private ordresEdiService: OrdresEdiService,
+    private ordreLignesService: OrdreLignesService,
     private ordresService: OrdresService,
     public tabContext: TabContext,
     private dateMgtService: DateManagementService,
@@ -68,20 +69,14 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
       Grid.ModifCommandeEdi
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
-    this.gridTitle = "";
-  }
-
-  async ngOnInit() {
     this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
-  }
-
-  ngOnChanges() {
-    if (this.ordreEdiId) this.enableFilters();
+    this.gridTitle = "";
   }
 
   enableFilters() {
+
     const requiredFields = [
       "id",
       "eanProduitClient",
@@ -117,7 +112,8 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
       "ordre.id",
       "ordre.numero",
       "ordre.campagne.id",
-      "ordre.",
+      "ordreId",
+      "refEdiLigne"
     ];
 
     this.datagrid.dataSource = null;
@@ -166,7 +162,7 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
         // Fill right text of the group row
         e.cellElement.childNodes[0].children[2].innerText =
           "Livraison : " +
-            this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
+          this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
           "";
 
         // Fill indicator button text and sets its bck depending on the status
@@ -207,12 +203,11 @@ export class GridModifCommandeEdiComponent implements OnInit, OnChanges {
 
   onEdiCellClick(e) {
     if (!e?.data) return;
-    const ordre = e.data.ordre;
-    // Should be replaced by a order already focused check in root-component
-    if (this.openedOrders?.includes(`${ordre.campagne.id}-${ordre.numero}`))
-      return;
-    this.openedOrders.push(`${ordre.campagne.id}-${ordre.numero}`);
-    if (ordre) this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
+    const dataSource = this.ordreLignesService.getDataSource_v2(["ediLigne.id", "ordre.numero", "ordre.campagne.id"]);
+    dataSource.filter(["ediLigne.id", "=", e.data.refEdiLigne]);
+    dataSource.load().then(res => {
+      if (res?.length) this.tabContext.openOrdre(res[0].ordre.numero, res[0].ordre.campagne.id);
+    });
   }
 
   onCompleteOrderEdiClick() {

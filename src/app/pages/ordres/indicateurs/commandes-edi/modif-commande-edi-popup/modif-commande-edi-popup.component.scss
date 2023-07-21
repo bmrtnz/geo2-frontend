@@ -1,5 +1,51 @@
+// Var
+@import "themes/generated/variables.base";
+
 ::ng-deep .modif-commande-edi-popup {
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+    padding: 0 8px 0 24px;
+
+    .title-start,
+    .title-end {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .title-end {
+      position: relative;
+      top: -1px;
+      font-size: 22px;
+      color: $base-accent;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
   .dx-popup-content {
-    padding-top: 0;
+    padding: 10px 24px 24px 24px;
+
+    .grid-modif-commande-edi-container {
+      background: #FFF !important;
+      padding: 0 15px 0 2px;
+    }
+
+    .popup-action {
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &>.dx-button {
+        margin-left: 10px;
+      }
+    }
+
   }
 }

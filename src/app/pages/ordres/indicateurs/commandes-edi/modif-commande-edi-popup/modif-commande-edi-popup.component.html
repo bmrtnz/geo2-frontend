@@ -1,18 +1,49 @@
 <dx-popup
+  [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
-  [dragEnabled]="true"
-  [width]="1140"
-  [hideOnOutsideClick]="false"
-  [shading]="false"
-  [(visible)]="visible"
-  title="{{ 'ordre-edi-modification' | localize }}"
   height="auto"
+  [dragEnabled]="true"
+  [hideOnOutsideClick]="showMode"
+  [(visible)]="visible"
+  [fullScreen]="this.popupFullscreen"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
   [resizeEnabled]="true"
 >
-  <app-grid-modif-commande-edi
-    [ordreEdiId]="ordreEdiId"
-    [ordreId]="ordreId"
-    (clotureOrdreEdi)="clotureOrdreEdi()"
-  ></app-grid-modif-commande-edi>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ titleStart }}&nbsp;</div>
+    <div class="title-end">{{ titleEnd }}</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="grid-modif-commande-edi-container">
+        <app-grid-modif-commande-edi
+          [ordreEdiId]="ordreEdiId"
+          [ordreId]="ordreId"
+          (clotureOrdreEdi)="clotureOrdreEdi()"
+        ></app-grid-modif-commande-edi>
+      </div>
+    </dx-scroll-view>
+  </div>
+
+  <div class="popup-action">
+    <dx-button
+      text="{{ 'btn-fermer' | localize }}"
+      type="default"
+      (onClick)="hidePopup()"
+    ></dx-button>
+  </div>
 </dx-popup>

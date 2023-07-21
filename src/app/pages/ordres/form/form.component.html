@@ -1450,6 +1450,12 @@
   [ordre]="ordre"
   (selectedClient)="afterSelectPaloxAccounts($event)"
 ></app-selection-compte-palox-popup>
+<app-modif-commande-edi-popup
+  [commandeEdiId]="refOrdreEdi"
+  [commandeId]="ordre?.id"
+  [showMode]="true"
+  [canalCde]="canalOrdreEdi"
+></app-modif-commande-edi-popup>
 <app-confirmation-result-popup></app-confirmation-result-popup>
 
 <app-question-popup #dateDepartMutationPopup></app-question-popup>

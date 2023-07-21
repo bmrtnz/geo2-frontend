@@ -124,6 +124,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     // Ex 96000x6
     if (this.multipleItems) {
+      this.multipleItems = this.remplacementArticle ? 1 : this.multipleItems;
       const lastArt = articleTags[articleTags.length - 1]
       if ((this.gridCommandes.gridRowsTotal + this.multipleItems + this.saisieCode.value.length - 1) > this.maxRowNumber) {
         this.multipleItems = 0;
