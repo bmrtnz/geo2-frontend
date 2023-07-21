@@ -40,6 +40,7 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
+  @Input() public single: boolean;
   @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public articleLigneId: string;
@@ -169,7 +170,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   selectFromGrid(e) {
     const tagArray = this.saisieCode.value;
     // We do not allow article selection if already tag entered
-    if (this.remplacementArticle) {
+    if (this.single) {
       if (tagArray?.length) {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;

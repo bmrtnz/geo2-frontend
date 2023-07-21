@@ -1370,9 +1370,9 @@
     </dx-validation-group>
   </form>
 
-  <app-editing-alert></app-editing-alert>
   <app-ajout-articles-ref-client-popup
     [ordre]="ordre"
+    [single]="false"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-ref-client-popup>
@@ -1385,12 +1385,14 @@
     [ordre]="ordre"
     [gridCommandes]="gridCommandes"
     [articleRowKey]="articleRowKey"
+    [single]="!!articleRowKey"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-manu-popup>
   <app-ajout-articles-histo-popup
     [ordre]="ordre"
     [readOnlyMode]="readOnlyMode"
+    [single]="false"
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-histo-popup>
@@ -1399,6 +1401,9 @@
     (lignesChanged)="onLignesChanged($event)"
   >
   </app-ajout-articles-stock-popup>
+
+  <app-editing-alert></app-editing-alert>
+
   <app-file-manager-popup
     key="ordres"
     [subTitle]="'Ordre n°' + ordre.numero"

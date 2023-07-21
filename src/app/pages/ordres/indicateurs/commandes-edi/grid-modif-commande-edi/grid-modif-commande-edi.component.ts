@@ -44,7 +44,6 @@ export class GridModifCommandeEdiComponent {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public gridTitle: string;
 
 
   @Input() ordreEdiId: string;
@@ -62,7 +61,7 @@ export class GridModifCommandeEdiComponent {
     public tabContext: TabContext,
     private dateMgtService: DateManagementService,
     public gridsService: GridsService,
-    private localization: LocalizationService,
+    public localization: LocalizationService,
     public authService: AuthService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -72,7 +71,6 @@ export class GridModifCommandeEdiComponent {
     this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
-    this.gridTitle = "";
   }
 
   enableFilters() {
@@ -206,7 +204,16 @@ export class GridModifCommandeEdiComponent {
     const dataSource = this.ordreLignesService.getDataSource_v2(["ediLigne.id", "ordre.numero", "ordre.campagne.id"]);
     dataSource.filter(["ediLigne.id", "=", e.data.refEdiLigne]);
     dataSource.load().then(res => {
-      if (res?.length) this.tabContext.openOrdre(res[0].ordre.numero, res[0].ordre.campagne.id);
+      if (res?.length) {
+        this.tabContext.openOrdre(
+          res[0].ordre.numero,
+          res[0].ordre.campagne.id,
+          true,
+          this.localization.localize("acces-ordre")
+        );
+      } else {
+        notify(this.localization.localize("ordre-not-found"), "warning", 1500);
+      }
     });
   }
 

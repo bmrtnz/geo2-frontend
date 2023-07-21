@@ -7,6 +7,7 @@
     padding: 0 8px 0 24px;
 
     .title-start,
+    .title-mid,
     .title-end {
       font-size: 20px;
       font-weight: 500;
@@ -15,7 +16,7 @@
       line-height: 29px;
     }
 
-    .title-end {
+    .title-mid {
       position: relative;
       top: -1px;
       font-size: 22px;

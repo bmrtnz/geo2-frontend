@@ -50,7 +50,7 @@
           class="articles-valid-button"
           type="success"
           [disabled]="articlesKO"
-          [visible]="nbARticles > 0"
+          [visible]="nbARticles > 0 && !(single && nbARticles > 1)"
           [text]="validBtnText"
           (onClick)="insertArticles()"
         ></dx-button>

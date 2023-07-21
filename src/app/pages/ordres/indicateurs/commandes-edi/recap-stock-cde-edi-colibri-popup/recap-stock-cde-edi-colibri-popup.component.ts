@@ -66,11 +66,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       setTimeout(() => (this.pulseBtnOn = true), 1);
     }
     this.nbLignesOld = this.nbLignes;
-    if (this.nbLignes)
-      this.addButton.instance.option(
-        "hint",
-        this.gridUtilsService.friendlyFormatList(this.chosenArticles)
-      );
   }
 
   getGridSelectedArticles() {

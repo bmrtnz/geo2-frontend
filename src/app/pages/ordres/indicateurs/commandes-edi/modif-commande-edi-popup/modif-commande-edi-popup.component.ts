@@ -31,6 +31,7 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   public visible: boolean;
   public popupFullscreen: boolean;
   public titleStart: string;
+  public titleMid: string;
   public titleEnd: string;
 
   constructor(
@@ -46,7 +47,8 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   setTitle() {
     if (this.showMode) {
       this.titleStart = `${this.localizeService.localize("commande")} ${this.canalCde}`;
-      if (this.commandeEdiId) this.titleEnd = " n° " + this.commandeEdiId;
+      if (this.commandeEdiId) this.titleMid = " n° " + this.commandeEdiId;
+      this.titleEnd = `- ${this.localizeService.localize('click-ordre-row')}`;
     } else {
       this.titleStart = this.localizeService.localize("ordre-edi-modification");
     }
