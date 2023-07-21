@@ -134,7 +134,7 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
           "and",
           [["article.id", "contains", values.search],
             "or",
-          ["article.normalisation.articleClient", "contains", values.search],
+          ["codeArticleClient", "contains", values.search],
             "or",
           ["gtinColisClient", "contains", values.search]]
         );
