@@ -324,18 +324,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           ];
           const filter = [];
 
-          // A VIRER !! MIS TEMPORAIREMENT SUITE DOUBLONS ASTRONOMIQUES RENVOYES
-          // Voir https://redmine.microtec.fr/issues/21576
-          const setClts = new Set();
-          clientList.map(clt => setClts.add(clt.client.id));
-          Array.from(setClts).map(cltIds => filter.push(["id", "=", cltIds], "or"));
-          ////////////////////////////////////////////////////////////////////////
-
-          // A REMETTRE
-          // clientList.map((clt) => {
-          //   filter.push(["id", "=", clt.client.id], "or");
-          // });
-          /////////////
+          clientList.map((clt) => {
+            filter.push(["id", "=", clt.client.id], "or");
+          });
           filter.pop();
           if (filters.length) filters.push("and");
           filters.push(filter);
