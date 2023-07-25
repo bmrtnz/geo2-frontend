@@ -73,7 +73,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public assistantes: DataSource;
   private dataSourceOL: DataSource;
   public periodes: any[];
-  public typesDates: string[];
+  public typesDates: { key: string, description: string }[];
   public filtresStock: string[];
   public etats: any;
   public displayedEtat: string[];
@@ -134,14 +134,20 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     public authService: AuthService
   ) {
     this.typesDates = [
-      this.localization.localize("date-livraison"),
-      this.localization.localize("date-creation")
+      {
+        key: 'livraison',
+        description: this.localization.localize("date-livraison"),
+      },
+      {
+        key: 'creation',
+        description: this.localization.localize("date-creation"),
+      },
     ];
     this.filtresStock = [
       this.localization.localize("simplifie"),
       this.localization.localize("detaille")
     ]
-    this.formGroup.get("typeDate").setValue(this.typesDates[0]);
+    this.formGroup.get("typeDate").setValue(this.typesDates[0].key);
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi
@@ -282,6 +288,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         this.etats.filter((res) => res.caption === this.etatRB.value)[0].id,
         values.dateMin,
         values.dateMax,
+        values.typeDate,
         requiredFields
       )
       .subscribe((res) => {

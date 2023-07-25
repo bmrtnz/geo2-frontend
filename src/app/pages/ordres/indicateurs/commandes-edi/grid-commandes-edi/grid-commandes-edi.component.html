@@ -130,6 +130,8 @@
             <dx-select-box
               #typeDatesSB
               formControlName="typeDate"
+              [valueExpr]="'key'"
+              [displayExpr]="'description'"
               [items]="typesDates"
             >
               <dxo-drop-down-options
