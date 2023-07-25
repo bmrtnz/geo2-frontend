@@ -262,13 +262,13 @@ export class ContactsComponent implements OnInit, NestedPart, OnChanges {
       this.route.parent.firstChild.paramMap.pipe(
         map(params => params.get("client")),
         concatMap(clientId => this.entrepotsService
-          .getOneByCodeAndSocieteIdAndClientId(
+          .getOneByCodeAndClientSocieteIdAndClientId(
             new Set(["id", "client.id"]),
             codeEntrepot,
             this.currentCompanyService.getCompany().id,
             clientId,
           )),
-        map((res) => res.data.entrepotByCodeAndSocieteIdAndClientId),
+        map((res) => res.data.entrepotByCodeAndClientSocieteIdAndClientId),
         first(),
       );
     const entrepot = await firstValueFrom(fetchEntrepot(this.codeTiers));
