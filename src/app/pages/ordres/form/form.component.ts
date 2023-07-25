@@ -90,6 +90,7 @@ import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.c
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
+import { ModifCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
   RouteParam,
@@ -404,6 +405,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   comptePaloxPopup: SelectionComptePaloxPopupComponent;
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
+  @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+
+
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -999,23 +1003,27 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
+  onShowEdiColibriOrderClick() {
+    this.modifCdeEdiPopup.visible = true;
+  }
+
   onArticleManClick(e?) {
     this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
   }
 
-  onArticleHistoClick() {
-    this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-    this.ajoutArtHisto.visible = true;
-  }
+  // onArticleHistoClick() {
+  //   this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
+  //   this.ajoutArtHisto.visible = true;
+  // }
 
-  onArticleStockClick() {
-    this.ajoutArtStock.visible = true;
-  }
+  // onArticleStockClick() {
+  //   this.ajoutArtStock.visible = true;
+  // }
 
-  onRefClientClick() {
-    this.ajoutArtRefClt.visible = true;
-  }
+  // onRefClientClick() {
+  //   this.ajoutArtRefClt.visible = true;
+  // }
 
   onDestockAutoClick() {
     this.gridCommandes.grid.instance.saveEditData();

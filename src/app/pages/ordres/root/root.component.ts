@@ -146,12 +146,12 @@ export class TabContext {
    * @param campagne Campagne id
    * @param toastInfo Shows toast by default, false it not desired
    */
-  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
+  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean, specialText?: string) {
     if (!numero) return;
     toastInfo = toastInfo === undefined ? true : toastInfo;
     if (toastInfo)
       notify(
-        this.localization.localize("ouverture-ordre").replace("&NO", numero),
+        (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
         "info",
         1500
       );

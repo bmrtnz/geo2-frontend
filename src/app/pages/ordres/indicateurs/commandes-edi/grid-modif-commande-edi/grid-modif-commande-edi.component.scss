@@ -2,104 +2,116 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-::ng-deep .order-edi-complete-button {
-  position: absolute;
-  z-index: 1;
-  margin-top: 9px;
-  right: 169px;
-  height: 34px;
-  font-size: 12px;
 
-  .dx-button-content {
-    padding: 3px 13px !important;
-  }
-}
+::ng-deep .grid-container-edi-cde {
+  .order-edi-complete-button {
+    position: absolute;
+    z-index: 1;
+    margin-top: 8px;
+    right: 211px;
+    height: 34px;
+    font-size: 12px;
 
-::ng-deep .small-status-button {
-  position: relative;
-  top: 1px;
-  height: 18px;
-  min-width: 0;
-  margin-right: 13px;
-  pointer-events: none;
-  padding: 2px 14px 0 14px;
-  font-size: 13px;
-  float: left;
-}
-
-::ng-deep .small-action-button {
-  position: relative;
-  float: right;
-  margin: 0 5px;
-  height: 20px;
-  line-height: 14px;
-  padding: 0;
-  font-size: 11px;
-
-  .dx-button-content {
-    padding: 6px 9px;
-
-    .dx-button-text {
-      line-height: 11px;
+    .dx-button-content {
+      padding: 3px 13px !important;
     }
   }
-}
 
-::ng-deep .group-text-1 {
-  position: relative;
-  margin-top: 3px;
-  height: auto;
-  width: 560px;
-  white-space: initial;
-  color: rgba(0, 0, 0, 0.54) !important;
-  line-height: 16px;
-  float: left;
-}
-
-::ng-deep .group-text-2 {
-  position: relative;
-  top: 1px;
-  padding: 10px;
-  margin-left: 20px;
-  color: rgba(0, 0, 0, 0.7);
-  float: left;
-}
-
-::ng-deep .group-back-color {
-  background-color: #ffe7ad !important;
-}
-
-::ng-deep .info-U {
-  background-color: #ffa100 !important;
-}
-
-::ng-deep .info-C {
-  background-color: #8fc459 !important;
-}
-
-::ng-deep .white-text {
-  color: #fff !important;
-}
-
-::ng-deep .grid-modif-commande-Edi {
-  max-height: 500px;
-
-  .dx-datagrid-group-panel {
-    display: none;
+  .dx-datagrid-header-panel .dx-texteditor-container {
+    width: 500px;
   }
 
-  .dx-row-lines {
-    cursor: pointer;
+  .grid-grouping-button {
+    right: 158px;
   }
 
-  .dx-datagrid-group-closed,
-  .dx-datagrid-group-opened {
+  .small-status-button {
+    position: relative;
+    top: 1px;
+    height: 18px;
+    min-width: 0;
+    margin-right: 13px;
+    pointer-events: none;
+    padding: 2px 14px 0 14px;
+    font-size: 13px;
+    float: left;
+  }
+
+  .small-action-button {
+    position: relative;
+    float: right;
+    margin: 0 5px;
+    height: 20px;
+    line-height: 14px;
+    padding: 0;
+    font-size: 11px;
+
+    .dx-button-content {
+      padding: 6px 9px;
+
+      .dx-button-text {
+        line-height: 11px;
+      }
+    }
+  }
+
+  .group-text-1 {
+    position: relative;
+    margin-top: 3px;
+    height: auto;
+    width: 560px;
+    white-space: initial;
     color: rgba(0, 0, 0, 0.54) !important;
+    line-height: 16px;
+    float: left;
   }
 
-  .dx-row-focused {
-    .green-font {
-      color: #a9f77e !important;
+  .group-text-2 {
+    position: relative;
+    top: 1px;
+    padding: 10px;
+    margin-left: 20px;
+    color: rgba(0, 0, 0, 0.7);
+    float: left;
+  }
+
+  .group-back-color {
+    background-color: #ffe7ad !important;
+  }
+
+  .info-U {
+    background-color: #ffa100 !important;
+  }
+
+  .info-C {
+    background-color: #8fc459 !important;
+  }
+
+  .white-text {
+    color: #fff !important;
+  }
+
+  .grid-modif-commande-Edi {
+    min-height: 208px;
+    max-height: 500px;
+
+    .dx-datagrid-group-panel {
+      display: none;
+    }
+
+    .dx-row-lines {
+      cursor: pointer;
+    }
+
+    .dx-datagrid-group-closed,
+    .dx-datagrid-group-opened {
+      color: rgba(0, 0, 0, 0.54) !important;
+    }
+
+    .dx-row-focused {
+      .green-font {
+        color: #a9f77e !important;
+      }
     }
   }
 }

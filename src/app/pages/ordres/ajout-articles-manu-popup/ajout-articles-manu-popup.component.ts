@@ -40,6 +40,7 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
+  @Input() public single: boolean;
   @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public articleLigneId: string;
@@ -124,6 +125,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     // Ex 96000x6
     if (this.multipleItems) {
+      this.multipleItems = this.remplacementArticle ? 1 : this.multipleItems;
       const lastArt = articleTags[articleTags.length - 1]
       if ((this.gridCommandes.gridRowsTotal + this.multipleItems + this.saisieCode.value.length - 1) > this.maxRowNumber) {
         this.multipleItems = 0;
@@ -168,7 +170,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   selectFromGrid(e) {
     const tagArray = this.saisieCode.value;
     // We do not allow article selection if already tag entered
-    if (this.remplacementArticle) {
+    if (this.single) {
       if (tagArray?.length) {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;
@@ -253,7 +255,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
     this.catalogue.dataGrid.instance.clearSelection();
-    this.catalogue.especeSB.instance.reset();
+    this.catalogue.especeSB.value = ["POMME"];
     this.catalogue.varieteSB.instance.reset();
     this.catalogue.modesCultureSB.instance.reset();
     this.catalogue.emballageSB.instance.reset();

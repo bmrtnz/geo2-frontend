@@ -67,6 +67,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Input() public gridSelectionEnabled: boolean;
+  @Input() public single: boolean;
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();
@@ -493,6 +494,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;
       }
+
+      // Selection can be unique in some cases (E.g. EDI/COLIBRI)
+      if (this.single && e.selectedRowKeys?.length === 2)
+        e.component.deselectRows(e.selectedRowKeys[0]);
     }
 
     this.selectChange.emit(e);

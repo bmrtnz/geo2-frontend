@@ -30,6 +30,8 @@ import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-li
 export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public readOnlyMode: boolean;
+  @Input() public single: boolean;
+  @Output() public singleSelection: boolean;
   @Output() public gridSelectionEnabled: boolean;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public clientId: string;
@@ -63,11 +65,13 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     private currentCompanyService: CurrentCompanyService,
     private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
-  ) { }
+  ) {
+  }
 
   ngOnChanges() {
     this.setTitle();
     this.gridSelectionEnabled = !this.readOnlyMode;
+    this.singleSelection = this.single;
   }
 
   setTitle() {
