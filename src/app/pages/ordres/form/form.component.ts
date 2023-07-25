@@ -509,6 +509,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     combineLatest([
       this.formGroup.get("transporteurDEVCode").valueChanges,
       this.formGroup.get("incoterm").valueChanges,
+      this.formGroup.get("transporteur").valueChanges,
     ])
       .pipe(
         filter((res) => !!this.ordre.transporteurDEVCode?.id),
