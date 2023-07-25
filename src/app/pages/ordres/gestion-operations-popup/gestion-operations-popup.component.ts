@@ -449,7 +449,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     from(this.gridLot.refresh())
       .pipe(
         // on ignore l'erreur de "refresh annulé"
-        catchError(err => err === "canceled" ? of(null) : err),
+        catchError(err => err === "canceled" ? of(null) : throwError(() => err)),
         concatMap(() => this.setupLot()),
         concatMap((data) => this.gridLot.updateLot(data))
       )
