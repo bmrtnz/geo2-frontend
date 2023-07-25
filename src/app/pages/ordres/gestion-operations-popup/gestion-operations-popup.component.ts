@@ -4,7 +4,7 @@ import {
   Input,
   OnChanges,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ChooseEntrepotPopupComponent } from "app/shared/components/choose-entrepot-popup/choose-entrepot-popup.component";
 import { ChooseOrdrePopupComponent } from "app/shared/components/choose-ordre-popup/choose-ordre-popup.component";
@@ -27,7 +27,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   DxListComponent,
   DxPopupComponent,
-  DxRadioGroupComponent,
+  DxRadioGroupComponent
 } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import { EMPTY, forkJoin, from, iif, of, throwError, zip } from "rxjs";
@@ -38,9 +38,8 @@ import {
   finalize,
   map,
   mapTo,
-  mergeMap,
-  tap,
-  toArray,
+  mergeMap, tap,
+  toArray
 } from "rxjs/operators";
 import { ForfaitLitigePopupComponent } from "../forfait-litige-popup/forfait-litige-popup.component";
 import { FraisAnnexesLitigePopupComponent } from "../form-litiges/frais-annexes-litige-popup/frais-annexes-litige-popup.component";
@@ -449,7 +448,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
   pushLitigeLignes(event) {
     from(this.gridLot.refresh())
       .pipe(
-        concatMapTo(this.setupLot()),
+        // on ignore l'erreur de "refresh annulé"
+        catchError(err => err === "canceled" ? of(null) : throwError(() => err)),
+        concatMap(() => this.setupLot()),
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
