@@ -128,6 +128,7 @@ export class GridModifCommandeEdiComponent {
         ALL,
         new Date(1980, 1, 1),
         new Date(2100, 1, 1),
+        'livraison',
         requiredFields
       )
       .subscribe((res) => {
