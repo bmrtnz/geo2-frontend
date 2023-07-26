@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { ArticlesService, FournisseursService } from "app/shared/services";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -28,7 +29,8 @@ export class AjoutArticleEdiColibriPopupComponent {
   constructor(
     private fournisseurService: FournisseursService,
     private articlesService: ArticlesService,
-    private currentCompanyService: CurrentCompanyService
+    private functionsService: FunctionsService,
+    private currentCompanyService: CurrentCompanyService,
   ) {
     this.articlesDS = this.articlesService.getDataSource_v2(["id", "normalisation.articleClient"], "cache-first", "id");
     this.articlesDS.filter(["valide", "=", true]);
@@ -80,14 +82,16 @@ export class AjoutArticleEdiColibriPopupComponent {
   }
 
   save() {
-
-    //////////////////////////////////////////////////////////////////
-    // Implémentation
-    // w_ajout_art_recap_edi_colibri_EVENT_click_button_enregistrer
-    //////////////////////////////////////////////////////////////////
-
-    this.whenValidate.emit();
-    this.visible = false;
+    this.functionsService.wAjoutArtRecapEdiColibri(
+      this.codeArticleSB.value.id,
+      this.fournisseurSB.value.code,
+      this.proprietaireSB.value.code,
+      this.quantiteSB.value ?? this.ligneEdi.ligneEdi.quantiteColis,
+      this.ligneEdi.id,
+    ).subscribe(() => {
+      this.whenValidate.emit();
+      this.visible = false;
+    });
   }
 
   onShowing(e) {
@@ -101,8 +105,8 @@ export class AjoutArticleEdiColibriPopupComponent {
     if (this.ligneEdi) {
       // Set values from grid
       this.codeArticleSB.value = { id: this.ligneEdi.article?.id };
-      this.proprietaireSB.value = { id: this.ligneEdi.proprietaire?.id, listeExpediteurs: this.ligneEdi.proprietaire?.listeExpediteurs };
-      this.fournisseurSB.value = { id: this.ligneEdi.fournisseur?.id };
+      this.proprietaireSB.value = { id: this.ligneEdi.proprietaire?.id, code: this.ligneEdi.proprietaire?.code, listeExpediteurs: this.ligneEdi.proprietaire?.listeExpediteurs };
+      this.fournisseurSB.value = { id: this.ligneEdi.fournisseur?.id, code: this.ligneEdi.fournisseur?.code };
       this.quantiteSB.instance.reset();
       // Set filters for proprietaire & fournisseur
       this.filterProprietaireDS([["valide", "=", true], "and", ["natureStation", "<>", "F"]]);
