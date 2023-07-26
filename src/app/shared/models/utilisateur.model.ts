@@ -31,6 +31,7 @@ export class Utilisateur extends Model {
   @Field() public email?: string;
   @Field() public periode?: string;
   @Field() public commentaireStock?: boolean;
+  @Field() public filtreRechercheStockEdi?: "S" | "D";
 
   public getSUP?() {
     return (
