@@ -34,7 +34,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMap, map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
@@ -74,7 +74,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   private dataSourceOL: DataSource;
   public periodes: any[];
   public typesDates: { key: string, description: string }[];
-  public filtresStock: string[];
+  public filtresStock: { key: string, description: string }[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
@@ -144,8 +144,14 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       },
     ];
     this.filtresStock = [
-      this.localization.localize("simplifie"),
-      this.localization.localize("detaille")
+      {
+        key: "S",
+        description: this.localization.localize("simplifie"),
+      },
+      {
+        key: "D",
+        description: this.localization.localize("detaille"),
+      },
     ]
     this.formGroup.get("typeDate").setValue(this.typesDates[0].key);
     this.allText = this.localization.localize("all");
@@ -193,6 +199,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField))
     );
 
+    this.formGroup.get("filtreStock").valueChanges
+      .pipe(concatMap(filtreRechercheStockEdi => this.authService.persist({ filtreRechercheStockEdi })))
+      .subscribe();
+
     // const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
     // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
     // const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
@@ -206,7 +216,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     );
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
 
-    this.formGroup.get("filtreStock").setValue(this.filtresStock[0]);
+    const initFilterStockKey = this.authService.currentUser.filtreRechercheStockEdi ?? "S";
+    this.formGroup.get("filtreStock").setValue(initFilterStockKey);
   }
 
   showGridTOREMOVE() {

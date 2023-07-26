@@ -93,6 +93,8 @@
             <dx-select-box
               #filtreStockSB
               formControlName="filtreStock"
+              [valueExpr]="'key'"
+              [displayExpr]="'description'"
               [dataSource]="filtresStock"
             >
             </dx-select-box>
