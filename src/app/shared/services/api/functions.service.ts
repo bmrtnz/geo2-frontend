@@ -955,6 +955,51 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public wAjoutArtRecapEdiColibri = (
+    articleID: string,
+    fournisseurCode: string,
+    proprietaireCode: string,
+    quantiteValide: number,
+    fromID: number,
+  ) =>
+    this.apollo.query<{
+      wAjoutArtRecapEdiColibri: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "wAjoutArtRecapEdiColibri",
+              body: functionBody,
+              params: [
+                { name: "articleID", value: "articleID", isVariable: true },
+                { name: "fournisseurCode", value: "fournisseurCode", isVariable: true },
+                { name: "proprietaireCode", value: "proprietaireCode", isVariable: true },
+                { name: "quantiteValide", value: "quantiteValide", isVariable: true },
+                { name: "fromID", value: "fromID", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "articleID", type: "String", isOptionnal: false },
+            { name: "fournisseurCode", type: "String", isOptionnal: false },
+            { name: "proprietaireCode", type: "String", isOptionnal: false },
+            { name: "quantiteValide", type: "Int", isOptionnal: false },
+            { name: "fromID", type: "BigDecimal", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        articleID,
+        fournisseurCode,
+        proprietaireCode,
+        quantiteValide,
+        fromID,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];
