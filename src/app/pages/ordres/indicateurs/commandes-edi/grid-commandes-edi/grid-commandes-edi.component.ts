@@ -196,7 +196,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.gridTitle = "Liste des commandes EDI";
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
@@ -205,9 +205,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .pipe(concatMap(filtreRechercheStockEdi => this.authService.persist({ filtreRechercheStockEdi })))
       .subscribe();
 
-    // const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
+    // const d = new Date("2023-03-14-T00:00:00"); // A VIRER !!
     // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
-    // const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
+    // const f = new Date("2022-03-14T23:59:59"); // A VIRER !!
     // this.formGroup.get("dateMax").setValue(f); // A VIRER !!
   }
 
@@ -295,8 +295,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         values.codeAssistante?.id || ALL,
         values.codeCommercial?.id || ALL,
         this.etats.filter((res) => res.caption === this.etatRB.value)[0].id,
-        values.dateMin,
-        values.dateMax,
+        this.dateManagementService.startOfDay(values.dateMin),
+        this.dateManagementService.endOfDay(values.dateMax),
         values.typeDate,
         requiredFields
       )
@@ -692,6 +692,11 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       if (field === "libelleProduit")
         e.cellElement.title = e.data.libelleProduit ?? "";
     }
+  }
+
+  showEdiOrderNumber(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return "Cde Edi " + data[0].refEdiOrdre;
   }
 
   showModifyEdiButton(cell) {

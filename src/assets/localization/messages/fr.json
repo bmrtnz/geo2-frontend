@@ -227,6 +227,7 @@
     "annule-et-remplace": "Description obligatoire des annule et remplace",
     "blocking": "BLOQUANT :",
     "article-ajoutes": "article&& ajouté&&",
+    "article-ajoute": "Article ajouté !",
     "articles-ajoutes-refs-client": "Article&& &A ajouté&& aux références clients de &C",
     "articles-ajoutes-refs-client-vowel": "Article&& &A ajouté&& aux références clients d'&C",
     "articles-refs-client-present": "Cet article est déjà référencé",

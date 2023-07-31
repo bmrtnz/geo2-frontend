@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { ArticlesService, FournisseursService } from "app/shared/services";
+import { ArticlesService, FournisseursService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
 import DataSource from "devextreme/data/data_source";
 
 @Component({
@@ -30,6 +31,7 @@ export class AjoutArticleEdiColibriPopupComponent {
     private fournisseurService: FournisseursService,
     private articlesService: ArticlesService,
     private functionsService: FunctionsService,
+    private localize: LocalizationService,
     private currentCompanyService: CurrentCompanyService,
   ) {
     this.articlesDS = this.articlesService.getDataSource_v2(["id", "normalisation.articleClient"], "cache-first", "id");
@@ -73,12 +75,12 @@ export class AjoutArticleEdiColibriPopupComponent {
       }
     }
     this.filterFournisseurDS(filters);
-    return [newFourId, newFourCode];
+    return { id: newFourId, code: newFourCode };
   }
 
   onProprietaireChanged(e) {
     if (!e.event) return; // Only user event
-    this.fournisseurSB.value = { id: this.updateFilterFournisseurDS(e.value)[0] };
+    this.fournisseurSB.value = this.updateFilterFournisseurDS(e.value);
   }
 
   save() {
@@ -88,9 +90,13 @@ export class AjoutArticleEdiColibriPopupComponent {
       this.proprietaireSB.value.code,
       this.quantiteSB.value ?? this.ligneEdi.ligneEdi.quantiteColis,
       this.ligneEdi.id,
-    ).subscribe(() => {
-      this.whenValidate.emit();
-      this.visible = false;
+    ).subscribe({
+      next: (res) => {
+        notify(this.localize.localize("article-ajoute"), "success", 1500);
+        this.whenValidate.emit();
+        this.visible = false;
+      },
+      error: ({ message }: Error) => notify(message, "error"),
     });
   }
 
