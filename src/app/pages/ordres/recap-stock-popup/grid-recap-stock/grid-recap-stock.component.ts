@@ -90,7 +90,7 @@ export class GridRecapStockComponent {
           time = time.join(":");
           e.cellElement.textContent = `--> Option ${e.data.stock.utilisateurInfo} à ${time}`;
         } else {
-          if (e.data.mouvement.quantite >= 0) {
+          if (e.data.mouvement?.quantite >= 0) {
             e.cellElement.textContent = `Initial : ${e.data.stock.quantiteInitiale} - Déstocké : ${e.data.stock.quantiteReservee}`;
           } else {
             e.cellElement.textContent = `Réappro = ${Math.abs(e.data.stock.totalMouvements)}`;

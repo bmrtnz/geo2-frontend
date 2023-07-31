@@ -3,6 +3,8 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-recap-stock {
+  min-height: 200px;
+
   .dx-datagrid {
     max-height: 300px;
   }

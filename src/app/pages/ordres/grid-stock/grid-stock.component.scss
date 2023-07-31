@@ -117,10 +117,11 @@
     }
 
     &.recapitulatif {
-      background-color: $BW-orange-medium !important;
+      float: right;
+      background-color: $BW-khaki-dark !important;
 
       &:hover {
-        background-color: $BW-orange-dark !important;
+        background-color: $BW-khaki-ultradark !important;
       }
     }
   }

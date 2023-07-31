@@ -392,9 +392,11 @@ export class GridStockComponent implements OnInit {
   }
 
   openRecapPopup(data) {
-    if (!data?.articleID) return;
-    this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe((res) => {
+    let info = data.items ?? data.collapsedItems;
+    info = info[0];
+    if (!info?.articleID) return;
+    this.ligneStockArticle = info;
+    this.articlesService.getOne(info.articleID).subscribe((res) => {
       this.article = res.data.article;
       this.recapPopup.visible = true;
     });
