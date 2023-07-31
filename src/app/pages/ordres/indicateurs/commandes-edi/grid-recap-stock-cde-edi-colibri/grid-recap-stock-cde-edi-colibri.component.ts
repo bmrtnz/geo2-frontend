@@ -85,6 +85,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
       new Set([...this.specialFields, ...await fields.toPromise()])
     );
+    dataSource.filter(["numeroOrdreEDI", "=", 23636]); // A VIRER !!!!!!!!!!
     this.datagrid.dataSource = dataSource;
   }
 
