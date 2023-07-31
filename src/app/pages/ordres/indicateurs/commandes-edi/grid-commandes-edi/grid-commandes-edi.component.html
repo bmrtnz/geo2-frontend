@@ -205,7 +205,6 @@
       </dxi-item>
     </dx-box>
   </div>
-  <br />
 </form>
 
 <dx-button
@@ -217,7 +216,7 @@
   (onClick)="gridsService.expandCollapseGroups(this, false)"
 ></dx-button>
 <dx-data-grid
-  [height]="450"
+  class="grid-cdes-edi"
   [remoteOperations]="false"
   [keyExpr]="'id'"
   [showBorders]="false"

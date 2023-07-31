@@ -111,6 +111,11 @@
   background-color: #00759c;
 }
 
+// Toast is always on top
+.dx-overlay-wrapper.dx-toast-wrapper {
+  z-index: 10000 !important;
+}
+
 // No text overline
 body app-root.production {
   -webkit-user-select: none;
