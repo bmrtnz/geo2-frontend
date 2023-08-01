@@ -421,7 +421,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
     this.showHideLoader.emit(true);
-    notify(this.localization.localize("please-wait-order-creation"), "info", 7000);
+    notify(this.localization.localize("please-wait-order-creation"), "info", 5000);
     this.ordresEdiService.save_v2(["id", "entrepot.id"], {
       ediOrdre: {
         id: commandeEdi.refEdiOrdre,
@@ -439,7 +439,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         notify(
           this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
           , "error",
-          7000
+          10000
         )
       },
       next: () => {
