@@ -6833,63 +6833,69 @@
         "visibleIndex": 0,
         "dataField": "refEdiOrdre",
         "allowGrouping": true,
+        "sortIndex": 0,
+        "sortOrder": "asc",
         "groupIndex": 1,
-        "calculateGroupValue": "refCmdClient",
         "groupCellTemplate": "groupCellStatusTemplate",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "status",
         "width": 50,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 2,
-        "dataField": "numeroLigne",
+        "visibleIndex": 4,
+        "dataField": "refEdiLigne",
+        "sortIndex": 1,
         "sortOrder": "asc",
-        "sortIndex": 3,
+        "visible": false
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroLigne",
         "width": 70,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "libelleProduit",
         "width": 500,
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 10,
         "dataField": "eanProduitClient",
         "width": 140,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "parCombien",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 14,
         "dataField": "quantite",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 16,
         "dataField": "quantiteColis",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 18,
         "dataField": "listArticleId",
         "visible": true
       }

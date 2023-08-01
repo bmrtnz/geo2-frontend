@@ -63,6 +63,10 @@
   background-color: #8fc459 !important;
 }
 
+::ng-deep .grid-cdes-edi {
+  max-height: 550px !important;
+}
+
 ::ng-deep .grid-commandes-Edi {
   h6 {
     margin: 0;

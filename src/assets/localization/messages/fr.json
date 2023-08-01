@@ -1706,6 +1706,7 @@
     "ordresEdi-type-recherche": "Type recherche",
     "date-livraison": "Date de livraison",
     "date-creation": "Date de création",
+    "ordresEdi-refEdiLigne": "Réf. ligne Edi",
     "ordresEdi-numeroLigne": "Ligne",
     "ordresEdi-libelleProduit": "Libellé produit",
     "ordresEdi-eanProduitClient": "GTIN EDI",
