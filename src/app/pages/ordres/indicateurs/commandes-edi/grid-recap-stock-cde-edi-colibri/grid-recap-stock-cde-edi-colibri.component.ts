@@ -5,6 +5,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { EdiOrdre } from "app/shared/models";
 import { AuthService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -35,7 +36,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
-  @Input() public ordreEdiId: string;
+  @Input() public ordreEdiId: EdiOrdre["id"];
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
@@ -85,7 +86,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
       new Set([...this.specialFields, ...await fields.toPromise()])
     );
-    dataSource.filter(["numeroOrdreEDI", "=", 23636]); // A VIRER !!!!!!!!!!
+    dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
     this.datagrid.dataSource = dataSource;
   }
 

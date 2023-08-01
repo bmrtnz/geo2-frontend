@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { EdiOrdre } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -25,7 +26,7 @@ import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-ed
   styleUrls: ['./recap-stock-cde-edi-colibri-popup.component.scss']
 })
 export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
-  @Input() public ordre: Ordre;
+  @Input() public refOrdreEDI: EdiOrdre["id"];
   @Output() public gridSelectionEnabled: boolean;
 
 

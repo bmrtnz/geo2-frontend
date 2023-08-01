@@ -45,6 +45,7 @@ import { OrdresService } from "app/shared/services/api/ordres.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { GridsService } from "app/pages/ordres/grids.service";
 import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 
 enum InputField {
   clientCode = "client",
@@ -106,7 +107,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   visuCdeEdiPopup: VisualiserOrdresPopupComponent;
 
   @ViewChild(RecapStockCdeEdiColibriPopupComponent, { static: false })
-  TOREMOVEPOPUP: RecapStockCdeEdiColibriPopupComponent;
+  recapStockPopup: RecapStockCdeEdiColibriPopupComponent;
 
   public formGroup = new UntypedFormGroup({
     clientCode: new UntypedFormControl(),
@@ -131,7 +132,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     public tabContext: TabContext,
     private currentCompanyService: CurrentCompanyService,
     private dateMgtService: DateManagementService,
-    public authService: AuthService
+    public authService: AuthService,
+    public functionsService: FunctionsService,
   ) {
     this.typesDates = [
       {
@@ -218,10 +220,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
     const initFilterStockKey = this.authService.currentUser.filtreRechercheStockEdi ?? "S";
     this.formGroup.get("filtreStock").setValue(initFilterStockKey);
-  }
-
-  showGridTOREMOVE() {
-    this.TOREMOVEPOPUP.visible = true;
   }
 
   displayIDBefore(data) {
@@ -403,63 +401,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     });
   }
 
-  createEdiOrder(data, entrId?) {
-    // Add entrepot to commande EDI data
-    if (entrId) data = { ...data, entrepot: { id: entrId } };
-
-    this.ordresEdiService
-      .fCreeOrdresEdi(
-        this.currentCompanyService.getCompany().id,
-        data.entrepot.id,
-        this.datePipe.transform(data.dateLivraison, "dd/MM/yyyy"),
-        this.currentCompanyService.getCompany().campagne.id,
-        data.refCmdClient,
-        data.client.id,
-        data.refEdiOrdre,
-        this.authService.currentUser.nomUtilisateur
-      )
-      .subscribe({
-        next: (res) => {
-          const result = res.data.fCreeOrdresEdi.data;
-          this.lignesOrdreIds = [];
-          this.ordresNumeros = result?.ls_nordre_tot?.split(",");
-          if (!this.ordresNumeros?.length) {
-            notify(
-              this.localization.localize("ordre-erreur-creation"),
-              "error"
-            );
-            console.log(result);
-            return;
-          }
-          // console.log(result);
-          this.ordresNumeros.pop();
-          if (this.ordresNumeros.length === 1) {
-            notify(
-              this.localization
-                .localize("ordre-cree")
-                .replace("&O", this.ordresNumeros[0]),
-              "success",
-              7000
-            );
-            setTimeout(() =>
-              this.tabContext.openOrdre(
-                this.ordresNumeros[0],
-                this.currentCompanyService.getCompany().campagne.id,
-                false
-              )
-            );
-          } else {
-            this.visuCdeEdiPopup.visible = true;
-          }
-        },
-        error: (error: Error) => {
-          console.log(error);
-          alert(
-            this.messageFormat(error.message),
-            this.localization.localize("ordre-edi-creation")
-          );
-        },
-      });
+  onEdiEntrepotChoosed(data, id?) {
+    this.runCreationProcess({ ...data, entrepot: { id } });
   }
 
   OnClickCreateEdiButton(data) {
@@ -468,10 +411,31 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
     // Do we already have a specified entrepot? Otherwise, choose one
     if (this.commandeEdi.entrepot?.id) {
-      this.createEdiOrder(this.commandeEdi);
+      this.runCreationProcess(this.commandeEdi);
     } else {
       this.choixEntPopup.visible = true;
     }
+  }
+
+  runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
+    this.ordresEdiService.save_v2(["id", "entrepot.id"], {
+      ediOrdre: {
+        id: commandeEdi.refEdiOrdre,
+        entrepot: { id: commandeEdi.entrepot.id },
+      },
+    }).pipe(
+      concatMap(res => this.functionsService.ofReadOrdEdiColibri(
+        commandeEdi.refEdiOrdre,
+        this.currentCompanyService.getCompany().campagne.id,
+        this.formGroup.get("filtreStock").value,
+      )),
+    ).subscribe({
+      error: (err: Error) => notify(err.message, "error", 3000),
+      next: () => {
+        this.recapStockPopup.visible = true;
+        this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
+      }
+    });
   }
 
   OnClickModifyEdiButton(data) {

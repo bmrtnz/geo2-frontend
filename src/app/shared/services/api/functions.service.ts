@@ -1000,6 +1000,43 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public ofReadOrdEdiColibri = (
+    numeroCommandeEDI: string,
+    codeCampagne: string,
+    typeStock: 'S' | 'D',
+  ) =>
+    this.apollo.query<{
+      ofReadOrdEdiColibri: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofReadOrdEdiColibri",
+              body: functionBody,
+              params: [
+                { name: "numeroCommandeEDI", value: "numeroCommandeEDI", isVariable: true },
+                { name: "codeCampagne", value: "codeCampagne", isVariable: true },
+                { name: "typeStock", value: "typeStock", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "numeroCommandeEDI", type: "String", isOptionnal: false },
+            { name: "codeCampagne", type: "String", isOptionnal: false },
+            { name: "typeStock", type: "Char", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        numeroCommandeEDI,
+        codeCampagne,
+        typeStock,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];

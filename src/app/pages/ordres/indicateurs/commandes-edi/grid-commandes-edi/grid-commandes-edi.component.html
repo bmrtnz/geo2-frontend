@@ -10,13 +10,6 @@
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
     ></dx-button>
-    <dx-button
-      class="toremovebutton"
-      type="default"
-      text="grid récapitulatif stock"
-      [visible]="devMode"
-      (onClick)="showGridTOREMOVE()"
-    ></dx-button>
   </div>
   <div style="clear: both"></div>
   <div class="BAFFilterArea">
@@ -337,7 +330,7 @@
 </dx-data-grid>
 <app-choix-entrepot-commande-edi-popup
   [commandeEdi]="commandeEdi"
-  (entrepotChosen)="createEdiOrder(commandeEdi, $event)"
+  (entrepotChosen)="onEdiEntrepotChoosed(commandeEdi, $event)"
 >
 </app-choix-entrepot-commande-edi-popup>
 <app-modif-commande-edi-popup
