@@ -9,12 +9,13 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 export class CommandesEdiComponent {
   public visible: boolean;
   public popupFullscreen = true;
+  public loadingRecap;
 
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
-  constructor() {}
+  constructor() { }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("commandes-edi-popup");
@@ -24,10 +25,16 @@ export class CommandesEdiComponent {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
-  onHidden() {}
+  onHidden() {
+    this.loadingRecap = false;
+  }
 
   hidePopup() {
     this.popup.visible = false;
+  }
+
+  showHideLoader(e) {
+    this.loadingRecap = e;
   }
 
   resizePopup() {
@@ -37,7 +44,7 @@ export class CommandesEdiComponent {
   capitalize(data) {
     return data?.description
       ? data.description.charAt(0).toUpperCase() +
-          data.description.slice(1).toLowerCase()
+      data.description.slice(1).toLowerCase()
       : null;
   }
 }

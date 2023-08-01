@@ -34,7 +34,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   nbLignes: number;
   nbLignesOld: number;
   chosenArticles: string[];
-  ordreInfo = "";
   titleStart: string;
   titleMid: string;
   pulseBtnOn: boolean;
@@ -89,6 +88,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   clearAll() {
+    this.gridRecap.datagrid.instance.clearSelection();
     this.gridRecap.datagrid.dataSource = null;
     this.updateChosenArticles();
   }

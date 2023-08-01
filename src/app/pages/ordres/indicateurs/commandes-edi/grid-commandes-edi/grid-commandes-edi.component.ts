@@ -5,7 +5,8 @@ import {
   OnInit,
   Output,
   ViewChild,
-  isDevMode
+  isDevMode,
+  EventEmitter
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
@@ -81,7 +82,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public gridsService: GridsService;
   public allText: string;
   public gridTitle: string;
   public gridTitleCount: string;
@@ -93,6 +93,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @Output() commandeId: string;
   @Output() lignesOrdreIds: string[];
   @Output() ordresNumeros: string[];
+  @Output() public showHideLoader = new EventEmitter();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild("typeDatesSB", { static: false }) typeDatesSB: DxSelectBoxComponent;
@@ -125,6 +126,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
+    public gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
     public dateManagementService: DateManagementService,
     private localization: LocalizationService,
@@ -418,6 +420,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
+    this.showHideLoader.emit(true);
+    notify(this.localization.localize("please-wait-order-creation"), "info", 7000);
     this.ordresEdiService.save_v2(["id", "entrepot.id"], {
       ediOrdre: {
         id: commandeEdi.refEdiOrdre,
@@ -430,8 +434,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         this.formGroup.get("filtreStock").value,
       )),
     ).subscribe({
-      error: (err: Error) => notify(err.message, "error", 3000),
+      error: (err: Error) => {
+        this.showHideLoader.emit(false);
+        notify(
+          this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
+          , "error",
+          7000
+        )
+      },
       next: () => {
+        this.showHideLoader.emit(false);
         this.recapStockPopup.visible = true;
         this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
       }
@@ -639,6 +651,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   private messageFormat(mess) {
     mess = mess
       .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
+      .replace("Exception while fetching data (/ofReadOrdEdiColibri) : ", "")
       .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
       .replace(
         "Exception while fetching data (/fCreeOrdreComplementaire) : ",
