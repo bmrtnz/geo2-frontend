@@ -14,6 +14,7 @@
 
   .grey-light {
     background-color: #eee !important;
+    color: #333 !important;
   }
 
   .dx-group-row td {
@@ -116,10 +117,11 @@
     }
 
     &.recapitulatif {
-      background-color: $BW-orange-medium !important;
+      float: right;
+      background-color: $BW-khaki-dark !important;
 
       &:hover {
-        background-color: $BW-orange-dark !important;
+        background-color: $BW-khaki-ultradark !important;
       }
     }
   }

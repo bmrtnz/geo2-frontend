@@ -143,9 +143,9 @@ export class DuplicationOrdrePopupComponent {
     }
 
     const fin = new Date(this.formGroup.get("dateLivraisonPrevue").value);
-    const diffJours = fin.getDate() - deb.getDate();
+    const deltaDate = fin < deb;
 
-    if (diffJours < 0) {
+    if (deltaDate) {
       if (e.element.classList.contains("dateStart")) {
         this.formGroup
           .get("dateLivraisonPrevue")

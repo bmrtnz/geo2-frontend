@@ -1,13 +1,4 @@
 <div class="grid-recap-stock">
-  <dx-button
-    style="margin-right: 16px"
-    class="grid-grouping-button"
-    type="default"
-    icon="material-icons menu_open"
-    hint="{{ 'btn-grouping' | localize }}"
-    (onClick)="gridsService.expandCollapseGroups(this, false)"
-  ></dx-button>
-
   <dx-data-grid
     class="dx-card wide-card"
     [remoteOperations]="{
@@ -37,8 +28,6 @@
     "
   >
     <dxo-paging></dxo-paging>
-    <dxo-group-panel [visible]="true"> </dxo-group-panel>
-    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-header-filter
       [visible]="false"
       [allowSearch]="true"
