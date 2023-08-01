@@ -10,7 +10,14 @@
 
   <dx-data-grid
     class="dx-card wide-card"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: true,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="-1"
@@ -76,5 +83,26 @@
       [cellTemplate]="column.cellTemplate"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
+
+    <dxo-summary>
+      <dxi-total-item
+        column="stock.age"
+        displayFormat="Total :"
+        cssClass="text-align-right"
+      >
+      </dxi-total-item>
+      <dxi-total-item
+        column="stock.quantiteDisponible"
+        summaryType="sum"
+        displayFormat="{0}"
+      >
+      </dxi-total-item>
+      <dxi-total-item
+        column="mouvement.quantite"
+        summaryType="sum"
+        displayFormat="{0}"
+      >
+      </dxi-total-item>
+    </dxo-summary>
   </dx-data-grid>
 </div>
