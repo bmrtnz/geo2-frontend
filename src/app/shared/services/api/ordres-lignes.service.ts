@@ -358,9 +358,15 @@ export class OrdreLignesService extends ApiService implements APIRead {
         break;
       }
       case "fraisPrixUnitaire": {
-        // if (data.ordre.societe.id !== "IMP"
-        // ) this.lock(e);
-        this.lock(e); // Modif Léa #17301
+        if (data.ordre.societe.id !== "IMP"
+        ) this.lock(e);
+        this.lock(e); // Modif Léa #17301 + modifs Bruno 26/07/2023 #21724
+        break;
+      }
+      case "fraisUnite.id": {
+        if (data.ordre.societe.id !== "IMP"
+        ) this.lock(e);
+        this.lock(e); // Dde Bruno 26/07/2023 #21724
         break;
       }
       case "articleKit": {

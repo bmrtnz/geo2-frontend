@@ -128,6 +128,10 @@ export class GridStockComponent implements OnInit {
     "quantiteCalculee2",
     "quantiteCalculee3",
     "quantiteCalculee4",
+    "quantiteReservee1",
+    "quantiteReservee2",
+    "quantiteReservee3",
+    "quantiteReservee4",
     "quantiteHebdomadaire",
     "prevision3j",
     "prevision7j",
@@ -388,9 +392,11 @@ export class GridStockComponent implements OnInit {
   }
 
   openRecapPopup(data) {
-    if (!data?.articleID) return;
-    this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe((res) => {
+    let info = data.items ?? data.collapsedItems;
+    info = info[0];
+    if (!info?.articleID) return;
+    this.ligneStockArticle = info;
+    this.articlesService.getOne(info.articleID).subscribe((res) => {
       this.article = res.data.article;
       this.recapPopup.visible = true;
     });
@@ -444,14 +450,16 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
         const index = e.column.dataField[e.column.dataField.length - 1];
         let data = e.data;
+        let underline = false;
         if (e.rowType === "group") {
           data = data.items ?? data.collapsedItems;
-          let underline = false;
-          data.map(d => { if (d["quantiteReservee" + index] !== 0) underline = true; });
-          if (underline) e.cellElement.classList.add("underlined-text")
+          data.map(d => {
+            if (d["quantiteReservee" + index] > 0) underline = true;
+          });
         } else {
-          if (data["quantiteReservee" + index] !== 0) e.cellElement.classList.add("underlined-text")
+          if (data["quantiteReservee" + index] > 0) underline = true;
         }
+        if (underline) e.cellElement.classList.add("underlined-text");
       }
 
       // Fond jaune pour les stocks J21
@@ -518,4 +526,5 @@ export class GridStockComponent implements OnInit {
       }
     }
   }
+
 }
