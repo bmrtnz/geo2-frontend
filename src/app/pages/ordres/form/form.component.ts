@@ -53,21 +53,25 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { combineLatest, defer, Observable, of, Subject } from "rxjs";
+import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
 // eslint-disable-next-line max-len
 import {
   catchError,
   concatMap,
   concatMapTo,
   debounceTime,
+  exhaustMap,
   filter,
   first,
   map,
   mapTo,
+  refCount,
+  share,
   startWith,
   switchMap,
   takeUntil,
   takeWhile,
+  tap,
 } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
@@ -163,15 +167,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.handleTabChange().subscribe((event) => {
       this.initializeAnchors(event);
-
       if (event.status === "in") {
-        this.statutInterval = window.setInterval(
-          () => this.refetchStatut(),
-          5 * ONE_SECOND
-        );
-      } else if (event.status === "out" && this.statutInterval) {
-        window.clearInterval(this.statutInterval);
+        this.refetchSubscription = this.refetchOrder().subscribe({
+          next: ordre => {
+            this.refreshStatus(ordre.statut)
+          },
+          complete: () => console.log("Stopping order refetch cycle"),
+        });
       }
+      if (event.status === "out")
+        this.refetchSubscription?.unsubscribe();
     });
     self = this;
   }
@@ -264,7 +269,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private destroy = new Subject<boolean>();
   private anchorsInitialized = false;
-  private statutInterval: number;
+  private refetchSubscription: Subscription;
 
   public fragments = Fragments;
   public status: string;
@@ -503,7 +508,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       concatMap(([, ordre]) =>
         this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)
       ),
-      map((res) => res.data.ofInitRegimeTva.msg)
+      map((res) => res.data.ofInitRegimeTva.msg),
     );
 
     combineLatest([
@@ -1557,14 +1562,51 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.zoomTransporteurFilePopup.visible = true;
   }
 
+  private refetchOrder(period = 5000) {
+    console.log("Starting order refetch cycle");
+    return interval(period)
+      .pipe(
+        // we need current route information
+        switchMap(() => this.route.paramMap),
+        // complete this observable when we are outside the `ordres` scope
+        // this will stop the emissions on disconnection (with router redirection), by exemple
+        takeWhile(params => this.router.isActive("pages/ordres", {
+          paths: 'subset',
+          queryParams: 'ignored',
+          fragment: 'ignored',
+          matrixParams: 'ignored',
+        })),
+        // continue if the selected tab is an `ordre`
+        filter(params => /[-\d]+/.test(params.get(RouteParam.TabID))),
+        map((params) =>
+          this.tabContext.parseTabID(params.get(RouteParam.TabID))
+        ),
+        filter((data) => data.every((v) => v !== null && v !== undefined)),
+        concatMap(([numero, campagneID]) =>
+          this.ordresService.getOneByNumeroAndSocieteAndCampagne(
+            numero,
+            this.currentCompanyService.getCompany().id,
+            campagneID,
+            ["id", "statut"],
+            "network-only"
+          )
+        ),
+        map((res) => res.data.ordreByNumeroAndSocieteAndCampagne)
+      );
+  }
+
   private refetchStatut() {
     // No refetch when statut is "FACTURE" or "ANNULE"
     if ([Statut.FACTURE, Statut.ANNULE].includes(this.ordre?.statut)) {
       return;
     }
 
-    this.route.paramMap
+    interval(5000)
       .pipe(
+        tap(() => { console.log("YO"); }),
+        // takeWhile(() => this.router.isActive("pages/ordres", false)),
+        // tap(() => console.log("YO2")),
+        switchMap(() => this.route.paramMap),
         first(),
         filter((params) => !!params.get(RouteParam.TabID)),
         map((params) =>
@@ -1584,7 +1626,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         map((res) => res.data.ordreByNumeroAndSocieteAndCampagne)
       )
       .subscribe({
-        next: (ordre) => this.refreshStatus(ordre.statut),
+        next: (ordre: Ordre) => this.refreshStatus(ordre.statut),
       });
   }
 

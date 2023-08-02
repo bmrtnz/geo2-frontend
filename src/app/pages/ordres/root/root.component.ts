@@ -320,7 +320,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     window.sessionStorage.setItem("surveyRunning", "true");
     setInterval(() => {
       const id = window.sessionStorage.getItem("idOrdre");
-      if (id) {
+      const isOrdresRouteActive = this.router.isActive("pages/ordres", {
+        paths: 'subset',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+      });
+      if (id && isOrdresRouteActive) {
         this.functionsService
           .fInitBlocageOrdre(id, this.authService.currentUser.nomUtilisateur)
           .valueChanges.subscribe((res) => {
