@@ -522,7 +522,7 @@ export class GridStockComponent implements OnInit {
   public calculateCustomSummary(options) {
     if (self.customSummaryFields.includes(options.name)) {
       if (options.summaryProcess === "calculate") {
-        options.totalValue = options.value;
+        options.totalValue = options.value; //
       }
     }
   }
