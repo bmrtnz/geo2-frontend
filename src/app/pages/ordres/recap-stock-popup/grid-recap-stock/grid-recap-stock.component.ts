@@ -96,19 +96,14 @@ export class GridRecapStockComponent {
     ).subscribe((res) => {
 
       let DsItems = JSON.parse(JSON.stringify(res.data.allDetailStockResa));
-      // Sort by fournisseur, then age
-      DsItems.sort(function (a, b) {
-        return a.stock.fournisseur.code > b.stock.fournisseur.code ||
-          a.stock.dateFabrication > b.stock.dateFabrication ||
-          a.stock?.age > b.stock?.age;
-      });
+      DsItems.sort((a, b) => a.stock.fournisseur.code > b.stock.fournisseur.code);
+      DsItems.sort((a, b) => a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age);
+      DsItems.sort((a, b) => (a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age) || a.stock.quantiteInitiale > b.stock.quantiteInitiale);
 
-      let oldFour;
-      let oldDate;
+      let oldFour, oldDate, oldDesc;
       let id = 1;
       DsItems.map((data) => {
         // Handle description abrégée
-        data.stock.quantiteInitiale = ""; // Clear original content
         if (data.stock.statutStock === "O") {
           let time = data.stock.dateInfo.split("T")[1].split(":");
           time.splice(-1);
@@ -122,13 +117,15 @@ export class GridRecapStockComponent {
           }
         }
         // Clear repeated fields, a kind of group structure wanted by BW
-        if (oldFour === data.stock.fournisseur.code && oldDate === data.stock.dateFabrication) {
+        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.quantiteInitiale && data.mouvement?.quantite) {
+          data.stock.fournisseur.code = "";
           data.stock.quantiteDisponible = null;
           data.stock.age = null;
           data.stock.quantiteInitiale = "";
         } else {
           oldFour = data.stock.fournisseur.code;
           oldDate = data.stock.dateFabrication;
+          oldDesc = data.stock.quantiteInitiale;
         }
         data.id = id;
         id++
@@ -139,6 +136,15 @@ export class GridRecapStockComponent {
       this.datagrid.instance.endCustomLoading();
     });
 
+  }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "quantiteDisponible") {
+      if (options.summaryProcess === "calculate") {
+        if (!options.totalValue) options.totalValue = 0;
+        options.totalValue += options.value.stock?.quantiteDisponible;
+      }
+    }
   }
 
 }
