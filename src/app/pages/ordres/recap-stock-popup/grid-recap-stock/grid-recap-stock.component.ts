@@ -138,13 +138,13 @@ export class GridRecapStockComponent {
 
   }
 
-  public calculateCustomSummary(options) {
-    if (options.name === "quantiteDisponible") {
-      if (options.summaryProcess === "calculate") {
-        if (!options.totalValue) options.totalValue = 0;
-        options.totalValue += options.value.stock?.quantiteDisponible;
-      }
-    }
-  }
+  // public calculateCustomSummary(options) {
+  //   if (options.name === "quantiteDisponible") {
+  //     if (options.summaryProcess === "calculate") {
+  //       if (!options.totalValue) options.totalValue = 0;
+  //       options.totalValue += options.value.stock?.quantiteDisponible;
+  //     }
+  //   }
+  // }
 
 }
