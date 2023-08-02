@@ -442,6 +442,9 @@ export class GridStockComponent implements OnInit {
     } else if (e.rowType === "data") {
       if (e.column.dataField === "stock.quantiteTotale")
         e.cellElement.classList.add("grey-light");
+      if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
+        e.cellElement.textContent = "";
+
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
@@ -474,7 +477,7 @@ export class GridStockComponent implements OnInit {
         }
         if (
           e.column.dataField.indexOf("quantiteCalculee") === 0 ||
-          ["prevision3j", "prevision7j"].includes(e.column.dataField)
+          (["prevision3j", "prevision7j"].includes(e.column.dataField) && e.rowType === "group")
         ) {
           let neg = false;
           if (e.rowType === "data") {
@@ -522,7 +525,8 @@ export class GridStockComponent implements OnInit {
   public calculateCustomSummary(options) {
     if (self.customSummaryFields.includes(options.name)) {
       if (options.summaryProcess === "calculate") {
-        options.totalValue = options.value; //
+        options.totalValue = options.value;
+        options.value = null;
       }
     }
   }
