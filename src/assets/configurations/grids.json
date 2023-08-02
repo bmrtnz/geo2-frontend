@@ -6896,6 +6896,12 @@
       },
       {
         "visibleIndex": 18,
+        "dataField": "prixVente",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
         "dataField": "listArticleId",
         "visible": true
       }
