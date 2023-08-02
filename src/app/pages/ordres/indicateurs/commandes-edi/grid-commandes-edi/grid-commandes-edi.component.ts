@@ -454,7 +454,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   OnClickModifyEdiButton(data) {
     this.commandeEdi = data.items ?? data.collapsedItems;
     this.commandeEdiId = this.commandeEdi[0].refEdiOrdre;
-    this.commandeId = this.commandeEdi[0].ordre.id;
+    this.commandeId = this.commandeEdi[0].ordre?.id;
     this.modifCdeEdiPopup.visible = true;
   }
 
