@@ -335,6 +335,21 @@
           (onClick)="openRecapPopup(cell.data)"
         >
         </dx-button>
+        <!-- Commentaire -->
+        <div class="comment-with-pen float-right">
+          <!-- <div class="text">{{ cell.data.commentaire }}</div> -->
+          <div class="text">{{ getDataFromGroup(cell)?.commentaire }}</div>
+          <dx-button
+            class="grid-pen-button"
+            type="default"
+            icon="material-icons edit"
+            [focusStateEnabled]="false"
+            hint="{{ 'hint-click-modif-comment' | localize }}"
+            [visible]="this.authService.currentUser.commentaireStock"
+            (onClick)="editComment(cell)"
+          >
+          </dx-button>
+        </div>
       </div>
 
       <dxi-column
@@ -359,22 +374,6 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
-
-      <div
-        *dxTemplate="let cell of 'editButtonTemplate'"
-        class="cell-with-icon"
-      >
-        <div class="text">{{ cell.value }}</div>
-        <dx-button
-          class="grid-pen-button"
-          type="default"
-          icon="material-icons edit"
-          [focusStateEnabled]="false"
-          [visible]="this.authService.currentUser.commentaireStock"
-          (onClick)="editComment(cell)"
-        >
-        </dx-button>
-      </div>
     </dx-data-grid>
   </div>
 </div>
