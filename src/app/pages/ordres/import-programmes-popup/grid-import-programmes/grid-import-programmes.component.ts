@@ -23,7 +23,7 @@ import { TabContext } from "../../root/root.component";
 })
 export class GridImportProgrammesComponent {
   @Input() programID: string;
-  @Input() title: string;
+  @Input() shown: boolean;
 
   @ViewChild(DxDataGridComponent, { static: true })
   datagrid: DxDataGridComponent;

@@ -439,9 +439,6 @@ export class GridStockComponent implements OnInit {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
-    } else if (e.rowType === "data") {
-      if (e.column.dataField === "stock.quantiteTotale")
-        e.cellElement.classList.add("grey-light");
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
@@ -484,6 +481,8 @@ export class GridStockComponent implements OnInit {
           }
           if (neg) e.cellElement.classList.add("highlight-negativeStock-cell");
         }
+        if (e.column.dataField === "stock.quantiteTotale")
+          e.cellElement.classList.add("grey-light");
       }
     }
   }
@@ -497,8 +496,14 @@ export class GridStockComponent implements OnInit {
   }
 
   editComment(cell) {
-    this.articleLigneId = cell.data.articleID;
-    this.promptPopupComponent.show({ comment: cell.value });
+    const data = this.getDataFromGroup(cell);
+    this.articleLigneId = data.articleID;
+    this.promptPopupComponent.show({ comment: data.commentaire });
+  }
+
+  getDataFromGroup(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0];
   }
 
   validateComment(comment) {

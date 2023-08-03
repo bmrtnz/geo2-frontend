@@ -113,6 +113,10 @@ export class PromptPopupComponent {
     this.setValidationRules();
   }
 
+  quickValidate(form: NgForm) {
+    if (!this.commentItemsList) this.onSubmit(form);
+  }
+
   onSubmit(form: NgForm) {
     if (
       this.commentValidator.instance.validate().isValid ||
@@ -141,4 +145,4 @@ export class PromptPopupComponent {
   ],
   exports: [PromptPopupComponent],
 })
-export class PromptPopupModule {}
+export class PromptPopupModule { }

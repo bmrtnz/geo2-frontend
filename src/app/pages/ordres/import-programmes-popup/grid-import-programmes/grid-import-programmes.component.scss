@@ -3,3 +3,8 @@
   color: #ff325a !important;
   text-shadow: 1px 1px 15px #fff;
 }
+
+::ng-deep .grid-import-programs {
+  min-height: 250px;
+  transition: opacity 0.2s;
+}

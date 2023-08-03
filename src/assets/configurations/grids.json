@@ -1383,12 +1383,14 @@
       {
         "visibleIndex": 6,
         "dataField": "fournisseurCode",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "proprietaireCode",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
@@ -1396,12 +1398,14 @@
         "visibleIndex": 9,
         "dataField": "dateFabrication",
         "visible": true,
+        "cssClass": "small-side-padding",
         "dataType": "date",
         "format": "dd-MM-yyyy"
       },
       {
         "visibleIndex": 10,
         "dataField": "typePaletteID",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -1472,10 +1476,8 @@
         "visible": true
       },
       {
-        "visibleIndex": 40,
         "dataField": "commentaire",
-        "visible": true,
-        "cellTemplate": "editButtonTemplate"
+        "showInColumnChooser": false
       },
       {
         "dataField": "origineID",
