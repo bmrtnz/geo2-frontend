@@ -1001,7 +1001,7 @@ export class FunctionsService {
     });
 
   public ofReadOrdEdiColibri = (
-    numeroCommandeEDI: string,
+    numeroCommandeEDI: number,
     codeCampagne: string,
     typeStock: 'S' | 'D',
   ) =>
@@ -1023,7 +1023,7 @@ export class FunctionsService {
             },
           ],
           [
-            { name: "numeroCommandeEDI", type: "String", isOptionnal: false },
+            { name: "numeroCommandeEDI", type: "BigDecimal", isOptionnal: false },
             { name: "codeCampagne", type: "String", isOptionnal: false },
             { name: "typeStock", type: "Char", isOptionnal: false },
           ]

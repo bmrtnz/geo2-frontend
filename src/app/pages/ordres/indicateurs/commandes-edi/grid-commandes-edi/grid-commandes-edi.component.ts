@@ -430,7 +430,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       },
     }).pipe(
       concatMap(res => this.functionsService.ofReadOrdEdiColibri(
-        commandeEdi.refEdiOrdre,
+        parseInt(commandeEdi.refEdiOrdre),
         this.currentCompanyService.getCompany().campagne.id,
         this.formGroup.get("filtreStock").value,
       )),
