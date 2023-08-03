@@ -5,8 +5,16 @@
 ::ng-deep .grid-recap-stock {
   min-height: 200px;
 
+  .dx-row.dx-footer-row {
+    background-color: $BW-khaki-dark;
+
+    td div {
+      color: #FFF !important;
+    }
+  }
+
   .dx-datagrid {
-    max-height: 300px;
+    max-height: 400px;
   }
 
   // Reducing grid's height when it's empty
@@ -41,6 +49,7 @@
     .option-text {
       color: $base-accent;
     }
+
   }
 }
 

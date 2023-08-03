@@ -244,6 +244,11 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
       dateMax: datePeriod.dateFin,
     });
   }
+
+  public calculateTime(e) {
+    return e.dateDepartPrevueFournisseur?.split("T")[1];
+  }
+
 }
 
 export default PlanningMaritimeComponent;

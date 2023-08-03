@@ -1794,8 +1794,6 @@
         "visibleIndex": 2,
         "dataField": "stock.fournisseur.code",
         "dataType": "string",
-        "sortOrder": "asc",
-        "sortIndex": 1,
         "visible": true
       },
       {
@@ -1810,8 +1808,6 @@
         "dataField": "stock.age",
         "cssClass": "small-side-padding text-align-center",
         "width": 75,
-        "sortOrder": "asc",
-        "sortIndex": 2,
         "visible": true
       },
       {
@@ -1853,7 +1849,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "stock.quantiteInitiale",
+        "dataField": "stock.userModification",
         "dataType": "string",
         "visible": true
       },
@@ -1895,10 +1891,16 @@
         "showInColumnChooser": false
       },
       {
+        "dataField": "stock.quantiteInitiale",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "mouvement.id",
+        "visible": false
+      },
+      {
         "dataField": "stock.id",
         "showInColumnChooser": false,
-        "sortOrder": "asc",
-        "sortIndex": 3,
         "visible": false
       }
     ]
@@ -7273,6 +7275,7 @@
         "dataType": "string",
         "width": 60,
         "cssClass": "no-padding text-align-center",
+        "calculateCellValue": "calculateTime",
         "visible": true
       },
       {

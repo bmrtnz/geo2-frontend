@@ -194,7 +194,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   }
 
   private messageFormat(mess) {
-    const functionNames = ["ofInitArticle"];
+    const functionNames = ["ofInitArticleHistory"];
     functionNames.map(
       (fn) =>
         (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
