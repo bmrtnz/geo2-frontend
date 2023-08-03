@@ -3,7 +3,7 @@
     class="dx-card wide-card"
     [remoteOperations]="{
       filtering: true,
-      grouping: true,
+      grouping: false,
       groupPaging: false,
       paging: false,
       sorting: true,
@@ -73,7 +73,7 @@
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
 
-    <dxo-summary>
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
       <dxi-total-item
         column="stock.age"
         displayFormat="Total :"
@@ -81,9 +81,10 @@
       >
       </dxi-total-item>
       <dxi-total-item
-        column="stock.quantiteDisponible"
-        summaryType="sum"
-        displayFormat="{0}"
+        [name]="'quantiteDisponible'"
+        [summaryType]="'custom'"
+        [displayFormat]="'{0}'"
+        showInColumn="stock.quantiteDisponible"
       >
       </dxi-total-item>
       <dxi-total-item

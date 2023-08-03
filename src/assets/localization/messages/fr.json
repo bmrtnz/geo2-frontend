@@ -1477,7 +1477,7 @@
     "ordreRecapStock-mouvement-dateModification": "Heure",
     "ordreRecapStock-mouvement-parQui": "Par qui ?",
     "ordreRecapStock-stock-proprietaire-code": "Propriétaire",
-    "ordreRecapStock-stock-quantiteInitiale": "Description abrégée",
+    "ordreRecapStock-stock-userModification": "Description abrégée",
     "ordreRecapStock-stock-dateFabrication": "Date de fabrication",
     "ordreRecapStock-mouvement-id": "id mouv.",
     "ordreLogistique-id": "id ligne",

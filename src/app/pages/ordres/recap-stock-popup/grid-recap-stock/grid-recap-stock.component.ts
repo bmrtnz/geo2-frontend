@@ -108,24 +108,24 @@ export class GridRecapStockComponent {
           let time = data.stock.dateInfo.split("T")[1].split(":");
           time.splice(-1);
           time = time.join(":");
-          data.stock.quantiteInitiale = `--> Option ${data.stock.utilisateurInfo} à ${time}`;
+          data.stock.userModification = `--> Option ${data.stock.utilisateurInfo} à ${time}`;
         } else {
           if (data.mouvement?.quantite >= 0) {
-            data.stock.quantiteInitiale = `Initial : ${data.stock.quantiteInitiale} - Déstocké : ${data.stock.quantiteReservee}`;
+            data.stock.userModification = `Initial : ${data.stock.quantiteInitiale} - Déstocké : ${data.stock.quantiteReservee}`;
           } else {
-            data.stock.quantiteInitiale = `Réappro = ${Math.abs(data.stock.totalMouvements)}`;
+            data.stock.userModification = `Réappro = ${Math.abs(data.stock.totalMouvements)}`;
           }
         }
         // Clear repeated fields, a kind of group structure wanted by BW
-        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.quantiteInitiale && data.mouvement?.quantite) {
+        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.userModification && data.mouvement?.quantite) {
           data.stock.fournisseur.code = "";
           data.stock.quantiteDisponible = null;
           data.stock.age = null;
-          data.stock.quantiteInitiale = "";
+          data.stock.userModification = "";
         } else {
           oldFour = data.stock.fournisseur.code;
           oldDate = data.stock.dateFabrication;
-          oldDesc = data.stock.quantiteInitiale;
+          oldDesc = data.stock.userModification;
         }
         data.id = id;
         id++
@@ -138,13 +138,14 @@ export class GridRecapStockComponent {
 
   }
 
-  // public calculateCustomSummary(options) {
-  //   if (options.name === "quantiteDisponible") {
-  //     if (options.summaryProcess === "calculate") {
-  //       if (!options.totalValue) options.totalValue = 0;
-  //       options.totalValue += options.value.stock?.quantiteDisponible;
-  //     }
-  //   }
-  // }
+  public calculateCustomSummary(options) {
+    if (options.name === "quantiteDisponible") {
+      if (options.summaryProcess === "start") options.totalValue = 0;
+      if (options.summaryProcess === "calculate") {
+
+        options.totalValue += options.value.stock?.quantiteDisponible ?? 0;
+      }
+    }
+  }
 
 }

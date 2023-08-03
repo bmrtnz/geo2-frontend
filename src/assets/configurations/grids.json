@@ -1847,7 +1847,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "stock.quantiteInitiale",
+        "dataField": "stock.userModification",
         "dataType": "string",
         "visible": true
       },
@@ -1886,6 +1886,10 @@
       },
       {
         "dataField": "stock.quantiteReservee",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "stock.quantiteInitiale",
         "showInColumnChooser": false
       },
       {
