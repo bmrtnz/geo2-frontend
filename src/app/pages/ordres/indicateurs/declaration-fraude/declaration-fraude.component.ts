@@ -153,8 +153,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       if (calibres.length > 1) {
         // Il peut y avoir x lignes différentes sur la même variété donc on somme
         let commandes = calibres.filter((r) => r.nombreColisCommandes);
-        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
-        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b, 0);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b, 0);
         const commande = {
           nombrePalettesCommandees: nbPalettesCommandees,
           nombreColisCommandes: nbColisCommandes
