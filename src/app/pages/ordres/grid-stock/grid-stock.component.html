@@ -337,8 +337,9 @@
         </dx-button>
         <!-- Commentaire -->
         <div class="comment-with-pen float-right">
-          <!-- <div class="text">{{ cell.data.commentaire }}</div> -->
-          <div class="text">{{ getDataFromGroup(cell)?.commentaire }}</div>
+          <div class="text text-align-right">
+            {{ getDataFromGroup(cell)?.commentaire }}
+          </div>
           <dx-button
             class="grid-pen-button"
             type="default"
