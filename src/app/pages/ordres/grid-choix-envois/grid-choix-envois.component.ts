@@ -89,7 +89,6 @@ export class GridChoixEnvoisComponent implements OnInit {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
-  canSelectAll: boolean;
   public canBeSent: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
@@ -180,12 +179,12 @@ export class GridChoixEnvoisComponent implements OnInit {
     this.contentReadyEvent.emit(event);
 
     // Workaround for select all rows after loading data (without timeout do always select all)
-    if (!this.canSelectAll) return;
-    setTimeout(() => {
-      event.component.selectAll();
-      this.canSelectAll = false;
-      this.canBeSent = true;
-    }, 500);
+    // if (!this.canSelectAll) return;
+    // setTimeout(() => {
+    //   event.component.selectAll();
+    //   this.canSelectAll = false;
+    //   this.canBeSent = true;
+    // }, 500);
   }
 
   displayIDBefore(data) {
@@ -251,7 +250,6 @@ export class GridChoixEnvoisComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          this.canSelectAll = true;
 
           // on retire les duplicats
           let uniqueEnvois = [];
@@ -281,6 +279,10 @@ export class GridChoixEnvoisComponent implements OnInit {
               this.addComplComment(uniqueEnvois);
           }
           this.gridData = new DataSource(uniqueEnvois);
+          setTimeout(() => {
+            this.dataGrid.instance.selectAll();
+            this.canBeSent = true;
+          }, 1000);
         },
         error: (message) => notify({ message }, "error", 7000),
       });

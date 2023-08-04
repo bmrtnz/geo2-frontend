@@ -24,7 +24,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   @ViewChild(GridAnnuleRemplaceComponent)
   gridAnnuleRemplaceComponent: GridAnnuleRemplaceComponent;
 
-  constructor(public localizeService: LocalizationService) {}
+  constructor(public localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -34,6 +34,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
     this.title = this.localizeService.localize("annule-et-remplace");
   }
   hidePopup() {
+    this.gridAnnuleRemplaceComponent.canBeSent = false;
     this.popup.visible = false;
   }
 

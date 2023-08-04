@@ -45,7 +45,6 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   ];
 
   firstReason: any;
-  private canSelectAll: boolean;
   public copyPasteVisible: boolean;
   public raisonsList: string[];
   public columns: Observable<GridColumn[]>;
@@ -87,12 +86,12 @@ export class GridAnnuleRemplaceComponent implements OnInit {
 
   onContentReady(event) {
     // Workaround for select all rows after loading data (without timeout do always select all)
-    if (!this.canSelectAll) return;
-    setTimeout(() => {
-      event.component.selectAll();
-      this.canSelectAll = false;
-      this.canBeSent = true;
-    }, 500);
+    // if (!this.canSelectAll) return;
+    // setTimeout(() => {
+    //   event.component.selectAll();
+    //   this.canSelectAll = false;
+    //   this.canBeSent = true;
+    // }, 500);
   }
 
   onRowClick({ rowIndex }) {
@@ -145,7 +144,6 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          this.canSelectAll = true;
           const uniqueTiers = [...new Set(data.map((e) => e.codeTiers))].map(
             (tier) => data.find((e) => e.codeTiers === tier)
           );
@@ -154,6 +152,10 @@ export class GridAnnuleRemplaceComponent implements OnInit {
           ).on("changed", () => {
             this.handleRaisonAR();
           });
+          setTimeout(() => {
+            this.dataGrid.instance.selectAll();
+            this.canBeSent = true;
+          }, 1000);
         },
         error: (message) => notify({ message }, "error", 7000),
       });
