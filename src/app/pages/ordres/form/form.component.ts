@@ -1521,7 +1521,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   updateTabStatusDot() {
     // Update green dot on order tab (Statut.CONFIRME)
     this.tabContext.getSelectedItem().subscribe(res => {
-      if (!this.ordre || res.id.split("-")[1] !== this.ordre.numero || !res) return;
+      if (!res || !this.ordre || res?.id.split("-")[1] !== this.ordre.numero) return;
       res.status = Statut[this.ordre?.statut] === Statut.CONFIRME.toString();
     });
   }
