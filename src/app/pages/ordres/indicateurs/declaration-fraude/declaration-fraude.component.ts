@@ -186,8 +186,10 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
 
+    this.dataSource = null;
+
     this.setGridTitle();
-    this.grid.instance.beginCustomLoading("");
+    setTimeout(() => this.grid.instance.beginCustomLoading(""), 100);
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
