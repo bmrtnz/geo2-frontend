@@ -271,7 +271,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     this.preFilterData.dateLivraisonPrevue = datePeriod.dateFin;
   }
 
-  manualDate(e) {
+  manuelDateStart(e) {
+    this.manualDate(e, 'dateStart');
+  }
+
+  manualDate(e, type?) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
 
@@ -281,7 +285,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     const deltaDate = fin < deb;
 
     if (deltaDate) {
-      if (e.element.classList.contains("dateStart")) {
+      if (type === "dateStart") {
         this.preFilterData.dateLivraisonPrevue =
           this.dateManagementService.endOfDay(deb);
       } else {
