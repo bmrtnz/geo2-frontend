@@ -35,6 +35,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
     this.title = this.localizeService.localize("annule-et-remplace");
   }
   hidePopup() {
+    this.gridAnnuleRemplaceComponent.canBeSent = false;
     this.popup.visible = false;
   }
 

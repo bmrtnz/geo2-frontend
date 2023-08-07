@@ -55,6 +55,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   }
 
   async hidePopup() {
+    this.gridChoixEnvoisComponent.canBeSent = false;
     this.popup.instance.hide();
     this.whenDone.emit();
   }
@@ -74,7 +75,6 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
   async onHiding(event) {
     if (!this.closeConfirm) {
-      console.log("hiding ?")
       event.cancel = true; // cancel popup hiding
 
       const result = confirm(

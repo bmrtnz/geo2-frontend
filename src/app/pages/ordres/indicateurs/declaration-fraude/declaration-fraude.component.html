@@ -95,20 +95,20 @@
       ></dx-select-box>
     </dxi-item>
     <dxi-item
-      dataField="dateDepartPrevue"
+      dataField="dateDepartMin"
       editorType="dxDateBox"
       [isRequired]="true"
       [editorOptions]="{
         displayFormat: 'dd/MM/yyyy',
-        onValueChanged: manualDate.bind(this)
+        onValueChanged: manuelDateStart.bind(this)
       }"
     >
       <dxo-label
-        text="{{ 'packing-list-date-arrivee-prevue' | localize }}"
+        text="{{ 'packing-list-date-depart-min' | localize }}"
       ></dxo-label>
     </dxi-item>
     <dxi-item
-      dataField="dateLivraisonPrevue"
+      dataField="dateDepartMax"
       editorType="dxDateBox"
       [isRequired]="true"
       [editorOptions]="{
@@ -117,7 +117,7 @@
       }"
     >
       <dxo-label
-        text="{{ 'packing-list-date-depart-prevue' | localize }}"
+        text="{{ 'packing-list-date-depart-max' | localize }}"
       ></dxo-label>
     </dxi-item>
   </dxi-item>

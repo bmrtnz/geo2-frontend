@@ -75,13 +75,13 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     transporteur?: Partial<Transporteur>;
     bureauAchat?: Partial<BureauAchat>;
     fournisseur?: Partial<Fournisseur>;
-    dateDepartPrevue?: Date;
-    dateLivraisonPrevue?: Date;
+    dateDepartMin?: Date;
+    dateDepartMax?: Date;
     dateModification?: Date;
     periode?;
   } = {
-      dateDepartPrevue: this.dateManagementService.startOfDay(),
-      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      dateDepartMin: this.dateManagementService.startOfDay(),
+      dateDepartMax: this.dateManagementService.endOfDay(),
     };
 
   public periodes: any[];
@@ -133,8 +133,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       value: myPeriod,
     });
     this.dxForm.instance.updateData({
-      dateDepartPrevue: datePeriod.dateDebut,
-      dateLivraisonPrevue: datePeriod.dateFin,
+      dateDepartMin: datePeriod.dateDebut,
+      dateDepartMax: datePeriod.dateFin,
     });
   }
 
@@ -153,8 +153,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       if (calibres.length > 1) {
         // Il peut y avoir x lignes différentes sur la même variété donc on somme
         let commandes = calibres.filter((r) => r.nombreColisCommandes);
-        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
-        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b, 0);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b, 0);
         const commande = {
           nombrePalettesCommandees: nbPalettesCommandees,
           nombreColisCommandes: nbColisCommandes
@@ -176,8 +176,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   setGridTitle() {
     this.resumeLabel = this.localizer.localize(
       "fraude-grid-title",
-      this.preFilterData.dateDepartPrevue.toLocaleDateString(),
-      this.preFilterData.dateLivraisonPrevue.toLocaleDateString(),
+      this.preFilterData.dateDepartMin.toLocaleDateString(),
+      this.preFilterData.dateDepartMax.toLocaleDateString(),
       this.preFilterData.secteur.id,
       this.currentCompanyService.getCompany().id
     );
@@ -186,8 +186,10 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
 
+    this.dataSource = null;
+
     this.setGridTitle();
-    this.grid.instance.beginCustomLoading("");
+    setTimeout(() => this.grid.instance.beginCustomLoading(""), 100);
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
@@ -226,11 +228,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
         this.preFilterData?.secteur?.id,
         this.currentCompanyService.getCompany().id,
         this.datePipe.transform(
-          this.preFilterData?.dateDepartPrevue,
+          this.preFilterData?.dateDepartMin,
           "yyyy-MM-dd"
         ),
         this.datePipe.transform(
-          this.preFilterData?.dateLivraisonPrevue,
+          this.preFilterData?.dateDepartMax,
           "yyyy-MM-dd"
         ),
         this.datePipe.transform(
@@ -267,25 +269,29 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
     const datePeriod = this.dateManagementService.getDates(e);
 
-    this.preFilterData.dateDepartPrevue = datePeriod.dateDebut;
-    this.preFilterData.dateLivraisonPrevue = datePeriod.dateFin;
+    this.preFilterData.dateDepartMin = datePeriod.dateDebut;
+    this.preFilterData.dateDepartMax = datePeriod.dateFin;
   }
 
-  manualDate(e) {
+  manuelDateStart(e) {
+    this.manualDate(e, 'dateStart');
+  }
+
+  manualDate(e, type?) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = this.preFilterData.dateDepartPrevue;
-    const fin = this.preFilterData.dateLivraisonPrevue;
+    const deb = this.preFilterData.dateDepartMin;
+    const fin = this.preFilterData.dateDepartMax;
     const deltaDate = fin < deb;
 
     if (deltaDate) {
-      if (e.element.classList.contains("dateStart")) {
-        this.preFilterData.dateLivraisonPrevue =
+      if (type === "dateStart") {
+        this.preFilterData.dateDepartMax =
           this.dateManagementService.endOfDay(deb);
       } else {
-        this.preFilterData.dateDepartPrevue =
+        this.preFilterData.dateDepartMin =
           this.dateManagementService.startOfDay(fin);
       }
     }
