@@ -1,4 +1,24 @@
 ::ng-deep .choose-ordre-popup {
+
+  .dx-template-wrapper.dx-popup-title {
+    background-color: #FFF;
+    overflow: hidden;
+    padding: 0 8px 0 24px;
+
+    .title-start {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .close-article-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
   dx-data-grid {
     margin: 0 2px !important;
   }

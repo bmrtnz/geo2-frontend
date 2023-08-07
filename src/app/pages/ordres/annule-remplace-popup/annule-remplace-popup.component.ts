@@ -17,14 +17,15 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   @Input() public gridEnvois: GridEnvoisComponent;
   @Input() docsPopup: DocumentsOrdresPopupComponent;
 
-  visible: boolean;
-  title: string;
+  public visible: boolean;
+  public title: string;
+  public popupFullscreen: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridAnnuleRemplaceComponent)
   gridAnnuleRemplaceComponent: GridAnnuleRemplaceComponent;
 
-  constructor(public localizeService: LocalizationService) {}
+  constructor(public localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -43,6 +44,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
 
   onShown(e) {
     this.gridAnnuleRemplaceComponent.reload();
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   clearAndHidePopup() {

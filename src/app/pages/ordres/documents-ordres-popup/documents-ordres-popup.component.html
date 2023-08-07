@@ -1,5 +1,6 @@
 <dx-popup
   *ngIf="ordre?.id"
+  [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
   [hideOnOutsideClick]="true"
@@ -18,6 +19,13 @@
       (onClick)="hidePopup()"
     >
     </dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
   </div>
 
   <div class="action-buttons-container">

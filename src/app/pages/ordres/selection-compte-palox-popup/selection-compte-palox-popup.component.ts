@@ -49,6 +49,7 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
   public gridHasData: boolean;
   public title: string;
   private hintNotValid: string;
+  public popupFullscreen: boolean;
 
   constructor(
     private clientsService: ClientsService,
@@ -139,4 +140,9 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
     this.selectedClient.emit(errorMessage);
     this.popup.visible = false;
   }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
 }

@@ -1,12 +1,27 @@
 <dx-popup
+  [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
   [hideOnOutsideClick]="true"
   [(visible)]="visible"
-  [title]="title"
   (onShowing)="onShowing($event)"
   [resizeEnabled]="true"
 >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <app-entrepot-details [entrepotId]="entrepotId"></app-entrepot-details>

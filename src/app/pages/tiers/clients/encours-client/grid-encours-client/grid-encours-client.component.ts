@@ -62,8 +62,8 @@ export class GridEncoursClientComponent implements OnChanges {
   private today: Date;
   public readyToRefresh: boolean;
   private requiredFields: string[];
-  private sumDebit: number;
-  private sumCredit: number;
+  public sumDebit: number;
+  public sumCredit: number;
   public formGroup = new UntypedFormGroup({
     client: new UntypedFormControl(),
     secteur: new UntypedFormControl(),
@@ -132,26 +132,30 @@ export class GridEncoursClientComponent implements OnChanges {
       "ordre.campagne.id",
       "ordre.societe.id",
       "ordre.logistiques.numeroImmatriculation",
-      "ordre.logistiques.numeroContainer",
+      "ordre.logistiques.numeroContainer"
     ];
   }
 
   ngOnChanges() {
-    if (this.client && this.popupShown) {
-      this.formGroup.patchValue({
-        client: {
-          id: this.client.id,
-          agrement: this.client.agrement,
-          enCoursTemporaire: this.client.enCoursTemporaire,
-          enCoursBlueWhale: this.client.enCoursBlueWhale,
-        },
-        secteur: { id: this.client.secteur.id },
-        encoursAutorise: null,
-        encoursRetard: null,
-      });
-      this.deviseClient = this.client.devise.id;
+    this.formGroup.patchValue({
+      client: {
+        id: this.client?.id,
+        agrement: this.client?.agrement,
+        enCoursTemporaire: this.client?.enCoursTemporaire,
+        enCoursBlueWhale: this.client?.enCoursBlueWhale,
+      },
+      secteur: { id: this.client?.secteur.id },
+      encoursAutorise: null,
+      encoursRetard: null,
+    });
+    this.deviseClient = this.client?.devise.id;
+
+    if (this.popupShown) {
       this.enableFilters();
+    } else {
+      if (this.datagrid) this.datagrid.dataSource = null;
     }
+
   }
 
   enableFilters() {
