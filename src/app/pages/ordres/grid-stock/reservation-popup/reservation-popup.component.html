@@ -13,7 +13,7 @@
       <dx-text-box
         formControlName="commentaire"
         valueChangeEvent="keyup"
-        [placeholder]="'Veuillez saisir un commentaire'"
+        placeholder="{{ 'warning-expected-comment' | localize }}"
       >
       </dx-text-box>
 
@@ -33,7 +33,7 @@
         *ngIf="negativeStock"
         class="red-font"
       >
-        Le stock sera négatif avec ce mouvement !
+        {{ "warning-negative-stock" | localize }}
       </p>
       <p *ngIf="!negativeStock">&nbsp;</p>
 
