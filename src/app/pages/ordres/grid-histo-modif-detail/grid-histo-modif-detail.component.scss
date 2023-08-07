@@ -1,4 +1,11 @@
-::ng-deep .bold-grey-light {
-  font-weight: bold;
-  background-color: #eee;
+::ng-deep .grid-histo-modif-detail {
+  .dx-datagrid {
+    min-height: 200px;
+    max-height: 500px;
+  }
+
+  .bold-grey-light {
+    font-weight: bold;
+    background-color: #eee;
+  }
 }
