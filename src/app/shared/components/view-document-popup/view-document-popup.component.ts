@@ -31,13 +31,13 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
 
-  public fullScreen: boolean;
+  public popupFullscreen: boolean;
   public safeUrl: SafeUrl;
 
-  constructor(private screen: ScreenService, private sanitizer: DomSanitizer) {}
+  constructor(private screen: ScreenService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.fullScreen = !this.screen.sizes["screen-large"];
+    this.popupFullscreen = !this.screen.sizes["screen-large"];
   }
 
   ngOnChanges(changes: any) {
@@ -72,4 +72,4 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
   imports: [SharedModule, DxPopupModule],
   exports: [ViewDocumentPopupComponent],
 })
-export class ViewDocumentPopupModule {}
+export class ViewDocumentPopupModule { }
