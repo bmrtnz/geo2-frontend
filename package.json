@@ -1,6 +1,6 @@
 {
   "name": "geo2",
-  "version": "1.12.6",
+  "version": "1.12.7",
   "engines": {
     "npm": ">=8",
     "node": ">=16"
@@ -14,7 +14,7 @@
     "start:webdev": "ng serve --open --live-reload=false --configuration=webdev",
     "start:bw": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --open",
     "build": "ng build",
-    "build:prod": "ng build --configuration production && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
+    "build:prod": "ng build --configuration=production && node script/archive ./dist/geo2-{version}.tar.gz ./dist/geo2/",
     "build:webdev": "ng build --configuration=webdev",
     "build:bwdev": "ng build --configuration=bwdev && node script/archive ./dist/geo2-bwtest-{version}.tar.gz ./dist/geo2/",
     "build:stats": "ng build --stats-json",
