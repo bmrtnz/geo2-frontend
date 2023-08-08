@@ -254,6 +254,19 @@ body app-root.production {
   margin: 10px 0 !important;
 }
 
+// Alerting
+.dx-datagrid-header-panel {
+  .dx-icon-edit-button-save {
+    color: $base-accent !important;
+  }
+
+  .dx-state-disabled {
+    .dx-icon-edit-button-save {
+      color: black !important;
+    }
+  }
+}
+
 // Centering Oui/Non text in datagrid filter row
 .dx-datagrid-filter-row .dx-texteditor-input[aria-haspopup="listbox"] {
   position: relative;
