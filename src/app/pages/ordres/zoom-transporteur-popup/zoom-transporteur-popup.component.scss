@@ -1,6 +1,10 @@
 ::ng-deep .zoom-transporteur-popup {
   background-color: #f2f2f2 !important;
 
+  .dx-datagrid {
+    min-height: 250px;
+  }
+
   .dx-template-wrapper.dx-popup-title {
     background-color: #FFF;
     overflow: hidden;

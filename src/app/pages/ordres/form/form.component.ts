@@ -1018,19 +1018,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ajoutArtManu.visible = true;
   }
 
-  // onArticleHistoClick() {
-  //   this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-  //   this.ajoutArtHisto.visible = true;
-  // }
-
-  // onArticleStockClick() {
-  //   this.ajoutArtStock.visible = true;
-  // }
-
-  // onRefClientClick() {
-  //   this.ajoutArtRefClt.visible = true;
-  // }
-
   onDestockAutoClick() {
     this.gridCommandes.grid.instance.saveEditData();
     // Wait until grid has been totally saved
@@ -1677,7 +1664,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     notify(
       this.localization.localize("text-popup-abandon-BAF"),
       "warning",
-      7000
+      8000
     );
   }
 
