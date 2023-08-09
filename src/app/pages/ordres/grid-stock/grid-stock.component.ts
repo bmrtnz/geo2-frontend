@@ -37,6 +37,11 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { CampagnesService } from "app/shared/services/api/campagnes.service";
 
 let self;
 
@@ -69,8 +74,9 @@ export class GridStockComponent implements OnInit {
   @ViewChild("emballageSB", { static: false })
   emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
-  @ViewChild("bureauAchatSB", { static: false })
-  bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("secteursSB", { static: false }) secteursSB: DxSelectBoxComponent;
+  @ViewChild("clientsSB", { static: false }) clientsSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
   zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent)
@@ -93,6 +99,8 @@ export class GridStockComponent implements OnInit {
   emballages: Observable<DataSource>;
   origines: Observable<DataSource>;
   bureauxAchat: Observable<DataSource>;
+  public clients: DataSource;
+  public secteurs: DataSource;
   trueFalse: any;
   initialSpecy: any;
   calculate: boolean;
@@ -101,6 +109,7 @@ export class GridStockComponent implements OnInit {
   gridTitle: string;
   noEspeceSet: boolean;
   gridRowsTotal: number;
+
   public summaryFields = [
     "quantiteCalculee1",
     "quantiteCalculee2",
@@ -154,6 +163,10 @@ export class GridStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
+    public secteursService: SecteursService,
+    public ordreLignesService: OrdreLignesService,
+    public campagnesService: CampagnesService,
+    public currentCompanyService: CurrentCompanyService,
     private stocksService: StocksService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
@@ -166,6 +179,13 @@ export class GridStockComponent implements OnInit {
       "article.cahierDesCharge.espece.id"
     );
     this.trueFalse = ["Tous", "Oui", "Non"];
+
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
+    ]);
   }
 
   async ngOnInit() {
@@ -264,7 +284,7 @@ export class GridStockComponent implements OnInit {
           var: "modesCulture",
           id: "article.matierePremiere.modeCulture.id",
           desc: "article.matierePremiere.modeCulture.description",
-        },
+        }
       ];
       dataToLoad
         .filter((data) => !this[`${data.var}SB`].value)
@@ -279,6 +299,31 @@ export class GridStockComponent implements OnInit {
         });
     }
   }
+
+  onSecteurChanged(e) {
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.clientsSB.value = null;
+    if (!e.value?.id) {
+      this.clients = null;
+    } else {
+      this.clients = this.clientsService.getDataSource_v2([
+        "id",
+        "code",
+        "raisonSocial",
+        "valide",
+      ]);
+      const filter: any = [
+        ["secteur.id", "=", e.value?.id],
+        "and",
+        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+        "and",
+        ["valide", "=", true]
+      ];
+      this.clients.filter(filter);
+    }
+  }
+
 
   displayCodeBefore(data) {
     if (data?.__typename === "DistinctEdge") {
@@ -297,7 +342,8 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
-    this.datagrid.instance.beginCustomLoading("");
+    const message = (this.secteursSB.value?.id || this.clientsSB.value?.id) ? this.localizeService.localize("data-loading-process") : "";
+    this.datagrid.instance.beginCustomLoading(message);
     this.stocksService
       .allStockArticleList(
         this.inheritedFields,
@@ -309,11 +355,61 @@ export class GridStockComponent implements OnInit {
         this.bureauxAchatSB.value?.key
       )
       .subscribe((res) => {
-        this.datagrid.dataSource = res.data.allStockArticleList;
-        this.datagrid.instance.refresh();
-        this.datagrid.instance.endCustomLoading();
-        this.calculate = false;
+        if (this.createAdditFilter(res) !== true) this.endDSLoading(res.data.allStockArticleList);
       });
+  }
+
+  endDSLoading(data) {
+    this.datagrid.dataSource = data;
+    this.datagrid.instance.refresh();
+    this.datagrid.instance.endCustomLoading();
+    this.calculate = false;
+  }
+
+  createAdditFilter(res) {
+    const secteur = this.secteursSB.value?.id;
+    const client = this.clientsSB.value?.id;
+    const rawResults = res;
+
+    if (!client && !secteur) return;
+
+    this.datagrid.instance
+      .beginCustomLoading(
+        `${this.localizeService.localize("analysis")}
+         ${this.localizeService.localize("tiers-clients-secteur")}
+        /${this.localizeService.localize("tiers-client")}…`
+      );
+
+    const ordreLignesDS = this.ordreLignesService
+      .getDataSource_v2(["article.id", "ordre.numero", "ordre.campagne.id"], 100000) as DataSource;
+    const articles = [];
+
+    let campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
+    this.campagnesService
+      .getOne_v2((parseInt(campagneEnCours) - 1).toString(), new Set(["id"]))
+      .subscribe(res => {
+        const prevCampagneEnCours = res.data.campagne.id;
+        const rawFilter = [
+          [["ordre.campagne.id", "=", prevCampagneEnCours],
+            "or",
+          ["ordre.campagne.id", "=", campagneEnCours]],
+          "and",
+          ["ordre.societe.id", "=", this.currentCompanyService.getCompany().id]
+        ];
+        if (secteur) rawFilter.push("and", ["ordre.secteurCommercial.id", "=", secteur]);
+        if (client) rawFilter.push("and", ["ordre.client.id", "=", client]);
+        // Filter & load all results
+        ordreLignesDS.filter(rawFilter);
+        ordreLignesDS.load().then(res => {
+          res.map(ligne => articles.push(ligne.article.id));
+          // Last filtering & duplicates removal
+          let results = JSON.parse(JSON.stringify(rawResults.data.allStockArticleList));
+          this.endDSLoading(results.filter(r => Array.from(new Set(articles)).includes(r.articleID)));
+        });
+      });
+
+    return true;
+
   }
 
   openFilePopup(data) {

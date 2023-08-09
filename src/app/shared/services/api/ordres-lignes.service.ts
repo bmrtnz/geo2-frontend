@@ -122,10 +122,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
     return self.watchSaveQuery({ variables }).toPromise();
   }
 
-  getDataSource_v2(columns: Array<string>) {
+  getDataSource_v2(columns: Array<string>, pageSize?) {
     return new DataSource({
       reshapeOnPush: true,
       sort: [{ selector: "numero" }],
+      pageSize: pageSize ? pageSize : 20,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

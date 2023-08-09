@@ -7,9 +7,31 @@
 }
 
 ::ng-deep .grid-stock {
+
+  .dx-datagrid {
+    min-height: 270px;
+  }
+
   h6 {
     margin: 0 0 7px 0;
     float: left;
+  }
+
+  .dx-loadpanel-content {
+    margin-top: -35px;
+    overflow: visible;
+
+    .dx-loadpanel-message {
+      display: block !important;
+      position: relative;
+      top: 15px;
+      width: 400px;
+      left: -184px;
+      font-size: 13px;
+      padding: 3px 15px;
+      color: $base-accent;
+      border-radius: 9px;
+    }
   }
 
   .grey-light {
