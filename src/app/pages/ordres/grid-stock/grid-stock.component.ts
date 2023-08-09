@@ -39,7 +39,6 @@ import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-a
 import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
-import { OrdresService } from "app/shared/services/api/ordres.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CampagnesService } from "app/shared/services/api/campagnes.service";
 
@@ -128,6 +127,7 @@ export class GridStockComponent implements OnInit {
     "valide",
     "stock.quantiteTotale",
     "age",
+    "bio",
     "fournisseurCode",
     "proprietaireCode",
     "dateFabrication",
@@ -376,8 +376,8 @@ export class GridStockComponent implements OnInit {
     this.datagrid.instance
       .beginCustomLoading(
         `${this.localizeService.localize("analysis")}
-         ${this.localizeService.localize("tiers-clients-secteur")}
-        /${this.localizeService.localize("tiers-client")}…`
+         ${this.localizeService.localize("tiers-clients-secteur").toLowerCase()}
+        / ${this.localizeService.localize("tiers-client").toLowerCase()}…`
       );
 
     const ordreLignesDS = this.ordreLignesService

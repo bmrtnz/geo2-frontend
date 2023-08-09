@@ -25,11 +25,12 @@
       display: block !important;
       position: relative;
       top: 15px;
-      width: 400px;
-      left: -184px;
+      width: 200px;
+      left: -84px;
       font-size: 13px;
       padding: 3px 15px;
       color: $base-accent;
+      background-color: #FFF;
       border-radius: 9px;
     }
   }
@@ -97,7 +98,7 @@
   }
 
   .not-france-origin {
-    color: #FFA8CA !important;
+    color: #FF88AA !important;
   }
 
   .dx-row-focused {
@@ -107,6 +108,10 @@
 
     .bio-article {
       color: #a9f77e !important;
+    }
+
+    .not-france-origin {
+      color: #FFC8EA !important;
     }
   }
 
@@ -169,6 +174,7 @@
       float: left;
       margin-right: 15px;
       width: 200px;
+      min-height: 32px;
 
       &:last-of-type {
         margin-bottom: 10px;
