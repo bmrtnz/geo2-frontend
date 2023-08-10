@@ -342,8 +342,8 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
-    const message = (this.secteursSB.value?.id || this.clientsSB.value?.id) ? this.localizeService.localize("data-loading-process") : "";
-    this.datagrid.instance.beginCustomLoading(message);
+    // const message = (this.secteursSB.value?.id || this.clientsSB.value?.id) ? this.localizeService.localize("data-loading-process") : "";
+    this.datagrid.instance.beginCustomLoading("");
     this.stocksService
       .allStockArticleList(
         this.inheritedFields,
@@ -381,7 +381,7 @@ export class GridStockComponent implements OnInit {
       );
 
     const ordreLignesDS = this.ordreLignesService
-      .getDataSource_v2(["article.id", "ordre.numero", "ordre.campagne.id"], 100000) as DataSource;
+      .getDataSource_v2(["article.id"], 100000) as DataSource;
     const articles = [];
 
     let campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
@@ -612,7 +612,7 @@ export class GridStockComponent implements OnInit {
 
   refreshPrevStock() {
     this.calculate = true;
-    this.datagrid.instance.beginCustomLoading("calculate prev");
+    this.datagrid.instance.beginCustomLoading(this.localizeService.localize("calculate-prev"));
     this.stocksService.refreshStockHebdo().subscribe(() => {
       this.refreshArticlesGrid();
     });

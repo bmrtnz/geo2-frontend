@@ -113,6 +113,9 @@ export class AppComponent {
           trueText: this.localization.localize("trueText"),
           falseText: this.localization.localize("falseText"),
         },
+        loadPanel: {
+          text: this.localization.localize("data-loading-process")
+        },
         onExporting: this.gridUtilsService.onExporting, // E.g. add date to fileName
         pager: {
           showPageSizeSelector: true,
