@@ -160,6 +160,19 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
+  public getDistinctEntityDatasource(
+    fieldName,
+    descriptionField?,
+    searchExpr?
+  ) {
+    return this.getDistinctDatasource(
+      "GeoOrdreLigne",
+      fieldName,
+      descriptionField,
+      searchExpr
+    );
+  }
+
   getSummarisedDatasource(
     operation: SummaryOperation,
     columns: Array<string>,

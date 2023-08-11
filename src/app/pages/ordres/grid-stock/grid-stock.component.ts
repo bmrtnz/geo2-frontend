@@ -41,6 +41,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CampagnesService } from "app/shared/services/api/campagnes.service";
+import { LoadResult } from "devextreme/data/custom_store";
 
 let self;
 
@@ -380,32 +381,24 @@ export class GridStockComponent implements OnInit {
         / ${this.localizeService.localize("tiers-client").toLowerCase()}…`
       );
 
-    const ordreLignesDS = this.ordreLignesService
-      .getDataSource_v2(["article.id"], 100000) as DataSource;
-    const articles = [];
-
-    let campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
+    const campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
     this.campagnesService
       .getOne_v2((parseInt(campagneEnCours) - 1).toString(), new Set(["id"]))
       .subscribe(res => {
-        const prevCampagneEnCours = res.data.campagne.id;
-        const rawFilter = [
-          [["ordre.campagne.id", "=", prevCampagneEnCours],
-            "or",
-          ["ordre.campagne.id", "=", campagneEnCours]],
-          "and",
-          ["ordre.societe.id", "=", this.currentCompanyService.getCompany().id]
-        ];
-        if (secteur) rawFilter.push("and", ["ordre.secteurCommercial.id", "=", secteur]);
-        if (client) rawFilter.push("and", ["ordre.client.id", "=", client]);
-        // Filter & load all results
-        ordreLignesDS.filter(rawFilter);
-        ordreLignesDS.load().then(res => {
-          res.map(ligne => articles.push(ligne.article.id));
-          // Last filtering & duplicates removal
-          let results = JSON.parse(JSON.stringify(rawResults.data.allStockArticleList));
-          this.endDSLoading(results.filter(r => Array.from(new Set(articles)).includes(r.articleID)));
-        });
+        // Search previous campaing & Filter/load all results
+        let rawFilter = `(ordre.campagne.id=='${res.data.campagne.id}' or ordre.campagne.id=='${campagneEnCours}')`;
+        rawFilter += ` and ordre.societe.id=='${this.currentCompanyService.getCompany().id}'`
+        if (secteur) rawFilter += ` and ordre.secteurCommercial.id=='${secteur}'`;
+        if (client) rawFilter += ` and ordre.client.id=='${client}'`;
+
+        this.ordreLignesService.getDistinctEntityDatasource(
+          "article.id",
+          undefined,
+          rawFilter
+        ).subscribe(res => res.store().load().then((data: LoadResult<any>) => {
+          // Compare with stock results and keep the ones the sector/client sold
+          this.endDSLoading(rawResults.data.allStockArticleList.filter(r => data.map(d => d.node.key).includes(r.articleID)));
+        }));
       });
 
     return true;
