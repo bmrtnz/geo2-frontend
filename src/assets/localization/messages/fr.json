@@ -2003,6 +2003,8 @@
     "fraude-column-poidsNet": "Poids net",
     "fraude-column-articleDescription": "Description résumée de l'article",
     "fraude-column-incotermCode": "Incoterm",
+    "fraude-column-typeTransportDescription": "Type transp.",
+    "fraude-column-baseTarifTransportCode": "Unité transp.",
     "btn-duplicate": "Dupliquer",
     "hint-client-duplicate": "Dupliquer le client",
     "hint-search-edi-articles": "Recherche dans le GTIN client, les codes articles client et BW",

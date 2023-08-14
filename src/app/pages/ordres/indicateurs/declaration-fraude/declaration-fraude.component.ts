@@ -120,6 +120,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
+    this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
   }
 
   setDefaultPeriod(periodId) {
@@ -295,7 +296,17 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           this.dateManagementService.startOfDay(fin);
       }
     }
+
+    if (type === "dateStart") this.updateModifiedDate(new Date(deb));
+
     this.periodeSB.value = null;
+  }
+
+  updateModifiedDate(deb) {
+    // We decide to check modified orders between now and 3 months ago
+    // for performance purposes
+    this.preFilterData.dateModification =
+      this.dateManagementService.startOfDay(new Date(deb.setMonth(deb.getMonth() - 3)));
   }
 
   onRowPrepared(e) {
