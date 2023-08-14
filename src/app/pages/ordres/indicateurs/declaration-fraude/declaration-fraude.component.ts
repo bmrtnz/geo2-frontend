@@ -224,7 +224,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "etaLocation",
           "etaDate",
           "commentaireInterne",
-          "entrepotCode"
+          "entrepotCode",
+          "typeTransportDescription",
+          "baseTarifTransportCode"
         ]),
         this.preFilterData?.secteur?.id,
         this.currentCompanyService.getCompany().id,
