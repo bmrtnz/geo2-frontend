@@ -66,7 +66,7 @@ export class StatistiquesArticlePopupComponent implements OnChanges {
   onShown() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "D1A");
-    setTimeout(() => this.refresh());
+    setTimeout(() => this.refreshGrids());
   }
 
   onHidden() {
@@ -82,7 +82,7 @@ export class StatistiquesArticlePopupComponent implements OnChanges {
     this.popupFullscreen = !this.popupFullscreen;
   }
 
-  refresh() {
+  refreshGrids() {
     this.gridClientComponent?.enableFilters();
     this.gridFournisseurComponent?.enableFilters();
   }

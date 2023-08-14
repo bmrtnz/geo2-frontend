@@ -21,8 +21,8 @@ import ArrayStore from "devextreme/data/array_store";
 export class GridStatArticleFournisseursComponent {
 
   @Input() public articleId: string;
-  @Input() public dateMin: Date;
-  @Input() public dateMax: Date;
+  @Input() public dateMin;
+  @Input() public dateMax;
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
@@ -62,24 +62,26 @@ export class GridStatArticleFournisseursComponent {
     )
       .subscribe((res) => {
         this.datagrid.instance.endCustomLoading();
-        this.datagrid.instance.option("focusedRowIndex", 0);
         this.dataSource = new DataSource({
-          store: new ArrayStore({ data: res })
+          store: new ArrayStore({ data: res, key: "id" })
         });
         this.datagrid.dataSource = this.dataSource;
       });
-  }
-
-  onCellPrepared(e) {
-    if (e.rowType === "data") {
-    }
   }
 
   public clearDataSource() {
     this.datagrid.dataSource = null;
   }
 
-  public refresh() {
-    this.datagrid.instance.refresh();
+  calculateInfoFournisseur(data) {
+    return data.fournisseur.raisonSocial + " " +
+      data.fournisseur.codePostal + " " +
+      data.fournisseur.ville
   }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "show_tiers-name" && options.summaryProcess === "calculate")
+      options.totalValue = options.value;
+  }
+
 }

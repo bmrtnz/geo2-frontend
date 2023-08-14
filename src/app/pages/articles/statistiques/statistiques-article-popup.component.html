@@ -1,5 +1,5 @@
 <dx-popup
-  [width]="1800"
+  [width]="1400"
   height="auto"
   [showTitle]="true"
   [dragEnabled]="true"
@@ -42,7 +42,7 @@
           class="refresh spacing float-right"
           type="default"
           text="{{ 'btn-refresh' | localize }}"
-          (onClick)="refresh()"
+          (onClick)="refreshGrids()"
         ></dx-button>
 
         <div class="filter-area spacing float-right">
@@ -86,7 +86,7 @@
                 type="date"
                 [displayFormat]="'dd-MM-yy'"
                 (onValueChanged)="manualDate($event)"
-                (onEnterKey)="refresh()"
+                (onEnterKey)="refreshGrids()"
               ></dx-date-box>
             </div>
           </div>

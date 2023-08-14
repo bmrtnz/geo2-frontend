@@ -1,12 +1,19 @@
 <dx-data-grid
-  class="dx-card wide-card"
-  [remoteOperations]="true"
+  class="dx-card wide-card grid-article-stats"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: true,
+    groupPaging: false,
+    paging: false,
+    sorting: true,
+    summary: false
+  }"
   [showBorders]="false"
   [focusedRowEnabled]="true"
-  [keyExpr]="'id'"
+  [noDataText]="'aucun-historique' | localize"
   [columnAutoWidth]="true"
+  [rowAlternationEnabled]="true"
   [allowColumnReordering]="true"
-  (onCellPrepared)="onCellPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       this.localizeService.localize('tiers-clients-title'),
@@ -29,6 +36,60 @@
     [showNavigationButtons]="true"
     [showPageSizeSelector]="true"
   ></dxo-pager>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      column="expeditionNbColis"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="expeditionNbColis"
+      summaryType="sum"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      column="expeditionPoidsNet"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="expeditionPoidsNet"
+      summaryType="sum"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      column="numeroOrdre"
+      summaryType="count"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="numeroOrdre"
+      summaryType="count"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      [column]="'client.code'"
+      [showInColumn]="'client.raisonSocial'"
+      [name]="'show_tiers-name'"
+      [summaryType]="'custom'"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+  </dxo-summary>
   <dxo-state-storing
     [enabled]="true"
     type="custom"
@@ -56,9 +117,12 @@
       column.name
     "
     [format]="column.format"
-    [cssClass]="'small-side-padding' + column.cssClass"
+    [cssClass]="
+      'small-side-padding' + (column.cssClass ? ' ' + column.cssClass : '')
+    "
     [width]="column.width"
     [dataType]="column?.dataType"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)

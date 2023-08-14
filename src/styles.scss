@@ -488,36 +488,36 @@ body app-root.production {
   }
 }
 
-.small-left-padding {
+.small-left-padding:not(.dx-group-panel-item) {
   padding-left: 10px !important;
 }
 
-.small-right-padding {
+.small-right-padding:not(.dx-group-panel-item) {
   padding-right: 10px !important;
 }
 
-.no-padding {
+.no-padding:not(.dx-group-panel-item) {
   padding: 0 !important;
 }
 
-.no-padding-left {
+.no-padding-left:not(.dx-group-panel-item) {
   padding-left: 0 !important;
 }
 
-.no-padding-right {
+.no-padding-right:not(.dx-group-panel-item) {
   padding-right: 0 !important;
 }
 
-.small-side-padding {
+.small-side-padding:not(.dx-group-panel-item) {
   padding-right: 5px !important;
   padding-left: 5px !important;
 }
 
-.large-right-side-padding {
+.large-right-side-padding:not(.dx-group-panel-item) {
   padding-right: 40px !important;
 }
 
-.medium-left-side-padding {
+.medium-left-side-padding:not(.dx-group-panel-item) {
   padding-left: 20px !important;
 }
 

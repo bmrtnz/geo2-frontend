@@ -39,7 +39,6 @@ export class ProfilePopupComponent {
   public periodes: any[];
   private nomUtilisateur: string;
   private nomInterne: string;
-  public toto: any;
   public saveUserPrefs: boolean;
 
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -161,4 +160,4 @@ export class ProfilePopupComponent {
   ],
   exports: [ProfilePopupComponent],
 })
-export class ProfilePopupModule {}
+export class ProfilePopupModule { }
