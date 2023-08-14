@@ -1184,6 +1184,7 @@
     "ordresTransporteur-ordre-id": "Réf. ordre",
     "ordresTransporteur-ordre-societe-id": "Société",
     "ordresTransporteur-ordre-flagAnnule": "Annulé ?",
+    "ordresTransporteur-ordre-incoterm-id": "Incoterm",
     "ordresTransporteur-groupage-text": "Départ groupé chez &T le &D",
     "ordresTransporteur-ordre-type-id": "Type Ordre",
     "ordresFournisseur-ordre-societe-id": "Société",

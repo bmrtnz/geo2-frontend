@@ -5118,8 +5118,11 @@
         "visible": true
       },
       {
-        "dataField": "ordre.flagAnnule",
-        "visible": false
+        "visibleIndex": 24,
+        "dataField": "ordre.incoterm.id"
+      },
+      {
+        "dataField": "ordre.flagAnnule"
       },
       {
         "dataField": "version"
