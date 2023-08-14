@@ -8500,5 +8500,89 @@
         "visible": false
       }
     ]
+  },
+  "statistiques-article-client": {
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "client.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "expeditionNbColis",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "expeditionPoidsNet",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroOrdre",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "dataField": "client.raisonSocial",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "client.codePostal",
+        "showInColumnChooser": false
+      }
+    ]
+  },
+  "statistiques-article-fournisseur": {
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseur.code",
+        "dataType": "string",
+        "sortOrder": "asc",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "expeditionNbColis",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "expeditionPoidsNet",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroOrdre",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "dataField": "fournisseur.raisonSocial",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "fournisseur.codePostal",
+        "showInColumnChooser": false
+      }
+    ]
   }
 }

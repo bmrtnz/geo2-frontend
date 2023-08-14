@@ -21,6 +21,8 @@ import {
   DxValidatorModule,
   DxPopupModule,
   DxAutocompleteModule,
+  DxScrollViewModule,
+  DxDateBoxModule,
 } from "devextreme-angular";
 import { ArticlesRoutingModule } from "./articles-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -36,6 +38,9 @@ import { AssociationArticlesEDICOLIBRIComponent } from './association-articles-e
 import { GridArticlesEdiColibriComponent } from "./association-articles-edi-colibri/grid-articles-edi-colibri/grid-articles-edi-colibri.component";
 import { ModificationArticleEdiPopupComponent } from "./association-articles-edi-colibri/modification-article-edi-popup/modification-article-edi-popup.component";
 import { GridsService } from "../ordres/grids.service";
+import { StatistiquesArticlePopupComponent } from './statistiques/statistiques-article-popup.component';
+import { GridStatArticleClientsComponent } from './statistiques/grid-stat-article-clients/grid-stat-article-clients.component';
+import { GridStatArticleFournisseursComponent } from './statistiques/grid-stat-article-fournisseurs/grid-stat-article-fournisseurs.component';
 
 
 @NgModule({
@@ -59,9 +64,11 @@ import { GridsService } from "../ordres/grids.service";
     DxPopoverModule,
     DxSelectBoxModule,
     DxTextAreaModule,
+    DxDateBoxModule,
     DxTextBoxModule,
     DxValidatorModule,
     EditingAlertModule,
+    DxScrollViewModule,
     DxAutocompleteModule,
     PushHistoryPopupModule,
     HistoriqueValideModule,
@@ -74,7 +81,11 @@ import { GridsService } from "../ordres/grids.service";
     ArticlesListComponent,
     AssociationArticlesEDICOLIBRIComponent,
     GridArticlesEdiColibriComponent,
-    ModificationArticleEdiPopupComponent
+    ModificationArticleEdiPopupComponent,
+    StatistiquesArticlePopupComponent,
+    GridStatArticleFournisseursComponent,
+    GridStatArticleClientsComponent,
+    GridStatArticleFournisseursComponent,
   ],
 
   providers: [NestedGuard, EditingGuard, GridsService],

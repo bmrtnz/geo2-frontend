@@ -86,6 +86,15 @@
         >
         </dx-button>
         <dx-button
+          type="success"
+          height="auto"
+          icon="material-icons equalizer"
+          hint="{{ 'hint-client-article-stats' | localize }}"
+          (onClick)="viewStats()"
+          text="{{ 'statistiques' | localize }}"
+        >
+        </dx-button>
+        <dx-button
           *ngIf="!articleLigneId"
           class="black"
           height="auto"
@@ -1284,3 +1293,5 @@
   [document]="this.currentEtiquette"
   [(visible)]="this.etiquetteVisible"
 ></app-view-document-popup>
+<app-statistiques-article-popup [article]="article">
+</app-statistiques-article-popup>
