@@ -227,6 +227,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   private fastNextButton: HTMLElement;
   public activeStateEnabled = false;
   public typeTab = TabType;
+  public tabsUnpined: boolean;
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true })
@@ -347,6 +348,14 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     tabCont.scrollTo({ left: pos, behavior: "smooth" });
   }
 
+  onTabsPinClick() {
+    this.tabsUnpined = !this.tabsUnpined;
+    window.localStorage.setItem(
+      "OrderTabsUnpined",
+      this.tabsUnpined ? "true" : "false"
+    );
+  }
+
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
 
     if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
@@ -373,6 +382,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabTitleRendered(event) {
+    if (this.tabsUnpined === undefined)
+      this.tabsUnpined = window.localStorage.getItem("OrderTabsUnpined") === "true" ? true : false;
     const replaceEvent = (e) => {
       const id = e.currentTarget.querySelector("[data-item-id]").dataset.itemId;
       this.onTabTitleClick({ itemData: { id } });
