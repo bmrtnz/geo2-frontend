@@ -86,21 +86,21 @@
         >
         </dx-button>
         <dx-button
-          type="success"
-          height="auto"
-          icon="material-icons equalizer"
-          hint="{{ 'hint-client-article-stats' | localize }}"
-          (onClick)="viewStats()"
-          text="{{ 'statistiques' | localize }}"
-        >
-        </dx-button>
-        <dx-button
           *ngIf="!articleLigneId"
           class="black"
           height="auto"
           icon="material-icons folder"
           (onClick)="fileManagerClick()"
           text="{{ 'btn-docsjoints' | localize }}"
+        >
+        </dx-button>
+        <dx-button
+          type="success"
+          height="auto"
+          icon="material-icons equalizer"
+          hint="{{ 'hint-client-article-stats' | localize }}"
+          (onClick)="viewStats()"
+          text="{{ 'statistiques' | localize }}"
         >
         </dx-button>
       </dxi-item>
