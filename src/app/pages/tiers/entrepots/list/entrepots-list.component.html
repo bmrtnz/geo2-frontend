@@ -20,6 +20,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
