@@ -309,13 +309,6 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  scrollToTop() {
-    const Element = document.querySelector(".content") as HTMLElement;
-    Element.scrollIntoView({
-      behavior: "smooth",
-    });
-  }
-
   updateAllTabsStatusDots() {
     this.tabContext.getNotSelectedItems().subscribe(tabs =>
       tabs

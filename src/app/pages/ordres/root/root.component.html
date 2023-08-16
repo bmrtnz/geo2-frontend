@@ -70,7 +70,10 @@
     </div>
 
     <div *dxTemplate="let item of 'item'">
-      <dx-scroll-view (onScroll)="onScroll($event)">
+      <dx-scroll-view
+        (onScroll)="onScroll($event)"
+        class="scrollview-ordre-content"
+      >
         <ng-template [ngComponentOutlet]="item.component"></ng-template>
       </dx-scroll-view>
     </div>
