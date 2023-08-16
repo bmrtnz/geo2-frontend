@@ -11,4 +11,8 @@
   .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
     padding: 0 !important;
   }
+
+  .no-arrow .dx-texteditor-buttons-container {
+    display: none !important;
+  }
 }
