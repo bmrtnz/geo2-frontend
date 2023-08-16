@@ -70,7 +70,7 @@
     </div>
 
     <div *dxTemplate="let item of 'item'">
-      <dx-scroll-view>
+      <dx-scroll-view (onScroll)="onScroll($event)">
         <ng-template [ngComponentOutlet]="item.component"></ng-template>
       </dx-scroll-view>
     </div>

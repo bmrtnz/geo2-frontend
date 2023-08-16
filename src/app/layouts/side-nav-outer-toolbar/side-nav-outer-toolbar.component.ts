@@ -93,6 +93,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
       orderScrollBtns.style.top = newPos + "px";
     }
   }
+
   scrollToTop() {
     const Element = document.querySelector(".content") as HTMLElement;
     Element.scrollIntoView({
