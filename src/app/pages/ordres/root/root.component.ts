@@ -295,6 +295,27 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     window.sessionStorage.removeItem("surveyRunning");
   }
 
+  onScroll(e) {
+    const topValue = e.scrollOffset.top;
+
+    // Back to top button
+    const showHidePixelsFromTop = 150;
+    const Element = document.querySelector(".backtotop") as HTMLElement;
+
+    if (topValue < showHidePixelsFromTop) {
+      Element.classList.add("hiddenBacktotop");
+    } else {
+      Element.classList.remove("hiddenBacktotop");
+    }
+  }
+
+  scrollToTop() {
+    const Element = document.querySelector(".content") as HTMLElement;
+    Element.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+
   updateAllTabsStatusDots() {
     this.tabContext.getNotSelectedItems().subscribe(tabs =>
       tabs
