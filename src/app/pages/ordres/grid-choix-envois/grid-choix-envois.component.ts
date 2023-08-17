@@ -3,9 +3,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren,
+  ViewChild
 } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -26,12 +24,12 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, delay, finalize, map, tap } from "rxjs/operators";
+import { concatMapTo, finalize, map } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
 
 let self;
@@ -104,7 +102,6 @@ export class GridChoixEnvoisComponent implements OnInit {
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
-  @ViewChildren(DxSelectBoxComponent) selectBoxes: QueryList<DxSelectBoxComponent>;
 
   /**
    * It takes an array of Envois and an array of Partial<Envois> and returns an array of Envois with
@@ -203,6 +200,7 @@ export class GridChoixEnvoisComponent implements OnInit {
   onCellClick(e) {
     if (e.rowType !== "data") return;
 
+    // Handle CUSINV + Mail selectbox functionality
     if (e.column.dataField === "numeroAcces1") {
       if (e.data?.moyenCommunication?.id === 'MAI' && e.data?.flux.id === "CUSINV") {
         this.SelectBoxPopupWidth = 200;
