@@ -82,6 +82,7 @@
 
   .dx-tab {
     padding: 0;
+    min-width: 0 !important;
 
     .dx-template-wrapper.dx-tab-content {
       padding: 12px 15px 11px 11px;
@@ -102,7 +103,7 @@
         height: 55px;
 
         .dx-icon {
-          margin-top: 4px;
+          margin: 4px -2px 0px 4px;
         }
       }
 

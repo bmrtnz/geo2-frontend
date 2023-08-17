@@ -16,9 +16,10 @@
   [shading]="shaderEnabled"
   [(opened)]="menuOpened"
 >
+  <!-- [compactMode]="!menuOpened" -->
   <app-side-navigation-menu
     [items]="menuItems"
-    [compactMode]="!menuOpened"
+    [compactMode]="false"
     [selectedItem]="selectedRoute"
     class="dx-theme-material-typography dx-swatch-additional side-navigation-menu"
     *dxTemplate="let dataMenu of 'panel'"
