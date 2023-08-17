@@ -126,6 +126,12 @@
       &.close-all-orders-tab {
         height: 55px;
 
+        .dx-tab-content {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
         .dx-icon {
           color: $base-accent;
         }
@@ -173,7 +179,7 @@
       white-space: normal;
       text-transform: none;
       font-size: 11px;
-      line-height: 10px;
+      line-height: 12px;
       text-align: left;
       margin-left: 5px;
     }

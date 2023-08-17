@@ -228,6 +228,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public activeStateEnabled = false;
   public typeTab = TabType;
   public tabsUnpined: boolean;
+  public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
+  public moreThanOneOpenOrder: number;
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true })
@@ -244,7 +246,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
-  ) { }
+  ) {
+    this.moreThanOneOpenOrder = 0;
+  }
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
@@ -461,6 +465,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!ordre?.length;
+    this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
   }
 
   closeEveryOrdre() {
@@ -478,7 +483,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
-    notify(this.localizationService.localize("all-orders-were-closed"));
+    notify(this.localizationService.localize(
+      this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
+    );
   }
 
   private handleRouting() {
@@ -541,8 +548,11 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
-        class: "close-all-orders-tab",
-        multiLineTitle: "Fermer tous les ordres",
+        class: "close-all-orders-tab multiline-tab",
+        multiLineTitle: [
+          this.localizationService.localize("close-open-order"),
+          this.localizationService.localize("close-all-orders")
+        ],
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -634,6 +644,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
+    this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
 
     return this.items.indexOf(data);
   }

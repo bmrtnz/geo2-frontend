@@ -441,6 +441,7 @@
     "valeurIncorrecte": "Valeur incorrecte",
     "MontantNonNul": "Saisir un montant non nul",
     "all-orders-were-closed": "Tous les ordres ont été fermés",
+    "open-order-was-closed": "L'ordre a bien été fermé",
     "date-depassee": "Date dépassée",
     "profil": "Profil",
     "text-palox-popup-title-ajuster": "Ajuster le nombre de palox",
@@ -2014,6 +2015,8 @@
     "copy-entreps-contacts": "Copier les contacts des entrepôts",
     "copy-done": "Duplication terminée",
     "pin-tabs": "Figer les onglets",
-    "unpin-tabs": "Libérer les onglets"
+    "unpin-tabs": "Libérer les onglets",
+    "close-all-orders": "Fermer tous les ordres",
+    "close-open-order": "Fermer l'ordre ouvert"
   }
 }

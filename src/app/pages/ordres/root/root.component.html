@@ -55,7 +55,11 @@
           *ngIf="tab.multiLineTitle"
           class="dx-tab-text-multiLine"
         >
-          {{ tab.multiLineTitle }}
+          {{
+            tab.id !== TAB_CLOSE_ALL_ORDRES
+              ? tab.multiLineTitle
+              : tab.multiLineTitle[moreThanOneOpenOrder]
+          }}
         </div>
         <i
           class="dx-icon dx-icon-close"
