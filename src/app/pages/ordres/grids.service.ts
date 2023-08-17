@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
+import { ONE_MINUTE } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
 
 type OrdreGridId =
   | "Commande"
@@ -65,4 +67,24 @@ export class GridsService {
           !that.datagrid.instance.option("masterDetail").autoExpandAll,
       });
   }
+
+  public waitUntilAllGridDataSaved(grid) {
+    grid.instance.saveEditData();
+    return new Promise<void>((resolve, reject) => {
+      // Wait until grid has been totally saved
+      const saveTimeout = setTimeout(() => {
+        notify("Erreur sauvegarde grille cde", "error");
+        clearInterval(saveInterval);
+        reject();
+      }, 2 * ONE_MINUTE)
+      const saveInterval = setInterval(() => {
+        if (!grid.instance.hasEditData()) {
+          clearInterval(saveInterval);
+          clearTimeout(saveTimeout);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+
 }

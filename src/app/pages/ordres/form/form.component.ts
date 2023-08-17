@@ -1018,28 +1018,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ajoutArtManu.visible = true;
   }
 
-  // onArticleHistoClick() {
-  //   this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-  //   this.ajoutArtHisto.visible = true;
-  // }
-
-  // onArticleStockClick() {
-  //   this.ajoutArtStock.visible = true;
-  // }
-
-  // onRefClientClick() {
-  //   this.ajoutArtRefClt.visible = true;
-  // }
-
-  onDestockAutoClick() {
-    this.gridCommandes.grid.instance.saveEditData();
-    // Wait until grid has been totally saved
-    const saveInterval = setInterval(() => {
-      if (!this.gridCommandes.grid.instance.hasEditData()) {
-        clearInterval(saveInterval);
-        this.destockageAutoPopup.visible = true;
-      }
-    }, 100);
+  async onDestockAutoClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes.grid);
+    this.destockageAutoPopup.visible = true;
   }
 
   updateDestockAuto() {
@@ -1058,7 +1039,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupagePopup.visible = true;
   }
 
-  onDuplicateOrderClick() {
+  async onDuplicateOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes.grid);
     this.duplicationPopup.visible = true;
   }
 
