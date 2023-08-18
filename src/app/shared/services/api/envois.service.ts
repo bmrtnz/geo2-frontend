@@ -320,9 +320,9 @@ export class EnvoisService extends ApiService implements APIRead {
     ]);
   }
 
-  public fDocumentEnvoiDeclarationBollore(ordreRef: string) {
+  public fDocumentEnvoiFactureDouaniere(ordreRef: string) {
     return this.functionsService.queryFunction(
-      "fDocumentEnvoiDeclarationBollore",
+      "fDocumentEnvoiFactureDouaniere",
       [{ name: "ordreRef", type: "String", value: ordreRef }]
     );
   }

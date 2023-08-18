@@ -254,7 +254,7 @@ export class GridChoixEnvoisComponent implements OnInit {
       .geoPrepareEnvois(
         this.ordre.id,
         this.fluxID,
-        true,
+        false,
         !!annuleOrdre ? !!annuleOrdre : false,
         this.authService.currentUser.nomUtilisateur
       )
@@ -265,7 +265,7 @@ export class GridChoixEnvoisComponent implements OnInit {
           .geoPrepareEnvois(
             this.ordre.id,
             this.fluxID,
-            true,
+            false,
             !annuleOrdre ? !!annuleOrdre : false,
             this.authService.currentUser.nomUtilisateur
           )),
