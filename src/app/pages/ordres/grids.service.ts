@@ -69,6 +69,7 @@ export class GridsService {
   }
 
   public waitUntilAllGridDataSaved(grid) {
+    if (!grid || !grid.instance.hasEditData()) return Promise.resolve();
     grid.instance.saveEditData();
     return new Promise<void>((resolve, reject) => {
       // Wait until grid has been totally saved
