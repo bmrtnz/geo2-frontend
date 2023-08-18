@@ -37,6 +37,11 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { CampagnesService } from "app/shared/services/api/campagnes.service";
+import { LoadResult } from "devextreme/data/custom_store";
 
 let self;
 
@@ -69,8 +74,9 @@ export class GridStockComponent implements OnInit {
   @ViewChild("emballageSB", { static: false })
   emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
-  @ViewChild("bureauAchatSB", { static: false })
-  bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("secteursSB", { static: false }) secteursSB: DxSelectBoxComponent;
+  @ViewChild("clientsSB", { static: false }) clientsSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
   zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent)
@@ -93,6 +99,8 @@ export class GridStockComponent implements OnInit {
   emballages: Observable<DataSource>;
   origines: Observable<DataSource>;
   bureauxAchat: Observable<DataSource>;
+  public clients: DataSource;
+  public secteurs: DataSource;
   trueFalse: any;
   initialSpecy: any;
   calculate: boolean;
@@ -101,6 +109,7 @@ export class GridStockComponent implements OnInit {
   gridTitle: string;
   noEspeceSet: boolean;
   gridRowsTotal: number;
+
   public summaryFields = [
     "quantiteCalculee1",
     "quantiteCalculee2",
@@ -119,6 +128,7 @@ export class GridStockComponent implements OnInit {
     "valide",
     "stock.quantiteTotale",
     "age",
+    "bio",
     "fournisseurCode",
     "proprietaireCode",
     "dateFabrication",
@@ -154,6 +164,10 @@ export class GridStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
+    public secteursService: SecteursService,
+    public ordreLignesService: OrdreLignesService,
+    public campagnesService: CampagnesService,
+    public currentCompanyService: CurrentCompanyService,
     private stocksService: StocksService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
@@ -166,6 +180,13 @@ export class GridStockComponent implements OnInit {
       "article.cahierDesCharge.espece.id"
     );
     this.trueFalse = ["Tous", "Oui", "Non"];
+
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
+    ]);
   }
 
   async ngOnInit() {
@@ -264,7 +285,7 @@ export class GridStockComponent implements OnInit {
           var: "modesCulture",
           id: "article.matierePremiere.modeCulture.id",
           desc: "article.matierePremiere.modeCulture.description",
-        },
+        }
       ];
       dataToLoad
         .filter((data) => !this[`${data.var}SB`].value)
@@ -279,6 +300,31 @@ export class GridStockComponent implements OnInit {
         });
     }
   }
+
+  onSecteurChanged(e) {
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.clientsSB.value = null;
+    if (!e.value?.id) {
+      this.clients = null;
+    } else {
+      this.clients = this.clientsService.getDataSource_v2([
+        "id",
+        "code",
+        "raisonSocial",
+        "valide",
+      ]);
+      const filter: any = [
+        ["secteur.id", "=", e.value?.id],
+        "and",
+        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+        "and",
+        ["valide", "=", true]
+      ];
+      this.clients.filter(filter);
+    }
+  }
+
 
   displayCodeBefore(data) {
     if (data?.__typename === "DistinctEdge") {
@@ -297,6 +343,7 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
+    // const message = (this.secteursSB.value?.id || this.clientsSB.value?.id) ? this.localizeService.localize("data-loading-process") : "";
     this.datagrid.instance.beginCustomLoading("");
     this.stocksService
       .allStockArticleList(
@@ -309,11 +356,53 @@ export class GridStockComponent implements OnInit {
         this.bureauxAchatSB.value?.key
       )
       .subscribe((res) => {
-        this.datagrid.dataSource = res.data.allStockArticleList;
-        this.datagrid.instance.refresh();
-        this.datagrid.instance.endCustomLoading();
-        this.calculate = false;
+        if (this.createAdditFilter(res) !== true) this.endDSLoading(res.data.allStockArticleList);
       });
+  }
+
+  endDSLoading(data) {
+    this.datagrid.dataSource = data;
+    this.datagrid.instance.refresh();
+    this.datagrid.instance.endCustomLoading();
+    this.calculate = false;
+  }
+
+  createAdditFilter(res) {
+    const secteur = this.secteursSB.value?.id;
+    const client = this.clientsSB.value?.id;
+    const rawResults = res;
+
+    if (!client && !secteur) return;
+
+    this.datagrid.instance
+      .beginCustomLoading(
+        `${this.localizeService.localize("analysis")}
+         ${this.localizeService.localize("tiers-clients-secteur").toLowerCase()}
+        / ${this.localizeService.localize("tiers-client").toLowerCase()}…`
+      );
+
+    const campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
+    this.campagnesService
+      .getOne_v2((parseInt(campagneEnCours) - 1).toString(), new Set(["id"]))
+      .subscribe(res => {
+        // Search previous campaing & Filter/load all results
+        let rawFilter = `(ordre.campagne.id=='${res.data.campagne.id}' or ordre.campagne.id=='${campagneEnCours}')`;
+        rawFilter += ` and ordre.societe.id=='${this.currentCompanyService.getCompany().id}'`
+        if (secteur) rawFilter += ` and ordre.secteurCommercial.id=='${secteur}'`;
+        if (client) rawFilter += ` and ordre.client.id=='${client}'`;
+
+        this.ordreLignesService.getDistinctEntityDatasource(
+          "article.id",
+          undefined,
+          rawFilter
+        ).subscribe(res => res.store().load().then((data: LoadResult<any>) => {
+          // Compare with stock results and keep the ones the sector/client sold
+          this.endDSLoading(rawResults.data.allStockArticleList.filter(r => data.map(d => d.node.key).includes(r.articleID)));
+        }));
+      });
+
+    return true;
+
   }
 
   openFilePopup(data) {
@@ -439,6 +528,12 @@ export class GridStockComponent implements OnInit {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
+    } else if (e.rowType === "data") {
+      if (e.column.dataField === "stock.quantiteTotale")
+        e.cellElement.classList.add("grey-light");
+      if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
+        e.cellElement.textContent = "";
+
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
@@ -471,7 +566,7 @@ export class GridStockComponent implements OnInit {
         }
         if (
           e.column.dataField.indexOf("quantiteCalculee") === 0 ||
-          ["prevision3j", "prevision7j"].includes(e.column.dataField)
+          (["prevision3j", "prevision7j"].includes(e.column.dataField) && e.rowType === "group")
         ) {
           let neg = false;
           if (e.rowType === "data") {
@@ -518,7 +613,7 @@ export class GridStockComponent implements OnInit {
 
   refreshPrevStock() {
     this.calculate = true;
-    this.datagrid.instance.beginCustomLoading("calculate prev");
+    this.datagrid.instance.beginCustomLoading(this.localizeService.localize("calculate-prev"));
     this.stocksService.refreshStockHebdo().subscribe(() => {
       this.refreshArticlesGrid();
     });
@@ -528,6 +623,7 @@ export class GridStockComponent implements OnInit {
     if (self.customSummaryFields.includes(options.name)) {
       if (options.summaryProcess === "calculate") {
         options.totalValue = options.value;
+        options.value = null;
       }
     }
   }

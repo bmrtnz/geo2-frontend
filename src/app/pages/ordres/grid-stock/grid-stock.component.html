@@ -155,6 +155,43 @@
           </dx-select-box>
         </div>
       </div>
+
+      <!-- Secteur -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteursSB
+            [dataSource]="secteurs"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id', 'description']"
+            (onValueChanged)="onSecteurChanged($event)"
+          >
+            <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
+
+      <!-- Client -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-client" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #clientsSB
+            [dataSource]="clients"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+          >
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </div>
     <dx-button
       class="refresh floatRight"

@@ -560,7 +560,7 @@ export class GridCommandesComponent
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
-    this.grid.instance.beginCustomLoading("reindexing");
+    this.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
     const items = datasource.items();
     const lignes = items
       .slice(startIndex, endIndex ? inclusive(endIndex) : items.length)
@@ -861,7 +861,7 @@ export class GridCommandesComponent
     const source = self.grid.dataSource as DataSource;
     const sorted = source.items().map(({ id }) => id);
     sorted.splice(e.toIndex, 0, sorted.splice(e.fromIndex, 1)[0]);
-    self.grid.instance.beginCustomLoading("reindexing");
+    self.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
     self.ordreLignesService
       .reindex(sorted, ["id", "numero"])
       .pipe(
