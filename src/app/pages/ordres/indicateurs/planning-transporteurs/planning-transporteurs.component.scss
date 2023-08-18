@@ -65,15 +65,15 @@
 
 // Highlight groups entrepot/numero
 ::ng-deep .dx-row:not(.dx-row-focused) {
-  .numero-planning-transporteurs {
-    background: $BW-khaki-dark;
-    color: white;
-    cursor: pointer;
-  }
 
   .entrepot-planning-transporteurs {
-    background: $BW-orange-medium;
+    background: #EED771;
+  }
+
+  .numero-planning-transporteurs {
     color: white;
+    background: #F6A14D;
+    cursor: pointer;
   }
 }
 

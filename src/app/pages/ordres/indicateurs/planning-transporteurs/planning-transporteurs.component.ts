@@ -29,6 +29,8 @@ import Utils from "utils/Filter";
 import { GridsService } from "../../grids.service";
 import { TabContext } from "../../root/root.component";
 
+let self;
+
 enum FormInput {
   valide = "valide",
   transporteurCode = "transporteur",
@@ -54,6 +56,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  @ViewChild("transporteurSB", { static: false }) transporteurSB: DxSelectBoxComponent;
   @ViewChild("filterForm") filterForm: NgForm;
   @ViewChild("validClient") validClient: DxButtonComponent;
   @ViewChild("validEntrepot") validEntrepot: DxButtonComponent;
@@ -63,6 +66,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
+  public statut = Statut;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     transporteurCode: new UntypedFormControl(),
@@ -81,10 +85,12 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     private tabContext: TabContext,
     private currentCompanyService: CurrentCompanyService
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchConfig(
       Grid.PlanningTransporteurs
     );
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
+
     this.transporteursDataSource = this.transporteursService.getDataSource_v2([
       "id",
       "raisonSocial",
@@ -111,6 +117,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     // Only way found to validate and show Warning icon
     this.formGroup.get("transporteurCode").setValue("");
     this.formGroup.get("transporteurCode").reset();
+    this.transporteurSB.instance.focus();
     this.formGroup.get("valide").patchValue(true);
   }
 
@@ -194,82 +201,22 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // Best expression for order status display
-      if (e.column.dataField === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
-      }
 
       // Groupage
-      if (e.column.dataField === "groupage" && e.value) {
-        e.cellElement.textContent = this.localizeService
-          .localize("ordresTransporteur-groupage-text")
-          .replace("&T", e.value)
-          .replace(
-            "&D",
-            this.dateManagementService.formatDate(
-              e.data.dateDepartPrevueGroupage,
-              "dd-MM-yyyy"
-            )
-          );
+      if (e.column.dataField === "groupage" && e.value)
         e.cellElement.classList.add("transporteur-grouping");
-      }
-      // Ajout CP, ville et pays au lieu de livraison
-      if (e.column.dataField === "entrepotRaisonSocial") {
-        if (e.data.entrepotCodePostal) {
-          e.cellElement.innerText +=
-            " - " +
-            e.data.entrepotCodePostal +
-            " " +
-            e.data.entrepotVille +
-            " (" +
-            e.data.entrepotPays +
-            ")";
-        }
-      }
-      // Ajout version ordre
-      if (e.column.dataField === "numero") {
-        e.cellElement.innerText += e.data.version ? " - " + e.data.version : "";
+
+      // Ordre
+      if (e.column.dataField === "numero")
         e.cellElement.classList += " bold";
-      }
-      // Ajout type colis
-      if (e.column.dataField === "sommeColisCommandes") {
-        e.cellElement.innerText += " / " + e.data.colis;
-      }
-      // Ajout type palette
-      if (e.column.dataField === "espece") {
-        e.cellElement.innerText += " / " + e.data.palette;
-      }
-      // Best expression for date
-      if (
-        e.column.dataField === "dateLivraisonPrevue" ||
-        e.column.dataField === "dateDepartPrevueFournisseur"
-      ) {
-        if (e.value)
-          e.cellElement.innerText = this.dateManagementService.formatDate(
-            e.value,
-            "dd-MM-yyyy"
-          );
-      }
     }
 
-    // Ajout CP, ville et pays au lieu de livraison nom groupe
-    if (e.rowType === "group") {
-      if (e.data.items && e.column.dataField === "entrepotRaisonSocial") {
-        if (e.data.items[0]?.entrepotCodePostal) {
-          e.cellElement.innerText +=
-            " - " +
-            e.data.items[0].entrepotCodePostal +
-            " " +
-            e.data.items[0].entrepotVille +
-            " (" +
-            e.data.items[0].entrepotPays +
-            ")";
-        }
-        e.cellElement.classList.add("entrepot-planning-transporteurs");
-      }
-      if (e.data.items && e.column.dataField === "numero") {
-        e.cellElement.classList.add("numero-planning-transporteurs");
-      }
+    // Entrepot et numéro ordre
+    if (e.column.dataField === "entrepotRaisonSocial")
+      e.cellElement.classList.add("entrepot-planning-transporteurs");
+    if (e.column.dataField === "numero") {
+      e.cellElement.classList.add("numero-planning-transporteurs");
+      e.cellElement.title = this.localizeService.localize("hint-access-ordre");
     }
   }
 
@@ -277,15 +224,58 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     // Highlight canceled orders
     if (["data", "group"].includes(e.rowType)) {
       let data = e.data.items ?? e.data.collapsedItems;
-      if (e.rowType === "data") {
-        data = e.data;
-      } else {
-        data = data[0];
-      }
+      data = (e.rowType === "data") ? e.data : data[0];
       if (data?.ordre?.flagAnnule === true) {
         e.rowElement.classList.add("canceled-orders");
         e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
+    }
+  }
+
+  calculateGroupage(data) {
+    if (data.groupage) {
+      const textGroupage = self.localizeService.localize("ordresTransporteur-groupage-text")
+        .replace("&T", data.groupage)
+        .replace(
+          "&D",
+          self.dateManagementService.formatDate(
+            data.dateDepartPrevueGroupage,
+            "dd-MM-yyyy"
+          )
+        )
+      return textGroupage;
+    }
+  }
+
+  calculateSommeColisCommandes(data) {
+    // Ajout type colis
+    return data.sommeColisCommandes + "/" + data.colis;
+  }
+
+  calculateEspece(data) {
+    // Ajout type palette
+    return data.espece + "/" + data.palette;
+  }
+
+  calculateStatut(data) {
+    // Best expression for order status display
+    return self.statut[data.ordre.statut] ?? "";
+  }
+
+  calculateNumero(data) {
+    // Ajout version ordre
+    return data.numero + (data.version ? " - " + data.version : "");
+  }
+
+  calculateEntrepot(data) {
+    // Ajout CP, ville et pays au lieu de livraison
+    if (data.entrepotCodePostal) {
+      return data.entrepotCodePostal +
+        " " +
+        data.entrepotVille +
+        " (" +
+        data.entrepotPays +
+        ")";
     }
   }
 

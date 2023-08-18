@@ -285,7 +285,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       "ordre.dateDepartPrevue",
       "initBlocageOrdre",
       "verifStatusEdi",
-      "prixVente"
+      "prixVente",
+      "codeInterneProduitClient"
     ];
 
     this.datagrid.instance.beginCustomLoading("");

@@ -46,6 +46,7 @@ export class CommandeEdi extends Model {
   @Field() public refEdiOrdre?: string;
   @Field() public initBlocageOrdre?: boolean;
   @Field() public verifStatusEdi?: boolean;
+  @Field() public codeInterneProduitClient?: string;
   @Field({ dataType: "datetime" }) public dateDocument?: string;
   @Field({ dataType: "datetime" }) public dateLivraison?: string;
 }

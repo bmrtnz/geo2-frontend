@@ -1,0 +1,32 @@
+// Var
+@import "themes/generated/variables.base";
+
+::ng-deep .grid-article-stats {
+
+  // To let the toolbar right buttons appear the usual way &
+  // Simplify info content
+  .dx-datagrid-header-panel .dx-toolbar-before .dx-texteditor {
+    position: absolute;
+    top: 0;
+    width: 270px !important;
+    z-index: 0;
+  }
+
+  .dx-group-panel-message {
+    padding: 9px 0 0 133px;
+  }
+
+  .dx-datagrid-group-panel {
+    position: relative;
+    z-index: 1;
+  }
+
+}
+
+::ng-deep .blue-text {
+  color: $base-accent;
+}
+
+::ng-deep .numeroOrdre .dx-datagrid-summary-item {
+  text-align: center !important;
+}

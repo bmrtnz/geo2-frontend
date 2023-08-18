@@ -4,6 +4,7 @@ import { AjoutArticlesManuPopupComponent } from 'app/pages/ordres/ajout-articles
 import { AjoutArticlesRefClientPopupComponent } from 'app/pages/ordres/ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component';
 import { AjoutArticlesStockPopupComponent } from 'app/pages/ordres/ajout-articles-stock-popup/ajout-articles-stock-popup.component';
 import Ordre from 'app/shared/models/ordre.model';
+import { GridsService } from '../grids.service';
 
 
 @Component({
@@ -40,6 +41,10 @@ export class AddArticleToOrderButtonsComponent implements OnChanges {
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
 
+  constructor(
+    private gridsService: GridsService
+  ) { }
+
   ngOnChanges() {
     this.gridCommandes = this.gridCommandesAlias;
     this.articleRowKey = this.articleRowKeyAlias;
@@ -52,22 +57,30 @@ export class AddArticleToOrderButtonsComponent implements OnChanges {
     this.readOnlyMode = this.readOnlyModeAlias;
   }
 
-  onArticleManClick(e?) {
+  async onArticleManClick(e?) {
+    await this.saveGridCde();
     this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
   }
 
-  onArticleHistoClick() {
+  async onArticleHistoClick() {
+    await this.saveGridCde();
     this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
     this.ajoutArtHisto.visible = true;
   }
 
-  onArticleStockClick() {
+  async onArticleStockClick() {
+    await this.saveGridCde();
     this.ajoutArtStock.visible = true;
   }
 
-  onRefClientClick() {
+  async onRefClientClick() {
+    await this.saveGridCde();
     this.ajoutArtRefClt.visible = true;
+  }
+
+  saveGridCde() {
+    return this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
   }
 
   onLignesChanged(e) {

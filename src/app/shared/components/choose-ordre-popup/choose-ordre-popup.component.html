@@ -1,15 +1,34 @@
 <dx-popup
-  [title]="'choose-ordre' | localize"
+  [fullScreen]="this.popupFullscreen"
   [width]="'auto'"
   [height]="'auto'"
   [maxWidth]="'80vw'"
   [showCloseButton]="true"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
 >
-  <dx-scroll-view [height]="'80vh'">
-    <app-ordres-suivi
-      [rowSelectionEventMode]="'emit'"
-      (whenRowSelected)="choosed.emit($event)"
-    ></app-ordres-suivi>
-  </dx-scroll-view>
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ title }}&nbsp;</div>
+    <dx-button
+      class="close-article-popup"
+      icon="close"
+      (onClick)="hidePopup()"
+    ></dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
+  </div>
+
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view [height]="'80vh'">
+      <app-ordres-suivi
+        [rowSelectionEventMode]="'emit'"
+        (whenRowSelected)="choosed.emit($event)"
+      ></app-ordres-suivi>
+    </dx-scroll-view>
+  </div>
 </dx-popup>

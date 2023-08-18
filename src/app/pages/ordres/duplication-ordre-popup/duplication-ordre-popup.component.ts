@@ -45,7 +45,7 @@ export class DuplicationOrdrePopupComponent {
       { name: "incoterm", checked: false },
     ];
     this.itemsToKeep.map((item) =>
-      this.formGroup.addControl(item.name, new UntypedFormControl())
+      this.formGroup.addControl(item.name, new UntypedFormControl(false))
     );
   }
 
@@ -91,6 +91,9 @@ export class DuplicationOrdrePopupComponent {
   }
 
   hidePopup() {
+    this.itemsToKeep.map((item) => {
+      this.formGroup.get(item.name).patchValue(false);
+    });
     this.processRunning = false;
     this.popup.visible = false;
   }

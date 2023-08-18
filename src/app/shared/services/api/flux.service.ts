@@ -46,4 +46,21 @@ export class FluxService extends ApiService implements APIRead {
       }),
     });
   }
+
+  /** Douanes when CUSINV and mail as mean */
+  mailsDouanes() {
+    return [
+      {
+        id: 0,
+        description: "Douane Montauban",
+        mail: "douane_montauban@blue-whale.com"
+      },
+      {
+        id: 1,
+        description: "Douane Avignon",
+        mail: "douaneavignon@blue-whale.com"
+      },
+    ];
+  }
+
 }

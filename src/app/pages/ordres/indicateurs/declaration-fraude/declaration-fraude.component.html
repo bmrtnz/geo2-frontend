@@ -122,6 +122,7 @@
     </dxi-item>
   </dxi-item>
   <dxi-item
+    [cssClass]="'modified-orders-from'"
     itemType="group"
     [colCount]="2"
   >
@@ -186,6 +187,7 @@
   <dxi-column
     [dataField]="'fournisseurCode'"
     [caption]="'fraude-column-fournisseurCode' | localize"
+    [cssClass]="'small-side-padding'"
     [groupIndex]="2"
     [width]="'auto'"
   ></dxi-column>
@@ -193,6 +195,7 @@
     [dataField]="'dateDepartPrevue'"
     [caption]="'fraude-column-dateDepartPrevue' | localize"
     [dataType]="'date'"
+    [cssClass]="'small-side-padding'"
     [format]="'dd/MM'"
     [width]="'auto'"
   ></dxi-column>
@@ -200,40 +203,58 @@
     [dataField]="'dateDepartPrevueFournisseur'"
     [caption]="'fraude-column-dateDepartPrevueFournisseur' | localize"
     [dataType]="'date'"
+    [cssClass]="'small-side-padding'"
     [format]="'dd/MM'"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'nombrePalettesCommandees'"
     [caption]="'fraude-column-nombrePalettesCommandees' | localize"
+    [cssClass]="'small-side-padding'"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'nombreColisCommandes'"
     [caption]="'fraude-column-nombreColisCommandes' | localize"
+    [cssClass]="'small-side-padding'"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'poidsNet'"
     [caption]="'fraude-column-poidsNet' | localize"
-    [cssClass]="'multi-line-header'"
+    [cssClass]="'small-side-padding'"
     [calculateCellValue]="calculatePoidsNetValue"
     [width]="50"
   ></dxi-column>
   <dxi-column
     [dataField]="'articleDescription'"
     [caption]="'fraude-column-articleDescription' | localize"
+    [cssClass]="'small-side-padding'"
     [calculateCellValue]="calculateArticleValue"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'pays'"
     [calculateCellValue]="calculatePaysValue"
+    [cssClass]="'small-side-padding'"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'incotermCode'"
     [caption]="'fraude-column-incotermCode' | localize"
+    [cssClass]="'small-side-padding'"
+    [width]="'auto'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'typeTransportDescription'"
+    [caption]="'fraude-column-typeTransportDescription' | localize"
+    [cssClass]="'small-side-padding'"
+    [width]="'auto'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'baseTarifTransportCode'"
+    [caption]="'fraude-column-baseTarifTransportCode' | localize"
+    [cssClass]="'small-side-padding'"
     [width]="'auto'"
   ></dxi-column>
 

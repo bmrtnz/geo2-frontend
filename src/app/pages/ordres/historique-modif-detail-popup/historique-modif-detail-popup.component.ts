@@ -29,7 +29,7 @@ export class HistoriqueModifDetailPopupComponent implements OnChanges {
   gridHistoModif: GridHistoModifDetailComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -47,7 +47,11 @@ export class HistoriqueModifDetailPopupComponent implements OnChanges {
       .parentNode.classList.add("historique-modif-detail-popup");
   }
 
-  onHiding(e) {}
+  onShown() {
+    this.gridHistoModif.refresh();
+  }
+
+  onHiding(e) { }
 
   hidePopup() {
     this.popup.visible = false;

@@ -559,7 +559,7 @@ export class GridCommandesComponent
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
-    this.grid.instance.beginCustomLoading("reindexing");
+    this.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
     const items = datasource.items();
     const lignes = items
       .slice(startIndex, endIndex ? inclusive(endIndex) : items.length)
@@ -662,7 +662,8 @@ export class GridCommandesComponent
     return this.certificationText + (isCert ? " ✓" : "");
   }
 
-  openDestockagePopup(ligne) {
+  async openDestockagePopup(ligne) {
+    await this.gridsService.waitUntilAllGridDataSaved(self?.grid);
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
     const current = `${ligne.fournisseur?.code ?? "-"} / ${ligne.proprietaireMarchandise?.code ?? "-"
@@ -860,7 +861,7 @@ export class GridCommandesComponent
     const source = self.grid.dataSource as DataSource;
     const sorted = source.items().map(({ id }) => id);
     sorted.splice(e.toIndex, 0, sorted.splice(e.fromIndex, 1)[0]);
-    self.grid.instance.beginCustomLoading("reindexing");
+    self.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
     self.ordreLignesService
       .reindex(sorted, ["id", "numero"])
       .pipe(
@@ -943,7 +944,8 @@ export class GridCommandesComponent
     return ("0" + num.toString()).slice(-2);
   }
 
-  swapArticle(cell) {
+  async swapArticle(cell) {
+    await this.gridsService.waitUntilAllGridDataSaved(self?.grid);
     this.swapRowArticle.emit(cell.id);
   }
 

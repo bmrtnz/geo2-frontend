@@ -27,10 +27,11 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   @Output() public currOrdre: Partial<Ordre>;
   @Output() public whenDone = new EventEmitter();
 
-  visible: boolean;
-  closeConfirm = false;
-  titleStart: string;
-  titleEnd: string;
+  public visible: boolean;
+  public closeConfirm = false;
+  public titleStart: string;
+  public titleEnd: string;
+  public popupFullscreen: boolean;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridChoixEnvoisComponent)
   gridChoixEnvoisComponent: GridChoixEnvoisComponent;
@@ -57,6 +58,10 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
     this.gridChoixEnvoisComponent.canBeSent = false;
     this.popup.instance.hide();
     this.whenDone.emit();
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   onShowing(e) {

@@ -94,6 +94,15 @@
           text="{{ 'btn-docsjoints' | localize }}"
         >
         </dx-button>
+        <dx-button
+          type="success"
+          height="auto"
+          icon="material-icons equalizer"
+          hint="{{ 'hint-client-article-stats' | localize }}"
+          (onClick)="viewStats()"
+          text="{{ 'statistiques' | localize }}"
+        >
+        </dx-button>
       </dxi-item>
       <dxi-item [ratio]="0.3"> </dxi-item>
       <dxi-item [ratio]="4">
@@ -1284,3 +1293,5 @@
   [document]="this.currentEtiquette"
   [(visible)]="this.etiquetteVisible"
 ></app-view-document-popup>
+<app-statistiques-article-popup [article]="article">
+</app-statistiques-article-popup>

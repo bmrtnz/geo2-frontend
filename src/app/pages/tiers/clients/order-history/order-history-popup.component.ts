@@ -16,13 +16,13 @@ export class OrderHistoryPopupComponent implements OnChanges {
   @Output() public secteurId: string;
   @Output() public popupShown: boolean;
 
-  visible: boolean;
-  titleStart: string;
-  titleMid: string;
+  public visible: boolean;
+  public titleStart: string;
+  public titleMid: string;
+  public popupFullscreen: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor() { }
 
@@ -53,4 +53,10 @@ export class OrderHistoryPopupComponent implements OnChanges {
     this.popup.visible = false;
     this.popupShown = false;
   }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
+
 }

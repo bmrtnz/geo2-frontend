@@ -1,4 +1,3 @@
-import Ordre from "./ordre.model";
 import EdiOrdre from "./edi-ordre.model";
 import { Field, Model, ModelName } from "./model";
 

@@ -14,12 +14,16 @@ import {
 import {
   DxFileManagerComponent,
   DxFileManagerModule,
+  DxButtonModule,
   DxPopupModule,
+  DxScrollViewModule,
+  DxPopupComponent,
+  DxScrollViewComponent
 } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
 import CustomFileSystemProvider from "devextreme/file_management/custom_provider";
 import { SharedModule } from "../../shared.module";
-import { AuthService } from "../../services";
+import { AuthService, LocalizationService } from "../../services";
 
 @Component({
   selector: "app-file-manager-popup",
@@ -27,24 +31,30 @@ import { AuthService } from "../../services";
   styleUrls: ["./file-manager-popup.component.scss"],
   providers: [FileManagerService],
 })
-export class FileManagerComponent {
+export class FileManagerComponent implements OnChanges {
   @Input() key: string;
 
   @Input() id: any;
 
   @Input() subTitle: string;
 
-  @ViewChild(DxFileManagerComponent, { static: false })
-  fileManager: DxFileManagerComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+  @ViewChild(DxFileManagerComponent, { static: false }) fileManager: DxFileManagerComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
-  visible = false;
-  userAdmin = false;
-  fileProvider: CustomFileSystemProvider;
-  items: any;
+  public visible = false;
+  public userAdmin = false;
+  public fileProvider: CustomFileSystemProvider;
+  public items: any;
+  public popupFullscreen: boolean;
+  public titleStart: string;
+  public titleMid: string;
+  public titleEnd: string;
 
   constructor(
     public fileManagerService: FileManagerService,
-    private authService: AuthService
+    private authService: AuthService,
+    public localizeService: LocalizationService
   ) {
     this.items = [
       "showNavPane",
@@ -56,7 +66,21 @@ export class FileManagerComponent {
     ];
   }
 
-  onShowing() {
+  ngOnChanges() {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.setTitle();
+  }
+
+  setTitle() {
+    this.titleStart = this.localizeService.localize("documents");
+    this.titleMid = (this.subTitle ? ' - ' : '');
+    this.titleEnd = (this.subTitle ?? '');
+  }
+
+  onShowing(e) {
+
+    e.component.content().parentNode.classList.add("file-manager-popup");
+
     this.fileProvider = this.fileManagerService.getProvider(this.key, this.id);
 
     this.userAdmin = this.authService.currentUser.adminClient;
@@ -81,11 +105,20 @@ export class FileManagerComponent {
   //     this.fileManager.instance.option("currentPath", "");
   //   }
   // }
+
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
 }
 
 @NgModule({
-  imports: [CommonModule, DxFileManagerModule, DxPopupModule, SharedModule],
+  imports: [CommonModule, DxFileManagerModule, DxPopupModule, SharedModule, DxButtonModule, DxScrollViewModule],
   declarations: [FileManagerComponent],
   exports: [FileManagerComponent],
 })
-export class FileManagerModule {}
+export class FileManagerModule { }

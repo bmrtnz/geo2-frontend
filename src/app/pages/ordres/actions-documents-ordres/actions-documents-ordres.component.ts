@@ -146,16 +146,10 @@ export class ActionsDocumentsOrdresComponent {
     this.actionSheet.visible = !this.actionSheet.visible;
   }
 
-  onClickSendAction(e, annulation?) {
+  async onClickSendAction(e, annulation?) {
     if (this.gridCommandes) {
-      this.gridCommandes.grid.instance.saveEditData();
-      // Wait until grid has been totally saved
-      const saveInterval = setInterval(() => {
-        if (!this.gridCommandes.grid.instance.hasEditData()) {
-          clearInterval(saveInterval);
-          this.sendAction(e, annulation);
-        }
-      }, 100);
+      await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+      this.sendAction(e, annulation);
     } else {
       this.sendAction(e, annulation);
     }

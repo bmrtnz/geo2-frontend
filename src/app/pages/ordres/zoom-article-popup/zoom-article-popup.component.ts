@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
-import { DxScrollViewComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-article-popup",
@@ -16,12 +16,15 @@ import { DxScrollViewComponent } from "devextreme-angular";
 export class ZoomArticlePopupComponent implements OnChanges {
   @Input() public articleLigneId: string;
 
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+
   visible: boolean;
   title: string;
+  public popupFullscreen: boolean;
 
-  constructor(private localizeService: LocalizationService) {}
+
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
@@ -36,4 +39,13 @@ export class ZoomArticlePopupComponent implements OnChanges {
   onShowing(e) {
     e.component.content().parentNode.classList.add("zoom-article-popup");
   }
+
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
 }

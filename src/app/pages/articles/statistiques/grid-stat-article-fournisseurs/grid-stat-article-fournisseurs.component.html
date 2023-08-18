@@ -1,0 +1,134 @@
+<dx-data-grid
+  class="dx-card wide-card grid-article-stats"
+  [remoteOperations]="{
+    filtering: true,
+    grouping: true,
+    groupPaging: false,
+    paging: false,
+    sorting: true,
+    summary: false
+  }"
+  [showBorders]="false"
+  [noDataText]="'aucun-historique' | localize"
+  [focusedRowEnabled]="true"
+  [columnAutoWidth]="true"
+  [rowAlternationEnabled]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      this.localizeService.localize('tiers-fournisseurs-title'),
+      $event,
+      gridConfiguratorService.Grid.StatsArticleFournisseur,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-export fileName="Statistiques article fournisseurs"></dxo-export>
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      column="expeditionNbColis"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="expeditionNbColis"
+      summaryType="sum"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      column="expeditionPoidsNet"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="expeditionPoidsNet"
+      summaryType="sum"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      column="numeroOrdre"
+      summaryType="count"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+    <dxi-total-item
+      column="numeroOrdre"
+      summaryType="count"
+      [displayFormat]="'{0}'"
+      [cssClass]="'blue-text'"
+    >
+    </dxi-total-item>
+    <dxi-group-item
+      [column]="'fournisseur.code'"
+      [showInColumn]="'fournisseur.raisonSocial'"
+      [name]="'show_tiers-name'"
+      [summaryType]="'custom'"
+      [showInGroupFooter]="true"
+      [displayFormat]="'{0}'"
+    >
+    </dxi-group-item>
+  </dxo-summary>
+
+  <dxo-state-storing
+    [enabled]="true"
+    type="custom"
+    [storageKey]="gridConfiguratorService.Grid.StatsArticleFournisseur"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
+  >
+  </dxo-column-chooser>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [caption]="
+      ('articleStats-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [format]="column.format"
+    [cssClass]="
+      'small-side-padding' + (column.cssClass ? ' ' + column.cssClass : '')
+    "
+    [width]="column.width"
+    [dataType]="column?.dataType"
+    [calculateCellValue]="this[column?.calculateCellValue]"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+</dx-data-grid>

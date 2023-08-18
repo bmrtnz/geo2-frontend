@@ -12,6 +12,7 @@ import { LocalizationService, ScreenService } from "./shared/services";
 import { FormUtilsService } from "./shared/services/form-utils.service";
 import { DateManagementService } from "./shared/services/date-management.service";
 import { GridUtilsService } from "./shared/services/grid-utils.service";
+import dxAutocomplete from "devextreme/ui/autocomplete";
 
 @Component({
   selector: "app-root",
@@ -94,6 +95,11 @@ export class AppComponent {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn,
       },
     });
+    dxAutocomplete.defaultOptions({
+      options: {
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
+    });
     dxDateBox.defaultOptions({
       options: {
         useMaskBehavior: true,
@@ -112,6 +118,9 @@ export class AppComponent {
         commonColumnSettings: {
           trueText: this.localization.localize("trueText"),
           falseText: this.localization.localize("falseText"),
+        },
+        loadPanel: {
+          text: this.localization.localize("data-loading-process")
         },
         onExporting: this.gridUtilsService.onExporting, // E.g. add date to fileName
         pager: {

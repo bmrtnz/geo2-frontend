@@ -106,7 +106,7 @@
       type="default"
       [focusStateEnabled]="false"
       [visible]="showModifButton(cell)"
-      [text]="'Modifier'"
+      text="{{ 'btn-modifier' | localize }}"
       (onClick)="modifDetailExp(cell)"
     >
     </dx-button>
@@ -118,7 +118,7 @@
       type="default"
       [focusStateEnabled]="false"
       [visible]="showAutoButton(cell)"
-      [text]="'Auto'"
+      text="{{ 'btn-auto' | localize }}"
       (onClick)="autoDetailExp(cell)"
     ></dx-button>
   </div>

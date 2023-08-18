@@ -16,8 +16,7 @@ type GQLResponse = {
 })
 export class HistoriqueModificationsDetailService
   extends ApiService
-  implements APIRead
-{
+  implements APIRead {
   constructor(
     apollo: Apollo,
     public functionsService: FunctionsService,
@@ -62,7 +61,7 @@ export class HistoriqueModificationsDetailService
             };
             const query = await this.buildGetAll_v2(columns);
             const variables = this.mapLoadOptionsToVariables(options);
-            this.listenQuery<Response>(query, { variables }, (res) => {
+            this.listenQuery<Response>(query, { variables, fetchPolicy: "no-cache" }, (res) => {
               if (res.data && res.data.allHistoriqueModificationDetail) {
                 resolve(
                   this.asInstancedListCount(

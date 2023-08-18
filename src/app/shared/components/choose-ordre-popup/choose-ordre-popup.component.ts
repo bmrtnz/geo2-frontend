@@ -1,24 +1,22 @@
 import {
   Component,
   EventEmitter,
-  HostListener,
   NgModule,
-  Output,
   ViewChild,
 } from "@angular/core";
-import { OrdresModule } from "app/pages/ordres/ordres.module";
 import OrdresSuiviComponent, {
   OrdresSuiviModule,
 } from "app/pages/ordres/suivi/ordres-suivi.component";
 import Ordre from "app/shared/models/ordre.model";
+import { LocalizationService } from "app/shared/services";
 import { SharedModule } from "app/shared/shared.module";
 import {
   DxPopupComponent,
   DxPopupModule,
   DxScrollViewModule,
+  DxButtonModule
 } from "devextreme-angular";
-import { EMPTY, of } from "rxjs";
-import { concatMap, finalize, first, tap } from "rxjs/operators";
+import { finalize, first } from "rxjs/operators";
 
 @Component({
   selector: "app-choose-ordre-popup",
@@ -28,7 +26,15 @@ import { concatMap, finalize, first, tap } from "rxjs/operators";
 export class ChooseOrdrePopupComponent {
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
   @ViewChild(OrdresSuiviComponent) private suiviComponent: OrdresSuiviComponent;
+
+  public popupFullscreen: boolean;
   public choosed = new EventEmitter<Ordre["id"]>();
+  public title: string;
+
+  constructor(
+    public localizeService: LocalizationService,
+  ) {
+  }
 
   /** Present the popup */
   public prompt() {
@@ -41,13 +47,26 @@ export class ChooseOrdrePopupComponent {
 
   public onShowing(e) {
     e.component.content().parentNode.classList.add("choose-ordre-popup");
+    this.title = this.localizeService.localize("choose-ordre");
+  }
+
+  public onShown() {
     this.suiviComponent.histoGrid.reload();
   }
+
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
 }
 
 @NgModule({
-  imports: [OrdresSuiviModule, DxPopupModule, SharedModule, DxScrollViewModule],
+  imports: [OrdresSuiviModule, DxPopupModule, SharedModule, DxScrollViewModule, DxButtonModule],
   declarations: [ChooseOrdrePopupComponent],
   exports: [ChooseOrdrePopupComponent],
 })
-export class ChooseOrdrePopupModule {}
+export class ChooseOrdrePopupModule { }

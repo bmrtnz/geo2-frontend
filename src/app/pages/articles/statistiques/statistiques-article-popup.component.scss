@@ -1,0 +1,126 @@
+// Var
+@import "themes/generated/variables.base";
+
+::ng-deep .statistiques-article-popup {
+  min-width: 1080px;
+
+  .grid-box {
+
+    .grid-container {
+      width: 48%;
+
+      &.grid-container-left {
+        float: left;
+      }
+
+      &.grid-container-right {
+        float: right;
+      }
+
+      .dx-datagrid {
+        max-height: 400px;
+      }
+    }
+
+    .grid-spacer {
+      position: relative;
+      width: 4%;
+      height: 200px;
+      float: left;
+    }
+  }
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+    padding: 0 8px 0 24px;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+
+    .close-popup {
+      top: 13px;
+      float: right;
+    }
+  }
+
+  .dx-popup-content {
+    padding-top: 10px;
+    font-size: 15px;
+    background: #fff;
+
+    .stats-article-content-container {
+      padding: 0 15px 0 2px;
+
+      .bold-text {
+        font-weight: bold !important;
+      }
+
+      .dx-texteditor {
+        &.stock-resa-log {
+          border: 1px dashed #ccc;
+          padding: 0 10px;
+
+          &:before {
+            display: none;
+          }
+
+          textarea {
+            font-size: 15px;
+            line-height: 18px;
+            color: $base-accent;
+          }
+        }
+      }
+
+      .article-detail-container {
+        width: 350px;
+        margin: 0 25px 0 12px;
+        width: 47%;
+        float: left;
+      }
+
+      .filter-area {
+        width: 30%;
+        margin: 0 25px;
+
+        .dx-field {
+          margin-bottom: 0;
+        }
+      }
+
+      .refresh {
+        margin: 5px 0 0 25px;
+      }
+
+      .blue-style {
+        color: $base-accent;
+      }
+
+      .article-description {
+        margin-top: 2px;
+        color: #444;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: justify;
+        text-justify: distribute;
+      }
+
+      .popup-buttons-container {
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+
+        .dx-button {
+          margin: 5px;
+          width: 100px;
+        }
+      }
+    }
+  }
+}

@@ -173,7 +173,7 @@
                     *ngFor="let linkedOrder of linkedOrders"
                     class="small-button linkedOrder-{{ linkedOrder.class }}"
                     type="default"
-                    hint="{{ 'hint-ordres-lies' | localize }}"
+                    hint="{{ 'hint-access-ordre' | localize }}"
                     text="{{ linkedOrder.ordre.numero }} ({{
                       linkedOrder.criteria
                     }})"
@@ -975,8 +975,12 @@
 
                 <dx-button
                   class="upperButton subButton edi-colibri-button"
+                  [ngClass]="{
+                    'inactive-button':
+                      !fullOrderNumber ||
+                      !authService.currentUser.accessCommandeEdi
+                  }"
                   [visible]="!!refOrdreEdi"
-                  [disabled]="!fullOrderNumber"
                   type="success"
                   text="{{ 'btn-show-order' | localize }} {{ canalOrdreEdi }}"
                   (onClick)="onShowEdiColibriOrderClick()"
@@ -1075,6 +1079,7 @@
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
                     [ordre]="ordre"
                     [ordreBAFOuFacture]="ordreBAFOuFacture"
+                    [gridCommandes]="gridCommandes"
                   ></app-grid-ordre-ligne-logistique>
                   <div *ngIf="ordresLignesViewExp">
                     <div class="grid-separator"></div>
@@ -1243,6 +1248,7 @@
                       <app-actions-documents-ordres
                         [ordre]="data"
                         [gridEnvois]="gridEnvois"
+                        [gridCommandes]="gridCommandes"
                         [orderConfirmationOnly]="false"
                       ></app-actions-documents-ordres>
                     </div>
