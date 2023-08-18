@@ -95,7 +95,8 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+    // this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+    this.setDefaultPeriod("J");
 
     // Auto sector select from current user settings
     if (this.authService.currentUser.secteurCommercial) {
@@ -318,28 +319,15 @@ export class PlanningDepartComponent implements AfterViewInit {
 
     // Remove negative offset
     if (deltaDate) {
-      // When date start input changed
       if (e.element.classList.contains("dateStart")) {
         this.dateMax.value = deb;
-        // Set time for correct value on view
-        this.dateMax.value = new Date(
-          (this.dateMax.value as Date).setUTCHours(21, 59, 59)
-        );
-        // Adapt to 24h periode
-        this.dateMax.value = new Date(this.dateMax.value.valueOf() + ONE_DAY);
-      }
-
-      // When date end input changed
-      if (e.element.classList.contains("dateEnd")) {
+      } else {
         this.dateMin.value = fin;
-        // Set time for correct value on view
-        this.dateMin.value = new Date(
-          (this.dateMin.value as Date).setUTCHours(22, 0, 0)
-        );
-        // Adapt to 24h periode
-        this.dateMin.value = new Date(this.dateMin.value.valueOf() - ONE_DAY);
       }
     }
+
+    this.dateMin.value = this.dateManagementService.startOfDay(this.dateMin.value);
+    this.dateMax.value = this.dateManagementService.endOfDay(this.dateMax.value);
 
     this.periodeSB.value = null;
   }

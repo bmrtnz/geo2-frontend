@@ -56,7 +56,8 @@
 }
 
 .palox-grids {
-  max-height: 550px;
+  max-height: 520px;
+  // max-height: calc(100vh - 378px);
 }
 
 // Highlight client groups

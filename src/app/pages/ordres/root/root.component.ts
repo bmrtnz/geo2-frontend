@@ -227,6 +227,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   private fastNextButton: HTMLElement;
   public activeStateEnabled = false;
   public typeTab = TabType;
+  public tabsUnpined: boolean;
+  public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
+  public moreThanOneOpenOrder: number;
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true })
@@ -243,7 +246,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
-  ) { }
+  ) {
+    this.moreThanOneOpenOrder = 0;
+  }
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
@@ -292,6 +297,20 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener("window:unload")
   windowUnload() {
     window.sessionStorage.removeItem("surveyRunning");
+  }
+
+  onScroll(e) {
+    const topValue = e.scrollOffset.top;
+
+    // Back to top button
+    const showHidePixelsFromTop = 150;
+    const Element = document.querySelector(".backtotop") as HTMLElement;
+
+    if (topValue < showHidePixelsFromTop) {
+      Element.classList.add("hiddenBacktotop");
+    } else {
+      Element.classList.remove("hiddenBacktotop");
+    }
   }
 
   updateAllTabsStatusDots() {
@@ -347,6 +366,14 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     tabCont.scrollTo({ left: pos, behavior: "smooth" });
   }
 
+  onTabsPinClick() {
+    this.tabsUnpined = !this.tabsUnpined;
+    window.localStorage.setItem(
+      "OrderTabsUnpined",
+      this.tabsUnpined ? "true" : "false"
+    );
+  }
+
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
 
     if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
@@ -373,6 +400,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabTitleRendered(event) {
+    if (this.tabsUnpined === undefined)
+      this.tabsUnpined = window.localStorage.getItem("OrderTabsUnpined") === "true" ? true : false;
     const replaceEvent = (e) => {
       const id = e.currentTarget.querySelector("[data-item-id]").dataset.itemId;
       this.onTabTitleClick({ itemData: { id } });
@@ -436,6 +465,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!ordre?.length;
+    this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
   }
 
   closeEveryOrdre() {
@@ -453,7 +483,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
-    notify(this.localizationService.localize("all-orders-were-closed"));
+    notify(this.localizationService.localize(
+      this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
+    );
   }
 
   private handleRouting() {
@@ -516,8 +548,11 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
-        class: "close-all-orders-tab",
-        multiLineTitle: "Fermer tous les ordres",
+        class: "close-all-orders-tab multiline-tab",
+        multiLineTitle: [
+          this.localizationService.localize("close-open-order"),
+          this.localizationService.localize("close-all-orders")
+        ],
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -609,6 +644,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
+    this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
 
     return this.items.indexOf(data);
   }

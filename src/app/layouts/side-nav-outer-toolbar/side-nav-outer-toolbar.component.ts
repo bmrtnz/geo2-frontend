@@ -93,11 +93,14 @@ export class SideNavOuterToolbarComponent implements OnInit {
       orderScrollBtns.style.top = newPos + "px";
     }
   }
+
   scrollToTop() {
-    const Element = document.querySelector(".content") as HTMLElement;
-    Element.scrollIntoView({
-      behavior: "smooth",
-    });
+    // Check scroll context
+    const target = window.localStorage.getItem("OrderTabsUnpined") === "true" ?
+      ".content" :
+      ".dx-multiview-item.dx-item-selected .scrollview-ordre-content .dx-scrollview-content";
+    const Element = document.querySelector(target) as HTMLElement;
+    Element?.scrollIntoView({ behavior: "smooth" });
   }
 
   updateDrawer() {

@@ -975,8 +975,12 @@
 
                 <dx-button
                   class="upperButton subButton edi-colibri-button"
+                  [ngClass]="{
+                    'inactive-button':
+                      !fullOrderNumber ||
+                      !authService.currentUser.accessCommandeEdi
+                  }"
                   [visible]="!!refOrdreEdi"
-                  [disabled]="!fullOrderNumber"
                   type="success"
                   text="{{ 'btn-show-order' | localize }} {{ canalOrdreEdi }}"
                   (onClick)="onShowEdiColibriOrderClick()"
