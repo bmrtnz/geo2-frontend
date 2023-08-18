@@ -22,7 +22,7 @@ export class FluxEnvoisService {
     private authService: AuthService,
     private depotEnvoisService: DepotEnvoisService,
     private envoisService: EnvoisService
-  ) {}
+  ) { }
 
   prompt(
     fluxID: Flux["id"],
@@ -62,13 +62,14 @@ export class FluxEnvoisService {
           return this.envoisService.fDocumentEnvoiCominv(ordreID);
         case "BUYCO":
           return this.envoisService.fDocumentEnvoiShipmentBuyco(ordreID);
+        case "CUSINV":
         case "DECBOL":
-          return this.envoisService.fDocumentEnvoiDeclarationBollore(ordreID);
+          return this.envoisService.fDocumentEnvoiFactureDouaniere(ordreID);
         case "TRACA":
           return this.pushDepotEnvoi("TRACA", ordreID), of(null);
         case "IMPORD":
           return this.pushDepotEnvoi("IMPORD", ordreID), of(null);
-        // "CUSINV" | "PROFOR" | "RESLIT" | "INCLIT"
+        // "PROFOR" | "RESLIT" | "INCLIT"
         // No initialization phase, continuing to flux selection
         default:
           return of({ data: { res: 1 } });
