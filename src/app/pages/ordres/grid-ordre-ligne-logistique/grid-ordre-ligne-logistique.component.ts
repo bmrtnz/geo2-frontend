@@ -43,8 +43,7 @@ import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
 export class GridOrdreLigneLogistiqueComponent
-  implements OnChanges, AfterViewInit
-{
+  implements OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -57,11 +56,14 @@ export class GridOrdreLigneLogistiqueComponent
   public askForCloture: boolean;
   public reasonId: string;
   public gridRowsTotal: number;
+
   @Input() public ordre: Ordre;
   @Output() public ordreLogistique: OrdreLogistique;
   @Input() public ligneLogistiqueId: string;
   @Input() public ordreBAFOuFacture;
+  @Input() public gridCommandes;
   @Output() refreshGridLigneDetail = new EventEmitter();
+
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false })
   choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
@@ -156,8 +158,9 @@ export class GridOrdreLigneLogistiqueComponent
     this.datagrid.instance.refresh();
   }
 
-  showHistoDetail(cell) {
+  async showHistoDetail(cell) {
     if (this.countHisto) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.countHisto = true;
     cell.cellElement.classList.add("hide-button");
     this.ligneLogistiqueId = cell.data.id;

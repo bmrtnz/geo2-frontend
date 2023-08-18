@@ -627,7 +627,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onAddRefsClient() {
-    // await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     let artIds = [];
     const rowsData = this.warnNoSelectedRows();
     if (!rowsData) return;
@@ -1017,7 +1017,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
-  onShowEdiColibriOrderClick() {
+  async onShowEdiColibriOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.modifCdeEdiPopup.visible = true;
   }
 
