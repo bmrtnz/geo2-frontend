@@ -188,7 +188,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   async onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
 
-    if (this.remplacementArticle) this.clearAll();
+    // if (this.remplacementArticle) this.clearAll();
 
     this.catalogue.dataGrid.selection = {
       mode: "multiple",
