@@ -133,7 +133,7 @@ export class GridCommandesComponent
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
 
-  @Input() ordreID: string;
+  @Input() ordre: Partial<Ordre>;
   @Input() venteACommission: boolean;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
@@ -143,7 +143,6 @@ export class GridCommandesComponent
   // legacy features properties
   public certifsMD: any;
   public certifMDDS: DataSource;
-  public ordre: Partial<Ordre>;
   public certificationText: string;
   public originText: string;
   public lastRowFocused: boolean;
@@ -205,7 +204,7 @@ export class GridCommandesComponent
       .pipe(filter((params) => params.has("ordre_id")))
       .subscribe({
         next: (params) => {
-          this.ordreID = params.get("ordre_id");
+          this.ordre.id = params.get("ordre_id");
           this.updateRestrictions();
         },
       });
@@ -247,7 +246,7 @@ export class GridCommandesComponent
   }
 
   ngOnChanges() {
-    if (this.ordreID) this.updateRestrictions();
+    if (this.ordre?.id) this.updateRestrictions();
   }
 
   ngAfterViewInit() {
@@ -293,7 +292,7 @@ export class GridCommandesComponent
           clearInterval(saveInterval);
           this.functionsService
             .fCalculMargePrevi(
-              this.ordreID,
+              this.ordre?.id,
               this.currentCompanyService.getCompany().id
             )
             .subscribe({
@@ -453,7 +452,7 @@ export class GridCommandesComponent
   }
 
   private refreshData(columns: GridColumn[]) {
-    if (this.ordreID)
+    if (this.ordre?.id)
       return of(columns).pipe(
         GridConfiguratorService.getVisible(),
         GridConfiguratorService.getFields(),
@@ -538,7 +537,7 @@ export class GridCommandesComponent
               ...["proprietaireMarchandise.listeExpediteurs"],
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
-              ["ordre.id", "=", this.ordreID],
+              ["ordre.id", "=", this.ordre?.id],
             ])
           )
         )
@@ -546,7 +545,7 @@ export class GridCommandesComponent
   }
 
   private async updateRestrictions() {
-    const isCloture = await this.ordresService.isCloture({ id: this.ordreID });
+    const isCloture = await this.ordresService.isCloture({ id: this.ordre?.id });
     this.allowMutations = !isCloture;
   }
 

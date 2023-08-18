@@ -1061,7 +1061,7 @@
                   </div>
                   <app-grid-commandes
                     *ngIf="ordre?.id"
-                    [ordreID]="ordre?.id"
+                    [ordre]="ordre"
                     [venteACommission]="ordre?.venteACommission"
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
