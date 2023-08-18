@@ -12,6 +12,7 @@ import { LocalizationService, ScreenService } from "./shared/services";
 import { FormUtilsService } from "./shared/services/form-utils.service";
 import { DateManagementService } from "./shared/services/date-management.service";
 import { GridUtilsService } from "./shared/services/grid-utils.service";
+import dxAutocomplete from "devextreme/ui/autocomplete";
 
 @Component({
   selector: "app-root",
@@ -90,6 +91,11 @@ export class AppComponent {
       },
     });
     dxTextBox.defaultOptions({
+      options: {
+        onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
+    });
+    dxAutocomplete.defaultOptions({
       options: {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn,
       },
