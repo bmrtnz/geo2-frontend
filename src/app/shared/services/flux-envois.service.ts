@@ -22,7 +22,7 @@ export class FluxEnvoisService {
     private authService: AuthService,
     private depotEnvoisService: DepotEnvoisService,
     private envoisService: EnvoisService
-  ) {}
+  ) { }
 
   prompt(
     fluxID: Flux["id"],

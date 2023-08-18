@@ -4742,6 +4742,8 @@
         "visibleIndex": 10,
         "dataField": "numeroAcces1",
         "dataType": "string",
+        "cssClass": "no-arrow",
+        "editCellTemplate": "selectBoxCustomEditTemplate",
         "width": "200",
         "visible": true
       },
