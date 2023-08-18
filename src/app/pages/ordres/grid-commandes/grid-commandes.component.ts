@@ -663,7 +663,8 @@ export class GridCommandesComponent
     return this.certificationText + (isCert ? " ✓" : "");
   }
 
-  openDestockagePopup(ligne) {
+  async openDestockagePopup(ligne) {
+    await this.gridsService.waitUntilAllGridDataSaved(self?.grid);
     if (!this.allowMutations) return;
     this.ordreLigne = ligne;
     const current = `${ligne.fournisseur?.code ?? "-"} / ${ligne.proprietaireMarchandise?.code ?? "-"
@@ -944,7 +945,8 @@ export class GridCommandesComponent
     return ("0" + num.toString()).slice(-2);
   }
 
-  swapArticle(cell) {
+  async swapArticle(cell) {
+    await this.gridsService.waitUntilAllGridDataSaved(self?.grid);
     this.swapRowArticle.emit(cell.id);
   }
 

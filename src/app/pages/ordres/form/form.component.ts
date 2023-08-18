@@ -626,7 +626,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.gridCommandes.grid.instance.getSelectedRowsData();
   }
 
-  onAddRefsClient() {
+  async onAddRefsClient() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     let artIds = [];
     const rowsData = this.warnNoSelectedRows();
     if (!rowsData) return;
@@ -692,7 +693,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  onRegulOrderClick() {
+  async onRegulOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
       notify(
@@ -785,8 +787,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.grid.instance.deselectAll();
   }
 
-  onComplOrderClick() {
+  async onComplOrderClick() {
     if (!this.ordre?.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     // As LIST_NORDRE_COMP is a VARCHAR(50)
     if (
       this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",")
@@ -883,8 +887,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onCancelOrderClick() {
+  async onCancelOrderClick() {
     if (!this.ordre.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     this.ordresService.fTestAnnuleOrdre(this.ordre.id).subscribe({
       next: () => {
         this.promptPopupTitle =
@@ -923,8 +929,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onDeleteOrderClick() {
+  async onDeleteOrderClick() {
     if (!this.ordre.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     this.promptPopupTitle =
       this.localization.localize("ordre-delete-title") + this.ordre?.numero;
     this.promptPopupPurpose = "delete";
@@ -1009,7 +1017,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
-  onShowEdiColibriOrderClick() {
+  async onShowEdiColibriOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.modifCdeEdiPopup.visible = true;
   }
 
@@ -1018,15 +1027,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.ajoutArtManu.visible = true;
   }
 
-  onDestockAutoClick() {
-    this.gridCommandes.grid.instance.saveEditData();
-    // Wait until grid has been totally saved
-    const saveInterval = setInterval(() => {
-      if (!this.gridCommandes.grid.instance.hasEditData()) {
-        clearInterval(saveInterval);
-        this.destockageAutoPopup.visible = true;
-      }
-    }, 100);
+  async onDestockAutoClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    this.destockageAutoPopup.visible = true;
   }
 
   updateDestockAuto() {
@@ -1037,15 +1040,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (e) this.selectedGridCdesRows = e.length > 0;
   }
 
-  detailExp() {
+  async detailExp() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
-  openGroupageChargementsPopup() {
+  async openGroupageChargementsPopup() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.groupagePopup.visible = true;
   }
 
-  onDuplicateOrderClick() {
+  async onDuplicateOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.duplicationPopup.visible = true;
   }
 
@@ -1198,7 +1204,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.update();
   }
 
-  public refreshOrder() {
+  public async refreshOrder() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.refreshHeader();
     this.gridsService.reload(
       "Commande",
@@ -1641,7 +1648,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.factureVisible = true;
   }
 
-  public bonAFacturer() {
+  public async bonAFacturer() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     const societe: Societe = this.currentCompanyService.getCompany();
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe({
@@ -1685,16 +1694,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return /^[AEIOUYaeiouy]$/i.test(text);
   }
 
-  public onDuplicationBukSaClick() {
+  public async onDuplicationBukSaClick() {
     if (this.gridCommandes) {
-      this.gridCommandes.grid.instance.saveEditData();
-      // Wait until grid has been totally saved
-      const saveInterval = setInterval(() => {
-        if (!this.gridCommandes.grid.instance.hasEditData()) {
-          clearInterval(saveInterval);
-          this.onDuplicationBukSa();
-        }
-      }, 100);
+      await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+      this.onDuplicationBukSa();
     } else {
       this.onDuplicationBukSa();
     }
@@ -1765,7 +1768,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  public onDelRegroupementClick() {
+  public async onDelRegroupementClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
       next: (res) => notify(res.data.fDelRegroupement.msg, "success"),
@@ -1782,7 +1786,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       );
   }
 
-  onClickCreateLitige() {
+  async onClickCreateLitige() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.litigesBtn.nativeElement.click();
     setTimeout(() => this.formLitiges.createLitige());
   }
