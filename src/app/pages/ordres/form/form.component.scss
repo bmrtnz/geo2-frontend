@@ -191,16 +191,30 @@
   top: -10px;
 }
 
-::ng-deep .add-litige-button {
+.add-litige-button {
   position: absolute;
   right: 0;
   width: 0 !important;
-  min-width: 23px;
-  margin: -6px 3px 0 0;
+  margin: -3px -3px 0 0;
   z-index: 1;
+  border-radius: 100%;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  transition: 0.2s;
 
-  .dx-icon {
-    font-size: 15px;
+  &:hover {
+    background: #EEE;
+  }
+
+  .dx-button-content {
+    top: -2px;
+  }
+
+  .dx-icon.dx-icon-edit-button-addrow {
+    font-size: 14px !important;
+    padding: 1px !important;
   }
 }
 
