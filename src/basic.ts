@@ -84,7 +84,7 @@ interface GridColumn {
   /**
    * Casts column values to a specific data type.
    */
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  dataType?: any;
 
   /**
    * Specifies the column's filter value displayed in the filter row.
@@ -316,40 +316,40 @@ type format =
   | string
   | ((value: number | Date) => string)
   | {
-      currency?: string;
-      formatter?: (value: number | Date) => string;
-      parser?: (value: string) => number | Date;
-      precision?: number;
-      type?:
-        | "billions"
-        | "currency"
-        | "day"
-        | "decimal"
-        | "exponential"
-        | "fixedPoint"
-        | "largeNumber"
-        | "longDate"
-        | "longTime"
-        | "millions"
-        | "millisecond"
-        | "month"
-        | "monthAndDay"
-        | "monthAndYear"
-        | "percent"
-        | "quarter"
-        | "quarterAndYear"
-        | "shortDate"
-        | "shortTime"
-        | "thousands"
-        | "trillions"
-        | "year"
-        | "dayOfWeek"
-        | "hour"
-        | "longDateLongTime"
-        | "minute"
-        | "second"
-        | "shortDateShortTime";
-    };
+    currency?: string;
+    formatter?: (value: number | Date) => string;
+    parser?: (value: string) => number | Date;
+    precision?: number;
+    type?:
+    | "billions"
+    | "currency"
+    | "day"
+    | "decimal"
+    | "exponential"
+    | "fixedPoint"
+    | "largeNumber"
+    | "longDate"
+    | "longTime"
+    | "millions"
+    | "millisecond"
+    | "month"
+    | "monthAndDay"
+    | "monthAndYear"
+    | "percent"
+    | "quarter"
+    | "quarterAndYear"
+    | "shortDate"
+    | "shortTime"
+    | "thousands"
+    | "trillions"
+    | "year"
+    | "dayOfWeek"
+    | "hour"
+    | "longDateLongTime"
+    | "minute"
+    | "second"
+    | "shortDateShortTime";
+  };
 
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = ONE_SECOND * 60;
