@@ -173,6 +173,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [keyExpr]="'id'"
+    (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"

@@ -159,6 +159,12 @@ export class ArticlesListComponent
     this.dataGrid.instance.filter(this.allGridFilters);
   }
 
+  onContentReady(e) {
+    // Article file to be opened when unique
+    const visibleRows = e.component.getVisibleRows();
+    if (visibleRows?.length === 1 && !this.ordre) this.onRowDblClick({ data: { id: visibleRows[0]?.data?.id } });
+  }
+
   onRowDblClick(e) {
     // Open article file
     if (this.ordre) {

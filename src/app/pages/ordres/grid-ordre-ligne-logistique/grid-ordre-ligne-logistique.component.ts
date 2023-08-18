@@ -43,8 +43,7 @@ import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
 export class GridOrdreLigneLogistiqueComponent
-  implements OnChanges, AfterViewInit
-{
+  implements OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -169,7 +168,7 @@ export class GridOrdreLigneLogistiqueComponent
         if (res.countHistoriqueModificationDetail) {
           this.histoDetailPopup.visible = true;
         } else {
-          notify("Aucun historique disponible", "warning", 3000);
+          notify(this.localization.localize("aucun-historique-trouve"), "warning", 3000);
         }
       });
   }

@@ -8510,5 +8510,107 @@
         "visible": false
       }
     ]
+  },
+  "statistiques-article-fournisseur": {
+    "pageSize": 100,
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "fournisseur.code",
+        "dataType": "string",
+        "groupIndex": 0,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "expeditionNbColis",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "expeditionPoidsNet",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroOrdre",
+        "cssClass": "text-align-center numeroOrdre",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "fournisseur.raisonSocial",
+        "dataType": "string",
+        "calculateCellValue": "calculateInfoFournisseur",
+        "visible": true
+      },
+      {
+        "dataField": "fournisseur.codePostal",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "fournisseur.ville",
+        "showInColumnChooser": false
+      }
+    ]
+  },
+  "statistiques-article-client": {
+    "pageSize": 100,
+    "columns": [
+      {
+        "dataField": "id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "visibleIndex": 0,
+        "dataField": "client.code",
+        "dataType": "string",
+        "groupIndex": 0,
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "expeditionNbColis",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "expeditionPoidsNet",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroOrdre",
+        "cssClass": "text-align-center numeroOrdre",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "client.raisonSocial",
+        "dataType": "string",
+        "calculateCellValue": "calculateInfoClient",
+        "visible": true
+      },
+      {
+        "dataField": "client.codePostal",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "client.ville",
+        "showInColumnChooser": false
+      }
+    ]
   }
 }
