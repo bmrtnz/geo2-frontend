@@ -76,6 +76,12 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     this.updateData(current);
   }
 
+  onContentReady(e) {
+    // File to be opened when unique
+    const visibleRows = e.component.getVisibleRows();
+    if (visibleRows?.length === 1) this.onRowDblClick({ data: { id: visibleRows[0]?.data?.id } });
+  }
+
   onRowDblClick(event) {
     this.router.navigate([`/pages/tiers/clients/${event.data.id}`]);
   }

@@ -94,6 +94,12 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
       });
   }
 
+  onContentReady(e) {
+    // File to be opened when unique
+    const visibleRows = e.component.getVisibleRows();
+    if (visibleRows?.length === 1) this.onRowDblClick({ data: { id: visibleRows[0]?.data?.id } });
+  }
+
   onColumnsChange({ current }: { current: GridColumn[] }) {
     this.updateData(current);
   }
