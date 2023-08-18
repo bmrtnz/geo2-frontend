@@ -1740,6 +1740,7 @@
     "ordresEdi-eanProduitClient": "GTIN client",
     "ordresEdi-parCombien": "Par combien",
     "ordresEdi-uniteQtt": "Unité Qtt",
+    "ordresEdi-codeInterneProduitClient": "Article client",
     "ordresEdi-quantiteColis": "Quantité Colis",
     "ordresEdi-quantite": "Quantité UC",
     "ordresEdi-listArticleId": "Liste des articles potentiels",

@@ -6888,8 +6888,13 @@
       {
         "visibleIndex": 10,
         "dataField": "eanProduitClient",
-        "width": 140,
-        "cssClass": "no-padding text-align-center",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "codeInterneProduitClient",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
