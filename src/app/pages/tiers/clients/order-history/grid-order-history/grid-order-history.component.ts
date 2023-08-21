@@ -201,9 +201,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     const filter = [
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
-      [`ordre.${dateType}`, ">=", this.dateManagementService.startOfDay(values.dateMin)],
+      [`ordre.${dateType}`, ">=", values.dateMin],
       "and",
-      [`ordre.${dateType}`, "<=", this.dateManagementService.endOfDay(values.dateMax)],
+      [`ordre.${dateType}`, "<=", values.dateMax],
       "and",
       [[`nombreColisCommandes`, ">", 0], "or", [`nombreColisExpedies`, ">", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
 
