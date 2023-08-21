@@ -833,16 +833,18 @@ export class GridCommandesComponent
       const finalRows = this.grid.instance.getVisibleRows().length - rowsToDelete.length;
       rowsToDelete.map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
       this.grid.instance.saveEditData();
+      this.grid.instance.beginCustomLoading("");
       // Preventing reindexing before all rows are removed
       let secureLoop = 0;
       const saveInterval = setInterval(() => {
         secureLoop++;
         this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
-        if (!this.lastingRows || secureLoop === 300) {
+        if (!this.lastingRows || secureLoop === 500) {
           clearInterval(saveInterval);
           if (finalRows) {
             setTimeout(() => {
               this.reindexRows();
+              this.grid.instance.endCustomLoading();
               this.grid.instance.refresh();
             }, 2100);
           }

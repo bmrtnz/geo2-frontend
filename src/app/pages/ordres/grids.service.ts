@@ -35,7 +35,7 @@ export class GridsService {
    */
   public register(id: OrdreGridId, component: DxDataGridComponent, order?) {
     const key = id + (order ?? "");
-    this.grids[id + (order ?? "")] = component;
+    this.grids[key] = component;
   }
 
   /**
