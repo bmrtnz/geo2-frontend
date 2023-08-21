@@ -199,14 +199,16 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (this.switchLivraison?.value) dateType = "dateLivraisonPrevue";
 
     const filter = [
+      ["ordre.societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
       [`ordre.${dateType}`, ">=", values.dateMin],
       "and",
       [`ordre.${dateType}`, "<=", values.dateMax],
-      "and",
-      [[`nombreColisCommandes`, ">", 0], "or", [`nombreColisExpedies`, ">", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
-
+      // "and",
+      // [[`nombreColisCommandes`, "<>", 0], "and", [`nombreColisExpedies`, "<>", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
+      // Lignes commentées 21-08-2023 suite volonté BW d'avoir accès ouvertures de calibre (0 colis exp, 0 colis cdés)
     ];
     if (values.client?.id) {
       filter.push("and", ["ordre.client.id", "=", values.client.id]);
