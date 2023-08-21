@@ -841,12 +841,14 @@ export class GridCommandesComponent
         this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
         if (!this.lastingRows || secureLoop === 500) {
           clearInterval(saveInterval);
+          this.grid.instance.endCustomLoading();
           if (finalRows) {
             setTimeout(() => {
               this.reindexRows();
-              this.grid.instance.endCustomLoading();
               this.grid.instance.refresh();
             }, 2100);
+          } else {
+            this.grid.instance.refresh();
           }
         }
       }, 100);
