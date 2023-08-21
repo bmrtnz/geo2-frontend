@@ -35,8 +35,7 @@ export class GridsService {
    */
   public register(id: OrdreGridId, component: DxDataGridComponent, order?) {
     const key = id + (order ?? "");
-    this.grids[key] = component;
-    console.log("Register : ", key)
+    this.grids[id + (order ?? "")] = component;
   }
 
   /**
@@ -45,7 +44,6 @@ export class GridsService {
    */
   public reload(ids: OrdreGridId[], order?) {
     ids.map((id) => this.grids[id + (order ?? "")]?.instance.refresh());
-    (ids.map((id) => console.log("Reload :", id + (order ?? ""))));
   }
 
   /**
@@ -79,13 +77,9 @@ export class GridsService {
       });
   }
 
-  public waitUntilAllGridDataSaved(grid, loader?: boolean) {
-    if (grid?.instance.hasEditData()) {
-      // if (loader)
+  public waitUntilAllGridDataSaved(grid) {
+    if (!grid?.instance.hasEditData()) return Promise.resolve();
 
-    } else {
-      return Promise.resolve();
-    }
     grid.instance.saveEditData();
     return new Promise<void>((resolve, reject) => {
       // Wait until grid has been totally saved

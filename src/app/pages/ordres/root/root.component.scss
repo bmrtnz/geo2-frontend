@@ -84,13 +84,30 @@
     padding: 0;
     min-width: 0 !important;
 
+    .infinite-rotate {
+      animation-name: spin;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      pointer-events: none;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .dx-template-wrapper.dx-tab-content {
       padding: 12px 15px 11px 11px;
       margin: 0 1px;
 
       &:hover {
         i.dx-icon-close {
-          color: #fe3d2c;
           visibility: visible;
 
           &+.dx-tab-status-dot {
@@ -166,7 +183,11 @@
       top: -2px;
       right: -2px;
       font-size: 17px;
-      visibility: hidden;
+      color: #fe3d2c;
+
+      &:not(.infinite-rotate) {
+        visibility: hidden;
+      }
     }
 
     .dx-tab-text>i {

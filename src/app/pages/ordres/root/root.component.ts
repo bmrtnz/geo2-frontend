@@ -447,11 +447,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Save before closing
     // Seen with Bruno 18-08-2023 : no confirmation required
-    await this.gridsService
-      .waitUntilAllGridDataSaved(this.gridsService.get("Commande", (event.target as HTMLElement).parentElement.dataset.itemId));
+    const closeTabBtn = (event.target as HTMLElement);
+    const pullID = closeTabBtn.parentElement.dataset.itemId;
+    const grid = this.gridsService.get("Commande", pullID);
+    if (grid?.instance.hasEditData()) closeTabBtn.classList.add("infinite-rotate");
+    await this.gridsService.waitUntilAllGridDataSaved(grid);
 
     this.selectTab(TAB_LOAD_ID);
-    const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
     const indicateur = this.route.snapshot.queryParamMap
       .getAll(TabType.Indicator)
       .filter((param) => param !== pullID);
