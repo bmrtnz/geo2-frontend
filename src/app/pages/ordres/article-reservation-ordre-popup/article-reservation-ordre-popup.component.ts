@@ -61,8 +61,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     private cd: ChangeDetectorRef,
     private gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
-    private currentCompanyService: CurrentCompanyService,
-    private grids: GridsService
+    private currentCompanyService: CurrentCompanyService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -269,7 +268,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
       ),
       finalize(() => {
         this.whenApplied.emit();
-        this.grids.reload("SyntheseExpeditions", "DetailExpeditions");
+        this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordreLigne.ordre));
       })
     );
   }

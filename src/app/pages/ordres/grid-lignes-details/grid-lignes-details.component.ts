@@ -104,7 +104,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     ]);
     this.achatUniteSource = this.venteUniteSource;
     this.enableFilters();
-    this.gridsService.register("DetailExpeditions", this.datagrid);
+    this.gridsService.register("DetailExpeditions", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
     this.gridExpFiltered = false;
   }
 
@@ -142,12 +142,12 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -375,8 +375,8 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     const statut = this.ordre.facture
       ? "facturé"
       : this.ordre.bonAFacturer
-      ? "bon à facturer"
-      : "";
+        ? "bon à facturer"
+        : "";
     if (statut) {
       notify(
         "Ordre " + statut + ", la modification est impossible...",

@@ -42,8 +42,7 @@ import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-
   templateUrl: "./grid-ordre-ligne-logistique.component.html",
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
-export class GridOrdreLigneLogistiqueComponent
-  implements OnChanges, AfterViewInit {
+export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -94,10 +93,8 @@ export class GridOrdreLigneLogistiqueComponent
 
   ngOnChanges(changes: SimpleChanges) {
     this.enableFilters();
-  }
-
-  ngAfterViewInit() {
-    this.gridsService.register("SyntheseExpeditions", this.datagrid);
+    if (this.datagrid && this.ordre)
+      this.gridsService.register("SyntheseExpeditions", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {
@@ -238,7 +235,7 @@ export class GridOrdreLigneLogistiqueComponent
         this.refreshGridLigneDetail.emit(true);
         // Comptabilisation des retraits
         this.ordresService.fChgtQteArtRet(this.ordre.id).subscribe({
-          next: () => this.gridsService.reload("Commande"),
+          next: () => this.gridsService.reload(["Commande"], this.gridsService.orderIdentifier(this.ordre)),
           error: (error: Error) => {
             notify(
               error.message.replace(

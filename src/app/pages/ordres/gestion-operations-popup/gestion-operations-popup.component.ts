@@ -283,7 +283,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         next: (dataMutated) => {
           this.quitPopup();
           this.whenUpdated.emit(dataMutated);
-          this.gridsService.reload("LitigeLigne");
+          this.gridsService.reload(["LitigeLigne"]);
         },
         error: (err: Error) => notify(err.message, "ERROR", 7000),
       });

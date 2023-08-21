@@ -26,31 +26,42 @@ type OrdreGridId =
  */
 @Injectable()
 export class GridsService {
-  private grids: { [key: number]: DxDataGridComponent } = {};
+  private grids: { [key: string]: DxDataGridComponent } = {};
 
   /**
    * Register grid instance for future actions
    * @param id Grid identifier
    * @param component Grid component
    */
-  public register(id: OrdreGridId, component: DxDataGridComponent) {
-    this.grids[id] = component;
+  public register(id: OrdreGridId, component: DxDataGridComponent, order?) {
+    const key = id + (order ?? "");
+    this.grids[key] = component;
+    console.log("Register : ", key)
   }
 
   /**
    * Call "refresh" on each provided grid
    * @param ids List of grid identifiers
    */
-  public reload(...ids: OrdreGridId[]) {
-    ids.forEach((id) => this.grids[id]?.instance.refresh());
+  public reload(ids: OrdreGridId[], order?) {
+    ids.map((id) => this.grids[id + (order ?? "")]?.instance.refresh());
+    (ids.map((id) => console.log("Reload :", id + (order ?? ""))));
   }
 
   /**
    * Return the grid component if it is registered, undefined otherwise
    * @param id Grid identifier
    */
-  public get(id: OrdreGridId) {
-    return this.grids[id] as DxDataGridComponent;
+  public get(id: OrdreGridId, order?) {
+    return this.grids[id + (order ?? "")] as DxDataGridComponent;
+  }
+
+  /**
+   * Return identifier like '22-567896' from ordre
+   */
+  orderIdentifier(ordre) {
+    if (!ordre) return null;
+    return `${ordre.campagne?.id}-${ordre.numero}`;
   }
 
   /**
@@ -68,8 +79,13 @@ export class GridsService {
       });
   }
 
-  public waitUntilAllGridDataSaved(grid) {
-    if (!grid || !grid.instance.hasEditData()) return Promise.resolve();
+  public waitUntilAllGridDataSaved(grid, loader?: boolean) {
+    if (grid?.instance.hasEditData()) {
+      // if (loader)
+
+    } else {
+      return Promise.resolve();
+    }
     grid.instance.saveEditData();
     return new Promise<void>((resolve, reject) => {
       // Wait until grid has been totally saved

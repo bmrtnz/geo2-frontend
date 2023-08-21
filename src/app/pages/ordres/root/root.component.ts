@@ -55,6 +55,7 @@ import {
   tap,
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 let self;
 
@@ -243,6 +244,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private localizationService: LocalizationService,
     private ordresService: OrdresService,
     private functionsService: FunctionsService,
+    private gridsService: GridsService,
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
@@ -439,9 +441,15 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onTabCloseClick(event: MouseEvent) {
+  async onTabCloseClick(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    // Save before closing
+    // Seen with Bruno 18-08-2023 : no confirmation required
+    await this.gridsService
+      .waitUntilAllGridDataSaved(this.gridsService.get("Commande", (event.target as HTMLElement).parentElement.dataset.itemId));
+
     this.selectTab(TAB_LOAD_ID);
     const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
     const indicateur = this.route.snapshot.queryParamMap

@@ -194,7 +194,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("Frais", this.datagrid);
+    this.gridsService.register("Frais", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {

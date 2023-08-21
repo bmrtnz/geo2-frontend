@@ -250,7 +250,7 @@ export class GridCommandesComponent
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("Commande", this.grid);
+    this.gridsService.register("Commande", this.grid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   displaySummaryFormat(data) {
@@ -297,7 +297,7 @@ export class GridCommandesComponent
             )
             .subscribe({
               error: ({ message }: Error) => console.log(message),
-              complete: () => this.gridsService.reload("OrdreMarge"),
+              complete: () => this.gridsService.reload(["OrdreMarge"], this.gridsService.orderIdentifier(this.ordre)),
             });
         }
       }, 100);
@@ -317,7 +317,7 @@ export class GridCommandesComponent
     this.transporteurChange.emit();
     setTimeout(() => {
       this.reindexRows();
-      this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+      this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
     }, 1000);
   }
 
@@ -357,7 +357,7 @@ export class GridCommandesComponent
         .then(() => store.remove(change.key))
         .then(() => {
           store.push([change]);
-          this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+          this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
           setTimeout(() => this.reindexRows(), 200);
           return this.handleMutations();
         });
@@ -422,9 +422,10 @@ export class GridCommandesComponent
             complete: () => {
               rsv();
               if (name === "fournisseur")
-                this.gridsService.reload(
+                this.gridsService.reload([
                   "SyntheseExpeditions",
                   "DetailExpeditions"
+                ], this.gridsService.orderIdentifier(this.ordre)
                 );
               this.handleMutations();
               if (["fournisseur"].includes(name)) this.transporteurChange.emit();

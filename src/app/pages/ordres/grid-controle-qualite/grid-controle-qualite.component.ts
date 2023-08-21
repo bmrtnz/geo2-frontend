@@ -53,7 +53,7 @@ export class GridControleQualiteComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("CQ", this.dataGrid);
+    this.gridsService.register("CQ", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   enableFilters() {
