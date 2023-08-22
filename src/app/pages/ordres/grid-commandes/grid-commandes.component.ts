@@ -158,6 +158,8 @@ export class GridCommandesComponent
   public fournisseursDataSource: DataSource;
   public embalExp: string[];
   private lastingRows: number;
+  private reindexButton: any;
+
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -193,6 +195,9 @@ export class GridCommandesComponent
             onClick: () => {
               this.reindexRows();
               this.grid.instance.refresh();
+            },
+            onInitialized: (args: any) => {
+              this.reindexButton = args.component;
             },
           },
         },
@@ -230,6 +235,7 @@ export class GridCommandesComponent
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
     this.grid.instance.deselectAll();
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
+    this.reindexButton.option("disabled", !this.gridRowsTotal);
     // Register all distinct fournisseurs (embal/exp)
     this.embalExp = [];
     if (this.grid.dataSource) {
