@@ -469,6 +469,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   closeEveryOrdre() {
+    this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(
       TabType.Indicator
     );
