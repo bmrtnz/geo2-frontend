@@ -4701,6 +4701,13 @@
     "columns": [
       {
         "visibleIndex": 0,
+        "dataField": "id",
+        "width": 80,
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
         "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "110",
@@ -4787,12 +4794,6 @@
         "allowEditing": false,
         "width": "100",
         "visible": true
-      },
-      {
-        "visibleIndex": 20,
-        "dataField": "id",
-        "allowEditing": false,
-        "visible": false
       },
       {
         "dataField": "typeTiers.id",
