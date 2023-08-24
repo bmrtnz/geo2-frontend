@@ -1070,6 +1070,39 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public ofControleQteArt = (
+    numeroCommandeEDI: number,
+    codeCampagne: string,
+  ) =>
+    this.apollo.query<{
+      ofControleQteArt: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofControleQteArt",
+              body: functionBody,
+              params: [
+                { name: "numeroCommandeEDI", value: "numeroCommandeEDI", isVariable: true },
+                { name: "codeCampagne", value: "codeCampagne", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "numeroCommandeEDI", type: "BigDecimal", isOptionnal: false },
+            { name: "codeCampagne", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        numeroCommandeEDI,
+        codeCampagne,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];
