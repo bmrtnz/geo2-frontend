@@ -150,6 +150,7 @@ export enum Grid {
   PackingList = "packing-list",
   SelectionLignesCdeLitige = "selection-lignes-litige",
   LitigeLignesLot = "litige-lignes-lot",
+  OrdresRegroupement = "ordres-regroupement",
 }
 
 const extraConfigurations = [

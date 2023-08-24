@@ -8483,5 +8483,79 @@
         "visible": false
       }
     ]
+  },
+  "ordres-regroupement": {
+    "columns": [
+      {
+        "visibleIndex": 0,
+        "dataField": "codeChargement",
+        "visible": true
+      },
+      {
+        "visibleIndex":1,
+        "dataField": "ordreOrigine",
+        "visible": true
+      },
+      {
+        "visibleIndex": 2,
+        "dataField": "raisonSociale",
+        "visible": true
+      },
+      {
+        "visibleIndex": 3,
+        "dataField": "ville",
+        "visible": true
+      },
+      {
+        "visibleIndex": 4,
+        "dataField": "station",
+        "visible": true
+      },
+      {
+        "visibleIndex": 5,
+        "dataField": "refArticleOrigine",
+        "visible": true
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "descriptionVariete",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "poidsNetCommande",
+        "visible": true
+      },
+      {
+        "visibleIndex": 8,
+        "dataField": "nombrePalettesCommandees",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "nombreColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 10,
+        "dataField": "id",
+        "visible": false
+      },
+      {
+        "visibleIndex": 12,
+        "dataField": "transporteurCode",
+        "visible": false
+      },
+      {
+        "visibleIndex": 13,
+        "dataField": "dateDepartPrevue",
+        "visible": false
+      },
+      {
+        "visibleIndex": 14,
+        "dataField": "dateLivraisonPrevue",
+        "visible": false
+      }
+    ]
   }
 }
