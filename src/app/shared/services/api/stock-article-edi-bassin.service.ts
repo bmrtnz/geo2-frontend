@@ -73,4 +73,13 @@ export class StockArticleEdiBassinService extends ApiService {
     });
   }
 
+  saveAll(body: Set<string>, allStockArticleEdiBassin: Array<Partial<StockArticleEdiBassin>>) {
+    return this.apollo.mutate<{
+      saveAllStockArticleEdiBassin: Array<Partial<StockArticleEdiBassin>>;
+    }>({
+      mutation: gql(this.buildSaveAllGraph([...body])),
+      variables: { allStockArticleEdiBassin },
+    });
+  }
+
 }
