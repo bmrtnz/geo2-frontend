@@ -121,6 +121,39 @@ export class GridStockComponent implements OnInit {
   ];
   public customSummaryFields = ["quantiteHebdomadaire"];
 
+  readonly decriptionFields = new Set([
+    "id",
+    "description",
+    "referencesClient.client.code",
+    "referencesClient.client.secteur.id",
+    "referencesClient.client.raisonSocial",
+    "referencesClient.client.ville",
+    "matierePremiere.variete.description",
+    "matierePremiere.origine.description",
+    "cahierDesCharge.categorie.description",
+    "cahierDesCharge.coloration.description",
+    "cahierDesCharge.sucre.description",
+    "cahierDesCharge.penetro.description",
+    "cahierDesCharge.cirage.description",
+    "cahierDesCharge.rangement.description",
+    "emballage.emballage.descriptionTechnique",
+    "emballage.emballage.idSymbolique",
+    "emballage.conditionSpecial.description",
+    "emballage.alveole.description",
+    "normalisation.etiquetteEvenementielle.description",
+    "normalisation.etiquetteColis.description",
+    "normalisation.etiquetteUc.description",
+    "normalisation.gtinUc",
+    "normalisation.gtinColis",
+    "normalisation.produitMdd",
+    "normalisation.articleClient",
+    "normalisation.calibreMarquage.description",
+    "normalisation.stickeur.description",
+    "gtinUcBlueWhale",
+    "gtinColisBlueWhale",
+    "instructionStation",
+  ])
+
   readonly inheritedFields = new Set([
     "id",
     "articleID",
@@ -420,38 +453,7 @@ export class GridStockComponent implements OnInit {
     this.articlesService
       .getOne_v2(
         this.articleLigneId,
-        new Set([
-          "id",
-          "description",
-          "referencesClient.client.code",
-          "referencesClient.client.secteur.id",
-          "referencesClient.client.raisonSocial",
-          "referencesClient.client.ville",
-          "matierePremiere.variete.description",
-          "matierePremiere.origine.description",
-          "cahierDesCharge.categorie.description",
-          "cahierDesCharge.coloration.description",
-          "cahierDesCharge.sucre.description",
-          "cahierDesCharge.penetro.description",
-          "cahierDesCharge.cirage.description",
-          "cahierDesCharge.rangement.description",
-          "emballage.emballage.descriptionTechnique",
-          "emballage.emballage.idSymbolique",
-          "emballage.conditionSpecial.description",
-          "emballage.alveole.description",
-          "normalisation.etiquetteEvenementielle.description",
-          "normalisation.etiquetteColis.description",
-          "normalisation.etiquetteUc.description",
-          "normalisation.gtinUc",
-          "normalisation.gtinColis",
-          "normalisation.produitMdd",
-          "normalisation.articleClient",
-          "normalisation.calibreMarquage.description",
-          "normalisation.stickeur.description",
-          "gtinUcBlueWhale",
-          "gtinColisBlueWhale",
-          "instructionStation",
-        ])
+        this.decriptionFields
       )
       .subscribe((res) => {
         this.article = res.data.article;
@@ -470,7 +472,10 @@ export class GridStockComponent implements OnInit {
   openReservationPopup(data) {
     if (!data?.articleID) return;
     this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe((res) => {
+    this.articlesService.getOne_v2(
+      data.articleID,
+      this.decriptionFields
+    ).subscribe((res) => {
       this.article = res.data.article;
       this.optionPopup.visible = true;
     });
@@ -485,7 +490,10 @@ export class GridStockComponent implements OnInit {
     info = info[0];
     if (!info?.articleID) return;
     this.ligneStockArticle = info;
-    this.articlesService.getOne(info.articleID).subscribe((res) => {
+    this.articlesService.getOne_v2(
+      info.articleID,
+      this.decriptionFields
+    ).subscribe((res) => {
       this.article = res.data.article;
       this.recapPopup.visible = true;
     });
@@ -524,6 +532,7 @@ export class GridStockComponent implements OnInit {
         e.cellElement.textContent
       ) {
         const data = e.data.items ?? e.data.collapsedItems;
+        if (!data?.length) return;
         if (data[0].origineID && data[0].origineID != "F") {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
