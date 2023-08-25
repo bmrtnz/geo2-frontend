@@ -220,6 +220,7 @@ $left-panel-btn-height: 44px;
 ::ng-deep .form-scrollTo-buttons-container {
   position: fixed;
   top: 32px;
+  padding-left: 3px;
   width: calc($left-panel-width + 10px);
   overflow: hidden;
   transition: .25s;
