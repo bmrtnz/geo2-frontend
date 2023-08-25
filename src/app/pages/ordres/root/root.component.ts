@@ -479,11 +479,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   closeEveryOrdre() {
+    this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(
       TabType.Indicator
     );
+    let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
 
-    const ordre = [];
+    // Checking if grids have unsaved data
+    ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
+
+    ordre = [];
     const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
