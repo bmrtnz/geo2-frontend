@@ -3,9 +3,9 @@ import Ordre from "./ordre.model";
 
 @ModelName("OrdreRegroupement")
 export class OrdreRegroupement extends Model {
-  @Field({ asKey: true }) id: string;
   @Field() codeChargement: string;
-  @Field() ordreOrigine: string;
+  @Field() ordreRegroupement: string;
+  @Field({ asKey: true }) ordreOrigine: string;
   @Field() raisonSocial: string;
   @Field() ville: string;
   @Field() refArticleOrigine: string;
@@ -19,7 +19,7 @@ export class OrdreRegroupement extends Model {
   @Field({ dataType: "localdate" }) dateLivraisonPrevue: string;
   @Field() transporteurCode: string;
   @Field() station: string;
-  @Field() numero: string;
+  @Field({ asKey: true }) numero: string;
 }
 
 export default OrdreRegroupement;

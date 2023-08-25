@@ -8487,64 +8487,65 @@
   "ordres-regroupement": {
     "columns": [
       {
-        "visibleIndex": 0,
+        "visibleIndex": 1,
         "dataField": "codeChargement",
         "visible": true
       },
       {
-        "visibleIndex":1,
+        "visibleIndex":2,
         "dataField": "ordreOrigine",
-        "visible": true
+        "visible": true,
+        "groupIndex": 1
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 3,
         "dataField": "raisonSociale",
         "visible": true
       },
       {
-        "visibleIndex": 3,
+        "visibleIndex": 4,
         "dataField": "ville",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 5,
         "dataField": "station",
         "visible": true
       },
       {
-        "visibleIndex": 5,
+        "visibleIndex": 6,
         "dataField": "refArticleOrigine",
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 7,
         "dataField": "descriptionVariete",
         "visible": true
       },
       {
-        "visibleIndex": 7,
-        "dataField": "poidsNetCommande",
-        "visible": true
-      },
-      {
         "visibleIndex": 8,
-        "dataField": "nombrePalettesCommandees",
+        "dataField": "description",
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "nombreColis",
+        "dataField": "nombrePalettesCommandees",
         "visible": true
       },
       {
         "visibleIndex": 10,
-        "dataField": "id",
-        "visible": false
+        "dataField": "nombreColis",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "ordreRegroupement",
+        "visible": false,
+        "groupIndex": 0
       },
       {
         "visibleIndex": 12,
-        "dataField": "transporteurCode",
-        "visible": false
+        "dataField": "transporteurCode"
       },
       {
         "visibleIndex": 13,
@@ -8554,6 +8555,11 @@
       {
         "visibleIndex": 14,
         "dataField": "dateLivraisonPrevue",
+        "visible": false
+      },
+      {
+        "visibleIndex": 15,
+        "dataField": "poidsNetCommande",
         "visible": false
       }
     ]
