@@ -22,6 +22,7 @@
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
   (onKeyDown)="onKeyDown($event)"
 >
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-paging [enabled]="false"></dxo-paging>
   <dxo-export fileName="Lignes de commande"></dxo-export>
   <dxo-editing
