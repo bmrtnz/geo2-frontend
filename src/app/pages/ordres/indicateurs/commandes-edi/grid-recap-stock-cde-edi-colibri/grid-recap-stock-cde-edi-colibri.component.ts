@@ -57,6 +57,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     "fournisseur.id",
     "proprietaire.id",
     "proprietaire.listeExpediteurs",
+    "choix",
   ];
 
   constructor(
@@ -111,6 +112,9 @@ export class GridRecapStockCdeEdiColibriComponent {
 
       // Hiding checkboxes when there's no fournisseur assigned
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
+
+      // Pre select row when "choix" value is true
+      if (e.data.choix) this.datagrid.instance.selectRows([e.data.id], true);
     }
   }
 

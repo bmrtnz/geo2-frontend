@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import {
   Component,
   EventEmitter,
@@ -8,8 +9,10 @@ import {
 } from "@angular/core";
 import { EdiOrdre } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
+import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
@@ -17,6 +20,8 @@ import {
   DxPopupComponent,
   DxScrollViewComponent,
 } from "devextreme-angular";
+import notify from "devextreme/ui/notify";
+import { concatMap, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
 
 
@@ -48,6 +53,13 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
 
   constructor(
     private gridUtilsService: GridUtilsService,
+    private functionsService: FunctionsService,
+    private currentCompanyService: CurrentCompanyService,
+    private stockArticleEdiBassinService: StockArticleEdiBassinService,
+    private ordresEdiService: OrdresEdiService,
+    private datePipe: DatePipe,
+    private authService: AuthService,
+    private localization: LocalizationService,
     private localizeService: LocalizationService
   ) { }
 
@@ -107,10 +119,39 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   createOrder() {
-    //////////////////////////////////////////////////////////////////
-    // Implémentation
-    // Création ordre
-    //////////////////////////////////////////////////////////////////
+    const rows = this.gridRecap.datagrid.instance.getVisibleRows();
+    if (!rows.length) return;
+    const updatedRows = rows.map(row => ({
+      id: row.data.id,
+      choix: row.isSelected,
+    }));
+    this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows).pipe(
+      concatMap(_res => forkJoin([this.functionsService.ofControleSelArt, this.functionsService.ofControleQteArt]
+        .map(f => f(this.refOrdreEDI, this.currentCompanyService.getCompany().campagne.id)))),
+      concatMap(() => this.ordresEdiService.getOne(this.refOrdreEDI, new Set([
+        "entrepot.id",
+        "client.id",
+        "dateLivraison",
+        "referenceCommandeClient",
+      ]))),
+      concatMap(res => this.ordresEdiService.fCreeOrdresEdi(
+        this.currentCompanyService.getCompany().id,
+        res.data.ediOrdre.entrepot.id,
+        this.datePipe.transform(res.data.ediOrdre.dateLivraison, "dd/MM/yyyy"),
+        this.currentCompanyService.getCompany().campagne.id,
+        res.data.ediOrdre.referenceCommandeClient,
+        res.data.ediOrdre.client.id,
+        this.refOrdreEDI.toFixed(),
+        this.authService.currentUser.nomUtilisateur
+      )),
+    )
+      .subscribe({
+        next: res => {
+          const text = this.localization.localize("ordre-cree", res.data.fCreeOrdresEdi.data?.ls_nordre_tot);
+          notify(text, "success", 3000);
+        },
+        error: (err: Error) => notify(err.message, "error", 3000),
+      });
   }
 
   private messageFormat(mess) {
