@@ -47,6 +47,7 @@ import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.servic
 import { GridsService } from "app/pages/ordres/grids.service";
 import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 
 enum InputField {
   clientCode = "client",
@@ -136,6 +137,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private dateMgtService: DateManagementService,
     public authService: AuthService,
     public functionsService: FunctionsService,
+    private stockArticleEdiBassinService: StockArticleEdiBassinService,
   ) {
     this.typesDates = [
       {
@@ -429,27 +431,30 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         id: commandeEdi.refEdiOrdre,
         entrepot: { id: commandeEdi.entrepot.id },
       },
-    }).pipe(
-      concatMap(res => this.functionsService.ofReadOrdEdiColibri(
-        parseInt(commandeEdi.refEdiOrdre),
-        this.currentCompanyService.getCompany().campagne.id,
-        this.formGroup.get("filtreStock").value,
-      )),
-    ).subscribe({
-      error: (err: Error) => {
-        this.showHideLoader.emit(false);
-        notify(
-          this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
-          , "error",
-          10000
-        )
-      },
-      next: () => {
-        this.showHideLoader.emit(false);
-        this.recapStockPopup.visible = true;
-        this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
-      }
-    });
+    })
+      .pipe(
+        concatMap(() => this.stockArticleEdiBassinService
+          .deleteAllByOrdreEdiId(parseInt(commandeEdi.refEdiOrdre))),
+        concatMap(res => this.functionsService.ofReadOrdEdiColibri(
+          parseInt(commandeEdi.refEdiOrdre),
+          this.currentCompanyService.getCompany().campagne.id,
+          this.formGroup.get("filtreStock").value,
+        )),
+      ).subscribe({
+        error: (err: Error) => {
+          this.showHideLoader.emit(false);
+          notify(
+            this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
+            , "error",
+            10000
+          )
+        },
+        next: () => {
+          this.showHideLoader.emit(false);
+          this.recapStockPopup.visible = true;
+          this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
+        }
+      });
   }
 
   OnClickModifyEdiButton(data) {

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
+import { EdiOrdre } from "app/shared/models";
 import StockArticleEdiBassin from "app/shared/models/stock-article-edi-bassin.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
@@ -79,6 +80,33 @@ export class StockArticleEdiBassinService extends ApiService {
     }>({
       mutation: gql(this.buildSaveAllGraph([...body])),
       variables: { allStockArticleEdiBassin },
+    });
+  }
+
+  deleteAllByOrdreEdiId(ordreEdiId: EdiOrdre["id"]) {
+    return this.apollo.mutate<{
+      deleteAllByOrdreEdiId: void;
+    }>({
+      mutation: gql(ApiService.buildGraph("mutation", [
+        {
+          name: "deleteAllByOrdreEdiId",
+          params: [
+            {
+              name: `ordreEdiId`,
+              value: `ordreEdiId`,
+              isVariable: true,
+            },
+          ],
+        },
+      ],
+        [
+          {
+            name: `ordreEdiId`,
+            type: `BigDecimal`,
+            isOptionnal: false,
+          },
+        ])),
+      variables: { ordreEdiId },
     });
   }
 
