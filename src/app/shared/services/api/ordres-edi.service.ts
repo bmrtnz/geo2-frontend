@@ -17,6 +17,15 @@ export class OrdresEdiService extends ApiService {
     public apollo: Apollo
   ) {
     super(apollo, EdiOrdre);
+    this.gqlKeyType = "BigDecimal";
+  }
+
+  getOne(id: EdiOrdre["id"], columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ ediOrdre: EdiOrdre }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      })
   }
 
   /**
