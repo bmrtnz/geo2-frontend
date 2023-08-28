@@ -128,14 +128,20 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows).pipe(
       concatMap(_res => forkJoin([this.functionsService.ofControleSelArt, this.functionsService.ofControleQteArt]
         .map(f => f(this.refOrdreEDI, this.currentCompanyService.getCompany().campagne.id)))),
-      concatMap(() => this.ordresEdiService.fCreeOrdresEdi(
+      concatMap(() => this.ordresEdiService.getOne(this.refOrdreEDI, new Set([
+        "entrepot.id",
+        "client.id",
+        "dateLivraison",
+        "referenceCommandeClient",
+      ]))),
+      concatMap(res => this.ordresEdiService.fCreeOrdresEdi(
         this.currentCompanyService.getCompany().id,
-        rows[0].data.entrepot.id,
-        this.datePipe.transform(rows[0].data.dateLivraison, "dd/MM/yyyy"),
+        res.data.ediOrdre.entrepot.id,
+        this.datePipe.transform(res.data.ediOrdre.dateLivraison, "dd/MM/yyyy"),
         this.currentCompanyService.getCompany().campagne.id,
-        rows[0].data.refCmdClient,
-        rows[0].data.client.id,
-        rows[0].data.refEdiOrdre,
+        res.data.ediOrdre.referenceCommandeClient,
+        res.data.ediOrdre.client.id,
+        this.refOrdreEDI.toFixed(),
         this.authService.currentUser.nomUtilisateur
       )),
     )
