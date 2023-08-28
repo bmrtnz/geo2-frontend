@@ -274,7 +274,8 @@ export class GridCommandesComponent
       // Keep the setTimeout function in place!!!
       // It seems that not everything's really ready when event is triggered
       // Conclusion => without a timeOut, major risk of unsaved data!
-      return setTimeout(() => this.grid.instance.saveEditData(), 100);
+      if (this.grid.instance.hasEditData())
+        return setTimeout(() => this.grid.instance.saveEditData(), 100);
     }
   }
 
