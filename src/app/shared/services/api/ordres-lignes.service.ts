@@ -498,42 +498,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
-  public updateField(
-    fieldName: string,
-    value: any,
-    id: string,
-    socCode: string,
-    body: string[]
-  ) {
-    return this.apollo.mutate<{ updateField: Partial<OrdreLigne> }>({
-      mutation: gql(
-        ApiService.buildGraph(
-          "mutation",
-          [
-            {
-              name: "updateField",
-              body,
-              params: [
-                { name: "fieldName", value: "fieldName", isVariable: true },
-                { name: "value", value: "value", isVariable: true },
-                { name: "id", value: "id", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "fieldName", type: "String", isOptionnal: false },
-            { name: "value", type: "ObjectScalar", isOptionnal: true },
-            { name: "id", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { fieldName, value, id, socCode },
-      fetchPolicy: "network-only",
-    });
-  }
-
   public fGetInfoResa(orlRef: string) {
     return this.apollo.query<{
       fGetInfoResa: FunctionResponse<{

@@ -259,13 +259,12 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
         return null;
       }),
       concatMap((indicateurResa) =>
-        this.ordreLignesService.updateField(
-          "nombreReservationsSurStock",
-          indicateurResa,
-          this.ordreLigneInfo.id,
-          this.currentCompanyService.getCompany().id,
-          ["id", "nombreReservationsSurStock"]
-        )
+        this.ordreLignesService.save_v2(["id", "nombreReservationsSurStock"], {
+          ordreLigne: {
+            id: this.ordreLigneInfo.id,
+            nombreReservationsSurStock: indicateurResa,
+          }
+        })
       ),
       finalize(() => {
         this.whenApplied.emit();
