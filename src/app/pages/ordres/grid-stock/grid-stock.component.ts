@@ -494,7 +494,7 @@ export class GridStockComponent implements OnInit {
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
-    this.gridsService.reload("SyntheseExpeditions");
+    this.gridsService.reload(["SyntheseExpeditions"], this.gridsService.orderIdentifier(this.ordre));
   }
 
   onCellClick(e) {

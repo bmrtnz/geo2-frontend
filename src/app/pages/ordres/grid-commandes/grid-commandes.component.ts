@@ -133,7 +133,7 @@ export class GridCommandesComponent
   public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
 
-  @Input() ordreID: string;
+  @Input() ordre: Partial<Ordre>;
   @Input() venteACommission: boolean;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
@@ -143,7 +143,6 @@ export class GridCommandesComponent
   // legacy features properties
   public certifsMD: any;
   public certifMDDS: DataSource;
-  public ordre: Partial<Ordre>;
   public certificationText: string;
   public originText: string;
   public lastRowFocused: boolean;
@@ -159,6 +158,8 @@ export class GridCommandesComponent
   public fournisseursDataSource: DataSource;
   public embalExp: string[];
   private lastingRows: number;
+  private reindexButton: any;
+
 
   @Output() public ordreLigne: OrdreLigne;
   @Output() swapRowArticle = new EventEmitter();
@@ -195,6 +196,9 @@ export class GridCommandesComponent
               this.reindexRows();
               this.grid.instance.refresh();
             },
+            onInitialized: (args: any) => {
+              this.reindexButton = args.component;
+            },
           },
         },
       ],
@@ -205,7 +209,7 @@ export class GridCommandesComponent
       .pipe(filter((params) => params.has("ordre_id")))
       .subscribe({
         next: (params) => {
-          this.ordreID = params.get("ordre_id");
+          this.ordre.id = params.get("ordre_id");
           this.updateRestrictions();
         },
       });
@@ -231,6 +235,7 @@ export class GridCommandesComponent
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
     this.grid.instance.deselectAll();
     this.gridRowsTotal = this.grid.instance.getVisibleRows()?.length;
+    this.reindexButton.option("disabled", !this.gridRowsTotal);
     // Register all distinct fournisseurs (embal/exp)
     this.embalExp = [];
     if (this.grid.dataSource) {
@@ -247,11 +252,11 @@ export class GridCommandesComponent
   }
 
   ngOnChanges() {
-    if (this.ordreID) this.updateRestrictions();
+    if (this.ordre?.id) this.updateRestrictions();
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("Commande", this.grid);
+    this.gridsService.register("Commande", this.grid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   displaySummaryFormat(data) {
@@ -294,12 +299,12 @@ export class GridCommandesComponent
           clearInterval(saveInterval);
           this.functionsService
             .fCalculMargePrevi(
-              this.ordreID,
+              this.ordre?.id,
               this.currentCompanyService.getCompany().id
             )
             .subscribe({
               error: ({ message }: Error) => console.log(message),
-              complete: () => this.gridsService.reload("OrdreMarge"),
+              complete: () => this.gridsService.reload(["OrdreMarge"], this.gridsService.orderIdentifier(this.ordre)),
             });
         }
       }, 100);
@@ -319,7 +324,7 @@ export class GridCommandesComponent
     this.transporteurChange.emit();
     setTimeout(() => {
       this.reindexRows();
-      this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+      this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
     }, 1000);
   }
 
@@ -359,7 +364,7 @@ export class GridCommandesComponent
         .then(() => store.remove(change.key))
         .then(() => {
           store.push([change]);
-          this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+          this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
           setTimeout(() => this.reindexRows(), 200);
           return this.handleMutations();
         });
@@ -424,9 +429,10 @@ export class GridCommandesComponent
             complete: () => {
               rsv();
               if (name === "fournisseur")
-                this.gridsService.reload(
+                this.gridsService.reload([
                   "SyntheseExpeditions",
                   "DetailExpeditions"
+                ], this.gridsService.orderIdentifier(this.ordre)
                 );
               this.handleMutations();
               if (["fournisseur"].includes(name)) this.transporteurChange.emit();
@@ -454,7 +460,7 @@ export class GridCommandesComponent
   }
 
   private refreshData(columns: GridColumn[]) {
-    if (this.ordreID)
+    if (this.ordre?.id)
       return of(columns).pipe(
         GridConfiguratorService.getVisible(),
         GridConfiguratorService.getFields(),
@@ -539,7 +545,7 @@ export class GridCommandesComponent
               ...["proprietaireMarchandise.listeExpediteurs"],
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
-              ["ordre.id", "=", this.ordreID],
+              ["ordre.id", "=", this.ordre?.id],
             ])
           )
         )
@@ -547,7 +553,7 @@ export class GridCommandesComponent
   }
 
   private async updateRestrictions() {
-    const isCloture = await this.ordresService.isCloture({ id: this.ordreID });
+    const isCloture = await this.ordresService.isCloture({ id: this.ordre?.id });
     this.allowMutations = !isCloture;
   }
 
@@ -834,18 +840,22 @@ export class GridCommandesComponent
       const finalRows = this.grid.instance.getVisibleRows().length - rowsToDelete.length;
       rowsToDelete.map(k => this.grid.instance.deleteRow(this.grid.instance.getRowIndexByKey(k)))
       this.grid.instance.saveEditData();
+      this.grid.instance.beginCustomLoading("");
       // Preventing reindexing before all rows are removed
       let secureLoop = 0;
       const saveInterval = setInterval(() => {
         secureLoop++;
         this.lastingRows = this.grid.instance.getVisibleRows().length - finalRows;
-        if (!this.lastingRows || secureLoop === 300) {
+        if (!this.lastingRows || secureLoop === 500) {
           clearInterval(saveInterval);
+          this.grid.instance.endCustomLoading();
           if (finalRows) {
             setTimeout(() => {
               this.reindexRows();
               this.grid.instance.refresh();
             }, 2100);
+          } else {
+            this.grid.instance.refresh();
           }
         }
       }, 100);

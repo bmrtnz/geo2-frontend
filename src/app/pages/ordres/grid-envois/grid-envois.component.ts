@@ -64,7 +64,7 @@ export class GridEnvoisComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("Envois", this.dataGrid);
+    this.gridsService.register("Envois", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {

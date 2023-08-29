@@ -53,7 +53,7 @@ export class GridLitigesLignesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gridsService.register("LitigeLigne", this.datagrid);
+    this.gridsService.register("LitigeLigne", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
     this.enableFilters();
   }
 

@@ -179,10 +179,11 @@ export class ActionsDocumentsOrdresComponent {
       .pipe(
         tap((res) => {
           // Some order lines can be deleted
-          this.gridsService.reload(
+          this.gridsService.reload([
             "Commande",
             "SyntheseExpeditions",
             "DetailExpeditions"
+          ], this.gridsService.orderIdentifier(this.ordre)
           );
         }),
         filter((res) => res),

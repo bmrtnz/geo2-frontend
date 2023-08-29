@@ -104,7 +104,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
     ]);
     this.achatUniteSource = this.venteUniteSource;
     this.enableFilters();
-    this.gridsService.register("DetailExpeditions", this.datagrid);
+    this.gridsService.register("DetailExpeditions", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
     this.gridExpFiltered = false;
   }
 

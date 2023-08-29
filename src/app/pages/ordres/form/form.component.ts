@@ -1207,7 +1207,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public async refreshOrder() {
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.refreshHeader();
-    this.gridsService.reload(
+    this.gridsService.reload([
       "Commande",
       "SyntheseExpeditions",
       "DetailExpeditions",
@@ -1220,6 +1220,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "CQ",
       "Commentaires",
       "Log"
+    ], this.gridsService.orderIdentifier(this.ordre)
     );
     this.formLitiges?.loadForm();
   }

@@ -55,6 +55,7 @@ import {
   tap,
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 let self;
 
@@ -243,6 +244,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private localizationService: LocalizationService,
     private ordresService: OrdresService,
     private functionsService: FunctionsService,
+    private gridsService: GridsService,
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
@@ -439,11 +441,19 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onTabCloseClick(event: MouseEvent) {
+  async onTabCloseClick(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    // Save before closing
+    // Seen with Bruno 18-08-2023 : no confirmation required
+    const closeTabBtn = (event.target as HTMLElement);
+    const pullID = closeTabBtn.parentElement.dataset.itemId;
+    const grid = this.gridsService.get("Commande", pullID);
+    if (grid?.instance.hasEditData()) closeTabBtn.classList.add("infinite-rotate");
+    await this.gridsService.waitUntilAllGridDataSaved(grid);
+
     this.selectTab(TAB_LOAD_ID);
-    const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
     const indicateur = this.route.snapshot.queryParamMap
       .getAll(TabType.Indicator)
       .filter((param) => param !== pullID);
@@ -469,11 +479,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   closeEveryOrdre() {
+    this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(
       TabType.Indicator
     );
+    let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
 
-    const ordre = [];
+    // Checking if grids have unsaved data
+    ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
+
+    ordre = [];
     const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>

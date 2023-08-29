@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { TracabiliteLignesService } from "app/shared/services/api/tracabilite-lignes.service";
@@ -20,7 +20,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-detail-palettes.component.html",
   styleUrls: ["./grid-detail-palettes.component.scss"],
 })
-export class GridDetailPalettesComponent implements OnInit {
+export class GridDetailPalettesComponent implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -46,7 +46,7 @@ export class GridDetailPalettesComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("TotauxDetail", this.dataGrid);
+    this.gridsService.register("DetailPalettes", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {

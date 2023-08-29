@@ -307,7 +307,6 @@
                 >
                   <dx-load-panel
                     #loadPanel
-                    shadingColor="rgba(0,0,0,0.4)"
                     [position]="{ of: '#head' }"
                     [visible]="headerSaving || headerRefresh"
                     [showPane]="true"
@@ -1065,7 +1064,7 @@
                   </div>
                   <app-grid-commandes
                     *ngIf="ordre?.id"
-                    [ordreID]="ordre?.id"
+                    [ordre]="ordre"
                     [venteACommission]="ordre?.venteACommission"
                     (swapRowArticle)="onArticleManClick($event)"
                     (priceChange)="refreshRegimeTva.emit()"
