@@ -220,6 +220,18 @@ export class GridCommandesEventsService {
       this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
   }
 
+  async onPaletteInterChange(
+    newData: Partial<OrdreLigne>,
+    value: TypePalette["id"],
+    currentData: Partial<OrdreLigne>,
+  ) {
+    newData.paletteInter = { id: value };
+    if (value === "-") newData.nombrePalettesIntermediaires = 0;
+    else if (value)
+      if (currentData.nombrePalettesIntermediaires === 0)
+        newData.nombrePalettesIntermediaires = 1;
+  }
+
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,
