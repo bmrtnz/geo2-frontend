@@ -94,6 +94,24 @@ export class GridCommandesEventsService {
     }
   }
 
+  async onNombreColisCommandesChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["nombreColisCommandes"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    if (this.context?.secteurCode === "F") {
+      if (currentData.nombreColisCommandes && currentData.nombreColisPalette === 0)
+        newData.nombreColisPalette = value;
+
+      if (!currentData.nombreColisCommandes && currentData.nombreColisPalette !== 0)
+        newData.nombreColisPalette = 0;
+
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        this.ofRepartitionPalette(newData, currentData)(dxDataGrid);
+    }
+  }
+
   async onNombreColisPaletteChange(
     newData: Partial<OrdreLigne>,
     value: OrdreLigne["nombreColisPalette"],

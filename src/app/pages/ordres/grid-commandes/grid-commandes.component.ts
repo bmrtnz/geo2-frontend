@@ -651,6 +651,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "nombreColisPalette") {
       return self.gridCommandesEventsService
         .onNombreColisPaletteChange(newData, value, currentData, self.grid.instance);
+    } else if (context.dataField === "nombreColisCommandes") {
+      return self.gridCommandesEventsService
+        .onNombreColisCommandesChange(newData, value, currentData, self.grid.instance);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
