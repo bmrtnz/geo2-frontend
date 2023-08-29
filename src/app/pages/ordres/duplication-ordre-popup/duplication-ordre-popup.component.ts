@@ -90,11 +90,14 @@ export class DuplicationOrdrePopupComponent {
     }
   }
 
-  hidePopup() {
+  onHiding() {
     this.itemsToKeep.map((item) => {
       this.formGroup.get(item.name).patchValue(false);
     });
     this.processRunning = false;
+  }
+
+  hidePopup() {
     this.popup.visible = false;
   }
 
@@ -108,12 +111,6 @@ export class DuplicationOrdrePopupComponent {
     this.formGroup
       .get("dateLivraisonPrevue")
       .patchValue(this.ordre.dateLivraisonPrevue);
-    // this.formGroup
-    //   .get("dateDepartPrevue")
-    //   .patchValue(this.dateManagementService.findDate(0) + "T00:00");
-    // this.formGroup
-    //   .get("dateLivraisonPrevue")
-    //   .patchValue(this.dateManagementService.findDate(1));
     this.formGroup.get("entrepot").patchValue({
       id: this.ordre.entrepot.id,
       code: this.ordre.entrepot.code,
@@ -156,7 +153,7 @@ export class DuplicationOrdrePopupComponent {
       } else {
         this.formGroup
           .get("dateDepartPrevue")
-          .patchValue(this.formGroup.get("dateLivraisonPrevue").value);
+          .patchValue((this.formGroup.get("dateLivraisonPrevue").value + "T00:00:00"));
       }
     }
   }
@@ -188,6 +185,7 @@ export class DuplicationOrdrePopupComponent {
         next: (res) => {
           const numero = res.data?.wDupliqueOrdreOnDuplique?.data?.nordre;
           if (numero) {
+            this.tabContext.openIndicator("loading"); // KEEP THIS!!! See #22195
             notify(
               this.localization.localize("ordre-cree").replace("&O", numero),
               "success",

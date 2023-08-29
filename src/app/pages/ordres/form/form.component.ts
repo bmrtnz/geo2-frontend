@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -16,7 +17,6 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
-import { QuestionPopupComponent } from "app/shared/components/question-popup/question-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
 import {
@@ -164,13 +164,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public regimesTvaService: RegimesTvaService,
     public ordresLogistiquesService: OrdresLogistiquesService,
     private functionsService: FunctionsService,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.handleTabChange().subscribe((event) => {
       this.initializeAnchors(event);
       if (event.status === "in") {
         this.refetchSubscription = this.refetchOrder().subscribe({
           next: ordre => {
-            this.refreshStatus(ordre.statut)
+            if (ordre) this.refreshStatus(ordre.statut)
           },
           complete: () => console.log("Stopping order refetch cycle"),
         });
@@ -1249,6 +1250,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          this.changeDetectorRef.detectChanges();
           // France: 2 Incoterms only
           if (this.ordre.secteurCommercial.id === "F")
             this.incotermsDS.filter([
