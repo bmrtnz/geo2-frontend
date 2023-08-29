@@ -35,6 +35,7 @@ import { StocksService } from "app/shared/services/api/stocks.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { GridCommandesEventsService } from "app/shared/services/grid-commandes-events.service";
 import {
   Grid,
   GridConfiguratorService,
@@ -48,7 +49,7 @@ import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { EMPTY, from, iif, Observable, of, zip } from "rxjs";
+import { EMPTY, from, iif, lastValueFrom, Observable, of, zip } from "rxjs";
 import {
   concatMap,
   concatMapTo,
@@ -94,6 +95,7 @@ export class GridCommandesComponent
     private gridsService: GridsService,
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
+    private gridCommandesEventsService: GridCommandesEventsService,
     private authService: AuthService
   ) {
     self = this;
@@ -130,7 +132,7 @@ export class GridCommandesComponent
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  public changes: Change<Partial<OrdreLigne>>[] = [];
+  // public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
 
   @Input() ordre: Partial<Ordre>;
@@ -225,6 +227,7 @@ export class GridCommandesComponent
       )
       .subscribe((event) => {
         this.update();
+        this.gridCommandesEventsService.updateContext(this.ordre.id).subscribe();
         this.bindSources(event.component);
       });
 
@@ -275,12 +278,6 @@ export class GridCommandesComponent
       this.buildFournisseurFilter(row.data.proprietaireMarchandise.id).then(
         ({ filters }) => this.bindFournisseurSource(filters)
       );
-    } else if ((e.prevColumnIndex !== e.newColumnIndex) && e.prevColumnIndex !== -1) {
-      // Keep the setTimeout function in place!!!
-      // It seems that not everything's really ready when event is triggered
-      // Conclusion => without a timeOut, major risk of unsaved data!
-      if (this.grid.instance.hasEditData())
-        return setTimeout(() => this.grid.instance.saveEditData(), 100);
     }
   }
 
@@ -290,8 +287,6 @@ export class GridCommandesComponent
 
   onSaving(event: OnSavingEvent) {
     if (event.component.hasEditData()) {
-      this.changes = this.splitPropChanges();
-      event.cancel = true;
       // Calculate margin at the end of the saving process
       // & refresh margin grid
       const saveInterval = setInterval(() => {
@@ -308,8 +303,11 @@ export class GridCommandesComponent
             });
         }
       }, 100);
-      return this.handleMutations();
     }
+  }
+
+  onSaved() {
+    this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"]);
   }
 
   // Reload grid data after external update
@@ -334,138 +332,13 @@ export class GridCommandesComponent
     });
   }
 
-  private handleMutations() {
-    if (!this.changes.length) return;
-
-    const source = this.grid.dataSource as DataSource;
-    const store = source.store() as CustomStore;
-    const change = this.changes.shift();
-
-    if (change.type === "remove") {
-      return this.ordreLignesService
-        .updateField(
-          "fournisseur",
-          null,
-          change.key,
-          this.currentCompanyService.getCompany().id,
-          ["id", "fournisseur.id"]
-        )
-        .toPromise()
-        .then(() =>
-          this.functionsService
-            .onChangeFouCode(
-              change.key,
-              this.currentCompanyService.getCompany().id,
-              this.authService.currentUser.nomUtilisateur
-            )
-            .toPromise()
-        )
-        .then(() => this.ordreLignesService.remove(change.key))
-        .then(() => store.remove(change.key))
-        .then(() => {
-          store.push([change]);
-          this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
-          setTimeout(() => this.reindexRows(), 200);
-          return this.handleMutations();
-        });
-    }
-
-    if (change.type === "update")
-      return new Promise<void>(async (rsv, rjt) => {
-        /* eslint-disable-next-line prefer-const */
-        let [name, value] = Object.entries(change.data)[0];
-
-        if (["ventePrixUnitaire", "achatPrixUnitaire"].includes(name))
-          this.priceChange.emit();
-
-        // map object value
-        if (typeof value === "object") value = value.id;
-
-        // request mutation
-        this.columns
-          .pipe(
-            GridConfiguratorService.getVisible(),
-            GridConfiguratorService.getFields(),
-            concatMap((fields) =>
-              this.ordreLignesService.updateField(
-                name,
-                value,
-                change.key,
-                this.currentCompanyService.getCompany().id,
-                ["id", ...fields, ...this.lookupDisplayFields]
-              )
-            ),
-            first()
-          )
-          .subscribe({
-            // build and push response data
-            next: ({ data }) => {
-              if (data.updateField) {
-                setTimeout(() => this.checkSummaries());
-                store.push([
-                  change,
-                  {
-                    key: data.updateField.id,
-                    type: "update",
-                    data: data.updateField,
-                  },
-                ]);
-              }
-            },
-
-            // reject on error
-            error: (err) => {
-              notify(
-                err.message.replace(
-                  "Exception while fetching data (/updateField) : ",
-                  ""
-                ),
-                "error",
-                7000
-              );
-              rjt(err);
-            },
-
-            complete: () => {
-              rsv();
-              if (name === "fournisseur")
-                this.gridsService.reload([
-                  "SyntheseExpeditions",
-                  "DetailExpeditions"
-                ], this.gridsService.orderIdentifier(this.ordre)
-                );
-              this.handleMutations();
-              if (["fournisseur"].includes(name)) this.transporteurChange.emit();
-            },
-          });
-      });
-
-    return Promise.resolve();
-  }
-
-  private checkSummaries() {
-    // Checking - adjusting summaries (due to colis <-> palettes interactions)
-    let palSum = 0;
-    let colSum = 0;
-    (this.grid.dataSource as DataSource).items().map((d) => {
-      palSum += d.nombrePalettesCommandees ?? 0;
-      colSum += d.nombreColisCommandes ?? 0;
-    });
-    if (
-      palSum !==
-      this.grid.instance.getTotalSummaryValue("nombrePalettesCommandees") ||
-      colSum !== this.grid.instance.getTotalSummaryValue("nombreColisCommandes")
-    )
-      this.grid.instance.repaint();
-  }
-
   private refreshData(columns: GridColumn[]) {
     if (this.ordre?.id)
       return of(columns).pipe(
         GridConfiguratorService.getVisible(),
         GridConfiguratorService.getFields(),
         concatMap((fields) =>
-          this.ordreLignesService.getPreloadedDataSource(
+          of(this.ordreLignesService.getPreloadedDataSource(
             [
               OrdreLigne.getKeyField() as string,
               // grid config + visible
@@ -547,7 +420,7 @@ export class GridCommandesComponent
             this.ordreLignesService.mapDXFilterToRSQL([
               ["ordre.id", "=", this.ordre?.id],
             ])
-          )
+          ))
         )
       );
   }
@@ -729,8 +602,10 @@ export class GridCommandesComponent
     self = this; // KEEP THIS to have a consistent value of 'self' when navigating through order tabs
   }
 
-  setCellValue(newData, value, currentData) {
+  setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
     const context: any = this;
+
+    const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
 
     if (context.dataField === "proprietaireMarchandise.id") {
       return zip(
@@ -744,9 +619,6 @@ export class GridCommandesComponent
             newData.proprietaireMarchandise = proprietaire;
 
             // newData.fournisseur = fournisseur;
-            const rowIndex = self.grid.instance.getRowIndexByKey(
-              currentData.id
-            );
             self.grid.instance.cellValue(
               rowIndex,
               "fournisseur.id",
@@ -778,6 +650,33 @@ export class GridCommandesComponent
           })
         )
         .toPromise();
+    } else if (context.dataField === "nombrePalettesCommandees") {
+      return self.gridCommandesEventsService
+        .onNombrePalettesCommandeesChange(newData, value, currentData);
+    } else if (context.dataField === "nombreColisPalette") {
+      return self.gridCommandesEventsService
+        .onNombreColisPaletteChange(newData, value, currentData, self.grid.instance);
+    } else if (context.dataField === "nombreColisCommandes") {
+      return self.gridCommandesEventsService
+        .onNombreColisCommandesChange(newData, value, currentData, self.grid.instance);
+    } else if (context.dataField === "ventePrixUnitaire") {
+      return self.gridCommandesEventsService
+        .onVentePrixUnitaireChange(newData, value, currentData);
+    } else if (context.dataField === "gratuit") {
+      return self.gridCommandesEventsService
+        .onGratuitChange(newData, value, currentData);
+    } else if (context.dataField === "achatDevisePrixUnitaire") {
+      return self.gridCommandesEventsService
+        .onAchatDevisePrixUnitaireChange(newData, value, currentData);
+    } else if (context.dataField === "typePalette.id") {
+      return self.gridCommandesEventsService
+        .onTypePaletteChange(newData, value, currentData, self.grid.instance);
+    } else if (context.dataField === "paletteInter.id") {
+      return self.gridCommandesEventsService
+        .onPaletteInterChange(newData, value, currentData);
+    } else if (context.dataField === "nombrePalettesIntermediaires") {
+      return self.gridCommandesEventsService
+        .onNombrePalettesIntermediairesChange(newData, value, currentData, self.grid.instance);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
@@ -873,7 +772,7 @@ export class GridCommandesComponent
     const source = self.grid.dataSource as DataSource;
     const sorted = source.items().map(({ id }) => id);
     sorted.splice(e.toIndex, 0, sorted.splice(e.fromIndex, 1)[0]);
-    self.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
+    self.grid.instance.beginCustomLoading(self.localizeService.localize("reindexing"));
     self.ordreLignesService
       .reindex(sorted, ["id", "numero"])
       .pipe(
@@ -1071,33 +970,6 @@ export class GridCommandesComponent
         { sort: [{ selector: "code" }] }
       )
     );
-  }
-
-  splitPropChanges() {
-    const fournisseurChanges = [];
-    const mappedChanges = this.changes.map((change) => {
-      // on ne s'occupe que des cas de mise a jour
-      if (change.type !== "update") return change;
-
-      // on decoupe les changements sur le cas proprietaire/fournisseur
-      const properties = Object.keys(change.data);
-      if (
-        properties.includes("fournisseur") &&
-        properties.includes("proprietaireMarchandise")
-      ) {
-        // on pousse le changement sur le fournisseur
-        const fournisseur = JSON.parse(JSON.stringify(change));
-        delete fournisseur.data.proprietaireMarchandise;
-        fournisseurChanges.push(fournisseur);
-
-        // on retire la propriété fournisseur sur le changement en cours
-        delete change.data.fournisseur;
-      }
-      return change;
-    });
-
-    // on fusionne les changements
-    return [...mappedChanges, ...fournisseurChanges];
   }
 
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {

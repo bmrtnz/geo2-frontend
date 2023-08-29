@@ -49,9 +49,9 @@ export class OrdreLigne extends Model {
   @Field() public listeCertifications?: string;
   @Field({ model: import("./base-tarif.model") }) public achatUnite?: BaseTarif;
   @Field({ model: import("./type-palette.model") })
-  public typePalette?: Palette;
+  public typePalette?: Partial<Palette>;
   @Field({ model: import("./type-palette.model") })
-  public paletteInter?: Palette;
+  public paletteInter?: Partial<Palette>;
   @Field() public fraisPrixUnitaire?: number;
   @Field() public tauxRemiseSurFacture?: number;
   @Field() public tauxRemiseHorsFacture?: number;
@@ -93,6 +93,7 @@ export class OrdreLigne extends Model {
   public mouvement?: StockMouvement;
   @Field() public nombreReservationsSurStock?: number;
   @Field() public ristourne?: boolean;
+  @Field() public indicateurPalette?: number;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");

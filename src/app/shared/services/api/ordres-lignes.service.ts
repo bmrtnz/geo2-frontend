@@ -9,13 +9,16 @@ import {
   FunctionsService,
 } from "app/shared/services/api/functions.service";
 import ArrayStore from "devextreme/data/array_store";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import { lastValueFrom } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
+import { FormUtilsService } from "../form-utils.service";
 
 export enum SummaryOperation {
   Marge = "allOrdreLigneMarge",
@@ -118,7 +121,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
   }
 
   private update(id, values) {
-    const variables = { ordreLigne: { id, ...values } };
+    const variables = { ordreLigne: FormUtilsService.cleanTypenames({ id, ...values }) };
     return self.watchSaveQuery({ variables }).toPromise();
   }
 
@@ -477,56 +480,21 @@ export class OrdreLignesService extends ApiService implements APIRead {
     });
   }
 
-  async getPreloadedDataSource(columns: Array<string>, search?: string) {
-    const data = await this.apollo
-      .query<{ [key: string]: Array<OrdreLigne> }>({
-        query: gql(this.buildGetListGraph(columns)),
-        variables: { search },
-        fetchPolicy: "network-only",
-      })
-      .pipe(map((res) => res.data[`all${this.model.name}List`]))
-      .toPromise();
+  getPreloadedDataSource(columns: Array<string>, search?: string) {
     return new DataSource({
-      store: new ArrayStore({
+      store: new CustomStore({
         key: this.keyField,
-        data: JSON.parse(JSON.stringify(data)),
+        byKey: this.byKey_v2(columns),
+        load: options => lastValueFrom(this.apollo
+          .query<{ [key: string]: Array<OrdreLigne> }>({
+            query: gql(this.buildGetListGraph(columns)),
+            variables: { search },
+            fetchPolicy: "network-only",
+          })
+          .pipe(map((res) => JSON.parse(JSON.stringify(res.data[`all${this.model.name}List`]))))),
+        update: this.update,
+        remove: this.remove as unknown as (key: any) => PromiseLike<void>,
       }),
-    });
-  }
-
-  public updateField(
-    fieldName: string,
-    value: any,
-    id: string,
-    socCode: string,
-    body: string[]
-  ) {
-    return this.apollo.mutate<{ updateField: Partial<OrdreLigne> }>({
-      mutation: gql(
-        ApiService.buildGraph(
-          "mutation",
-          [
-            {
-              name: "updateField",
-              body,
-              params: [
-                { name: "fieldName", value: "fieldName", isVariable: true },
-                { name: "value", value: "value", isVariable: true },
-                { name: "id", value: "id", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "fieldName", type: "String", isOptionnal: false },
-            { name: "value", type: "ObjectScalar", isOptionnal: true },
-            { name: "id", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { fieldName, value, id, socCode },
-      fetchPolicy: "network-only",
     });
   }
 

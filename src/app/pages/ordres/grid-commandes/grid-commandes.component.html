@@ -10,7 +10,7 @@
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
-  (onFocusedCellChanging)="onFocusedCellChanging($event)"
+  (onSaved)="onSaved()"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
   (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
@@ -29,8 +29,6 @@
     [mode]="'batch'"
     [allowUpdating]="allowMutations || venteACommission"
     [allowDeleting]="allowMutations"
-    [(changes)]="changes"
-    [refreshMode]="'reshape'"
     [startEditAction]="'click'"
   ></dxo-editing>
   <dxo-keyboard-navigation
