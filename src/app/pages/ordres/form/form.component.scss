@@ -2,6 +2,9 @@
 @import "scss/variables.scss";
 @import "themes/generated/variables.base";
 
+$left-panel-width: 170px;
+$left-panel-btn-height: 44px;
+
 ::ng-deep .form-ordres-page {
 
   .action-article-container {
@@ -13,6 +16,10 @@
       margin-left: 10px;
       float: right;
     }
+  }
+
+  .width0 {
+    width: 0 !important;
   }
 
   .top-grid-cde-buttons {
@@ -69,14 +76,6 @@
       padding: 0 13px 5px 13px !important;
     }
   }
-
-  // .add-ref-client-button {
-  //   right: 704px;
-  // }
-
-  // .stock-auto-button {
-  //   right: 558px;
-  // }
 
   .header-btn-baf {
     margin: -5px 9px 0 0;
@@ -150,7 +149,8 @@
 
   .ordres-page {
     position: relative;
-    width: calc(100% - 180px);
+    width: calc(100% - 182px);
+    transition: 0.25s;
     left: 182px;
 
     .order-reload-btn {
@@ -167,7 +167,7 @@
   }
 
   .ordres-page-fullscreen {
-    width: auto !important;
+    width: 100% !important;
     left: 0 !important;
   }
 
@@ -193,9 +193,8 @@
 
 .add-litige-button {
   position: absolute;
-  right: 0;
-  width: 0 !important;
-  margin: -3px -3px 0 0;
+  right: 10px;
+  margin: -1px -3px 0 0;
   z-index: 1;
   border-radius: 100%;
   width: 30px !important;
@@ -204,10 +203,6 @@
   min-height: 0 !important;
   transition: 0.2s;
 
-  &:hover {
-    background: #EEE;
-  }
-
   .dx-button-content {
     top: -2px;
   }
@@ -215,35 +210,48 @@
   .dx-icon.dx-icon-edit-button-addrow {
     font-size: 14px !important;
     padding: 1px !important;
+
+    &:hover {
+      background: #79B23F;
+    }
   }
 }
 
 ::ng-deep .form-scrollTo-buttons-container {
   position: fixed;
   top: 32px;
-  width: 170px;
+  padding-left: 3px;
+  width: calc($left-panel-width + 10px);
+  overflow: hidden;
+  transition: .25s;
   z-index: 1000;
 
-  .dx-button {
-    width: 100%;
-    min-height: 44px;
-    margin-bottom: 10px;
+  .form-scrollTo-buttons-subcontainer {
+    padding-right: 10px;
 
-    .dx-button-content {
-      display: block;
-      padding: 5px !important;
 
-      .dx-icon {
-        display: inline;
-        font-size: 18px !important;
-      }
+    .scrollTo-buttons {
+      width: 100%;
+      min-height: $left-panel-btn-height;
+      margin-bottom: 10px;
 
-      .dx-button-text {
-        padding-right: 3px;
-        padding-left: 3px;
-        margin-top: 2px !important;
-        font-size: 13px;
-        line-height: 12px !important;
+      .dx-button-content {
+        display: block;
+        padding: 5px !important;
+
+        .dx-icon {
+          display: inline;
+          font-size: 18px !important;
+        }
+
+        .dx-button-text {
+          padding-right: 3px;
+          padding-left: 3px;
+          margin-top: 2px !important;
+          font-size: 13px;
+          white-space: inherit !important;
+          line-height: 12px !important;
+        }
       }
     }
   }
@@ -432,7 +440,7 @@ dx-button[type="normal"] {
 
 .dot {
   position: absolute;
-  right: 0;
+  right: 10px;
   margin: -4px -4px 0 0;
   height: 15px;
   min-width: 15px;

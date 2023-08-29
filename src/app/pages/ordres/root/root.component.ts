@@ -568,6 +568,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
           this.localizationService.localize("close-open-order"),
           this.localizationService.localize("close-all-orders")
         ],
+        visible: false,
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -640,6 +641,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       const indicator = this.ordresIndicatorsService.getIndicatorByName(
         data.id
       );
+      // Inconcistency with one or several indicators? Cleans as it can
+      if (!indicator) {
+        this.pullTab(data.id)
+        this.selectTab(TAB_HOME_ID);
+        return;
+      }
       data.component = (await indicator.component).default;
       // TODO Badge indicator count
       // if (indicator.withCount) data.badge = indicator.number || '?';

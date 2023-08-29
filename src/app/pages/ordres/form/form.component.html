@@ -1,141 +1,143 @@
 <div class="form-ordres-page">
   <div
     class="form-scrollTo-buttons-container"
-    [ngClass]="{ 'display-none': !leftAccessPanel?.value }"
+    [ngClass]="{ width0: !leftAccessPanel?.value }"
   >
-    <span class="top-order-number">{{ this?.ordre?.numero || "-" }}</span>
-    <dx-button
-      class="black"
-      data-accordion="articles"
-      height="auto"
-      icon="box"
-      text="{{ 'ordres-suivi-articles' | localize }}"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Articles"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      data-accordion="logistique"
-      height="auto"
-      icon="material-icons local_shipping"
-      text="{{ 'ordres-suivi-logistique' | localize }}"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Logistique"
-    >
-    </dx-button>
-    <div class="button-container">
-      <div
-        *ngIf="dotLitiges"
-        class="dot"
+    <div class="form-scrollTo-buttons-subcontainer">
+      <span class="top-order-number">{{ this?.ordre?.numero || "-" }}</span>
+      <dx-button
+        class="black scrollTo-buttons"
+        data-accordion="articles"
+        height="auto"
+        icon="box"
+        text="{{ 'ordres-suivi-articles' | localize }}"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Articles"
       >
-        {{ dotLitiges }}
-      </div>
-      <div
-        *ngIf="!dotLitiges && ordre && !!gridCommandes?.gridRowsTotal"
-        (click)="onClickCreateLitige()"
-        class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
-        title="{{ 'ordres-litiges-create' | localize }}"
+      </dx-button>
+      <dx-button
+        class="black scrollTo-buttons"
+        data-accordion="logistique"
+        height="auto"
+        icon="material-icons local_shipping"
+        text="{{ 'ordres-suivi-logistique' | localize }}"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Logistique"
       >
-        <div class="dx-button-content">
-          <i class="dx-icon dx-icon-edit-button-addrow"></i>
+      </dx-button>
+      <div class="button-container">
+        <div
+          *ngIf="dotLitiges"
+          class="dot"
+        >
+          {{ dotLitiges }}
         </div>
+        <div
+          *ngIf="!dotLitiges && ordre && !!gridCommandes?.gridRowsTotal"
+          (click)="onClickCreateLitige()"
+          class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
+          title="{{ 'ordres-litiges-create' | localize }}"
+        >
+          <div class="dx-button-content">
+            <i class="dx-icon dx-icon-edit-button-addrow"></i>
+          </div>
+        </div>
+        <dx-button
+          #litigesBtn
+          class="black dotted-button scrollTo-buttons"
+          data-accordion="litiges"
+          height="auto"
+          icon="material-icons offline_bolt"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.Litiges"
+          text="{{ 'ordres-suivi-litiges' | localize }}"
+        >
+        </dx-button>
       </div>
       <dx-button
-        #litigesBtn
-        class="black dotted-button"
-        data-accordion="litiges"
+        class="black scrollTo-buttons"
+        data-accordion="synthese"
         height="auto"
-        icon="material-icons offline_bolt"
+        icon="material-icons euro_symbol"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
-        [fragment]="fragments.Litiges"
-        text="{{ 'ordres-suivi-litiges' | localize }}"
+        [fragment]="fragments.Synthese"
+        text="{{ 'ordres-suivi-synthese' | localize }}"
+      >
+      </dx-button>
+      <dx-button
+        class="black scrollTo-buttons"
+        height="auto"
+        data-accordion="fluxdocs"
+        icon="material-icons folder"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Flux"
+        text="{{ 'ordres-suivi-fluxdocs' | localize }}"
+      >
+      </dx-button>
+      <div class="button-container">
+        <div
+          *ngIf="dotCQ"
+          class="dot"
+        >
+          {{ dotCQ }}
+        </div>
+        <dx-button
+          class="black dotted-button scrollTo-buttons"
+          data-accordion="CQ"
+          height="auto"
+          icon="material-icons insert_chart_outlined"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.CQ"
+          text="{{ 'ordres-suivi-CQ' | localize }}"
+        >
+        </dx-button>
+      </div>
+      <div class="button-container">
+        <div
+          *ngIf="dotCommentaires"
+          class="dot"
+        >
+          {{ dotCommentaires }}
+        </div>
+        <dx-button
+          class="black dotted-button scrollTo-buttons"
+          data-accordion="commentaires"
+          height="auto"
+          icon="material-icons message"
+          [routerLink]="[]"
+          [queryParamsHandling]="'merge'"
+          [fragment]="fragments.Commentaires"
+          text="{{ 'ordres-suivi-commentaires' | localize }}"
+        >
+        </dx-button>
+      </div>
+      <dx-button
+        class="black scrollTo-buttons"
+        data-accordion="log"
+        height="auto"
+        icon="material-icons view_headline"
+        [routerLink]="[]"
+        [queryParamsHandling]="'merge'"
+        [fragment]="fragments.Log"
+        text="{{ 'ordres-suivi-log' | localize }}"
+      >
+      </dx-button>
+      <dx-button
+        class="black scrollTo-buttons"
+        height="auto"
+        icon="material-icons folder"
+        [disabled]="!ordre"
+        (onClick)="fileManagerClick()"
+        text="{{ 'ordres-suivi-documents' | localize }}"
       >
       </dx-button>
     </div>
-    <dx-button
-      class="black"
-      data-accordion="synthese"
-      height="auto"
-      icon="material-icons euro_symbol"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Synthese"
-      text="{{ 'ordres-suivi-synthese' | localize }}"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      height="auto"
-      data-accordion="fluxdocs"
-      icon="material-icons folder"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Flux"
-      text="{{ 'ordres-suivi-fluxdocs' | localize }}"
-    >
-    </dx-button>
-    <div class="button-container">
-      <div
-        *ngIf="dotCQ"
-        class="dot"
-      >
-        {{ dotCQ }}
-      </div>
-      <dx-button
-        class="black dotted-button"
-        data-accordion="CQ"
-        height="auto"
-        icon="material-icons insert_chart_outlined"
-        [routerLink]="[]"
-        [queryParamsHandling]="'merge'"
-        [fragment]="fragments.CQ"
-        text="{{ 'ordres-suivi-CQ' | localize }}"
-      >
-      </dx-button>
-    </div>
-    <div class="button-container">
-      <div
-        *ngIf="dotCommentaires"
-        class="dot"
-      >
-        {{ dotCommentaires }}
-      </div>
-      <dx-button
-        class="black dotted-button"
-        data-accordion="commentaires"
-        height="auto"
-        icon="material-icons message"
-        [routerLink]="[]"
-        [queryParamsHandling]="'merge'"
-        [fragment]="fragments.Commentaires"
-        text="{{ 'ordres-suivi-commentaires' | localize }}"
-      >
-      </dx-button>
-    </div>
-    <dx-button
-      class="black"
-      data-accordion="log"
-      height="auto"
-      icon="material-icons view_headline"
-      [routerLink]="[]"
-      [queryParamsHandling]="'merge'"
-      [fragment]="fragments.Log"
-      text="{{ 'ordres-suivi-log' | localize }}"
-    >
-    </dx-button>
-    <dx-button
-      class="black"
-      height="auto"
-      icon="material-icons folder"
-      [disabled]="!ordre"
-      (onClick)="fileManagerClick()"
-      text="{{ 'ordres-suivi-documents' | localize }}"
-    >
-    </dx-button>
   </div>
   <form [formGroup]="formGroup">
     <dx-validation-group name="loginGroup">

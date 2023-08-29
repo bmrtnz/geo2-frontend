@@ -1235,7 +1235,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.tabContext.parseTabID(params.get(RouteParam.TabID))
         ),
         switchMap(([numero, campagneID]) => {
-          if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
+          if (numero === TAB_ORDRE_CREATE_ID || !campagneID) return of({} as Ordre);
           return this.ordresService
             .getOneByNumeroAndSocieteAndCampagne(
               numero,
