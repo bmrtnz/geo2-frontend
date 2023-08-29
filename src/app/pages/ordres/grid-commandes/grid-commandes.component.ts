@@ -600,6 +600,8 @@ export class GridCommandesComponent
   setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
     const context: any = this;
 
+    const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
+
     if (context.dataField === "proprietaireMarchandise.id") {
       return zip(
         self.fournisseursService
@@ -612,9 +614,6 @@ export class GridCommandesComponent
             newData.proprietaireMarchandise = proprietaire;
 
             // newData.fournisseur = fournisseur;
-            const rowIndex = self.grid.instance.getRowIndexByKey(
-              currentData.id
-            );
             self.grid.instance.cellValue(
               rowIndex,
               "fournisseur.id",
@@ -647,7 +646,11 @@ export class GridCommandesComponent
         )
         .toPromise();
     } else if (context.dataField === "nombrePalettesCommandees") {
-      return self.gridCommandesEventsService.onNombrePalettesCommandeesChange(newData, value, currentData);
+      return self.gridCommandesEventsService
+        .onNombrePalettesCommandeesChange(newData, value, currentData);
+    } else if (context.dataField === "nombreColisPalette") {
+      return self.gridCommandesEventsService
+        .onNombreColisPaletteChange(newData, value, currentData, self.grid.instance);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
