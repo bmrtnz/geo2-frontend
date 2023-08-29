@@ -171,6 +171,21 @@ export class GridCommandesEventsService {
     if (value > 0) newData.gratuit = false;
   }
 
+  async onGratuitChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["gratuit"],
+    currentData: Partial<OrdreLigne>,
+  ) {
+    newData.gratuit = value;
+    if (value) {
+      newData.ventePrixUnitaire = 0;
+      if (currentData.achatDevisePrixUnitaire === null) {
+        newData.achatDevisePrixUnitaire = 0;
+        newData.achatPrixUnitaire = 0;
+      }
+    }
+  }
+
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,
