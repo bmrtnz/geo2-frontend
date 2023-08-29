@@ -229,7 +229,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         tagArray.push(myValue);
         e.component.option("value", tagArray);
         this.articlesKO = true;
-        this.articlesService.getOne(myValue).subscribe((res) => {
+        this.articlesService.getOne_v2(myValue, ["id", "valide"]).subscribe((res) => {
           const myArt = res?.data?.article;
           this.articlesKO = !myArt || myArt.valide !== true;
           if (this.articlesKO) {
