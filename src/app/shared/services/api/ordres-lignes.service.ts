@@ -18,6 +18,7 @@ import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
+import { FormUtilsService } from "../form-utils.service";
 
 export enum SummaryOperation {
   Marge = "allOrdreLigneMarge",
@@ -120,7 +121,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
   }
 
   private update(id, values) {
-    const variables = { ordreLigne: { id, ...values } };
+    const variables = { ordreLigne: FormUtilsService.cleanTypenames({ id, ...values }) };
     return self.watchSaveQuery({ variables }).toPromise();
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import dxDataGrid from 'devextreme/ui/data_grid';
+import dxDataGrid, { Row } from 'devextreme/ui/data_grid';
 import { concatMap, lastValueFrom, map, Observable, tap } from 'rxjs';
 import { Article, OrdreLigne, Secteur, Societe, TypePalette } from '../models';
 import Ordre from '../models/ordre.model';
@@ -41,8 +41,9 @@ export class GridCommandesEventsService {
     value: OrdreLigne["nombrePalettesCommandees"],
     currentData: Partial<OrdreLigne>,
   ) {
-    if (this.context?.secteurCode === "F") {
-      const typePalette = currentData?.paletteInter ?? currentData?.typePalette;
+    newData.nombrePalettesCommandees = value;
+    if (this.context?.secteurCode !== "F") {
+      const typePalette = currentData?.paletteInter?.id ?? currentData?.typePalette?.id;
 
       if (this.context?.client?.secteur?.id !== "F")
         newData.nombrePalettesCommandees = 0;
@@ -51,9 +52,9 @@ export class GridCommandesEventsService {
         let nombreColisPalette: number;
         let nombreColisPaletteIntermediaire: number;
 
-        if (typePalette?.id) {
+        if (typePalette) {
           nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
-            typePalette?.id,
+            typePalette,
             currentData.article.id,
             this.context?.client?.secteur?.id,
           ).pipe(map(res => res.data.fetchNombreColisParPalette)));
@@ -86,29 +87,11 @@ export class GridCommandesEventsService {
         // BAM le 24/08/16
         // Pour tout les secteurs sauf france on recalcule le nombre de colis
         if (nombreColisPalette !== 0)
-          newData.nombrePalettesCommandees = value * nombreColisPalette * nombreColisPaletteIntermediaire;
+          newData.nombreColisCommandes = value * nombreColisPalette * nombreColisPaletteIntermediaire;
 
       }
 
       if (!value) newData.indicateurPalette = 0;
-    }
-  }
-
-  async onNombreColisCommandesChange(
-    newData: Partial<OrdreLigne>,
-    value: OrdreLigne["nombreColisCommandes"],
-    currentData: Partial<OrdreLigne>,
-    dxDataGrid: dxDataGrid,
-  ) {
-    if (this.context?.secteurCode === "F") {
-      if (currentData.nombreColisCommandes && currentData.nombreColisPalette === 0)
-        newData.nombreColisPalette = value;
-
-      if (!currentData.nombreColisCommandes && currentData.nombreColisPalette !== 0)
-        newData.nombreColisPalette = 0;
-
-      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData)(dxDataGrid);
     }
   }
 
@@ -120,6 +103,7 @@ export class GridCommandesEventsService {
   ) {
     const applyRepartitionPalette = this.ofRepartitionPalette(newData, currentData);
 
+    newData.nombreColisPalette = value;
     if (this.context?.secteurCode !== "F") {
       if (value) {
         let ll_nb_pal_calc = currentData.nombrePalettesCommandees;
@@ -137,7 +121,7 @@ export class GridCommandesEventsService {
       }
     } else {
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        applyRepartitionPalette(dxDataGrid);
+        applyRepartitionPalette?.(dxDataGrid);
     }
 
     if (this.context?.secteurCode === "F") {
@@ -148,7 +132,33 @@ export class GridCommandesEventsService {
         newData.nombreColisPalette = 0;
 
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        applyRepartitionPalette(dxDataGrid);
+        applyRepartitionPalette?.(dxDataGrid);
+    }
+  }
+
+  async onNombreColisCommandesChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["nombreColisCommandes"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    newData.nombreColisCommandes = value;
+    if (this.context?.secteurCode === "F") {
+      if (value && currentData.nombreColisPalette === 0) {
+        const typePalette = currentData?.paletteInter?.id ?? currentData?.typePalette?.id;
+        const nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
+          typePalette,
+          currentData.article.id,
+          this.context?.client?.secteur?.id,
+        ).pipe(map(res => res.data.fetchNombreColisParPalette)));
+        newData.nombreColisPalette = nombreColisPalette;
+      }
+
+      if (!value && currentData.nombreColisPalette !== 0)
+        newData.nombreColisPalette = 0;
+
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
     }
   }
 
@@ -156,16 +166,18 @@ export class GridCommandesEventsService {
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,
   ) {
-    if ((newData.nombreColisPalette ?? currentData.nombreColisPalette) !== 0) return;
-    if (!newData.fournisseur?.id ?? currentData.fournisseur?.id) return;
+    if ((newData.nombreColisPalette ?? currentData.nombreColisPalette) === 0) return;
+    if (!(newData.fournisseur?.id ?? currentData.fournisseur?.id)) return;
 
     let nb_pal: number;
     let ld_pal_nb_col: number;
     let nb_pal_th = 0;
     let nb_pal_dispo = 0;
-    return (dxDataGrid: dxDataGrid) => {
-      dxDataGrid.getVisibleRows()
-        .filter(row => row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id))
+
+    return (dxDataGrid: dxDataGrid) =>
+      // On met un petit delai, sinon on obtient pas les nouvelles valeurs
+      setTimeout(() => dxDataGrid.getVisibleRows()
+        .filter(row => row.rowType === "data" && row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id))
         .forEach(row => {
           ld_pal_nb_col = row.data.nombreColisPalette;
 
@@ -191,14 +203,14 @@ export class GridCommandesEventsService {
           // Si une partie de palette est occupée
           if (nb_pal_th > 0) {
             // On ajoute une palette au sol
-            nb_pal++;
+            nb_pal += 1;
             // On garde la place qui reste sur cette palette
             nb_pal_th -= 1;
           }
           nb_pal_dispo = nb_pal_th;
-          dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nb_pal);
-        });
-    }
+          dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", Math.ceil(nb_pal));
+        }), 10);
+
   }
 
 }
