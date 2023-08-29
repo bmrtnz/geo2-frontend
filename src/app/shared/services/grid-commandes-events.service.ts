@@ -162,6 +162,15 @@ export class GridCommandesEventsService {
     }
   }
 
+  async onVentePrixUnitaireChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["ventePrixUnitaire"],
+    currentData: Partial<OrdreLigne>,
+  ) {
+    newData.ventePrixUnitaire = value;
+    if (value > 0) newData.gratuit = false;
+  }
+
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,

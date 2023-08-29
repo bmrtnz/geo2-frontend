@@ -654,6 +654,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "nombreColisCommandes") {
       return self.gridCommandesEventsService
         .onNombreColisCommandesChange(newData, value, currentData, self.grid.instance);
+    } else if (context.dataField === "ventePrixUnitaire") {
+      return self.gridCommandesEventsService
+        .onVentePrixUnitaireChange(newData, value, currentData);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
