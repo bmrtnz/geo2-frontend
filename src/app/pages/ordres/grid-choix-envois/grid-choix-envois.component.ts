@@ -239,13 +239,13 @@ export class GridChoixEnvoisComponent implements OnInit {
     return null;
   }
 
-  async clearTemps() {
-    const temps: Partial<Envois>[] = this.dataGrid.instance
-      .getDataSource()
-      .items()
-      .map(({ id }) => ({ id }));
-
-    return this.envoisService.deleteTempEnvois(temps).toPromise();
+  clearTemps() {
+    this.envoisService.getList(
+      `ordre.id==${this.ordre.id} and traite==A`,
+      ["id"]).subscribe(res => {
+        const temps = res.data.allEnvoisList.map(({ id }) => ({ id }));
+        this.envoisService.deleteTempEnvois(temps).toPromise()
+      });
   }
 
   reload(annuleOrdre?) {
