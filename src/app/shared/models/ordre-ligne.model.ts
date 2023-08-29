@@ -93,6 +93,7 @@ export class OrdreLigne extends Model {
   public mouvement?: StockMouvement;
   @Field() public nombreReservationsSurStock?: number;
   @Field() public ristourne?: boolean;
+  @Field() public indicateurPalette?: number;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");

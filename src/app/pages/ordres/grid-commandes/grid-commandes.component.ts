@@ -35,6 +35,7 @@ import { StocksService } from "app/shared/services/api/stocks.service";
 import { TypesPaletteService } from "app/shared/services/api/types-palette.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { GridCommandesEventsService } from "app/shared/services/grid-commandes-events.service";
 import {
   Grid,
   GridConfiguratorService,
@@ -94,6 +95,7 @@ export class GridCommandesComponent
     private gridsService: GridsService,
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
+    private gridCommandesEventsService: GridCommandesEventsService,
     private authService: AuthService
   ) {
     self = this;
@@ -221,6 +223,7 @@ export class GridCommandesComponent
       )
       .subscribe((event) => {
         this.update();
+        this.gridCommandesEventsService.updateContext(this.ordreID).subscribe();
         this.bindSources(event.component);
       });
 
@@ -643,6 +646,8 @@ export class GridCommandesComponent
           })
         )
         .toPromise();
+    } else if (context.dataField === "nombrePalettesCommandees") {
+      return self.gridCommandesEventsService.onNombrePalettesCommandeesChange(newData, value, currentData);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);

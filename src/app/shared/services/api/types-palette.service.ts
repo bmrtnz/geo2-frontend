@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Apollo } from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { TypePalette } from "../../models";
+import { Article, Secteur, TypePalette } from "../../models";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 
 @Injectable({
@@ -87,5 +87,42 @@ export class TypesPaletteService extends ApiService implements APIRead {
         byKey: this.byKey(columns),
       }),
     });
+  }
+
+  fetchNombreColisParPalette(
+    typePalette: TypePalette["id"],
+    article: Article["id"],
+    secteur: Secteur["id"],
+  ) {
+    return this.apollo.query<{
+      fetchNombreColisParPalette: number;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fetchNombreColisParPalette",
+              params: [
+                { name: "typePalette", value: "typePalette", isVariable: true },
+                { name: "article", value: "article", isVariable: true },
+                { name: "secteur", value: "secteur", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "typePalette", type: "String", isOptionnal: false },
+            { name: "article", type: "String", isOptionnal: false },
+            { name: "secteur", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        typePalette,
+        article,
+        secteur,
+      },
+      fetchPolicy: "network-only",
+    })
   }
 }
