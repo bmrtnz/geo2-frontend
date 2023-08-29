@@ -199,6 +199,27 @@ export class GridCommandesEventsService {
     newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? currentData.achatDeviseTaux) * value;
   }
 
+  async onTypePaletteChange(
+    newData: Partial<OrdreLigne>,
+    value: TypePalette["id"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    newData.typePalette = { id: value };
+
+    const nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
+      value,
+      currentData.article.id,
+      this.context?.client?.secteur?.id,
+    ).pipe(map(res => res.data.fetchNombreColisParPalette)));
+
+    if (this.context?.secteurCode === "F")
+      newData.nombreColisPalette = nombreColisPalette;
+
+    if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+      this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+  }
+
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,

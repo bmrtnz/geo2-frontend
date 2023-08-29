@@ -49,9 +49,9 @@ export class OrdreLigne extends Model {
   @Field() public listeCertifications?: string;
   @Field({ model: import("./base-tarif.model") }) public achatUnite?: BaseTarif;
   @Field({ model: import("./type-palette.model") })
-  public typePalette?: Palette;
+  public typePalette?: Partial<Palette>;
   @Field({ model: import("./type-palette.model") })
-  public paletteInter?: Palette;
+  public paletteInter?: Partial<Palette>;
   @Field() public fraisPrixUnitaire?: number;
   @Field() public tauxRemiseSurFacture?: number;
   @Field() public tauxRemiseHorsFacture?: number;
