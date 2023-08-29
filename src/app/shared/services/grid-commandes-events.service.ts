@@ -94,6 +94,57 @@ export class GridCommandesEventsService {
       if (!value) newData.indicateurPalette = 0;
     }
   }
+  async onNombrePalettesIntermediairesChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["nombrePalettesIntermediaires"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    newData.nombrePalettesIntermediaires = value;
+    let ls_pal_code;
+
+    if (value > 0) {
+      ls_pal_code = currentData.typePalette?.id;
+      if (ls_pal_code) {
+        if (!currentData.paletteInter?.id || currentData.paletteInter.id === "-")
+          newData.paletteInter = { id: ls_pal_code };
+      }
+      ls_pal_code = { id: newData.paletteInter.id ?? currentData.paletteInter.id };
+    } else newData.paletteInter = { id: "-" };
+
+    if (!ls_pal_code) ls_pal_code = currentData.typePalette?.id;
+
+    const ll_pal_nb_col = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
+      ls_pal_code,
+      currentData.article.id,
+      this.context?.client?.secteur?.id,
+    ).pipe(map(res => res.data.fetchNombreColisParPalette)));
+
+    if (value !== 0) {
+      if (value === 1)
+        newData.nombreColisPalette = ll_pal_nb_col / 2;
+      else
+        newData.nombreColisPalette = ll_pal_nb_col / value;
+    } else {
+      if (ll_pal_nb_col)
+        newData.nombreColisPalette = ll_pal_nb_col;
+    }
+
+    let ll_nb_pal = currentData.nombrePalettesCommandees;
+    let ll_nb_pal_calc = ll_nb_pal;
+    if (!ll_nb_pal) ll_nb_pal_calc = 1;
+    if (value === 1)
+      value = ll_nb_pal === 0 ? 1 : 2;
+    if (value === 0) value = 1;
+
+    if (this.context?.secteurCode !== "F")
+      if (ll_pal_nb_col && ll_pal_nb_col !== 0)
+        newData.nombreColisCommandes = value * ll_nb_pal_calc * ll_pal_nb_col;
+
+    if (this.context?.client?.secteur?.id === "F")
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+  }
 
   async onNombreColisPaletteChange(
     newData: Partial<OrdreLigne>,

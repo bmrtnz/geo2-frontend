@@ -669,6 +669,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "paletteInter.id") {
       return self.gridCommandesEventsService
         .onPaletteInterChange(newData, value, currentData);
+    } else if (context.dataField === "nombrePalettesIntermediaires") {
+      return self.gridCommandesEventsService
+        .onNombrePalettesIntermediairesChange(newData, value, currentData, self.grid.instance);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
