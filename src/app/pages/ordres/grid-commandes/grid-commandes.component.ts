@@ -660,6 +660,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "gratuit") {
       return self.gridCommandesEventsService
         .onGratuitChange(newData, value, currentData);
+    } else if (context.dataField === "achatDevisePrixUnitaire") {
+      return self.gridCommandesEventsService
+        .onAchatDevisePrixUnitaireChange(newData, value, currentData);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);

@@ -186,6 +186,19 @@ export class GridCommandesEventsService {
     }
   }
 
+  async onAchatDevisePrixUnitaireChange(
+    newData: Partial<OrdreLigne>,
+    value: OrdreLigne["achatDevisePrixUnitaire"],
+    currentData: Partial<OrdreLigne>,
+  ) {
+    newData.achatDevisePrixUnitaire = value;
+    if (!currentData.achatDeviseTaux) {
+      newData.achatDevise = this.context.societe.devise.id;
+      newData.achatDeviseTaux = 1;
+    }
+    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? currentData.achatDeviseTaux) * value;
+  }
+
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,
