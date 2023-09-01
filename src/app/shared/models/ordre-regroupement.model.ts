@@ -1,5 +1,4 @@
 import { Field, Model, ModelName } from "./model";
-import Ordre from "./ordre.model";
 
 @ModelName("OrdreRegroupement")
 export class OrdreRegroupement extends Model {
