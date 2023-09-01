@@ -20,7 +20,6 @@ import {
   DxSelectBoxComponent,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import {concat, from, lastValueFrom, Observable} from "rxjs";
 import { map } from "rxjs/operators";
@@ -42,10 +41,8 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 })
 export class RepartitionOrdresRegroupementComponent {
   private gridConfig: Promise<GridConfig>;
-  public periodes: any;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("filterForm") filterForm: NgForm;
   @ViewChild("validFournisseur") validFournisseur: DxButtonComponent;
 
@@ -103,10 +100,6 @@ export class RepartitionOrdresRegroupementComponent {
     "nomUtilisateur",
   ]);
 
-  // ngAfterViewInit() {
-  //   //this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
-  // }
-
   async enableFilters() {
 
       const values: Inputs = {
@@ -117,8 +110,6 @@ export class RepartitionOrdresRegroupementComponent {
         this.columns.pipe(
           map((columns) => columns.map((column) => column.dataField))
         );
-
-      console.log(values);
 
       this.repartitionOrdresRegroupement.setPersisantVariables({
         dateMin: values.dateMin,
@@ -168,6 +159,54 @@ export class RepartitionOrdresRegroupementComponent {
           ? data.raisonSocial
           : data.description)
       : null;
+  }
+
+  onCellPrepared(e) {
+    if (e.rowType === "group") {
+      if (e.column.dataField === "ordreRegroupement" && e.cellElement.textContent) {
+        let data = e.data.items ?? e.data.collapsedItems;
+        if (!data[0]) return;
+      }
+      // Si ligne = Ordre Origine
+      if (e.column.dataField === "ordreOrigine" && e.cellElement.textContent) {
+        let data = e.data.items ?? e.data.collapsedItems;
+        if (!data[0]) return;
+        data = data[0];
+        const dateDepart = new Date(data.dateDepartPrevue);
+        const dateLivraison = new Date(data.dateLivraisonPrevue);
+
+        const continuationOnNextPage = e.cellElement.textContent.indexOf("(") !== -1
+                                          ? e.cellElement.textContent.substring(e.cellElement.textContent.indexOf("("), e.cellElement.textContent.length)
+                                          : "";
+
+        // Showing Transporteur and Dates in group header
+        e.cellElement.textContent =
+          "Ordre origine : " + data.ordreOrigine +
+          (data.transporteurCode ? " - " + " Transporteur : " + data.transporteurCode + " " : "") +
+          (data.dateDepartPrevue ? " - " + " Date de départ : " + dateDepart.toLocaleString() + " " : "") +
+          (data.dateLivraisonPrevue ? " - " + " Date de livraison : " + dateLivraison.toLocaleString() + " " : "") +
+          (continuationOnNextPage.trim() !== "" ? continuationOnNextPage : "");
+      }
+    }
+  }
+
+  onRowPrepared(e) {
+    if (e.rowType === "group" && e.groupIndex === 0) {
+      e.rowElement.classList.add('group-1-header');
+    }
+    if (e.rowType === "group" && e.groupIndex === 1) {
+      e.rowElement.classList.add('group-2-header');
+    }
+  }
+
+  calculateCustomSummary(options) {
+    if (options.groupIndex === 0) {
+        options.totalValue = (options.name === "totalLabel") ? "TOTAL GÉNÉRAL" : "";
+
+    }
+    if (options.groupIndex === 1) {
+      options.totalValue = (options.name === "totalLabel") ? "TOTAL" : "";
+    }
   }
 }
 

@@ -8492,7 +8492,7 @@
         "visible": true
       },
       {
-        "visibleIndex":2,
+        "visibleIndex": 2,
         "dataField": "ordreOrigine",
         "visible": true,
         "groupIndex": 1
@@ -8545,7 +8545,8 @@
       },
       {
         "visibleIndex": 12,
-        "dataField": "transporteurCode"
+        "dataField": "transporteurCode",
+        "visible": false
       },
       {
         "visibleIndex": 13,
@@ -8560,7 +8561,8 @@
       {
         "visibleIndex": 15,
         "dataField": "poidsNetCommande",
-        "visible": false
+        "visible": true,
+        "allowGrouping": true
       }
     ]
   }

@@ -1,0 +1,28 @@
+// Var
+@import "themes/generated/variables.base";
+
+h6 {
+  margin: 0;
+  float: left;
+}
+
+.refresh {
+  top: -8px;
+  float: right;
+}
+
+.dx-field-label {
+  text-align: right;
+}
+
+::ng-deep .group-1-header {
+      background: $base-accent !important;
+      color: white !important;
+    }
+
+::ng-deep .group-2-header {
+  background: rgba(0, 117, 156, 0.3) ;
+  color: $base-accent;
+}
+
+
