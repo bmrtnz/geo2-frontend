@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import {
   FournisseursService,
@@ -16,12 +16,11 @@ import {
 import { GridColumn } from "basic";
 import {
   DxButtonComponent,
-  DxDataGridComponent,
-  DxSelectBoxComponent,
+  DxDataGridComponent
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import {concat, from, lastValueFrom, Observable} from "rxjs";
+import {from, lastValueFrom, Observable} from "rxjs";
 import { map } from "rxjs/operators";
 
 enum FormInput {
@@ -105,11 +104,6 @@ export class RepartitionOrdresRegroupementComponent {
       const values: Inputs = {
         ...this.formGroup.value,
       };
-
-      const fields =
-        this.columns.pipe(
-          map((columns) => columns.map((column) => column.dataField))
-        );
 
       this.repartitionOrdresRegroupement.setPersisantVariables({
         dateMin: values.dateMin,
