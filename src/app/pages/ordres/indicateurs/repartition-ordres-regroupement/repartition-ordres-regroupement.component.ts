@@ -191,11 +191,21 @@ export class RepartitionOrdresRegroupementComponent {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "group" && e.groupIndex === 0) {
-      e.rowElement.classList.add('group-1-header');
+    if (e.rowType === "group") {
+      if (e.groupIndex === 0) {
+        e.rowElement.classList.add('group-1-header');
+      }
+      if (e.groupIndex === 1) {
+        e.rowElement.classList.add('group-2-header');
+      }
     }
-    if (e.rowType === "group" && e.groupIndex === 1) {
-      e.rowElement.classList.add('group-2-header');
+    if (e.rowType === "groupFooter") {
+      if (e.groupIndex === 0) {
+        e.rowElement.classList.add('group-1-footer');
+      }
+      if (e.groupIndex === 1) {
+        e.rowElement.classList.add('group-2-footer');
+      }
     }
   }
 
