@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import dxDataGrid from 'devextreme/ui/data_grid';
-import { tap } from 'rxjs';
+import { lastValueFrom, map, tap } from 'rxjs';
 import { OrdreLigne, TypePalette } from '../models';
 import Ordre from '../models/ordre.model';
 import { OrdresService } from './api/ordres.service';
@@ -236,8 +236,16 @@ export class GridCommandesEventsService {
   ) {
     newData.typePalette = { id: value };
 
-    if (this.context?.secteurCode === "F")
-      newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
+    const nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
+      value,
+      currentData.article.id,
+      this.context?.client?.secteur?.id,
+    ).pipe(map(res => res.data.fetchNombreColisParPalette)));
+
+    if (this.context?.secteurCode === "F") {
+      newData.nombreColisPaletteByDimensions = nombreColisPalette;
+      newData.nombreColisPalette = nombreColisPalette;
+    }
 
     if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
       this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
