@@ -272,6 +272,7 @@ export class GridCommandesComponent
     if (event.component.hasEditData()) {
       // Calculate margin at the end of the saving process
       // & refresh margin grid
+      self.grid.instance.option("loadPanel.enabled", true);
       const saveInterval = setInterval(() => {
         if (!this.grid.instance.hasEditData()) {
           clearInterval(saveInterval);
@@ -601,6 +602,7 @@ export class GridCommandesComponent
   }
 
   setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
+    self.grid.instance.option("loadPanel.enabled", false);
     const context: any = this;
 
     const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
