@@ -2938,10 +2938,6 @@
       },
       {
         "dataField": "fournisseur.id",
-        "calculateDisplayValue": [
-          "fournisseur.code",
-          "fournisseur.raisonSocial"
-        ],
         "cssClass": "small-side-padding",
         "visible": true,
         "width": 170

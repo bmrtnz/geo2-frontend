@@ -133,9 +133,9 @@ export class GridCommandesComponent
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  // public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
   public fournisseursSource: DataSource;
+  private fournisseurDisplayValueStore: { [id: number]: string } = {};
 
   @Input() ordreID: string;
   @Input() venteACommission: boolean;
@@ -410,6 +410,7 @@ export class GridCommandesComponent
                 "article.emballage.emballage.yh",
                 "article.emballage.emballage.zb",
                 "article.emballage.emballage.zh",
+                "proprietaireMarchandise.natureStation",
               ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
@@ -598,9 +599,9 @@ export class GridCommandesComponent
 
   onFocusedCellChanging(e) {
     const dataField = e.columns[e.newColumnIndex].dataField;
-    const propietaireID = e.rows[e.newRowIndex].data.proprietaireMarchandise?.id;
-    if (propietaireID && dataField === "fournisseur.id")
-      this.buildFournisseurFilter(propietaireID).then(
+    const proprietaireID = e.rows[e.newRowIndex].data.proprietaireMarchandise?.id;
+    if (proprietaireID && dataField === "fournisseur.id")
+      this.buildFournisseurFilter(proprietaireID).then(
         ({ filters }) => {
           // La colonne "fournisseur" n'utilise pas un `lookup` comme composant
           // car il ne possede pas de fonctionnalité de filtrage de données
@@ -615,8 +616,6 @@ export class GridCommandesComponent
   setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
     self.grid.instance.option("loadPanel.enabled", false);
     const context: any = this;
-
-    const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
 
     if (context.dataField === "proprietaireMarchandise.id") {
       context.defaultSetCellValue(newData, value);
@@ -843,9 +842,20 @@ export class GridCommandesComponent
       e.editorOptions.valueExpr = "id";
       e.editorOptions.searchExpr = ["code"];
       e.editorOptions.dataSource = this.fournisseursSource;
-      e.editorOptions.displayExpr = rowData => rowData?.code ? `${rowData?.code} - ${rowData?.raisonSocial}` : "";
+      e.editorOptions.displayExpr = rowData => {
+        const displayValue = rowData?.code ? `${rowData?.code} - ${rowData?.raisonSocial}` : "";
+        if (rowData?.id)
+          this.fournisseurDisplayValueStore[rowData.id] = displayValue;
+        return displayValue;
+      };
       e.editorOptions.onValueChanged = args => e.setValue(args.value);
     }
+  }
+
+  calculateFournisseurDisplayValue(rowData) {
+    if (self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id])
+      return self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id];
+    return rowData.fournisseur ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
   }
 
   onEditorPrepared(e) {

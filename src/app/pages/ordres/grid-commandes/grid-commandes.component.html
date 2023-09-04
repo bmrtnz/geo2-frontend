@@ -203,7 +203,9 @@
     [editorOptions]="column?.editorOptions"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="
-      column?.calculateDisplayValue
+      column.dataField === 'fournisseur.id'
+        ? calculateFournisseurDisplayValue
+        : column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
         : column?.dataField
     "
