@@ -44,9 +44,9 @@ export class GridCommandesEventsService {
     newData.nombrePalettesCommandees = value;
     if (this.context?.secteurCode !== "F") {
       if (this.context?.client?.secteur?.id !== "F")
-        newData.nombrePalettesCommandees = 0;
+        newData.nombreColisCommandes = 0;
 
-      if (!currentData.nombrePalettesCommandees || newData.nombrePalettesCommandees === 0) {
+      if (!currentData.nombreColisCommandes || newData.nombreColisCommandes === 0) {
         let nombreColisPalette: number;
         let nombreColisPaletteIntermediaire: number;
 
@@ -309,7 +309,10 @@ export class GridCommandesEventsService {
             nb_pal_th -= 1;
           }
           nb_pal_dispo = nb_pal_th;
-          dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", Math.ceil(nb_pal));
+
+          const nombrePalettes = Math.ceil(nb_pal);
+          if (nombrePalettes !== row.data?.nombrePalettesCommandees)
+            dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nombrePalettes);
         }), 10);
 
   }
