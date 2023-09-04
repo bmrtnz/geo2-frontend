@@ -400,6 +400,17 @@ export class GridCommandesComponent
               ],
               // Used to filter emballeur/expediteur
               ...["proprietaireMarchandise.listeExpediteurs"],
+              // Required by cell events
+              ...[
+                "typePalette.dimensions",
+                "nombreColisPaletteByDimensions",
+                "article.emballage.emballage.xb",
+                "article.emballage.emballage.xh",
+                "article.emballage.emballage.yb",
+                "article.emballage.emballage.yh",
+                "article.emballage.emballage.zb",
+                "article.emballage.emballage.zh",
+              ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
               ["ordre.id", "=", this.ordreID],

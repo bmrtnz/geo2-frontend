@@ -94,6 +94,7 @@ export class OrdreLigne extends Model {
   @Field() public nombreReservationsSurStock?: number;
   @Field() public ristourne?: boolean;
   @Field() public indicateurPalette?: number;
+  @Field() public nombreColisPaletteByDimensions?: number;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");
