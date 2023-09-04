@@ -2971,6 +2971,7 @@
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "venteUnite.id",
+        "width": 90,
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -3040,6 +3041,7 @@
         ],
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
+        "width": 90,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
           "searchTimeout": "0"
