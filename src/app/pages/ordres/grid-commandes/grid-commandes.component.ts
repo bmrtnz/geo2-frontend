@@ -44,6 +44,7 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { Change, GridColumn, OnSavingEvent } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DxoLoadPanelComponent } from "devextreme-angular/ui/nested";
+import ArrayStore from "devextreme/data/array_store";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
@@ -132,8 +133,9 @@ export class GridCommandesComponent
 
   public readonly gridID = Grid.LignesCommandes;
   public columns: Observable<GridColumn[]>;
-  // public changes: Change<Partial<OrdreLigne>>[] = [];
   public contentReadyEvent = new EventEmitter<any>();
+  public fournisseursSource: DataSource;
+  private fournisseurDisplayValueStore: { [id: number]: string } = {};
 
   @Input() ordre: Partial<Ordre>;
   @Input() venteACommission: boolean;
@@ -267,20 +269,6 @@ export class GridCommandesComponent
     return data.value + " ligne" + (data.value > 1 ? "s" : "");
   }
 
-  onFocusedCellChanging(e) {
-    // Setting the embal/exp list depending on propri&taire
-    if (
-      e.columns[e.prevColumnIndex]?.dataField !==
-      "fournisseur.id" &&
-      e.columns[e.newColumnIndex]?.dataField === "fournisseur.id"
-    ) {
-      const row = e.rows[e.newRowIndex];
-      this.buildFournisseurFilter(row.data.proprietaireMarchandise.id).then(
-        ({ filters }) => this.bindFournisseurSource(filters)
-      );
-    }
-  }
-
   destockEnded() {
     this.updateDestockAuto.emit();
   }
@@ -289,6 +277,7 @@ export class GridCommandesComponent
     if (event.component.hasEditData()) {
       // Calculate margin at the end of the saving process
       // & refresh margin grid
+      self.grid.instance.option("loadPanel.enabled", true);
       const saveInterval = setInterval(() => {
         if (!this.grid.instance.hasEditData()) {
           clearInterval(saveInterval);
@@ -416,6 +405,18 @@ export class GridCommandesComponent
               ],
               // Used to filter emballeur/expediteur
               ...["proprietaireMarchandise.listeExpediteurs"],
+              // Required by cell events
+              ...[
+                "typePalette.dimensions",
+                "nombreColisPaletteByDimensions",
+                "article.emballage.emballage.xb",
+                "article.emballage.emballage.xh",
+                "article.emballage.emballage.yb",
+                "article.emballage.emballage.yh",
+                "article.emballage.emballage.zb",
+                "article.emballage.emballage.zh",
+                "proprietaireMarchandise.natureStation",
+              ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
               ["ordre.id", "=", this.ordre?.id],
@@ -475,7 +476,6 @@ export class GridCommandesComponent
       ])
       .pipe(map((res) => res.data.fournisseur))
       .toPromise();
-
     if (
       this.currentCompanyService.getCompany().id !== "BUK" ||
       proprietaire?.code.substring(0, 2) !== "BW"
@@ -602,57 +602,77 @@ export class GridCommandesComponent
     self = this; // KEEP THIS to have a consistent value of 'self' when navigating through order tabs
   }
 
+  onFocusedCellChanging(e) {
+    const dataField = e.columns[e.newColumnIndex].dataField;
+    const proprietaireID = e.rows[e.newRowIndex].data.proprietaireMarchandise?.id;
+    if (proprietaireID && dataField === "fournisseur.id")
+      this.buildFournisseurFilter(proprietaireID).then(
+        ({ filters }) => {
+          // La colonne "fournisseur" n'utilise pas un `lookup` comme composant
+          // car il ne possede pas de fonctionnalité de filtrage de données
+          // Et la reassignation dynamique de celui ci cause des problemes de performances sur la navigation
+          // Nous utilisons donc une implementation personnalisée d'une `select-box`
+          // avec laquelle le filtrage de la source de données est possible
+          this.fournisseursSource.filter(filters);
+        }
+      );
+  }
+
   setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
+    self.grid.instance.option("loadPanel.enabled", false);
     const context: any = this;
 
-    const rowIndex = self.grid.instance.getRowIndexByKey(currentData.id);
-
     if (context.dataField === "proprietaireMarchandise.id") {
-      return zip(
-        self.fournisseursService
-          .getOne_v2(value, ["id", "code", "raisonSocial"])
-          .pipe(map((res) => res.data.fournisseur)),
-        self.buildFournisseurFilter(value)
-      )
-        .pipe(
-          concatMap(([proprietaire, { fournisseur }]) => {
-            newData.proprietaireMarchandise = proprietaire;
+      context.defaultSetCellValue(newData, value);
+      // return zip(
+      //   self.fournisseursService
+      //     .getOne_v2(value, ["id", "code", "raisonSocial"])
+      //     .pipe(map((res) => res.data.fournisseur)),
+      //   self.buildFournisseurFilter(value)
+      // )
+      //   .pipe(
+      //     concatMap(([proprietaire, { fournisseur }]) => {
+      //       newData.proprietaireMarchandise = proprietaire;
 
-            // newData.fournisseur = fournisseur;
-            self.grid.instance.cellValue(
-              rowIndex,
-              "fournisseur.id",
-              fournisseur?.id
-            );
+      //       // newData.fournisseur = fournisseur;
+      //       self.grid.instance.cellValue(
+      //         rowIndex,
+      //         "fournisseur.id",
+      //         fournisseur?.id
+      //       );
 
-            // On force la bonne valeur pour l'affichage au focus
-            const ds = self.grid.dataSource as DataSource;
-            const store = ds.store() as CustomStore;
-            store.push([
-              {
-                key: currentData.id,
-                type: "update",
-                data: { fournisseur } as Partial<OrdreLigne>,
-              },
-            ]);
+      //       // On force la bonne valeur pour l'affichage au focus
+      //       const ds = self.grid.dataSource as DataSource;
+      //       const store = ds.store() as CustomStore;
+      //       store.push([
+      //         {
+      //           key: currentData.id,
+      //           type: "update",
+      //           data: { fournisseur } as Partial<OrdreLigne>,
+      //         },
+      //       ]);
 
-            return EMPTY;
-          })
-        )
-        .toPromise();
+      //       return EMPTY;
+      //     })
+      //   )
+      //   .toPromise();
     } else if (context.dataField === "fournisseur.id") {
-      return self.fournisseursService
-        .getOne_v2(value, ["id", "code", "raisonSocial"])
-        .pipe(
-          concatMap((res) => {
-            newData.fournisseur = res.data.fournisseur;
-            return EMPTY;
-          })
-        )
-        .toPromise();
+      context.defaultSetCellValue(newData, value);
+      // return self.fournisseursService
+      //   .getOne_v2(value, ["id", "code", "raisonSocial"])
+      //   .pipe(
+      //     concatMap((res) => {
+      //       newData.fournisseur = res.data.fournisseur;
+      //       return EMPTY;
+      //     })
+      //   )
+      //   .toPromise();
     } else if (context.dataField === "nombrePalettesCommandees") {
       return self.gridCommandesEventsService
         .onNombrePalettesCommandeesChange(newData, value, currentData);
+    } else if (context.dataField === "nombrePalettesIntermediaires") {
+      return self.gridCommandesEventsService
+        .onNombrePalettesIntermediairesChange(newData, value, currentData, self.grid.instance);
     } else if (context.dataField === "nombreColisPalette") {
       return self.gridCommandesEventsService
         .onNombreColisPaletteChange(newData, value, currentData, self.grid.instance);
@@ -674,9 +694,6 @@ export class GridCommandesComponent
     } else if (context.dataField === "paletteInter.id") {
       return self.gridCommandesEventsService
         .onPaletteInterChange(newData, value, currentData);
-    } else if (context.dataField === "nombrePalettesIntermediaires") {
-      return self.gridCommandesEventsService
-        .onNombrePalettesIntermediairesChange(newData, value, currentData, self.grid.instance);
     } else {
       // default behavior
       context.defaultSetCellValue(newData, value);
@@ -827,6 +844,27 @@ export class GridCommandesComponent
       e.editorOptions.onOpened = (elem) =>
         elem.component._popup.option("width", 300);
     }
+    // Customize `fournisseur` column
+    if (e.parentType == "dataRow" && e.dataField == "fournisseur.id") {
+      e.editorName = "dxSelectBox";
+      e.editorOptions.searchTimeout = 0;
+      e.editorOptions.valueExpr = "id";
+      e.editorOptions.searchExpr = ["code"];
+      e.editorOptions.dataSource = this.fournisseursSource;
+      e.editorOptions.displayExpr = rowData => {
+        const displayValue = rowData?.code ? `${rowData?.code} - ${rowData?.raisonSocial}` : "";
+        if (rowData?.id)
+          this.fournisseurDisplayValueStore[rowData.id] = displayValue;
+        return displayValue;
+      };
+      e.editorOptions.onValueChanged = args => e.setValue(args.value);
+    }
+  }
+
+  calculateFournisseurDisplayValue(rowData) {
+    if (self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id])
+      return self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id];
+    return rowData.fournisseur?.id ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
   }
 
   onEditorPrepared(e) {
@@ -905,6 +943,12 @@ export class GridCommandesComponent
 
   /** lookup columns datasource binding */
   private async bindSources(grid: dxDataGrid) {
+    this.fournisseursSource = await this.fournisseursService.getPreloadedDatasource<Fournisseur>(
+      ["id", "code", "raisonSocial", "listeExpediteurs"],
+      this.fournisseursService.mapDXFilterToRSQL([["valide", "=", true]])
+    );
+    this.fournisseursSource.sort([{ selector: "code" }]);
+
     // With Fournisseur model
     GridConfiguratorService.bindLookupColumnSource(
       grid,
@@ -919,7 +963,6 @@ export class GridCommandesComponent
         { sort: [{ selector: "code" }] }
       )
     );
-    this.bindFournisseurSource();
 
     // With BaseTarif model
     const btFilter = this.basesTarifService.mapDXFilterToRSQL([

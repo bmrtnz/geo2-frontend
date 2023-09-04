@@ -13,6 +13,7 @@
   (onSaved)="onSaved()"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
+  (onFocusedCellChanging)="onFocusedCellChanging($event)"
   (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
@@ -202,7 +203,9 @@
     [editorOptions]="column?.editorOptions"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="
-      column?.calculateDisplayValue
+      column.dataField === 'fournisseur.id'
+        ? calculateFournisseurDisplayValue
+        : column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
         : column?.dataField
     "

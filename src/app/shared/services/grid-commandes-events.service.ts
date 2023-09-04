@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import dxDataGrid, { Row } from 'devextreme/ui/data_grid';
-import { concatMap, lastValueFrom, map, Observable, tap } from 'rxjs';
-import { Article, OrdreLigne, Secteur, Societe, TypePalette } from '../models';
+import dxDataGrid from 'devextreme/ui/data_grid';
+import { lastValueFrom, map, tap } from 'rxjs';
+import { OrdreLigne, TypePalette } from '../models';
 import Ordre from '../models/ordre.model';
 import { OrdresService } from './api/ordres.service';
 import { TypesPaletteService } from './api/types-palette.service';
@@ -43,24 +43,14 @@ export class GridCommandesEventsService {
   ) {
     newData.nombrePalettesCommandees = value;
     if (this.context?.secteurCode !== "F") {
-      const typePalette = currentData?.paletteInter?.id ?? currentData?.typePalette?.id;
-
       if (this.context?.client?.secteur?.id !== "F")
-        newData.nombrePalettesCommandees = 0;
+        newData.nombreColisCommandes = 0;
 
-      if (!currentData.nombrePalettesCommandees || newData.nombrePalettesCommandees === 0) {
+      if (!currentData.nombreColisCommandes || newData.nombreColisCommandes === 0) {
         let nombreColisPalette: number;
         let nombreColisPaletteIntermediaire: number;
 
-        if (typePalette) {
-          nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
-            typePalette,
-            currentData.article.id,
-            this.context?.client?.secteur?.id,
-          ).pipe(map(res => res.data.fetchNombreColisParPalette)));
-        }
-
-        if (nombreColisPalette) {
+        if (currentData?.nombreColisPaletteByDimensions) {
           // BAM le 14/11/18
           // ne pas modifier les colis si déjà saisi
           if (currentData?.nombreColisPalette > 0)
@@ -114,20 +104,14 @@ export class GridCommandesEventsService {
 
     if (!ls_pal_code) ls_pal_code = currentData.typePalette?.id;
 
-    const ll_pal_nb_col = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
-      ls_pal_code,
-      currentData.article.id,
-      this.context?.client?.secteur?.id,
-    ).pipe(map(res => res.data.fetchNombreColisParPalette)));
-
     if (value !== 0) {
       if (value === 1)
-        newData.nombreColisPalette = ll_pal_nb_col / 2;
+        newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions / 2;
       else
-        newData.nombreColisPalette = ll_pal_nb_col / value;
+        newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions / value;
     } else {
-      if (ll_pal_nb_col)
-        newData.nombreColisPalette = ll_pal_nb_col;
+      if (currentData?.nombreColisPaletteByDimensions)
+        newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
     }
 
     let ll_nb_pal = currentData.nombrePalettesCommandees;
@@ -138,8 +122,8 @@ export class GridCommandesEventsService {
     if (value === 0) value = 1;
 
     if (this.context?.secteurCode !== "F")
-      if (ll_pal_nb_col && ll_pal_nb_col !== 0)
-        newData.nombreColisCommandes = value * ll_nb_pal_calc * ll_pal_nb_col;
+      if (currentData?.nombreColisPaletteByDimensions && currentData?.nombreColisPaletteByDimensions !== 0)
+        newData.nombreColisCommandes = value * ll_nb_pal_calc * currentData?.nombreColisPaletteByDimensions;
 
     if (this.context?.client?.secteur?.id === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
@@ -196,13 +180,7 @@ export class GridCommandesEventsService {
     newData.nombreColisCommandes = value;
     if (this.context?.secteurCode === "F") {
       if (value && currentData.nombreColisPalette === 0) {
-        const typePalette = currentData?.paletteInter?.id ?? currentData?.typePalette?.id;
-        const nombreColisPalette = await lastValueFrom(this.typesPaletteService.fetchNombreColisParPalette(
-          typePalette,
-          currentData.article.id,
-          this.context?.client?.secteur?.id,
-        ).pipe(map(res => res.data.fetchNombreColisParPalette)));
-        newData.nombreColisPalette = nombreColisPalette;
+        newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
       }
 
       if (!value && currentData.nombreColisPalette !== 0)
@@ -264,8 +242,10 @@ export class GridCommandesEventsService {
       this.context?.client?.secteur?.id,
     ).pipe(map(res => res.data.fetchNombreColisParPalette)));
 
-    if (this.context?.secteurCode === "F")
+    if (this.context?.secteurCode === "F") {
+      newData.nombreColisPaletteByDimensions = nombreColisPalette;
       newData.nombreColisPalette = nombreColisPalette;
+    }
 
     if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
       this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
@@ -329,7 +309,10 @@ export class GridCommandesEventsService {
             nb_pal_th -= 1;
           }
           nb_pal_dispo = nb_pal_th;
-          dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", Math.ceil(nb_pal));
+
+          const nombrePalettes = Math.ceil(nb_pal);
+          if (nombrePalettes !== row.data?.nombrePalettesCommandees)
+            dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nombrePalettes);
         }), 10);
 
   }

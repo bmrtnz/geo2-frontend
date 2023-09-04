@@ -707,6 +707,35 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public clearTraca = (
+    ordreLigneRef: string,
+  ) =>
+    this.apollo.query<{
+      clearTraca: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "clearTraca",
+              body: functionBody,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        ordreLigneRef,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];

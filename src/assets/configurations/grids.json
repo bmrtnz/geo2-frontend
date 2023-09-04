@@ -2938,26 +2938,8 @@
       },
       {
         "dataField": "fournisseur.id",
-        "calculateDisplayValue": [
-          "fournisseur.code",
-          "fournisseur.raisonSocial"
-        ],
         "cssClass": "small-side-padding",
         "visible": true,
-        "calculateSortValue": "transporteur.code",
-        "editorOptions": {
-          "searchTimeout": "0"
-        },
-        "lookup": {
-          "valueExpr": "id",
-          "displayExpr": [
-            "code",
-            "raisonSocial"
-          ],
-          "searchExpr": [
-            "code"
-          ]
-        },
         "width": 170
       },
       {
@@ -2985,6 +2967,7 @@
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "venteUnite.id",
+        "width": 90,
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -3054,6 +3037,7 @@
         ],
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
+        "width": 90,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
           "searchTimeout": "0"
@@ -3080,6 +3064,7 @@
         "calculateDisplayValue": [
           "typePalette.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "typePalette.id",
@@ -3102,6 +3087,7 @@
         "calculateDisplayValue": [
           "paletteInter.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "paletteInter.id",
