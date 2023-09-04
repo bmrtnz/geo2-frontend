@@ -3064,6 +3064,7 @@
         "calculateDisplayValue": [
           "typePalette.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "typePalette.id",
@@ -3086,6 +3087,7 @@
         "calculateDisplayValue": [
           "paletteInter.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "paletteInter.id",
