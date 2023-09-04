@@ -855,7 +855,7 @@ export class GridCommandesComponent
   calculateFournisseurDisplayValue(rowData) {
     if (self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id])
       return self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id];
-    return rowData.fournisseur ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
+    return rowData.fournisseur?.id ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
   }
 
   onEditorPrepared(e) {
