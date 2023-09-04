@@ -5,12 +5,12 @@ import {
   gql,
   MutationOptions,
   OperationVariables,
-  WatchQueryOptions,
+  WatchQueryOptions
 } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
-import { LoadOptions, BaseGroupDescriptor, Store } from "devextreme/data";
+import { BaseGroupDescriptor, LoadOptions } from "devextreme/data";
 import ArrayStore from "devextreme/data/array_store";
 import CustomStore, { CustomStoreOptions, Options } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
