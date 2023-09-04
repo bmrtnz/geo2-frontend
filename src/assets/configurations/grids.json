@@ -2944,20 +2944,6 @@
         ],
         "cssClass": "small-side-padding",
         "visible": true,
-        "calculateSortValue": "transporteur.code",
-        "editorOptions": {
-          "searchTimeout": "0"
-        },
-        "lookup": {
-          "valueExpr": "id",
-          "displayExpr": [
-            "code",
-            "raisonSocial"
-          ],
-          "searchExpr": [
-            "code"
-          ]
-        },
         "width": 170
       },
       {

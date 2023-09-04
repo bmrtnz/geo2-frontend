@@ -731,6 +731,7 @@ export class EvalDisplayPipe implements PipeTransform {
     };
   }
   transform(paths) {
+    console.log("Evaluating display value");
     return EvalDisplayPipe.doTransform(paths);
   }
 }
