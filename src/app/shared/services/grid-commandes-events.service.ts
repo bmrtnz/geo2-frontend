@@ -236,7 +236,7 @@ export class GridCommandesEventsService {
 
     } else newData.fournisseur = null;
 
-    let ls_dev_code = currentData.fournisseur.devise.id;
+    let ls_dev_code = currentData.fournisseur?.devise?.id;
     let ld_dev_taux: number;
 
     if (value !== currentData.proprietaireMarchandise?.id) {
@@ -259,20 +259,24 @@ export class GridCommandesEventsService {
 
         //Vérification s'il existe un pu mini pour la variété club
         //New gestion des frais marketing
-        const resFrais = await lastValueFrom(this.functionsService.fRecupFrais(
-          currentData.article.matierePremiere.variete.id,
-          currentData.article.cahierDesCharge.categorie.id,
-          this.context.secteurCode,
-          currentData.article.cahierDesCharge.categorie.cahierDesChargesBlueWhale,
-          currentData.article.matierePremiere.modeCulture.id,
-          currentData.article.matierePremiere.origine.id,
-        ).pipe(concatMap(res => this.attribFraisService
-          .getOne_v2(res?.data?.fRecupFrais?.res.toFixed(), new Set(["id", "fraisPU", "fraisUnite.id", "accompte", "perequation"])))));
-
         let ld_prix_mini = 0;
-        if (resFrais?.data?.attribFrais)
-          ld_prix_mini = resFrais.data.attribFrais.perequation
-            ? resFrais.data.attribFrais.accompte : 0;
+        try {
+          const resFrais = await lastValueFrom(this.functionsService.fRecupFrais(
+            currentData.article.matierePremiere.variete.id,
+            currentData.article.cahierDesCharge.categorie.id,
+            this.context.secteurCode,
+            currentData.article.cahierDesCharge.categorie.cahierDesChargesBlueWhale,
+            currentData.article.matierePremiere.modeCulture.id,
+            currentData.article.matierePremiere.origine.id,
+          ).pipe(concatMap(res => this.attribFraisService
+            .getOne_v2(res?.data?.fRecupFrais?.res.toFixed(), new Set(["id", "fraisPU", "fraisUnite.id", "accompte", "perequation"])))));
+
+          if (resFrais?.data?.attribFrais)
+            ld_prix_mini = resFrais.data.attribFrais.perequation
+              ? resFrais.data.attribFrais.accompte : 0;
+        } catch (error) {
+          console.warn("Echec de recuperation des frais -> ", error);
+        }
 
         let ld_ach_pu, ld_ach_dev_pu;
         if (ld_prix_mini && !["IMP", "BUK"].includes(this.context.societe.id)) {
