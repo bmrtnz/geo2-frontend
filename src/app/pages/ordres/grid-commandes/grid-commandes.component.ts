@@ -14,6 +14,7 @@ import {
   BaseTarif,
   CodePromo,
   Fournisseur,
+  NatureStation,
   TypePalette
 } from "app/shared/models";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
@@ -504,7 +505,8 @@ export class GridCommandesComponent
         if (proprietaire.id !== null)
           filters.push(["id", "=", proprietaire.id]);
       }
-    }
+    } else
+      filters.push(["natureStation", "<>", NatureStation.EXCLUSIVEMENT_PROPRIETAIRE])
     return filters;
   }
 
