@@ -411,6 +411,13 @@ export class GridCommandesComponent
                 "article.emballage.emballage.zb",
                 "article.emballage.emballage.zh",
                 "proprietaireMarchandise.natureStation",
+                "fournisseur.devise.id",
+                "article.id",
+                "article.matierePremiere.variete.id",
+                "article.cahierDesCharge.categorie.id",
+                "article.cahierDesCharge.categorie.cahierDesChargesBlueWhale",
+                "article.matierePremiere.origine.id",
+                "article.matierePremiere.modeCulture.id",
               ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
@@ -618,7 +625,8 @@ export class GridCommandesComponent
     const context: any = this;
 
     if (context.dataField === "proprietaireMarchandise.id") {
-      context.defaultSetCellValue(newData, value);
+      return self.gridCommandesEventsService
+        .onProprietaireMarchandiseChange(newData, value, currentData, self.grid.instance);
       // return zip(
       //   self.fournisseursService
       //     .getOne_v2(value, ["id", "code", "raisonSocial"])

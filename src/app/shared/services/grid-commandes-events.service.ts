@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import dxDataGrid from 'devextreme/ui/data_grid';
-import { lastValueFrom, map, tap } from 'rxjs';
-import { OrdreLigne, TypePalette } from '../models';
+import { concatMap, lastValueFrom, map, tap } from 'rxjs';
+import { Fournisseur, NatureStation, OrdreLigne, TypePalette } from '../models';
 import Ordre from '../models/ordre.model';
+import { AttribFraisService } from './api/attrib-frais.service';
+import { DevisesRefsService } from './api/devises-refs.service';
+import { FournisseursService } from './api/fournisseurs.service';
+import { FunctionsService } from './api/functions.service';
 import { OrdresService } from './api/ordres.service';
 import { TypesPaletteService } from './api/types-palette.service';
 import { CurrentCompanyService } from './current-company.service';
@@ -17,7 +21,11 @@ export class GridCommandesEventsService {
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
+    private fournisseursService: FournisseursService,
+    private functionsService: FunctionsService,
     private typesPaletteService: TypesPaletteService,
+    private devisesRefsService: DevisesRefsService,
+    private attribFraisService: AttribFraisService,
   ) { }
 
   updateContext(ordre: Ordre["id"]) {
@@ -29,6 +37,7 @@ export class GridCommandesEventsService {
       "societe.devise.id",
       "client.secteur.id",
       "type.id",
+      "typeVente.id",
     ])).pipe(
       tap(res => {
         this.context = res.data.ordre;
@@ -191,6 +200,113 @@ export class GridCommandesEventsService {
     }
   }
 
+  async onProprietaireMarchandiseChange(
+    newData: Partial<OrdreLigne>,
+    value: Fournisseur["id"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    newData.proprietaireMarchandise = { id: value };
+    const listeExpediteurs = currentData.proprietaireMarchandise?.listeExpediteurs?.split(",");
+    let ls_fou: Partial<Fournisseur>;
+
+    if (currentData.proprietaireMarchandise?.natureStation === NatureStation.EXCLUSIVEMENT_PROPRIETAIRE)
+      if (listeExpediteurs?.length) {
+        const fournisseur = await lastValueFrom(this.fournisseursService
+          .getFournisseurByCode(listeExpediteurs[0], new Set(["id", "code"])));
+        ls_fou = fournisseur.data.fournisseurByCode;
+      }
+      else {
+        const fournisseur = await lastValueFrom(this.fournisseursService
+          .getOne_v2(value, new Set(["id", "code"])));
+        ls_fou = fournisseur.data.fournisseur;
+      }
+
+    if (listeExpediteurs?.find(exp => exp === newData?.fournisseur?.code) && currentData.logistique?.expedieStation) {
+      newData.fournisseur = ls_fou;
+
+      //Effacer les infos du détail d'expedition lors du changement de fournisseur
+      newData.nombrePalettesExpediees = 0;
+      newData.nombreColisExpedies = 0;
+      newData.poidsBrutExpedie = 0;
+      newData.poidsNetExpedie = 0;
+      newData.achatQuantite = 0;
+      newData.venteQuantite = 0;
+      this.functionsService.clearTraca(currentData.id).subscribe();
+
+    } else newData.fournisseur = null;
+
+    let ls_dev_code = currentData.fournisseur.devise.id;
+    let ld_dev_taux: number;
+
+    if (value !== currentData.proprietaireMarchandise?.id) {
+      if (ls_dev_code) {
+        if (ls_dev_code === this.context.societe.devise.id)
+          ld_dev_taux = 1;
+        else {
+          const res = await lastValueFrom(this.devisesRefsService.getOne({
+            id: this.context.societe.devise.id,
+            devise: ls_dev_code,
+          }, ["id", "tauxAchat"]));
+          if (res?.data?.deviseRef)
+            ld_dev_taux = res.data.deviseRef.tauxAchat;
+          if (!ld_dev_taux) {
+            console.error("Erreur: le taux de cette devise n'est pas renseigné");
+            ls_dev_code = this.context.societe.devise.id;
+            ld_dev_taux = 1;
+          }
+        }
+
+        //Vérification s'il existe un pu mini pour la variété club
+        //New gestion des frais marketing
+        const resFrais = await lastValueFrom(this.functionsService.fRecupFrais(
+          currentData.article.matierePremiere.variete.id,
+          currentData.article.cahierDesCharge.categorie.id,
+          this.context.secteurCode,
+          currentData.article.cahierDesCharge.categorie.cahierDesChargesBlueWhale,
+          currentData.article.matierePremiere.modeCulture.id,
+          currentData.article.matierePremiere.origine.id,
+        ).pipe(concatMap(res => this.attribFraisService
+          .getOne_v2(res?.data?.fRecupFrais?.res.toFixed(), new Set(["id", "fraisPU", "fraisUnite.id", "accompte", "perequation"])))));
+
+        let ld_prix_mini = 0;
+        if (resFrais?.data?.attribFrais)
+          ld_prix_mini = resFrais.data.attribFrais.perequation
+            ? resFrais.data.attribFrais.accompte : 0;
+
+        let ld_ach_pu, ld_ach_dev_pu;
+        if (ld_prix_mini && !["IMP", "BUK"].includes(this.context.societe.id)) {
+          newData.achatPrixUnitaire = ld_prix_mini;
+          ld_ach_pu = ld_prix_mini;
+          ld_ach_dev_pu = ld_dev_taux * ld_prix_mini;
+          newData.achatPrixUnitaire = ld_ach_pu;
+          newData.achatDevisePrixUnitaire = ld_ach_dev_pu;
+        } else {
+          newData.achatPrixUnitaire = ld_dev_taux * currentData.achatDevisePrixUnitaire;
+        }
+
+      } else {
+        ls_dev_code = this.context.societe.devise.id;
+        ld_dev_taux = 1;
+      }
+
+      newData.achatDevise = ls_dev_code;
+      newData.achatDeviseTaux = ld_dev_taux;
+    }
+
+    if (this.context?.secteurCode === "F")
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
+
+    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
+      // On met un petit delai, sinon on obtient pas les nouvelles valeurs
+      setTimeout(() => dxDataGrid.getVisibleRows()
+        .forEach(row => {
+          dxDataGrid.cellValue(row.rowIndex, "proprietaireMarchandise.id", value);
+          dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", ls_fou.id);
+        }), 10);
+  }
+
   async onVentePrixUnitaireChange(
     newData: Partial<OrdreLigne>,
     value: OrdreLigne["ventePrixUnitaire"],
@@ -266,6 +382,7 @@ export class GridCommandesEventsService {
   private ofRepartitionPalette(
     newData: Partial<OrdreLigne>,
     currentData: Partial<OrdreLigne>,
+    filterFournisseur = true,
   ) {
     if ((newData.nombreColisPalette ?? currentData.nombreColisPalette) === 0) return;
     if (!(newData.fournisseur?.id ?? currentData.fournisseur?.id)) return;
@@ -278,7 +395,10 @@ export class GridCommandesEventsService {
     return (dxDataGrid: dxDataGrid) =>
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
       setTimeout(() => dxDataGrid.getVisibleRows()
-        .filter(row => row.rowType === "data" && row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id))
+        .filter(row => {
+          if (!filterFournisseur) return true;
+          return row.rowType === "data" && row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id);
+        })
         .forEach(row => {
           ld_pal_nb_col = row.data.nombreColisPalette;
 
