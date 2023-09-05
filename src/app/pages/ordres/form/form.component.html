@@ -1072,6 +1072,7 @@
                     (transporteurChange)="refreshTransporteur()"
                     (selectedRowsChange)="gridCdesSelectedRowsChange($event)"
                     (updateDestockAuto)="updateDestockAuto()"
+                    (afterSaved)="refreshHeader()"
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique

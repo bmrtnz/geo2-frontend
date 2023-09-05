@@ -143,6 +143,7 @@ export class GridCommandesComponent
   @ViewChild(DxoLoadPanelComponent) loadPanel: DxoLoadPanelComponent;
   @Output() allowMutations = false;
   @Output() updateDestockAuto = new EventEmitter<any>();
+  @Output() afterSaved = new EventEmitter<any>();
 
   // legacy features properties
   public certifsMD: any;
@@ -292,6 +293,7 @@ export class GridCommandesComponent
 
   onSaved() {
     this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+    this.afterSaved.emit();
   }
 
   // Reload grid data after external update
