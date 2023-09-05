@@ -108,7 +108,7 @@ export class GridCommandesEventsService {
         if (!currentData.paletteInter?.id || currentData.paletteInter.id === "-")
           newData.paletteInter = { id: ls_pal_code };
       }
-      ls_pal_code = { id: newData.paletteInter.id ?? currentData.paletteInter.id };
+      ls_pal_code = { id: newData.paletteInter?.id ?? currentData.paletteInter?.id };
     } else newData.paletteInter = { id: "-" };
 
     if (!ls_pal_code) ls_pal_code = currentData.typePalette?.id;
