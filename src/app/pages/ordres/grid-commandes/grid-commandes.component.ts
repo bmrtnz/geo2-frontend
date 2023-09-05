@@ -996,4 +996,9 @@ export class GridCommandesComponent
       )
     );
   }
+
+  onGridOut() {
+    if (this.grid.instance.hasEditData())
+      this.grid.instance.saveEditData();
+  }
 }
