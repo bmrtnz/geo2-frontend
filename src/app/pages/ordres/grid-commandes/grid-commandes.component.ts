@@ -468,7 +468,6 @@ export class GridCommandesComponent
   }
 
   private async buildFournisseurFilter(proprietaireID?: Fournisseur["id"]) {
-    let fournisseur: Partial<Fournisseur>;
     const filters = [];
 
     const proprietaire = await this.fournisseursService
@@ -488,25 +487,15 @@ export class GridCommandesComponent
       if (listExp?.length) {
         for (const exp of listExp) {
           filters.push(["code", "=", exp], "or");
-          // Automatically selected when included in the list
-          if (exp === proprietaire.code) fournisseur = proprietaire;
         }
-
-        // Select first on the list if no selection
-        const firstFournisseur = await this.fournisseursService
-          .getFournisseurByCode(listExp[0], ["id", "code", "raisonSocial"])
-          .pipe(map((res) => res.data.fournisseurByCode))
-          .toPromise();
-        fournisseur = fournisseur ?? firstFournisseur;
 
         filters.pop();
       } else {
-        fournisseur = proprietaire;
         if (proprietaire.id !== null)
           filters.push(["id", "=", proprietaire.id]);
       }
     }
-    return { filters, fournisseur };
+    return filters;
   }
 
   // legacy features methods
@@ -611,7 +600,7 @@ export class GridCommandesComponent
     const proprietaireID = e.rows[e.newRowIndex].data.proprietaireMarchandise?.id;
     if (proprietaireID && dataField === "fournisseur.id")
       this.buildFournisseurFilter(proprietaireID).then(
-        ({ filters }) => {
+        (filters) => {
           // La colonne "fournisseur" n'utilise pas un `lookup` comme composant
           // car il ne possede pas de fonctionnalité de filtrage de données
           // Et la reassignation dynamique de celui ci cause des problemes de performances sur la navigation
@@ -628,39 +617,30 @@ export class GridCommandesComponent
 
     if (context.dataField === "proprietaireMarchandise.id") {
       return self.gridCommandesEventsService
-        .onProprietaireMarchandiseChange(newData, value, currentData, self.grid.instance);
-      // return zip(
-      //   self.fournisseursService
-      //     .getOne_v2(value, ["id", "code", "raisonSocial"])
-      //     .pipe(map((res) => res.data.fournisseur)),
-      //   self.buildFournisseurFilter(value)
-      // )
-      //   .pipe(
-      //     concatMap(([proprietaire, { fournisseur }]) => {
-      //       newData.proprietaireMarchandise = proprietaire;
+        .onProprietaireMarchandiseChange(newData, value, currentData, self.grid.instance)
+        .then(() => lastValueFrom(self.fournisseursService
+          .getOne_v2(newData.proprietaireMarchandise?.id ?? currentData.proprietaireMarchandise?.id, [
+            "id",
+            "code",
+            "raisonSocial",
+            "listeExpediteurs",
+          ]).pipe(map((res) => res.data.fournisseur)))
+        )
+        .then(async proprietaire => {
+          if (newData?.fournisseur) return;
+          const listeExpediteurs = proprietaire?.listeExpediteurs?.split(",");
+          if (listeExpediteurs?.length) {
+            for (const exp of listeExpediteurs)
+              // Automatically selected when included in the list
+              if (exp === proprietaire.code) newData.fournisseur = proprietaire;
 
-      //       // newData.fournisseur = fournisseur;
-      //       self.grid.instance.cellValue(
-      //         rowIndex,
-      //         "fournisseur.id",
-      //         fournisseur?.id
-      //       );
-
-      //       // On force la bonne valeur pour l'affichage au focus
-      //       const ds = self.grid.dataSource as DataSource;
-      //       const store = ds.store() as CustomStore;
-      //       store.push([
-      //         {
-      //           key: currentData.id,
-      //           type: "update",
-      //           data: { fournisseur } as Partial<OrdreLigne>,
-      //         },
-      //       ]);
-
-      //       return EMPTY;
-      //     })
-      //   )
-      //   .toPromise();
+            // Select first on the list if no selection
+            const firstFournisseur = await lastValueFrom(self.fournisseursService
+              .getFournisseurByCode(listeExpediteurs[0], ["id", "code", "raisonSocial"])
+              .pipe(map((res) => res.data.fournisseurByCode)));
+            newData.fournisseur = newData?.fournisseur ?? firstFournisseur;
+          } else newData.fournisseur = proprietaire;
+        });
     } else if (context.dataField === "fournisseur.id") {
       context.defaultSetCellValue(newData, value);
       // return self.fournisseursService
