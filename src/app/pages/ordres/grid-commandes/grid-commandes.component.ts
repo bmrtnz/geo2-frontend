@@ -55,7 +55,8 @@ import {
   concatMapTo, filter,
   finalize, last,
   map,
-  takeWhile
+  takeWhile,
+  tap
 } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
@@ -271,7 +272,7 @@ export class GridCommandesComponent
     if (event.component.hasEditData()) {
       // Calculate margin at the end of the saving process
       // & refresh margin grid
-      self.grid.instance.option("loadPanel.enabled", true);
+      this.grid.instance.option("loadPanel.enabled", true);
       const saveInterval = setInterval(() => {
         if (!this.grid.instance.hasEditData()) {
           clearInterval(saveInterval);
@@ -297,10 +298,12 @@ export class GridCommandesComponent
       this.functionsService
         .setTransporteurBassin(firstLigneCommande.id, firstLigneCommande.ordre.societe.id)
         .subscribe(() => this.afterSaved.emit());
+    this.grid.instance.option("loadPanel.enabled", false);
   }
 
   // Reload grid data after external update
   public async update() {
+    this.grid.instance.option("loadPanel.enabled", true);
     this.grid.instance.beginCustomLoading("");
     const datasource = await this.refreshData(
       await this.columns.toPromise()
@@ -312,12 +315,15 @@ export class GridCommandesComponent
     setTimeout(() => {
       this.reindexRows();
       this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordre));
+      this.grid.instance.option("loadPanel.enabled", false);
     }, 1000);
   }
 
   private onColumnsConfigurationChange({ current }: { current: GridColumn[] }) {
+    this.grid.instance.option("loadPanel.enabled", true);
     this.refreshData(current).subscribe((datasource) => {
       this.grid.dataSource = datasource;
+      this.grid.instance.option("loadPanel.enabled", false);
     });
   }
 
@@ -430,7 +436,7 @@ export class GridCommandesComponent
               ["ordre.id", "=", this.ordre?.id],
             ])
           ))
-        )
+        ),
       );
   }
 
@@ -616,7 +622,6 @@ export class GridCommandesComponent
   }
 
   setCellValue(newData: Partial<OrdreLigne>, value, currentData: Partial<OrdreLigne>) {
-    self.grid.instance.option("loadPanel.enabled", false);
     const context: any = this;
 
     if (context.dataField === "proprietaireMarchandise.id") {
