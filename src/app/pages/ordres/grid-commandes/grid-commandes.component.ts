@@ -7,14 +7,14 @@ import {
   OnChanges,
   OnInit,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BaseTarif,
   CodePromo,
   Fournisseur,
-  TypePalette,
+  TypePalette
 } from "app/shared/models";
 import LigneReservation from "app/shared/models/ligne-reservation.model";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
@@ -22,7 +22,7 @@ import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
   FournisseursService,
-  LocalizationService,
+  LocalizationService
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { CertificationsModesCultureService } from "app/shared/services/api/certifications-modes-culture.service";
@@ -38,30 +38,24 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { GridCommandesEventsService } from "app/shared/services/grid-commandes-events.service";
 import {
   Grid,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
-import { Change, GridColumn, OnSavingEvent } from "basic";
+import { GridColumn, OnSavingEvent } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DxoLoadPanelComponent } from "devextreme-angular/ui/nested";
-import ArrayStore from "devextreme/data/array_store";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { EMPTY, from, iif, lastValueFrom, Observable, of, zip } from "rxjs";
+import { from, iif, lastValueFrom, Observable, of } from "rxjs";
 import {
   concatMap,
-  concatMapTo,
-  debounceTime,
-  filter,
-  finalize,
-  first,
-  last,
+  concatMapTo, filter,
+  finalize, last,
   map,
-  takeWhile,
-  tap,
+  takeWhile
 } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
@@ -296,7 +290,8 @@ export class GridCommandesComponent
   }
 
   onSaved() {
-    this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"]);
+    this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
+      .subscribe(() => this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions", "Logistique", "Frais"]));
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
@@ -1004,5 +999,10 @@ export class GridCommandesComponent
         this.grid.focusedColumnIndex
       )
     );
+  }
+
+  onGridOut() {
+    if (this.grid.instance.hasEditData())
+      this.grid.instance.saveEditData();
   }
 }

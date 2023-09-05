@@ -216,7 +216,7 @@ export class FunctionsService {
    * avant envoi de documents et validation bon à facturer
    */
   public fVerifLogistiqueOrdre = (ordreRef: string) =>
-    this.apollo.watchQuery<{ fVerifLogistiqueOrdre: FunctionResponse }>({
+    this.apollo.query<{ fVerifLogistiqueOrdre: FunctionResponse }>({
       query: gql(
         ApiService.buildGraph(
           "query",

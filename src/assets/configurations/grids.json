@@ -2945,17 +2945,6 @@
       {
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
         "cssClass": "multi-line-header small-side-padding",
         "visible": true
       },
@@ -3016,17 +3005,6 @@
       {
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "width": 95,
         "visible": true
       },
@@ -3114,17 +3092,6 @@
       },
       {
         "dataField": "fraisPrixUnitaire",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3159,30 +3126,12 @@
         "width": 45,
         "allowEditing": false,
         "cssClass": "multi-line-header",
-        "editorOptions": {
-          "step": 0,
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "visible": true
       },
       {
         "dataField": "tauxRemiseHorsFacture",
         "width": 45,
         "allowEditing": false,
-        "editorOptions": {
-          "step": 0,
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "cssClass": "multi-line-header",
         "visible": true
       },

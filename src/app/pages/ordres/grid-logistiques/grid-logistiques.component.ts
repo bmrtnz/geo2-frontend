@@ -36,7 +36,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
   templateUrl: "./grid-logistiques.component.html",
   styleUrls: ["./grid-logistiques.component.scss"],
 })
-export class GridLogistiquesComponent implements OnInit, AfterViewInit, OnChanges {
+export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public transporteurGroupageSource: DataSource;
   public groupageSource: DataSource;
