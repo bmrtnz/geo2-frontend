@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import {
@@ -36,7 +36,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
   templateUrl: "./grid-logistiques.component.html",
   styleUrls: ["./grid-logistiques.component.scss"],
 })
-export class GridLogistiquesComponent implements OnInit, OnChanges {
+export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public transporteurGroupageSource: DataSource;
   public groupageSource: DataSource;
@@ -113,6 +113,9 @@ export class GridLogistiquesComponent implements OnInit, OnChanges {
           .filter((inst) => inst.valide)
           .map((inst) => this.instructionsList.push(inst.description));
       });
+  }
+  ngAfterViewInit(): void {
+    this.gridsService.register("Logistique", this.datagrid);
   }
 
   ngOnInit(): void {

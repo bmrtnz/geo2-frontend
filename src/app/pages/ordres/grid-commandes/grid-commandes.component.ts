@@ -291,7 +291,8 @@ export class GridCommandesComponent
   }
 
   onSaved() {
-    this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
+    this.functionsService.fVerifLogistiqueOrdre(this.ordreID)
+      .subscribe(() => this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions", "Logistique", "Frais"));
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
