@@ -6641,8 +6641,17 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "frais",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "frais.id",
+        "calculateDisplayValue": "frais.description",
+        "editorOptions": {
+          "searchTimeout": "0",
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 200,
         "visible": true
       },
@@ -6674,8 +6683,17 @@
       },
       {
         "visibleIndex": 9,
-        "dataField": "devise",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "devise.id",
+        "calculateDisplayValue": "devise.description",
+        "editorOptions": {
+          "searchTimeout": "0",
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 120,
         "visible": true
       },
@@ -6722,7 +6740,9 @@
       {
         "visibleIndex": 18,
         "dataField": "codePlus",
-        "editCellTemplate": "customSelectBoxTemplate",
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
         "visible": true
       },
       {

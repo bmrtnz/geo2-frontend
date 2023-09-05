@@ -35,6 +35,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
+import { EditorPreparingEvent } from "devextreme/ui/data_grid";
 
 @Component({
   selector: "app-grid-frais",
@@ -207,7 +208,11 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
         )
       );
       this.dataSource = this.ordresFraisService.getDataSource_v2(
-        await fields.toPromise()
+        [
+          ...await fields.toPromise(),
+          "devise.description",
+          "frais.description",
+        ]
       );
       this.dataSource.filter([["ordre.id", "=", this.ordre.id]]);
       this.datagrid.dataSource = this.dataSource;
@@ -392,5 +397,28 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
 
   public calculateMontantTotal(entity: Partial<OrdreFrais>) {
     return (entity.achatQuantite ?? 0) * (entity.achatPrixUnitaire ?? 0);
+  }
+
+  public onEditorPreparing(e: EditorPreparingEvent) {
+    if (e.parentType == "dataRow")
+      this.configureSelectSources(e);
+  }
+
+  private configureSelectSources(e: EditorPreparingEvent) {
+    if (e.dataField === "frais.id") {
+      e.editorName = "dxSelectBox";
+      e.editorOptions.dataSource = this.fraisSource;
+      e.editorOptions.onValueChanged = args => e.setValue(args.value);
+    }
+    if (e.dataField === "devise.id") {
+      e.editorName = "dxSelectBox";
+      e.editorOptions.dataSource = this.deviseSource;
+      e.editorOptions.onValueChanged = args => e.setValue(args.value);
+    }
+    if (e.dataField === "codePlus") {
+      e.editorName = "dxSelectBox";
+      e.editorOptions.dataSource = this.codePlusSource;
+      e.editorOptions.onValueChanged = args => e.setValue(args.value);
+    }
   }
 }

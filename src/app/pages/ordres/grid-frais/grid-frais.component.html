@@ -22,6 +22,7 @@
   (onSaved)="onSaved()"
   (onCellDblClick)="(onCellClick)"
   (onCellPrepared)="onCellPrepared($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Frais',
@@ -87,6 +88,7 @@
     [editorOptions]="column.editorOptions"
     [editCellTemplate]="column.editCellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
+    [calculateDisplayValue]="column?.calculateDisplayValue"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
     "
@@ -94,7 +96,7 @@
   >
   </dxi-column>
 
-  <div *dxTemplate="let cell of 'selectBoxTemplate'">
+  <!-- <div *dxTemplate="let cell of 'selectBoxTemplate'">
     <dx-select-box
       [dataSource]="this[cell.column.dataField + 'Source']"
       [displayExpr]="
@@ -126,5 +128,5 @@
       <dxo-drop-down-options [width]="SelectBoxPopupWidth">
       </dxo-drop-down-options>
     </dx-select-box>
-  </div>
+  </div> -->
 </dx-data-grid>
