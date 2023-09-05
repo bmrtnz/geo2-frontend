@@ -234,7 +234,7 @@ export class GridCommandesEventsService {
       newData.venteQuantite = 0;
       this.functionsService.clearTraca(currentData.id).subscribe();
 
-    } else newData.fournisseur = null;
+    }
 
     let ls_dev_code = currentData.fournisseur?.devise?.id;
     let ld_dev_taux: number;
@@ -308,6 +308,44 @@ export class GridCommandesEventsService {
         .forEach(row => {
           dxDataGrid.cellValue(row.rowIndex, "proprietaireMarchandise.id", value);
           dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", ls_fou.id);
+        }), 10);
+  }
+
+  async onFournisseurChange(
+    newData: Partial<OrdreLigne>,
+    value: Fournisseur["id"],
+    currentData: Partial<OrdreLigne>,
+    dxDataGrid: dxDataGrid,
+  ) {
+    newData.fournisseur = { id: value };
+
+    if (!currentData.logistique.expedieStation) {
+      //Effacer les infos du détail d'expedition lors du changement de fournisseur
+      currentData.nombrePalettesExpediees = 0;
+      currentData.nombreColisExpedies = 0;
+      currentData.poidsBrutExpedie = 0;
+      currentData.poidsNetExpedie = 0;
+      currentData.achatQuantite = 0;
+      currentData.venteQuantite = 0;
+      this.functionsService.clearTraca(currentData.id).subscribe();
+    }
+
+    if (currentData.fournisseur?.id !== newData.fournisseur?.id)
+      if (!currentData.proprietaireMarchandise?.id)
+        newData.proprietaireMarchandise = { id: value };
+
+    // const ls_visible_reparcam = dxDataGrid.getVisibleRows()
+    //   .some(row => row.data.fournisseur.indicateurRepartitionCamion);
+
+    if (this.context?.secteurCode === "F")
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
+
+    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
+      // On met un petit delai, sinon on obtient pas les nouvelles valeurs
+      setTimeout(() => dxDataGrid.getVisibleRows()
+        .forEach(row => {
+          dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", value);
         }), 10);
   }
 

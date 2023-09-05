@@ -161,7 +161,6 @@ export class GridCommandesComponent
   public newNumero = 0;
   public hintDblClick: string;
   public proprietairesDataSource: DataSource;
-  public fournisseursDataSource: DataSource;
   public embalExp: string[];
   private lastingRows: number;
 
@@ -293,7 +292,11 @@ export class GridCommandesComponent
 
   onSaved() {
     this.gridsService.reload("SyntheseExpeditions", "DetailExpeditions");
-    this.afterSaved.emit();
+    const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
+    if (firstLigneCommande)
+      this.functionsService
+        .setTransporteurBassin(firstLigneCommande.id, firstLigneCommande.ordre.societe.id)
+        .subscribe(() => this.afterSaved.emit());
   }
 
   // Reload grid data after external update
@@ -414,6 +417,7 @@ export class GridCommandesComponent
                 "article.emballage.emballage.zh",
                 "proprietaireMarchandise.natureStation",
                 "fournisseur.devise.id",
+                "fournisseur.indicateurRepartitionCamion",
                 "article.id",
                 "article.matierePremiere.variete.id",
                 "article.cahierDesCharge.categorie.id",
@@ -642,16 +646,8 @@ export class GridCommandesComponent
           } else newData.fournisseur = proprietaire;
         });
     } else if (context.dataField === "fournisseur.id") {
-      context.defaultSetCellValue(newData, value);
-      // return self.fournisseursService
-      //   .getOne_v2(value, ["id", "code", "raisonSocial"])
-      //   .pipe(
-      //     concatMap((res) => {
-      //       newData.fournisseur = res.data.fournisseur;
-      //       return EMPTY;
-      //     })
-      //   )
-      //   .toPromise();
+      return self.gridCommandesEventsService
+        .onFournisseurChange(newData, value, currentData, self.grid.instance);
     } else if (context.dataField === "nombrePalettesCommandees") {
       return self.gridCommandesEventsService
         .onNombrePalettesCommandeesChange(newData, value, currentData);
@@ -925,7 +921,7 @@ export class GridCommandesComponent
   /** lookup columns datasource binding */
   private async bindSources(grid: dxDataGrid) {
     this.fournisseursSource = await this.fournisseursService.getPreloadedDatasource<Fournisseur>(
-      ["id", "code", "raisonSocial", "listeExpediteurs"],
+      ["id", "code", "raisonSocial", "listeExpediteurs", "indicateurRepartitionCamion"],
       this.fournisseursService.mapDXFilterToRSQL([["valide", "=", true]])
     );
     this.fournisseursSource.sort([{ selector: "code" }]);
@@ -979,21 +975,6 @@ export class GridCommandesComponent
         field,
         tpLookupStore
       );
-  }
-
-  private async bindFournisseurSource(dxFilter?: any[]) {
-    const filters: any[] = [["valide", "=", true]];
-    if (dxFilter && dxFilter.length) filters.push("and", dxFilter);
-
-    GridConfiguratorService.bindLookupColumnSource(
-      this.grid.instance,
-      "fournisseur.id",
-      await this.fournisseursService.getPreloadedLookupStore<Fournisseur>(
-        ["id", "code", "raisonSocial", "listeExpediteurs"],
-        this.fournisseursService.mapDXFilterToRSQL(filters),
-        { sort: [{ selector: "code" }] }
-      )
-    );
   }
 
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
