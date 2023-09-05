@@ -736,6 +736,88 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public fRecupFrais = (
+    varCode: string,
+    catCode: string,
+    scoCode: string,
+    tvtCode: string,
+    modeCulture: number,
+    origine: string,
+  ) =>
+    this.apollo.query<{
+      fRecupFrais: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fRecupFrais",
+              body: functionBody,
+              params: [
+                { name: "varCode", value: "varCode", isVariable: true },
+                { name: "catCode", value: "catCode", isVariable: true },
+                { name: "scoCode", value: "scoCode", isVariable: true },
+                { name: "tvtCode", value: "tvtCode", isVariable: true },
+                { name: "modeCulture", value: "modeCulture", isVariable: true },
+                { name: "origine", value: "origine", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "varCode", type: "String", isOptionnal: false },
+            { name: "catCode", type: "String", isOptionnal: false },
+            { name: "scoCode", type: "String", isOptionnal: false },
+            { name: "tvtCode", type: "String", isOptionnal: false },
+            { name: "modeCulture", type: "Int", isOptionnal: false },
+            { name: "origine", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        varCode,
+        catCode,
+        scoCode,
+        tvtCode,
+        modeCulture,
+        origine,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public setTransporteurBassin = (
+    orlRef: string,
+    socCode: string,
+  ) =>
+    this.apollo.query<{
+      setTransporteurBassin: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "setTransporteurBassin",
+              body: functionBody,
+              params: [
+                { name: "orlRef", value: "orlRef", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "orlRef", type: "String", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        orlRef,
+        socCode,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];

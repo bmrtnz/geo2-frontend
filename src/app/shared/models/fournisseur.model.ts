@@ -109,6 +109,7 @@ export class Fournisseur extends Model {
   })
   public certifications: CertificationFournisseur[];
   @Field({ model: import("./stock.model") }) public stocks: Stock[];
+  @Field() public indicateurRepartitionCamion: boolean;
 }
 
 export default Fournisseur;
