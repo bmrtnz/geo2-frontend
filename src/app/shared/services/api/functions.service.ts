@@ -785,6 +785,39 @@ export class FunctionsService {
       fetchPolicy: "network-only",
     });
 
+  public setTransporteurBassin = (
+    orlRef: string,
+    socCode: string,
+  ) =>
+    this.apollo.query<{
+      setTransporteurBassin: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "setTransporteurBassin",
+              body: functionBody,
+              params: [
+                { name: "orlRef", value: "orlRef", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "orlRef", type: "String", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        orlRef,
+        socCode,
+      },
+      fetchPolicy: "network-only",
+    });
+
   public queryFunction(name: string, parameters: any[]) {
     const params = [];
     const variables = [];
