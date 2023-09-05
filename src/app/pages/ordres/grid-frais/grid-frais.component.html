@@ -45,8 +45,13 @@
     [allowAdding]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
-    [mode]="'cell'"
+    [mode]="'batch'"
   ></dxo-editing>
+  <dxo-keyboard-navigation
+    [enterKeyAction]="'moveFocus'"
+    [enterKeyDirection]="'row'"
+    [editOnKeyPress]="true"
+  ></dxo-keyboard-navigation>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
     [enabled]="true"
@@ -74,7 +79,6 @@
       column.name
     "
     [dataType]="column?.dataType"
-    [showEditorAlways]="true"
     [cssClass]="column.cssClass"
     [width]="column.width"
     [allowEditing]="column.allowEditing"
