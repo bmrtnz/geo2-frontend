@@ -327,11 +327,11 @@ export class GridReservationStockComponent implements OnInit, OnChanges {
           ]),
           concatMap((data) =>
             concat(
-              ...data.map(([name, value]) =>
+              ...data.map(([name, id]) =>
                 this.ordreLignesService.save_v2(["id", `${name}.id`], {
                   ordreLigne: {
                     id: this.ordreLigneInfo.id,
-                    [name]: value,
+                    [name]: { id },
                   }
                 })
               )
