@@ -17,7 +17,6 @@
     (onCellClick)="onCellClick($event)"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="onContentReady($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         localizeService.localize('documents-list'),
@@ -114,6 +113,7 @@
         [searchExpr]="'description'"
         [value]="cell.data[cell.column.dataField]"
         (onValueChanged)="onCustomValueChanged($event, cell)"
+        (onKeyUp)="onSelectBoxKeyUp($event, cell)"
       >
         <dxo-drop-down-options
           [width]="SelectBoxPopupWidth"

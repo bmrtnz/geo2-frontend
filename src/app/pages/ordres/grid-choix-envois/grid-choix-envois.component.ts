@@ -169,15 +169,11 @@ export class GridChoixEnvoisComponent implements OnInit {
     }
   }
 
-  onEditorPreparing(e) {
-    // If the user types "@", its mail address is automatically typed
-    if (e.parentType === "dataRow") {
-      e.editorOptions.onKeyUp = (elem) => {
-        if (e.dataField === "numeroAcces1" && this.USER_MAIL) {
-          const myInput = elem.element?.querySelector("input.dx-texteditor-input");
-          if (myInput.value === "@") myInput.value = this.USER_MAIL
-        }
-      }
+  onSelectBoxKeyUp(event, cell) {
+    // console.log(event, cell);
+    if (cell.column.dataField === "numeroAcces1" && this.USER_MAIL) {
+      const myInput = event.element?.querySelector("input.dx-texteditor-input");
+      if (myInput.value === "@") myInput.value = this.USER_MAIL
     }
   }
 
