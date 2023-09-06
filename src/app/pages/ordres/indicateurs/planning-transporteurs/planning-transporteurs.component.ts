@@ -270,12 +270,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   calculateEntrepot(data) {
     // Ajout CP, ville et pays au lieu de livraison
     if (data.entrepotCodePostal) {
-      return data.entrepotCodePostal +
-        " " +
-        data.entrepotVille +
-        " (" +
-        data.entrepotPays +
-        ")";
+      return `${data?.entrepotRaisonSocial} - ${data.entrepotCodePostal} ${data.entrepotVille} (${data.entrepotPays})`;
     }
   }
 
