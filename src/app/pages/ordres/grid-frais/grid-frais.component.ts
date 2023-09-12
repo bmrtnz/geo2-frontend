@@ -36,6 +36,8 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
 import { EditorPreparingEvent } from "devextreme/ui/data_grid";
+import Frais from "app/shared/models/frais.model";
+import { Devise } from "app/shared/models";
 
 @Component({
   selector: "app-grid-frais",
@@ -228,39 +230,39 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     };
     e.data.achatQuantite = 1; // Par défaut
     e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
-    setTimeout(() => this.datagrid.instance.saveEditData(), 1);
+    // setTimeout(() => this.datagrid.instance.saveEditData(), 1);
   }
 
-  onValueChanged(event, cell) {
-    if (!event.event) return;
-    let valueToSave;
+  // onValueChanged(event, cell) {
+  //   if (!event.event) return;
+  //   let valueToSave;
 
-    if (cell.setValue) {
-      if (
-        typeof event.value === "object" &&
-        cell.column.dataField === "codePlus"
-      ) {
-        valueToSave = event.value?.code ?? event.value?.id ?? event.value;
-      } else {
-        valueToSave = event.value;
-      }
-      if (cell.column.dataField === "codePlus" && valueToSave !== null)
-        valueToSave = valueToSave.substring(0, 35);
+  //   if (cell.setValue) {
+  //     if (
+  //       typeof event.value === "object" &&
+  //       cell.column.dataField === "codePlus"
+  //     ) {
+  //       valueToSave = event.value?.code ?? event.value?.id ?? event.value;
+  //     } else {
+  //       valueToSave = event.value;
+  //     }
+  //     if (cell.column.dataField === "codePlus" && valueToSave !== null)
+  //       valueToSave = valueToSave.substring(0, 35);
 
-      switch (cell.column.dataField) {
-        case "frais": {
-          if (cell.data.codePlus)
-            cell.component.cellValue(
-              cell.component.getRowIndexByKey(cell.row.key),
-              "codePlus",
-              null
-            );
-          break;
-        }
-      }
-      cell.setValue(valueToSave);
-    }
-  }
+  //     switch (cell.column.dataField) {
+  //       case "frais": {
+  //         if (cell.data.codePlus)
+  //           cell.component.cellValue(
+  //             cell.component.getRowIndexByKey(cell.row.key),
+  //             "codePlus",
+  //             null
+  //           );
+  //         break;
+  //       }
+  //     }
+  //     cell.setValue(valueToSave);
+  //   }
+  // }
 
   onEditingStart(cell) {
     if (!cell.column || !cell.data.deviseTaux) return;
@@ -360,43 +362,9 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     return field;
   }
 
-  onSaving(event) {
-    const rowData = this.datagrid.instance
-      .getVisibleRows()
-      .filter((r) => r.isEditing);
-    if (event.changes.length)
-      event.promise = this.processSaving(event.changes, rowData[0].data);
-  }
-
-  async processSaving(changes, entity) {
-    for (const change of changes) {
-      // We add calculated values to changes as they're only on client side
-      const calculated = {
-        achatPrixUnitaire: this.calculateAchatPU(entity),
-        montant: this.calculateMontant(entity),
-        montantTotal: this.calculateMontantTotal(entity),
-      };
-      change.data = { ...change.data, ...calculated };
-    }
-  }
-
   onSaved() {
     this.selectPhase = false;
     this.datagrid.instance.repaint();
-  }
-
-  public calculateAchatPU(entity: Partial<OrdreFrais>) {
-    const PU = (entity.achatDevisePrixUnitaire ?? 0) * (entity.deviseTaux ?? 0);
-    entity.achatPrixUnitaire = PU;
-    return PU;
-  }
-
-  public calculateMontant(entity: Partial<OrdreFrais>) {
-    return (entity.achatQuantite ?? 0) * (entity.achatDevisePrixUnitaire ?? 0);
-  }
-
-  public calculateMontantTotal(entity: Partial<OrdreFrais>) {
-    return (entity.achatQuantite ?? 0) * (entity.achatPrixUnitaire ?? 0);
   }
 
   public onEditorPreparing(e: EditorPreparingEvent) {
@@ -405,20 +373,29 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   }
 
   private configureSelectSources(e: EditorPreparingEvent) {
-    if (e.dataField === "frais.id") {
-      e.editorName = "dxSelectBox";
+    if (e.dataField === "frais.id")
       e.editorOptions.dataSource = this.fraisSource;
-      e.editorOptions.onValueChanged = args => e.setValue(args.value);
-    }
-    if (e.dataField === "devise.id") {
-      e.editorName = "dxSelectBox";
+    if (e.dataField === "devise.id")
       e.editorOptions.dataSource = this.deviseSource;
-      e.editorOptions.onValueChanged = args => e.setValue(args.value);
-    }
     if (e.dataField === "codePlus") {
       e.editorName = "dxSelectBox";
       e.editorOptions.dataSource = this.codePlusSource;
       e.editorOptions.onValueChanged = args => e.setValue(args.value);
     }
   }
+
+  setCellValue(newData: Partial<OrdreFrais>, value, currentData: Partial<OrdreFrais>) {
+    const context: any = this;
+    const achatPU = () => newData?.achatPrixUnitaire ?? currentData?.achatPrixUnitaire ?? 0;
+    const achatDevisePU = () => newData?.achatDevisePrixUnitaire ?? currentData?.achatDevisePrixUnitaire ?? 0;
+    const taux = () => newData?.deviseTaux ?? currentData?.deviseTaux ?? 0;
+    const achatQuantite = () => newData?.achatQuantite ?? currentData?.achatQuantite ?? 0;
+
+    context.defaultSetCellValue(newData, value);
+    if (context.dataField === "achatPrixUnitaire")
+      newData.achatPrixUnitaire = achatDevisePU() * taux();
+    newData.montant = achatQuantite() * achatDevisePU();
+    newData.montantTotal = achatQuantite() * achatPU();
+  }
+
 }

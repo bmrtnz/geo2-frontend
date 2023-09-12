@@ -6642,9 +6642,14 @@
       {
         "visibleIndex": 1,
         "dataField": "frais.id",
-        "calculateDisplayValue": "frais.description",
+        "calculateSortValue": "frais.id",
+        "calculateDisplayValue": [
+          "frais.description"
+        ],
         "editorOptions": {
-          "searchTimeout": "0",
+          "searchTimeout": "0"
+        },
+        "lookup": {
           "valueExpr": "id",
           "displayExpr": "description",
           "searchExpr": [
@@ -6665,28 +6670,26 @@
         "dataField": "achatPrixUnitaire",
         "allowEditing": false,
         "cssClass": "multi-line-header",
-        "visible": false,
-        "calculateCellValue": "calculateAchatPU"
+        "visible": false
       },
       {
         "visibleIndex": 7,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "editorOptions": {
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 9,
         "dataField": "devise.id",
-        "calculateDisplayValue": "devise.description",
+        "calculateSortValue": "devise.id",
+        "calculateDisplayValue": [
+          "devise.description"
+        ],
         "editorOptions": {
-          "searchTimeout": "0",
+          "searchTimeout": "0"
+        },
+        "lookup": {
           "valueExpr": "id",
           "displayExpr": "description",
           "searchExpr": [
@@ -6707,20 +6710,12 @@
             "precision": 2
           }
         },
-        "visible": true,
-        "calculateCellValue": "calculateMontant"
+        "visible": true
       },
       {
         "visibleIndex": 13,
         "dataField": "deviseTaux",
         "dataType": "number",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 5
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
@@ -6734,14 +6729,14 @@
             "type": "fixedPoint",
             "precision": 2
           }
-        },
-        "calculateCellValue": "calculateMontantTotal"
+        }
       },
       {
         "visibleIndex": 18,
         "dataField": "codePlus",
         "editorOptions": {
-          "searchTimeout": "0"
+          "searchTimeout": "0",
+          "acceptCustomValue": true
         },
         "visible": true
       },
