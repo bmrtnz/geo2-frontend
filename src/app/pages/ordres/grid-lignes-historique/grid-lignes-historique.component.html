@@ -320,6 +320,7 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column?.showInColumnChooser"
+      [calculateCellValue]="this[column?.calculateCellValue]"
     >
     </dxi-column>
 
