@@ -70,6 +70,9 @@ export class Entrepot extends Model {
   @Field() public referenceIfco: string;
   @Field({ dataType: "date" }) public dateDebutIfco: string;
   @Field({ model: import("./client.model") }) public client: Client;
+  get codePlus() {
+    return `${this.code} - ${this.raisonSocial}`;
+  }
 }
 
 export default Entrepot;

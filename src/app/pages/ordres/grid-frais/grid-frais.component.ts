@@ -37,7 +37,9 @@ import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
 import { EditorPreparingEvent } from "devextreme/ui/data_grid";
 import Frais from "app/shared/models/frais.model";
-import { Devise } from "app/shared/models";
+import { Devise, Entrepot, LieuPassageAQuai, Transitaire, Transporteur } from "app/shared/models";
+import { argsToArgsConfig } from "graphql/type/definition";
+import dxSelectBox, { CustomItemCreatingEvent } from "devextreme/ui/select_box";
 
 @Component({
   selector: "app-grid-frais",
@@ -50,14 +52,12 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   public dataSource: DataSource;
   public fraisSource: DataSource;
   public deviseSource: DataSource;
-  public codePlusSource: DataSource;
   public transporteurSource: DataSource;
   public entrepotSource: DataSource;
   public transitaireSource: DataSource;
   public transitaireDouanierSource: DataSource;
   public lieuxPassageAQuaiSource: DataSource;
   public codePlusList: string[];
-  public selectPhase: boolean;
   public codePlusTransporteurs: string[];
   public codePlusTransitaires: string[];
   public codePlusEntrepots: string[];
@@ -87,11 +87,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     public localizeService: LocalizationService,
     public authService: AuthService
   ) {
-    this.displayDescOnly = this.displayDescOnly.bind(this);
-    this.displayCustom = this.displayCustom.bind(this);
-    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
-      Grid.OrdreFrais
-    );
+    this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreFrais);
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.itemsWithSelectBox = ["frais", "devise", "codePlus"];
     this.descriptionOnlyDisplaySB = ["frais"];
@@ -110,7 +106,6 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     ]);
     this.deviseSource.filter(["valide", "=", true]);
     this.initializeFournDataSources();
-    this.selectPhase = false;
   }
 
   ngOnInit(): void {
@@ -230,39 +225,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     };
     e.data.achatQuantite = 1; // Par défaut
     e.data.deviseTaux = 1; // Répercussion comp. Géo1. Ce taux ne change jamais
-    // setTimeout(() => this.datagrid.instance.saveEditData(), 1);
   }
-
-  // onValueChanged(event, cell) {
-  //   if (!event.event) return;
-  //   let valueToSave;
-
-  //   if (cell.setValue) {
-  //     if (
-  //       typeof event.value === "object" &&
-  //       cell.column.dataField === "codePlus"
-  //     ) {
-  //       valueToSave = event.value?.code ?? event.value?.id ?? event.value;
-  //     } else {
-  //       valueToSave = event.value;
-  //     }
-  //     if (cell.column.dataField === "codePlus" && valueToSave !== null)
-  //       valueToSave = valueToSave.substring(0, 35);
-
-  //     switch (cell.column.dataField) {
-  //       case "frais": {
-  //         if (cell.data.codePlus)
-  //           cell.component.cellValue(
-  //             cell.component.getRowIndexByKey(cell.row.key),
-  //             "codePlus",
-  //             null
-  //           );
-  //         break;
-  //       }
-  //     }
-  //     cell.setValue(valueToSave);
-  //   }
-  // }
 
   onEditingStart(cell) {
     if (!cell.column || !cell.data.deviseTaux) return;
@@ -270,81 +233,29 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       cell.cancel = true;
   }
 
-  displayCodeBefore(data) {
-    if (data && !data.id) return data;
-    return data
-      ? (data.code ? data.code : data.id) +
-      " - " +
-      (data.raisonSocial
-        ? data.raisonSocial
-        : data.ville
-          ? data.ville
-          : data.description)
-      : null;
-  }
-
-  displayDescOnly(data) {
-    return data ? this.capitalize(data.description) : null;
-  }
-
-  displayCustom(data) {
-    if (this.selectPhase) {
-      return this.displayCodeBefore(data);
-    } else {
-      return data;
-    }
-  }
-
-  returnCodeId(data) {
-    return data.code ? data.code : data.id;
-  }
-
-  capitalize(data) {
-    return data
-      ? data.charAt(0).toUpperCase() + data.slice(1).toLowerCase()
-      : null;
-  }
-
-  updateCodePlusDataSource(data) {
-    const frais = data.frais?.id;
+  updateCodePlusDataSource(e) {
+    const frais = e.data.frais?.id;
     if (!frais) return;
-    this.selectPhase = true;
     this.initializeFournDataSources();
-    this.selectBoxes
-      .filter((component) => component.instance.$element()[0].id === data.id)
-      .map((component) => {
-        if (frais === "RAMASS" || frais === "FRET")
-          component.dataSource = this.transporteurSource;
-        if (frais === "DEDIMP" || frais === "DEDEXP")
-          component.dataSource = this.transitaireDouanierSource;
-        if (frais === "TRANSI") component.dataSource = this.transitaireSource;
-        if (frais === "QUAI")
-          component.dataSource = this.lieuxPassageAQuaiSource;
-        if (frais === "ENTBWS") component.dataSource = this.entrepotSource;
-      });
+    if (frais === "RAMASS" || frais === "FRET")
+      e.column.editorOptions.dataSource = this.transporteurSource;
+    if (frais === "DEDIMP" || frais === "DEDEXP")
+      e.column.editorOptions.dataSource = this.transitaireDouanierSource;
+    if (frais === "TRANSI") e.column.editorOptions.dataSource = this.transitaireSource;
+    if (frais === "QUAI")
+      e.column.editorOptions.dataSource = this.lieuxPassageAQuaiSource;
+    if (frais === "ENTBWS") e.column.editorOptions.dataSource = this.entrepotSource;
   }
 
   onCellClick(e) {
     if (e.rowType !== "data") return;
     // Warning when no cost type
-    if (!e.data?.frais?.id && e.column.dataField === "codePlus") {
-      notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
-    }
-    // No DS is displayed
     if (e.column.dataField === "codePlus") {
-      if (this.isCustomText(e.data)) {
-        this.SelectBoxPopupWidth = 0;
-        e.cellElement.classList.add("no-arrow");
-      } else {
-        this.SelectBoxPopupWidth = 400;
-        e.cellElement.classList.remove("no-arrow");
-        this.updateCodePlusDataSource(e.data);
-      }
-    }
-  }
+      if (!e.data?.frais?.id)
+        notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
 
-  isCustomText(data) {
-    return ["DIVERS", "ANIM"].includes(data.frais?.id);
+      this.updateCodePlusDataSource(e);
+    }
   }
 
   onCellPrepared(e) {
@@ -362,11 +273,6 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     return field;
   }
 
-  onSaved() {
-    this.selectPhase = false;
-    this.datagrid.instance.repaint();
-  }
-
   public onEditorPreparing(e: EditorPreparingEvent) {
     if (e.parentType == "dataRow")
       this.configureSelectSources(e);
@@ -379,8 +285,14 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       e.editorOptions.dataSource = this.deviseSource;
     if (e.dataField === "codePlus") {
       e.editorName = "dxSelectBox";
-      e.editorOptions.dataSource = this.codePlusSource;
-      e.editorOptions.onValueChanged = args => e.setValue(args.value);
+      e.editorOptions.acceptCustomValue = true;
+      e.editorOptions.onCustomItemCreating = (event: CustomItemCreatingEvent) => {
+        if (!event.customItem)
+          event.customItem = { codePlus: event.text };
+      }
+      e.editorOptions.onValueChanged = args => {
+        e.setValue({ codePlus: args.value });
+      };
     }
   }
 
@@ -391,6 +303,8 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     const taux = () => newData?.deviseTaux ?? currentData?.deviseTaux ?? 0;
     const achatQuantite = () => newData?.achatQuantite ?? currentData?.achatQuantite ?? 0;
 
+    if (context.dataField === "codePlus")
+      value = value?.codePlus?.substring(0, 35);
     context.defaultSetCellValue(newData, value);
     if (context.dataField === "achatPrixUnitaire")
       newData.achatPrixUnitaire = achatDevisePU() * taux();

@@ -6736,7 +6736,8 @@
         "dataField": "codePlus",
         "editorOptions": {
           "searchTimeout": "0",
-          "acceptCustomValue": true
+          "valueExpr": "codePlus",
+          "displayExpr": "codePlus"
         },
         "visible": true
       },
