@@ -455,7 +455,7 @@ export class GridCommandesEventsService {
             // Compte le nombre de palettes en décimal en tenant compte de la place qui reste sur le dernier calcul théorique qui est forcément <=0
             nb_pal_th = nb_pal_dispo + row.data.nombreColisCommandes / ld_pal_nb_col;
             // Compte le nombre en valeur entière
-            nb_pal = nb_pal_dispo + row.data.nombreColisCommandes / ld_pal_nb_col;
+            nb_pal = Math.floor(nb_pal_dispo + row.data.nombreColisCommandes / ld_pal_nb_col);
           } else {
             nb_pal_th = 0;
             nb_pal = 0;
