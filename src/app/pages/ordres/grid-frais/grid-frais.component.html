@@ -22,6 +22,7 @@
     (onCellDblClick)="(onCellClick)"
     (onCellPrepared)="onCellPrepared($event)"
     (onEditorPreparing)="onEditorPreparing($event)"
+    (onFocusedCellChanging)="onFocusedCellChanging($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Frais',
@@ -45,6 +46,7 @@
       [allowAdding]="true"
       [allowUpdating]="true"
       [allowDeleting]="true"
+      [newRowPosition]="'last'"
       [mode]="'batch'"
     ></dxo-editing>
     <dxo-keyboard-navigation

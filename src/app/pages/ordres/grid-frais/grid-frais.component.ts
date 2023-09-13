@@ -9,7 +9,6 @@ import {
 } from "@angular/core";
 import OrdreFrais from "app/shared/models/ordre-frais.model";
 import Ordre from "app/shared/models/ordre.model";
-import { alert } from "devextreme/ui/dialog";
 import {
   AuthService,
   EntrepotsService,
@@ -30,16 +29,14 @@ import {
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { EditorPreparingEvent } from "devextreme/ui/data_grid";
+import { alert } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import { CustomItemCreatingEvent } from "devextreme/ui/select_box";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
-import { EditorPreparingEvent } from "devextreme/ui/data_grid";
-import Frais from "app/shared/models/frais.model";
-import { Devise, Entrepot, LieuPassageAQuai, Transitaire, Transporteur } from "app/shared/models";
-import { argsToArgsConfig } from "graphql/type/definition";
-import dxSelectBox, { CustomItemCreatingEvent } from "devextreme/ui/select_box";
 
 @Component({
   selector: "app-grid-frais",
@@ -286,6 +283,8 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     if (e.dataField === "codePlus") {
       e.editorName = "dxSelectBox";
       e.editorOptions.acceptCustomValue = true;
+      // Create on `Enter` https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#customItemCreateEvent
+      e.editorOptions.customItemCreateEvent = '';
       e.editorOptions.onCustomItemCreating = (event: CustomItemCreatingEvent) => {
         if (!event.customItem)
           event.customItem = { codePlus: event.text };
@@ -315,5 +314,11 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   onGridOut() {
     if (this.datagrid.instance.hasEditData())
       this.datagrid.instance.saveEditData();
+  }
+
+  onFocusedCellChanging(e) {
+    if (e.prevColumnIndex === e.columns.length - 1)
+      if ([e.prevRowIndex, e.newRowIndex].includes(e.rows.length - 1))
+        this.datagrid.instance.addRow();
   }
 }
