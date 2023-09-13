@@ -53,6 +53,11 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
+  <dxo-keyboard-navigation
+    [enterKeyAction]="'moveFocus'"
+    [enterKeyDirection]="'row'"
+    [editOnKeyPress]="true"
+  ></dxo-keyboard-navigation>
 
   <dxi-column
     *ngFor="let column of this.columns | async"
