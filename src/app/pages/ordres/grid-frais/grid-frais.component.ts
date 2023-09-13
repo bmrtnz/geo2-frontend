@@ -312,4 +312,8 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     newData.montantTotal = achatQuantite() * achatPU();
   }
 
+  onGridOut() {
+    if (this.datagrid.instance.hasEditData())
+      this.datagrid.instance.saveEditData();
+  }
 }
