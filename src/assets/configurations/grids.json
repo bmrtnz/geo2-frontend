@@ -3429,7 +3429,8 @@
         "sortIndex": 1,
         "width": 80,
         "visible": true,
-        "groupIndex": 1
+        "groupIndex": 1,
+        "calculateCellValue": "calculateGroupeOrdreLibelle"
       },
       {
         "visibleIndex": 2,

@@ -1,46 +1,26 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild,} from "@angular/core";
+import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
-import {
-  AuthService,
-  ClientsService,
-  EntrepotsService,
-} from "app/shared/services";
-import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
-import { FunctionsService } from "app/shared/services/api/functions.service";
-import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { SecteursService } from "app/shared/services/api/secteurs.service";
-import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DateManagementService } from "app/shared/services/date-management.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
-import { LocalizationService } from "app/shared/services/localization.service";
-import { GridColumn, TotalItem } from "basic";
-import {
-  DxDataGridComponent,
-  DxSelectBoxComponent,
-  DxSwitchComponent,
-} from "devextreme-angular";
+import {Statut} from "app/shared/models/ordre.model";
+import {AuthService, ClientsService, EntrepotsService,} from "app/shared/services";
+import {BureauxAchatService} from "app/shared/services/api/bureaux-achat.service";
+import {FunctionsService} from "app/shared/services/api/functions.service";
+import {OrdreLignesService} from "app/shared/services/api/ordres-lignes.service";
+import {SecteursService} from "app/shared/services/api/secteurs.service";
+import {CurrentCompanyService} from "app/shared/services/current-company.service";
+import {DateManagementService} from "app/shared/services/date-management.service";
+import {Grid, GridConfig, GridConfiguratorService,} from "app/shared/services/grid-configurator.service";
+import {LocalizationService} from "app/shared/services/localization.service";
+import {GridColumn} from "basic";
+import {DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent,} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { GridsService } from "../grids.service";
-import { TabContext } from "../root/root.component";
-import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import {environment} from "environments/environment";
+import {from, Observable} from "rxjs";
+import {map} from "rxjs/operators";
+import {GridsService} from "../grids.service";
+import {TabContext} from "../root/root.component";
+import {ZoomArticlePopupComponent} from "../zoom-article-popup/zoom-article-popup.component";
 
 
 enum InputField {
@@ -265,6 +245,19 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
     }
+  }
+
+  calculateGroupeOrdreLibelle(data) {
+    data = data.ordre;
+    return data.numero +
+      " - " +
+      (data.entrepot?.code ?? "") +
+      " - " +
+      (data.referenceClient ? data.referenceClient + " " : "") +
+      (data.transporteur?.id
+        ? "(Transporteur : " + data.transporteur.id + ")"
+        : "") +
+      ` - ${Statut[data.statut]}`;
   }
 
   onCellPrepared(e) {
