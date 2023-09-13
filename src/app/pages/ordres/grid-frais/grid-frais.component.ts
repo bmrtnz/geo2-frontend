@@ -305,6 +305,8 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     if (context.dataField === "codePlus")
       value = value?.codePlus?.substring(0, 35);
     context.defaultSetCellValue(newData, value);
+    if (context.dataField === "frais.id")
+      newData.codePlus = '';
     if (context.dataField === "achatPrixUnitaire")
       newData.achatPrixUnitaire = achatDevisePU() * taux();
     newData.montant = achatQuantite() * achatDevisePU();
