@@ -38,6 +38,9 @@ export class Transporteur extends Model {
   public typeTiers: TypeTiers;
   @Field({ model: import("./historique-transporteur.model") })
   public historique: HistoriqueTransporteur[];
+  get codePlus() {
+    return `${this.id} - ${this.raisonSocial}`;
+  }
 }
 
 export default Transporteur;

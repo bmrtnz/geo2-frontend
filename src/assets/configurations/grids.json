@@ -6641,8 +6641,22 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "frais",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "frais.id",
+        "calculateSortValue": "frais.id",
+        "calculateDisplayValue": [
+          "frais.description"
+        ],
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 200,
         "visible": true
       },
@@ -6656,26 +6670,33 @@
         "dataField": "achatPrixUnitaire",
         "allowEditing": false,
         "cssClass": "multi-line-header",
-        "visible": false,
-        "calculateCellValue": "calculateAchatPU"
+        "visible": false
       },
       {
         "visibleIndex": 7,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "editorOptions": {
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "devise",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "devise.id",
+        "calculateSortValue": "devise.id",
+        "calculateDisplayValue": [
+          "devise.description"
+        ],
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 120,
         "visible": true
       },
@@ -6689,20 +6710,12 @@
             "precision": 2
           }
         },
-        "visible": true,
-        "calculateCellValue": "calculateMontant"
+        "visible": true
       },
       {
         "visibleIndex": 13,
         "dataField": "deviseTaux",
         "dataType": "number",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 5
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
@@ -6716,13 +6729,16 @@
             "type": "fixedPoint",
             "precision": 2
           }
-        },
-        "calculateCellValue": "calculateMontantTotal"
+        }
       },
       {
         "visibleIndex": 18,
         "dataField": "codePlus",
-        "editCellTemplate": "customSelectBoxTemplate",
+        "editorOptions": {
+          "searchTimeout": "0",
+          "valueExpr": "codePlus",
+          "displayExpr": "codePlus"
+        },
         "visible": true
       },
       {

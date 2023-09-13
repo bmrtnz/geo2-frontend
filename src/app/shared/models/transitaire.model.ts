@@ -6,6 +6,9 @@ export class Transitaire extends Model {
   @Field({ asLabel: true }) public raisonSocial: string;
   @Field() public valide: boolean;
   @Field() public declarantDouanier: boolean;
+  get codePlus() {
+    return `${this.id} - ${this.raisonSocial}`;
+  }
 }
 
 export default Transitaire;
