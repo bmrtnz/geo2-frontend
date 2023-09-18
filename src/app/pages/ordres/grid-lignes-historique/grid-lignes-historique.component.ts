@@ -1,26 +1,26 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild,} from "@angular/core";
-import {UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild, } from "@angular/core";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import {Statut} from "app/shared/models/ordre.model";
-import {AuthService, ClientsService, EntrepotsService,} from "app/shared/services";
-import {BureauxAchatService} from "app/shared/services/api/bureaux-achat.service";
-import {FunctionsService} from "app/shared/services/api/functions.service";
-import {OrdreLignesService} from "app/shared/services/api/ordres-lignes.service";
-import {SecteursService} from "app/shared/services/api/secteurs.service";
-import {CurrentCompanyService} from "app/shared/services/current-company.service";
-import {DateManagementService} from "app/shared/services/date-management.service";
-import {Grid, GridConfig, GridConfiguratorService,} from "app/shared/services/grid-configurator.service";
-import {LocalizationService} from "app/shared/services/localization.service";
-import {GridColumn} from "basic";
-import {DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent,} from "devextreme-angular";
+import { Statut } from "app/shared/models/ordre.model";
+import { AuthService, ClientsService, EntrepotsService, } from "app/shared/services";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import { Grid, GridConfig, GridConfiguratorService, } from "app/shared/services/grid-configurator.service";
+import { LocalizationService } from "app/shared/services/localization.service";
+import { GridColumn } from "basic";
+import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent, } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import {environment} from "environments/environment";
-import {from, Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {GridsService} from "../grids.service";
-import {TabContext} from "../root/root.component";
-import {ZoomArticlePopupComponent} from "../zoom-article-popup/zoom-article-popup.component";
+import { environment } from "environments/environment";
+import { from, Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { GridsService } from "../grids.service";
+import { TabContext } from "../root/root.component";
+import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
 
 enum InputField {
@@ -248,36 +248,29 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   calculateGroupeOrdreLibelle(data) {
+    // Ajout code entrep. + réf client + (code transp.) + ...
+    let numeroContainerArray = [];
+    let numeroContainer;
+    numeroContainerArray.push(data.logistique?.numeroContainer);
+    numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+    if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
+
     data = data.ordre;
+
     return data.numero +
       " - " +
       (data.entrepot?.code ?? "") +
-      " - " +
-      (data.referenceClient ? data.referenceClient + " " : "") +
+      (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+      (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+      (numeroContainer ? " - " + numeroContainer + " " : "") +
       (data.transporteur?.id
-        ? "(Transporteur : " + data.transporteur.id + ")"
+        ? " (Transporteur : " + data.transporteur.id + ")"
         : "") +
       ` - ${Statut[data.statut]}`;
   }
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      // Ajout code entrep. + réf client + (code transp.)
-      if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-        data = data[0].ordre;
-        e.cellElement.textContent =
-          data.numero +
-          " - " +
-          (data.entrepot?.code ?? "") +
-          " - " +
-          (data.referenceClient ? data.referenceClient + " " : "") +
-          (data.transporteur?.id
-            ? "(Transporteur : " + data.transporteur.id + ")"
-            : "") +
-          ` - ${Statut[data.statut]}`;
-      }
       if (e.column.dataField === "ordre.dateDepartPrevue")
         e.cellElement.classList.add("first-group");
     }

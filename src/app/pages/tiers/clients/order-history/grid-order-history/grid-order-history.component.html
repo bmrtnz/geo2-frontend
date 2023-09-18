@@ -213,6 +213,15 @@
   ></dx-button>
 </form>
 
+<dx-button
+  style="margin-right: 17px"
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="gridsService.expandCollapseGroups(this)"
+></dx-button>
+
 <div class="grid-order-history-container">
   <dx-data-grid
     class="dx-card wide-card"
@@ -247,6 +256,7 @@
   >
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-export fileName="Historique des ordres"></dxo-export>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -305,6 +315,7 @@
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
       [calculateGroupValue]="column.calculateGroupValue"
+      [calculateCellValue]="this[column?.calculateCellValue]"
       allowSearch="false"
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
