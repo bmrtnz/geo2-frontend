@@ -1,6 +1,10 @@
 // Var
 @import "themes/generated/variables.base";
 
+::ng-deep .grid-fraude {
+  max-height: calc(100vh - 425px) !important;
+}
+
 ::ng-deep {
   .justified-row {
     background-color: lightgray !important;
