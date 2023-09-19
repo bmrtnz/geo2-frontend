@@ -1190,6 +1190,7 @@
     "ordresTransporteur-groupage": "Groupage",
     "ordresTransporteur-fournisseurCodePostal": "CP Fournisseur",
     "ordresTransporteur-fournisseurPays": "Pays Fournisseur",
+    "ordresTransporteur-fournisseurBassin-id": "Bureau d'achat",
     "ordresTransporteur-espece": "Produit / Palette",
     "ordresTransporteur-ordre-expedie": "*******",
     "ordresTransporteur-palette": "Palette",
