@@ -113,7 +113,7 @@ export class AppComponent {
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
     dxDataGrid.defaultOptions({
       options: {
-        scrolling: { useNative: true },
+        scrolling: { useNative: false },
         columnFixing: { enabled: true },
         commonColumnSettings: {
           trueText: this.localization.localize("trueText"),

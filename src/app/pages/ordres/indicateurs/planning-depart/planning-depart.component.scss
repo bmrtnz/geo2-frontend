@@ -10,6 +10,8 @@
 }
 
 ::ng-deep .grid-planning-departs {
+  max-height: calc(100vh - 390px) !important;
+
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
 
