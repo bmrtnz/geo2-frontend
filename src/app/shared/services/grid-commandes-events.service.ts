@@ -236,7 +236,8 @@ export class GridCommandesEventsService {
 
     }
 
-    let ls_dev_code = currentData.fournisseur?.devise?.id;
+    const newProprietaire = await lastValueFrom(this.fournisseursService.getOne_v2(value, ["id", "devise.id"]));
+    let ls_dev_code = newProprietaire.data.fournisseur.devise.id;
     let ld_dev_taux: number;
 
     if (value !== currentData.proprietaireMarchandise?.id) {

@@ -423,6 +423,7 @@ export class GridCommandesComponent
                 "article.emballage.emballage.zb",
                 "article.emballage.emballage.zh",
                 "proprietaireMarchandise.natureStation",
+                "proprietaireMarchandise.devise.id",
                 "fournisseur.devise.id",
                 "fournisseur.indicateurRepartitionCamion",
                 "article.id",
