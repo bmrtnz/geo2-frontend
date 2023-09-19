@@ -382,20 +382,22 @@ export class GridCommandesEventsService {
     newData.achatDevisePrixUnitaire = value;
 
     let ld_dev_taux;
-    let ls_dev_code = currentData.proprietaireMarchandise.devise.id;
+    const newProprietaire = await lastValueFrom(this.fournisseursService.getOne_v2(currentData.proprietaireMarchandise.id, ["id", "devise.id"]));
+    let ls_dev_code = newProprietaire.data.fournisseur.devise.id;
     const res = await lastValueFrom(this.devisesRefsService.getOne({
       id: this.context.societe.devise.id,
       devise: ls_dev_code,
     }, ["id", "tauxAchat"]));
 
-    if (res?.data?.deviseRef)
+    if (res?.data?.deviseRef?.tauxAchat)
       ld_dev_taux = res.data.deviseRef.tauxAchat;
-
-    if (!ld_dev_taux) {
+    else {
       newData.achatDevise = this.context.societe.devise.id;
-      newData.achatDeviseTaux = 1;
+      ld_dev_taux = 1;
     }
-    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? ld_dev_taux) * value;
+
+    newData.achatDeviseTaux = ld_dev_taux;
+    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? newData.achatDeviseTaux) * value;
   }
 
   async onTypePaletteChange(
