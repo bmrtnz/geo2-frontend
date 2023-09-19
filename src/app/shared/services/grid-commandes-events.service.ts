@@ -380,7 +380,18 @@ export class GridCommandesEventsService {
     currentData: Partial<OrdreLigne>,
   ) {
     newData.achatDevisePrixUnitaire = value;
-    if (!currentData.achatDeviseTaux) {
+
+    let ld_dev_taux;
+    let ls_dev_code = currentData.proprietaireMarchandise.devise.id;
+    const res = await lastValueFrom(this.devisesRefsService.getOne({
+      id: this.context.societe.devise.id,
+      devise: ls_dev_code,
+    }, ["id", "tauxAchat"]));
+
+    if (res?.data?.deviseRef)
+      ld_dev_taux = res.data.deviseRef.tauxAchat;
+
+    if (!ld_dev_taux) {
       newData.achatDevise = this.context.societe.devise.id;
       newData.achatDeviseTaux = 1;
     }
