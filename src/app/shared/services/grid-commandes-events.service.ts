@@ -395,7 +395,7 @@ export class GridCommandesEventsService {
       newData.achatDevise = this.context.societe.devise.id;
       newData.achatDeviseTaux = 1;
     }
-    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? currentData.achatDeviseTaux) * value;
+    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? ld_dev_taux) * value;
   }
 
   async onTypePaletteChange(
