@@ -21,7 +21,7 @@ import {
   DxScrollViewComponent,
 } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { concatMap, forkJoin } from "rxjs";
+import { concatMap, finalize, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
 
 
@@ -144,6 +144,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
         this.refOrdreEDI.toFixed(),
         this.authService.currentUser.nomUtilisateur
       )),
+      finalize(() => this.gridRecap.refreshGrid()),
     )
       .subscribe({
         next: res => {
