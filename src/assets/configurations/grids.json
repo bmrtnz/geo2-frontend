@@ -4638,6 +4638,7 @@
     ]
   },
   "choix-envois": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4743,6 +4744,7 @@
     ]
   },
   "annule-remplace": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
