@@ -1,0 +1,50 @@
+<dx-popup
+  width="500"
+  height="auto"
+  [dragEnabled]="true"
+  title="{{ 'zoom-article-title' | localize }}"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShown)="onShown($event)"
+  [hideOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <form class="inputs">
+      <!-- Validité, Code art BW, GTIN, code art Clt et Priorité -->
+      <div class="EDI-info-boxes">
+        <div class="dx-field">
+          <div class="dx-field-label text-align-right">
+            {{ "ordreStock-articleID" | localize }}
+          </div>
+          <div class="dx-field-value codeArtBW">
+            <dx-select-box
+              #codeArtBWBox
+              [dataSource]="articlesDS"
+              displayExpr="id"
+              [searchMode]="'contains'"
+              [showClearButton]="true"
+              (onEnterKey)="accessArticle()"
+            >
+              <dx-validator>
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-select-box>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <br />
+      <div class="popup-action">
+        <dx-button
+          text="{{ 'btn-access-file' | localize }}"
+          type="default"
+          (onClick)="accessArticle()"
+        ></dx-button>
+      </div>
+    </form>
+  </div>
+</dx-popup>
+
+<app-zoom-article-popup [articleLigneId]="articleId"></app-zoom-article-popup>
