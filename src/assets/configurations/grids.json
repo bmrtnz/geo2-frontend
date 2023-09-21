@@ -4823,9 +4823,9 @@
         "visibleIndex": 0,
         "dataField": "ordreLogistique.dateDepartPrevueFournisseur",
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 115,
+        "width": 140,
         "visible": true
       },
       {
@@ -4893,9 +4893,9 @@
         "visibleIndex": 16,
         "dataField": "ordreLogistique.ordre.dateLivraisonPrevue",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 90,
+        "width": 140,
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "visible": true
       },
       {
