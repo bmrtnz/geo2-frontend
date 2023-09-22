@@ -3053,7 +3053,8 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id"
+            "id",
+            "description"
           ],
           "searchExpr": [
             "id"
