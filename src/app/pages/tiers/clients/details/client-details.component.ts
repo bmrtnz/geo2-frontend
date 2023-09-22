@@ -627,11 +627,14 @@ export class ClientDetailsComponent
     // Sum of couverture Coface & couverture BW. & couverture temporaire Updated on any change
     this.couvertureTotale.value =
       parseInt(this.formGroup.get("agrement").value || 0, 10) +
-      +parseInt(this.formGroup.get("enCoursBlueWhale").value || 0, 10) +
+      parseInt(this.formGroup.get("enCoursBlueWhale").value || 0, 10) +
       parseInt(this.formGroup.get("enCoursTemporaire").value || 0, 10);
     // If couverture temporaire, date limite is required
-    if (el) {
-      this.couvTemp = params.value;
+    if (el) this.couvTemp = params.value;
+    // If couverture and refus coface, unckeck the latter
+    if (params.value && this.formGroup.get("refusCoface").value === true) {
+      this.formGroup.get("refusCoface").markAsDirty();
+      this.formGroup.get("refusCoface").setValue(false);
     }
   }
 
