@@ -9,8 +9,8 @@
   [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
-    <form class="inputs">
-      <!-- Validité, Code art BW, GTIN, code art Clt et Priorité -->
+    <div class="inputs">
+      <!-- Code article -->
       <div class="EDI-info-boxes">
         <div class="dx-field">
           <div class="dx-field-label text-align-right">
@@ -43,7 +43,7 @@
           (onClick)="accessArticle()"
         ></dx-button>
       </div>
-    </form>
+    </div>
   </div>
 </dx-popup>
 

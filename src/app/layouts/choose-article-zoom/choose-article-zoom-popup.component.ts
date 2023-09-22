@@ -38,7 +38,7 @@ export class ChooseArticleZoomPopupComponent implements OnInit {
   }
 
   onShown(e) {
-    // this.codeArtBWBox.instance.focus();
+    this.codeArtBWBox.instance.focus();
     e.component
       .content()
       .parentNode.classList.add("choose-article-zoom-popup");
