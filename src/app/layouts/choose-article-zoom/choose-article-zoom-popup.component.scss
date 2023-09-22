@@ -13,54 +13,34 @@
   .dx-texteditor-input-container::after {
     right: 0 !important;
   }
-}
 
-.popup-action {
-  position: relative;
-  display: inline-block;
-  left: 50%;
-  transform: translateX(-50%);
-
-  &>.dx-button {
-    margin-left: 10px;
+  .popup-action {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
   }
-}
 
-.EDI-info-boxes {
-  padding-right: 70px;
+  .inputs {
+    padding: 0 35px;
 
-  .dx-field {
-    margin-bottom: 3px;
+    .dx-field {
+      margin-bottom: 3px;
 
-    &.valide-EDI-checkbox {
-      height: 34px;
-
-      .dx-checkbox {
-        margin: 9px 0;
-        float: left;
-      }
-    }
-
-    .dx-field-label {
-      width: 46% !important;
-      white-space: initial;
-      margin-right: 10px;
-
-      &.large-padding-left {
-        padding-left: 50px;
-      }
-    }
-
-    .dx-field-value {
-      width: 200px !important;
-
-      &.prioriteEdi {
-        width: 50px !important;
+      .dx-field-label {
+        width: 40% !important;
+        white-space: initial;
+        margin-right: 10px;
       }
 
-      &.codeArtBW {
-        width: 140px !important;
+      .dx-field-value {
+        width: 200px !important;
+
+        &.codeArtBW {
+          width: 140px !important;
+        }
       }
     }
   }
+
 }

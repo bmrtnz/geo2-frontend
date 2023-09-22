@@ -144,6 +144,8 @@
     "btn-modifierLot": "Modifier un Lot",
     "btn-supprimerLot": "Supprimer un Lot",
     "warn-article-non-valid": "Il n'est pas possible de modifier la validité, l'article réf. {0} étant non-valide",
+    "warn-unknown-article": "L'article {0} n'existe pas",
+    "warn-article-type": "{0} : format/type incorrect",
     "afficher-boutons-navigation-rapide": "Afficher la barre de boutons de navigation rapide",
     "masquer-boutons-navigation-rapide": "Masquer la barre de boutons de navigation rapide",
     "btn-origine": "Origine",

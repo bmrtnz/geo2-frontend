@@ -1,35 +1,32 @@
 <dx-popup
-  width="500"
+  width="420"
   height="auto"
   [dragEnabled]="true"
   title="{{ 'zoom-article-title' | localize }}"
   [visible]="visible"
   (onHidden)="onHidden()"
-  (onShown)="onShown($event)"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
   [hideOnOutsideClick]="true"
 >
   <div *dxTemplate="let d of 'content'">
     <div class="inputs">
       <!-- Code article -->
-      <div class="EDI-info-boxes">
-        <div class="dx-field">
-          <div class="dx-field-label text-align-right">
-            {{ "ordreStock-articleID" | localize }}
-          </div>
-          <div class="dx-field-value codeArtBW">
-            <dx-select-box
-              #codeArtBWBox
-              [dataSource]="articlesDS"
-              displayExpr="id"
-              [searchMode]="'contains'"
-              [showClearButton]="true"
-              (onEnterKey)="accessArticle()"
-            >
-              <dx-validator>
-                <dxi-validation-rule type="required"></dxi-validation-rule>
-              </dx-validator>
-            </dx-select-box>
-          </div>
+      <div class="dx-field">
+        <div class="dx-field-label text-align-right">
+          {{ "ordreStock-articleID" | localize }}
+        </div>
+        <div class="dx-field-value codeArtBW">
+          <dx-text-box
+            #codeArtBWBox
+            [showClearButton]="true"
+            [valueChangeEvent]="'keyup'"
+            (onEnterKey)="accessArticle()"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
         </div>
       </div>
 

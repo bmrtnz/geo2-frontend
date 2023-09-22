@@ -1,19 +1,20 @@
-import { Component, NgModule, OnInit, Output, ViewChild } from "@angular/core";
-import { DxButtonModule, DxPopupComponent, DxPopupModule, DxSelectBoxComponent, DxSelectBoxModule, DxValidatorModule } from "devextreme-angular";
-import { ArticlesService } from "app/shared/services";
-import DataSource from "devextreme/data/data_source";
+import { Component, NgModule, Output, ViewChild } from "@angular/core";
+import { DxButtonModule, DxPopupComponent, DxPopupModule, DxSelectBoxComponent, DxTextBoxModule, DxValidatorModule } from "devextreme-angular";
+import { ArticlesService, LocalizationService } from "app/shared/services";
 import { SharedModule } from "app/shared/shared.module";
 import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/zoom-article-popup.component";
 import { OrdresModule } from "app/pages/ordres/ordres.module";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: 'app-choose-article-zoom-popup',
   templateUrl: './choose-article-zoom-popup.component.html',
   styleUrls: ['./choose-article-zoom-popup.component.scss']
 })
-export class ChooseArticleZoomPopupComponent implements OnInit {
+export class ChooseArticleZoomPopupComponent {
   constructor(
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private localizeService: LocalizationService
   ) { }
 
   @Output() articleId: string;
@@ -23,37 +24,45 @@ export class ChooseArticleZoomPopupComponent implements OnInit {
 
   @ViewChild("codeArtBWBox", { static: false }) codeArtBWBox: DxSelectBoxComponent;
 
-  public articlesDS: DataSource;
   public title: string;
   public visible: boolean;
 
-  ngOnInit() {
-    this.articlesDS = this.articlesService.getDataSource_v2(["id"], "cache-first", "id");
-    this.articlesDS.filter(["valide", "=", true]);
-  }
 
   onHidden() {
     this.codeArtBWBox.instance.reset();
     this.visible = false;
   }
 
-  onShown(e) {
-    this.codeArtBWBox.instance.focus();
+  onShowing(e) {
     e.component
       .content()
       .parentNode.classList.add("choose-article-zoom-popup");
   }
 
+  onShown() {
+    this.codeArtBWBox.instance.focus();
+  }
+
   accessArticle() {
-    if (!this.codeArtBWBox.value?.id) return;
-    this.articleId = this.codeArtBWBox.value.id;
-    this.zoomPopup.visible = true;
-    this.visible = false;
+    if (!this.codeArtBWBox.value) return;
+    let myValue = this.codeArtBWBox.value;
+    if (myValue.length > 6) {
+      notify(this.localizeService.localize("warn-article-type", myValue), "error", 3000);
+    } else {
+      myValue = ("000000" + myValue).slice(-6);
+      this.articlesService.getOne_v2(myValue, ["id", "valide"]).subscribe((res) => {
+        const myArt = res?.data?.article;
+        if (!myArt) return notify(this.localizeService.localize("warn-unknown-article", myValue), "error", 3000);
+        this.articleId = myValue;
+        this.zoomPopup.visible = true;
+        this.visible = false;
+      });
+    }
   }
 }
 
 @NgModule({
-  imports: [DxPopupModule, DxSelectBoxModule, DxButtonModule, DxValidatorModule, SharedModule, OrdresModule],
+  imports: [DxPopupModule, DxTextBoxModule, DxButtonModule, DxValidatorModule, SharedModule, OrdresModule],
   declarations: [ChooseArticleZoomPopupComponent],
   exports: [ChooseArticleZoomPopupComponent],
 })
