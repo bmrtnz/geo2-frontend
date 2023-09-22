@@ -36,8 +36,7 @@ import { tap } from "rxjs/operators";
   styleUrls: ["./lieux-passage-a-quai-details.component.scss"],
 })
 export class LieuxPassageAQuaiDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
-{
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
   @Input() public lieupassageaquaiLigneId: string;
   @Input() public lieupassageaquaiTitle: string;
 
@@ -225,12 +224,12 @@ export class LieuxPassageAQuaiDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -290,16 +289,14 @@ export class LieuxPassageAQuaiDetailsComponent
       const lieuPassageAQuai = {
         id: this.lieupassageaquai.id,
         preSaisie: false,
-        valide: true,
       };
       this.lieupassageaquaiService
-        .save_v2(["id", "preSaisie", "valide"], {
+        .save_v2(["id", "preSaisie"], {
           lieuPassageAQuai,
         })
         .subscribe({
           next: () => {
             this.refreshGrid.emit();
-            this.formGroup.get("valide").setValue(true);
             this.formGroup.markAsPristine();
             this.preSaisie = "";
             this.validationService.showToValidateBadges();

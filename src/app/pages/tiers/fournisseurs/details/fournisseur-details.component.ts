@@ -62,8 +62,7 @@ import { LibelleNatureStation } from "app/shared/models/fournisseur.model";
   styleUrls: ["./fournisseur-details.component.scss"],
 })
 export class FournisseurDetailsComponent
-  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable
-{
+  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
   private static readonly IDENTIFIANTS_FOURNISSEUR_PLATEFORME = [4, 5, 6];
 
   @Input() public fournisseurLigneId: string;
@@ -303,13 +302,9 @@ export class FournisseurDetailsComponent
         const fournisseur = {
           id: this.fournisseur.id,
           preSaisie: false,
-          valide: true,
         };
-        this.formGroup.get("valide").setValue(true);
-        this.formGroup.get("valide").markAsDirty();
         this.preSaisie = "";
-        const validModif = true;
-        this.saveData(fournisseur, validModif);
+        this.saveData(fournisseur);
       }
     }
   }
@@ -478,12 +473,12 @@ export class FournisseurDetailsComponent
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -595,12 +590,12 @@ export class FournisseurDetailsComponent
       this.mapCertificationsForSave(this.formGroup.get("certifications").value);
 
     (fournisseur.valide !== undefined &&
-    (this.fournisseur.valide !== fournisseur.valide || validModif) &&
-    !this.createMode
+      (this.fournisseur.valide !== fournisseur.valide || validModif) &&
+      !this.createMode
       ? this.validatePopup.present(HistoryType.FOURNISSEUR, {
-          fournisseur: { id: fournisseur.id },
-          valide: fournisseur.valide,
-        })
+        fournisseur: { id: fournisseur.id },
+        valide: fournisseur.valide,
+      })
       : of(undefined)
     )
       .pipe(

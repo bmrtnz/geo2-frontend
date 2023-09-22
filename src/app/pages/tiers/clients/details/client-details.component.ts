@@ -662,13 +662,9 @@ export class ClientDetailsComponent
         const client = {
           id: this.client.id,
           preSaisie: false,
-          valide: true,
         };
-        this.formGroup.get("valide").setValue(true);
-        this.formGroup.get("valide").markAsDirty();
         this.preSaisie = "";
-        const validModif = true;
-        this.saveData(client, validModif);
+        this.saveData(client);
       }
     }
   }
