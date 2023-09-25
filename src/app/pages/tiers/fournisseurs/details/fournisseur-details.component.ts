@@ -305,13 +305,9 @@ export class FournisseurDetailsComponent
         const fournisseur = {
           id: this.fournisseur.id,
           preSaisie: false,
-          valide: true,
         };
-        this.formGroup.get("valide").setValue(true);
-        this.formGroup.get("valide").markAsDirty();
         this.preSaisie = "";
-        const validModif = true;
-        this.saveData(fournisseur, validModif);
+        this.saveData(fournisseur);
       }
     }
   }
