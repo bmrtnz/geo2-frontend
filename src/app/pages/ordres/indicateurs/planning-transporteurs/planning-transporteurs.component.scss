@@ -16,50 +16,59 @@
   font-style: italic;
 }
 
-::ng-deep .orderTileFilterArea {
-  width: 1100px;
+::ng-deep .orderTileFilterArea-container {
+  margin: 30px 20px;
+  overflow: hidden;
 
-  .valideCheckboxField {
-    .dx-field-label {
-      position: relative;
-      top: -1px;
-      width: 90px !important;
-      white-space: inherit;
-      text-overflow: initial;
+  .orderTileFilterArea {
+    width: 800px;
+
+    .valideCheckboxField {
+      .dx-field-label {
+        position: relative;
+        top: -1px;
+        width: 90px !important;
+        white-space: inherit;
+        text-overflow: initial;
+      }
+
+      .dx-field-value {
+        width: 33px !important;
+      }
     }
 
-    .dx-field-value {
-      width: 33px !important;
+    .dx-datebox .dx-texteditor-input {
+      padding-right: 0 !important;
+    }
+
+    .orderTileleftFilters .dx-field {
+      margin-bottom: 0;
+    }
+
+    .orderRightRightFilters {
+      margin-top: 4px;
+    }
+
+    .validOnlyButtons {
+      display: block;
+      min-width: 0 !important;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      float: left;
+
+      .dx-button-content {
+        padding: 6px;
+      }
+    }
+
+    .dx-invalid-message-content {
+      padding: 0;
     }
   }
 
-  .dx-datebox .dx-texteditor-input {
-    padding-right: 0 !important;
-  }
-
-  .orderTileleftFilters .dx-field {
-    margin-bottom: 0;
-  }
-
-  .orderRightRightFilters {
-    margin-top: 4px;
-  }
-
-  .validOnlyButtons {
-    display: block;
-    min-width: 0 !important;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    float: left;
-
-    .dx-button-content {
-      padding: 6px;
-    }
-  }
-
-  .dx-invalid-message-content {
-    padding: 0;
+  .refresh-btn {
+    margin-left: 10px;
   }
 }
 

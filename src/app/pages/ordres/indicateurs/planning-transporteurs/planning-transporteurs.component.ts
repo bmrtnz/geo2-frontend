@@ -6,6 +6,7 @@ import {
   LocalizationService,
   TransporteursService,
 } from "app/shared/services";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { PlanningTransporteursService } from "app/shared/services/api/planning-transporteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -34,6 +35,7 @@ let self;
 enum FormInput {
   valide = "valide",
   transporteurCode = "transporteur",
+  bureauAchat = "bureauAchat",
   dateMin = "dateDepartPrevueFournisseur",
   dateMax = "dateDepartPrevueFournisseur",
   // valideClient = 'valideClient',
@@ -66,18 +68,21 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   public ordresDataSource: DataSource;
   public transporteursDataSource: DataSource;
+  public bureauxAchat: DataSource;
   public statut = Statut;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     transporteurCode: new UntypedFormControl(),
     dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+    bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public planningTransporteursService: PlanningTransporteursService,
     public transporteursService: TransporteursService,
+    public bureauxAchatService: BureauxAchatService,
     public authService: AuthService,
     public gridsService: GridsService,
     public localizeService: LocalizationService,
@@ -97,6 +102,11 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       "valide",
     ]);
     this.transporteursDataSource.filter(["valide", "=", true]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
     this.periodes = this.dateManagementService.periods();
     this.validRequiredEntity = {
       client: true,
@@ -164,8 +174,13 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
       // Filtering vs company
       const societe = this.currentCompanyService.getCompany().id;
-      if (societe === "BUK") this.ordresDataSource.filter(["ordre.type.id", "<>", "RGP"]);
-      if (societe === "SA") this.ordresDataSource.filter(["ordre.type.id", "<>", "ORI"]);
+      const filter = [];
+      if (societe === "BUK") filter.push(["ordre.type.id", "<>", "RGP"], "and");
+      if (societe === "SA") filter.push(["ordre.type.id", "<>", "ORI"], "and");
+      if (values.bureauAchat?.id) filter.push(["fournisseurBassin.id", "=", values.bureauAchat.id], "and");
+      filter.pop();
+      if (filter.length) this.ordresDataSource.filter(filter);
+      if (filter.length) console.log(filter)
 
       this.datagrid.dataSource = this.ordresDataSource;
     }

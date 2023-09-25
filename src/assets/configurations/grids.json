@@ -5080,6 +5080,10 @@
         "dataField": "ordre.incoterm.id"
       },
       {
+        "visibleIndex": 26,
+        "dataField": "fournisseurBassin.id"
+      },
+      {
         "dataField": "ordre.flagAnnule"
       },
       {
