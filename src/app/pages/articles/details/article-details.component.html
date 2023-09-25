@@ -153,7 +153,7 @@
                   [readOnly]="readOnlyMode"
                   [disabled]="true"
                   [dataSource]="especes"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                   (onValueChanged)="onEspeceChange($event)"
                 >
@@ -259,7 +259,7 @@
                   formControlName="type"
                   [readOnly]="readOnlyMode"
                   [dataSource]="types"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -278,7 +278,7 @@
                   formControlName="modeCulture"
                   [readOnly]="readOnlyMode"
                   [dataSource]="modesCulture"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -304,7 +304,7 @@
                   formControlName="origine"
                   [readOnly]="readOnlyMode"
                   [dataSource]="origines"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -328,7 +328,7 @@
                   formControlName="calibreUnifie"
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresUnifies"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -354,7 +354,7 @@
                   formControlName="typeVente"
                   [readOnly]="readOnlyMode"
                   [dataSource]="typesVente"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -415,7 +415,7 @@
                   formControlName="categorie"
                   [readOnly]="readOnlyMode"
                   [dataSource]="categories"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -439,7 +439,7 @@
                   formControlName="coloration"
                   [readOnly]="readOnlyMode"
                   [dataSource]="colorations"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -465,7 +465,7 @@
                   formControlName="sucre"
                   [readOnly]="readOnlyMode"
                   [dataSource]="sucres"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -489,7 +489,7 @@
                   formControlName="penetro"
                   [readOnly]="readOnlyMode"
                   [dataSource]="penetros"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -513,7 +513,7 @@
                   formControlName="cirage"
                   [readOnly]="readOnlyMode"
                   [dataSource]="cirages"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -532,7 +532,7 @@
                   formControlName="rangement"
                   [readOnly]="readOnlyMode"
                   [dataSource]="rangements"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -625,7 +625,7 @@
                   formControlName="conditionSpecial"
                   [readOnly]="readOnlyMode"
                   [dataSource]="conditionsSpecials"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -644,7 +644,7 @@
                   formControlName="alveole"
                   [readOnly]="readOnlyMode"
                   [dataSource]="alveoles"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -746,7 +746,7 @@
                   formControlName="identificationSymbolique"
                   [readOnly]="readOnlyMode"
                   [dataSource]="identificationsSymboliques"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -1017,7 +1017,7 @@
                   formControlName="stickeur"
                   [readOnly]="readOnlyMode"
                   [dataSource]="stickeurs"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -1052,7 +1052,7 @@
                   formControlName="marque"
                   [readOnly]="readOnlyMode"
                   [dataSource]="marques"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -1076,7 +1076,7 @@
                   formControlName="calibreMarquage"
                   [readOnly]="readOnlyMode"
                   [dataSource]="calibresMarquage"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                   <dx-validator
@@ -1103,7 +1103,7 @@
                   formControlName="etiquetteColis"
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesColis"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -1135,7 +1135,7 @@
                   formControlName="etiquetteUc"
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesUc"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
@@ -1169,7 +1169,7 @@
                   formControlName="etiquetteEvenementielle"
                   [readOnly]="readOnlyMode"
                   [dataSource]="etiquettesEvenementielle"
-                  displayExpr="description"
+                  [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
                 >
                 </dx-select-box>
