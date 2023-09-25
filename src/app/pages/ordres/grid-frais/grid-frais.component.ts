@@ -230,29 +230,19 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       cell.cancel = true;
   }
 
-  updateCodePlusDataSource(e) {
-    const frais = e.data.frais?.id;
+  fetchCodePlusDataSource(frais: OrdreFrais["id"]) {
     if (!frais) return;
     this.initializeFournDataSources();
     if (frais === "RAMASS" || frais === "FRET")
-      e.column.editorOptions.dataSource = this.transporteurSource;
+      return this.transporteurSource;
     if (frais === "DEDIMP" || frais === "DEDEXP")
-      e.column.editorOptions.dataSource = this.transitaireDouanierSource;
-    if (frais === "TRANSI") e.column.editorOptions.dataSource = this.transitaireSource;
+      return this.transitaireDouanierSource;
+    if (frais === "TRANSI")
+      return this.transitaireSource;
     if (frais === "QUAI")
-      e.column.editorOptions.dataSource = this.lieuxPassageAQuaiSource;
-    if (frais === "ENTBWS") e.column.editorOptions.dataSource = this.entrepotSource;
-  }
-
-  onCellClick(e) {
-    if (e.rowType !== "data") return;
-    // Warning when no cost type
-    if (e.column.dataField === "codePlus") {
-      if (!e.data?.frais?.id)
-        notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
-
-      this.updateCodePlusDataSource(e);
-    }
+      return this.lieuxPassageAQuaiSource;
+    if (frais === "ENTBWS")
+      return this.entrepotSource;
   }
 
   onCellPrepared(e) {
@@ -305,7 +295,9 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     if (context.dataField === "codePlus")
       value = value?.codePlus?.substring(0, 35);
     context.defaultSetCellValue(newData, value);
-    if (context.dataField === "achatPrixUnitaire")
+    if (context.dataField === "frais.id")
+      newData.codePlus = '';
+    if (context.dataField === "achatDevisePrixUnitaire")
       newData.achatPrixUnitaire = achatDevisePU() * taux();
     newData.montant = achatQuantite() * achatDevisePU();
     newData.montantTotal = achatQuantite() * achatPU();
@@ -317,6 +309,14 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   }
 
   onFocusedCellChanging(e) {
+    if (e.columns[e.newColumnIndex].dataField === "codePlus") {
+      const fraisID = e.rows?.[e.newRowIndex]?.data?.frais?.id;
+      if (!fraisID)
+        notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
+      else
+        e.columns[e.newColumnIndex].editorOptions.dataSource = this.fetchCodePlusDataSource(fraisID);
+    }
+
     if (e.prevColumnIndex === e.columns.length - 1)
       if ([e.prevRowIndex, e.newRowIndex].includes(e.rows.length - 1))
         this.datagrid.instance.addRow();
