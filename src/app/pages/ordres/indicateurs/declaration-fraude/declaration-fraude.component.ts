@@ -42,12 +42,18 @@ import { concatMap, finalize } from "rxjs/operators";
 })
 export class DeclarationFraudeComponent implements AfterViewInit {
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild("secteurSB", { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild("clientSB", { static: false }) clientSB: DxSelectBoxComponent;
+  @ViewChild("entrepotSB", { static: false }) entrepotSB: DxSelectBoxComponent;
+  @ViewChild("transporteurSB", { static: false }) transporteurSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
+  @ViewChild("fournisseurSB", { static: false }) fournisseurSB: DxSelectBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
-    private secteursService: SecteursService,
+    public secteursService: SecteursService,
     private clientsService: ClientsService,
     private entrepotsService: EntrepotsService,
     private transporteursService: TransporteursService,
@@ -58,65 +64,59 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     private datePipe: DatePipe,
     private localizer: LocalizationService
   ) {
-    [
-      this.clientLookupStore,
-      this.entrepotLookupStore,
-      this.fournisseurLookupStore,
-    ].forEach((storeConfig) => {
-      storeConfig.sort = [{ selector: "code" }];
-    });
     this.periodes = this.dateManagementService.periods();
+
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
+    ]);
+    this.clients = clientsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    this.entrepots = entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    this.transporteurs = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+      "valide",
+    ]);
+    this.transporteurs.filter(["valide", "=", true]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
+    this.filterFournisseurs(); // Initialize fournisseurs
   }
 
   public preFilterData: {
-    secteur?: Partial<Secteur>;
-    client?: Partial<Client>;
-    entrepot?: Partial<Entrepot>;
-    transporteur?: Partial<Transporteur>;
-    bureauAchat?: Partial<BureauAchat>;
-    fournisseur?: Partial<Fournisseur>;
     dateDepartMin?: Date;
     dateDepartMax?: Date;
     dateModification?: Date;
-    periode?;
   } = {
       dateDepartMin: this.dateManagementService.startOfDay(),
       dateDepartMax: this.dateManagementService.endOfDay(),
     };
 
+  public secteurs: DataSource;
+  public clients: DataSource;
+  public entrepots: DataSource;
+  public transporteurs: DataSource;
+  public bureauxAchat: DataSource;
+  public fournisseurs: DataSource;
   public periodes: any[];
   public dataSource: DataSource;
   public now: number = Date.now();
   public resumeLabel: string;
   public etatLabel: string;
   @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
-
-  public secteurLookupStore = this.secteursService.getLookupStore(
-    ["id"],
-    "valide==true"
-  );
-  public clientLookupStore = this.clientsService.getLookupStore(
-    ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
-    }`
-  );
-  public entrepotLookupStore = this.entrepotsService.getLookupStore(
-    ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
-    }`
-  );
-  public transportLookupStore = this.transporteursService.getLookupStore(
-    ["id"],
-    `valide==true`
-  );
-  public bureauAchatLookupStore = this.bureauxAchatService.getLookupStore(
-    ["id"],
-    `valide==true`
-  );
-  public fournisseurLookupStore = this.fournisseursService.getLookupStore(
-    ["id", "code"],
-    `valide==true`
-  );
 
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
@@ -137,6 +137,72 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       dateDepartMin: datePeriod.dateDebut,
       dateDepartMax: datePeriod.dateFin,
     });
+  }
+
+  displayCodeBefore(data) {
+    return data
+      ? (data.code ? data.code : data.id) +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
+      : null;
+  }
+
+  onSecteurChanged(e) {
+    this.clients = this.clientsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    const filter: any = [
+      ["secteur.id", "=", e.value?.id],
+      "and",
+      ["societe.id", "=", this.currentCompanyService.getCompany().id],
+    ];
+    this.clients.filter(filter);
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.clientSB.value = null;
+    this.entrepotSB.value = null;
+  }
+
+  onClientChanged(e) {
+    this.entrepots = this.entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+
+    const filter: any = [["client.id", "=", e.value?.id]];
+    filter.push("and", ["valide", "=", true]);
+    this.entrepots.filter(filter);
+
+    this.entrepots.load().then((res) => {
+      if (res?.length === 1)
+        this.entrepotSB.value = { id: res[0].id };
+    });
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.entrepotSB.value = null;
+  }
+
+  filterFournisseurs(bureauAchat?) {
+    bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
+    this.fournisseurs = this.fournisseursService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+    ]);
+    this.fournisseurs.filter(["valide", "=", true]);
+    if (bureauAchat)
+      this.fournisseurs.filter([
+        ["valide", "=", true],
+        "and",
+        ["bureauAchat.id", "=", bureauAchat.id],
+      ]);
   }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
@@ -179,7 +245,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       "fraude-grid-title",
       this.preFilterData.dateDepartMin.toLocaleDateString(),
       this.preFilterData.dateDepartMax.toLocaleDateString(),
-      this.preFilterData.secteur.id,
+      this.secteurSB?.value?.id,
       this.currentCompanyService.getCompany().id
     );
   }
@@ -228,7 +294,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "typeTransportDescription",
           "baseTarifTransportCode"
         ]),
-        this.preFilterData?.secteur?.id,
+        this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,
         this.datePipe.transform(
           this.preFilterData?.dateDepartMin,
@@ -242,11 +308,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           this.preFilterData?.dateModification,
           "yyyy-MM-ddTHH:mm:ss"
         ),
-        this.preFilterData?.client?.id,
-        this.preFilterData?.transporteur?.id,
-        this.preFilterData?.fournisseur?.code,
-        this.preFilterData?.bureauAchat?.id,
-        this.preFilterData?.entrepot?.id
+        this.clientSB?.value?.id,
+        this.transporteurSB?.value?.id,
+        this.fournisseurSB?.value?.code,
+        this.bureauAchatSB?.value?.id,
+        this.entrepotSB?.value?.id,
       )
       .pipe(
         concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
