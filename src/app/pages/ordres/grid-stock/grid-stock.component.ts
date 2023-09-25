@@ -287,7 +287,8 @@ export class GridStockComponent implements OnInit {
       if (this.originesSB.value)
         sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value?.key}'`;
       if (this.modesCultureSB.value)
-        sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value?.key}'`;
+        sbFilters += ` and article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value?.key}'`;
+
       const dataToLoad = [
         {
           var: "varietes",
