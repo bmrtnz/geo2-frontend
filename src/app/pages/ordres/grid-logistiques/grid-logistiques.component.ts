@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
+import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -295,5 +296,12 @@ export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewIni
   onGridOut() {
     if (this.datagrid.instance.hasEditData())
       this.datagrid.instance.saveEditData();
+  }
+
+  setCellValue(newData: Partial<OrdreLogistique>, value, currentData: Partial<OrdreLogistique>) {
+    const context: any = this;
+    context.defaultSetCellValue(newData, value);
+    if (context.dataField === "groupage")
+      newData.typeLieuGroupageArrivee = 'G';
   }
 }
