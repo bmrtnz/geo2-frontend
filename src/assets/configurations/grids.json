@@ -4943,6 +4943,34 @@
         "visible": true
       },
       {
+        "visibleIndex": 30,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 32,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 34,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 36,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
         "dataField": "ordreLogistique.ordre.referenceClient",
         "visible": true
       },
