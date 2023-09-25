@@ -16,7 +16,7 @@ h6 {
 }
 
 ::ng-deep .ordresBAF-grid {
-  max-height: 800px;
+  max-height: calc(100vh - 426px) !important;
 }
 
 ::ng-deep .blocked-color {

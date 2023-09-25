@@ -3956,6 +3956,7 @@
     ]
   },
   "ordres-a-facturer": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -3968,7 +3969,7 @@
       {
         "visibleIndex": 2,
         "dataField": "indicateurBaf",
-        "sortOrder": "asc",
+        "sortOrder": "desc",
         "sortIndex": 1,
         "visible": true
       },
