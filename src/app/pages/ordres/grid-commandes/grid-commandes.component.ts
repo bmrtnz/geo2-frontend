@@ -620,6 +620,7 @@ export class GridCommandesComponent
           // Nous utilisons donc une implementation personnalisée d'une `select-box`
           // avec laquelle le filtrage de la source de données est possible
           this.fournisseursSource.filter(filters);
+          this.fournisseursSource.reload();
         }
       );
   }
