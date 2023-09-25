@@ -279,9 +279,10 @@ export class ClientDetailsComponent
     onClick: () => this.toggleVisible(),
   };
 
+  @Input() clientId: string;
   @Output() modifUserIds: string[];
   @Output() openEncoursOrder = new EventEmitter<any>();
-  @Input() clientId: string;
+  @Output() orderCurrOrder = new EventEmitter<any>();
 
   @ViewChild(EditingAlertComponent, { static: true })
   alertComponent: EditingAlertComponent;
@@ -1011,4 +1012,9 @@ export class ClientDetailsComponent
   openOrder(ordre) {
     this.openEncoursOrder.emit(ordre);
   }
+
+  openStdOrder(ordre) {
+    this.orderCurrOrder.emit(ordre);
+  }
+
 }

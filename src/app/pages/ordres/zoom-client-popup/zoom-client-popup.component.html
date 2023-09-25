@@ -28,6 +28,7 @@
       <app-client-details
         [clientId]="clientId"
         (openEncoursOrder)="openOrder($event)"
+        (orderCurrOrder)="openOrder($event)"
       ></app-client-details>
       <app-contacts [clientCode]="clientCode"></app-contacts>
       <br />

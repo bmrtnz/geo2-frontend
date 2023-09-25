@@ -65,8 +65,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Input() public gridSelectionEnabled: boolean;
+  @Input() public comingFrom: string;
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() openOrder = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomClientArticlePopupComponent, { static: false })
@@ -272,12 +274,16 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       campagneId = data.ordre.campagne.id;
     }
     if (numero && campagneId) {
-      window.sessionStorage.setItem(
-        "openOrder",
-        [numero, campagneId].join("|")
-      );
-      this.hidePopup.emit();
-      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      if (this.comingFrom === "zoomClient") {
+        this.openOrder.emit({ campagne: { id: campagneId }, numero: numero });
+      } else {
+        window.sessionStorage.setItem(
+          "openOrder",
+          [numero, campagneId].join("|")
+        );
+        this.hidePopup.emit();
+        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      }
     }
   }
 
