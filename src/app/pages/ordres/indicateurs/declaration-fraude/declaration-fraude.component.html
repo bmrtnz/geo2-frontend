@@ -10,74 +10,125 @@
     itemType="group"
     [colCount]="6"
   >
-    <dxi-item
-      dataField="secteur"
-      editorType="dxLookup"
-      [isRequired]="true"
-      [editorOptions]="{
-        dataSource: secteurLookupStore,
-        displayExpr: 'id',
-        searchExpr: ['id', 'description']
-      }"
-    >
-      <dxo-label text="{{ 'tiers-clients-secteur' | localize }}"></dxo-label>
+    <dxi-item>
+      <!-- Secteur -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteurSB
+            [dataSource]="secteurs"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id']"
+            (onValueChanged)="onSecteurChanged($event)"
+          >
+            <dx-validator name="{{ 'tiers-clients-secteur' | localize }}">
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+            <dxo-drop-down-options [width]="210"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
-    <dxi-item
-      dataField="client"
-      editorType="dxLookup"
-      [editorOptions]="{
-        dataSource: clientLookupStore,
-        showClearButton: true,
-        displayExpr: 'code'
-      }"
-    >
-      <dxo-label text="{{ 'tiers-client' | localize }}"></dxo-label>
+    <dxi-item>
+      <!-- Client -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-client" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #clientSB
+            [dataSource]="clients"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+            [showClearButton]="true"
+            (onValueChanged)="onClientChanged($event)"
+          >
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
-    <dxi-item
-      dataField="entrepot"
-      editorType="dxLookup"
-      [editorOptions]="{
-        dataSource: entrepotLookupStore,
-        showClearButton: true,
-        displayExpr: 'code'
-      }"
-    >
-      <dxo-label text="{{ 'tiers-entrepot' | localize }}"></dxo-label>
+    <dxi-item>
+      <!-- Entrepot -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-entrepot" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #entrepotSB
+            [dataSource]="entrepots"
+            [searchExpr]="['code']"
+            [displayExpr]="displayCodeBefore"
+            [showClearButton]="true"
+          >
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
-    <dxi-item
-      dataField="transporteur"
-      editorType="dxLookup"
-      [editorOptions]="{
-        dataSource: transportLookupStore,
-        showClearButton: true,
-        displayExpr: 'id'
-      }"
-    >
-      <dxo-label text="{{ 'ordres-transporteur' | localize }}"></dxo-label>
+
+    <!-- Bureau achat -->
+    <dxi-item>
+      <div class="dx-field field-large">
+        <div class="dx-field-label noEllipsis">
+          {{ "tiers-fournisseurs-bureauAchat" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #bureauAchatSB
+            [dataSource]="bureauxAchat"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id']"
+            (onValueChanged)="filterFournisseurs($event)"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
-    <dxi-item
-      dataField="bureauAchat"
-      editorType="dxLookup"
-      [editorOptions]="{
-        dataSource: bureauAchatLookupStore,
-        showClearButton: true,
-        displayExpr: 'id'
-      }"
-    >
-      <dxo-label
-        text="{{ 'tiers-fournisseurs-bureauAchat' | localize }}"
-      ></dxo-label>
+    <dxi-item>
+      <!-- transporteur -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label">
+          {{ "ordres-transporteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #transporteurSB
+            [dataSource]="transporteurs"
+            [displayExpr]="displayCodeBefore"
+            [showClearButton]="true"
+            [searchExpr]="['id']"
+          >
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
-    <dxi-item
-      dataField="fournisseur"
-      editorType="dxLookup"
-      [editorOptions]="{
-        dataSource: fournisseurLookupStore,
-        showClearButton: true,
-        displayExpr: 'code'
-      }"
-    >
-      <dxo-label text="{{ 'tiers-fournisseur' | localize }}"></dxo-label>
+    <!-- Fournisseur -->
+    <dxi-item>
+      <div class="dx-field field-large">
+        <div class="dx-field-label capitalize">
+          {{ "fournisseur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #fournisseurSB
+            [dataSource]="fournisseurs"
+            [displayExpr]="displayCodeBefore"
+            [showClearButton]="true"
+            [searchExpr]="['code']"
+            [showClearButton]="true"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </dxi-item>
   </dxi-item>
   <dxi-item
@@ -159,6 +210,7 @@
 </div>
 
 <dx-data-grid
+  class="grid-fraude"
   [dataSource]="dataSource"
   [width]="'100%'"
   (onCellPrepared)="onCellPrepared($event)"

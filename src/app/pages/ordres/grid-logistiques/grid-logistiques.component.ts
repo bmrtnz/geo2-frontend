@@ -291,4 +291,9 @@ export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewIni
     this.refresh();
     this.gridLignesLogistique.refresh();
   }
+
+  onGridOut() {
+    if (this.datagrid.instance.hasEditData())
+      this.datagrid.instance.saveEditData();
+  }
 }

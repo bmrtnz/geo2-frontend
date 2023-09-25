@@ -12,16 +12,20 @@ import {
 } from "../../shared/components";
 import { ScreenService } from "../../shared/services";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
+import { ChooseArticleZoomPopupModule } from "../choose-article-zoom/choose-article-zoom-popup.component";
 import {
   DxScrollViewModule,
   DxScrollViewComponent,
 } from "devextreme-angular/ui/scroll-view";
 import { CommonModule } from "@angular/common";
+import { SharedModule } from "app/shared/shared.module";
 
 import { navigation } from "../../pages/pages-navigation";
 import { Router, NavigationEnd } from "@angular/router";
 import { DxButtonModule } from "devextreme-angular";
 import { ValidationService } from "app/shared/services/api/validation.service";
+import { ChooseArticleZoomPopupComponent } from "../choose-article-zoom/choose-article-zoom-popup.component";
+
 
 @Component({
   selector: "app-side-nav-outer-toolbar",
@@ -35,8 +39,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
   menuOpened: boolean;
   temporaryMenuOpened = false;
 
-  @ViewChild(DxScrollViewComponent, { static: false })
-  scrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
+  @ViewChild(ChooseArticleZoomPopupComponent, { static: false }) chooseArticlePopup: ChooseArticleZoomPopupComponent;
 
   @Input()
   title: string;
@@ -123,32 +127,26 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
   navigationChanged(event) {
     const path = event.itemData.path;
+    const open = event.itemData.open;
     const pointerEvent = event.event;
 
     pointerEvent.preventDefault();
 
-    if (
-      path &&
-      this.menuOpened &&
-      !(path === "pages/ordres" && this.router.url.includes(path))
-    ) {
-      this.router.navigateByUrl(path);
+    if (!open) {
+      // Standard case = routing
+      if (
+        path &&
+        this.menuOpened &&
+        !(path === "pages/ordres" && this.router.url.includes(path))
+      ) this.router.navigateByUrl(path);
+    } else {
+      // Special cases
+      switch (open) {
+        case "ChooseArticleZoomPopupComponent":
+          this.chooseArticlePopup.visible = true;
+          break;
+      }
     }
-
-    //   if (event.node.selected) {
-    //     pointerEvent.preventDefault();
-    //   } else {
-    //       this.router.navigateByUrl(path);
-    //     }
-
-    //   if (this.hideMenuAfterNavigation) {
-    //     this.temporaryMenuOpened = false;
-    //     this.menuOpened = false;
-    //     pointerEvent.stopPropagation();
-    //   } else {
-    //     pointerEvent.preventDefault();
-    //   }
-    // }
   }
 
   menuToggle() {
@@ -173,9 +171,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
     SideNavigationMenuModule,
     DxDrawerModule,
     HeaderModule,
+    ChooseArticleZoomPopupModule,
     DxButtonModule,
     DxScrollViewModule,
     CommonModule,
+    SharedModule
   ],
   exports: [SideNavOuterToolbarComponent],
   declarations: [SideNavOuterToolbarComponent],

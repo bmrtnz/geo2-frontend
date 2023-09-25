@@ -236,7 +236,7 @@ export class ArticleDetailsComponent
     this.editing = false;
     this.cloneMode = false;
 
-    if (this.route.snapshot.url[0]?.path !== "articles") return;
+    if (this.articleLigneId) return; // Do not get the id from the path when zoom mode
 
     this.route.params
       .pipe(switchMap((params) => this.articlesService.getOne(params.id)))

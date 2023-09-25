@@ -279,9 +279,10 @@ export class ClientDetailsComponent
     onClick: () => this.toggleVisible(),
   };
 
+  @Input() clientId: string;
   @Output() modifUserIds: string[];
   @Output() openEncoursOrder = new EventEmitter<any>();
-  @Input() clientId: string;
+  @Output() orderCurrOrder = new EventEmitter<any>();
 
   @ViewChild(EditingAlertComponent, { static: true })
   alertComponent: EditingAlertComponent;
@@ -627,11 +628,14 @@ export class ClientDetailsComponent
     // Sum of couverture Coface & couverture BW. & couverture temporaire Updated on any change
     this.couvertureTotale.value =
       parseInt(this.formGroup.get("agrement").value || 0, 10) +
-      +parseInt(this.formGroup.get("enCoursBlueWhale").value || 0, 10) +
+      parseInt(this.formGroup.get("enCoursBlueWhale").value || 0, 10) +
       parseInt(this.formGroup.get("enCoursTemporaire").value || 0, 10);
     // If couverture temporaire, date limite is required
-    if (el) {
-      this.couvTemp = params.value;
+    if (el) this.couvTemp = params.value;
+    // If couverture and refus coface, unckeck the latter
+    if (params.value && this.formGroup.get("refusCoface").value === true) {
+      this.formGroup.get("refusCoface").markAsDirty();
+      this.formGroup.get("refusCoface").setValue(false);
     }
   }
 
@@ -662,13 +666,9 @@ export class ClientDetailsComponent
         const client = {
           id: this.client.id,
           preSaisie: false,
-          valide: true,
         };
-        this.formGroup.get("valide").setValue(true);
-        this.formGroup.get("valide").markAsDirty();
         this.preSaisie = "";
-        const validModif = true;
-        this.saveData(client, validModif);
+        this.saveData(client);
       }
     }
   }
@@ -1008,4 +1008,9 @@ export class ClientDetailsComponent
   openOrder(ordre) {
     this.openEncoursOrder.emit(ordre);
   }
+
+  openStdOrder(ordre) {
+    this.orderCurrOrder.emit(ordre);
+  }
+
 }

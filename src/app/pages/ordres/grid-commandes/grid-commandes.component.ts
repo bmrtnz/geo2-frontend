@@ -423,6 +423,7 @@ export class GridCommandesComponent
                 "article.emballage.emballage.zb",
                 "article.emballage.emballage.zh",
                 "proprietaireMarchandise.natureStation",
+                "proprietaireMarchandise.devise.id",
                 "fournisseur.devise.id",
                 "fournisseur.indicateurRepartitionCamion",
                 "article.id",
@@ -619,6 +620,7 @@ export class GridCommandesComponent
           // Nous utilisons donc une implementation personnalisée d'une `select-box`
           // avec laquelle le filtrage de la source de données est possible
           this.fournisseursSource.filter(filters);
+          this.fournisseursSource.reload();
         }
       );
   }

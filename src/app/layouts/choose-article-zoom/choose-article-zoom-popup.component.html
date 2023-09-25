@@ -1,0 +1,47 @@
+<dx-popup
+  width="420"
+  height="auto"
+  [dragEnabled]="true"
+  title="{{ 'zoom-article-title' | localize }}"
+  [visible]="visible"
+  (onHidden)="onHidden()"
+  (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
+  [hideOnOutsideClick]="true"
+>
+  <div *dxTemplate="let d of 'content'">
+    <div class="inputs">
+      <!-- Code article -->
+      <div class="dx-field">
+        <div class="dx-field-label text-align-right">
+          {{ "ordreStock-articleID" | localize }}
+        </div>
+        <div class="dx-field-value codeArtBW">
+          <dx-text-box
+            #codeArtBWBox
+            [showClearButton]="true"
+            [valueChangeEvent]="'keyup'"
+            (onEnterKey)="accessArticle()"
+          >
+            <dx-validator>
+              <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      </div>
+
+      <br />
+      <br />
+      <br />
+      <div class="popup-action">
+        <dx-button
+          text="{{ 'btn-access-file' | localize }}"
+          type="default"
+          (onClick)="accessArticle()"
+        ></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+<app-zoom-article-popup [articleLigneId]="articleId"></app-zoom-article-popup>

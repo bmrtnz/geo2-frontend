@@ -3053,7 +3053,8 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id"
+            "id",
+            "description"
           ],
           "searchExpr": [
             "id"
@@ -3955,6 +3956,7 @@
     ]
   },
   "ordres-a-facturer": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -3967,7 +3969,7 @@
       {
         "visibleIndex": 2,
         "dataField": "indicateurBaf",
-        "sortOrder": "asc",
+        "sortOrder": "desc",
         "sortIndex": 1,
         "visible": true
       },
@@ -4531,6 +4533,7 @@
     ]
   },
   "envois": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4638,6 +4641,7 @@
     ]
   },
   "choix-envois": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4743,6 +4747,7 @@
     ]
   },
   "annule-remplace": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4823,9 +4828,9 @@
         "visibleIndex": 0,
         "dataField": "ordreLogistique.dateDepartPrevueFournisseur",
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 115,
+        "width": 140,
         "visible": true
       },
       {
@@ -4893,9 +4898,9 @@
         "visibleIndex": 16,
         "dataField": "ordreLogistique.ordre.dateLivraisonPrevue",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 90,
+        "width": 140,
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "visible": true
       },
       {
@@ -4936,6 +4941,34 @@
         "width": 40,
         "cssClass": "no-padding",
         "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 32,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 34,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 36,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
       },
       {
         "dataField": "ordreLogistique.ordre.referenceClient",
@@ -5073,6 +5106,10 @@
       {
         "visibleIndex": 24,
         "dataField": "ordre.incoterm.id"
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "fournisseurBassin.id"
       },
       {
         "dataField": "ordre.flagAnnule"

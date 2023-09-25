@@ -34,8 +34,10 @@
           [entrepotId]="entrepotId"
           [secteurId]="secteurId"
           [gridSelectionEnabled]="gridSelectionEnabled"
+          [comingFrom]="isComingFrom"
           [popupShown]="popupShown"
           (hidePopup)="hidePopup()"
+          (openOrder)="openOrder($event)"
         ></app-grid-order-history>
         <br />
       </div>

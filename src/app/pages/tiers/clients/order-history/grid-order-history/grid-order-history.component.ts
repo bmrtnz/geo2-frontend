@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
+import { GridsService } from "app/pages/ordres/grids.service";
 import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -64,8 +65,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Input() public gridSelectionEnabled: boolean;
+  @Input() public comingFrom: string;
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() openOrder = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomClientArticlePopupComponent, { static: false })
@@ -114,6 +117,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
     public authService: AuthService,
+    public gridsService: GridsService,
     public functionsService: FunctionsService,
     private router: Router,
     public localizeService: LocalizationService
@@ -270,39 +274,43 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       campagneId = data.ordre.campagne.id;
     }
     if (numero && campagneId) {
-      window.sessionStorage.setItem(
-        "openOrder",
-        [numero, campagneId].join("|")
-      );
-      this.hidePopup.emit();
-      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      if (this.comingFrom === "zoomClient") {
+        this.openOrder.emit({ campagne: { id: campagneId }, numero: numero });
+      } else {
+        window.sessionStorage.setItem(
+          "openOrder",
+          [numero, campagneId].join("|")
+        );
+        this.hidePopup.emit();
+        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      }
     }
+  }
+
+  calculateGroupeOrdreLibelle(data) {
+    // Ajout code entrep. + réf client + (code transp.) + ...
+    let numeroContainerArray = [];
+    let numeroContainer;
+    numeroContainerArray.push(data.logistique?.numeroContainer);
+    numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+    if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
+
+    data = data.ordre;
+
+    return data.numero +
+      " - " +
+      (data.entrepot?.code ?? "") +
+      (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+      (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+      (numeroContainer ? " - " + numeroContainer + " " : "") +
+      (data.transporteur?.id
+        ? " (Transporteur : " + data.transporteur.id + ")"
+        : "") +
+      ` - ${Statut[data.statut]}`;
   }
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      // Ajout code entrep. + réf client + (code transp.)
-      if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-        let numeroContainerArray = [];
-        let numeroContainer;
-        data.map(ol => numeroContainerArray.push(ol.logistique.numeroContainer));
-        numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
-        if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
-        data = data[0].ordre;
-        e.cellElement.textContent =
-          data.numero +
-          " - " +
-          (data.entrepot?.code ?? "") +
-          (data.referenceClient ? " - " + data.referenceClient + " " : "") +
-          (data.codeChargement ? " - " + data.codeChargement + " " : "") +
-          (numeroContainer ? " - " + numeroContainer + " " : "") +
-          (data.transporteur?.id
-            ? " (Transporteur : " + data.transporteur.id + ")"
-            : "") +
-          ` - ${Statut[data.statut]}`;
-      }
       if (e.column.dataField === "ordre.dateDepartPrevue")
         e.cellElement.classList.add("first-group");
     }

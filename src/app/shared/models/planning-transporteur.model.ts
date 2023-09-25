@@ -1,3 +1,4 @@
+import BureauAchat from "./bureau-achat.model";
 import { Field, Model, ModelName } from "./model";
 import Ordre from "./ordre.model";
 
@@ -22,6 +23,7 @@ export class PlanningTransporteur extends Model {
   @Field() fournisseur: string;
   @Field() fournisseurCodePostal: string;
   @Field() fournisseurPays: string;
+  @Field({ model: import("./bureau-achat.model") }) public fournisseurBassin?: BureauAchat;
   @Field({ dataType: "datetime" }) dateDepartPrevueGroupage: string;
   @Field() groupage: string;
   @Field() espece: string;

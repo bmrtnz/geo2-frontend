@@ -136,7 +136,7 @@ export class GridCommandesEventsService {
 
     if (this.context?.client?.secteur?.id === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+        this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
   }
 
   async onNombreColisPaletteChange(
@@ -145,7 +145,7 @@ export class GridCommandesEventsService {
     currentData: Partial<OrdreLigne>,
     dxDataGrid: dxDataGrid,
   ) {
-    const applyRepartitionPalette = this.ofRepartitionPalette(newData, currentData);
+    const applyRepartitionPalette = this.ofRepartitionPalette({ ...currentData, ...newData });
 
     newData.nombreColisPalette = value;
     if (this.context?.secteurCode !== "F") {
@@ -196,7 +196,7 @@ export class GridCommandesEventsService {
         newData.nombreColisPalette = 0;
 
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+        this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
     }
   }
 
@@ -236,7 +236,8 @@ export class GridCommandesEventsService {
 
     }
 
-    let ls_dev_code = currentData.fournisseur?.devise?.id;
+    const newProprietaire = await lastValueFrom(this.fournisseursService.getOne_v2(value, ["id", "devise.id"]));
+    let ls_dev_code = newProprietaire.data.fournisseur.devise.id;
     let ld_dev_taux: number;
 
     if (value !== currentData.proprietaireMarchandise?.id) {
@@ -298,10 +299,6 @@ export class GridCommandesEventsService {
       newData.achatDeviseTaux = ld_dev_taux;
     }
 
-    if (this.context?.secteurCode === "F")
-      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
-
     if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
       setTimeout(() => dxDataGrid.getVisibleRows()
@@ -309,6 +306,11 @@ export class GridCommandesEventsService {
           dxDataGrid.cellValue(row.rowIndex, "proprietaireMarchandise.id", value);
           dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", ls_fou.id);
         }), 10);
+
+    if (this.context?.secteurCode === "F")
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        setTimeout(() => dxDataGrid.getVisibleRows()
+          .forEach(row => this.ofRepartitionPalette(row.data)?.(dxDataGrid)), 1000);
   }
 
   async onFournisseurChange(
@@ -339,7 +341,8 @@ export class GridCommandesEventsService {
 
     if (this.context?.secteurCode === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
+        dxDataGrid.getVisibleRows()
+          .forEach(row => this.ofRepartitionPalette(row.data)?.(dxDataGrid));
 
     if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
@@ -379,11 +382,24 @@ export class GridCommandesEventsService {
     currentData: Partial<OrdreLigne>,
   ) {
     newData.achatDevisePrixUnitaire = value;
-    if (!currentData.achatDeviseTaux) {
+
+    let ld_dev_taux;
+    const newProprietaire = await lastValueFrom(this.fournisseursService.getOne_v2(currentData.proprietaireMarchandise.id, ["id", "devise.id"]));
+    let ls_dev_code = newProprietaire.data.fournisseur.devise.id;
+    const res = await lastValueFrom(this.devisesRefsService.getOne({
+      id: this.context.societe.devise.id,
+      devise: ls_dev_code,
+    }, ["id", "tauxAchat"]));
+
+    if (res?.data?.deviseRef?.tauxAchat)
+      ld_dev_taux = res.data.deviseRef.tauxAchat;
+    else {
       newData.achatDevise = this.context.societe.devise.id;
-      newData.achatDeviseTaux = 1;
+      ld_dev_taux = 1;
     }
-    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? currentData.achatDeviseTaux) * value;
+
+    newData.achatDeviseTaux = ld_dev_taux;
+    newData.achatPrixUnitaire = (newData.achatDeviseTaux ?? newData.achatDeviseTaux) * value;
   }
 
   async onTypePaletteChange(
@@ -406,7 +422,7 @@ export class GridCommandesEventsService {
     }
 
     if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-      this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+      this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
   }
 
   async onPaletteInterChange(
@@ -422,24 +438,21 @@ export class GridCommandesEventsService {
   }
 
   private ofRepartitionPalette(
-    newData: Partial<OrdreLigne>,
-    currentData: Partial<OrdreLigne>,
-    filterFournisseur = true,
+    data: Partial<OrdreLigne>,
   ) {
-    if ((newData.nombreColisPalette ?? currentData.nombreColisPalette) === 0) return;
-    if (!(newData.fournisseur?.id ?? currentData.fournisseur?.id)) return;
 
     let nb_pal: number;
     let ld_pal_nb_col: number;
     let nb_pal_th = 0;
     let nb_pal_dispo = 0;
+    const selectedFournisseurID = data.fournisseur?.id;
 
     return (dxDataGrid: dxDataGrid) =>
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
       setTimeout(() => dxDataGrid.getVisibleRows()
         .filter(row => {
-          if (!filterFournisseur) return true;
-          return row.rowType === "data" && row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id);
+          return row.rowType === "data" &&
+            row.data.fournisseur?.id === selectedFournisseurID;
         })
         .forEach(row => {
           ld_pal_nb_col = row.data.nombreColisPalette;
