@@ -60,6 +60,7 @@ export class GridCommandesEventsService {
         let nombreColisPaletteIntermediaire: number;
 
         if (currentData?.nombreColisPaletteByDimensions) {
+          nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
           // BAM le 14/11/18
           // ne pas modifier les colis si déjà saisi
           if (currentData?.nombreColisPalette > 0)

@@ -393,8 +393,16 @@ body app-root.production {
 }
 
 // Filter panel adjustments
+.dx-datagrid-header-panel {
+  order: -2;
+}
+
 .dx-datagrid-filter-panel {
-  padding: 0 18px;
+  position: relative;
+  order: -1;
+  border-top: 0;
+  border-bottom: 0;
+  padding: 0 18px 0 25px;
   justify-content: left;
 
   .dx-datagrid-filter-panel-text {
