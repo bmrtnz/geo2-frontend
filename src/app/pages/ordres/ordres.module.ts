@@ -334,6 +334,7 @@ import { AddArticleToOrderButtonsComponent } from "./add-article-to-order-button
   ],
   exports: [
     GridStockComponent,
+    ZoomArticlePopupComponent
   ],
 })
 export class OrdresModule { }

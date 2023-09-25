@@ -223,7 +223,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         myValue = myValue.split("x")[0];
       }
       if (myValue.length > 6) {
-        notify(myValue + ": format/type incorrects", "error", 3000);
+        notify(this.localizeService.localize("warn-article-type", myValue), "error", 3000);
       } else {
         myValue = ("000000" + myValue).slice(-6);
         tagArray.push(myValue);
@@ -233,7 +233,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
           const myArt = res?.data?.article;
           this.articlesKO = !myArt || myArt.valide !== true;
           if (this.articlesKO) {
-            notify("L'article " + myValue + " n'existe pas", "error", 3000);
+            notify(this.localizeService.localize("warn-unknown-article", myValue), "error", 3000);
             if (tagArray.includes(myValue)) tagArray.pop();
             e.component.option("value", tagArray);
           }
