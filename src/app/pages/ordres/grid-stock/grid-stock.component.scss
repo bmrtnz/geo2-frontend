@@ -122,6 +122,7 @@
     .text {
       margin: 3px 10px 2px 0;
       max-width: 250px;
+      color: rgba(0, 0, 0, .54);
       overflow: hidden;
       white-space: normal;
       float: left;
@@ -132,6 +133,10 @@
       height: 22px;
       font-size: 20px !important;
     }
+  }
+
+  .dx-row-focused .comment-with-pen .text {
+    color: #FFF;
   }
 
   .small-horiz-padding {
