@@ -1125,10 +1125,24 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "preSaisie",
+        "dataType": "string",
+        "calculateCellValue": "calculateEmballage",
+        "calculateFilterExpression": "calculateFilterEmballage",
+        "visible": true
+      },
+      {
         "visibleIndex": 6,
         "dataField": "emballage.emballage.id",
         "dataType": "string",
-        "visible": true
+        "visible": false
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "emballage.emballage.description",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 8,
@@ -1137,8 +1151,20 @@
         "visible": true
       },
       {
+        "visibleIndex": 9,
+        "dataField": "matierePremiere.calibreUnifie.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "visibleIndex": 10,
         "dataField": "matierePremiere.calibreUnifie.description",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "normalisation.calibreMarquage.id",
         "dataType": "string",
         "visible": true
       },
@@ -1176,14 +1202,7 @@
         "visibleIndex": 22,
         "dataField": "matierePremiere.type.code",
         "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": true
-      },
-      {
-        "dataField": "emballage.emballage.description",
-        "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
+        "visible": false
       },
       {
         "visibleIndex": 50,
@@ -1191,13 +1210,6 @@
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      },
-      {
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "width": 50,
-        "showInColumnChooser": false,
-        "visible": false
       },
       {
         "dataField": "cahierDesCharge.coloration.id",
@@ -1235,12 +1247,27 @@
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteColis.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteUc.id",
         "dataType": "string",
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteUc.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteEvenementielle.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteEvenementielle.description",
         "dataType": "string",
         "visible": false
       },
@@ -1252,6 +1279,7 @@
       {
         "dataField": "emballage.id",
         "dataType": "string",
+        "showInColumnChooser": false,
         "visible": false
       },
       {

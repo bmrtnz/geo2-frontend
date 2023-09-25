@@ -179,14 +179,15 @@ export class ArticlesListComponent
   }
 
   onCellPrepared(e) {
-    // Best expression for emballage display
-    if (
-      e.rowType === "data" &&
-      e.column.dataField === "emballage.emballage.id"
-    ) {
-      e.cellElement.textContent =
-        e.value + " - " + e.data.emballage.emballage.description;
-    }
+  }
+
+  calculateEmballage(data) {
+    return data.emballage.emballage.id + " - " + data.emballage.emballage.description;
+  }
+
+  calculateFilterEmballage(value, op, target) {
+    if (target === "filterBuilder")
+      return [["emballage.emballage.description", "contains", value], "or", ["emballage.emballage.id", "contains", value]];
   }
 
   /**
