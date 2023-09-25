@@ -136,7 +136,7 @@ export class GridCommandesEventsService {
 
     if (this.context?.client?.secteur?.id === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+        this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
   }
 
   async onNombreColisPaletteChange(
@@ -145,7 +145,7 @@ export class GridCommandesEventsService {
     currentData: Partial<OrdreLigne>,
     dxDataGrid: dxDataGrid,
   ) {
-    const applyRepartitionPalette = this.ofRepartitionPalette(newData, currentData);
+    const applyRepartitionPalette = this.ofRepartitionPalette({ ...currentData, ...newData });
 
     newData.nombreColisPalette = value;
     if (this.context?.secteurCode !== "F") {
@@ -196,7 +196,7 @@ export class GridCommandesEventsService {
         newData.nombreColisPalette = 0;
 
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+        this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
     }
   }
 
@@ -299,10 +299,6 @@ export class GridCommandesEventsService {
       newData.achatDeviseTaux = ld_dev_taux;
     }
 
-    if (this.context?.secteurCode === "F")
-      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
-
     if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
       setTimeout(() => dxDataGrid.getVisibleRows()
@@ -310,6 +306,11 @@ export class GridCommandesEventsService {
           dxDataGrid.cellValue(row.rowIndex, "proprietaireMarchandise.id", value);
           dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", ls_fou.id);
         }), 10);
+
+    if (this.context?.secteurCode === "F")
+      if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
+        setTimeout(() => dxDataGrid.getVisibleRows()
+          .forEach(row => this.ofRepartitionPalette(row.data)?.(dxDataGrid)), 1000);
   }
 
   async onFournisseurChange(
@@ -340,7 +341,8 @@ export class GridCommandesEventsService {
 
     if (this.context?.secteurCode === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-        this.ofRepartitionPalette(newData, currentData, false)?.(dxDataGrid);
+        dxDataGrid.getVisibleRows()
+          .forEach(row => this.ofRepartitionPalette(row.data)?.(dxDataGrid));
 
     if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
@@ -420,7 +422,7 @@ export class GridCommandesEventsService {
     }
 
     if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
-      this.ofRepartitionPalette(newData, currentData)?.(dxDataGrid);
+      this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
   }
 
   async onPaletteInterChange(
@@ -436,24 +438,21 @@ export class GridCommandesEventsService {
   }
 
   private ofRepartitionPalette(
-    newData: Partial<OrdreLigne>,
-    currentData: Partial<OrdreLigne>,
-    filterFournisseur = true,
+    data: Partial<OrdreLigne>,
   ) {
-    if ((newData.nombreColisPalette ?? currentData.nombreColisPalette) === 0) return;
-    if (!(newData.fournisseur?.id ?? currentData.fournisseur?.id)) return;
 
     let nb_pal: number;
     let ld_pal_nb_col: number;
     let nb_pal_th = 0;
     let nb_pal_dispo = 0;
+    const selectedFournisseurID = data.fournisseur?.id;
 
     return (dxDataGrid: dxDataGrid) =>
       // On met un petit delai, sinon on obtient pas les nouvelles valeurs
       setTimeout(() => dxDataGrid.getVisibleRows()
         .filter(row => {
-          if (!filterFournisseur) return true;
-          return row.rowType === "data" && row.data.fournisseur?.id === (newData.fournisseur?.id ?? currentData.fournisseur?.id);
+          return row.rowType === "data" &&
+            row.data.fournisseur?.id === selectedFournisseurID;
         })
         .forEach(row => {
           ld_pal_nb_col = row.data.nombreColisPalette;
