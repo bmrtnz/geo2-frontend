@@ -241,6 +241,20 @@ body app-root.production {
   }
 }
 
+// Datagrid horizontal scrollbar on top
+.dx-scrollbar-horizontal {
+  top: 0;
+}
+
+.dx-scrollbar-horizontal,
+.dx-scrollbar-vertical {
+  cursor: pointer;
+
+  .dx-scrollable-scroll {
+    transition: height 0.2s, width 0.2s !important;
+  }
+}
+
 // Reducing space between form fields
 .dx-form-group-content,
 .dx-accordion-item {

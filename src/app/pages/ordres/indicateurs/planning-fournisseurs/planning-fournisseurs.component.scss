@@ -50,6 +50,10 @@
 ::ng-deep .gridPF-container {
   position: relative;
 
+  .grid-planning-fournisseurs {
+    max-height: calc(100vh - 345px) !important;
+  }
+
   .showPrices-box {
     width: 300px;
     position: absolute;
