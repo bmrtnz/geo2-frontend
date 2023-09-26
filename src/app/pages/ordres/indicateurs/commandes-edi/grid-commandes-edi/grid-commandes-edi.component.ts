@@ -34,8 +34,8 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { concatMap, map } from "rxjs/operators";
+import { from, iif, Observable } from "rxjs";
+import { concatMap, finalize, map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
@@ -426,6 +426,21 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
     this.showHideLoader.emit(true);
     notify(this.localization.localize("please-wait-order-creation"), "info", 5000);
+
+    const genericGen = this.functionsService.ofReadOrdEdiColibri(
+      parseInt(commandeEdi.refEdiOrdre),
+      this.currentCompanyService.getCompany().campagne.id,
+      this.formGroup.get("filtreStock").value,
+    );
+
+    const espagneGen = this.ordresEdiService.fCreateEdiEsp(
+      parseInt(commandeEdi.refEdiOrdre),
+      this.currentCompanyService.getCompany().id,
+      commandeEdi.client.id,
+      commandeEdi.entrepot.id,
+      this.authService.currentUser.nomUtilisateur,
+    );
+
     this.ordresEdiService.save_v2(["id", "entrepot.id"], {
       ediOrdre: {
         id: commandeEdi.refEdiOrdre,
@@ -435,11 +450,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .pipe(
         concatMap(() => this.stockArticleEdiBassinService
           .deleteAllByOrdreEdiId(parseInt(commandeEdi.refEdiOrdre))),
-        concatMap(res => this.functionsService.ofReadOrdEdiColibri(
-          parseInt(commandeEdi.refEdiOrdre),
-          this.currentCompanyService.getCompany().campagne.id,
-          this.formGroup.get("filtreStock").value,
-        )),
+        concatMap(res => this.ordresEdiService.getOne(parseInt(commandeEdi.refEdiOrdre), ["id", "secteur.id"])),
+        concatMap(res => res.data.ediOrdre.secteur?.id === "ESP" ? espagneGen : genericGen),
       ).subscribe({
         error: (err: Error) => {
           this.showHideLoader.emit(false);
@@ -449,10 +461,16 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             10000
           )
         },
-        next: () => {
+        next: res => {
           this.showHideLoader.emit(false);
-          this.recapStockPopup.visible = true;
-          this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
+          if ("ofReadOrdEdiColibri" in res.data) {
+            this.recapStockPopup.visible = true;
+            this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
+          }
+          if ("fCreateEdiEsp" in res.data) {
+            const text = this.localization.localize("ordre-cree", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
+            notify(text, "success", 3000);
+          }
         }
       });
   }

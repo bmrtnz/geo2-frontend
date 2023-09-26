@@ -23,12 +23,13 @@ import {
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
-import { from } from "rxjs";
+import { from, lastValueFrom } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { EdiLigne } from "app/shared/models";
 
 @Component({
   selector: "app-ajout-articles-ref-client-popup",
@@ -38,6 +39,7 @@ import { AssociatedArticlePromptComponent } from "../associated-article-prompt/a
 export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public single: boolean;
+  @Input() public ediLigneID: EdiLigne["id"];
   @Output() public additionnalFilter: any;
   @Output() public lignesChanged = new EventEmitter();
 
@@ -248,6 +250,16 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
               this.currentCompanyService.getCompany().id
             )
             .valueChanges.pipe(
+              concatMap(async res => {
+                if (this.ediLigneID)
+                  await lastValueFrom(this.OrdreLigneService.save_v2(["id"], {
+                    ordreLigne: {
+                      id: res.data.ofInitArticle.data.new_orl_ref,
+                      ediLigne: { id: this.ediLigneID },
+                    },
+                  }));
+                return res;
+              }),
               concatMap((res) => {
                 this.associatedPrompt.ordreLigneID =
                   res.data.ofInitArticle.data.new_orl_ref;

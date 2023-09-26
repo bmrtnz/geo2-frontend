@@ -6,7 +6,7 @@ import ClientEdi from "app/shared/models/client-edi.model";
 import CommandeEdi from "app/shared/models/commande-edi.model";
 import EdiOrdre from "app/shared/models/edi-ordre.model";
 import { ApiService } from "../api.service";
-import { FunctionsService } from "./functions.service";
+import { functionBody, FunctionResponse, FunctionsService } from "./functions.service";
 
 @Injectable({
   providedIn: "root",
@@ -175,6 +175,54 @@ export class OrdresEdiService extends ApiService {
       { name: "username", type: "String", value: username },
     ]);
   }
+
+  public fCreateEdiEsp = (
+    ediOrdreRef: number,
+    socCode: string,
+    cliRef: string,
+    cenRef: string,
+    username: string,
+  ) =>
+    this.apollo.query<{
+      fCreateEdiEsp: FunctionResponse<{
+        ls_nordre_tot: string,
+        tab_ordre_cree: Array<string>,
+      }>
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fCreateEdiEsp",
+              body: functionBody,
+              params: [
+                { name: "ediOrdreRef", value: "ediOrdreRef", isVariable: true },
+                { name: "socCode", value: "socCode", isVariable: true },
+                { name: "cliRef", value: "cliRef", isVariable: true },
+                { name: "cenRef", value: "cenRef", isVariable: true },
+                { name: "username", value: "username", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ediOrdreRef", type: "BigDecimal", isOptionnal: false },
+            { name: "socCode", type: "String", isOptionnal: false },
+            { name: "cliRef", type: "String", isOptionnal: false },
+            { name: "cenRef", type: "String", isOptionnal: false },
+            { name: "username", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        ediOrdreRef,
+        socCode,
+        cliRef,
+        cenRef,
+        username,
+      },
+      fetchPolicy: "network-only",
+    });
 
   save_v2(columns: Array<string>, variables: OperationVariables) {
     return this.apollo.mutate<{ saveEdiOrdre: EdiOrdre }>({

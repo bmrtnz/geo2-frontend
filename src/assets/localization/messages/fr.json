@@ -370,7 +370,7 @@
     "acces-ordre": "Accès ordre n° &NO",
     "ouverture-ordre": "Ouverture ordre n° &NO",
     "ouverture-ordres": "Ouverture ordres n° &NO",
-    "ordre-cree": "L'ordre n°&O a bien été créé",
+    "ordre-cree": "L'ordre n°{0} a bien été créé",
     "ajout-ordre-ok": "L'ajout à l'ordre n°&O a bien été effectué",
     "ordre-duplicate-lignes": "&L ligne&& copiée&&",
     "ordre-transfer-lignes": "&L ligne&& transférée&&",
