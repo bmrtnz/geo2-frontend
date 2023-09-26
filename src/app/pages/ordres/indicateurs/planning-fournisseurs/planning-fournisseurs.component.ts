@@ -223,9 +223,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       if (e.data?.ordre?.numero !== this.oldOrderNumber) {
         this.alternateOrder = !this.alternateOrder;
         this.oldOrderNumber = e.data?.ordre?.numero;
-        if (this.alternateOrder)
-          e.rowElement.classList.add("alternate-row");
       }
+      if (this.alternateOrder)
+        e.rowElement.classList.add("alternate-row");
     }
   }
 
