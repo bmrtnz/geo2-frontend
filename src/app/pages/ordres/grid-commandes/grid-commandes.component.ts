@@ -409,6 +409,8 @@ export class GridCommandesComponent
                 "ordre.secteurCommercial.id",
                 "ordre.bonAFacturer",
                 "ordre.societe.id",
+                "ordre.statut",
+                "ordre.id",
               ],
               // Used to filter emballeur/expediteur
               ...["proprietaireMarchandise.listeExpediteurs"],

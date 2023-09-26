@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import OrdreLigneLitigePick from "app/shared/models/ordre-ligne-litige-pick.model";
-import Ordre from "app/shared/models/ordre.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import {
   functionBody,
   FunctionResponse,
@@ -242,6 +242,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
     if (!allowMutations &&
       data.ordre.venteACommission === true &&
       !["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)
+    )
+      return this.lock(e);
+
+    // Special case: lock every cell except some when not BAF or invoice
+    if ((!allowMutations && !["ventePrixUnitaire", "venteUnite.id"].includes(e.column.dataField)) ||
+      [Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut])
     )
       return this.lock(e);
 
