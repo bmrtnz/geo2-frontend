@@ -4,30 +4,30 @@ import {
   Input,
   OnChanges,
   Output,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
+import { EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
-import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
   DxButtonComponent,
   DxPopupComponent,
   DxScrollViewComponent,
-  DxTagBoxComponent,
+  DxTagBoxComponent
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
-import { concatMap, takeWhile, tap } from "rxjs/operators";
+import { from, lastValueFrom } from "rxjs";
+import { concatMap, takeWhile } from "rxjs/operators";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
@@ -41,6 +41,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
   @Input() public single: boolean;
+  @Input() public ediLigneID: EdiLigne["id"];
   @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public articleLigneId: string;
@@ -299,6 +300,16 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
               this.remplacementArticle ? this.articleRowKey : null
             )
             .valueChanges.pipe(
+              concatMap(async res => {
+                if (this.ediLigneID)
+                  await lastValueFrom(this.OrdreLigneService.save_v2(["id"], {
+                    ordreLigne: {
+                      id: res.data.ofInitArticle.data.new_orl_ref,
+                      ediLigne: { id: this.ediLigneID },
+                    },
+                  }));
+                return res;
+              }),
               concatMap((res) => {
                 this.associatedPrompt.ordreLigneID =
                   res.data.ofInitArticle.data.new_orl_ref;

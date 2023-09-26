@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
+import { EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import {
@@ -24,6 +25,7 @@ import DataSource from "devextreme/data/data_source";
 })
 export class AjoutArticlesStockPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
+  @Input() public ediLigneID: EdiLigne["id"];
   @Output() public lignesChanged = new EventEmitter();
 
   visible: boolean;
@@ -51,7 +53,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -84,7 +86,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
-  clearAll() {}
+  clearAll() { }
 
   hidePopup() {
     this.popup.visible = false;

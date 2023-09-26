@@ -236,7 +236,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     quantite: number,
     commentaire: string
   ) {
-    return this.apollo.query<{ reservationStock: FunctionResponse }>({
+    return this.apollo.query<{ reservationStock: FunctionResponse<{ new_orl_ref: string }> }>({
       query: gql(
         ApiService.buildGraph(
           "query",
