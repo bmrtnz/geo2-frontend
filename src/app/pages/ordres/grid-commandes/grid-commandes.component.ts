@@ -835,6 +835,10 @@ export class GridCommandesComponent
     if (e.editorName === "dxSelectBox") {
       e.editorOptions.onOpened = (elem) =>
         elem.component._popup.option("width", 300);
+      e.editorOptions.onInput = (elem) => {
+        const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+        myInput?.focus()
+      }
     }
     // Customize `fournisseur` column
     if (e.parentType == "dataRow" && e.dataField == "fournisseur.id") {
