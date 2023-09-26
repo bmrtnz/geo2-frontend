@@ -238,18 +238,21 @@ export class OrdreLignesService extends ApiService implements APIRead {
     const bloquer =
       window.sessionStorage.getItem("blockage") === "true" ? true : false;
 
-    // Special case: lock every cell except some when vente à commission is true
-    if (!allowMutations &&
-      data.ordre.venteACommission === true &&
-      !["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)
-    )
+    // Global case
+    if ([Statut.ANNULE.toString(), Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut]))
       return this.lock(e);
 
-    // Special case: lock every cell except some when not BAF or invoice
-    if ((!allowMutations && !["ventePrixUnitaire", "venteUnite.id"].includes(e.column.dataField)) ||
-      [Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut])
-    )
-      return this.lock(e);
+    // Special case: lock every cell except some when vente à commission is true & !allowmutations
+    if (!allowMutations) {
+      if (data.ordre.venteACommission === true) {
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField))
+          return this.lock(e);
+      } else {
+        // Special case: unlock every cell except some when !allowmutations
+        if (!["ventePrixUnitaire", "venteUnite.id"].includes(e.column.dataField))
+          return this.lock(e);
+      }
+    }
 
     switch (e.column.dataField) {
       case "nombrePalettesCommandees": {
