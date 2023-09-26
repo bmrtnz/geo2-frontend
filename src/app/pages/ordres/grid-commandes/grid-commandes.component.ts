@@ -297,7 +297,7 @@ export class GridCommandesComponent
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
-        .setTransporteurBassin(firstLigneCommande.id, firstLigneCommande.ordre.societe.id)
+        .setTransporteurBassin(firstLigneCommande.id)
         .subscribe(() => this.afterSaved.emit());
     this.grid.instance.option("loadPanel.enabled", false);
   }
