@@ -64,8 +64,8 @@ export class ArticleCertificationPopupComponent implements OnChanges {
     return data
       ? data.numero
         ? (data.numero.length === 1 ? "0" + data.numero : data.numero) +
-          " - " +
-          data.libelle
+        " - " +
+        data.libelle
         : data.libelle
       : null;
   }
@@ -156,7 +156,7 @@ export class ArticleCertificationPopupComponent implements OnChanges {
 
   saveCertification() {
     const list = [];
-    this.certlist.selectedItemKeys.map((cert) =>
+    this.certlist.selectedItemKeys?.map((cert) =>
       list.push(parseInt(cert.text.split("-")[0], 10))
     );
     this.newCertification = list.join(",");
