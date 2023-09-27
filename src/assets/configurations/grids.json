@@ -4997,11 +4997,6 @@
         "visible": false
       },
       {
-        "dataField": "ordreLogistique.totalPalettesExpediees",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
         "dataField": "ordreLogistique.nombrePalettes100x120",
         "showInColumnChooser": false,
         "visible": false
