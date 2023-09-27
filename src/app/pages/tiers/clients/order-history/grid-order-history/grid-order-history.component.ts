@@ -257,6 +257,18 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
+      if (e.data?.ordre.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
+    }
+    if (e.rowType === "group") {
+      let data = e.data.items ?? e.data.collapsedItems;
+      data = data[0];
+      if (data?.ordre?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
     }
   }
 

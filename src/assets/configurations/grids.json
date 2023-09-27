@@ -3641,6 +3641,11 @@
         "dataField": "ordre.campagne.id",
         "showInColumnChooser": false,
         "visible": false
+      },
+      {
+        "dataField": "ordre.flagAnnule",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
