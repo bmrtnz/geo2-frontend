@@ -511,7 +511,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
       if (!dataItems.ordre) return;
       this.hidePopup.emit();
-      this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+      this.tabContext.openOrdre(dataItems.ordre.numero, dataItems.ordre.campagne.id);
     } else {
       this.hidePopup.emit();
       this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);

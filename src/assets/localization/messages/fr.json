@@ -1337,6 +1337,7 @@
     "ordreLignesHisto-article-articleDescription-descriptionReferenceCourte": "Article - desc. abrégée",
     "ordreLignesHisto-nombrePalettesCommandees": "Pal cde/exp",
     "ordreLignesHisto-nombreColisCommandes": "Colis cdés/exp.",
+    "ordreLignesHisto-ordre-codeChargement": "Code chargement",
     "ordreLignesHisto-ventePrixUnitaire": "PU vente",
     "ordreLignesHisto-achatDevisePrixUnitaire": "PU Achat",
     "ordreLignesHisto-fournisseur-code": "Emballeur / Expéditeur",

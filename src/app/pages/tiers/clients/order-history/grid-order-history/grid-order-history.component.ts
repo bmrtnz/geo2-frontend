@@ -267,7 +267,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       if (!data.items && !data.collapsedItems) return;
       const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
       if (!dataItems.ordre) return;
-      numero = data.key;
+      numero = dataItems.ordre.numero;
       campagneId = dataItems.ordre.campagne.id;
     } else {
       numero = data.ordre.numero;
