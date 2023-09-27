@@ -152,38 +152,34 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   }
 
   enableFilters() {
-    if (!this.formGroup.get("transporteurCode").value) {
-      notify(this.localizeService.localize("please-select-transporteur"), "error", 1500);
-    } else {
-      const values: Inputs = {
-        ...this.formGroup.value,
-        // valideClient: !this.validClient.instance.element().classList.contains('lowOpacity'),
-        // valideEntrepot: !this.validEntrepot.instance.element().classList.contains('lowOpacity'),
-        // valideFournisseur: !this.validFournisseur.instance.element().classList.contains('lowOpacity'),
-      };
+    const values: Inputs = {
+      ...this.formGroup.value,
+      // valideClient: !this.validClient.instance.element().classList.contains('lowOpacity'),
+      // valideEntrepot: !this.validEntrepot.instance.element().classList.contains('lowOpacity'),
+      // valideFournisseur: !this.validFournisseur.instance.element().classList.contains('lowOpacity'),
+    };
 
-      this.planningTransporteursService.setPersisantVariables({
-        dateMin: values.dateMin,
-        dateMax: values.dateMax,
-        societeCode: "%", // All companies
-        transporteurCode: values.transporteurCode,
-        // valideClient: values.valideClient,
-        // valideEntrepot: values.valideEntrepot,
-        // valideFournisseur: values.valideFournisseur,
-      } as Inputs);
+    this.planningTransporteursService.setPersisantVariables({
+      dateMin: values.dateMin,
+      dateMax: values.dateMax,
+      societeCode: "%", // All companies
+      transporteurCode: values.transporteurCode || "%",
+      // valideClient: values.valideClient,
+      // valideEntrepot: values.valideEntrepot,
+      // valideFournisseur: values.valideFournisseur,
+    } as Inputs);
 
-      // Filtering vs company
-      const societe = this.currentCompanyService.getCompany().id;
-      const filter = [];
-      if (societe === "BUK") filter.push(["ordre.type.id", "<>", "RGP"], "and");
-      if (societe === "SA") filter.push(["ordre.type.id", "<>", "ORI"], "and");
-      if (values.bureauAchat?.id) filter.push(["fournisseurBassin.id", "=", values.bureauAchat.id], "and");
-      filter.pop();
-      if (filter.length) this.ordresDataSource.filter(filter);
-      if (filter.length) console.log(filter)
+    // Filtering vs company
+    const societe = this.currentCompanyService.getCompany().id;
+    const filter = [];
+    if (societe === "BUK") filter.push(["ordre.type.id", "<>", "RGP"], "and");
+    if (societe === "SA") filter.push(["ordre.type.id", "<>", "ORI"], "and");
+    if (values.bureauAchat?.id) filter.push(["fournisseurBassin.id", "=", values.bureauAchat.id], "and");
+    filter.pop();
+    if (filter.length) this.ordresDataSource.filter(filter);
 
-      this.datagrid.dataSource = this.ordresDataSource;
-    }
+    this.datagrid.dataSource = this.ordresDataSource;
+
   }
 
   onRowDblClick(e) {
@@ -227,9 +223,9 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     }
 
     // Entrepot et numéro ordre
-    if (e.column.dataField === "entrepotRaisonSocial")
+    if (e.column.dataField === "entrepotRaisonSocial" && e.value)
       e.cellElement.classList.add("entrepot-planning-transporteurs");
-    if (e.column.dataField === "numero") {
+    if (e.column.dataField === "numero" && e.value) {
       e.cellElement.classList.add("numero-planning-transporteurs");
       e.cellElement.title = this.localizeService.localize("hint-access-ordre");
     }
@@ -284,9 +280,11 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   calculateEntrepot(data) {
     // Ajout CP, ville et pays au lieu de livraison
+    let title = `(Transp. : ${data.transporteur})`;
     if (data.entrepotCodePostal) {
-      return `${data?.entrepotRaisonSocial} - ${data.entrepotCodePostal} ${data.entrepotVille} (${data.entrepotPays})`;
+      title += `  ${data?.entrepotRaisonSocial} - ${data.entrepotCodePostal} ${data.entrepotVille} (${data.entrepotPays})`;
     }
+    return title;
   }
 
   onValideChanged(e) {
