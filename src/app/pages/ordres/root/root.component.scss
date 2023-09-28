@@ -180,8 +180,8 @@
 
     i.dx-icon-close {
       position: absolute;
-      top: 4px;
-      right: 3px;
+      top: 2px;
+      right: 2px;
       width: 16px;
       height: 16px;
       font-size: 17px;
@@ -196,7 +196,6 @@
       &:hover {
         font-size: 15px;
         line-height: 16px;
-        padding-left: 1px;
         background: #fe3d2c;
         color: #FFF;
       }
