@@ -3,6 +3,9 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-ordre-ligne-historique {
+
+  max-height: calc(100vh - 400px) !important;
+
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
