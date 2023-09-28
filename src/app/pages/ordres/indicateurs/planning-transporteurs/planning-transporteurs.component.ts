@@ -163,7 +163,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       dateMin: values.dateMin,
       dateMax: values.dateMax,
       societeCode: "%", // All companies
-      transporteurCode: values.transporteurCode || "%",
+      transporteurCode: values.transporteurCode || '%',
       // valideClient: values.valideClient,
       // valideEntrepot: values.valideEntrepot,
       // valideFournisseur: values.valideFournisseur,
