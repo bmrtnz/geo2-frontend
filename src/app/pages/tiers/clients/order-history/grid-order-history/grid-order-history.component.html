@@ -256,7 +256,7 @@
   >
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
-    <dxo-export fileName="Historique des ordres"></dxo-export>
+    <dxo-export fileName="Historique des ordres client"></dxo-export>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -291,13 +291,14 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-summary>
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
       <dxi-group-item
         *ngFor="let field of summaryFields"
+        [name]="field"
         [column]="field"
-        summaryType="sum"
+        summaryType="custom"
         [alignByColumn]="true"
-        displayFormat="{0}"
+        [displayFormat]="'{0}'"
       >
       </dxi-group-item>
     </dxo-summary>

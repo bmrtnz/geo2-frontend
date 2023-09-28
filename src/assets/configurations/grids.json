@@ -3492,6 +3492,7 @@
         "visibleIndex": 14,
         "dataField": "nombrePalettesCommandees",
         "width": 50,
+        "calculateCellValue": "calculateNombrePalettesCommandees",
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3499,6 +3500,7 @@
         "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "width": 100,
+        "calculateCellValue": "calculateNombreColisCommandes",
         "cssClass": "multi-line-header colisCommandes",
         "visible": true
       },
@@ -3506,6 +3508,7 @@
         "visibleIndex": 18,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3513,6 +3516,7 @@
         "visibleIndex": 20,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateAchatDevisePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3619,6 +3623,11 @@
       },
       {
         "dataField": "nombreColisExpedies",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "nombrePalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },

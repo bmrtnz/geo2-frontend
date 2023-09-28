@@ -22,6 +22,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
+let self;
 
 enum InputField {
   valide = "valide",
@@ -105,6 +106,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public localizeService: LocalizationService,
     private tabContext: TabContext
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLigneHistorique
     );
@@ -316,42 +318,29 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       // Clic sur loupe
       if (e.column.dataField === "article.matierePremiere.origine.id")
         e.cellElement.title = this.hintClick;
-
-      // Palettes
-      if (e.column.dataField === "nombrePalettesCommandees") {
-        e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          (e.data.nombrePalettesCommandees ?? 0);
-      }
-
-      // Colis
-      if (e.column.dataField === "nombreColisCommandes") {
-        e.cellElement.innerText =
-          e.cellElement.innerText + "/" + (e.data.nombreColisExpedies ?? 0);
-      }
-
-      // Prix
-      if (e.column.dataField === "ventePrixUnitaire") {
-        if (!e.data?.ventePrixUnitaire || !e.data?.venteUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.venteUnite?.description;
-        }
-      }
-      if (e.column.dataField === "achatDevisePrixUnitaire") {
-        if (
-          !e.data?.achatDevisePrixUnitaire ||
-          !e.data?.achatUnite?.description
-        ) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.achatUnite.description;
-        }
-      }
     }
+  }
+
+  calculateNombrePalettesCommandees(data) {
+    // Ajout type colis
+    return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
+  }
+
+  calculateNombreColisCommandes(data) {
+    // Ajout type colis
+    return data.nombreColisCommandes + "/" + (data.nombreColisExpedies ?? 0);
+  }
+
+  calculateVentePrixUnitaire(data) {
+    if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+      return "";
+    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
+      return "";
+    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
   }
 
   openFilePopup(cell, e) {
@@ -514,6 +503,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
           ? data.raisonSocial
           : data.description)
       : null;
+  }
+
+  public calculateCustomSummary(options) {
+    if (self.summaryFields.includes(options.name)) {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+      }
+    }
   }
 
   // Open selected ordre on group/line row double-click
