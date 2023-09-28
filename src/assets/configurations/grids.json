@@ -4670,6 +4670,8 @@
         "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "110",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "allowEditing": false,
         "visible": true
       },
@@ -4795,6 +4797,8 @@
         "visibleIndex": 6,
         "dataField": "typeTiers.description",
         "dataType": "string",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "width": "120",
         "allowEditing": false,
         "visible": true
