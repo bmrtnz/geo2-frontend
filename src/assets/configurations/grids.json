@@ -8372,7 +8372,7 @@
     ]
   },
   "recap-stock-cdes-edi": {
-    "pageSize": 100,
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,

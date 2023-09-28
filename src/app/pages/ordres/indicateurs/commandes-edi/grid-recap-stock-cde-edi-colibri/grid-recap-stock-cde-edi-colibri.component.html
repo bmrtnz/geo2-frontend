@@ -41,9 +41,10 @@
       [allowSearch]="true"
     ></dxo-header-filter>
     <dxo-pager
-      [showPageSizeSelector]="true"
+      [visible]="true"
       [showInfo]="true"
-      [showNavigationButtons]="true"
+      [showPageSizeSelector]="false"
+      infoText="{2} {{ 'elements' | localize }}"
     ></dxo-pager>
     <dxo-selection
       mode="multiple"
