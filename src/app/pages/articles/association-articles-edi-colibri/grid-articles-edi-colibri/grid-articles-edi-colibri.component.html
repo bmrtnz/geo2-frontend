@@ -18,6 +18,7 @@
               [displayExpr]="displayCodeBefore"
               [searchExpr]="['code']"
               [showClearButton]="true"
+              (onValueChanged)="onClientValueChanged($event)"
             >
               <dx-validator>
                 <dxi-validation-rule
@@ -83,7 +84,6 @@
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [noDataText]="'aucun-article-EDI-COLIBRI' | localize"
-  (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
   (onCellClick)="onCellClick($event)"
   (onRowDblClick)="onRowDblClick($event)"
@@ -133,8 +133,8 @@
           class="plus-button"
           icon="plus"
           type="success"
-          [visible]="!!gridHasData"
           hint="{{ 'hint-add-article' | localize }}"
+          [visible]="isClient()"
           (onClick)="addEDIArticle()"
         >
         </dx-button>
