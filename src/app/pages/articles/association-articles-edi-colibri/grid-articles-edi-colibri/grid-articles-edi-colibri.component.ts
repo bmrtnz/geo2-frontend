@@ -141,7 +141,6 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   }
 
   onRowDblClick(e) {
-    console.log(e)
     this.EdiArticle = e?.data;
     this.modifPopup.show("modification");
   }
