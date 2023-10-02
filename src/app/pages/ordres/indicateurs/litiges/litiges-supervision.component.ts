@@ -108,8 +108,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       "nomUtilisateur",
     ]);
     this.commerciaux.filter([
-      // ["valide", "=", true],
-      // "and",
+      ["valide", "=", true],
+      "and",
       ["role", "=", Role.COMMERCIAL],
       "and",
       ["nomUtilisateur", "<>", "null"],
@@ -119,8 +119,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       "nomUtilisateur",
     ]);
     this.assistantes.filter([
-      // ["valide", "=", true],
-      // "and",
+      ["valide", "=", true],
+      "and",
       ["role", "=", Role.ASSISTANT],
       "and",
       ["nomUtilisateur", "<>", "null"],
