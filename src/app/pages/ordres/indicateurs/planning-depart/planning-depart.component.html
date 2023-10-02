@@ -60,11 +60,7 @@
             [displayExpr]="dateManagementService.displayPeriodText"
             (onValueChanged)="setDates($event)"
           >
-            <dxo-drop-down-options
-              [width]="300"
-              [wrapperAttr]="{ class: 'period-list' }"
-            >
-            </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>

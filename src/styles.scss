@@ -120,6 +120,10 @@
   z-index: 10000 !important;
 }
 
+body {
+  overflow: hidden;
+}
+
 // No text overline
 body app-root.production {
   -webkit-user-select: none;

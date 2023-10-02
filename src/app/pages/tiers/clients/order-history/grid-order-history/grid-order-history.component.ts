@@ -41,6 +41,8 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomClientArticlePopupComponent } from "../zoom-client-article-popup/zoom-client-article-popup.component";
 
+let self;
+
 enum InputField {
   valide = "valide",
   dateMin = "dateMin",
@@ -122,6 +124,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     private router: Router,
     public localizeService: LocalizationService
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLigneHistorique
     );
@@ -257,32 +260,17 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
+      if (e.data?.ordre.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
     }
-  }
-
-  // Open selected ordre on group/line row double-click
-  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    let numero, campagneId;
-    if (rowType === "group") {
-      if (!data.items && !data.collapsedItems) return;
-      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-      if (!dataItems.ordre) return;
-      numero = data.key;
-      campagneId = dataItems.ordre.campagne.id;
-    } else {
-      numero = data.ordre.numero;
-      campagneId = data.ordre.campagne.id;
-    }
-    if (numero && campagneId) {
-      if (this.comingFrom === "zoomClient") {
-        this.openOrder.emit({ campagne: { id: campagneId }, numero: numero });
-      } else {
-        window.sessionStorage.setItem(
-          "openOrder",
-          [numero, campagneId].join("|")
-        );
-        this.hidePopup.emit();
-        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+    if (e.rowType === "group") {
+      let data = e.data.items ?? e.data.collapsedItems;
+      data = data[0];
+      if (data?.ordre?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
     }
   }
@@ -344,42 +332,29 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       // Clic sur loupe
       if (e.column.dataField === "article.matierePremiere.origine.id")
         e.cellElement.title = this.hintClick;
-
-      // Palettes
-      if (e.column.dataField === "nombrePalettesCommandees") {
-        e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          (e.data.nombrePalettesCommandees ?? 0);
-      }
-
-      // Colis
-      if (e.column.dataField === "nombreColisCommandes") {
-        e.cellElement.innerText =
-          e.cellElement.innerText + "/" + (e.data.nombreColisExpedies ?? 0);
-      }
-
-      // Prix
-      if (e.column.dataField === "ventePrixUnitaire") {
-        if (!e.data?.ventePrixUnitaire || !e.data?.venteUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.venteUnite?.description;
-        }
-      }
-      if (e.column.dataField === "achatDevisePrixUnitaire") {
-        if (
-          !e.data?.achatDevisePrixUnitaire ||
-          !e.data?.achatUnite?.description
-        ) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.achatUnite.description;
-        }
-      }
     }
+  }
+
+  calculateNombrePalettesCommandees(data) {
+    // Ajout type colis
+    return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
+  }
+
+  calculateNombreColisCommandes(data) {
+    // Ajout type colis
+    return data.nombreColisCommandes + "/" + (data.nombreColisExpedies ?? 0);
+  }
+
+  calculateVentePrixUnitaire(data) {
+    if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+      return "";
+    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
+      return "";
+    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
   }
 
   openFilePopup(cell, e) {
@@ -527,4 +502,42 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
           : data.description)
       : null;
   }
+
+  public calculateCustomSummary(options) {
+    if (self.summaryFields.includes(options.name)) {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+      }
+    }
+  }
+
+  // Open selected ordre on group/line row double-click
+  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
+    let numero, campagneId;
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      numero = data.key;
+      campagneId = dataItems.ordre.campagne.id;
+    } else {
+      numero = data.ordre.numero;
+      campagneId = data.ordre.campagne.id;
+    }
+    if (numero && campagneId) {
+      if (this.comingFrom === "zoomClient") {
+        this.openOrder.emit({ campagne: { id: campagneId }, numero: numero });
+      } else {
+        window.sessionStorage.setItem(
+          "openOrder",
+          [numero, campagneId].join("|")
+        );
+        this.hidePopup.emit();
+        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      }
+    }
+  }
+
 }

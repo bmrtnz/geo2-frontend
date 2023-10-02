@@ -3,6 +3,9 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-ordre-ligne-historique {
+
+  max-height: calc(100vh - 400px) !important;
+
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
@@ -18,6 +21,11 @@
 
   .first-group+.colisCommandes div {
     color: transparent;
+  }
+
+  // Highlight canceled orders
+  .canceled-orders td {
+    color: #ff325a !important;
   }
 
 }

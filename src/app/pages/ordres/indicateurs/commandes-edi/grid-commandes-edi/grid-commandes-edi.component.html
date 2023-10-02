@@ -129,11 +129,7 @@
               [displayExpr]="'description'"
               [items]="typesDates"
             >
-              <dxo-drop-down-options
-                [width]="200"
-                [elementAttr]="{ class: 'period-list' }"
-              >
-              </dxo-drop-down-options>
+              <dxo-drop-down-options [width]="200"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
         </div>
@@ -152,11 +148,7 @@
               [displayExpr]="dateManagementService.displayPeriodText"
               (onValueChanged)="setDates($event)"
             >
-              <dxo-drop-down-options
-                [width]="300"
-                [elementAttr]="{ class: 'period-list' }"
-              >
-              </dxo-drop-down-options>
+              <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
         </div>
