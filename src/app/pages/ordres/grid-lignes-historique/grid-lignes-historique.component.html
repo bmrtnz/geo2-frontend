@@ -160,11 +160,7 @@
             [displayExpr]="dateManagementService.displayPeriodText"
             (onValueChanged)="setDates($event)"
           >
-            <dxo-drop-down-options
-              [width]="300"
-              [elementAttr]="{ class: 'period-list' }"
-            >
-            </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
@@ -292,13 +288,14 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-summary>
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
       <dxi-group-item
         *ngFor="let field of summaryFields"
+        [name]="field"
         [column]="field"
-        summaryType="sum"
+        summaryType="custom"
         [alignByColumn]="true"
-        displayFormat="{0}"
+        [displayFormat]="'{0}'"
       >
       </dxi-group-item>
     </dxo-summary>

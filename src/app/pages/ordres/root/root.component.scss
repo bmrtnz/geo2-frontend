@@ -180,13 +180,24 @@
 
     i.dx-icon-close {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
       font-size: 17px;
+      line-height: 14px;
+      border-radius: 100%;
       color: #fe3d2c;
 
       &:not(.infinite-rotate) {
         visibility: hidden;
+      }
+
+      &:hover {
+        font-size: 15px;
+        line-height: 16px;
+        background: #fe3d2c;
+        color: #FFF;
       }
     }
 

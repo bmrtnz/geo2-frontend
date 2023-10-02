@@ -263,6 +263,12 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   public onEditorPreparing(e: EditorPreparingEvent) {
     if (e.parentType == "dataRow")
       this.configureSelectSources(e);
+
+    // Optimizing lookup dropdown list width
+    if (e.editorName === "dxSelectBox") {
+      e.editorOptions.onOpened = (elem) =>
+        elem.component._popup.option("width", 300);
+    }
   }
 
   private configureSelectSources(e: EditorPreparingEvent) {
@@ -297,8 +303,8 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     context.defaultSetCellValue(newData, value);
     if (context.dataField === "frais.id")
       newData.codePlus = '';
-    if (context.dataField === "achatDevisePrixUnitaire")
-      newData.achatPrixUnitaire = achatDevisePU() * taux();
+
+    newData.achatPrixUnitaire = achatDevisePU() * taux();
     newData.montant = achatQuantite() * achatDevisePU();
     newData.montantTotal = achatQuantite() * achatPU();
   }

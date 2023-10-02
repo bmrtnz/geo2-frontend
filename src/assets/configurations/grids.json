@@ -3077,7 +3077,8 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id"
+            "id",
+            "description"
           ],
           "searchExpr": [
             "id"
@@ -3492,6 +3493,7 @@
         "visibleIndex": 14,
         "dataField": "nombrePalettesCommandees",
         "width": 50,
+        "calculateCellValue": "calculateNombrePalettesCommandees",
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3499,6 +3501,7 @@
         "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "width": 100,
+        "calculateCellValue": "calculateNombreColisCommandes",
         "cssClass": "multi-line-header colisCommandes",
         "visible": true
       },
@@ -3506,6 +3509,7 @@
         "visibleIndex": 18,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3513,6 +3517,7 @@
         "visibleIndex": 20,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateAchatDevisePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3623,6 +3628,11 @@
         "visible": false
       },
       {
+        "dataField": "nombrePalettesExpediees",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
         "dataField": "ordre.entrepot.code",
         "showInColumnChooser": false,
         "visible": false
@@ -3639,6 +3649,11 @@
       },
       {
         "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.flagAnnule",
         "showInColumnChooser": false,
         "visible": false
       }
@@ -4655,6 +4670,8 @@
         "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "110",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "allowEditing": false,
         "visible": true
       },
@@ -4780,6 +4797,8 @@
         "visibleIndex": 6,
         "dataField": "typeTiers.description",
         "dataType": "string",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "width": "120",
         "allowEditing": false,
         "visible": true
@@ -4993,11 +5012,6 @@
       },
       {
         "dataField": "ordreLogistique.nombrePalettesAuSol",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordreLogistique.totalPalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },

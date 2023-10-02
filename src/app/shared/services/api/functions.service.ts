@@ -787,7 +787,6 @@ export class FunctionsService {
 
   public setTransporteurBassin = (
     orlRef: string,
-    socCode: string,
   ) =>
     this.apollo.query<{
       setTransporteurBassin: FunctionResponse;
@@ -801,19 +800,16 @@ export class FunctionsService {
               body: functionBody,
               params: [
                 { name: "orlRef", value: "orlRef", isVariable: true },
-                { name: "socCode", value: "socCode", isVariable: true },
               ],
             },
           ],
           [
             { name: "orlRef", type: "String", isOptionnal: false },
-            { name: "socCode", type: "String", isOptionnal: false },
           ]
         )
       ),
       variables: {
         orlRef,
-        socCode,
       },
       fetchPolicy: "network-only",
     });

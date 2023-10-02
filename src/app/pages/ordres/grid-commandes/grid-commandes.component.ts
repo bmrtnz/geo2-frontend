@@ -297,7 +297,7 @@ export class GridCommandesComponent
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
-        .setTransporteurBassin(firstLigneCommande.id, firstLigneCommande.ordre.societe.id)
+        .setTransporteurBassin(firstLigneCommande.id)
         .subscribe(() => this.afterSaved.emit());
     this.grid.instance.option("loadPanel.enabled", false);
   }
@@ -835,6 +835,10 @@ export class GridCommandesComponent
     if (e.editorName === "dxSelectBox") {
       e.editorOptions.onOpened = (elem) =>
         elem.component._popup.option("width", 300);
+      e.editorOptions.onInput = (elem) => {
+        const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+        myInput?.focus()
+      }
     }
     // Customize `fournisseur` column
     if (e.parentType == "dataRow" && e.dataField == "fournisseur.id") {
