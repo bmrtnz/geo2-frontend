@@ -144,6 +144,16 @@ export class ActionsDocumentsOrdresComponent {
   showFluxDoxOtherBtns(e) {
     this.actionSheetTarget = e.element;
     this.actionSheet.visible = !this.actionSheet.visible;
+
+    const syntheseExpeditionsGrid = this.gridsService.get("SyntheseExpeditions").instance;
+    if (syntheseExpeditionsGrid) {
+      const detailsExped = syntheseExpeditionsGrid.getDataSource().items();
+
+      if (detailsExped.find(ordreLogisitique => ordreLogisitique.dateDepartReelleFournisseur !== null)) {
+        this.actionsFlux
+          .find(element => element.id === "PROFOR").disabled = true
+      }
+    }
   }
 
   async onClickSendAction(e, annulation?) {
