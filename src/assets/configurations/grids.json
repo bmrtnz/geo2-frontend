@@ -3772,6 +3772,26 @@
         "allowEditing": false,
         "width": 80,
         "visible": true
+      },
+      {
+        "dataField": "ordre.societe.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "fournisseur.indicateurModificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.client.modificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.secteurCommercial.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": false
       }
     ]
   },
