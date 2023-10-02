@@ -1475,7 +1475,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (!fraisUnite) fraisUnite = "";
-    if (!fraisPU) return "";
 
     return (
       "Frais client " + fraisPU + " " + fraisUnite + " " + messFraisPlateforme

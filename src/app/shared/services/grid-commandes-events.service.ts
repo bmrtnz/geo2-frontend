@@ -442,8 +442,8 @@ export class GridCommandesEventsService {
     data: Partial<OrdreLigne>,
   ) {
 
-    let nb_pal: number;
-    let ld_pal_nb_col: number;
+    let nb_pal = 0;
+    let ld_pal_nb_col = 0;
     let nb_pal_th = 0;
     let nb_pal_dispo = 0;
     const selectedFournisseurID = data.fournisseur?.id;
@@ -487,7 +487,7 @@ export class GridCommandesEventsService {
           nb_pal_dispo = nb_pal_th;
 
           const nombrePalettes = Math.ceil(nb_pal);
-          if (nombrePalettes !== row.data?.nombrePalettesCommandees)
+          if (nombrePalettes && nombrePalettes !== row.data?.nombrePalettesCommandees)
             dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nombrePalettes);
         }), 10);
 
