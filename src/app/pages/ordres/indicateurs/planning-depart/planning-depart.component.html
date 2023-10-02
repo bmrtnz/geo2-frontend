@@ -140,13 +140,12 @@
       [visible]="true"
       [allowSearch]="true"
     ></dxo-header-filter>
-    <!-- <dxo-paging></dxo-paging>
     <dxo-pager
-      [showPageSizeSelector]="true"
+      [visible]="true"
       [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager> -->
+      [showPageSizeSelector]="false"
+      infoText="{2} {{ 'elements' | localize }}"
+    ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.PlanningDepart"
       [enabled]="true"
