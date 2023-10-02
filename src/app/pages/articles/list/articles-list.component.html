@@ -238,6 +238,8 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column.showInColumnChooser"
+      [calculateCellValue]="this[column?.calculateCellValue]"
+      [calculateFilterExpression]="this[column?.calculateFilterExpression]"
     ></dxi-column>
   </dx-data-grid>
 </div>
