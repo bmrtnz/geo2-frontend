@@ -195,8 +195,22 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
       case "expedieStation": {
         if (this.changeCloture || this.ordreBAFOuFacture) return;
         if (e.data.expedieStation === true) {
-          if (!this.authService.isAdmin) return; // Seuls les admins peuvent déclôturer
-          this.choixRaisonPopup.visible = true;
+          // Conditions pour déclôturer
+          this.ordresLogistiquesService
+            .count(`id==${e.data.id} and ordre.lignes.article.matierePremiere.variete.modificationDetail==true`)
+            .subscribe((articleModifDetail) => {
+              if (!this.authService.isAdmin &&
+                this.authService.currentUser.geoClient !== "2" &&
+                e.data.ordre.societe.id !== "IMP" &&
+                e.data.ordre.societe.id !== "IUK" &&
+                e.data.fournisseur.indicateurModificationDetail != true &&
+                e.data.ordre.client.modificationDetail != true &&
+                e.data.ordre.secteurCommercial.id !== "PAL" &&
+                !["RPO", "RPR", "RDF"].includes(e.data.ordre.type.id) &&
+                articleModifDetail.data.countOrdreLogistique === 0
+              ) return notify(this.localizeService.localize("warn-not-allowed"), "warning", 3000);
+              this.choixRaisonPopup.visible = true;
+            });
         } else {
           // Save cloture
           this.changeCloture = true;
