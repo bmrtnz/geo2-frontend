@@ -176,6 +176,21 @@
         text-align: center;
       }
 
+      .dx-tab-unsaved-dot {
+        position: absolute;
+        left: 0;
+        margin: -18px 0 0 11px;
+        height: 11px;
+        min-width: 11px;
+        padding: 0 4px;
+        background: #ff325a;
+        border-radius: 15px;
+        font-size: 12px;
+        line-height: 14px;
+        color: white;
+        text-align: center;
+      }
+
     }
 
     i.dx-icon-close {

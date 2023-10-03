@@ -70,6 +70,10 @@
           *ngIf="tab.type === typeTab.Ordre && tab.status"
           class="dx-tab-status-dot"
         ></div>
+        <div
+          *ngIf="tab.type === typeTab.Ordre && tab.unsaved"
+          class="dx-tab-unsaved-dot"
+        ></div>
       </div>
     </div>
 

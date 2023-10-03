@@ -1016,8 +1016,8 @@ export class GridCommandesComponent
     );
   }
 
-  onGridOut() {
-    if (this.grid.instance.hasEditData())
-      this.grid.instance.saveEditData();
-  }
+  // onGridOut() {
+  //   if (this.grid.instance.hasEditData())
+  //     this.grid.instance.saveEditData();
+  // }
 }

@@ -1,309 +1,309 @@
-<div (mouseleave)="onGridOut()">
-  <dx-data-grid
-    class="grid-commandes"
-    [remoteOperations]="false"
-    [cacheEnabled]="true"
-    [columnAutoWidth]="true"
-    [allowColumnReordering]="true"
-    [repaintChangesOnly]="true"
-    [highlightChanges]="false"
-    [columnFixing]="{ enabled: false }"
-    [focusedRowEnabled]="true"
-    (onToolbarPreparing)="gridConfigHandler($event)"
-    (onSaving)="onSaving($event)"
-    (onSaved)="onSaved()"
-    (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
-    (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
-    (onFocusedCellChanging)="onFocusedCellChanging($event)"
-    (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
-    (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
-    (onEditingStart)="onEditingStart($event)"
-    (onCellClick)="onCellClick()"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onSelectionChanged)="onSelectionChanged($event)"
-    (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
-    (onKeyDown)="onKeyDown($event)"
+<!-- <div (mouseleave)="onGridOut()"> -->
+<dx-data-grid
+  class="grid-commandes"
+  [remoteOperations]="false"
+  [cacheEnabled]="true"
+  [columnAutoWidth]="true"
+  [allowColumnReordering]="true"
+  [repaintChangesOnly]="true"
+  [highlightChanges]="false"
+  [columnFixing]="{ enabled: false }"
+  [focusedRowEnabled]="true"
+  (onToolbarPreparing)="gridConfigHandler($event)"
+  (onSaving)="onSaving($event)"
+  (onSaved)="onSaved()"
+  (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
+  (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
+  (onFocusedCellChanging)="onFocusedCellChanging($event)"
+  (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
+  (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
+  (onEditingStart)="onEditingStart($event)"
+  (onCellClick)="onCellClick()"
+  (onEditorPreparing)="onEditorPreparing($event)"
+  (onSelectionChanged)="onSelectionChanged($event)"
+  (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
+  (onKeyDown)="onKeyDown($event)"
+>
+  <dxo-paging [enabled]="false"></dxo-paging>
+  <dxo-export fileName="Lignes de commande"></dxo-export>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [mode]="'batch'"
+    [allowUpdating]="true"
+    [allowDeleting]="allowMutations"
+    [startEditAction]="'click'"
+  ></dxo-editing>
+  <dxo-keyboard-navigation
+    [enterKeyAction]="'moveFocus'"
+    [enterKeyDirection]="'column'"
+    [editOnKeyPress]="true"
+  ></dxo-keyboard-navigation>
+  <dxo-summary
+    *ngIf="!!gridRowsTotal"
+    [recalculateWhileEditing]="true"
   >
-    <dxo-paging [enabled]="false"></dxo-paging>
-    <dxo-export fileName="Lignes de commande"></dxo-export>
-    <dxo-editing
-      [selectTextOnEditStart]="true"
-      [mode]="'batch'"
-      [allowUpdating]="true"
-      [allowDeleting]="allowMutations"
-      [startEditAction]="'click'"
-    ></dxo-editing>
-    <dxo-keyboard-navigation
-      [enterKeyAction]="'moveFocus'"
-      [enterKeyDirection]="'column'"
-      [editOnKeyPress]="true"
-    ></dxo-keyboard-navigation>
-    <dxo-summary
-      *ngIf="!!gridRowsTotal"
-      [recalculateWhileEditing]="true"
-    >
-      <dxi-total-item
-        column="article.articleDescription.descriptionReferenceLongue"
-        summaryType="count"
-        [customizeText]="displaySummaryFormat"
-      ></dxi-total-item>
-      <dxi-total-item
-        column="nombrePalettesCommandees"
-        summaryType="sum"
-        displayFormat="{0}"
-      ></dxi-total-item>
-      <dxi-total-item
-        column="nombreColisCommandes"
-        summaryType="sum"
-        displayFormat="{0}"
-      ></dxi-total-item>
-    </dxo-summary>
+    <dxi-total-item
+      column="article.articleDescription.descriptionReferenceLongue"
+      summaryType="count"
+      [customizeText]="displaySummaryFormat"
+    ></dxi-total-item>
+    <dxi-total-item
+      column="nombrePalettesCommandees"
+      summaryType="sum"
+      displayFormat="{0}"
+    ></dxi-total-item>
+    <dxi-total-item
+      column="nombreColisCommandes"
+      summaryType="sum"
+      displayFormat="{0}"
+    ></dxi-total-item>
+  </dxo-summary>
 
-    <dxo-row-dragging
-      *ngIf="FEATURE.rowOrdering && allowMutations && gridRowsTotal > 1"
-      [allowReordering]="true"
-      [onReorder]="onReorder"
-      [showDragIcons]="true"
-      [dropFeedbackMode]="'push'"
-    ></dxo-row-dragging>
-    <dxo-selection
-      mode="multiple"
-      [showCheckBoxesMode]="'always'"
-      [selectAllMode]="'page'"
-    ></dxo-selection>
+  <dxo-row-dragging
+    *ngIf="FEATURE.rowOrdering && allowMutations && gridRowsTotal > 1"
+    [allowReordering]="true"
+    [onReorder]="onReorder"
+    [showDragIcons]="true"
+    [dropFeedbackMode]="'push'"
+  ></dxo-row-dragging>
+  <dxo-selection
+    mode="multiple"
+    [showCheckBoxesMode]="'always'"
+    [selectAllMode]="'page'"
+  ></dxo-selection>
 
-    <!-- certifications -->
-    <ng-container *ngIf="FEATURE.columnCertifications">
-      <dxi-column
-        cssClass="small-horiz-padding"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'certificationTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'certificationTemplate'">
-        <dx-button
-          class="small-article-button certification"
-          type="default"
-          [focusStateEnabled]="false"
-          [text]="showCertificationCheck(cell.data)"
-          (onClick)="openCertificationPopup(cell.data)"
-        ></dx-button>
-      </div>
-    </ng-container>
-
-    <!-- origine -->
-    <ng-container *ngIf="FEATURE.columnOrigine">
-      <dxi-column
-        cssClass="small-horiz-padding"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'origineTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'origineTemplate'">
-        <dx-button
-          [visible]="showOriginButton(cell)"
-          class="small-article-button origin"
-          type="default"
-          [focusStateEnabled]="false"
-          [text]="showOriginCheck(cell.data)"
-          (onClick)="openOriginePopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-    </ng-container>
-
-    <!-- Indicateur stock -->
-    <ng-container *ngIf="FEATURE.indicateurStock">
-      <dxi-column
-        [visible]="allowMutations"
-        cssClass="small-horiz-padding toto"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'indicateurStockTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'indicateurStockTemplate'">
-        <dx-button
-          [visible]="cell.data.nombreReservationsSurStock"
-          class="small-article-button small-stock-button"
-          [text]="cell.data.nombreReservationsSurStock"
-        >
-        </dx-button>
-      </div>
-    </ng-container>
-
-    <!-- Déstockage -->
-    <ng-container *ngIf="FEATURE.destockage">
-      <dxi-column
-        [visible]="allowMutations"
-        cssClass="small-horiz-padding"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'destockageTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'destockageTemplate'">
-        <dx-button
-          class="small-article-button"
-          type="success"
-          [focusStateEnabled]="false"
-          hint="{{ 'destockage' | localize }}"
-          [text]="'D'"
-          (onClick)="openDestockagePopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-    </ng-container>
-
-    <!-- switch article -->
-    <ng-container *ngIf="FEATURE.quickSwitch">
-      <dxi-column
-        [visible]="allowMutations"
-        cssClass="small-horiz-padding"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'swapButtonTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'swapButtonTemplate'">
-        <dx-button
-          class="swap-button"
-          type="default"
-          [focusStateEnabled]="false"
-          icon="material-icons swap_horizontal_circle"
-          hint="Remplacer"
-          (onClick)="swapArticle(cell.data)"
-        ></dx-button>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="FEATURE.reportDLUO">
-      <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
-        <div>
-          {{
-            "ordreLignes-" + cell.column.dataField?.split(".").join("-")
-              | localize
-          }}
-        </div>
-        <dx-button
-          *ngIf="gridRowsTotal > 1"
-          class="small-article-button"
-          type="default"
-          [focusStateEnabled]="false"
-          [text]="'Reporter'"
-          (onClick)="copyPaste($event, cell.column.dataField)"
-        ></dx-button>
-      </div>
-    </ng-container>
-
+  <!-- certifications -->
+  <ng-container *ngIf="FEATURE.columnCertifications">
     <dxi-column
-      *ngFor="let column of this.columns | async"
-      [fixed]="column.fixed"
-      [width]="column.width"
-      [dataField]="column.dataField"
-      [allowEditing]="column.allowEditing"
-      [allowSorting]="false"
-      [format]="column?.format"
-      [editorOptions]="column?.editorOptions"
-      [headerCellTemplate]="column.headerCellTemplate"
-      [calculateDisplayValue]="
-        column.dataField === 'fournisseur.id'
-          ? calculateFournisseurDisplayValue
-          : column?.calculateDisplayValue
-          ? (column.calculateDisplayValue | evalDisplay)
-          : column?.dataField
-      "
-      [lookup]="column?.lookup"
-      [showInColumnChooser]="column.showInColumnChooser"
-      [calculateSortValue]="column?.calculateSortValue"
-      [cssClass]="column?.cssClass"
-      [caption]="
-        ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
-      "
-      [setCellValue]="setCellValue"
-    >
-      <!-- Restrictions valeurs saisies -->
-      <dxi-validation-rule
-        *ngIf="column.dataField === 'nombrePalettesIntermediaires'"
-        type="range"
-        [min]="0"
-        [max]="9"
-        message="{{ 'valeurIncorrecte' | localize }}"
-      ></dxi-validation-rule>
-      <dxi-validation-rule
-        *ngIf="column.dataField === 'nombrePalettesCommandees'"
-        type="range"
-        [min]="0"
-        [max]="999"
-        message="{{ 'valeurIncorrecte' | localize }}"
-      ></dxi-validation-rule>
-      <dxi-validation-rule
-        *ngIf="column.dataField === 'nombreColisPalette'"
-        type="range"
-        [min]="0"
-        [max]="999"
-        message="{{ 'valeurIncorrecte' | localize }}"
-      ></dxi-validation-rule>
-      <dxi-validation-rule
-        *ngIf="column.dataField === 'nombreColisCommandes'"
-        type="range"
-        [max]="9999"
-        message="{{ 'valeurIncorrecte' | localize }}"
-      ></dxi-validation-rule>
-    </dxi-column>
-
-    <!-- overide mutation buttons -->
-    <dxi-column
-      *ngIf="allowMutations"
-      type="buttons"
-      [width]="30"
+      cssClass="small-horiz-padding"
       [showInColumnChooser]="false"
-      [headerCellTemplate]="'headerDeleteTemplate'"
-    ></dxi-column>
-
-    <div *dxTemplate="let cell of 'headerDeleteTemplate'">
-      <button
-        *ngIf="!!grid?.instance.getSelectedRowKeys()?.length"
-        class="dx-link dx-icon-trash dx-link-icon multi-delete"
-        title="{{ 'btn-delete-selected' | localize }}"
-        (click)="deleteArticles()"
-      ></button>
+      [cellTemplate]="'certificationTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'certificationTemplate'">
+      <dx-button
+        class="small-article-button certification"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="showCertificationCheck(cell.data)"
+        (onClick)="openCertificationPopup(cell.data)"
+      ></dx-button>
     </div>
-  </dx-data-grid>
+  </ng-container>
 
-  <!-- marge previsionelle -->
-  <app-button-marge-previ
-    *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
-    [ordreID]="ordre.id"
-  ></app-button-marge-previ>
+  <!-- origine -->
+  <ng-container *ngIf="FEATURE.columnOrigine">
+    <dxi-column
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'origineTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'origineTemplate'">
+      <dx-button
+        [visible]="showOriginButton(cell)"
+        class="small-article-button origin"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="showOriginCheck(cell.data)"
+        (onClick)="openOriginePopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
 
-  <app-article-reservation-ordre-popup
-    *ngIf="FEATURE.destockage"
-    [ordreLigne]="ordreLigne"
-    (whenApplied)="this.update(); destockEnded()"
-  ></app-article-reservation-ordre-popup>
+  <!-- Indicateur stock -->
+  <ng-container *ngIf="FEATURE.indicateurStock">
+    <dxi-column
+      [visible]="allowMutations"
+      cssClass="small-horiz-padding toto"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'indicateurStockTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'indicateurStockTemplate'">
+      <dx-button
+        [visible]="cell.data.nombreReservationsSurStock"
+        class="small-article-button small-stock-button"
+        [text]="cell.data.nombreReservationsSurStock"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
 
-  <app-article-certification-popup
-    *ngIf="FEATURE.columnCertifications"
-    [ordreLigne]="ordreLigne"
-    (changeLigne)="onDataChanged($event)"
-    (update)="update()"
-  ></app-article-certification-popup>
+  <!-- Déstockage -->
+  <ng-container *ngIf="FEATURE.destockage">
+    <dxi-column
+      [visible]="allowMutations"
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'destockageTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'destockageTemplate'">
+      <dx-button
+        class="small-article-button"
+        type="success"
+        [focusStateEnabled]="false"
+        hint="{{ 'destockage' | localize }}"
+        [text]="'D'"
+        (onClick)="openDestockagePopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+  </ng-container>
 
-  <app-article-origine-popup
-    *ngIf="FEATURE.columnOrigine"
-    [ordreLigne]="ordreLigne"
-    (changeLigne)="onDataChanged($event)"
-    (update)="update()"
-  ></app-article-origine-popup>
+  <!-- switch article -->
+  <ng-container *ngIf="FEATURE.quickSwitch">
+    <dxi-column
+      [visible]="allowMutations"
+      cssClass="small-horiz-padding"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'swapButtonTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'swapButtonTemplate'">
+      <dx-button
+        class="swap-button"
+        type="default"
+        [focusStateEnabled]="false"
+        icon="material-icons swap_horizontal_circle"
+        hint="Remplacer"
+        (onClick)="swapArticle(cell.data)"
+      ></dx-button>
+    </div>
+  </ng-container>
 
-  <app-zoom-article-popup
-    *ngIf="FEATURE.zoom"
-    [articleLigneId]="articleLigneId"
-  ></app-zoom-article-popup>
+  <ng-container *ngIf="FEATURE.reportDLUO">
+    <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
+      <div>
+        {{
+          "ordreLignes-" + cell.column.dataField?.split(".").join("-")
+            | localize
+        }}
+      </div>
+      <dx-button
+        *ngIf="gridRowsTotal > 1"
+        class="small-article-button"
+        type="default"
+        [focusStateEnabled]="false"
+        [text]="'Reporter'"
+        (onClick)="copyPaste($event, cell.column.dataField)"
+      ></dx-button>
+    </div>
+  </ng-container>
 
-  <app-zoom-fournisseur-popup
-    *ngIf="FEATURE.zoom"
-    [fournisseurCode]="fournisseurCode"
-    [fournisseurLigneId]="fournisseurLigneId"
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [fixed]="column.fixed"
+    [width]="column.width"
+    [dataField]="column.dataField"
+    [allowEditing]="column.allowEditing"
+    [allowSorting]="false"
+    [format]="column?.format"
+    [editorOptions]="column?.editorOptions"
+    [headerCellTemplate]="column.headerCellTemplate"
+    [calculateDisplayValue]="
+      column.dataField === 'fournisseur.id'
+        ? calculateFournisseurDisplayValue
+        : column?.calculateDisplayValue
+        ? (column.calculateDisplayValue | evalDisplay)
+        : column?.dataField
+    "
+    [lookup]="column?.lookup"
+    [showInColumnChooser]="column.showInColumnChooser"
+    [calculateSortValue]="column?.calculateSortValue"
+    [cssClass]="column?.cssClass"
+    [caption]="
+      ('ordreLignes-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [setCellValue]="setCellValue"
   >
-  </app-zoom-fournisseur-popup>
-</div>
+    <!-- Restrictions valeurs saisies -->
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombrePalettesIntermediaires'"
+      type="range"
+      [min]="0"
+      [max]="9"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombrePalettesCommandees'"
+      type="range"
+      [min]="0"
+      [max]="999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombreColisPalette'"
+      type="range"
+      [min]="0"
+      [max]="999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'nombreColisCommandes'"
+      type="range"
+      [max]="9999"
+      message="{{ 'valeurIncorrecte' | localize }}"
+    ></dxi-validation-rule>
+  </dxi-column>
+
+  <!-- overide mutation buttons -->
+  <dxi-column
+    *ngIf="allowMutations"
+    type="buttons"
+    [width]="30"
+    [showInColumnChooser]="false"
+    [headerCellTemplate]="'headerDeleteTemplate'"
+  ></dxi-column>
+
+  <div *dxTemplate="let cell of 'headerDeleteTemplate'">
+    <button
+      *ngIf="!!grid?.instance.getSelectedRowKeys()?.length"
+      class="dx-link dx-icon-trash dx-link-icon multi-delete"
+      title="{{ 'btn-delete-selected' | localize }}"
+      (click)="deleteArticles()"
+    ></button>
+  </div>
+</dx-data-grid>
+
+<!-- marge previsionelle -->
+<app-button-marge-previ
+  *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
+  [ordreID]="ordre.id"
+></app-button-marge-previ>
+
+<app-article-reservation-ordre-popup
+  *ngIf="FEATURE.destockage"
+  [ordreLigne]="ordreLigne"
+  (whenApplied)="this.update(); destockEnded()"
+></app-article-reservation-ordre-popup>
+
+<app-article-certification-popup
+  *ngIf="FEATURE.columnCertifications"
+  [ordreLigne]="ordreLigne"
+  (changeLigne)="onDataChanged($event)"
+  (update)="update()"
+></app-article-certification-popup>
+
+<app-article-origine-popup
+  *ngIf="FEATURE.columnOrigine"
+  [ordreLigne]="ordreLigne"
+  (changeLigne)="onDataChanged($event)"
+  (update)="update()"
+></app-article-origine-popup>
+
+<app-zoom-article-popup
+  *ngIf="FEATURE.zoom"
+  [articleLigneId]="articleLigneId"
+></app-zoom-article-popup>
+
+<app-zoom-fournisseur-popup
+  *ngIf="FEATURE.zoom"
+  [fournisseurCode]="fournisseurCode"
+  [fournisseurLigneId]="fournisseurLigneId"
+>
+</app-zoom-fournisseur-popup>
+<!-- </div> -->
