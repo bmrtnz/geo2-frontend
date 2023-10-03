@@ -145,7 +145,7 @@ export class ActionsDocumentsOrdresComponent {
     this.actionSheetTarget = e.element;
     this.actionSheet.visible = !this.actionSheet.visible;
 
-    const syntheseExpeditionsGrid = this.gridsService.get("SyntheseExpeditions").instance;
+    const syntheseExpeditionsGrid = this.gridsService.get("SyntheseExpeditions", this.gridsService.orderIdentifier(this.ordre)).instance;
     if (syntheseExpeditionsGrid) {
       const detailsExped = syntheseExpeditionsGrid.getDataSource().items();
 
