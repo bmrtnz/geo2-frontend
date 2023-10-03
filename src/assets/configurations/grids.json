@@ -2922,7 +2922,7 @@
         "calculateCellValue": "proprietaireMarchandise.id",
         "calculateSortValue": "proprietaireMarchandise.code",
         "editorOptions": {
-          "searchTimeout": "0"
+          "searchTimeout": "50"
         },
         "lookup": {
           "valueExpr": "id",
