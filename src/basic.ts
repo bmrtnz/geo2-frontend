@@ -218,6 +218,7 @@ interface GridColumn {
   customizeText?: string;
   virtual?: boolean;
   formatter?: string;
+  calculateFilterExpression?: any;
 }
 
 /**
