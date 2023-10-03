@@ -245,12 +245,18 @@ export class OrdreLignesService extends ApiService implements APIRead {
     // Special case: lock every cell except some when vente à commission is true & !allowmutations
     if (!allowMutations) {
       if (data.ordre.venteACommission === true) {
-        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField))
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
           return this.lock(e);
+        } else {
+          return;
+        }
       } else {
         // Special case: unlock every cell except some when !allowmutations
-        if (!["ventePrixUnitaire", "venteUnite.id"].includes(e.column.dataField))
+        if (!["ventePrixUnitaire", "venteUnite.id", "gratuit"].includes(e.column.dataField)) {
           return this.lock(e);
+        } else {
+          return;
+        }
       }
     }
 
