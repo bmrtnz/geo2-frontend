@@ -85,6 +85,7 @@ export type TabPanelItem = dxTabPanelItem & {
   position: number;
   component?: FormComponent | any;
   status?: boolean;
+  unsaved?: boolean,
   type?: string;
 };
 
@@ -113,6 +114,19 @@ export class TabContext {
       publish(),
       refCount()
     ) as ConnectableObservable<TabChangeData>;
+  }
+
+  /**
+   * Return ALL tab panel items
+   */
+  public getAllItems() {
+    return this.componentRef.route.paramMap.pipe(
+      share(),
+      map((params) => {
+        const selected = params.get(RouteParam.TabID);
+        return this.componentRef.items;
+      })
+    );
   }
 
   /**
@@ -231,10 +245,10 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public tabsUnpined: boolean;
   public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
   public moreThanOneOpenOrder: number;
+  private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
-  @ViewChild(DxTabPanelComponent, { static: true })
-  tabPanel: DxTabPanelComponent;
+  @ViewChild(DxTabPanelComponent, { static: true }) tabPanel: DxTabPanelComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -276,6 +290,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe();
     this.surveyBlockage();
+    this.gridUnsavedControl(); // Unsaved red dot on tabs
     window.sessionStorage.removeItem("idOrdre");
     setInterval(() => {
       const leftArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-left") as HTMLElement;
@@ -292,6 +307,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.gridUnsavedInterval);
     this.destroy.next(true);
     this.destroy.unsubscribe();
   }
@@ -299,6 +315,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener("window:unload")
   windowUnload() {
     window.sessionStorage.removeItem("surveyRunning");
+  }
+
+  gridUnsavedControl() {
+    // Pastille rouge "ordre non sauvegardé"
+    this.gridUnsavedInterval = setInterval(() => {
+      this.tabContext.getAllItems().subscribe(tabs =>
+        tabs.filter((tab) => tab.type === "ordre")
+          .map(t => t.unsaved = !!this.gridsService.get("Commande", t.id)?.instance.hasEditData())
+      );
+    }, 1500);
   }
 
   onScroll(e) {
@@ -316,6 +342,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateAllTabsStatusDots() {
+    // Pastille verte "Confirmé"
     this.tabContext.getNotSelectedItems().subscribe(tabs =>
       tabs
         .filter((tab) => tab.type === "ordre")
@@ -411,7 +438,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     on(event.itemElement, "dxpointerdown", (e) => e.stopPropagation());
     on(event.itemElement, "dxclick", replaceEvent);
-    on(event.itemElement, "dxhoverstart", () => this.setTabTooltip(event));
+    on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
   }
 
   setTabTooltip(item) {
