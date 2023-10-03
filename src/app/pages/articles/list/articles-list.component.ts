@@ -178,17 +178,6 @@ export class ArticlesListComponent
     this.gridRowStyleService.applyGridRowStyle(e);
   }
 
-  onCellPrepared(e) {
-    // Best expression for emballage display
-    // if (
-    //   e.rowType === "data" &&
-    //   e.column.dataField === "emballage.emballage.id"
-    // ) {
-    //   e.cellElement.textContent =
-    //     e.value + " - " + e.data.emballage.emballage.description;
-    // }
-  }
-
   calculateEmballage(data) {
     return data.emballage.emballage.id + " - " + data.emballage.emballage.description;
   }
@@ -235,6 +224,9 @@ export class ArticlesListComponent
               // remap groupe-emballage path (reason: depth of 2)
               path = path.replace(
                 "emballage.groupe.id",
+                "emballage.emballage.groupe.id"
+              ).replace(
+                "emballage.emballage.emballage.groupe.id",
                 "emballage.emballage.groupe.id"
               );
               return [path, value === "null" ? "isnotnull" : "=", value];
