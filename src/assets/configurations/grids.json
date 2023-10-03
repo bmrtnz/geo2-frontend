@@ -1125,8 +1125,23 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "preSaisie",
+        "dataType": "string",
+        "calculateCellValue": "calculateEmballage",
+        "calculateFilterExpression": "calculateFilterEmballage",
+        "allowSearch": true,
+        "visible": false
+      },
+      {
         "visibleIndex": 6,
         "dataField": "emballage.emballage.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "emballage.emballage.description",
         "dataType": "string",
         "visible": true
       },
@@ -1137,10 +1152,22 @@
         "visible": true
       },
       {
+        "visibleIndex": 9,
+        "dataField": "matierePremiere.calibreUnifie.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "visibleIndex": 10,
         "dataField": "matierePremiere.calibreUnifie.description",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "normalisation.calibreMarquage.id",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 12,
@@ -1180,24 +1207,11 @@
         "showInColumnChooser": true
       },
       {
-        "dataField": "emballage.emballage.description",
-        "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
-      },
-      {
         "visibleIndex": 50,
         "dataField": "valide",
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      },
-      {
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "width": 50,
-        "showInColumnChooser": false,
-        "visible": false
       },
       {
         "dataField": "cahierDesCharge.coloration.id",
@@ -1235,12 +1249,27 @@
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteColis.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteUc.id",
         "dataType": "string",
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteUc.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteEvenementielle.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteEvenementielle.description",
         "dataType": "string",
         "visible": false
       },
@@ -1252,7 +1281,8 @@
       {
         "dataField": "emballage.id",
         "dataType": "string",
-        "visible": false
+        "visible": false,
+        "showInColumnChooser": false
       },
       {
         "dataField": "emballage.conditionSpecial.id",

@@ -175,7 +175,6 @@
     [keyExpr]="'id'"
     (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
-    (onCellPrepared)="onCellPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
@@ -238,6 +237,8 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column.showInColumnChooser"
+      [calculateCellValue]="this[column?.calculateCellValue]"
+      [calculateFilterExpression]="this[column?.calculateFilterExpression]"
     ></dxi-column>
   </dx-data-grid>
 </div>
