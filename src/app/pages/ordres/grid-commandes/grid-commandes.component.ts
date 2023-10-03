@@ -831,15 +831,6 @@ export class GridCommandesComponent
         this.gridUtilsService.secureTypedValueWithEditGrid(elem);
       };
     }
-    // Optimizing lookup dropdown list width
-    if (e.editorName === "dxSelectBox") {
-      e.editorOptions.onOpened = (elem) =>
-        elem.component._popup.option("width", 300);
-      e.editorOptions.onInput = (elem) => {
-        const myInput = elem.element?.querySelector("input.dx-texteditor-input");
-        myInput?.focus()
-      }
-    }
     // Customize `fournisseur` column
     if (e.parentType == "dataRow" && e.dataField == "fournisseur.id") {
       e.editorName = "dxSelectBox";
@@ -854,6 +845,15 @@ export class GridCommandesComponent
         return displayValue;
       };
       e.editorOptions.onValueChanged = args => e.setValue(args.value);
+    }
+    // Optimizing lookup dropdown list width + typing
+    if (e.editorName === "dxSelectBox") {
+      e.editorOptions.onOpened = (elem) =>
+        elem.component._popup.option("width", 300);
+      e.editorOptions.onInput = (elem) => {
+        const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+        myInput?.focus()
+      }
     }
   }
 
