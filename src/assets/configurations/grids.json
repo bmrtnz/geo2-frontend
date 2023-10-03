@@ -1131,7 +1131,7 @@
         "calculateCellValue": "calculateEmballage",
         "calculateFilterExpression": "calculateFilterEmballage",
         "allowSearch": true,
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 6,
