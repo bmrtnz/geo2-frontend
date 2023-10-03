@@ -301,7 +301,9 @@ export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewIni
   setCellValue(newData: Partial<OrdreLogistique>, value, currentData: Partial<OrdreLogistique>) {
     const context: any = this;
     context.defaultSetCellValue(newData, value);
-    if (context.dataField === "groupage")
+    if (context.dataField === "groupage") {
       newData.typeLieuGroupageArrivee = 'G';
+      newData.dateLivraisonLieuGroupage = currentData?.dateDepartPrevueFournisseur;
+    }
   }
 }
