@@ -117,7 +117,7 @@ export class TabContext {
   }
 
   /**
-   * Return All tab panel unselected items
+   * Return ALL tab panel items
    */
   public getAllItems() {
     return this.componentRef.route.paramMap.pipe(
