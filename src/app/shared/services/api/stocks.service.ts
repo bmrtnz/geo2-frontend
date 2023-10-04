@@ -107,6 +107,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
     modeCulture?: string,
     emballage?: string,
     bureauAchat?: string,
+    groupeEmballage?: string,
   ) {
     return this.apollo.query<{ allStockArticleList: StockArticle[] }>({
       query: gql(
@@ -123,6 +124,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
                 { name: "modeCulture", value: "modeCulture", isVariable: true },
                 { name: "emballage", value: "emballage", isVariable: true },
                 { name: "bureauAchat", value: "bureauAchat", isVariable: true },
+                { name: "groupeEmballage", value: "groupeEmballage", isVariable: true },
               ],
             },
           ],
@@ -133,6 +135,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             { name: "modeCulture", type: "String", isOptionnal: true },
             { name: "emballage", type: "String", isOptionnal: true },
             { name: "bureauAchat", type: "String", isOptionnal: true },
+            { name: "groupeEmballage", type: "String", isOptionnal: true },
           ]
         )
       ),
@@ -143,6 +146,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
         modeCulture,
         emballage,
         bureauAchat,
+        groupeEmballage,
       },
       fetchPolicy: "network-only",
     });
