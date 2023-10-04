@@ -121,9 +121,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   private update(id, values) {
     const variables = { ordreLigne: FormUtilsService.cleanTypenames({ id, ...values }) };
-    return lastValueFrom(self.watchSaveQuery({ variables }).pipe(
-      concatMap(() => self.functionsService.fDetailsExpOnClickAuto(id)),
-    ));
+    return lastValueFrom(self.watchSaveQuery({ variables }));
   }
 
   getDataSource_v2(columns: Array<string>, pageSize?) {
