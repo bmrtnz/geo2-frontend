@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { OrdresSaveLogsService } from "app/shared/services/api/ordres-save-logs.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -15,7 +15,7 @@ import { GridsService } from "../grids.service";
   templateUrl: "./grid-save-log.component.html",
   styleUrls: ["./grid-save-log.component.scss"],
 })
-export class GridSaveLogComponent implements OnInit {
+export class GridSaveLogComponent implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
   @ViewChild(DxDataGridComponent, { static: true })
   dataGrid: DxDataGridComponent;
@@ -36,6 +36,11 @@ export class GridSaveLogComponent implements OnInit {
   ngOnInit(): void {
     this.enableFilters();
   }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Log", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
+  }
+
 
   enableFilters() {
     if (this?.ordre?.id) {

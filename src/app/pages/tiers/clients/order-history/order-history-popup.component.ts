@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Client from "app/shared/models/client.model";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
@@ -10,24 +10,28 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 export class OrderHistoryPopupComponent implements OnChanges {
   @Input() public client: Client;
   @Input() public readOnlyMode: boolean;
+  @Input() public comingFrom: string;
   @Output() public gridSelectionEnabled: boolean;
   @Output() public clientId: string;
   @Output() public entrepotId: string;
   @Output() public secteurId: string;
   @Output() public popupShown: boolean;
+  @Output() public isComingFrom: string;
+  @Output() orderOpen = new EventEmitter<any>();
 
-  visible: boolean;
-  titleStart: string;
-  titleMid: string;
+  public visible: boolean;
+  public titleStart: string;
+  public titleMid: string;
+  public popupFullscreen: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor() { }
 
   ngOnChanges() {
     this.setTitle();
+    this.isComingFrom = this.comingFrom;
     this.gridSelectionEnabled = !this.readOnlyMode;
   }
 
@@ -53,4 +57,14 @@ export class OrderHistoryPopupComponent implements OnChanges {
     this.popup.visible = false;
     this.popupShown = false;
   }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
+  }
+
+  openOrder(ordre) {
+    this.orderOpen.emit(ordre);
+  }
+
+
 }

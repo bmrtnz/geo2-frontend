@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
@@ -21,7 +21,7 @@ import { CqPhotosPopupComponent } from "./cq-photos-popup/cq-photos-popup.compon
   templateUrl: "./grid-controle-qualite.component.html",
   styleUrls: ["./grid-controle-qualite.component.scss"],
 })
-export class GridControleQualiteComponent implements OnInit {
+export class GridControleQualiteComponent implements OnInit, AfterViewInit {
   @Input() public ordre: Ordre;
   @Output() public ordreLigne;
   @ViewChild(DxDataGridComponent, { static: true })
@@ -53,7 +53,7 @@ export class GridControleQualiteComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("CQ", this.dataGrid);
+    this.gridsService.register("CQ", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   enableFilters() {

@@ -42,8 +42,7 @@ import { switchMap, tap } from "rxjs/operators";
   styleUrls: ["./transporteur-details.component.scss"],
 })
 export class TransporteurDetailsComponent
-  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable
-{
+  implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
   @Input() public transporteurLigneId: string;
 
   formGroup = this.fb.group({
@@ -309,12 +308,12 @@ export class TransporteurDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
@@ -379,12 +378,12 @@ export class TransporteurDetailsComponent
 
   saveData(transporteur) {
     (transporteur.valide !== undefined &&
-    this.transporteur.valide !== transporteur.valide /*|| validModif*/ &&
-    !this.createMode
+      this.transporteur.valide !== transporteur.valide /*|| validModif*/ &&
+      !this.createMode
       ? this.validatePopup.present(HistoryType.TRANSPORTEUR, {
-          transporteur: { id: transporteur.id },
-          valide: transporteur.valide,
-        })
+        transporteur: { id: transporteur.id },
+        valide: transporteur.valide,
+      })
       : of(undefined)
     )
       .pipe(
@@ -426,16 +425,14 @@ export class TransporteurDetailsComponent
       const transporteur = {
         id: this.transporteur.id,
         preSaisie: false,
-        valide: true,
       };
       this.transporteursService
-        .save_v2(["id", "preSaisie", "valide"], {
+        .save_v2(["id", "preSaisie"], {
           transporteur,
         })
         .subscribe({
           next: () => {
             this.refreshGrid.emit();
-            this.formGroup.get("valide").setValue(true);
             this.formGroup.markAsPristine();
             this.preSaisie = "";
             this.validationService.showToValidateBadges();

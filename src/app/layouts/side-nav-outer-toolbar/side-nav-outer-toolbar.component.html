@@ -16,9 +16,10 @@
   [shading]="shaderEnabled"
   [(opened)]="menuOpened"
 >
+  <!-- [compactMode]="!menuOpened" -->
   <app-side-navigation-menu
     [items]="menuItems"
-    [compactMode]="!menuOpened"
+    [compactMode]="false"
     [selectedItem]="selectedRoute"
     class="dx-theme-material-typography dx-swatch-additional side-navigation-menu"
     *dxTemplate="let dataMenu of 'panel'"
@@ -28,7 +29,7 @@
   </app-side-navigation-menu>
 
   <dx-scroll-view
-    class="full-height-scrollable toto"
+    class="full-height-scrollable"
     [useNative]="true"
     (onScroll)="onScroll($event)"
   >
@@ -49,3 +50,5 @@
   >
   </dx-button>
 </div>
+
+<app-choose-article-zoom-popup></app-choose-article-zoom-popup>

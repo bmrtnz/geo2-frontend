@@ -187,6 +187,7 @@ export class GridConfiguratorService {
   constructor(
     private gridsConfigsService: GridsConfigsService,
     private authService: AuthService,
+    private localizeService: LocalizationService,
     private httpClient: HttpClient,
     private apollo: Apollo,
     private localizationService: LocalizationService,
@@ -508,7 +509,7 @@ export class GridConfiguratorService {
       onColumnsChange,
     }: AutoConfig
   ) {
-    component.beginCustomLoading("Initializing...");
+    component.beginCustomLoading(this.localizeService.localize("initializing"));
 
     if (autoStateStoring)
       this.autoConfigureStateStoring(component.option("stateStoring"), grid);
@@ -527,7 +528,7 @@ export class GridConfiguratorService {
         ),
         tap(
           ({ fullName, value }: Partial<{ fullName: string; value: any }>) => {
-            component.beginCustomLoading("Initializing columns...");
+            component.beginCustomLoading(this.localizeService.localize("initializing-columns"));
             const res = fullName.match(/^columns\[(\d+)\]\.visible$/);
             if (res?.[1])
               this.precacheColumns(
@@ -731,6 +732,7 @@ export class EvalDisplayPipe implements PipeTransform {
     };
   }
   transform(paths) {
+    console.log("Evaluating display value");
     return EvalDisplayPipe.doTransform(paths);
   }
 }

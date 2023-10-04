@@ -159,11 +159,7 @@
             [displayExpr]="dateManagementService.displayPeriodText"
             (onValueChanged)="setDates($event)"
           >
-            <dxo-drop-down-options
-              [width]="300"
-              [elementAttr]="{ class: 'period-list' }"
-            >
-            </dxo-drop-down-options>
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
       </div>
@@ -213,6 +209,15 @@
   ></dx-button>
 </form>
 
+<dx-button
+  style="margin-right: 17px"
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="gridsService.expandCollapseGroups(this)"
+></dx-button>
+
 <div class="grid-order-history-container">
   <dx-data-grid
     class="dx-card wide-card"
@@ -247,6 +252,7 @@
   >
     <!-- Grid configuration -->
     <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
+    <dxo-export fileName="Historique des ordres client"></dxo-export>
     <dxo-header-filter
       [visible]="true"
       [allowSearch]="true"
@@ -281,13 +287,14 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
-    <dxo-summary>
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
       <dxi-group-item
         *ngFor="let field of summaryFields"
+        [name]="field"
         [column]="field"
-        summaryType="sum"
+        summaryType="custom"
         [alignByColumn]="true"
-        displayFormat="{0}"
+        [displayFormat]="'{0}'"
       >
       </dxi-group-item>
     </dxo-summary>
@@ -305,6 +312,7 @@
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
       [calculateGroupValue]="column.calculateGroupValue"
+      [calculateCellValue]="this[column?.calculateCellValue]"
       allowSearch="false"
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)

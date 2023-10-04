@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { gql, MutationOptions, OperationVariables } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Article } from "app/shared/models";
+import ArticleStatistiqueClient from "app/shared/models/article-statistique-client.model";
+import ArticleStatistiqueFournisseur from "app/shared/models/article-statistique-fournisseur.model";
 import {
   APIRead,
   ApiService,
@@ -10,7 +12,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { from } from "rxjs";
-import { mergeMap, take, takeUntil, takeWhile } from "rxjs/operators";
+import { map, mergeMap, take, takeUntil, takeWhile } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -169,6 +171,98 @@ export class ArticlesService extends ApiService implements APIRead {
       searchExpr,
       fetchPolicy
     );
+  }
+
+  /**
+   * Point d'entrée pour les statistiques de vente d'un article
+   */
+  public allArticleStatistiqueClients(
+    body: Set<string>,
+    dateMin: Date,
+    dateMax: Date,
+    article: string,
+    societe: string
+  ) {
+    return this.apollo
+      .query<{ allArticleStatistiqueClients: Array<Partial<ArticleStatistiqueClient>> }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: "allArticleStatistiqueClients",
+                body,
+                params: [
+                  { name: "dateMax", value: "dateMax", isVariable: true },
+                  { name: "dateMin", value: "dateMin", isVariable: true },
+                  { name: "article", value: "article", isVariable: true },
+                  { name: "societe", value: "societe", isVariable: true },
+                ],
+              },
+            ],
+            [
+              { name: "dateMax", type: "LocalDate", isOptionnal: false },
+              { name: "dateMin", type: "LocalDate", isOptionnal: false },
+              { name: "article", type: "String", isOptionnal: false },
+              { name: "societe", type: "String", isOptionnal: false },
+            ]
+          )
+        ),
+        variables: {
+          dateMax,
+          dateMin,
+          article,
+          societe
+        },
+        fetchPolicy: "network-only",
+      })
+      .pipe(map((res) => res.data.allArticleStatistiqueClients));
+  }
+
+  /**
+ * Point d'entrée pour les statistiques d'achat fournisseur d'un article
+ */
+  public allArticleStatistiqueFournisseurs(
+    body: Set<string>,
+    dateMin: Date,
+    dateMax: Date,
+    article: string,
+    societe: string
+  ) {
+    return this.apollo
+      .query<{ allArticleStatistiqueFournisseurs: Array<Partial<ArticleStatistiqueFournisseur>> }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: "allArticleStatistiqueFournisseurs",
+                body,
+                params: [
+                  { name: "dateMax", value: "dateMax", isVariable: true },
+                  { name: "dateMin", value: "dateMin", isVariable: true },
+                  { name: "article", value: "article", isVariable: true },
+                  { name: "societe", value: "societe", isVariable: true },
+                ],
+              },
+            ],
+            [
+              { name: "dateMax", type: "LocalDate", isOptionnal: false },
+              { name: "dateMin", type: "LocalDate", isOptionnal: false },
+              { name: "article", type: "String", isOptionnal: false },
+              { name: "societe", type: "String", isOptionnal: false },
+            ]
+          )
+        ),
+        variables: {
+          dateMax,
+          dateMin,
+          article,
+          societe
+        },
+        fetchPolicy: "network-only",
+      })
+      .pipe(map((res) => res.data.allArticleStatistiqueFournisseurs));
   }
 
   concatArtDescript(article) {

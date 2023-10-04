@@ -55,6 +55,7 @@ import {
   tap,
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
+import { GridsService } from "../grids.service";
 
 let self;
 
@@ -84,6 +85,7 @@ export type TabPanelItem = dxTabPanelItem & {
   position: number;
   component?: FormComponent | any;
   status?: boolean;
+  unsaved?: boolean,
   type?: string;
 };
 
@@ -112,6 +114,19 @@ export class TabContext {
       publish(),
       refCount()
     ) as ConnectableObservable<TabChangeData>;
+  }
+
+  /**
+   * Return ALL tab panel items
+   */
+  public getAllItems() {
+    return this.componentRef.route.paramMap.pipe(
+      share(),
+      map((params) => {
+        const selected = params.get(RouteParam.TabID);
+        return this.componentRef.items;
+      })
+    );
   }
 
   /**
@@ -146,12 +161,12 @@ export class TabContext {
    * @param campagne Campagne id
    * @param toastInfo Shows toast by default, false it not desired
    */
-  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean) {
+  public openOrdre(numero: string, campagne?: string, toastInfo?: boolean, specialText?: string) {
     if (!numero) return;
     toastInfo = toastInfo === undefined ? true : toastInfo;
     if (toastInfo)
       notify(
-        this.localization.localize("ouverture-ordre").replace("&NO", numero),
+        (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
         "info",
         1500
       );
@@ -227,10 +242,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   private fastNextButton: HTMLElement;
   public activeStateEnabled = false;
   public typeTab = TabType;
+  public tabsUnpined: boolean;
+  public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
+  public moreThanOneOpenOrder: number;
+  private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
-  @ViewChild(DxTabPanelComponent, { static: true })
-  tabPanel: DxTabPanelComponent;
+  @ViewChild(DxTabPanelComponent, { static: true }) tabPanel: DxTabPanelComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -240,10 +258,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private localizationService: LocalizationService,
     private ordresService: OrdresService,
     private functionsService: FunctionsService,
+    private gridsService: GridsService,
     private dateManagementService: DateManagementService,
     private authService: AuthService,
     private tabContext: TabContext
-  ) { }
+  ) {
+    this.moreThanOneOpenOrder = 0;
+  }
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
@@ -269,6 +290,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe();
     this.surveyBlockage();
+    this.gridUnsavedControl(); // Unsaved red dot on tabs
     window.sessionStorage.removeItem("idOrdre");
     setInterval(() => {
       const leftArrow = this.tabPanel?.instance.$element()[0].querySelector(".dx-widget.dx-tabs-nav-button-left") as HTMLElement;
@@ -285,6 +307,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.gridUnsavedInterval);
     this.destroy.next(true);
     this.destroy.unsubscribe();
   }
@@ -294,7 +317,32 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     window.sessionStorage.removeItem("surveyRunning");
   }
 
+  gridUnsavedControl() {
+    // Pastille rouge "ordre non sauvegardé"
+    this.gridUnsavedInterval = setInterval(() => {
+      this.tabContext.getAllItems().subscribe(tabs =>
+        tabs.filter((tab) => tab.type === "ordre")
+          .map(t => t.unsaved = !!this.gridsService.get("Commande", t.id)?.instance.hasEditData())
+      );
+    }, 1500);
+  }
+
+  onScroll(e) {
+    const topValue = e.scrollOffset.top;
+
+    // Back to top button
+    const showHidePixelsFromTop = 150;
+    const Element = document.querySelector(".backtotop") as HTMLElement;
+
+    if (topValue < showHidePixelsFromTop) {
+      Element.classList.add("hiddenBacktotop");
+    } else {
+      Element.classList.remove("hiddenBacktotop");
+    }
+  }
+
   updateAllTabsStatusDots() {
+    // Pastille verte "Confirmé"
     this.tabContext.getNotSelectedItems().subscribe(tabs =>
       tabs
         .filter((tab) => tab.type === "ordre")
@@ -320,7 +368,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     window.sessionStorage.setItem("surveyRunning", "true");
     setInterval(() => {
       const id = window.sessionStorage.getItem("idOrdre");
-      if (id) {
+      const isOrdresRouteActive = this.router.isActive("pages/ordres", {
+        paths: 'subset',
+        queryParams: 'ignored',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+      });
+      if (id && isOrdresRouteActive) {
         this.functionsService
           .fInitBlocageOrdre(id, this.authService.currentUser.nomUtilisateur)
           .valueChanges.subscribe((res) => {
@@ -339,6 +393,14 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     const tabSubCont = tabCont.querySelector(".dx-scrollable-content") as HTMLElement;
     pos = (dir === "prev") ? 0 : tabSubCont?.offsetWidth - tabCont?.offsetWidth + 2;
     tabCont.scrollTo({ left: pos, behavior: "smooth" });
+  }
+
+  onTabsPinClick() {
+    this.tabsUnpined = !this.tabsUnpined;
+    window.localStorage.setItem(
+      "OrderTabsUnpined",
+      this.tabsUnpined ? "true" : "false"
+    );
   }
 
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
@@ -367,6 +429,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabTitleRendered(event) {
+    if (this.tabsUnpined === undefined)
+      this.tabsUnpined = window.localStorage.getItem("OrderTabsUnpined") === "true" ? true : false;
     const replaceEvent = (e) => {
       const id = e.currentTarget.querySelector("[data-item-id]").dataset.itemId;
       this.onTabTitleClick({ itemData: { id } });
@@ -374,7 +438,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     on(event.itemElement, "dxpointerdown", (e) => e.stopPropagation());
     on(event.itemElement, "dxclick", replaceEvent);
-    on(event.itemElement, "dxhoverstart", () => this.setTabTooltip(event));
+    on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
   }
 
   setTabTooltip(item) {
@@ -404,11 +468,19 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onTabCloseClick(event: MouseEvent) {
+  async onTabCloseClick(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    // Save before closing
+    // Seen with Bruno 18-08-2023 : no confirmation required
+    const closeTabBtn = (event.target as HTMLElement);
+    const pullID = closeTabBtn.parentElement.dataset.itemId;
+    const grid = this.gridsService.get("Commande", pullID);
+    if (grid?.instance.hasEditData()) closeTabBtn.classList.add("infinite-rotate");
+    await this.gridsService.waitUntilAllGridDataSaved(grid);
+
     this.selectTab(TAB_LOAD_ID);
-    const pullID = (event.target as HTMLElement).parentElement.dataset.itemId;
     const indicateur = this.route.snapshot.queryParamMap
       .getAll(TabType.Indicator)
       .filter((param) => param !== pullID);
@@ -430,14 +502,20 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!ordre?.length;
+    this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
   }
 
   closeEveryOrdre() {
+    this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(
       TabType.Indicator
     );
+    let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
 
-    const ordre = [];
+    // Checking if grids have unsaved data
+    ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
+
+    ordre = [];
     const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
@@ -447,7 +525,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
-    notify(this.localizationService.localize("all-orders-were-closed"));
+    notify(this.localizationService.localize(
+      this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
+    );
   }
 
   private handleRouting() {
@@ -510,8 +590,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
-        class: "close-all-orders-tab",
-        multiLineTitle: "Fermer tous les ordres",
+        class: "close-all-orders-tab multiline-tab",
+        multiLineTitle: [
+          this.localizationService.localize("close-open-order"),
+          this.localizationService.localize("close-all-orders")
+        ],
+        visible: false,
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -584,6 +668,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       const indicator = this.ordresIndicatorsService.getIndicatorByName(
         data.id
       );
+      // Inconcistency with one or several indicators? Cleans as it can
+      if (!indicator) {
+        this.pullTab(data.id)
+        this.selectTab(TAB_HOME_ID);
+        return;
+      }
       data.component = (await indicator.component).default;
       // TODO Badge indicator count
       // if (indicator.withCount) data.badge = indicator.number || '?';
@@ -603,6 +693,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Update delete all orders tab
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
+    this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
 
     return this.items.indexOf(data);
   }

@@ -20,6 +20,11 @@
     color: transparent;
   }
 
+  // Highlight canceled orders
+  .canceled-orders td {
+    color: #ff325a !important;
+  }
+
 }
 
 ::ng-deep .secteur-histo-ligne-field {

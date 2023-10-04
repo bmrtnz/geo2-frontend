@@ -5,16 +5,16 @@ import {
   gql,
   MutationOptions,
   OperationVariables,
-  WatchQueryOptions,
+  WatchQueryOptions
 } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
 import { Model } from "app/shared/models/model";
 import { LookupStore } from "basic";
-import { LoadOptions, BaseGroupDescriptor } from "devextreme/data";
+import { BaseGroupDescriptor, LoadOptions } from "devextreme/data";
 import ArrayStore from "devextreme/data/array_store";
-import CustomStore, { CustomStoreOptions } from "devextreme/data/custom_store";
+import CustomStore, { CustomStoreOptions, Options } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import { from, Observable, Subject } from "rxjs";
+import { from, lastValueFrom, Observable, Subject } from "rxjs";
 import { filter, map, mergeMap, take, takeUntil } from "rxjs/operators";
 
 const DEFAULT_KEY = "id";
@@ -131,23 +131,23 @@ export interface APIPersist {
     variables: OperationVariables
   ):
     | Promise<
-        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
-      >
+      Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+    >
     | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
   save_v2?(
     columns: Array<string>,
     variables: OperationVariables
   ):
     | Promise<
-        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
-      >
+      Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+    >
     | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
   delete?(
     variables: OperationVariables
   ):
     | Promise<
-        Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
-      >
+      Observable<FetchResult<any, Record<string, any>, Record<string, any>>>
+    >
     | Observable<FetchResult<any, Record<string, any>, Record<string, any>>>;
 }
 
@@ -215,18 +215,16 @@ export abstract class ApiService implements OnDestroy {
       ops.map(
         (o) => `${o.alias ? `${o.alias}: ` : ""} ${o.name}
       ${o?.params ? `(${mapParams(o.params)})` : ""}
-      ${
-        o?.body
-          ? `{
+      ${o?.body
+            ? `{
         ${mapPaths(o?.body)}
       }`
-          : ""
-      }`
+            : ""
+          }`
       );
 
-    return `${type} ${alias}${
-      variables?.length ? `(${mapVariables(variables)})` : ""
-    } { ${mapOperations(operations)} }`;
+    return `${type} ${alias}${variables?.length ? `(${mapVariables(variables)})` : ""
+      } { ${mapOperations(operations)} }`;
   }
 
   static mapForSave(variables: { [key: string]: any }) {
@@ -347,11 +345,11 @@ export abstract class ApiService implements OnDestroy {
           edges {
             node {
               ${await this.model
-                .getGQLFields(depth, regExpFilter, null, {
-                  noList: true,
-                  forceFilter: option?.forceFilter,
-                })
-                .toPromise()}
+        .getGQLFields(depth, regExpFilter, null, {
+          noList: true,
+          forceFilter: option?.forceFilter,
+        })
+        .toPromise()}
             }
           }
           pageInfo {
@@ -607,13 +605,13 @@ export abstract class ApiService implements OnDestroy {
   public mapDXSearchToDXFilter(options: LoadOptions) {
     return typeof options.searchExpr === "object"
       ? (options.searchExpr as [])
-          .map((expr) => [expr, options.searchOperation, options.searchValue])
-          .join("¤or¤")
-          .split("¤")
-          .map((value: any) => {
-            const mapped = value.split(",");
-            return mapped.length > 1 ? mapped : mapped.shift();
-          })
+        .map((expr) => [expr, options.searchOperation, options.searchValue])
+        .join("¤or¤")
+        .split("¤")
+        .map((value: any) => {
+          const mapped = value.split(",");
+          return mapped.length > 1 ? mapped : mapped.shift();
+        })
       : [options.searchExpr, options.searchOperation, options.searchValue];
   }
 
@@ -732,7 +730,7 @@ export abstract class ApiService implements OnDestroy {
   }
 
   public mapLoadOptionsToVariables(
-    options: LoadOptions & { isLoadingAll?; exportPage?; exportTake? }
+    options: LoadOptions & { isLoadingAll?; exportPage?; exportTake?}
   ) {
     const variables: RelayPageVariables = {
       pageable: {
@@ -761,10 +759,10 @@ export abstract class ApiService implements OnDestroy {
       variables.pageable.sort = {
         orders: (options.sort as Array<any>).map(
           ({ selector: property, desc }) =>
-            ({
-              property,
-              direction: desc ? Direction.DESC : Direction.ASC,
-            } as OrderedField)
+          ({
+            property,
+            direction: desc ? Direction.DESC : Direction.ASC,
+          } as OrderedField)
         ),
       };
 
@@ -1091,6 +1089,24 @@ export abstract class ApiService implements OnDestroy {
       store: new ArrayStore({ data }),
       ...params,
     } as LookupStore;
+  }
+
+  async getPreloadedDatasource<T>(
+    columns: Array<string>,
+    search?: string,
+    params: Partial<Options> = {}
+  ) {
+    const data = await lastValueFrom(this.apollo
+      .query<{ [key: string]: Array<T> }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "cache-first",
+      })
+      .pipe(map((res) => res.data[`all${this.model.name}List`])));
+    return new DataSource({
+      store: new ArrayStore({ data }),
+      ...params,
+    });
   }
 
   /**

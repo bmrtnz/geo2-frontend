@@ -1,4 +1,5 @@
 <dx-popup
+  [fullScreen]="this.popupFullscreen"
   [width]="950"
   height="auto"
   [showTitle]="true"
@@ -18,6 +19,13 @@
       (onClick)="quitPopup()"
     >
     </dx-button>
+    <dx-button
+      class="min-max-imize-popup-icon"
+      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+      icon="material-icons fullscreen_exit"
+      [focusStateEnabled]="false"
+      (onClick)="resizePopup()"
+    ></dx-button>
   </div>
 
   <div *dxTemplate="let data of 'content'">

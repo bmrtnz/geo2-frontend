@@ -14,7 +14,7 @@ import {
 } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { concatMap, defer, delay, exhaustMap, filter, firstValueFrom, from, iif, lastValueFrom, mergeMap, of, switchMap, tap } from "rxjs";
+import { lastValueFrom, } from "rxjs";
 import { GridImportProgrammesComponent } from "./grid-import-programmes/grid-import-programmes.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { FunctionsService } from "app/shared/services/api/functions.service";
@@ -27,7 +27,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 export class ImportProgrammesPopupComponent implements OnChanges {
   @Input() program: { id: string; name: string; text: string };
   @Output() programID: string;
-  @Output() title: string;
+  @Output() shown: boolean;
 
   @ViewChild(ConfirmationResultPopupComponent)
   resultPopup: ConfirmationResultPopupComponent;
@@ -42,6 +42,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   public buildAccept = ProgramService.buildAccept();
   public customUploadData;
   public loading: boolean;
+  public title: string;
 
   @ViewChild(GridImportProgrammesComponent, { static: false })
   gridComponent: GridImportProgrammesComponent;
@@ -174,15 +175,31 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     }
   }
 
+  setSpecialColumnHeader() {
+    if (this.gridComponent?.datagrid) {
+      const header = `ordres-program-loadRef-${this.program?.id === Program.PRÉORDRES ? "preordres" : "others"}`;
+      this.gridComponent.datagrid.instance
+        .columnOption(
+          "loadRef",
+          "caption",
+          this.localizeService.localize(header)
+        );
+    }
+  }
+
   onShowing(e) {
+    this.shown = false;
     e.component.content().parentNode.classList.add("import-programme-popup");
   }
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.setSpecialColumnHeader();
+    this.shown = true;
   }
 
   onHidden(e) {
+    this.shown = false;
     this.uploader.instance.reset();
     this.gridComponent.datagrid.dataSource = null;
   }

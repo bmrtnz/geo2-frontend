@@ -42,9 +42,7 @@ import { HistoriqueModifDetailPopupComponent } from "../historique-modif-detail-
   templateUrl: "./grid-ordre-ligne-logistique.component.html",
   styleUrls: ["./grid-ordre-ligne-logistique.component.scss"],
 })
-export class GridOrdreLigneLogistiqueComponent
-  implements OnChanges, AfterViewInit
-{
+export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
@@ -57,11 +55,14 @@ export class GridOrdreLigneLogistiqueComponent
   public askForCloture: boolean;
   public reasonId: string;
   public gridRowsTotal: number;
+
   @Input() public ordre: Ordre;
   @Output() public ordreLogistique: OrdreLogistique;
   @Input() public ligneLogistiqueId: string;
   @Input() public ordreBAFOuFacture;
+  @Input() public gridCommandes;
   @Output() refreshGridLigneDetail = new EventEmitter();
+
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false })
   choixRaisonPopup: ChoixRaisonDecloturePopupComponent;
@@ -92,10 +93,8 @@ export class GridOrdreLigneLogistiqueComponent
 
   ngOnChanges(changes: SimpleChanges) {
     this.enableFilters();
-  }
-
-  ngAfterViewInit() {
-    this.gridsService.register("SyntheseExpeditions", this.datagrid);
+    if (this.datagrid && this.ordre)
+      this.gridsService.register("SyntheseExpeditions", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {
@@ -156,8 +155,9 @@ export class GridOrdreLigneLogistiqueComponent
     this.datagrid.instance.refresh();
   }
 
-  showHistoDetail(cell) {
+  async showHistoDetail(cell) {
     if (this.countHisto) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.countHisto = true;
     cell.cellElement.classList.add("hide-button");
     this.ligneLogistiqueId = cell.data.id;
@@ -169,7 +169,7 @@ export class GridOrdreLigneLogistiqueComponent
         if (res.countHistoriqueModificationDetail) {
           this.histoDetailPopup.visible = true;
         } else {
-          notify("Aucun historique disponible", "warning", 3000);
+          notify(this.localization.localize("aucun-historique-trouve"), "warning", 3000);
         }
       });
   }
@@ -195,8 +195,22 @@ export class GridOrdreLigneLogistiqueComponent
       case "expedieStation": {
         if (this.changeCloture || this.ordreBAFOuFacture) return;
         if (e.data.expedieStation === true) {
-          if (!this.authService.isAdmin) return; // Seuls les admins peuvent déclôturer
-          this.choixRaisonPopup.visible = true;
+          // Conditions pour déclôturer
+          this.ordresLogistiquesService
+            .count(`id==${e.data.id} and ordre.lignes.article.matierePremiere.variete.modificationDetail==true`)
+            .subscribe((articleModifDetail) => {
+              if (!this.authService.isAdmin &&
+                this.authService.currentUser.geoClient !== "2" &&
+                e.data.ordre.societe.id !== "IMP" &&
+                e.data.ordre.societe.id !== "IUK" &&
+                e.data.fournisseur.indicateurModificationDetail != true &&
+                e.data.ordre.client.modificationDetail != true &&
+                e.data.ordre.secteurCommercial.id !== "PAL" &&
+                !["RPO", "RPR", "RDF"].includes(e.data.ordre.type.id) &&
+                articleModifDetail.data.countOrdreLogistique === 0
+              ) return notify(this.localizeService.localize("warn-not-allowed"), "warning", 3000);
+              this.choixRaisonPopup.visible = true;
+            });
         } else {
           // Save cloture
           this.changeCloture = true;
@@ -235,7 +249,7 @@ export class GridOrdreLigneLogistiqueComponent
         this.refreshGridLigneDetail.emit(true);
         // Comptabilisation des retraits
         this.ordresService.fChgtQteArtRet(this.ordre.id).subscribe({
-          next: () => this.gridsService.reload("Commande"),
+          next: () => this.gridsService.reload(["Commande"], this.gridsService.orderIdentifier(this.ordre)),
           error: (error: Error) => {
             notify(
               error.message.replace(

@@ -1,0 +1,69 @@
+<dx-button
+  class="upperButton subButton"
+  [disabled]="!fullOrderNumber || !allowMutations"
+  type="success"
+  hint="{{ 'hint-ajout-ordre' | localize }} {{
+    'hint-source-refClt' | localize
+  }}"
+  text="{{ 'btn-referenceClt' | localize }}"
+  (onClick)="onRefClientClick()"
+></dx-button>
+<dx-button
+  class="upperButton subButton"
+  [disabled]="!fullOrderNumber || !allowMutations"
+  type="success"
+  hint="{{ 'hint-ajout-ordre' | localize }} {{
+    'hint-source-stock' | localize
+  }}"
+  text="{{ 'btn-stock' | localize }}"
+  (onClick)="onArticleStockClick()"
+></dx-button>
+<dx-button
+  class="upperButton subButton"
+  [disabled]="!fullOrderNumber || !allowMutations"
+  type="success"
+  hint="{{ 'hint-ajout-ordre' | localize }} {{
+    'hint-source-manuel' | localize
+  }}"
+  (onClick)="onArticleManClick()"
+  text="{{ 'btn-manuel' | localize }}"
+></dx-button>
+<dx-button
+  class="upperButton subButton"
+  [disabled]="false"
+  type="success"
+  [hint]="
+    !fullOrderNumber || !allowMutations
+      ? histoLigneOrdreReadOnlyText
+      : histoLigneOrdreText
+  "
+  (onClick)="onArticleHistoClick()"
+  text="{{ 'btn-historique' | localize }}"
+></dx-button>
+
+<app-ajout-articles-ref-client-popup
+  [ordre]="ordre"
+  [single]="single"
+  (lignesChanged)="onLignesChanged($event)"
+>
+</app-ajout-articles-ref-client-popup>
+<app-ajout-articles-manu-popup
+  [ordre]="ordre"
+  [gridCommandes]="gridCommandes"
+  [articleRowKey]="articleRowKey"
+  [single]="single || !!articleRowKey"
+  (lignesChanged)="onLignesChanged($event)"
+>
+</app-ajout-articles-manu-popup>
+<app-ajout-articles-histo-popup
+  [ordre]="ordre"
+  [readOnlyMode]="readOnlyMode"
+  [single]="single"
+  (lignesChanged)="onLignesChanged($event)"
+>
+</app-ajout-articles-histo-popup>
+<app-ajout-articles-stock-popup
+  [ordre]="ordre"
+  (lignesChanged)="onLignesChanged($event)"
+>
+</app-ajout-articles-stock-popup>

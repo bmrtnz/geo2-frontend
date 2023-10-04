@@ -32,13 +32,9 @@ h6 {
   }
 }
 
-::ng-deep .period-list .dx-list-item {
-  padding: 6px 15px;
-}
-
 ::ng-deep .ordres-litiges-grid {
   // Highlight groups
-
+  max-height: 520px;
   max-width: none !important;
 
   .dx-row:not(.dx-row-focused) {

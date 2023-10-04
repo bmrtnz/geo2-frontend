@@ -216,7 +216,7 @@ export class FunctionsService {
    * avant envoi de documents et validation bon à facturer
    */
   public fVerifLogistiqueOrdre = (ordreRef: string) =>
-    this.apollo.watchQuery<{ fVerifLogistiqueOrdre: FunctionResponse }>({
+    this.apollo.query<{ fVerifLogistiqueOrdre: FunctionResponse }>({
       query: gql(
         ApiService.buildGraph(
           "query",
@@ -341,402 +341,6 @@ export class FunctionsService {
         )
       ),
       variables: { ordRef },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification nb palettes commandées sur une ligne d'ordre
-   */
-  public onChangeCdeNbPal = (
-    ordreLigneRef: string,
-    secteurCommercialCode: string
-  ) =>
-    this.apollo.watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeCdeNbPal",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                {
-                  name: "secteurCommercialCode",
-                  value: "secteurCommercialCode",
-                  isVariable: true,
-                },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            {
-              name: "secteurCommercialCode",
-              type: "String",
-              isOptionnal: false,
-            },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, secteurCommercialCode },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification nb palettes intermédiaires sur une ligne d'ordre
-   */
-  // public onChangeDemipalInd =
-  //   (ordreLigneRef: string, username: string) => this.apollo
-  //     .watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
-  //       query: gql(ApiService.buildGraph(
-  //         "query",
-  //         [
-  //           {
-  //             name: "onChangeDemipalInd",
-  //             body,
-  //             params: [
-  //               { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
-  //               { name: "username", value: "username", isVariable: true },
-  //             ]
-  //           }
-  //         ],
-  //         [
-  //           { name: "ordreLigneRef", type: "String", isOptionnal: false },
-  //           { name: "username", type: "String", isOptionnal: false },
-  //         ],
-  //       )),
-  //       variables: { ordreLigneRef, username },
-  //       fetchPolicy: "network-only",
-  //     })
-
-  /**
-   * Event modification nb colis par palette sur une ligne d'ordre
-   */
-  public onChangePalNbCol = (ordreLigneRef: string, username: string) =>
-    this.apollo.watchQuery<{ onChangeCdeNbPal: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangePalNbCol",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification nb colis par palette sur une ligne d'ordre
-   */
-  public onChangeCdeNbCol = (ordreLigneRef: string, username: string) =>
-    this.apollo.watchQuery<{ onChangeCdeNbCol: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeCdeNbCol",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification propriétaire marchandise
-   */
-  public onChangeProprCode = (
-    ordreLigneRef: string,
-    societeCode: string,
-    username: string
-  ) =>
-    this.apollo.watchQuery<{ onChangeProprCode: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeProprCode",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "societeCode", value: "societeCode", isVariable: true },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "societeCode", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, societeCode, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification fournisseur
-   */
-  public onChangeFouCode = (
-    ordreLigneRef: string,
-    societeCode: string,
-    username: string
-  ) =>
-    this.apollo.query<{ onChangeFouCode: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeFouCode",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "societeCode", value: "societeCode", isVariable: true },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "societeCode", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, societeCode, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification PU Vente
-   */
-  public onChangeVtePu = (ordreLigneRef: string) =>
-    this.apollo.watchQuery<{ onChangeVtePu: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeVtePu",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-              ],
-            },
-          ],
-          [{ name: "ordreLigneRef", type: "String", isOptionnal: false }]
-        )
-      ),
-      variables: { ordreLigneRef },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification gratuit
-   */
-  public onChangeIndGratuit = (ordreLigneRef: string) =>
-    this.apollo.watchQuery<{ onChangeIndGratuit: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeIndGratuit",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-              ],
-            },
-          ],
-          [{ name: "ordreLigneRef", type: "String", isOptionnal: false }]
-        )
-      ),
-      variables: { ordreLigneRef },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification type palette
-   */
-  public onChangePalCode = (
-    ordreLigneRef: string,
-    secteurCode: string,
-    username: string
-  ) =>
-    this.apollo.watchQuery<{ onChangePalCode: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangePalCode",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "secteurCode", value: "secteurCode", isVariable: true },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "secteurCode", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, secteurCode, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification type palette intermédiaire
-   */
-  public onChangePalinterCode = (ordreLigneRef: string) =>
-    this.apollo.watchQuery<{ onChangePalinterCode: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangePalinterCode",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-              ],
-            },
-          ],
-          [{ name: "ordreLigneRef", type: "String", isOptionnal: false }]
-        )
-      ),
-      variables: { ordreLigneRef },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification nb palette intermédiaire
-   */
-  public onChangePalNbPalinter = (ordreLigneRef: string, username: string) =>
-    this.apollo.watchQuery<{ onChangePalNbPalinter: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangePalNbPalinter",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "username", value: "username", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "username", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, username },
-      fetchPolicy: "network-only",
-    });
-
-  /**
-   * Event modification PU Dev Achat
-   */
-  public onChangeAchDevPu = (ordreLigneRef: string, societeCode: string) =>
-    this.apollo.watchQuery<{ onChangePalinterCode: FunctionResponse }>({
-      query: gql(
-        ApiService.buildGraph(
-          "query",
-          [
-            {
-              name: "onChangeAchDevPu",
-              body: functionBody,
-              params: [
-                {
-                  name: "ordreLigneRef",
-                  value: "ordreLigneRef",
-                  isVariable: true,
-                },
-                { name: "societeCode", value: "societeCode", isVariable: true },
-              ],
-            },
-          ],
-          [
-            { name: "ordreLigneRef", type: "String", isOptionnal: false },
-            { name: "societeCode", type: "String", isOptionnal: false },
-          ]
-        )
-      ),
-      variables: { ordreLigneRef, societeCode },
       fetchPolicy: "network-only",
     });
 
@@ -951,6 +555,261 @@ export class FunctionsService {
         transporteurDevCode,
         societeID,
         transporteurPU,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public wAjoutArtRecapEdiColibri = (
+    articleID: string,
+    fournisseurCode: string,
+    proprietaireCode: string,
+    quantiteValide: number,
+    fromID: number,
+  ) =>
+    this.apollo.query<{
+      wAjoutArtRecapEdiColibri: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "wAjoutArtRecapEdiColibri",
+              body: functionBody,
+              params: [
+                { name: "articleID", value: "articleID", isVariable: true },
+                { name: "fournisseurCode", value: "fournisseurCode", isVariable: true },
+                { name: "proprietaireCode", value: "proprietaireCode", isVariable: true },
+                { name: "quantiteValide", value: "quantiteValide", isVariable: true },
+                { name: "fromID", value: "fromID", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "articleID", type: "String", isOptionnal: false },
+            { name: "fournisseurCode", type: "String", isOptionnal: false },
+            { name: "proprietaireCode", type: "String", isOptionnal: false },
+            { name: "quantiteValide", type: "Int", isOptionnal: false },
+            { name: "fromID", type: "BigDecimal", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        articleID,
+        fournisseurCode,
+        proprietaireCode,
+        quantiteValide,
+        fromID,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public ofReadOrdEdiColibri = (
+    numeroCommandeEDI: number,
+    codeCampagne: string,
+    typeStock: 'S' | 'D',
+  ) =>
+    this.apollo.query<{
+      ofReadOrdEdiColibri: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofReadOrdEdiColibri",
+              body: functionBody,
+              params: [
+                { name: "numeroCommandeEDI", value: "numeroCommandeEDI", isVariable: true },
+                { name: "codeCampagne", value: "codeCampagne", isVariable: true },
+                { name: "typeStock", value: "typeStock", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "numeroCommandeEDI", type: "BigDecimal", isOptionnal: false },
+            { name: "codeCampagne", type: "String", isOptionnal: false },
+            { name: "typeStock", type: "Char", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        numeroCommandeEDI,
+        codeCampagne,
+        typeStock,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public ofControleSelArt = (
+    numeroCommandeEDI: number,
+    codeCampagne: string,
+  ) =>
+    this.apollo.query<{
+      ofControleSelArt: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofControleSelArt",
+              body: functionBody,
+              params: [
+                { name: "numeroCommandeEDI", value: "numeroCommandeEDI", isVariable: true },
+                { name: "codeCampagne", value: "codeCampagne", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "numeroCommandeEDI", type: "BigDecimal", isOptionnal: false },
+            { name: "codeCampagne", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        numeroCommandeEDI,
+        codeCampagne,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public ofControleQteArt = (
+    numeroCommandeEDI: number,
+    codeCampagne: string,
+  ) =>
+    this.apollo.query<{
+      ofControleQteArt: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "ofControleQteArt",
+              body: functionBody,
+              params: [
+                { name: "numeroCommandeEDI", value: "numeroCommandeEDI", isVariable: true },
+                { name: "codeCampagne", value: "codeCampagne", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "numeroCommandeEDI", type: "BigDecimal", isOptionnal: false },
+            { name: "codeCampagne", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        numeroCommandeEDI,
+        codeCampagne,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public clearTraca = (
+    ordreLigneRef: string,
+  ) =>
+    this.apollo.query<{
+      clearTraca: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "clearTraca",
+              body: functionBody,
+              params: [
+                { name: "ordreLigneRef", value: "ordreLigneRef", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ordreLigneRef", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        ordreLigneRef,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public fRecupFrais = (
+    varCode: string,
+    catCode: string,
+    scoCode: string,
+    tvtCode: string,
+    modeCulture: number,
+    origine: string,
+  ) =>
+    this.apollo.query<{
+      fRecupFrais: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "fRecupFrais",
+              body: functionBody,
+              params: [
+                { name: "varCode", value: "varCode", isVariable: true },
+                { name: "catCode", value: "catCode", isVariable: true },
+                { name: "scoCode", value: "scoCode", isVariable: true },
+                { name: "tvtCode", value: "tvtCode", isVariable: true },
+                { name: "modeCulture", value: "modeCulture", isVariable: true },
+                { name: "origine", value: "origine", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "varCode", type: "String", isOptionnal: false },
+            { name: "catCode", type: "String", isOptionnal: false },
+            { name: "scoCode", type: "String", isOptionnal: false },
+            { name: "tvtCode", type: "String", isOptionnal: false },
+            { name: "modeCulture", type: "Int", isOptionnal: false },
+            { name: "origine", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        varCode,
+        catCode,
+        scoCode,
+        tvtCode,
+        modeCulture,
+        origine,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public setTransporteurBassin = (
+    orlRef: string,
+  ) =>
+    this.apollo.query<{
+      setTransporteurBassin: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "setTransporteurBassin",
+              body: functionBody,
+              params: [
+                { name: "orlRef", value: "orlRef", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "orlRef", type: "String", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        orlRef,
       },
       fetchPolicy: "network-only",
     });

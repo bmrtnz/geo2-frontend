@@ -27,7 +27,7 @@ export class OrdreLigne extends Model {
   public logistique?: OrdreLogistique;
   @Field({ model: import("./article.model") }) public article?: Article;
   @Field({ model: import("./fournisseur.model") })
-  public fournisseur?: Fournisseur;
+  public fournisseur?: Partial<Fournisseur>;
   @Field({ model: import("./base-tarif.model") }) public fraisUnite?: BaseTarif;
   @Field() public nombrePalettesCommandees?: number;
   @Field() public nombrePalettesExpediees?: number;
@@ -36,7 +36,7 @@ export class OrdreLigne extends Model {
   @Field() public nombreColisCommandes?: number;
   @Field() public libelleDLV?: string;
   @Field({ model: import("./fournisseur.model") })
-  public proprietaireMarchandise?: Fournisseur;
+  public proprietaireMarchandise?: Partial<Fournisseur>;
   @Field() public ventePrixUnitaire?: number;
   @Field() public gratuit?: boolean;
   @Field({ model: import("./code-promo.model") }) public codePromo?: CodePromo;
@@ -49,9 +49,9 @@ export class OrdreLigne extends Model {
   @Field() public listeCertifications?: string;
   @Field({ model: import("./base-tarif.model") }) public achatUnite?: BaseTarif;
   @Field({ model: import("./type-palette.model") })
-  public typePalette?: Palette;
+  public typePalette?: Partial<Palette>;
   @Field({ model: import("./type-palette.model") })
-  public paletteInter?: Palette;
+  public paletteInter?: Partial<Palette>;
   @Field() public fraisPrixUnitaire?: number;
   @Field() public tauxRemiseSurFacture?: number;
   @Field() public tauxRemiseHorsFacture?: number;
@@ -93,6 +93,8 @@ export class OrdreLigne extends Model {
   public mouvement?: StockMouvement;
   @Field() public nombreReservationsSurStock?: number;
   @Field() public ristourne?: boolean;
+  @Field() public indicateurPalette?: number;
+  @Field() public nombreColisPaletteByDimensions?: number;
 
   static formatNumero(index: number) {
     return index.toString().padStart(2, "0");

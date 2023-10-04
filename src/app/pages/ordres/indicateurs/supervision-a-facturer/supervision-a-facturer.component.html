@@ -220,12 +220,11 @@
     [visible]="true"
     [allowSearch]="true"
   ></dxo-header-filter>
-  <dxo-paging></dxo-paging>
   <dxo-pager
-    [showPageSizeSelector]="true"
+    [visible]="true"
     [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
+    [showPageSizeSelector]="false"
+    infoText="{2} {{ 'elements' | localize }}"
   ></dxo-pager>
   <dxo-export fileName="Vérification BAF"></dxo-export>
   <dxo-state-storing

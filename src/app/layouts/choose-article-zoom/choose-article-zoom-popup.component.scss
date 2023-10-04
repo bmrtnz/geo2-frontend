@@ -1,0 +1,46 @@
+// Var
+@import "themes/generated/variables.base";
+
+::ng-deep .choose-article-zoom-popup {
+  .dx-invalid-message {
+    visibility: hidden !important;
+  }
+
+  .dx-state-disabled {
+    opacity: 1 !important;
+  }
+
+  .dx-texteditor-input-container::after {
+    right: 0 !important;
+  }
+
+  .popup-action {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .inputs {
+    padding: 0 35px;
+
+    .dx-field {
+      margin-bottom: 3px;
+
+      .dx-field-label {
+        width: 40% !important;
+        white-space: initial;
+        margin-right: 10px;
+      }
+
+      .dx-field-value {
+        width: 200px !important;
+
+        &.codeArtBW {
+          width: 140px !important;
+        }
+      }
+    }
+  }
+
+}

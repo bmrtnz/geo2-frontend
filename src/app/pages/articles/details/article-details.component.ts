@@ -55,6 +55,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
 import { switchMap } from "rxjs/operators";
+import { StatistiquesArticlePopupComponent } from "../statistiques/statistiques-article-popup.component";
 
 @Component({
   selector: "app-articles",
@@ -151,8 +152,8 @@ export class ArticleDetailsComponent
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
   @ViewChild(PushHistoryPopupComponent, { static: false }) validatePopup: PushHistoryPopupComponent;
-  @ViewChildren(DxAccordionComponent)
-  accordion: any;
+  @ViewChildren(DxAccordionComponent) accordion: any;
+  @ViewChild(StatistiquesArticlePopupComponent, { static: false }) statsPopup: StatistiquesArticlePopupComponent;
   editing = false;
   public ucBW: boolean;
 
@@ -235,7 +236,7 @@ export class ArticleDetailsComponent
     this.editing = false;
     this.cloneMode = false;
 
-    if (this.route.snapshot.url[0]?.path !== "articles") return;
+    if (this.articleLigneId) return; // Do not get the id from the path when zoom mode
 
     this.route.params
       .pipe(switchMap((params) => this.articlesService.getOne(params.id)))
@@ -291,6 +292,10 @@ export class ArticleDetailsComponent
       .localize("articles-emballage-couchesColis")
       .replace("&h", couche)
       .replace("&b", colis);
+  }
+
+  viewStats() {
+    this.statsPopup.visible = true;
   }
 
   onCancel() {

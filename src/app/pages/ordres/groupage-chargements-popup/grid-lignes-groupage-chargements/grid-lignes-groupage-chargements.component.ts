@@ -88,7 +88,7 @@ export class GridLignesGroupageChargementsComponent
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("GroupageChargement", this.datagrid);
+    this.gridsService.register("GroupageChargement", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   ngOnChanges() {
@@ -341,10 +341,10 @@ export class GridLignesGroupageChargementsComponent
           if (operation === "transfer") {
             this.datagrid.instance.refresh();
             this.updateGridCde.emit();
-            this.gridsService.reload(
+            this.gridsService.reload([
               "SyntheseExpeditions",
               "DetailExpeditions"
-            );
+            ], this.gridsService.orderIdentifier(this.ordre));
           }
           this.tabContext.openOrdre(numOrdre, campOrdre, false);
           setTimeout(

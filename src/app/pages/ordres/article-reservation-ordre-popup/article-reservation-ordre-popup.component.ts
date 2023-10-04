@@ -61,8 +61,7 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
     private cd: ChangeDetectorRef,
     private gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
-    private currentCompanyService: CurrentCompanyService,
-    private grids: GridsService
+    private currentCompanyService: CurrentCompanyService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -259,17 +258,16 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
         return null;
       }),
       concatMap((indicateurResa) =>
-        this.ordreLignesService.updateField(
-          "nombreReservationsSurStock",
-          indicateurResa,
-          this.ordreLigneInfo.id,
-          this.currentCompanyService.getCompany().id,
-          ["id", "nombreReservationsSurStock"]
-        )
+        this.ordreLignesService.save_v2(["id", "nombreReservationsSurStock"], {
+          ordreLigne: {
+            id: this.ordreLigneInfo.id,
+            nombreReservationsSurStock: indicateurResa,
+          }
+        })
       ),
       finalize(() => {
         this.whenApplied.emit();
-        this.grids.reload("SyntheseExpeditions", "DetailExpeditions");
+        this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions"], this.gridsService.orderIdentifier(this.ordreLigne.ordre));
       })
     );
   }

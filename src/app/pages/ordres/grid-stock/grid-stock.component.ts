@@ -37,6 +37,11 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 import { ReservationPopupComponent } from "./reservation-popup/reservation-popup.component";
 import { ClientsArticleRefPopupComponent } from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 import { RecapStockPopupComponent } from "../recap-stock-popup/recap-stock-popup.component";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { CampagnesService } from "app/shared/services/api/campagnes.service";
+import { LoadResult } from "devextreme/data/custom_store";
 
 let self;
 
@@ -69,8 +74,9 @@ export class GridStockComponent implements OnInit {
   @ViewChild("emballageSB", { static: false })
   emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
-  @ViewChild("bureauAchatSB", { static: false })
-  bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
+  @ViewChild("secteursSB", { static: false }) secteursSB: DxSelectBoxComponent;
+  @ViewChild("clientsSB", { static: false }) clientsSB: DxSelectBoxComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
   zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent)
@@ -93,6 +99,8 @@ export class GridStockComponent implements OnInit {
   emballages: Observable<DataSource>;
   origines: Observable<DataSource>;
   bureauxAchat: Observable<DataSource>;
+  public clients: DataSource;
+  public secteurs: DataSource;
   trueFalse: any;
   initialSpecy: any;
   calculate: boolean;
@@ -101,6 +109,7 @@ export class GridStockComponent implements OnInit {
   gridTitle: string;
   noEspeceSet: boolean;
   gridRowsTotal: number;
+
   public summaryFields = [
     "quantiteCalculee1",
     "quantiteCalculee2",
@@ -112,6 +121,39 @@ export class GridStockComponent implements OnInit {
   ];
   public customSummaryFields = ["quantiteHebdomadaire"];
 
+  readonly decriptionFields = new Set([
+    "id",
+    "description",
+    "referencesClient.client.code",
+    "referencesClient.client.secteur.id",
+    "referencesClient.client.raisonSocial",
+    "referencesClient.client.ville",
+    "matierePremiere.variete.description",
+    "matierePremiere.origine.description",
+    "cahierDesCharge.categorie.description",
+    "cahierDesCharge.coloration.description",
+    "cahierDesCharge.sucre.description",
+    "cahierDesCharge.penetro.description",
+    "cahierDesCharge.cirage.description",
+    "cahierDesCharge.rangement.description",
+    "emballage.emballage.descriptionTechnique",
+    "emballage.emballage.idSymbolique",
+    "emballage.conditionSpecial.description",
+    "emballage.alveole.description",
+    "normalisation.etiquetteEvenementielle.description",
+    "normalisation.etiquetteColis.description",
+    "normalisation.etiquetteUc.description",
+    "normalisation.gtinUc",
+    "normalisation.gtinColis",
+    "normalisation.produitMdd",
+    "normalisation.articleClient",
+    "normalisation.calibreMarquage.description",
+    "normalisation.stickeur.description",
+    "gtinUcBlueWhale",
+    "gtinColisBlueWhale",
+    "instructionStation",
+  ])
+
   readonly inheritedFields = new Set([
     "id",
     "articleID",
@@ -119,6 +161,7 @@ export class GridStockComponent implements OnInit {
     "valide",
     "stock.quantiteTotale",
     "age",
+    "bio",
     "fournisseurCode",
     "proprietaireCode",
     "dateFabrication",
@@ -128,6 +171,10 @@ export class GridStockComponent implements OnInit {
     "quantiteCalculee2",
     "quantiteCalculee3",
     "quantiteCalculee4",
+    "quantiteReservee1",
+    "quantiteReservee2",
+    "quantiteReservee3",
+    "quantiteReservee4",
     "quantiteHebdomadaire",
     "prevision3j",
     "prevision7j",
@@ -150,6 +197,10 @@ export class GridStockComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,
+    public secteursService: SecteursService,
+    public ordreLignesService: OrdreLignesService,
+    public campagnesService: CampagnesService,
+    public currentCompanyService: CurrentCompanyService,
     private stocksService: StocksService,
     public authService: AuthService,
     private stockConsolideService: StockConsolideService,
@@ -162,6 +213,13 @@ export class GridStockComponent implements OnInit {
       "article.cahierDesCharge.espece.id"
     );
     this.trueFalse = ["Tous", "Oui", "Non"];
+
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
+    ]);
   }
 
   async ngOnInit() {
@@ -260,7 +318,7 @@ export class GridStockComponent implements OnInit {
           var: "modesCulture",
           id: "article.matierePremiere.modeCulture.id",
           desc: "article.matierePremiere.modeCulture.description",
-        },
+        }
       ];
       dataToLoad
         .filter((data) => !this[`${data.var}SB`].value)
@@ -275,6 +333,31 @@ export class GridStockComponent implements OnInit {
         });
     }
   }
+
+  onSecteurChanged(e) {
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.clientsSB.value = null;
+    if (!e.value?.id) {
+      this.clients = null;
+    } else {
+      this.clients = this.clientsService.getDataSource_v2([
+        "id",
+        "code",
+        "raisonSocial",
+        "valide",
+      ]);
+      const filter: any = [
+        ["secteur.id", "=", e.value?.id],
+        "and",
+        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+        "and",
+        ["valide", "=", true]
+      ];
+      this.clients.filter(filter);
+    }
+  }
+
 
   displayCodeBefore(data) {
     if (data?.__typename === "DistinctEdge") {
@@ -293,6 +376,7 @@ export class GridStockComponent implements OnInit {
   }
 
   refreshArticlesGrid() {
+    // const message = (this.secteursSB.value?.id || this.clientsSB.value?.id) ? this.localizeService.localize("data-loading-process") : "";
     this.datagrid.instance.beginCustomLoading("");
     this.stocksService
       .allStockArticleList(
@@ -305,11 +389,53 @@ export class GridStockComponent implements OnInit {
         this.bureauxAchatSB.value?.key
       )
       .subscribe((res) => {
-        this.datagrid.dataSource = res.data.allStockArticleList;
-        this.datagrid.instance.refresh();
-        this.datagrid.instance.endCustomLoading();
-        this.calculate = false;
+        if (this.createAdditFilter(res) !== true) this.endDSLoading(res.data.allStockArticleList);
       });
+  }
+
+  endDSLoading(data) {
+    this.datagrid.dataSource = data;
+    this.datagrid.instance.refresh();
+    this.datagrid.instance.endCustomLoading();
+    this.calculate = false;
+  }
+
+  createAdditFilter(res) {
+    const secteur = this.secteursSB.value?.id;
+    const client = this.clientsSB.value?.id;
+    const rawResults = res;
+
+    if (!client && !secteur) return;
+
+    this.datagrid.instance
+      .beginCustomLoading(
+        `${this.localizeService.localize("analysis")}
+         ${this.localizeService.localize("tiers-clients-secteur").toLowerCase()}
+        / ${this.localizeService.localize("tiers-client").toLowerCase()}…`
+      );
+
+    const campagneEnCours = this.currentCompanyService.getCompany().campagne?.id;
+    this.campagnesService
+      .getOne_v2((parseInt(campagneEnCours) - 1).toString(), new Set(["id"]))
+      .subscribe(res => {
+        // Search previous campaing & Filter/load all results
+        let rawFilter = `(ordre.campagne.id=='${res.data.campagne.id}' or ordre.campagne.id=='${campagneEnCours}')`;
+        rawFilter += ` and ordre.societe.id=='${this.currentCompanyService.getCompany().id}'`
+        if (secteur) rawFilter += ` and ordre.secteurCommercial.id=='${secteur}'`;
+        if (client) rawFilter += ` and ordre.client.id=='${client}'`;
+
+        this.ordreLignesService.getDistinctEntityDatasource(
+          "article.id",
+          undefined,
+          rawFilter
+        ).subscribe(res => res.store().load().then((data: LoadResult<any>) => {
+          // Compare with stock results and keep the ones the sector/client sold
+          this.endDSLoading(rawResults.data.allStockArticleList.filter(r => data.map(d => d.node.key).includes(r.articleID)));
+        }));
+      });
+
+    return true;
+
   }
 
   openFilePopup(data) {
@@ -327,38 +453,7 @@ export class GridStockComponent implements OnInit {
     this.articlesService
       .getOne_v2(
         this.articleLigneId,
-        new Set([
-          "id",
-          "description",
-          "referencesClient.client.code",
-          "referencesClient.client.secteur.id",
-          "referencesClient.client.raisonSocial",
-          "referencesClient.client.ville",
-          "matierePremiere.variete.description",
-          "matierePremiere.origine.description",
-          "cahierDesCharge.categorie.description",
-          "cahierDesCharge.coloration.description",
-          "cahierDesCharge.sucre.description",
-          "cahierDesCharge.penetro.description",
-          "cahierDesCharge.cirage.description",
-          "cahierDesCharge.rangement.description",
-          "emballage.emballage.descriptionTechnique",
-          "emballage.emballage.idSymbolique",
-          "emballage.conditionSpecial.description",
-          "emballage.alveole.description",
-          "normalisation.etiquetteEvenementielle.description",
-          "normalisation.etiquetteColis.description",
-          "normalisation.etiquetteUc.description",
-          "normalisation.gtinUc",
-          "normalisation.gtinColis",
-          "normalisation.produitMdd",
-          "normalisation.articleClient",
-          "normalisation.calibreMarquage.description",
-          "normalisation.stickeur.description",
-          "gtinUcBlueWhale",
-          "gtinColisBlueWhale",
-          "instructionStation",
-        ])
+        this.decriptionFields
       )
       .subscribe((res) => {
         this.article = res.data.article;
@@ -377,7 +472,10 @@ export class GridStockComponent implements OnInit {
   openReservationPopup(data) {
     if (!data?.articleID) return;
     this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe((res) => {
+    this.articlesService.getOne_v2(
+      data.articleID,
+      this.decriptionFields
+    ).subscribe((res) => {
       this.article = res.data.article;
       this.optionPopup.visible = true;
     });
@@ -388,9 +486,14 @@ export class GridStockComponent implements OnInit {
   }
 
   openRecapPopup(data) {
-    if (!data?.articleID) return;
-    this.ligneStockArticle = data;
-    this.articlesService.getOne(data.articleID).subscribe((res) => {
+    let info = data.items ?? data.collapsedItems;
+    info = info[0];
+    if (!info?.articleID) return;
+    this.ligneStockArticle = info;
+    this.articlesService.getOne_v2(
+      info.articleID,
+      this.decriptionFields
+    ).subscribe((res) => {
       this.article = res.data.article;
       this.recapPopup.visible = true;
     });
@@ -399,7 +502,7 @@ export class GridStockComponent implements OnInit {
   ajoutReservation() {
     this.selectChange.emit();
     this.datagrid.dataSource = [];
-    this.gridsService.reload("SyntheseExpeditions");
+    this.gridsService.reload(["SyntheseExpeditions"], this.gridsService.orderIdentifier(this.ordre));
   }
 
   onCellClick(e) {
@@ -429,6 +532,7 @@ export class GridStockComponent implements OnInit {
         e.cellElement.textContent
       ) {
         const data = e.data.items ?? e.data.collapsedItems;
+        if (!data?.length) return;
         if (data[0].origineID && data[0].origineID != "F") {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
@@ -436,6 +540,9 @@ export class GridStockComponent implements OnInit {
     } else if (e.rowType === "data") {
       if (e.column.dataField === "stock.quantiteTotale")
         e.cellElement.classList.add("grey-light");
+      if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
+        e.cellElement.textContent = "";
+
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {
@@ -444,14 +551,16 @@ export class GridStockComponent implements OnInit {
       if (e.column.dataField.indexOf("quantiteCalculee") === 0) {
         const index = e.column.dataField[e.column.dataField.length - 1];
         let data = e.data;
+        let underline = false;
         if (e.rowType === "group") {
           data = data.items ?? data.collapsedItems;
-          let underline = false;
-          data.map(d => { if (d["quantiteReservee" + index] !== 0) underline = true; });
-          if (underline) e.cellElement.classList.add("underlined-text")
+          data.map(d => {
+            if (d["quantiteReservee" + index] > 0) underline = true;
+          });
         } else {
-          if (data["quantiteReservee" + index] !== 0) e.cellElement.classList.add("underlined-text")
+          if (data["quantiteReservee" + index] > 0) underline = true;
         }
+        if (underline) e.cellElement.classList.add("underlined-text");
       }
 
       // Fond jaune pour les stocks J21
@@ -466,7 +575,7 @@ export class GridStockComponent implements OnInit {
         }
         if (
           e.column.dataField.indexOf("quantiteCalculee") === 0 ||
-          ["prevision3j", "prevision7j"].includes(e.column.dataField)
+          (["prevision3j", "prevision7j"].includes(e.column.dataField) && e.rowType === "group")
         ) {
           let neg = false;
           if (e.rowType === "data") {
@@ -476,6 +585,8 @@ export class GridStockComponent implements OnInit {
           }
           if (neg) e.cellElement.classList.add("highlight-negativeStock-cell");
         }
+        if (e.column.dataField === "stock.quantiteTotale")
+          e.cellElement.classList.add("grey-light");
       }
     }
   }
@@ -489,8 +600,14 @@ export class GridStockComponent implements OnInit {
   }
 
   editComment(cell) {
-    this.articleLigneId = cell.data.articleID;
-    this.promptPopupComponent.show({ comment: cell.value });
+    const data = this.getDataFromGroup(cell);
+    this.articleLigneId = data.articleID;
+    this.promptPopupComponent.show({ comment: data.commentaire });
+  }
+
+  getDataFromGroup(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return data[0];
   }
 
   validateComment(comment) {
@@ -505,7 +622,7 @@ export class GridStockComponent implements OnInit {
 
   refreshPrevStock() {
     this.calculate = true;
-    this.datagrid.instance.beginCustomLoading("calculate prev");
+    this.datagrid.instance.beginCustomLoading(this.localizeService.localize("calculate-prev"));
     this.stocksService.refreshStockHebdo().subscribe(() => {
       this.refreshArticlesGrid();
     });
@@ -515,7 +632,9 @@ export class GridStockComponent implements OnInit {
     if (self.customSummaryFields.includes(options.name)) {
       if (options.summaryProcess === "calculate") {
         options.totalValue = options.value;
+        options.value = null;
       }
     }
   }
+
 }

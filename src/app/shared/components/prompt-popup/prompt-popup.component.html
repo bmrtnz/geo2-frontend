@@ -44,6 +44,7 @@
         name="commentaire"
         valueChangeEvent="keyup"
         [showClearButton]="true"
+        (onEnterKey)="quickValidate(form)"
         [placeholder]="placeholder"
       >
         <dx-validator
@@ -60,6 +61,7 @@
         [displayFormat]="'dd-MM-yy HH:mm (EEEE)'"
         dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
         type="datetime"
+        (onEnterKey)="quickValidate(form)"
       >
         <dx-validator
           #validatorDate

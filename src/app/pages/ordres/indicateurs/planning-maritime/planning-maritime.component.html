@@ -147,6 +147,7 @@
         | localize) || column.name
     "
     [visible]="false"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [dataType]="column?.dataType"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="

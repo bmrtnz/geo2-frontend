@@ -32,6 +32,9 @@ export class LieuPassageAQuai extends Model {
   @Field() public lieuFonctionEan: string;
   @Field({ allowHeaderFiltering: false, allowSearch: false })
   public typeTiers: TypeTiers;
+  get codePlus() {
+    return `${this.id} - ${this.raisonSocial}`;
+  }
 }
 
 export default LieuPassageAQuai;

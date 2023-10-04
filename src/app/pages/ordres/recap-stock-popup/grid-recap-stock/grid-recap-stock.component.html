@@ -1,16 +1,14 @@
 <div class="grid-recap-stock">
-  <dx-button
-    style="margin-right: 16px"
-    class="grid-grouping-button"
-    type="default"
-    icon="material-icons menu_open"
-    hint="{{ 'btn-grouping' | localize }}"
-    (onClick)="gridsService.expandCollapseGroups(this, false)"
-  ></dx-button>
-
   <dx-data-grid
     class="dx-card wide-card"
-    [remoteOperations]="true"
+    [remoteOperations]="{
+      filtering: true,
+      grouping: false,
+      groupPaging: false,
+      paging: false,
+      sorting: true,
+      summary: false
+    }"
     [showBorders]="false"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="-1"
@@ -30,8 +28,6 @@
     "
   >
     <dxo-paging></dxo-paging>
-    <dxo-group-panel [visible]="true"> </dxo-group-panel>
-    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
     <dxo-header-filter
       [visible]="false"
       [allowSearch]="true"
@@ -76,5 +72,27 @@
       [cellTemplate]="column.cellTemplate"
       [showInColumnChooser]="column.showInColumnChooser"
     ></dxi-column>
+
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+      <dxi-total-item
+        column="stock.age"
+        displayFormat="Total :"
+        cssClass="text-align-right"
+      >
+      </dxi-total-item>
+      <dxi-total-item
+        [name]="'quantiteDisponible'"
+        [summaryType]="'custom'"
+        [displayFormat]="'{0}'"
+        showInColumn="stock.quantiteDisponible"
+      >
+      </dxi-total-item>
+      <dxi-total-item
+        column="mouvement.quantite"
+        summaryType="sum"
+        displayFormat="{0}"
+      >
+      </dxi-total-item>
+    </dxo-summary>
   </dx-data-grid>
 </div>

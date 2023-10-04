@@ -13,9 +13,13 @@
   <div *dxTemplate="let data of 'content'">
     <form #form="ngForm">
       <div class="textbox-left">
-        <span class="popup-detail-expediteur-title">Expéditeur :</span>
+        <span class="popup-detail-expediteur-title"
+          >{{ "modif-detail-lignes-exp" | localize }} :</span
+        >
         <br /><br />
-        <span class="popup-detail-article-title">Desc. :</span>
+        <span class="popup-detail-article-title"
+          >{{ "modif-detail-lignes-desc" | localize }} :</span
+        >
       </div>
       <div class="textbox-right">
         <span class="popup-detail-expediteur"
@@ -28,31 +32,41 @@
       <div style="clear: both"></div>
       <br />
       <div class="textbox-left">
-        <div class="header-form-modif-popup">Actuel</div>
+        <div class="header-form-modif-popup">
+          {{ "modif-detail-lignes-current" | localize }}
+        </div>
         <div style="clear: both"></div>
         <div class="dx-field">
-          <div class="dx-field-label">Nb Pal</div>
+          <div class="dx-field-label">
+            {{ "modif-detail-lignes-nbPal" | localize }}
+          </div>
           <dx-text-box
             value="{{ ligneDetail?.nombrePalettesExpediees }}"
             [readOnly]="true"
           ></dx-text-box>
         </div>
         <div class="dx-field">
-          <div class="dx-field-label">Nb Col</div>
+          <div class="dx-field-label">
+            {{ "modif-detail-lignes-nbCol" | localize }}
+          </div>
           <dx-text-box
             value="{{ ligneDetail?.nombreColisExpedies }}"
             [readOnly]="true"
           ></dx-text-box>
         </div>
         <div class="dx-field">
-          <div class="dx-field-label">Poids brut*</div>
+          <div class="dx-field-label">
+            {{ "modif-detail-lignes-pdsBrut" | localize }}*
+          </div>
           <dx-text-box
             value="{{ ligneDetail?.poidsBrutExpedie }}"
             [readOnly]="true"
           ></dx-text-box>
         </div>
         <div class="dx-field">
-          <div class="dx-field-label">Poids net*</div>
+          <div class="dx-field-label">
+            {{ "modif-detail-lignes-pdsNet" | localize }}*
+          </div>
           <dx-text-box
             value="{{ ligneDetail?.poidsNetExpedie }}"
             [readOnly]="true"
@@ -61,7 +75,9 @@
       </div>
 
       <div class="textbox-right">
-        <div class="header-form-modif-popup">Remplacé par**</div>
+        <div class="header-form-modif-popup">
+          {{ "modif-detail-lignes-replacedBy" | localize }}**
+        </div>
         <div style="clear: both"></div>
         <dx-number-box
           ngModel
@@ -91,8 +107,8 @@
       <div style="clear: both"></div>
       <br />
       <div class="textbox-left">
-        <div>* En kilo</div>
-        <div>** Ne saisir que les valeurs à modifier</div>
+        <div>* {{ "modif-detail-lignes-inKg" | localize }}</div>
+        <div>** {{ "modif-detail-lignes-modifyOnly" | localize }}</div>
       </div>
       <div style="clear: both"></div>
 

@@ -15,7 +15,7 @@ export class DevisesRefsService extends ApiService {
     this.gqlKeyType = "GeoDeviseRefKeyInput";
   }
 
-  getOne(id: string, columns: Array<string>) {
+  getOne(id: { id: string, devise: string }, columns: Array<string>) {
     return this.apollo
       .query<{ deviseRef: DeviseRef }>({
         query: gql(this.buildGetOneGraph(columns)),

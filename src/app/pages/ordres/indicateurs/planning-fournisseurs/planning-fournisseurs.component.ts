@@ -189,18 +189,6 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
     } else return data.achatPrixUnitaire;
   }
 
-  // calculateAchatUnite(data) {
-  //   if (!data.achatUnite?.description) {
-  //     return "";
-  //   } else return data.ordre.devise?.id + " / " + data.achatUnite.description;
-  // }
-
-  // calculateVenteUnite(data) {
-  //   if (!data.venteUnite?.description) {
-  //     return "";
-  //   } else return data.ordre.devise?.id + " / " + data.achatUnite.description;
-  // }
-
   filterFournisseurs(bureauAchat?) {
     bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
     this.fournisseurs = this.fournisseursService.getDataSource_v2([
@@ -235,9 +223,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       if (e.data?.ordre?.numero !== this.oldOrderNumber) {
         this.alternateOrder = !this.alternateOrder;
         this.oldOrderNumber = e.data?.ordre?.numero;
-        if (this.alternateOrder)
-          e.rowElement.classList.add("alternate-row");
       }
+      if (this.alternateOrder)
+        e.rowElement.classList.add("alternate-row");
     }
   }
 

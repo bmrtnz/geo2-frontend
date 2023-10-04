@@ -10,13 +10,6 @@
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
     ></dx-button>
-    <dx-button
-      class="toremovebutton"
-      type="default"
-      text="grid récapitulatif stock"
-      [visible]="false"
-      (onClick)="showGridTOREMOVE()"
-    ></dx-button>
   </div>
   <div style="clear: both"></div>
   <div class="BAFFilterArea">
@@ -93,6 +86,8 @@
             <dx-select-box
               #filtreStockSB
               formControlName="filtreStock"
+              [valueExpr]="'key'"
+              [displayExpr]="'description'"
               [dataSource]="filtresStock"
             >
             </dx-select-box>
@@ -130,13 +125,11 @@
             <dx-select-box
               #typeDatesSB
               formControlName="typeDate"
+              [valueExpr]="'key'"
+              [displayExpr]="'description'"
               [items]="typesDates"
             >
-              <dxo-drop-down-options
-                [width]="200"
-                [elementAttr]="{ class: 'period-list' }"
-              >
-              </dxo-drop-down-options>
+              <dxo-drop-down-options [width]="200"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
         </div>
@@ -155,11 +148,7 @@
               [displayExpr]="dateManagementService.displayPeriodText"
               (onValueChanged)="setDates($event)"
             >
-              <dxo-drop-down-options
-                [width]="300"
-                [elementAttr]="{ class: 'period-list' }"
-              >
-              </dxo-drop-down-options>
+              <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
         </div>
@@ -208,7 +197,6 @@
       </dxi-item>
     </dx-box>
   </div>
-  <br />
 </form>
 
 <dx-button
@@ -220,7 +208,7 @@
   (onClick)="gridsService.expandCollapseGroups(this, false)"
 ></dx-button>
 <dx-data-grid
-  [height]="450"
+  class="grid-cdes-edi"
   [remoteOperations]="false"
   [keyExpr]="'id'"
   [showBorders]="false"
@@ -296,7 +284,10 @@
       [focusStateEnabled]="false"
       [text]="'-'"
     ></dx-button>
-    <div class="group-text-1"></div>
+    <div
+      class="group-text-1"
+      [title]="showEdiOrderNumber(cell)"
+    ></div>
     <div class="group-text-2 group-back-color"></div>
     <dx-button
       class="small-action-button"
@@ -330,7 +321,7 @@
 </dx-data-grid>
 <app-choix-entrepot-commande-edi-popup
   [commandeEdi]="commandeEdi"
-  (entrepotChosen)="createEdiOrder(commandeEdi, $event)"
+  (entrepotChosen)="onEdiEntrepotChoosed(commandeEdi, $event)"
 >
 </app-choix-entrepot-commande-edi-popup>
 <app-modif-commande-edi-popup

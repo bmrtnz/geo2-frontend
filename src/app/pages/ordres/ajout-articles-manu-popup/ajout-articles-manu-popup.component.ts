@@ -40,6 +40,7 @@ import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-po
 export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public articleRowKey: string;
+  @Input() public single: boolean;
   @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
   @Output() public articleLigneId: string;
@@ -124,6 +125,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
     // Ex 96000x6
     if (this.multipleItems) {
+      this.multipleItems = this.remplacementArticle ? 1 : this.multipleItems;
       const lastArt = articleTags[articleTags.length - 1]
       if ((this.gridCommandes.gridRowsTotal + this.multipleItems + this.saisieCode.value.length - 1) > this.maxRowNumber) {
         this.multipleItems = 0;
@@ -168,7 +170,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   selectFromGrid(e) {
     const tagArray = this.saisieCode.value;
     // We do not allow article selection if already tag entered
-    if (this.remplacementArticle) {
+    if (this.single) {
       if (tagArray?.length) {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;
@@ -186,7 +188,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   async onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
 
-    if (this.remplacementArticle) this.clearAll();
+    // if (this.remplacementArticle) this.clearAll();
 
     this.catalogue.dataGrid.selection = {
       mode: "multiple",
@@ -221,17 +223,17 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
         myValue = myValue.split("x")[0];
       }
       if (myValue.length > 6) {
-        notify(myValue + ": format/type incorrects", "error", 3000);
+        notify(this.localizeService.localize("warn-article-type", myValue), "error", 3000);
       } else {
         myValue = ("000000" + myValue).slice(-6);
         tagArray.push(myValue);
         e.component.option("value", tagArray);
         this.articlesKO = true;
-        this.articlesService.getOne(myValue).subscribe((res) => {
+        this.articlesService.getOne_v2(myValue, ["id", "valide"]).subscribe((res) => {
           const myArt = res?.data?.article;
           this.articlesKO = !myArt || myArt.valide !== true;
           if (this.articlesKO) {
-            notify("L'article " + myValue + " n'existe pas", "error", 3000);
+            notify(this.localizeService.localize("warn-unknown-article", myValue), "error", 3000);
             if (tagArray.includes(myValue)) tagArray.pop();
             e.component.option("value", tagArray);
           }
@@ -253,7 +255,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.catalogue.dataGrid.dataSource = [];
     this.updateChosenArticles();
     this.catalogue.dataGrid.instance.clearSelection();
-    this.catalogue.especeSB.instance.reset();
+    this.catalogue.especeSB.value = ["POMME"];
     this.catalogue.varieteSB.instance.reset();
     this.catalogue.modesCultureSB.instance.reset();
     this.catalogue.emballageSB.instance.reset();

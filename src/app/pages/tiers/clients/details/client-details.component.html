@@ -2092,7 +2092,9 @@
 <app-editing-alert></app-editing-alert>
 <app-order-history-popup
   [client]="client"
+  [comingFrom]="clientId ? 'zoomClient' : 'client'"
   [readOnlyMode]="true"
+  (orderOpen)="openStdOrder($event)"
 >
 </app-order-history-popup>
 <app-encours-client-popup

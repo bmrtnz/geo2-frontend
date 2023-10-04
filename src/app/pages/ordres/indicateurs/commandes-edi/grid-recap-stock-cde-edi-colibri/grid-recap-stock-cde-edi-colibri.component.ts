@@ -5,6 +5,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { EdiOrdre } from "app/shared/models";
 import { AuthService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -35,7 +36,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
-  @Input() public ordreEdiId: string;
+  @Input() public ordreEdiId: EdiOrdre["id"];
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
@@ -56,6 +57,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     "fournisseur.id",
     "proprietaire.id",
     "proprietaire.listeExpediteurs",
+    "choix",
   ];
 
   constructor(
@@ -85,6 +87,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
       new Set([...this.specialFields, ...await fields.toPromise()])
     );
+    dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
     this.datagrid.dataSource = dataSource;
   }
 
@@ -109,6 +112,9 @@ export class GridRecapStockCdeEdiColibriComponent {
 
       // Hiding checkboxes when there's no fournisseur assigned
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
+
+      // Pre select row when "choix" value is true
+      if (e.data.choix) this.datagrid.instance.selectRows([e.data.id], true);
     }
   }
 

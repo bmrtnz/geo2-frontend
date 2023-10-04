@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
-import { DxScrollViewComponent } from "devextreme-angular";
+import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-zoom-entrepot-popup",
@@ -12,12 +12,14 @@ export class ZoomEntrepotPopupComponent implements OnChanges {
   @Input() public entrepotCode: string;
   @Input() public entrepotTitle: string;
 
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
-  visible: boolean;
-  title: string;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  public visible: boolean;
+  public title: string;
+  public popupFullscreen: boolean;
+
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     if (!this.entrepotId) return;
@@ -36,5 +38,13 @@ export class ZoomEntrepotPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("zoom-entrepot-popup");
+  }
+
+  hidePopup() {
+    this.popup.visible = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 }

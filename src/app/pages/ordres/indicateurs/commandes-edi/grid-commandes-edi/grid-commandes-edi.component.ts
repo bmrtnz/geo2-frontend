@@ -5,7 +5,8 @@ import {
   OnInit,
   Output,
   ViewChild,
-  isDevMode
+  isDevMode,
+  EventEmitter
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import CommandeEdi from "app/shared/models/commande-edi.model";
@@ -34,7 +35,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMap, map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
@@ -45,6 +46,8 @@ import { OrdresService } from "app/shared/services/api/ordres.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { GridsService } from "app/pages/ordres/grids.service";
 import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component";
+import { FunctionsService } from "app/shared/services/api/functions.service";
+import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 
 enum InputField {
   clientCode = "client",
@@ -73,14 +76,13 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public assistantes: DataSource;
   private dataSourceOL: DataSource;
   public periodes: any[];
-  public typesDates: string[];
-  public filtresStock: string[];
+  public typesDates: { key: string, description: string }[];
+  public filtresStock: { key: string, description: string }[];
   public etats: any;
   public displayedEtat: string[];
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
-  public gridsService: GridsService;
   public allText: string;
   public gridTitle: string;
   public gridTitleCount: string;
@@ -92,6 +94,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   @Output() commandeId: string;
   @Output() lignesOrdreIds: string[];
   @Output() ordresNumeros: string[];
+  @Output() public showHideLoader = new EventEmitter();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild("typeDatesSB", { static: false }) typeDatesSB: DxSelectBoxComponent;
@@ -106,7 +109,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   visuCdeEdiPopup: VisualiserOrdresPopupComponent;
 
   @ViewChild(RecapStockCdeEdiColibriPopupComponent, { static: false })
-  TOREMOVEPOPUP: RecapStockCdeEdiColibriPopupComponent;
+  recapStockPopup: RecapStockCdeEdiColibriPopupComponent;
 
   public formGroup = new UntypedFormGroup({
     clientCode: new UntypedFormControl(),
@@ -124,6 +127,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
+    public gridsService: GridsService,
     private ordreLignesService: OrdreLignesService,
     public dateManagementService: DateManagementService,
     private localization: LocalizationService,
@@ -131,17 +135,31 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     public tabContext: TabContext,
     private currentCompanyService: CurrentCompanyService,
     private dateMgtService: DateManagementService,
-    public authService: AuthService
+    public authService: AuthService,
+    public functionsService: FunctionsService,
+    private stockArticleEdiBassinService: StockArticleEdiBassinService,
   ) {
     this.typesDates = [
-      this.localization.localize("date-livraison"),
-      this.localization.localize("date-creation")
+      {
+        key: 'livraison',
+        description: this.localization.localize("date-livraison"),
+      },
+      {
+        key: 'creation',
+        description: this.localization.localize("date-creation"),
+      },
     ];
     this.filtresStock = [
-      this.localization.localize("simplifie"),
-      this.localization.localize("detaille")
+      {
+        key: "S",
+        description: this.localization.localize("simplifie"),
+      },
+      {
+        key: "D",
+        description: this.localization.localize("detaille"),
+      },
     ]
-    this.formGroup.get("typeDate").setValue(this.typesDates[0]);
+    this.formGroup.get("typeDate").setValue(this.typesDates[0].key);
     this.allText = this.localization.localize("all");
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.CommandesEdi
@@ -182,14 +200,18 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.gridTitle = "Liste des commandes EDI";
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    // const d = new Date("2022-04-02T00:00:00"); // A VIRER !!
+    this.formGroup.get("filtreStock").valueChanges
+      .pipe(concatMap(filtreRechercheStockEdi => this.authService.persist({ filtreRechercheStockEdi })))
+      .subscribe();
+
+    // const d = new Date("2023-03-14-T00:00:00"); // A VIRER !!
     // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
-    // const f = new Date("2022-04-02T23:59:59"); // A VIRER !!
+    // const f = new Date("2022-03-14T23:59:59"); // A VIRER !!
     // this.formGroup.get("dateMax").setValue(f); // A VIRER !!
   }
 
@@ -200,11 +222,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     );
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
 
-    this.formGroup.get("filtreStock").setValue(this.filtresStock[0]);
-  }
-
-  showGridTOREMOVE() {
-    this.TOREMOVEPOPUP.visible = true;
+    const initFilterStockKey = this.authService.currentUser.filtreRechercheStockEdi ?? "S";
+    this.formGroup.get("filtreStock").setValue(initFilterStockKey);
   }
 
   displayIDBefore(data) {
@@ -268,6 +287,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       "ordre.dateDepartPrevue",
       "initBlocageOrdre",
       "verifStatusEdi",
+      "prixVente",
+      "codeInterneProduitClient"
     ];
 
     this.datagrid.instance.beginCustomLoading("");
@@ -280,8 +301,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         values.codeAssistante?.id || ALL,
         values.codeCommercial?.id || ALL,
         this.etats.filter((res) => res.caption === this.etatRB.value)[0].id,
-        values.dateMin,
-        values.dateMax,
+        this.dateManagementService.startOfDay(values.dateMin),
+        this.dateManagementService.endOfDay(values.dateMax),
+        values.typeDate,
         requiredFields
       )
       .subscribe((res) => {
@@ -324,18 +346,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           ];
           const filter = [];
 
-          // A VIRER !! MIS TEMPORAIREMENT SUITE DOUBLONS ASTRONOMIQUES RENVOYES
-          // Voir https://redmine.microtec.fr/issues/21576
-          const setClts = new Set();
-          clientList.map(clt => setClts.add(clt.client.id));
-          Array.from(setClts).map(cltIds => filter.push(["id", "=", cltIds], "or"));
-          ////////////////////////////////////////////////////////////////////////
-
-          // A REMETTRE
-          // clientList.map((clt) => {
-          //   filter.push(["id", "=", clt.client.id], "or");
-          // });
-          /////////////
+          clientList.map((clt) => {
+            filter.push(["id", "=", clt.client.id], "or");
+          });
           filter.pop();
           if (filters.length) filters.push("and");
           filters.push(filter);
@@ -394,63 +407,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     });
   }
 
-  createEdiOrder(data, entrId?) {
-    // Add entrepot to commande EDI data
-    if (entrId) data = { ...data, entrepot: { id: entrId } };
-
-    this.ordresEdiService
-      .fCreeOrdresEdi(
-        this.currentCompanyService.getCompany().id,
-        data.entrepot.id,
-        this.datePipe.transform(data.dateLivraison, "dd/MM/yyyy"),
-        this.currentCompanyService.getCompany().campagne.id,
-        data.refCmdClient,
-        data.client.id,
-        data.refEdiOrdre,
-        this.authService.currentUser.nomUtilisateur
-      )
-      .subscribe({
-        next: (res) => {
-          const result = res.data.fCreeOrdresEdi.data;
-          this.lignesOrdreIds = [];
-          this.ordresNumeros = result?.ls_nordre_tot?.split(",");
-          if (!this.ordresNumeros?.length) {
-            notify(
-              this.localization.localize("ordre-erreur-creation"),
-              "error"
-            );
-            console.log(result);
-            return;
-          }
-          // console.log(result);
-          this.ordresNumeros.pop();
-          if (this.ordresNumeros.length === 1) {
-            notify(
-              this.localization
-                .localize("ordre-cree")
-                .replace("&O", this.ordresNumeros[0]),
-              "success",
-              7000
-            );
-            setTimeout(() =>
-              this.tabContext.openOrdre(
-                this.ordresNumeros[0],
-                this.currentCompanyService.getCompany().campagne.id,
-                false
-              )
-            );
-          } else {
-            this.visuCdeEdiPopup.visible = true;
-          }
-        },
-        error: (error: Error) => {
-          console.log(error);
-          alert(
-            this.messageFormat(error.message),
-            this.localization.localize("ordre-edi-creation")
-          );
-        },
-      });
+  onEdiEntrepotChoosed(data, id?) {
+    this.runCreationProcess({ ...data, entrepot: { id } });
   }
 
   OnClickCreateEdiButton(data) {
@@ -459,16 +417,50 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
     // Do we already have a specified entrepot? Otherwise, choose one
     if (this.commandeEdi.entrepot?.id) {
-      this.createEdiOrder(this.commandeEdi);
+      this.runCreationProcess(this.commandeEdi);
     } else {
       this.choixEntPopup.visible = true;
     }
   }
 
+  runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
+    this.showHideLoader.emit(true);
+    notify(this.localization.localize("please-wait-order-creation"), "info", 5000);
+    this.ordresEdiService.save_v2(["id", "entrepot.id"], {
+      ediOrdre: {
+        id: commandeEdi.refEdiOrdre,
+        entrepot: { id: commandeEdi.entrepot.id },
+      },
+    })
+      .pipe(
+        concatMap(() => this.stockArticleEdiBassinService
+          .deleteAllByOrdreEdiId(parseInt(commandeEdi.refEdiOrdre))),
+        concatMap(res => this.functionsService.ofReadOrdEdiColibri(
+          parseInt(commandeEdi.refEdiOrdre),
+          this.currentCompanyService.getCompany().campagne.id,
+          this.formGroup.get("filtreStock").value,
+        )),
+      ).subscribe({
+        error: (err: Error) => {
+          this.showHideLoader.emit(false);
+          notify(
+            this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
+            , "error",
+            10000
+          )
+        },
+        next: () => {
+          this.showHideLoader.emit(false);
+          this.recapStockPopup.visible = true;
+          this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
+        }
+      });
+  }
+
   OnClickModifyEdiButton(data) {
     this.commandeEdi = data.items ?? data.collapsedItems;
     this.commandeEdiId = this.commandeEdi[0].refEdiOrdre;
-    this.commandeId = this.commandeEdi[0].ordre.id;
+    this.commandeId = this.commandeEdi[0].ordre?.id;
     this.modifCdeEdiPopup.visible = true;
   }
 
@@ -666,6 +658,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   private messageFormat(mess) {
     mess = mess
       .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
+      .replace("Exception while fetching data (/ofReadOrdEdiColibri) : ", "")
       .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
       .replace(
         "Exception while fetching data (/fCreeOrdreComplementaire) : ",
@@ -719,6 +712,11 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       if (field === "libelleProduit")
         e.cellElement.title = e.data.libelleProduit ?? "";
     }
+  }
+
+  showEdiOrderNumber(cell) {
+    const data = cell.data.items ?? cell.data.collapsedItems;
+    return "Cde Edi " + data[0].refEdiOrdre;
   }
 
   showModifyEdiButton(cell) {

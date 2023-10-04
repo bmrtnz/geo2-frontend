@@ -159,6 +159,12 @@ export class ArticlesListComponent
     this.dataGrid.instance.filter(this.allGridFilters);
   }
 
+  onContentReady(e) {
+    // Article file to be opened when unique
+    const visibleRows = e.component.getVisibleRows();
+    if (visibleRows?.length === 1 && !this.ordre) this.onRowDblClick({ data: { id: visibleRows[0]?.data?.id } });
+  }
+
   onRowDblClick(e) {
     // Open article file
     if (this.ordre) {
@@ -172,14 +178,13 @@ export class ArticlesListComponent
     this.gridRowStyleService.applyGridRowStyle(e);
   }
 
-  onCellPrepared(e) {
-    // Best expression for emballage display
-    if (
-      e.rowType === "data" &&
-      e.column.dataField === "emballage.emballage.id"
-    ) {
-      e.cellElement.textContent =
-        e.value + " - " + e.data.emballage.emballage.description;
+  calculateEmballage(data) {
+    return data.emballage.emballage.id + " - " + data.emballage.emballage.description;
+  }
+
+  calculateFilterEmballage(value, op, target) {
+    if (target === "filterBuilder") {
+      return [["emballage.emballage.description", "contains", value], "or", ["emballage.emballage.id", "contains", value]];
     }
   }
 
@@ -219,6 +224,9 @@ export class ArticlesListComponent
               // remap groupe-emballage path (reason: depth of 2)
               path = path.replace(
                 "emballage.groupe.id",
+                "emballage.emballage.groupe.id"
+              ).replace(
+                "emballage.emballage.emballage.groupe.id",
                 "emballage.emballage.groupe.id"
               );
               return [path, value === "null" ? "isnotnull" : "=", value];

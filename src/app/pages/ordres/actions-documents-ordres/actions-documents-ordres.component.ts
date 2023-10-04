@@ -144,18 +144,22 @@ export class ActionsDocumentsOrdresComponent {
   showFluxDoxOtherBtns(e) {
     this.actionSheetTarget = e.element;
     this.actionSheet.visible = !this.actionSheet.visible;
+
+    const syntheseExpeditionsGrid = this.gridsService.get("SyntheseExpeditions", this.gridsService.orderIdentifier(this.ordre)).instance;
+    if (syntheseExpeditionsGrid) {
+      const detailsExped = syntheseExpeditionsGrid.getDataSource().items();
+
+      if (detailsExped.find(ordreLogisitique => ordreLogisitique.dateDepartReelleFournisseur !== null)) {
+        this.actionsFlux
+          .find(element => element.id === "PROFOR").disabled = true
+      }
+    }
   }
 
-  onClickSendAction(e, annulation?) {
+  async onClickSendAction(e, annulation?) {
     if (this.gridCommandes) {
-      this.gridCommandes.grid.instance.saveEditData();
-      // Wait until grid has been totally saved
-      const saveInterval = setInterval(() => {
-        if (!this.gridCommandes.grid.instance.hasEditData()) {
-          clearInterval(saveInterval);
-          this.sendAction(e, annulation);
-        }
-      }, 100);
+      await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+      this.sendAction(e, annulation);
     } else {
       this.sendAction(e, annulation);
     }
@@ -185,10 +189,11 @@ export class ActionsDocumentsOrdresComponent {
       .pipe(
         tap((res) => {
           // Some order lines can be deleted
-          this.gridsService.reload(
+          this.gridsService.reload([
             "Commande",
             "SyntheseExpeditions",
             "DetailExpeditions"
+          ], this.gridsService.orderIdentifier(this.ordre)
           );
         }),
         filter((res) => res),

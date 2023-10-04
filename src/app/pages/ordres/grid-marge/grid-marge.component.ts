@@ -66,7 +66,7 @@ export class GridMargeComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("OrdreMarge", this.dataGrid);
+    this.gridsService.register("OrdreMarge", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {

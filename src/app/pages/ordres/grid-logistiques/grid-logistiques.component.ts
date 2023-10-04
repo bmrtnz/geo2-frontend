@@ -1,5 +1,6 @@
-import { Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
+import OrdreLogistique from "app/shared/models/ordre-logistique.model";
 import Ordre from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -36,7 +37,7 @@ import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-
   templateUrl: "./grid-logistiques.component.html",
   styleUrls: ["./grid-logistiques.component.scss"],
 })
-export class GridLogistiquesComponent implements OnInit, OnChanges {
+export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewInit {
   public dataSource: DataSource;
   public transporteurGroupageSource: DataSource;
   public groupageSource: DataSource;
@@ -118,6 +119,11 @@ export class GridLogistiquesComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.enableFilters();
   }
+
+  ngAfterViewInit() {
+    this.gridsService.register("Logistique", this.datagrid, this.gridsService.orderIdentifier(this.ordre));
+  }
+
 
   async enableFilters() {
     if (this?.ordre?.id) {
@@ -285,5 +291,19 @@ export class GridLogistiquesComponent implements OnInit, OnChanges {
   public afterAjoutOrdlog() {
     this.refresh();
     this.gridLignesLogistique.refresh();
+  }
+
+  onGridOut() {
+    if (this.datagrid.instance.hasEditData())
+      this.datagrid.instance.saveEditData();
+  }
+
+  setCellValue(newData: Partial<OrdreLogistique>, value, currentData: Partial<OrdreLogistique>) {
+    const context: any = this;
+    context.defaultSetCellValue(newData, value);
+    if (context.dataField === "groupage") {
+      newData.typeLieuGroupageArrivee = 'G';
+      newData.dateLivraisonLieuGroupage = currentData?.dateDepartPrevueFournisseur;
+    }
   }
 }

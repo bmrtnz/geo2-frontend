@@ -6,9 +6,8 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import Ordre from "app/shared/models/ordre.model";
-import { ArticlesService, LocalizationService } from "app/shared/services";
+import { LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -25,9 +24,8 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
 import { from } from "rxjs";
-import { concatMap, takeWhile, tap } from "rxjs/operators";
+import { concatMap, takeWhile } from "rxjs/operators";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
-import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
@@ -39,6 +37,7 @@ import { AssociatedArticlePromptComponent } from "../associated-article-prompt/a
 })
 export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
+  @Input() public single: boolean;
   @Output() public additionnalFilter: any;
   @Output() public lignesChanged = new EventEmitter();
 
@@ -76,7 +75,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
     private localizeService: LocalizationService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     this.setTitle();

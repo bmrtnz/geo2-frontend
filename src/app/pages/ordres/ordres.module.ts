@@ -330,8 +330,11 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     OrdresSuiviModule,
     ConfirmationResultPopupModule,
     QuestionPopupModule,
-    ClientsArticleRefPopupModule,
+    ClientsArticleRefPopupModule
   ],
-  exports: [GridStockComponent],
+  exports: [
+    GridStockComponent,
+    ZoomArticlePopupComponent
+  ],
 })
 export class OrdresModule { }

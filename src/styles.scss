@@ -50,6 +50,10 @@
   opacity: 0;
 }
 
+.fullOpacity {
+  opacity: 1;
+}
+
 .red-font {
   color: #ff325a !important;
 }
@@ -109,6 +113,15 @@
 
 .dx-toast-info {
   background-color: #00759c;
+}
+
+// Toast is always on top
+.dx-overlay-wrapper.dx-toast-wrapper {
+  z-index: 10000 !important;
+}
+
+body {
+  overflow: hidden;
 }
 
 // No text overline
@@ -232,6 +245,20 @@ body app-root.production {
   }
 }
 
+// Datagrid horizontal scrollbar on top
+.dx-scrollbar-horizontal {
+  top: 0;
+}
+
+.dx-scrollbar-horizontal,
+.dx-scrollbar-vertical {
+  cursor: pointer;
+
+  .dx-scrollable-scroll {
+    transition: height 0.2s, width 0.2s !important;
+  }
+}
+
 // Reducing space between form fields
 .dx-form-group-content,
 .dx-accordion-item {
@@ -243,6 +270,19 @@ body app-root.production {
 // Reducing space between checkboxes
 .dx-box .dx-field-value:not(.dx-widget)>.dx-checkbox {
   margin: 10px 0 !important;
+}
+
+// Alerting
+.dx-datagrid-header-panel {
+  .dx-icon-edit-button-save {
+    color: $base-accent !important;
+  }
+
+  .dx-state-disabled {
+    .dx-icon-edit-button-save {
+      color: black !important;
+    }
+  }
 }
 
 // Centering Oui/Non text in datagrid filter row
@@ -357,8 +397,16 @@ body app-root.production {
 }
 
 // Filter panel adjustments
+.dx-datagrid-header-panel {
+  order: -2;
+}
+
 .dx-datagrid-filter-panel {
-  padding: 0 18px;
+  position: relative;
+  order: -1;
+  border-top: 0;
+  border-bottom: 0;
+  padding: 0 18px 0 25px;
   justify-content: left;
 
   .dx-datagrid-filter-panel-text {
@@ -479,36 +527,36 @@ body app-root.production {
   }
 }
 
-.small-left-padding {
+.small-left-padding:not(.dx-group-panel-item) {
   padding-left: 10px !important;
 }
 
-.small-right-padding {
+.small-right-padding:not(.dx-group-panel-item) {
   padding-right: 10px !important;
 }
 
-.no-padding {
+.no-padding:not(.dx-group-panel-item) {
   padding: 0 !important;
 }
 
-.no-padding-left {
+.no-padding-left:not(.dx-group-panel-item) {
   padding-left: 0 !important;
 }
 
-.no-padding-right {
+.no-padding-right:not(.dx-group-panel-item) {
   padding-right: 0 !important;
 }
 
-.small-side-padding {
+.small-side-padding:not(.dx-group-panel-item) {
   padding-right: 5px !important;
   padding-left: 5px !important;
 }
 
-.large-right-side-padding {
+.large-right-side-padding:not(.dx-group-panel-item) {
   padding-right: 40px !important;
 }
 
-.medium-left-side-padding {
+.medium-left-side-padding:not(.dx-group-panel-item) {
   padding-left: 20px !important;
 }
 

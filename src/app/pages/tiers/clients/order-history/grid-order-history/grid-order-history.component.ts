@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
+import { GridsService } from "app/pages/ordres/grids.service";
 import { Statut } from "app/shared/models/ordre.model";
 import {
   AuthService,
@@ -40,6 +41,8 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomClientArticlePopupComponent } from "../zoom-client-article-popup/zoom-client-article-popup.component";
 
+let self;
+
 enum InputField {
   valide = "valide",
   dateMin = "dateMin",
@@ -64,8 +67,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Input() public gridSelectionEnabled: boolean;
+  @Input() public comingFrom: string;
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() openOrder = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomClientArticlePopupComponent, { static: false })
@@ -114,10 +119,12 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
     public authService: AuthService,
+    public gridsService: GridsService,
     public functionsService: FunctionsService,
     private router: Router,
     public localizeService: LocalizationService
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLigneHistorique
     );
@@ -199,14 +206,16 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (this.switchLivraison?.value) dateType = "dateLivraisonPrevue";
 
     const filter = [
+      ["ordre.societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
-      [`ordre.${dateType}`, ">=", values.dateMin],
+      [`ordre.${dateType}`, ">=", this.dateManagementService.startOfDay(values.dateMin)],
       "and",
-      [`ordre.${dateType}`, "<=", values.dateMax],
-      "and",
-      [[`nombreColisCommandes`, ">", 0], "or", [`nombreColisExpedies`, ">", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
-
+      [`ordre.${dateType}`, "<=", this.dateManagementService.endOfDay(values.dateMax)],
+      // "and",
+      // [[`nombreColisCommandes`, "<>", 0], "and", [`nombreColisExpedies`, "<>", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
+      // Lignes commentées 21-08-2023 suite volonté BW d'avoir accès ouvertures de calibre (0 colis exp, 0 colis cdés)
     ];
     if (values.client?.id) {
       filter.push("and", ["ordre.client.id", "=", values.client.id]);
@@ -251,56 +260,45 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
+      if (e.data?.ordre.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
+    }
+    if (e.rowType === "group") {
+      let data = e.data.items ?? e.data.collapsedItems;
+      data = data[0];
+      if (data?.ordre?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
     }
   }
 
-  // Open selected ordre on group/line row double-click
-  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    let numero, campagneId;
-    if (rowType === "group") {
-      if (!data.items && !data.collapsedItems) return;
-      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-      if (!dataItems.ordre) return;
-      numero = data.key;
-      campagneId = dataItems.ordre.campagne.id;
-    } else {
-      numero = data.ordre.numero;
-      campagneId = data.ordre.campagne.id;
-    }
-    if (numero && campagneId) {
-      window.sessionStorage.setItem(
-        "openOrder",
-        [numero, campagneId].join("|")
-      );
-      this.hidePopup.emit();
-      setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
-    }
+  calculateGroupeOrdreLibelle(data) {
+    // Ajout code entrep. + réf client + (code transp.) + ...
+    let numeroContainerArray = [];
+    let numeroContainer;
+    numeroContainerArray.push(data.logistique?.numeroContainer);
+    numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+    if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
+
+    data = data.ordre;
+
+    return data.numero +
+      " - " +
+      (data.entrepot?.code ?? "") +
+      (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+      (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+      (numeroContainer ? " - " + numeroContainer + " " : "") +
+      (data.transporteur?.id
+        ? " (Transporteur : " + data.transporteur.id + ")"
+        : "") +
+      ` - ${Statut[data.statut]}`;
   }
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      // Ajout code entrep. + réf client + (code transp.)
-      if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-        let numeroContainerArray = [];
-        let numeroContainer;
-        data.map(ol => numeroContainerArray.push(ol.logistique.numeroContainer));
-        numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
-        if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
-        data = data[0].ordre;
-        e.cellElement.textContent =
-          data.numero +
-          " - " +
-          (data.entrepot?.code ?? "") +
-          (data.referenceClient ? " - " + data.referenceClient + " " : "") +
-          (data.codeChargement ? " - " + data.codeChargement + " " : "") +
-          (numeroContainer ? " - " + numeroContainer + " " : "") +
-          (data.transporteur?.id
-            ? " (Transporteur : " + data.transporteur.id + ")"
-            : "") +
-          ` - ${Statut[data.statut]}`;
-      }
       if (e.column.dataField === "ordre.dateDepartPrevue")
         e.cellElement.classList.add("first-group");
     }
@@ -334,42 +332,29 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       // Clic sur loupe
       if (e.column.dataField === "article.matierePremiere.origine.id")
         e.cellElement.title = this.hintClick;
-
-      // Palettes
-      if (e.column.dataField === "nombrePalettesCommandees") {
-        e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          (e.data.nombrePalettesCommandees ?? 0);
-      }
-
-      // Colis
-      if (e.column.dataField === "nombreColisCommandes") {
-        e.cellElement.innerText =
-          e.cellElement.innerText + "/" + (e.data.nombreColisExpedies ?? 0);
-      }
-
-      // Prix
-      if (e.column.dataField === "ventePrixUnitaire") {
-        if (!e.data?.ventePrixUnitaire || !e.data?.venteUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.venteUnite?.description;
-        }
-      }
-      if (e.column.dataField === "achatDevisePrixUnitaire") {
-        if (
-          !e.data?.achatDevisePrixUnitaire ||
-          !e.data?.achatUnite?.description
-        ) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.achatUnite.description;
-        }
-      }
     }
+  }
+
+  calculateNombrePalettesCommandees(data) {
+    // Ajout type colis
+    return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
+  }
+
+  calculateNombreColisCommandes(data) {
+    // Ajout type colis
+    return data.nombreColisCommandes + "/" + (data.nombreColisExpedies ?? 0);
+  }
+
+  calculateVentePrixUnitaire(data) {
+    if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+      return "";
+    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
+      return "";
+    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
   }
 
   openFilePopup(cell, e) {
@@ -517,4 +502,42 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
           : data.description)
       : null;
   }
+
+  public calculateCustomSummary(options) {
+    if (self.summaryFields.includes(options.name)) {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+      }
+    }
+  }
+
+  // Open selected ordre on group/line row double-click
+  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
+    let numero, campagneId;
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      numero = dataItems.ordre.numero;
+      campagneId = dataItems.ordre.campagne.id;
+    } else {
+      numero = data.ordre.numero;
+      campagneId = data.ordre.campagne.id;
+    }
+    if (numero && campagneId) {
+      if (this.comingFrom === "zoomClient") {
+        this.openOrder.emit({ campagne: { id: campagneId }, numero: numero });
+      } else {
+        window.sessionStorage.setItem(
+          "openOrder",
+          [numero, campagneId].join("|")
+        );
+        this.hidePopup.emit();
+        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      }
+    }
+  }
+
 }

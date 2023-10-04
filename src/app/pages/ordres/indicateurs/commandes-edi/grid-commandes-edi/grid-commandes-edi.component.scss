@@ -63,6 +63,10 @@
   background-color: #8fc459 !important;
 }
 
+::ng-deep .grid-cdes-edi {
+  max-height: 650px !important;
+}
+
 ::ng-deep .grid-commandes-Edi {
   h6 {
     margin: 0;
@@ -72,13 +76,6 @@
   .refresh {
     top: -8px;
     float: right;
-  }
-
-  .toremovebutton {
-    top: -8px;
-    margin-right: 10px;
-    float: right;
-    background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet);
   }
 
   .BAFFilterArea {
@@ -119,9 +116,5 @@
         padding: 0 10px 0 30px;
       }
     }
-  }
-
-  period-list .dx-list-item {
-    padding: 6px 15px;
   }
 }

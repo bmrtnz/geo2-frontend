@@ -42,12 +42,18 @@ import { concatMap, finalize } from "rxjs/operators";
 })
 export class DeclarationFraudeComponent implements AfterViewInit {
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild("secteurSB", { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild("clientSB", { static: false }) clientSB: DxSelectBoxComponent;
+  @ViewChild("entrepotSB", { static: false }) entrepotSB: DxSelectBoxComponent;
+  @ViewChild("transporteurSB", { static: false }) transporteurSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatSB", { static: false }) bureauAchatSB: DxSelectBoxComponent;
+  @ViewChild("fournisseurSB", { static: false }) fournisseurSB: DxSelectBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private ordresService: OrdresService,
-    private secteursService: SecteursService,
+    public secteursService: SecteursService,
     private clientsService: ClientsService,
     private entrepotsService: EntrepotsService,
     private transporteursService: TransporteursService,
@@ -58,32 +64,53 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     private datePipe: DatePipe,
     private localizer: LocalizationService
   ) {
-    [
-      this.clientLookupStore,
-      this.entrepotLookupStore,
-      this.fournisseurLookupStore,
-    ].forEach((storeConfig) => {
-      storeConfig.sort = [{ selector: "code" }];
-    });
     this.periodes = this.dateManagementService.periods();
+
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter([
+      ["valide", "=", true],
+      "and",
+      ["societes", "contains", this.currentCompanyService.getCompany().id],
+    ]);
+    this.clients = clientsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    this.entrepots = entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    this.transporteurs = this.transporteursService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+      "valide",
+    ]);
+    this.transporteurs.filter(["valide", "=", true]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
+    this.filterFournisseurs(); // Initialize fournisseurs
   }
 
   public preFilterData: {
-    secteur?: Partial<Secteur>;
-    client?: Partial<Client>;
-    entrepot?: Partial<Entrepot>;
-    transporteur?: Partial<Transporteur>;
-    bureauAchat?: Partial<BureauAchat>;
-    fournisseur?: Partial<Fournisseur>;
-    dateDepartPrevue?: Date;
-    dateLivraisonPrevue?: Date;
+    dateDepartMin?: Date;
+    dateDepartMax?: Date;
     dateModification?: Date;
-    periode?;
   } = {
-      dateDepartPrevue: this.dateManagementService.startOfDay(),
-      dateLivraisonPrevue: this.dateManagementService.endOfDay(),
+      dateDepartMin: this.dateManagementService.startOfDay(),
+      dateDepartMax: this.dateManagementService.endOfDay(),
     };
 
+  public secteurs: DataSource;
+  public clients: DataSource;
+  public entrepots: DataSource;
+  public transporteurs: DataSource;
+  public bureauxAchat: DataSource;
+  public fournisseurs: DataSource;
   public periodes: any[];
   public dataSource: DataSource;
   public now: number = Date.now();
@@ -91,35 +118,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public etatLabel: string;
   @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
 
-  public secteurLookupStore = this.secteursService.getLookupStore(
-    ["id"],
-    "valide==true"
-  );
-  public clientLookupStore = this.clientsService.getLookupStore(
-    ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
-    }`
-  );
-  public entrepotLookupStore = this.entrepotsService.getLookupStore(
-    ["id", "code"],
-    `valide==true and societe.id == ${this.currentCompanyService.getCompany().id
-    }`
-  );
-  public transportLookupStore = this.transporteursService.getLookupStore(
-    ["id"],
-    `valide==true`
-  );
-  public bureauAchatLookupStore = this.bureauxAchatService.getLookupStore(
-    ["id"],
-    `valide==true`
-  );
-  public fournisseurLookupStore = this.fournisseursService.getLookupStore(
-    ["id", "code"],
-    `valide==true`
-  );
-
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
+    this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
   }
 
   setDefaultPeriod(periodId) {
@@ -133,9 +134,75 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       value: myPeriod,
     });
     this.dxForm.instance.updateData({
-      dateDepartPrevue: datePeriod.dateDebut,
-      dateLivraisonPrevue: datePeriod.dateFin,
+      dateDepartMin: datePeriod.dateDebut,
+      dateDepartMax: datePeriod.dateFin,
     });
+  }
+
+  displayCodeBefore(data) {
+    return data
+      ? (data.code ? data.code : data.id) +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
+      : null;
+  }
+
+  onSecteurChanged(e) {
+    this.clients = this.clientsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+    const filter: any = [
+      ["secteur.id", "=", e.value?.id],
+      "and",
+      ["societe.id", "=", this.currentCompanyService.getCompany().id],
+    ];
+    this.clients.filter(filter);
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.clientSB.value = null;
+    this.entrepotSB.value = null;
+  }
+
+  onClientChanged(e) {
+    this.entrepots = this.entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial"
+    ]);
+
+    const filter: any = [["client.id", "=", e.value?.id]];
+    filter.push("and", ["valide", "=", true]);
+    this.entrepots.filter(filter);
+
+    this.entrepots.load().then((res) => {
+      if (res?.length === 1)
+        this.entrepotSB.value = { id: res[0].id };
+    });
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.entrepotSB.value = null;
+  }
+
+  filterFournisseurs(bureauAchat?) {
+    bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
+    this.fournisseurs = this.fournisseursService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+    ]);
+    this.fournisseurs.filter(["valide", "=", true]);
+    if (bureauAchat)
+      this.fournisseurs.filter([
+        ["valide", "=", true],
+        "and",
+        ["bureauAchat.id", "=", bureauAchat.id],
+      ]);
   }
 
   private static handleCalibres(data: Partial<DeclarationFraude>[]) {
@@ -153,8 +220,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       if (calibres.length > 1) {
         // Il peut y avoir x lignes différentes sur la même variété donc on somme
         let commandes = calibres.filter((r) => r.nombreColisCommandes);
-        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b);
-        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b);
+        const nbPalettesCommandees = commandes.map(c => c.nombrePalettesCommandees).reduce((a, b) => a + b, 0);
+        const nbColisCommandes = commandes.map(c => c.nombreColisCommandes).reduce((a, b) => a + b, 0);
         const commande = {
           nombrePalettesCommandees: nbPalettesCommandees,
           nombreColisCommandes: nbColisCommandes
@@ -176,9 +243,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   setGridTitle() {
     this.resumeLabel = this.localizer.localize(
       "fraude-grid-title",
-      this.preFilterData.dateDepartPrevue.toLocaleDateString(),
-      this.preFilterData.dateLivraisonPrevue.toLocaleDateString(),
-      this.preFilterData.secteur.id,
+      this.preFilterData.dateDepartMin.toLocaleDateString(),
+      this.preFilterData.dateDepartMax.toLocaleDateString(),
+      this.secteurSB?.value?.id,
       this.currentCompanyService.getCompany().id
     );
   }
@@ -186,8 +253,10 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
 
+    this.dataSource = null;
+
     this.setGridTitle();
-    this.grid.instance.beginCustomLoading("");
+    setTimeout(() => this.grid.instance.beginCustomLoading(""), 100);
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
@@ -221,27 +290,29 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "etaLocation",
           "etaDate",
           "commentaireInterne",
-          "entrepotCode"
+          "entrepotCode",
+          "typeTransportDescription",
+          "baseTarifTransportCode"
         ]),
-        this.preFilterData?.secteur?.id,
+        this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,
         this.datePipe.transform(
-          this.preFilterData?.dateDepartPrevue,
+          this.preFilterData?.dateDepartMin,
           "yyyy-MM-dd"
         ),
         this.datePipe.transform(
-          this.preFilterData?.dateLivraisonPrevue,
+          this.preFilterData?.dateDepartMax,
           "yyyy-MM-dd"
         ),
         this.datePipe.transform(
           this.preFilterData?.dateModification,
           "yyyy-MM-ddTHH:mm:ss"
         ),
-        this.preFilterData?.client?.id,
-        this.preFilterData?.transporteur?.id,
-        this.preFilterData?.fournisseur?.code,
-        this.preFilterData?.bureauAchat?.id,
-        this.preFilterData?.entrepot?.id
+        this.clientSB?.value?.id,
+        this.transporteurSB?.value?.id,
+        this.fournisseurSB?.value?.code,
+        this.bureauAchatSB?.value?.id,
+        this.entrepotSB?.value?.id,
       )
       .pipe(
         concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
@@ -267,29 +338,43 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
     const datePeriod = this.dateManagementService.getDates(e);
 
-    this.preFilterData.dateDepartPrevue = datePeriod.dateDebut;
-    this.preFilterData.dateLivraisonPrevue = datePeriod.dateFin;
+    this.preFilterData.dateDepartMin = datePeriod.dateDebut;
+    this.preFilterData.dateDepartMax = datePeriod.dateFin;
   }
 
-  manualDate(e) {
+  manuelDateStart(e) {
+    this.manualDate(e, 'dateStart');
+  }
+
+  manualDate(e, type?) {
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
-    const deb = this.preFilterData.dateDepartPrevue;
-    const fin = this.preFilterData.dateLivraisonPrevue;
+    const deb = this.preFilterData.dateDepartMin;
+    const fin = this.preFilterData.dateDepartMax;
     const deltaDate = fin < deb;
 
     if (deltaDate) {
-      if (e.element.classList.contains("dateStart")) {
-        this.preFilterData.dateLivraisonPrevue =
+      if (type === "dateStart") {
+        this.preFilterData.dateDepartMax =
           this.dateManagementService.endOfDay(deb);
       } else {
-        this.preFilterData.dateDepartPrevue =
+        this.preFilterData.dateDepartMin =
           this.dateManagementService.startOfDay(fin);
       }
     }
+
+    if (type === "dateStart") this.updateModifiedDate(new Date(deb));
+
     this.periodeSB.value = null;
+  }
+
+  updateModifiedDate(deb) {
+    // We decide to check modified orders between now and 3 months ago
+    // for performance purposes
+    this.preFilterData.dateModification =
+      this.dateManagementService.startOfDay(new Date(deb.setMonth(deb.getMonth() - 3)));
   }
 
   onRowPrepared(e) {

@@ -1,27 +1,27 @@
-<form
-  class="dx-fieldset"
-  [formGroup]="formGroup"
->
-  <div class="orderTileFilterArea">
-    <dx-box>
-      <dxi-item [ratio]="1">
-        <!-- Valides/non valides -->
-        <div class="dx-field valideCheckboxField">
-          <div class="dx-field-label">
-            {{ "valide-uniq" | localize }}
+<div class="orderTileFilterArea-container">
+  <form
+    class="float-left"
+    [formGroup]="formGroup"
+  >
+    <div class="orderTileFilterArea">
+      <dx-box>
+        <dxi-item [ratio]="1">
+          <!-- Valides/non valides -->
+          <div class="dx-field valideCheckboxField">
+            <div class="dx-field-label">
+              {{ "valide-uniq" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-check-box
+                formControlName="valide"
+                class="float-left"
+                (onValueChanged)="onValideChanged($event)"
+              >
+              </dx-check-box>
+            </div>
           </div>
-          <div class="dx-field-value">
-            <dx-check-box
-              formControlName="valide"
-              class="float-left"
-              (onValueChanged)="onValideChanged($event)"
-            >
-            </dx-check-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="3">
-        <div class="orderTileleftFilters">
+        </dxi-item>
+        <dxi-item [ratio]="3">
           <!-- Transporteurs -->
           <div class="dx-field field-large">
             <div class="dx-field-label">
@@ -29,12 +29,14 @@
             </div>
             <div class="dx-field-value">
               <dx-select-box
+                #transporteurSB
                 formControlName="transporteurCode"
                 [dataSource]="transporteursDataSource"
                 valueExpr="id"
                 [displayExpr]="displayIDBefore"
                 [searchExpr]="['id']"
                 itemTemplate="items"
+                [showClearButton]="true"
               >
                 <div *dxTemplate="let data of 'items'">
                   <div
@@ -44,74 +46,89 @@
                     {{ displayCodeBefore(data) }}
                   </div>
                 </div>
-                <dx-validator>
-                  <dxi-validation-rule
-                    type="required"
-                    message=""
-                  ></dxi-validation-rule>
-                </dx-validator>
                 <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
               </dx-select-box>
             </div>
           </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="7">
-        <dx-box>
-          <dxi-item [ratio]="2">
-            <!-- Période -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "ordres-periode" | localize }}
-              </div>
-              <div class="dx-field-value">
-                <dx-select-box
-                  #periodeSB
-                  [items]="periodes"
-                  [displayExpr]="dateManagementService.displayPeriodText"
-                  (onValueChanged)="setDates($event)"
-                >
-                  <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
-                </dx-select-box>
-              </div>
+        </dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Bureau achat -->
+          <div class="dx-field field-large">
+            <div class="dx-field-label noEllipsis">
+              {{ "tiers-fournisseurs-bureauAchat" | localize }}
             </div>
-          </dxi-item>
-          <dxi-item [ratio]="2">
-            <!-- Date de début -->
-            <div class="dx-field field-small">
-              <div class="dx-field-label">
-                {{ "ordres-Du" | localize }}
-              </div>
-              <div class="dx-field-value">
-                <dx-date-box
-                  formControlName="dateMin"
-                  class="dateStart"
-                  type="datetime"
-                  [displayFormat]="'dd-MM-yy  HH:mm'"
-                  (onValueChanged)="manualDate($event)"
-                ></dx-date-box>
-              </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="bureauAchat"
+                [dataSource]="bureauxAchat"
+                [displayExpr]="displayCodeBefore"
+                [searchExpr]="['id']"
+                [showClearButton]="true"
+              >
+                <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+              </dx-select-box>
             </div>
-          </dxi-item>
-          <dxi-item [ratio]="2">
-            <!-- Date de fin -->
-            <div class="dx-field field-small">
-              <div class="dx-field-label">
-                {{ "ordres-au" | localize }}
+          </div>
+        </dxi-item>
+      </dx-box>
+      <dx-box>
+        <dxi-item [ratio]="7">
+          <dx-box>
+            <dxi-item [ratio]="2">
+              <!-- Période -->
+              <div class="dx-field">
+                <div class="dx-field-label">
+                  {{ "ordres-periode" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    #periodeSB
+                    [items]="periodes"
+                    [displayExpr]="dateManagementService.displayPeriodText"
+                    (onValueChanged)="setDates($event)"
+                  >
+                    <dxo-drop-down-options [width]="300">
+                    </dxo-drop-down-options>
+                  </dx-select-box>
+                </div>
               </div>
-              <div class="dx-field-value">
-                <dx-date-box
-                  formControlName="dateMax"
-                  class="dateEnd"
-                  type="datetime"
-                  [displayFormat]="'dd-MM-yy  HH:mm'"
-                  (onValueChanged)="manualDate($event)"
-                ></dx-date-box>
+            </dxi-item>
+            <dxi-item [ratio]="2">
+              <!-- Date de début -->
+              <div class="dx-field field-small">
+                <div class="dx-field-label">
+                  {{ "ordres-Du" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-date-box
+                    formControlName="dateMin"
+                    class="dateStart"
+                    type="datetime"
+                    [displayFormat]="'dd-MM-yy  HH:mm'"
+                    (onValueChanged)="manualDate($event)"
+                  ></dx-date-box>
+                </div>
               </div>
-            </div>
-          </dxi-item>
-        </dx-box>
-        <!-- <dxi-item [ratio]="7">
+            </dxi-item>
+            <dxi-item [ratio]="2">
+              <!-- Date de fin -->
+              <div class="dx-field field-small">
+                <div class="dx-field-label">
+                  {{ "ordres-au" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-date-box
+                    formControlName="dateMax"
+                    class="dateEnd"
+                    type="datetime"
+                    [displayFormat]="'dd-MM-yy  HH:mm'"
+                    (onValueChanged)="manualDate($event)"
+                  ></dx-date-box>
+                </div>
+              </div>
+            </dxi-item>
+          </dx-box>
+          <!-- <dxi-item [ratio]="7">
               <div class="orderRightRightFilters">
               <dx-box>
                 <dxi-item [ratio]="1">
@@ -148,17 +165,19 @@
               </dx-box>
             </div>
           </dxi-item> -->
-      </dxi-item>
-    </dx-box>
-  </div>
+        </dxi-item>
+      </dx-box>
+    </div>
+  </form>
   <dx-button
-    class="refresh"
+    class="refresh-btn"
     type="default"
     text="{{ 'btn-refresh' | localize }}"
     (onClick)="enableFilters()"
   ></dx-button>
-  <br />
-</form>
+</div>
+
+<div style="clear: both"></div>
 
 <dx-button
   class="grid-grouping-button"
@@ -168,6 +187,7 @@
   (onClick)="gridsService.expandCollapseGroups(this)"
 ></dx-button>
 <dx-data-grid
+  class="grid-planning-transporteurs"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"
@@ -188,6 +208,7 @@
   "
 >
   <!-- Grid configuration -->
+  <dxo-export fileName="Planning transporteurs"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -227,7 +248,9 @@
         | localize) || column.name
     "
     [visible]="false"
+    [calculateCellValue]="this[column?.calculateCellValue]"
     [dataType]="column?.dataType"
+    [format]="column?.format"
     [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
     [allowHeaderFiltering]="
       column?.allowHeaderFiltering || ['string'].includes(column?.dataType)

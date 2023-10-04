@@ -155,6 +155,43 @@
           </dx-select-box>
         </div>
       </div>
+
+      <!-- Secteur -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-clients-secteur" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #secteursSB
+            [dataSource]="secteurs"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id', 'description']"
+            (onValueChanged)="onSecteurChanged($event)"
+          >
+            <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
+
+      <!-- Client -->
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-client" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #clientsSB
+            [dataSource]="clients"
+            [showClearButton]="true"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code']"
+          >
+            <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
     </div>
     <dx-button
       class="refresh floatRight"
@@ -178,6 +215,7 @@
         text="{{ 'btn-refresh-prev-stock' | localize }}"
         type="success"
         [disabled]="calculate"
+        icon="material-icons refresh"
         (onClick)="refreshPrevStock()"
       ></dx-button>
     </div>
@@ -307,27 +345,6 @@
         </dx-button>
       </div>
 
-      <!-- Récapitulatif -->
-      <dxi-column
-        *ngIf="recap"
-        cssClass="small-horiz-padding"
-        width="auto"
-        visibleIndex="14"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'recapitulatifTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'recapitulatifTemplate'">
-        <dx-button
-          class="small-article-button recapitulatif"
-          type="success"
-          [focusStateEnabled]="false"
-          [text]="'Récap'"
-          (onClick)="openRecapPopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-
       <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
         <div
           class="group-text-1"
@@ -345,6 +362,32 @@
           hint="{{ 'hint-clients-ref' | localize }}"
           icon="material-icons person"
         ></dx-button>
+        <!-- Récapitulatif -->
+        <dx-button
+          *ngIf="recap"
+          class="small-article-button recapitulatif"
+          type="success"
+          [focusStateEnabled]="false"
+          [text]="'Récap'"
+          (onClick)="openRecapPopup(cell.data)"
+        >
+        </dx-button>
+        <!-- Commentaire -->
+        <div class="comment-with-pen float-right">
+          <div class="text text-align-right">
+            {{ getDataFromGroup(cell)?.commentaire }}
+          </div>
+          <dx-button
+            class="grid-pen-button"
+            type="default"
+            icon="material-icons edit"
+            [focusStateEnabled]="false"
+            hint="{{ 'hint-click-modif-comment' | localize }}"
+            [visible]="this.authService.currentUser.commentaireStock"
+            (onClick)="editComment(cell)"
+          >
+          </dx-button>
+        </div>
       </div>
 
       <dxi-column
@@ -357,6 +400,7 @@
         "
         [dataType]="column?.dataType"
         [width]="column?.width"
+        [calculateCellValue]="this[column?.calculateCellValue]"
         [cssClass]="column?.cssClass"
         [groupCellTemplate]="column.groupCellTemplate"
         [cellTemplate]="column.cellTemplate"
@@ -368,22 +412,6 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
-
-      <div
-        *dxTemplate="let cell of 'editButtonTemplate'"
-        class="cell-with-icon"
-      >
-        <div class="text">{{ cell.value }}</div>
-        <dx-button
-          class="grid-pen-button"
-          type="default"
-          icon="material-icons edit"
-          [focusStateEnabled]="false"
-          [visible]="this.authService.currentUser.commentaireStock"
-          (onClick)="editComment(cell)"
-        >
-        </dx-button>
-      </div>
     </dx-data-grid>
   </div>
 </div>

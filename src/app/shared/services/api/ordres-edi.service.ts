@@ -17,6 +17,15 @@ export class OrdresEdiService extends ApiService {
     public apollo: Apollo
   ) {
     super(apollo, EdiOrdre);
+    this.gqlKeyType = "BigDecimal";
+  }
+
+  getOne(id: EdiOrdre["id"], columns: Array<string> | Set<string>) {
+    return this.apollo
+      .query<{ ediOrdre: EdiOrdre }>({
+        query: gql(this.buildGetOneGraph(columns)),
+        variables: { id },
+      })
   }
 
   /**
@@ -32,6 +41,7 @@ export class OrdresEdiService extends ApiService {
     status: string,
     dateMin: Date,
     dateMax: Date,
+    typeSearch: 'livraison' | 'creation',
     columns: string[]
   ) {
     return this.apollo.query<{ allCommandeEdi: CommandeEdi[] }>({
@@ -60,6 +70,7 @@ export class OrdresEdiService extends ApiService {
                 { name: "status", value: "status", isVariable: true },
                 { name: "dateMin", value: "dateMin", isVariable: true },
                 { name: "dateMax", value: "dateMax", isVariable: true },
+                { name: "typeSearch", value: "typeSearch", isVariable: true },
               ],
             },
           ],
@@ -73,6 +84,7 @@ export class OrdresEdiService extends ApiService {
             { name: "status", type: "String", isOptionnal: true },
             { name: "dateMin", type: "LocalDateTime", isOptionnal: true },
             { name: "dateMax", type: "LocalDateTime", isOptionnal: true },
+            { name: "typeSearch", type: "String", isOptionnal: false },
           ]
         )
       ),
@@ -86,6 +98,7 @@ export class OrdresEdiService extends ApiService {
         status,
         dateMin,
         dateMax,
+        typeSearch,
       },
       fetchPolicy: "no-cache",
     });

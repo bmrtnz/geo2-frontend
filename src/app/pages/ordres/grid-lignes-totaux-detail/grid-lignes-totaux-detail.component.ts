@@ -54,7 +54,7 @@ export class GridLignesTotauxDetailComponent
   }
 
   ngAfterViewInit() {
-    this.gridsService.register("TotauxDetail", this.dataGrid);
+    this.gridsService.register("TotauxDetail", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
   }
 
   async enableFilters() {

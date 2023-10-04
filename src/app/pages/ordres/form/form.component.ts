@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -16,7 +17,6 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
-import { QuestionPopupComponent } from "app/shared/components/question-popup/question-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut } from "app/shared/models/ordre.model";
 import {
@@ -53,21 +53,25 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
-import { combineLatest, defer, Observable, of, Subject } from "rxjs";
+import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
 // eslint-disable-next-line max-len
 import {
   catchError,
   concatMap,
   concatMapTo,
   debounceTime,
+  exhaustMap,
   filter,
   first,
   map,
   mapTo,
+  refCount,
+  share,
   startWith,
   switchMap,
   takeUntil,
   takeWhile,
+  tap,
 } from "rxjs/operators";
 import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
@@ -90,6 +94,7 @@ import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.c
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
+import { ModifCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
   RouteParam,
@@ -159,18 +164,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public regimesTvaService: RegimesTvaService,
     public ordresLogistiquesService: OrdresLogistiquesService,
     private functionsService: FunctionsService,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.handleTabChange().subscribe((event) => {
       this.initializeAnchors(event);
-
       if (event.status === "in") {
-        this.statutInterval = window.setInterval(
-          () => this.refetchStatut(),
-          5 * ONE_SECOND
-        );
-      } else if (event.status === "out" && this.statutInterval) {
-        window.clearInterval(this.statutInterval);
+        this.refetchSubscription = this.refetchOrder().subscribe({
+          next: ordre => {
+            if (ordre) this.refreshStatus(ordre.statut)
+          },
+          complete: () => console.log("Stopping order refetch cycle"),
+        });
       }
+      if (event.status === "out")
+        this.refetchSubscription?.unsubscribe();
     });
     self = this;
   }
@@ -263,7 +270,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private destroy = new Subject<boolean>();
   private anchorsInitialized = false;
-  private statutInterval: number;
+  private refetchSubscription: Subscription;
 
   public fragments = Fragments;
   public status: string;
@@ -404,6 +411,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   comptePaloxPopup: SelectionComptePaloxPopupComponent;
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
+  @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+
+
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
@@ -499,12 +509,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       concatMap(([, ordre]) =>
         this.regimesTvaService.ofInitRegimeTva(ordre.id, ordre.regimeTva.id)
       ),
-      map((res) => res.data.ofInitRegimeTva.msg)
+      map((res) => res.data.ofInitRegimeTva.msg),
     );
 
     combineLatest([
       this.formGroup.get("transporteurDEVCode").valueChanges,
       this.formGroup.get("incoterm").valueChanges,
+      this.formGroup.get("transporteur").valueChanges,
     ])
       .pipe(
         filter((res) => !!this.ordre.transporteurDEVCode?.id),
@@ -616,7 +627,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.gridCommandes.grid.instance.getSelectedRowsData();
   }
 
-  onAddRefsClient() {
+  async onAddRefsClient() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     let artIds = [];
     const rowsData = this.warnNoSelectedRows();
     if (!rowsData) return;
@@ -682,7 +694,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  onRegulOrderClick() {
+  async onRegulOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
       notify(
@@ -775,8 +788,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.grid.instance.deselectAll();
   }
 
-  onComplOrderClick() {
+  async onComplOrderClick() {
     if (!this.ordre?.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     // As LIST_NORDRE_COMP is a VARCHAR(50)
     if (
       this.ordre.listeOrdresComplementaires?.split(";").join(",").split(",")
@@ -873,8 +888,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onCancelOrderClick() {
+  async onCancelOrderClick() {
     if (!this.ordre.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     this.ordresService.fTestAnnuleOrdre(this.ordre.id).subscribe({
       next: () => {
         this.promptPopupTitle =
@@ -913,8 +930,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  onDeleteOrderClick() {
+  async onDeleteOrderClick() {
     if (!this.ordre.id) return;
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     this.promptPopupTitle =
       this.localization.localize("ordre-delete-title") + this.ordre?.numero;
     this.promptPopupPurpose = "delete";
@@ -999,33 +1018,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileManagerComponent.visible = true;
   }
 
+  async onShowEdiColibriOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    this.modifCdeEdiPopup.visible = true;
+  }
+
   onArticleManClick(e?) {
     this.articleRowKey = e;
     this.ajoutArtManu.visible = true;
   }
 
-  onArticleHistoClick() {
-    this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-    this.ajoutArtHisto.visible = true;
-  }
-
-  onArticleStockClick() {
-    this.ajoutArtStock.visible = true;
-  }
-
-  onRefClientClick() {
-    this.ajoutArtRefClt.visible = true;
-  }
-
-  onDestockAutoClick() {
-    this.gridCommandes.grid.instance.saveEditData();
-    // Wait until grid has been totally saved
-    const saveInterval = setInterval(() => {
-      if (!this.gridCommandes.grid.instance.hasEditData()) {
-        clearInterval(saveInterval);
-        this.destockageAutoPopup.visible = true;
-      }
-    }, 100);
+  async onDestockAutoClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    this.destockageAutoPopup.visible = true;
   }
 
   updateDestockAuto() {
@@ -1036,15 +1041,18 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (e) this.selectedGridCdesRows = e.length > 0;
   }
 
-  detailExp() {
+  async detailExp() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
-  openGroupageChargementsPopup() {
+  async openGroupageChargementsPopup() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.groupagePopup.visible = true;
   }
 
-  onDuplicateOrderClick() {
+  async onDuplicateOrderClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.duplicationPopup.visible = true;
   }
 
@@ -1197,9 +1205,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridCommandes.update();
   }
 
-  public refreshOrder() {
+  public async refreshOrder() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.refreshHeader();
-    this.gridsService.reload(
+    this.gridsService.reload([
       "Commande",
       "SyntheseExpeditions",
       "DetailExpeditions",
@@ -1212,6 +1221,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "CQ",
       "Commentaires",
       "Log"
+    ], this.gridsService.orderIdentifier(this.ordre)
     );
     this.formLitiges?.loadForm();
   }
@@ -1225,7 +1235,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.tabContext.parseTabID(params.get(RouteParam.TabID))
         ),
         switchMap(([numero, campagneID]) => {
-          if (numero === TAB_ORDRE_CREATE_ID) return of({} as Ordre);
+          if (numero === TAB_ORDRE_CREATE_ID || !campagneID) return of({} as Ordre);
           return this.ordresService
             .getOneByNumeroAndSocieteAndCampagne(
               numero,
@@ -1240,6 +1250,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (ordre) => {
           this.ordre = ordre;
+          this.changeDetectorRef.detectChanges();
           // France: 2 Incoterms only
           if (this.ordre.secteurCommercial.id === "F")
             this.incotermsDS.filter([
@@ -1464,7 +1475,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (!fraisUnite) fraisUnite = "";
-    if (!fraisPU) return "";
 
     return (
       "Frais client " + fraisPU + " " + fraisUnite + " " + messFraisPlateforme
@@ -1507,7 +1517,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   updateTabStatusDot() {
     // Update green dot on order tab (Statut.CONFIRME)
     this.tabContext.getSelectedItem().subscribe(res => {
-      if (!this.ordre || res.id.split("-")[1] !== this.ordre.numero) return;
+      if (!res || !this.ordre || res?.id.split("-")[1] !== this.ordre.numero) return;
       res.status = Statut[this.ordre?.statut] === Statut.CONFIRME.toString();
     });
   }
@@ -1548,14 +1558,51 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.zoomTransporteurFilePopup.visible = true;
   }
 
+  private refetchOrder(period = 5000) {
+    console.log("Starting order refetch cycle");
+    return interval(period)
+      .pipe(
+        // we need current route information
+        switchMap(() => this.route.paramMap),
+        // complete this observable when we are outside the `ordres` scope
+        // this will stop the emissions on disconnection (with router redirection), by exemple
+        takeWhile(params => this.router.isActive("pages/ordres", {
+          paths: 'subset',
+          queryParams: 'ignored',
+          fragment: 'ignored',
+          matrixParams: 'ignored',
+        })),
+        // continue if the selected tab is an `ordre`
+        filter(params => /[-\d]+/.test(params.get(RouteParam.TabID))),
+        map((params) =>
+          this.tabContext.parseTabID(params.get(RouteParam.TabID))
+        ),
+        filter((data) => data.every((v) => v !== null && v !== undefined)),
+        concatMap(([numero, campagneID]) =>
+          this.ordresService.getOneByNumeroAndSocieteAndCampagne(
+            numero,
+            this.currentCompanyService.getCompany().id,
+            campagneID,
+            ["id", "statut"],
+            "network-only"
+          )
+        ),
+        map((res) => res.data.ordreByNumeroAndSocieteAndCampagne)
+      );
+  }
+
   private refetchStatut() {
     // No refetch when statut is "FACTURE" or "ANNULE"
     if ([Statut.FACTURE, Statut.ANNULE].includes(this.ordre?.statut)) {
       return;
     }
 
-    this.route.paramMap
+    interval(5000)
       .pipe(
+        tap(() => { console.log("YO"); }),
+        // takeWhile(() => this.router.isActive("pages/ordres", false)),
+        // tap(() => console.log("YO2")),
+        switchMap(() => this.route.paramMap),
         first(),
         filter((params) => !!params.get(RouteParam.TabID)),
         map((params) =>
@@ -1575,7 +1622,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         map((res) => res.data.ordreByNumeroAndSocieteAndCampagne)
       )
       .subscribe({
-        next: (ordre) => this.refreshStatus(ordre.statut),
+        next: (ordre: Ordre) => this.refreshStatus(ordre.statut),
       });
   }
 
@@ -1603,7 +1650,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.factureVisible = true;
   }
 
-  public bonAFacturer() {
+  public async bonAFacturer() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+
     const societe: Societe = this.currentCompanyService.getCompany();
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe({
@@ -1626,7 +1675,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     notify(
       this.localization.localize("text-popup-abandon-BAF"),
       "warning",
-      7000
+      8000
     );
   }
 
@@ -1647,16 +1696,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     return /^[AEIOUYaeiouy]$/i.test(text);
   }
 
-  public onDuplicationBukSaClick() {
+  public async onDuplicationBukSaClick() {
     if (this.gridCommandes) {
-      this.gridCommandes.grid.instance.saveEditData();
-      // Wait until grid has been totally saved
-      const saveInterval = setInterval(() => {
-        if (!this.gridCommandes.grid.instance.hasEditData()) {
-          clearInterval(saveInterval);
-          this.onDuplicationBukSa();
-        }
-      }, 100);
+      await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+      this.onDuplicationBukSa();
     } else {
       this.onDuplicationBukSa();
     }
@@ -1727,7 +1770,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  public onDelRegroupementClick() {
+  public async onDelRegroupementClick() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
       next: (res) => notify(res.data.fDelRegroupement.msg, "success"),
@@ -1744,7 +1788,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       );
   }
 
-  onClickCreateLitige() {
+  async onClickCreateLitige() {
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.litigesBtn.nativeElement.click();
     setTimeout(() => this.formLitiges.createLitige());
   }

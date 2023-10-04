@@ -40,11 +40,9 @@
               [readOnly]="codeChangeProcess"
               (onValueChanged)="onValueChanged($event)"
               [ngClass]="{
-                'max-tags': chosenArticles?.length && remplacementArticle
+                'max-tags': chosenArticles?.length && single
               }"
-              [disabled]="
-                !!getGridSelectedArticles()?.length && remplacementArticle
-              "
+              [disabled]="!!getGridSelectedArticles()?.length && single"
             >
               <dxo-drop-down-options [width]="0"> </dxo-drop-down-options>
             </dx-tag-box>

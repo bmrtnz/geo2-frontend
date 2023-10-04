@@ -1,3 +1,4 @@
+<!-- <div (mouseleave)="onGridOut()"> -->
 <dx-data-grid
   class="grid-commandes"
   [remoteOperations]="false"
@@ -10,9 +11,10 @@
   [focusedRowEnabled]="true"
   (onToolbarPreparing)="gridConfigHandler($event)"
   (onSaving)="onSaving($event)"
-  (onFocusedCellChanging)="onFocusedCellChanging($event)"
+  (onSaved)="onSaved()"
   (onCellPrepared)="FEATURE.highlightBio && onCellPrepared($event)"
   (onFocusedRowChanged)="FEATURE.rowOrdering && onFocusedRowChanged($event)"
+  (onFocusedCellChanging)="onFocusedCellChanging($event)"
   (onContentReady)="contentReadyEvent.emit($event); onContentReady($event)"
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
@@ -27,10 +29,8 @@
   <dxo-editing
     [selectTextOnEditStart]="true"
     [mode]="'batch'"
-    [allowUpdating]="allowMutations || venteACommission"
+    [allowUpdating]="true"
     [allowDeleting]="allowMutations"
-    [(changes)]="changes"
-    [refreshMode]="'reshape'"
     [startEditAction]="'click'"
   ></dxo-editing>
   <dxo-keyboard-navigation
@@ -204,7 +204,9 @@
     [editorOptions]="column?.editorOptions"
     [headerCellTemplate]="column.headerCellTemplate"
     [calculateDisplayValue]="
-      column?.calculateDisplayValue
+      column.dataField === 'fournisseur.id'
+        ? calculateFournisseurDisplayValue
+        : column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
         : column?.dataField
     "
@@ -270,7 +272,7 @@
 <!-- marge previsionelle -->
 <app-button-marge-previ
   *ngIf="FEATURE.margePrevisionelle && !!gridRowsTotal"
-  [ordreID]="ordreID"
+  [ordreID]="ordre.id"
 ></app-button-marge-previ>
 
 <app-article-reservation-ordre-popup
@@ -304,3 +306,4 @@
   [fournisseurLigneId]="fournisseurLigneId"
 >
 </app-zoom-fournisseur-popup>
+<!-- </div> -->

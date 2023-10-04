@@ -10,70 +10,83 @@
   margin-right: 20px;
 }
 
+::ng-deep .grid-planning-transporteurs {
+  max-height: calc(100vh - 370px) !important;
+}
+
 ::ng-deep .transporteur-grouping {
   font-weight: bold;
   color: rgba(0, 0, 0, 0.6);
   font-style: italic;
 }
 
-::ng-deep .orderTileFilterArea {
-  width: 1100px;
+::ng-deep .orderTileFilterArea-container {
+  margin: 30px 20px;
+  overflow: hidden;
 
-  .valideCheckboxField {
-    .dx-field-label {
-      position: relative;
-      top: -1px;
-      width: 90px !important;
-      white-space: inherit;
-      text-overflow: initial;
+  .orderTileFilterArea {
+    width: 800px;
+
+    .valideCheckboxField {
+      .dx-field-label {
+        position: relative;
+        top: -1px;
+        width: 90px !important;
+        white-space: inherit;
+        text-overflow: initial;
+      }
+
+      .dx-field-value {
+        width: 33px !important;
+      }
     }
 
-    .dx-field-value {
-      width: 33px !important;
+    .dx-datebox .dx-texteditor-input {
+      padding-right: 0 !important;
+    }
+
+    .orderTileleftFilters .dx-field {
+      margin-bottom: 0;
+    }
+
+    .orderRightRightFilters {
+      margin-top: 4px;
+    }
+
+    .validOnlyButtons {
+      display: block;
+      min-width: 0 !important;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      float: left;
+
+      .dx-button-content {
+        padding: 6px;
+      }
+    }
+
+    .dx-invalid-message-content {
+      padding: 0;
     }
   }
 
-  .dx-datebox .dx-texteditor-input {
-    padding-right: 0 !important;
-  }
-
-  .orderTileleftFilters .dx-field {
-    margin-bottom: 0;
-  }
-
-  .orderRightRightFilters {
-    margin-top: 4px;
-  }
-
-  .validOnlyButtons {
-    display: block;
-    min-width: 0 !important;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    float: left;
-
-    .dx-button-content {
-      padding: 6px;
-    }
-  }
-
-  .dx-invalid-message-content {
-    padding: 0;
+  .refresh-btn {
+    margin-left: 10px;
   }
 }
 
 // Highlight groups entrepot/numero
 ::ng-deep .dx-row:not(.dx-row-focused) {
-  .numero-planning-transporteurs {
-    background: $BW-khaki-dark;
-    color: white;
-    cursor: pointer;
-  }
 
   .entrepot-planning-transporteurs {
-    background: $BW-orange-medium;
+    background: #EED771;
+  }
+
+  .numero-planning-transporteurs {
     color: white;
+    background: #F6A14D;
+    cursor: pointer;
   }
 }
 

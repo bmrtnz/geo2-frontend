@@ -302,10 +302,10 @@ export class GridLotComponent implements OnInit, OnChanges {
   /** Reloads grid data and repaints data rows, wrapper around `dxDataGrid.refresh` */
   public refresh() {
     // needed to reinitialize the datasource query parameters
-    this.fillGrid(
+    return this.fillGrid(
       this.gridConfiguratorService.fetchColumns(Grid.LitigeLignesLot)
-    );
-    return this.grid.instance.refresh();
+    )
+      .then(() => this.grid.instance.refresh());
   }
 
   public calculateClientAvoir(rowData: Partial<LitigeLigneFait>) {

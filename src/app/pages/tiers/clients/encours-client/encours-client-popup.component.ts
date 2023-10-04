@@ -24,17 +24,19 @@ export class EncoursClientPopupComponent implements OnChanges {
   @Output() public popupShown: boolean;
   @Output() openEncoursOrder = new EventEmitter<any>();
 
-  visible: boolean;
-  titleStart: string;
-  titleMid: string;
-
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+
+  public visible: boolean;
+  public titleStart: string;
+  public titleMid: string;
+  public popupFullscreen: boolean;
 
   constructor(
     private router: Router,
-  ) { }
+  ) {
+    this.popupShown = false;
+  }
 
   ngOnChanges() {
     this.setTitle();
@@ -44,21 +46,26 @@ export class EncoursClientPopupComponent implements OnChanges {
     if (this.client) {
       this.clientInfo = this.client;
       this.titleStart = "En-cours client ";
+      this.titleMid = this.clientInfo?.code;
     }
   }
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("encours-client-popup");
-    this.popupShown = true;
   }
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.popupShown = true;
   }
 
   hidePopup() {
     this.popup.visible = false;
     this.popupShown = false;
+  }
+
+  resizePopup() {
+    this.popupFullscreen = !this.popupFullscreen;
   }
 
   openOrder(ordre) {
@@ -73,4 +80,5 @@ export class EncoursClientPopupComponent implements OnChanges {
       setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
     }
   }
+
 }

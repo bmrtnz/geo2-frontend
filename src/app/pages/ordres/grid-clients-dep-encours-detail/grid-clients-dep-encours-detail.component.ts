@@ -177,6 +177,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   onRowDblClick(e) {
     this.client = {
       id: e.data.id,
+      code: e.data.code,
       secteur: { id: e.data.secteur.id },
       devise: { id: e.data.devise.id },
       agrement: e.data.agrement,

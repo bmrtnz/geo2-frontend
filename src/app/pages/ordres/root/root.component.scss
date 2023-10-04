@@ -2,8 +2,28 @@
 
 ::ng-deep .tabs-ordres-page {
 
+  .dx-tabpanel-tabs {
+    padding-bottom: 5px;
+    width: calc(100% - 40px);
+  }
+
+  .fixed-tabs {
+    .dx-item-content.dx-multiview-item-content {
+      height: calc(100vh - 240px) !important;
+
+      .dx-scrollable-wrapper {
+        padding-right: 10px;
+      }
+
+      .dx-datagrid .dx-scrollable-wrapper {
+        padding-right: 0;
+      }
+    }
+  }
+
   .dx-fast-prev-btn,
-  .dx-fast-next-btn {
+  .dx-fast-next-btn,
+  .dx-pin-tabs-btn {
     top: 20px;
     width: 28px !important;
     height: 55px;
@@ -16,7 +36,38 @@
   }
 
   .dx-fast-next-btn {
-    right: 12px;
+    right: 52px;
+  }
+
+  .dx-pin-tabs-btn {
+    position: absolute;
+    border-radius: 0 !important;
+    right: 24px;
+    background-color: #F2F2F2 !important;
+
+    .dx-icon {
+      color: #8FC459;
+      font-size: 22px !important;
+    }
+
+    &:hover {
+      .dx-icon {
+        color: #79B23F !important;
+      }
+    }
+  }
+
+  .tabs-unpined {
+    .dx-icon {
+      color: #CCC;
+      font-size: 22px !important;
+    }
+
+    &:hover {
+      .dx-icon {
+        color: #AAA !important;
+      }
+    }
   }
 
   .dx-tabs-nav-button-left,
@@ -31,6 +82,25 @@
 
   .dx-tab {
     padding: 0;
+    min-width: 0 !important;
+
+    .infinite-rotate {
+      animation-name: spin;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      pointer-events: none;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     .dx-template-wrapper.dx-tab-content {
       padding: 12px 15px 11px 11px;
@@ -38,7 +108,6 @@
 
       &:hover {
         i.dx-icon-close {
-          color: #fe3d2c;
           visibility: visible;
 
           &+.dx-tab-status-dot {
@@ -51,7 +120,7 @@
         height: 55px;
 
         .dx-icon {
-          margin-top: 4px;
+          margin: 4px -2px 0px 4px;
         }
       }
 
@@ -74,6 +143,12 @@
 
       &.close-all-orders-tab {
         height: 55px;
+
+        .dx-tab-content {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
 
         .dx-icon {
           color: $base-accent;
@@ -101,14 +176,44 @@
         text-align: center;
       }
 
+      .dx-tab-unsaved-dot {
+        position: absolute;
+        left: 0;
+        margin: -18px 0 0 11px;
+        height: 11px;
+        min-width: 11px;
+        padding: 0 4px;
+        background: #ff325a;
+        border-radius: 15px;
+        font-size: 12px;
+        line-height: 14px;
+        color: white;
+        text-align: center;
+      }
+
     }
 
     i.dx-icon-close {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
       font-size: 17px;
-      visibility: hidden;
+      line-height: 14px;
+      border-radius: 100%;
+      color: #fe3d2c;
+
+      &:not(.infinite-rotate) {
+        visibility: hidden;
+      }
+
+      &:hover {
+        font-size: 15px;
+        line-height: 16px;
+        background: #fe3d2c;
+        color: #FFF;
+      }
     }
 
     .dx-tab-text>i {
@@ -122,7 +227,7 @@
       white-space: normal;
       text-transform: none;
       font-size: 11px;
-      line-height: 10px;
+      line-height: 12px;
       text-align: left;
       margin-left: 5px;
     }

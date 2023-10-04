@@ -14,9 +14,9 @@
     [paging]="{
       enabled: false
     }"
+    (onCellClick)="onCellClick($event)"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="onContentReady($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         localizeService.localize('documents-list'),
@@ -64,6 +64,7 @@
         column.name
       "
       [width]="column?.width ? column?.width : 'auto'"
+      [cssClass]="column?.cssClass"
       [dataType]="column?.dataType"
       [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
@@ -100,6 +101,23 @@
         (onValueChanged)="onValueChanged($event, cell)"
       >
         <dxo-drop-down-options [width]="250"></dxo-drop-down-options>
+      </dx-select-box>
+    </div>
+
+    <div *dxTemplate="let cell of 'selectBoxCustomEditTemplate'">
+      <dx-select-box
+        [id]="cell.key"
+        [items]="mailsDouanes"
+        [acceptCustomValue]="true"
+        [displayExpr]="displayExpr"
+        [searchExpr]="'description'"
+        [value]="cell.data[cell.column.dataField]"
+        (onValueChanged)="onCustomValueChanged($event, cell)"
+        (onKeyUp)="onSelectBoxKeyUp($event, cell)"
+      >
+        <dxo-drop-down-options
+          [width]="SelectBoxPopupWidth"
+        ></dxo-drop-down-options>
       </dx-select-box>
     </div>
   </dx-data-grid>

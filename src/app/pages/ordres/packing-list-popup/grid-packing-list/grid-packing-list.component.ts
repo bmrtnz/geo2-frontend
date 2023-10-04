@@ -19,6 +19,8 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { map } from "rxjs/operators";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { DatePipe } from "@angular/common";
+
 
 @Component({
   selector: "app-grid-packing-list",
@@ -41,7 +43,8 @@ export class GridPackingListComponent {
   constructor(
     private ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
-    public localizeService: LocalizationService
+    public localizeService: LocalizationService,
+    private datePipe: DatePipe
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.PackingList
@@ -80,6 +83,12 @@ export class GridPackingListComponent {
     );
     // Retrieves all orders from the same entrepot
     this.dataSource.filter(["entrepot.id", "=", this.entrepotId]);
+
+    // Retrieves orders of less than 60 days
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() - 60);
+    this.dataSource.filter(["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")])
+
     this.datagrid.dataSource = this.dataSource;
   }
 }

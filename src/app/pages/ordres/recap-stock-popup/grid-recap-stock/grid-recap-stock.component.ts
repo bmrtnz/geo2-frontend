@@ -48,6 +48,7 @@ export class GridRecapStockComponent {
     this.requiredFields = [
       "article.id",
       "id",
+      "mouvement.id",
       "mouvement.quantite",
       "mouvement.type",
       "mouvement.parQui",
@@ -74,28 +75,10 @@ export class GridRecapStockComponent {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-
       // Colorize date fab
       if (e.column.dataField === "stock.dateFabrication") {
         if (e.data.stock.age > 2 && e.data.stock.quantiteDisponible !== 0)
           e.cellElement.classList.add(e.data.stock.quantiteDisponible < 0 ? "red-font" : "green-font");
-      }
-
-      // Show description abrégée
-      if (e.column.dataField === "stock.quantiteInitiale") {
-        e.cellElement.textContent = ""; // Clear original content
-        if (e.data.stock.statutStock === "O") {
-          let time = e.data.stock.dateInfo.split("T")[1].split(":");
-          time.splice(-1);
-          time = time.join(":");
-          e.cellElement.textContent = `--> Option ${e.data.stock.utilisateurInfo} à ${time}`;
-        } else {
-          if (e.data.mouvement.quantite >= 0) {
-            e.cellElement.textContent = `Initial : ${e.data.stock.quantiteInitiale} - Déstocké : ${e.data.stock.quantiteReservee}`;
-          } else {
-            e.cellElement.textContent = `Réappro = ${Math.abs(e.data.stock.totalMouvements)}`;
-          }
-        }
       }
     }
   }
@@ -111,10 +94,58 @@ export class GridRecapStockComponent {
       "%",
       this.requiredFields
     ).subscribe((res) => {
-      this.datagrid.dataSource = res.data.allDetailStockResa;
+
+      let DsItems = JSON.parse(JSON.stringify(res.data.allDetailStockResa));
+      DsItems.sort((a, b) => a.stock.fournisseur.code > b.stock.fournisseur.code);
+      DsItems.sort((a, b) => a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age);
+      DsItems.sort((a, b) => (a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age) || a.stock.quantiteInitiale > b.stock.quantiteInitiale);
+
+      let oldFour, oldDate, oldDesc;
+      let id = 1;
+      DsItems.map((data) => {
+        // Handle description abrégée
+        if (data.stock.statutStock === "O") {
+          let time = data.stock.dateInfo.split("T")[1].split(":");
+          time.splice(-1);
+          time = time.join(":");
+          data.stock.userModification = `--> Option ${data.stock.utilisateurInfo} à ${time}`;
+        } else {
+          if (data.mouvement?.quantite >= 0) {
+            data.stock.userModification = `Initial : ${data.stock.quantiteInitiale} - Déstocké : ${data.stock.quantiteReservee}`;
+          } else {
+            data.stock.userModification = `Réappro = ${Math.abs(data.stock.totalMouvements)}`;
+          }
+        }
+        // Clear repeated fields, a kind of group structure wanted by BW
+        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.userModification && data.mouvement?.quantite) {
+          data.stock.fournisseur.code = "";
+          data.stock.quantiteDisponible = null;
+          data.stock.age = null;
+          data.stock.userModification = "";
+        } else {
+          oldFour = data.stock.fournisseur.code;
+          oldDate = data.stock.dateFabrication;
+          oldDesc = data.stock.userModification;
+        }
+        data.id = id;
+        id++
+      });
+
+      this.datagrid.dataSource = DsItems;
       this.datagrid.instance.refresh();
       this.datagrid.instance.endCustomLoading();
     });
 
   }
+
+  public calculateCustomSummary(options) {
+    if (options.name === "quantiteDisponible") {
+      if (options.summaryProcess === "start") options.totalValue = 0;
+      if (options.summaryProcess === "calculate") {
+
+        options.totalValue += options.value.stock?.quantiteDisponible ?? 0;
+      }
+    }
+  }
+
 }

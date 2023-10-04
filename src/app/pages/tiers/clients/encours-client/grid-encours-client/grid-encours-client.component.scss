@@ -3,6 +3,8 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-encours-client {
+  min-height: 250px;
+
   .bio-article {
     color: #39970e !important;
     cursor: pointer;

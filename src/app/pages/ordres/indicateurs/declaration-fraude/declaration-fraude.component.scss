@@ -1,6 +1,10 @@
 // Var
 @import "themes/generated/variables.base";
 
+::ng-deep .grid-fraude {
+  max-height: calc(100vh - 425px) !important;
+}
+
 ::ng-deep {
   .justified-row {
     background-color: lightgray !important;
@@ -13,6 +17,10 @@
   .bold-black {
     font-weight: bold;
     color: #000;
+  }
+
+  .modified-orders-from input {
+    color: $base-accent;
   }
 
 }
@@ -36,6 +44,11 @@
 ::ng-deep .fraud-form {
   .dx-first-col.dx-last-col.dx-field-item.dx-col-0.dx-field-item-optional.dx-field-item-has-group {
     padding: 5px 0;
+  }
+
+  .dx-field-item-label-text {
+    color: $base-accent;
+    font-size: 14px;
   }
 
   .dx-texteditor-input {

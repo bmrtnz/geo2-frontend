@@ -2,6 +2,7 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .import-programme-popup {
+
   // Fake choose file button
   .custom-choose-file-button {
     position: absolute;
@@ -86,6 +87,7 @@
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    transition: opacity 0.25s;
 
     .dx-button {
       margin: 5px;

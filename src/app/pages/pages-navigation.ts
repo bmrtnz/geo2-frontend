@@ -34,6 +34,10 @@ export const navigation = [
         path: "pages/nested/n/(articles/list)",
       },
       {
+        html: '<div>Zoom article</div>',
+        open: 'ChooseArticleZoomPopupComponent',
+      },
+      {
         html: '<div>Association des articles EDI/COLIBRI</div>',
         path: "pages/articles/association-edi-colibri",
       },

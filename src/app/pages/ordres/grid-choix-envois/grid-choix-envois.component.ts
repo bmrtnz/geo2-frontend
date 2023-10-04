@@ -3,7 +3,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  ViewChild,
+  ViewChild
 } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -29,8 +29,10 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, delay, finalize, map, tap } from "rxjs/operators";
+import { concatMapTo, finalize, map } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
+
+let self;
 
 @Component({
   selector: "app-grid-choix-envois",
@@ -51,7 +53,10 @@ export class GridChoixEnvoisComponent implements OnInit {
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
     private ar: FluxArService,
-  ) { }
+  ) {
+    self = this;
+    this.mailsDouanes = this.fluxService.mailsDouanes();
+  }
 
   @Input() public ordre: Partial<Ordre>;
   @Input() public fluxID: string;
@@ -89,13 +94,13 @@ export class GridChoixEnvoisComponent implements OnInit {
   codeTiers: string;
   typeTiers: string;
   typeTiersLabel: string;
-  canSelectAll: boolean;
+  public mailsDouanes: any[];
   public canBeSent: boolean;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public SelectBoxPopupWidth: number;
   columnChooser = environment.columnChooser;
-  @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
   contentReadyEvent = new EventEmitter<any>();
 
   /**
@@ -164,28 +169,16 @@ export class GridChoixEnvoisComponent implements OnInit {
     }
   }
 
-  onEditorPreparing(e) {
-    // If the user types "@", its mail address is automatically typed
-    if (e.parentType === "dataRow") {
-      e.editorOptions.onKeyUp = (elem) => {
-        if (e.dataField === "numeroAcces1" && this.USER_MAIL) {
-          const myInput = elem.element?.querySelector("input.dx-texteditor-input");
-          if (myInput.value === "@") myInput.value = this.USER_MAIL
-        }
-      }
+  onSelectBoxKeyUp(event, cell) {
+    // console.log(event, cell);
+    if (cell.column.dataField === "numeroAcces1" && this.USER_MAIL) {
+      const myInput = event.element?.querySelector("input.dx-texteditor-input");
+      if (myInput.value === "@") myInput.value = this.USER_MAIL
     }
   }
 
   onContentReady(event) {
     this.contentReadyEvent.emit(event);
-
-    // Workaround for select all rows after loading data (without timeout do always select all)
-    if (!this.canSelectAll) return;
-    setTimeout(() => {
-      event.component.selectAll();
-      this.canSelectAll = false;
-      this.canBeSent = true;
-    }, 500);
   }
 
   displayIDBefore(data) {
@@ -200,6 +193,20 @@ export class GridChoixEnvoisComponent implements OnInit {
       : null;
   }
 
+  onCellClick(e) {
+    if (e.rowType !== "data") return;
+
+    // Handle CUSINV + Mail selectbox functionality
+    if (e.column.dataField === "numeroAcces1") {
+      if (e.data?.moyenCommunication?.id === 'MAI' && e.data?.flux.id === "CUSINV") {
+        this.SelectBoxPopupWidth = 200;
+        e.cellElement.classList.remove("no-arrow");
+      } else {
+        this.SelectBoxPopupWidth = 0;
+      }
+    }
+  }
+
   onRowClick({ rowIndex }) {
     this.dataGrid.instance.editRow(rowIndex);
   }
@@ -208,13 +215,33 @@ export class GridChoixEnvoisComponent implements OnInit {
     if (cell.setValue) cell.setValue(event.value);
   }
 
-  async clearTemps() {
-    const temps: Partial<Envois>[] = this.dataGrid.instance
-      .getDataSource()
-      .items()
-      .map(({ id }) => ({ id }));
+  onCustomValueChanged(event, cell) {
+    if (cell.setValue) {
+      if (event.value.mail) {
+        cell.setValue(event.value.mail); // Asssign mail (but we see description)
+      } else {
+        cell.setValue(event.value); // Or custom text
+      }
+    }
+  }
 
-    return this.envoisService.deleteTempEnvois(temps).toPromise();
+  displayExpr(data) {
+    if (data) {
+      const match = self.mailsDouanes.find(d => d.mail === data);
+      // We show description and not mail
+      if (match) return match.description;
+      return data.description ?? data;
+    }
+    return null;
+  }
+
+  clearTemps() {
+    this.envoisService.getList(
+      `ordre.id==${this.ordre.id} and traite==A`,
+      ["id"]).subscribe(res => {
+        const temps = res.data.allEnvoisList.map(({ id }) => ({ id }));
+        this.envoisService.deleteTempEnvois(temps).toPromise()
+      });
   }
 
   reload(annuleOrdre?) {
@@ -223,7 +250,7 @@ export class GridChoixEnvoisComponent implements OnInit {
       .geoPrepareEnvois(
         this.ordre.id,
         this.fluxID,
-        true,
+        false,
         !!annuleOrdre ? !!annuleOrdre : false,
         this.authService.currentUser.nomUtilisateur
       )
@@ -234,7 +261,7 @@ export class GridChoixEnvoisComponent implements OnInit {
           .geoPrepareEnvois(
             this.ordre.id,
             this.fluxID,
-            true,
+            false,
             !annuleOrdre ? !!annuleOrdre : false,
             this.authService.currentUser.nomUtilisateur
           )),
@@ -251,7 +278,6 @@ export class GridChoixEnvoisComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          this.canSelectAll = true;
 
           // on retire les duplicats
           let uniqueEnvois = [];
@@ -281,6 +307,10 @@ export class GridChoixEnvoisComponent implements OnInit {
               this.addComplComment(uniqueEnvois);
           }
           this.gridData = new DataSource(uniqueEnvois);
+          setTimeout(() => {
+            this.dataGrid.instance.selectAll();
+            this.canBeSent = true;
+          }, 1000);
         },
         error: (message) => notify({ message }, "error", 7000),
       });

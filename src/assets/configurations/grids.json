@@ -1125,8 +1125,23 @@
         "visible": true
       },
       {
+        "visibleIndex": 5,
+        "dataField": "preSaisie",
+        "dataType": "string",
+        "calculateCellValue": "calculateEmballage",
+        "calculateFilterExpression": "calculateFilterEmballage",
+        "allowSearch": true,
+        "visible": false
+      },
+      {
         "visibleIndex": 6,
         "dataField": "emballage.emballage.id",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "emballage.emballage.description",
         "dataType": "string",
         "visible": true
       },
@@ -1137,10 +1152,22 @@
         "visible": true
       },
       {
+        "visibleIndex": 9,
+        "dataField": "matierePremiere.calibreUnifie.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "visibleIndex": 10,
         "dataField": "matierePremiere.calibreUnifie.description",
         "dataType": "string",
         "visible": true
+      },
+      {
+        "visibleIndex": 11,
+        "dataField": "normalisation.calibreMarquage.id",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 12,
@@ -1180,24 +1207,11 @@
         "showInColumnChooser": true
       },
       {
-        "dataField": "emballage.emballage.description",
-        "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
-      },
-      {
         "visibleIndex": 50,
         "dataField": "valide",
         "dataType": "boolean",
         "width": 50,
         "visible": true
-      },
-      {
-        "dataField": "preSaisie",
-        "dataType": "boolean",
-        "width": 50,
-        "showInColumnChooser": false,
-        "visible": false
       },
       {
         "dataField": "cahierDesCharge.coloration.id",
@@ -1235,12 +1249,27 @@
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteColis.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteUc.id",
         "dataType": "string",
         "visible": false
       },
       {
+        "dataField": "normalisation.etiquetteUc.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "normalisation.etiquetteEvenementielle.id",
+        "dataType": "string",
+        "visible": false
+      },
+      {
+        "dataField": "normalisation.etiquetteEvenementielle.description",
         "dataType": "string",
         "visible": false
       },
@@ -1252,7 +1281,8 @@
       {
         "dataField": "emballage.id",
         "dataType": "string",
-        "visible": false
+        "visible": false,
+        "showInColumnChooser": false
       },
       {
         "dataField": "emballage.conditionSpecial.id",
@@ -1383,12 +1413,14 @@
       {
         "visibleIndex": 6,
         "dataField": "fournisseurCode",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "proprietaireCode",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
@@ -1396,12 +1428,14 @@
         "visibleIndex": 9,
         "dataField": "dateFabrication",
         "visible": true,
+        "cssClass": "small-side-padding",
         "dataType": "date",
         "format": "dd-MM-yyyy"
       },
       {
         "visibleIndex": 10,
         "dataField": "typePaletteID",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -1472,10 +1506,8 @@
         "visible": true
       },
       {
-        "visibleIndex": 40,
         "dataField": "commentaire",
-        "visible": true,
-        "cellTemplate": "editButtonTemplate"
+        "showInColumnChooser": false
       },
       {
         "dataField": "origineID",
@@ -1792,8 +1824,6 @@
         "visibleIndex": 2,
         "dataField": "stock.fournisseur.code",
         "dataType": "string",
-        "sortOrder": "asc",
-        "sortIndex": 1,
         "visible": true
       },
       {
@@ -1808,8 +1838,6 @@
         "dataField": "stock.age",
         "cssClass": "small-side-padding text-align-center",
         "width": 75,
-        "sortOrder": "asc",
-        "sortIndex": 2,
         "visible": true
       },
       {
@@ -1851,7 +1879,7 @@
       },
       {
         "visibleIndex": 18,
-        "dataField": "stock.quantiteInitiale",
+        "dataField": "stock.userModification",
         "dataType": "string",
         "visible": true
       },
@@ -1893,10 +1921,16 @@
         "showInColumnChooser": false
       },
       {
+        "dataField": "stock.quantiteInitiale",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "mouvement.id",
+        "visible": false
+      },
+      {
         "dataField": "stock.id",
         "showInColumnChooser": false,
-        "sortOrder": "asc",
-        "sortIndex": 3,
         "visible": false
       }
     ]
@@ -2918,7 +2952,7 @@
         "calculateCellValue": "proprietaireMarchandise.id",
         "calculateSortValue": "proprietaireMarchandise.code",
         "editorOptions": {
-          "searchTimeout": "0"
+          "searchTimeout": "50"
         },
         "lookup": {
           "valueExpr": "id",
@@ -2934,42 +2968,13 @@
       },
       {
         "dataField": "fournisseur.id",
-        "calculateDisplayValue": [
-          "fournisseur.code",
-          "fournisseur.raisonSocial"
-        ],
         "cssClass": "small-side-padding",
         "visible": true,
-        "calculateSortValue": "transporteur.code",
-        "editorOptions": {
-          "searchTimeout": "0"
-        },
-        "lookup": {
-          "valueExpr": "id",
-          "displayExpr": [
-            "code",
-            "raisonSocial"
-          ],
-          "searchExpr": [
-            "code"
-          ]
-        },
         "width": 170
       },
       {
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
         "cssClass": "multi-line-header small-side-padding",
         "visible": true
       },
@@ -2981,6 +2986,7 @@
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "venteUnite.id",
+        "width": 90,
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -3029,17 +3035,6 @@
       {
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "width": 95,
         "visible": true
       },
@@ -3050,6 +3045,7 @@
         ],
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
+        "width": 90,
         "calculateSortValue": "achatUnite.id",
         "editorOptions": {
           "searchTimeout": "0"
@@ -3076,6 +3072,7 @@
         "calculateDisplayValue": [
           "typePalette.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "typePalette.id",
@@ -3086,7 +3083,8 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id"
+            "id",
+            "description"
           ],
           "searchExpr": [
             "id"
@@ -3098,6 +3096,7 @@
         "calculateDisplayValue": [
           "paletteInter.id"
         ],
+        "width": 90,
         "cssClass": "multi-line-header small-side-padding",
         "visible": true,
         "calculateSortValue": "paletteInter.id",
@@ -3108,7 +3107,8 @@
           "searchMode": "startswith",
           "valueExpr": "id",
           "displayExpr": [
-            "id"
+            "id",
+            "description"
           ],
           "searchExpr": [
             "id"
@@ -3124,17 +3124,6 @@
       },
       {
         "dataField": "fraisPrixUnitaire",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3169,30 +3158,12 @@
         "width": 45,
         "allowEditing": false,
         "cssClass": "multi-line-header",
-        "editorOptions": {
-          "step": 0,
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "visible": true
       },
       {
         "dataField": "tauxRemiseHorsFacture",
         "width": 45,
         "allowEditing": false,
-        "editorOptions": {
-          "step": 0,
-          "type": "fixedPoint",
-          "precision": 2
-        },
-        "format": {
-          "type": "fixedPoint",
-          "precision": 2
-        },
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3207,6 +3178,10 @@
       {
         "dataField": "id",
         "visible": false
+      },
+      {
+        "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false
       }
     ]
   },
@@ -3486,7 +3461,8 @@
         "sortIndex": 1,
         "width": 80,
         "visible": true,
-        "groupIndex": 1
+        "groupIndex": 1,
+        "calculateCellValue": "calculateGroupeOrdreLibelle"
       },
       {
         "visibleIndex": 2,
@@ -3547,6 +3523,7 @@
         "visibleIndex": 14,
         "dataField": "nombrePalettesCommandees",
         "width": 50,
+        "calculateCellValue": "calculateNombrePalettesCommandees",
         "cssClass": "multi-line-header",
         "visible": true
       },
@@ -3554,6 +3531,7 @@
         "visibleIndex": 16,
         "dataField": "nombreColisCommandes",
         "width": 100,
+        "calculateCellValue": "calculateNombreColisCommandes",
         "cssClass": "multi-line-header colisCommandes",
         "visible": true
       },
@@ -3561,6 +3539,7 @@
         "visibleIndex": 18,
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3568,6 +3547,7 @@
         "visibleIndex": 20,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
+        "calculateCellValue": "calculateAchatDevisePrixUnitaire",
         "width": 100,
         "visible": true
       },
@@ -3678,6 +3658,11 @@
         "visible": false
       },
       {
+        "dataField": "nombrePalettesExpediees",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
         "dataField": "ordre.entrepot.code",
         "showInColumnChooser": false,
         "visible": false
@@ -3694,6 +3679,11 @@
       },
       {
         "dataField": "ordre.campagne.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.flagAnnule",
         "showInColumnChooser": false,
         "visible": false
       }
@@ -3827,6 +3817,26 @@
         "allowEditing": false,
         "width": 80,
         "visible": true
+      },
+      {
+        "dataField": "ordre.societe.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "fournisseur.indicateurModificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.client.modificationDetail",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.secteurCommercial.id",
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ordre.type.id",
+        "showInColumnChooser": false
       }
     ]
   },
@@ -4011,6 +4021,7 @@
     ]
   },
   "ordres-a-facturer": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4023,7 +4034,7 @@
       {
         "visibleIndex": 2,
         "dataField": "indicateurBaf",
-        "sortOrder": "asc",
+        "sortOrder": "desc",
         "sortIndex": 1,
         "visible": true
       },
@@ -4587,6 +4598,7 @@
     ]
   },
   "envois": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4694,12 +4706,22 @@
     ]
   },
   "choix-envois": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
+        "dataField": "id",
+        "width": 80,
+        "allowEditing": false,
+        "visible": false
+      },
+      {
+        "visibleIndex": 1,
         "dataField": "typeTiers.description",
         "dataType": "string",
         "width": "110",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "allowEditing": false,
         "visible": true
       },
@@ -4738,6 +4760,8 @@
         "visibleIndex": 10,
         "dataField": "numeroAcces1",
         "dataType": "string",
+        "cssClass": "no-arrow",
+        "editCellTemplate": "selectBoxCustomEditTemplate",
         "width": "200",
         "visible": true
       },
@@ -4783,12 +4807,6 @@
         "visible": true
       },
       {
-        "visibleIndex": 20,
-        "dataField": "id",
-        "allowEditing": false,
-        "visible": false
-      },
-      {
         "dataField": "typeTiers.id",
         "showInColumnChooser": false,
         "visible": false
@@ -4796,6 +4814,7 @@
     ]
   },
   "annule-remplace": {
+    "pageSize": 100000,
     "columns": [
       {
         "visibleIndex": 0,
@@ -4828,6 +4847,8 @@
         "visibleIndex": 6,
         "dataField": "typeTiers.description",
         "dataType": "string",
+        "sortIndex": 1,
+        "sortOrder": "asc",
         "width": "120",
         "allowEditing": false,
         "visible": true
@@ -4876,9 +4897,9 @@
         "visibleIndex": 0,
         "dataField": "ordreLogistique.dateDepartPrevueFournisseur",
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 115,
+        "width": 140,
         "visible": true
       },
       {
@@ -4946,9 +4967,9 @@
         "visibleIndex": 16,
         "dataField": "ordreLogistique.ordre.dateLivraisonPrevue",
         "cssClass": "no-padding text-align-center multi-line-header",
-        "width": 90,
+        "width": 140,
         "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "format": "dd-MM-yyyy à HH:mm",
         "visible": true
       },
       {
@@ -4991,6 +5012,34 @@
         "visible": true
       },
       {
+        "visibleIndex": 30,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 32,
+        "width": 50,
+        "dataField": "ordreLogistique.ordre.totalNombrePalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 34,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesCommandees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
+        "visibleIndex": 36,
+        "width": 50,
+        "dataField": "ordreLogistique.totalPalettesExpediees",
+        "cssClass": "no-padding multi-line-header",
+        "visible": false
+      },
+      {
         "dataField": "ordreLogistique.ordre.referenceClient",
         "visible": true
       },
@@ -5013,11 +5062,6 @@
       },
       {
         "dataField": "ordreLogistique.nombrePalettesAuSol",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "ordreLogistique.totalPalettesExpediees",
         "showInColumnChooser": false,
         "visible": false
       },
@@ -5049,17 +5093,20 @@
         "visibleIndex": 0,
         "dataField": "entrepotRaisonSocial",
         "groupIndex": 0,
+        "calculateCellValue": "calculateEntrepot",
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "numero",
         "groupIndex": 1,
+        "calculateCellValue": "calculateNumero",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "groupage",
+        "calculateCellValue": "calculateGroupage",
         "cssClass": "no-padding",
         "visible": true
       },
@@ -5076,21 +5123,27 @@
       {
         "visibleIndex": 8,
         "dataField": "sommeColisCommandes",
+        "calculateCellValue": "calculateSommeColisCommandes",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "espece",
+        "calculateCellValue": "calculateEspece",
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "dateDepartPrevueFournisseur",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
         "visibleIndex": 14,
         "dataField": "dateLivraisonPrevue",
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "visible": true
       },
       {
@@ -5101,6 +5154,7 @@
       {
         "visibleIndex": 18,
         "dataField": "ordre.statut",
+        "calculateCellValue": "calculateStatut",
         "visible": true
       },
       {
@@ -5114,8 +5168,15 @@
         "visible": true
       },
       {
-        "dataField": "ordre.flagAnnule",
-        "visible": false
+        "visibleIndex": 24,
+        "dataField": "ordre.incoterm.id"
+      },
+      {
+        "visibleIndex": 26,
+        "dataField": "fournisseurBassin.id"
+      },
+      {
+        "dataField": "ordre.flagAnnule"
       },
       {
         "dataField": "version"
@@ -6682,8 +6743,22 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "frais",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "frais.id",
+        "calculateSortValue": "frais.id",
+        "calculateDisplayValue": [
+          "frais.description"
+        ],
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 200,
         "visible": true
       },
@@ -6697,26 +6772,33 @@
         "dataField": "achatPrixUnitaire",
         "allowEditing": false,
         "cssClass": "multi-line-header",
-        "visible": false,
-        "calculateCellValue": "calculateAchatPU"
+        "visible": false
       },
       {
         "visibleIndex": 7,
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
-        "editorOptions": {
-          "format": {
-            "type": "fixedPoint",
-            "precision": 2
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
       {
         "visibleIndex": 9,
-        "dataField": "devise",
-        "editCellTemplate": "selectBoxTemplate",
+        "dataField": "devise.id",
+        "calculateSortValue": "devise.id",
+        "calculateDisplayValue": [
+          "devise.description"
+        ],
+        "editorOptions": {
+          "searchTimeout": "0"
+        },
+        "lookup": {
+          "valueExpr": "id",
+          "displayExpr": "description",
+          "searchExpr": [
+            "id",
+            "description"
+          ]
+        },
         "width": 120,
         "visible": true
       },
@@ -6730,20 +6812,12 @@
             "precision": 2
           }
         },
-        "visible": true,
-        "calculateCellValue": "calculateMontant"
+        "visible": true
       },
       {
         "visibleIndex": 13,
         "dataField": "deviseTaux",
         "dataType": "number",
-        "editorOptions": {
-          "step": 0,
-          "format": {
-            "type": "fixedPoint",
-            "precision": 5
-          }
-        },
         "allowEditing": true,
         "visible": true
       },
@@ -6757,13 +6831,16 @@
             "type": "fixedPoint",
             "precision": 2
           }
-        },
-        "calculateCellValue": "calculateMontantTotal"
+        }
       },
       {
         "visibleIndex": 18,
         "dataField": "codePlus",
-        "editCellTemplate": "customSelectBoxTemplate",
+        "editorOptions": {
+          "searchTimeout": "0",
+          "valueExpr": "codePlus",
+          "displayExpr": "codePlus"
+        },
         "visible": true
       },
       {
@@ -6833,63 +6910,80 @@
         "visibleIndex": 0,
         "dataField": "refEdiOrdre",
         "allowGrouping": true,
+        "sortIndex": 0,
+        "sortOrder": "asc",
         "groupIndex": 1,
-        "calculateGroupValue": "refCmdClient",
         "groupCellTemplate": "groupCellStatusTemplate",
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "status",
         "width": 50,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 2,
-        "dataField": "numeroLigne",
+        "visibleIndex": 4,
+        "dataField": "refEdiLigne",
+        "sortIndex": 1,
         "sortOrder": "asc",
-        "sortIndex": 3,
+        "visible": false
+      },
+      {
+        "visibleIndex": 6,
+        "dataField": "numeroLigne",
         "width": 70,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 8,
         "dataField": "libelleProduit",
         "width": 500,
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 10,
         "dataField": "eanProduitClient",
-        "width": 140,
-        "cssClass": "no-padding text-align-center",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 11,
+        "dataField": "codeInterneProduitClient",
+        "cssClass": "small-side-padding",
+        "visible": true
+      },
+      {
+        "visibleIndex": 12,
         "dataField": "parCombien",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 14,
         "dataField": "quantite",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 16,
         "dataField": "quantiteColis",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 18,
+        "dataField": "prixVente",
+        "dataType": "number",
+        "visible": true
+      },
+      {
+        "visibleIndex": 20,
         "dataField": "listArticleId",
         "visible": true
       }
@@ -6906,14 +7000,14 @@
         "visible": true
       },
       {
-        "visibleIndex": 1,
+        "visibleIndex": 2,
         "dataField": "status",
         "width": 50,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 2,
+        "visibleIndex": 4,
         "dataField": "numeroLigne",
         "sortOrder": "asc",
         "sortIndex": 3,
@@ -6922,46 +7016,46 @@
         "visible": true
       },
       {
-        "visibleIndex": 4,
+        "visibleIndex": 6,
         "dataField": "libelleProduit",
         "width": 500,
         "visible": true
       },
       {
-        "visibleIndex": 6,
+        "visibleIndex": 8,
         "dataField": "eanProduitClient",
         "width": 140,
         "cssClass": "no-padding text-align-center",
         "visible": true
       },
       {
-        "visibleIndex": 8,
+        "visibleIndex": 10,
         "dataField": "prixVente",
         "visible": true
       },
       {
-        "visibleIndex": 10,
+        "visibleIndex": 12,
         "dataField": "parCombien",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 12,
+        "visibleIndex": 14,
         "dataField": "quantite",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 14,
+        "visibleIndex": 16,
         "dataField": "quantiteColis",
         "width": 50,
         "cssClass": "multi-line-header",
         "visible": true
       },
       {
-        "visibleIndex": 16,
+        "visibleIndex": 18,
         "dataField": "listArticleId",
         "visible": true
       }
@@ -7259,6 +7353,7 @@
         "dataType": "string",
         "width": 60,
         "cssClass": "no-padding text-align-center",
+        "calculateCellValue": "calculateTime",
         "visible": true
       },
       {

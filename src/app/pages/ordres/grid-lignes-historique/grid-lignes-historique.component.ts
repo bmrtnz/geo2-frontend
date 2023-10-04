@@ -1,38 +1,18 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild, } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
-import {
-  AuthService,
-  ClientsService,
-  EntrepotsService,
-} from "app/shared/services";
+import { Statut } from "app/shared/models/ordre.model";
+import { AuthService, ClientsService, EntrepotsService, } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import {
-  Grid,
-  GridConfig,
-  GridConfiguratorService,
-} from "app/shared/services/grid-configurator.service";
+import { Grid, GridConfig, GridConfiguratorService, } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
-import { GridColumn, TotalItem } from "basic";
-import {
-  DxDataGridComponent,
-  DxSelectBoxComponent,
-  DxSwitchComponent,
-} from "devextreme-angular";
+import { GridColumn } from "basic";
+import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent, } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
@@ -42,6 +22,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 
+let self;
 
 enum InputField {
   valide = "valide",
@@ -67,6 +48,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Input() public secteurId: string;
   @Input() public fournisseurLigneCode: string;
   @Input() public gridSelectionEnabled: boolean;
+  @Input() public single: boolean;
   @Output() public articleLigneId: string;
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();
@@ -124,6 +106,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public localizeService: LocalizationService,
     private tabContext: TabContext
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLigneHistorique
     );
@@ -209,13 +192,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (this.switchLivraison?.value) dateType = "dateLivraisonPrevue";
 
     const filter = [
+      ["ordre.societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
       ["ordre.secteurCommercial.id", "=", values.secteur.id],
       "and",
-      [`ordre.${dateType}`, ">=", values.dateMin],
+      [`ordre.${dateType}`, ">=", this.dateManagementService.startOfDay(values.dateMin)],
       "and",
-      [`ordre.${dateType}`, "<=", values.dateMax],
-      "and",
-      [[`nombreColisCommandes`, ">", 0], "or", [`nombreColisExpedies`, ">", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
+      [`ordre.${dateType}`, "<=", this.dateManagementService.endOfDay(values.dateMax)],
+      // "and",
+      // [[`nombreColisCommandes`, "<>", 0], "and", [`nombreColisExpedies`, "<>", 0]] // Colis cdés et exp à 0: pas d'affichage de la ligne
+      // Lignes commentées 21-08-2023 suite volonté BW d'avoir accès ouvertures de calibre (0 colis exp, 0 colis cdés)
     ];
     if (values.client?.id) {
       filter.push("and", ["ordre.client.id", "=", values.client.id]);
@@ -260,27 +246,45 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       if (!e.data.article.valide)
         e.rowElement.classList.add("highlight-datagrid-row");
+      if (e.data?.ordre.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
     }
+    if (e.rowType === "group") {
+      let data = e.data.items ?? e.data.collapsedItems;
+      data = data[0];
+      if (data?.ordre?.flagAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title = this.localizeService.localize("ordre-annule");
+      }
+    }
+  }
+
+  calculateGroupeOrdreLibelle(data) {
+    // Ajout code entrep. + réf client + (code transp.) + ...
+    let numeroContainerArray = [];
+    let numeroContainer;
+    numeroContainerArray.push(data.logistique?.numeroContainer);
+    numeroContainerArray = Array.from(new Set(numeroContainerArray.filter(el => el)));
+    if (numeroContainerArray.length) numeroContainer = numeroContainerArray.join("/");
+
+    data = data.ordre;
+
+    return data.numero +
+      " - " +
+      (data.entrepot?.code ?? "") +
+      (data.referenceClient ? " - " + data.referenceClient + " " : "") +
+      (data.codeChargement ? " - " + data.codeChargement + " " : "") +
+      (numeroContainer ? " - " + numeroContainer + " " : "") +
+      (data.transporteur?.id
+        ? " (Transporteur : " + data.transporteur.id + ")"
+        : "") +
+      ` - ${Statut[data.statut]}`;
   }
 
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      // Ajout code entrep. + réf client + (code transp.)
-      if (e.column.dataField === "ordre.numero" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-        data = data[0].ordre;
-        e.cellElement.textContent =
-          data.numero +
-          " - " +
-          (data.entrepot?.code ?? "") +
-          " - " +
-          (data.referenceClient ? data.referenceClient + " " : "") +
-          (data.transporteur?.id
-            ? "(Transporteur : " + data.transporteur.id + ")"
-            : "") +
-          ` - ${Statut[data.statut]}`;
-      }
       if (e.column.dataField === "ordre.dateDepartPrevue")
         e.cellElement.classList.add("first-group");
     }
@@ -314,42 +318,29 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       // Clic sur loupe
       if (e.column.dataField === "article.matierePremiere.origine.id")
         e.cellElement.title = this.hintClick;
-
-      // Palettes
-      if (e.column.dataField === "nombrePalettesCommandees") {
-        e.cellElement.innerText =
-          e.cellElement.innerText +
-          "/" +
-          (e.data.nombrePalettesCommandees ?? 0);
-      }
-
-      // Colis
-      if (e.column.dataField === "nombreColisCommandes") {
-        e.cellElement.innerText =
-          e.cellElement.innerText + "/" + (e.data.nombreColisExpedies ?? 0);
-      }
-
-      // Prix
-      if (e.column.dataField === "ventePrixUnitaire") {
-        if (!e.data?.ventePrixUnitaire || !e.data?.venteUnite?.description) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.venteUnite?.description;
-        }
-      }
-      if (e.column.dataField === "achatDevisePrixUnitaire") {
-        if (
-          !e.data?.achatDevisePrixUnitaire ||
-          !e.data?.achatUnite?.description
-        ) {
-          e.cellElement.innerText = "";
-        } else {
-          e.cellElement.innerText =
-            e.cellElement.innerText + " " + e.data.achatUnite.description;
-        }
-      }
     }
+  }
+
+  calculateNombrePalettesCommandees(data) {
+    // Ajout type colis
+    return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
+  }
+
+  calculateNombreColisCommandes(data) {
+    // Ajout type colis
+    return data.nombreColisCommandes + "/" + (data.nombreColisExpedies ?? 0);
+  }
+
+  calculateVentePrixUnitaire(data) {
+    if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
+      return "";
+    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
+      return "";
+    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
   }
 
   openFilePopup(cell, e) {
@@ -493,6 +484,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         e.component.deselectRows(e.currentSelectedRowKeys);
         return;
       }
+
+      // Selection can be unique in some cases (E.g. EDI/COLIBRI)
+      if (this.single && e.selectedRowKeys?.length === 2)
+        e.component.deselectRows(e.selectedRowKeys[0]);
     }
 
     this.selectChange.emit(e);
@@ -510,6 +505,16 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       : null;
   }
 
+  public calculateCustomSummary(options) {
+    if (self.summaryFields.includes(options.name)) {
+      if (options.summaryProcess === "start") {
+        options.totalValue = 0;
+      } else if (options.summaryProcess === "calculate") {
+        options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+      }
+    }
+  }
+
   // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
     if (rowType === "group") {
@@ -517,7 +522,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
       if (!dataItems.ordre) return;
       this.hidePopup.emit();
-      this.tabContext.openOrdre(data.key, dataItems.ordre.campagne.id);
+      this.tabContext.openOrdre(dataItems.ordre.numero, dataItems.ordre.campagne.id);
     } else {
       this.hidePopup.emit();
       this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
