@@ -293,7 +293,14 @@ export class GridCommandesComponent
 
   onSaved() {
     this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
-      .subscribe(() => this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions", "Logistique", "Frais"]));
+      .subscribe(() => {
+        this.gridsService.reload([
+          "SyntheseExpeditions",
+          "DetailExpeditions",
+          "Logistique",
+          "Frais",
+        ], this.gridsService.orderIdentifier(this.ordre));
+      });
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
@@ -674,6 +681,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "ventePrixUnitaire") {
       return self.gridCommandesEventsService
         .onVentePrixUnitaireChange(newData, value, currentData);
+    } else if (context.dataField === "venteUnite.id") {
+      return self.gridCommandesEventsService
+        .onVenteUniteChange(newData, value, currentData);
     } else if (context.dataField === "gratuit") {
       return self.gridCommandesEventsService
         .onGratuitChange(newData, value, currentData);
