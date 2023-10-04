@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import { concatMap, lastValueFrom, map, tap } from 'rxjs';
-import { Fournisseur, NatureStation, OrdreLigne, TypePalette } from '../models';
+import { BaseTarif, Fournisseur, NatureStation, OrdreLigne, TypePalette } from '../models';
 import Ordre from '../models/ordre.model';
 import { AttribFraisService } from './api/attrib-frais.service';
 import { DevisesRefsService } from './api/devises-refs.service';
@@ -436,6 +436,15 @@ export class GridCommandesEventsService {
     else if (value)
       if (currentData.nombrePalettesIntermediaires === 0)
         newData.nombrePalettesIntermediaires = 1;
+  }
+
+  async onVenteUniteChange(
+    newData: Partial<OrdreLigne>,
+    value: BaseTarif["id"],
+    currentData: Partial<OrdreLigne>,
+  ) {
+    newData.venteUnite = { id: value };
+    await lastValueFrom(this.functionsService.fDetailsExpOnClickAuto(currentData.id));
   }
 
   private ofRepartitionPalette(

@@ -112,6 +112,11 @@ export class GridCommandesComponent
     zoom: true,
   };
 
+  public readonly closure_accordions = [
+    "flux",
+    "litiges"
+  ]
+
   private readonly lookupDisplayFields = [
     "proprietaireMarchandise.id",
     "proprietaireMarchandise.code",
@@ -140,6 +145,8 @@ export class GridCommandesComponent
   @Output() allowMutations = false;
   @Output() updateDestockAuto = new EventEmitter<any>();
   @Output() afterSaved = new EventEmitter<any>();
+  @Output() closeFormAccordions = new EventEmitter<any>();
+  @Output() openAfterStandByAccordions = new EventEmitter<any>();
 
   // legacy features properties
   public certifsMD: any;
@@ -157,8 +164,10 @@ export class GridCommandesComponent
   public hintDblClick: string;
   public proprietairesDataSource: DataSource;
   public embalExp: string[];
+  public dataToBesaved: boolean;
   private lastingRows: number;
   private reindexButton: any;
+  public currentFormAccordionClickId: string;
 
 
   @Output() public ordreLigne: OrdreLigne;
@@ -292,8 +301,16 @@ export class GridCommandesComponent
   }
 
   onSaved() {
+    this.openAfterStandByAccordions.emit([this.currentFormAccordionClickId]);
     this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
-      .subscribe(() => this.gridsService.reload(["SyntheseExpeditions", "DetailExpeditions", "Logistique", "Frais"]));
+      .subscribe(() => {
+        this.gridsService.reload([
+          "SyntheseExpeditions",
+          "DetailExpeditions",
+          "Logistique",
+          "Frais",
+        ], this.gridsService.orderIdentifier(this.ordre));
+      });
     const firstLigneCommande = this?.grid?.instance?.getVisibleRows()?.[0]?.data;
     if (firstLigneCommande)
       this.functionsService
@@ -674,6 +691,9 @@ export class GridCommandesComponent
     } else if (context.dataField === "ventePrixUnitaire") {
       return self.gridCommandesEventsService
         .onVentePrixUnitaireChange(newData, value, currentData);
+    } else if (context.dataField === "venteUnite.id") {
+      return self.gridCommandesEventsService
+        .onVenteUniteChange(newData, value, currentData);
     } else if (context.dataField === "gratuit") {
       return self.gridCommandesEventsService
         .onGratuitChange(newData, value, currentData);
@@ -825,6 +845,16 @@ export class GridCommandesComponent
   }
 
   onEditorPreparing(e) {
+
+    // We close flux docs accordion when data is not saved yet
+    if (!this.dataToBesaved && this.grid.instance.hasEditData()) {
+      this.dataToBesaved = true;
+      // This accordions react (unwanted closure) to ordre change
+      this.closeFormAccordions.emit(this.closure_accordions);
+    } else {
+      this.dataToBesaved = false;
+    }
+
     // KEEP THIS !!! See secureTypedValueWithEditGrid() comment
     if (e.parentType === "dataRow") {
       e.editorOptions.onInput = (elem) => {

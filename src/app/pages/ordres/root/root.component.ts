@@ -321,7 +321,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Pastille rouge "ordre non sauvegardé"
     this.gridUnsavedInterval = setInterval(() => {
       this.tabContext.getAllItems().subscribe(tabs =>
-        tabs.filter((tab) => tab.type === "ordre")
+        tabs.filter((tab) => tab.type === TabType.Ordre)
           .map(t => t.unsaved = !!this.gridsService.get("Commande", t.id)?.instance.hasEditData())
       );
     }, 1500);
@@ -345,7 +345,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Pastille verte "Confirmé"
     this.tabContext.getNotSelectedItems().subscribe(tabs =>
       tabs
-        .filter((tab) => tab.type === "ordre")
+        .filter((tab) => tab.type === TabType.Ordre)
         .map(t => {
           this.ordresService
             .getOneByNumeroAndSocieteAndCampagne(
