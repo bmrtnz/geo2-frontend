@@ -32,5 +32,6 @@ export class DeclarationFraude extends Model {
   @Field() transporteurCode: string;
   @Field() commentaireInterne: string;
   @Field() origineDescription: string;
+  @Field() gtinColis: string;
 }
 export default DeclarationFraude;
