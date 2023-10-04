@@ -233,33 +233,19 @@ export class OrdreLignesService extends ApiService implements APIRead {
     cell.cancel = true;
   }
 
+
   lockFields(e, allowMutations?) {
     // Locking step
     const data = e.data;
     const bloquer =
       window.sessionStorage.getItem("blockage") === "true" ? true : false;
 
-    // Global case
-    if ([Statut.ANNULE.toString(), Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut]))
+    // Special case: lock every cell except some when vente à commission is true
+    if (!allowMutations &&
+      data.ordre.venteACommission === true &&
+      !["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)
+    )
       return this.lock(e);
-
-    // Special case: lock every cell except some when vente à commission is true & !allowmutations
-    if (!allowMutations) {
-      if (data.ordre.venteACommission === true) {
-        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
-          return this.lock(e);
-        } else {
-          return;
-        }
-      } else {
-        // Special case: unlock every cell except some when !allowmutations
-        if (!["ventePrixUnitaire", "venteUnite.id", "gratuit"].includes(e.column.dataField)) {
-          return this.lock(e);
-        } else {
-          return;
-        }
-      }
-    }
 
     switch (e.column.dataField) {
       case "nombrePalettesCommandees": {
