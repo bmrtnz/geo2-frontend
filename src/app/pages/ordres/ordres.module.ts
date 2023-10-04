@@ -3,6 +3,9 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CustomCellTemplatesModule } from "app/custom-cell-templates/custom-cell-templates.module";
 import { ButtonLoaderModule } from "app/shared/components/button-loader/button-loader.component";
+import {
+  ClientsArticleRefPopupModule
+} from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
 import { ConfirmationResultPopupModule } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import { EditingAlertModule } from "app/shared/components/editing-alert/editing-alert.component";
 import { EntityCellTemplateModule } from "app/shared/components/entity-cell-template/entity-cell-template.component";
@@ -44,7 +47,7 @@ import {
   DxTileViewModule,
   DxTooltipModule,
   DxValidationGroupModule,
-  DxValidatorModule,
+  DxValidatorModule
 } from "devextreme-angular";
 import { PromptPopupModule } from "../../shared/components/prompt-popup/prompt-popup.component";
 import { ArticlesModule } from "../articles/articles.module";
@@ -56,6 +59,7 @@ import { LieuxPassageAQuaiModule } from "../tiers/lieux-passage-a-quai/lieux-pas
 import { TransporteursModule } from "../tiers/transporteurs/transporteurs.module";
 import { OrdresAccueilComponent } from "./accueil/ordres-accueil.component";
 import { ActionsDocumentsOrdresComponent } from "./actions-documents-ordres/actions-documents-ordres.component";
+import { AddArticleToOrderButtonsComponent } from "./add-article-to-order-buttons/add-article-to-order-buttons.component";
 import { AjoutArticlesHistoPopupComponent } from "./ajout-articles-histo-popup/ajout-articles-histo-popup.component";
 import { AjoutArticlesManuPopupComponent } from "./ajout-articles-manu-popup/ajout-articles-manu-popup.component";
 import { AjoutArticlesRefClientPopupComponent } from "./ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component";
@@ -68,7 +72,7 @@ import { ArticleCertificationPopupComponent } from "./article-certification-popu
 import { ArticleOriginePopupComponent } from "./article-origine-popup/article-origine-popup.component";
 import {
   ArticleReservationOrdrePopupComponent,
-  ListPipe,
+  ListPipe
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
 import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
@@ -113,13 +117,17 @@ import { GridImportProgrammesComponent } from "./import-programmes-popup/grid-im
 import { ImportProgrammesPopupComponent } from "./import-programmes-popup/import-programmes-popup.component";
 import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
+import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-edi/ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component';
 import { ChoixEntrepotCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { CommandesEdiComponent } from "./indicateurs/commandes-edi/commandes-edi.component";
 import { GridCommandesEdiComponent } from "./indicateurs/commandes-edi/grid-commandes-edi/grid-commandes-edi.component";
 import { GridModifCommandeEdiComponent } from "./indicateurs/commandes-edi/grid-modif-commande-edi/grid-modif-commande-edi.component";
+import { GridRecapStockCdeEdiColibriComponent } from './indicateurs/commandes-edi/grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component';
 import { ModifCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
+import { RecapStockCdeEdiColibriPopupComponent } from './indicateurs/commandes-edi/recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component';
 import { VisualiserOrdresPopupComponent } from "./indicateurs/commandes-edi/visualiser-ordres-popup/visualiser-ordres-popup.component";
 import { CommandesTransitComponent } from "./indicateurs/commandes-transit/commandes-transit.component";
+import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/declaration-fraude.component";
 import HistoriqueOrdresComponent from "./indicateurs/historique-ordres/historique-ordres.component";
 import { LitigesSupervisionComponent } from "./indicateurs/litiges/litiges-supervision.component";
 import { OrdresNonCloturesComponent } from "./indicateurs/ordres-non-clotures/ordres-non-clotures.component";
@@ -140,10 +148,12 @@ import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-pop
 import { OrdresRoutingModule } from "./ordres-routing.module";
 import { GridPackingListComponent } from "./packing-list-popup/grid-packing-list/grid-packing-list.component";
 import { PackingListPopupComponent } from "./packing-list-popup/packing-list-popup.component";
+import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/grid-recap-stock.component';
+import { RecapStockPopupComponent } from './recap-stock-popup/recap-stock-popup.component';
 import {
   LoadingTabComponent,
   RootComponent,
-  TabContext,
+  TabContext
 } from "./root/root.component";
 import { SelectionComptePaloxPopupComponent } from "./selection-compte-palox-popup/selection-compte-palox-popup.component";
 import { OrdresSuiviModule } from "./suivi/ordres-suivi.component";
@@ -153,16 +163,6 @@ import { ZoomEntrepotPopupComponent } from "./zoom-entrepot-popup/zoom-entrepot-
 import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fournisseur-popup.component";
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { DeclarationFraudeComponent } from "./indicateurs/declaration-fraude/declaration-fraude.component";
-import {
-  ClientsArticleRefPopupComponent,
-  ClientsArticleRefPopupModule,
-} from "app/shared/components/clients-article-ref-popup/clients-article-ref-popup.component";
-import { RecapStockPopupComponent } from './recap-stock-popup/recap-stock-popup.component';
-import { GridRecapStockComponent } from './recap-stock-popup/grid-recap-stock/grid-recap-stock.component';
-import { RecapStockCdeEdiColibriPopupComponent } from './indicateurs/commandes-edi/recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component';
-import { GridRecapStockCdeEdiColibriComponent } from './indicateurs/commandes-edi/grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component';
-import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-edi/ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component';
 import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartition-ordres-regroupement/repartition-ordres-regroupement.component';
 
 @NgModule({
@@ -263,6 +263,8 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     RecapStockCdeEdiColibriPopupComponent,
     GridRecapStockCdeEdiColibriComponent,
     AjoutArticleEdiColibriPopupComponent,
+    AjoutArticlesRefClientPopupComponent,
+    AddArticleToOrderButtonsComponent,
     RepartitionOrdresRegroupementComponent,
   ],
   providers: [

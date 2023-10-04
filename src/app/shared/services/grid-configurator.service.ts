@@ -150,6 +150,8 @@ export enum Grid {
   PackingList = "packing-list",
   SelectionLignesCdeLitige = "selection-lignes-litige",
   LitigeLignesLot = "litige-lignes-lot",
+  StatsArticleClient = "statistiques-article-client",
+  StatsArticleFournisseur = "statistiques-article-fournisseur",
   OrdresRegroupement = "ordres-regroupement",
 }
 
