@@ -56,8 +56,7 @@ import {
   concatMapTo, filter,
   finalize, last,
   map,
-  takeWhile,
-  tap
+  takeWhile
 } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
@@ -681,9 +680,6 @@ export class GridCommandesComponent
     } else if (context.dataField === "ventePrixUnitaire") {
       return self.gridCommandesEventsService
         .onVentePrixUnitaireChange(newData, value, currentData);
-    } else if (context.dataField === "venteUnite.id") {
-      return self.gridCommandesEventsService
-        .onVenteUniteChange(newData, value, currentData);
     } else if (context.dataField === "gratuit") {
       return self.gridCommandesEventsService
         .onGratuitChange(newData, value, currentData);

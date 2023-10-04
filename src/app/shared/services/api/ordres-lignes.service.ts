@@ -6,14 +6,13 @@ import Ordre, { Statut } from "app/shared/models/ordre.model";
 import {
   functionBody,
   FunctionResponse,
-  FunctionsService,
+  FunctionsService
 } from "app/shared/services/api/functions.service";
-import ArrayStore from "devextreme/data/array_store";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { lastValueFrom } from "rxjs";
-import { map, takeWhile } from "rxjs/operators";
+import { concatMap, map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
@@ -122,7 +121,9 @@ export class OrdreLignesService extends ApiService implements APIRead {
 
   private update(id, values) {
     const variables = { ordreLigne: FormUtilsService.cleanTypenames({ id, ...values }) };
-    return self.watchSaveQuery({ variables }).toPromise();
+    return lastValueFrom(self.watchSaveQuery({ variables }).pipe(
+      concatMap(() => self.functionsService.fDetailsExpOnClickAuto(id)),
+    ));
   }
 
   getDataSource_v2(columns: Array<string>, pageSize?) {

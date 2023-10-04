@@ -438,15 +438,6 @@ export class GridCommandesEventsService {
         newData.nombrePalettesIntermediaires = 1;
   }
 
-  async onVenteUniteChange(
-    newData: Partial<OrdreLigne>,
-    value: BaseTarif["id"],
-    currentData: Partial<OrdreLigne>,
-  ) {
-    newData.venteUnite = { id: value };
-    await lastValueFrom(this.functionsService.fDetailsExpOnClickAuto(currentData.id));
-  }
-
   private ofRepartitionPalette(
     data: Partial<OrdreLigne>,
   ) {
