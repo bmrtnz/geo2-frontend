@@ -2036,6 +2036,8 @@
     "litige-save-success": "Sauvegarde du litige effectuée",
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
     "report": "reporter",
+    "cell-report": "Report {0} effectué",
+    "text-report-items": "Lignes de commande - report possible des champs suivants :",
     "associated-docs": "Documents associés",
     "ordre-date-depart-mutate-title": "Date de départ de l'ordre modifiée",
     "ordre-date-depart-mutate": "Souhaitez-vous également modifier les dates de départ station / lieu de passage à quai (logistique départ) ?",

@@ -13,14 +13,18 @@ import {
   DxDateBoxModule,
   DxLoadPanelModule,
   DxNumberBoxModule,
+  DxCheckBoxModule,
   DxPopupModule,
   DxSelectBoxComponent,
   DxSelectBoxModule,
   DxTextBoxModule,
+  DxFormModule,
 } from "devextreme-angular";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-profile-popup",
@@ -40,6 +44,8 @@ export class ProfilePopupComponent {
   private nomUtilisateur: string;
   private nomInterne: string;
   public saveUserPrefs: boolean;
+  public reportedItems: any[];
+  public formGroup = new UntypedFormGroup({});
 
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
@@ -52,6 +58,24 @@ export class ProfilePopupComponent {
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateManagementService.periods();
+
+    this.reportedItems = [
+      { name: "proprietaireMarchandise.id", checked: true },
+      { name: "fournisseur.id", checked: true },
+      { name: "ventePrixUnitaire", checked: false },
+      { name: "venteUnite.id", checked: false },
+      { name: "achatDevisePrixUnitaire", checked: false },
+      { name: "achatUnite.id", checked: true },
+      { name: "typePalette.id", checked: false },
+      { name: "libelleDLV", checked: true, disabled: true },
+    ];
+
+    this.reportedItems.map((item) =>
+      this.formGroup.addControl(item.name, new UntypedFormControl({
+        value: item.checked,
+        disabled: item.disabled
+      }))
+    );
   }
 
   cancelClick() {
@@ -117,7 +141,7 @@ export class ProfilePopupComponent {
         notify(
           this.localizeService.localize("user-profile-saved"),
           "success",
-          1500
+          2500
         );
         this.hidePopup();
       },
@@ -155,7 +179,11 @@ export class ProfilePopupComponent {
     DxTextBoxModule,
     DxButtonModule,
     DxNumberBoxModule,
+    DxCheckBoxModule,
+    DxFormModule,
     DxDateBoxModule,
+    FormsModule,
+    ReactiveFormsModule,
     DxSelectBoxModule,
   ],
   exports: [ProfilePopupComponent],

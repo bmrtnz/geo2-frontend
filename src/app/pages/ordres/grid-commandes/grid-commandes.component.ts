@@ -106,11 +106,24 @@ export class GridCommandesComponent
     highlightBio: true,
     rowOrdering: true,
     quickSwitch: true,
-    reportDLUO: true,
+    reportCells: true,
     destockage: true,
     indicateurStock: true,
     zoom: true,
   };
+
+  configReportFields = [
+    "proprietaireMarchandise.id",
+    // "fournisseur.id",
+    // "ventePrixUnitaire",
+    // "venteUnite.id",
+    // "achatDevisePrixUnitaire",
+    // "achatUnite.id",
+    "typePalette.id"
+  ]
+  mandatoryReportFields = [
+    "libelleDLV"
+  ]
 
   private readonly lookupDisplayFields = [
     "proprietaireMarchandise.id",
@@ -204,7 +217,7 @@ export class GridCommandesComponent
       ],
     });
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.paramMap
       .pipe(filter((params) => params.has("ordre_id")))
       .subscribe({
@@ -227,9 +240,28 @@ export class GridCommandesComponent
         this.update();
         this.gridCommandesEventsService.updateContext(this.ordre.id).subscribe();
         this.bindSources(event.component);
+        const fields = this.columns.pipe(
+          map((columns) => columns.map((column) => column.dataField))
+        );
+        this.updateReportBtns(); // Like DLUO...
       });
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
+  }
+
+  async updateReportBtns() {
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
+    (await fields.toPromise()).map(field => {
+      const currClass = this.grid.instance.columnOption(field, "cssClass") ?? "";
+      if (this.configReportFields.concat(this.mandatoryReportFields).includes(field)) {
+        this.grid.instance.columnOption(field, "cssClass", currClass + " headerCellBtnTemplate-show");
+      } else {
+        this.grid.instance.columnOption(field, "cssClass", currClass.replace("headerCellBtnTemplate-show", ""));
+      }
+    });
+    // this.grid.instance.refresh();
   }
 
   onContentReady(e) {
@@ -894,20 +926,17 @@ export class GridCommandesComponent
     this.swapRowArticle.emit(cell.id);
   }
 
-  copyPaste(e, field) {
+  copyFirstPasteAllRows(e, data) {
     e.event.stopImmediatePropagation();
-    let refValue;
-    const rows = this.grid.instance.getVisibleRows();
-    if (rows?.length < 2) return;
-    rows.map((res, index) => {
-      if (!index) {
-        refValue = res.data.libelleDLV;
-      } else {
-        this.grid.instance.cellValue(res.rowIndex, field, refValue);
-      }
-    });
+    const field = data.column.dataField;
+    this.grid.instance
+      .getVisibleRows()
+      .map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
     setTimeout(() => this.grid.instance.saveEditData());
-    notify("Report DLUO effectué", "success", 3000);
+    const message =
+      this.localizeService.localize("cell-report",
+        this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`));
+    notify(message, "success", 3000);
   }
 
   openFilePopup(e) {
@@ -997,7 +1026,7 @@ export class GridCommandesComponent
   }
 
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
-    if (event.originalEvent.code !== "Enter") return;
+    if (event.originalEvent?.code !== "Enter") return;
     const shiftModifier = event.originalEvent.shiftKey;
     this.grid.instance.closeEditCell();
 

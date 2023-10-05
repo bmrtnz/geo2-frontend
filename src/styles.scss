@@ -552,6 +552,11 @@ body app-root.production {
   padding-left: 5px !important;
 }
 
+.no-side-padding:not(.dx-group-panel-item) {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
 .large-right-side-padding:not(.dx-group-panel-item) {
   padding-right: 40px !important;
 }
