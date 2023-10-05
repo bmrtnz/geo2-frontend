@@ -1073,6 +1073,10 @@
                     (selectedRowsChange)="gridCdesSelectedRowsChange($event)"
                     (updateDestockAuto)="updateDestockAuto()"
                     (afterSaved)="refreshHeader()"
+                    (closeFormAccordions)="closeFormAccordions($event)"
+                    (openAfterStandByAccordions)="
+                      openAfterStandByAccordions($event)
+                    "
                   ></app-grid-commandes>
                   <div class="grid-separator"></div>
                   <app-grid-ordre-ligne-logistique
@@ -1104,6 +1108,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1155,6 +1160,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1195,6 +1201,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1238,6 +1245,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1272,6 +1280,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1300,6 +1309,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{
@@ -1328,6 +1338,7 @@
                   [multiple]="false"
                   [selectedIndex]="-1"
                   [dataSource]="[ordre]"
+                  (onItemClick)="onAccordionToggleBtnClick($event)"
                 >
                   <div *dxTemplate="let prop of 'title'">
                     <span class="dx-form-group-caption accordion-title">{{

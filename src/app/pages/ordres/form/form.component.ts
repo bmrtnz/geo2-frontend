@@ -173,7 +173,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           next: ordre => {
             if (ordre) this.refreshStatus(ordre.statut)
           },
-          complete: () => console.log("Stopping order refetch cycle"),
         });
       }
       if (event.status === "out")
@@ -352,6 +351,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedGridCdesRows: boolean;
   public cancelledOrder: boolean;
   public promptPopupDateOnly: boolean;
+  private savedGridCdeStandby: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -366,7 +366,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("comInt", { static: false }) comInt: DxSelectBoxComponent;
   @ViewChild("leftAccessPanel", { static: false })
   leftAccessPanel: DxCheckBoxComponent;
-  @ViewChildren(DxAccordionComponent) accordion: DxAccordionComponent[];
+  @ViewChildren(DxAccordionComponent) accordion: QueryList<DxAccordionComponent>;
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
   @ViewChild(AjoutArticlesRefClientPopupComponent, { static: false })
   ajoutArtRefClt: AjoutArticlesRefClientPopupComponent;
@@ -417,6 +417,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
+
 
   ngOnInit() {
     this.initializeForm();
@@ -1416,6 +1417,40 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  public openFormAccordions(ids?) {
+    if (ids) {
+      this.accordion.filter(r => ids.includes(r.instance.$element()[0].id)).map(ac => ac.instance.expandItem(0));
+    } else {
+      this.accordion.map(r => r.instance.expandItem(0)); // All are opened
+    }
+  }
+
+  public closeFormAccordions(ids?) {
+    if (ids) {
+      this.accordion.filter(r => ids.includes(r.instance.$element()[0].id)).map(ac => ac.instance.collapseItem(0));
+    } else {
+      this.accordion.map(r => r.instance.collapseItem(0)); // All are closed
+    }
+  }
+
+  public openAfterStandByAccordions(ids?) {
+    if (this.savedGridCdeStandby) {
+      this.savedGridCdeStandby = false;
+      setTimeout(() => this.openFormAccordions(ids), 1000);
+    }
+  }
+
+  public onAccordionToggleBtnClick(e) {
+    const accordionId = e?.element?.id;
+    if (!accordionId || !this.gridCommandes?.closure_accordions.includes(accordionId)) return;
+    if (this.gridCommandes?.dataToBesaved) {
+      e.event.preventDefault(); // Delay opening until grid commande is saved
+      this.savedGridCdeStandby = true;
+      this.gridCommandes.currentFormAccordionClickId = accordionId;
+      this.gridCommandes?.grid.instance.saveEditData();
+    }
+  }
+
   private fetchFullOrderNumber() {
     const nouveau = this?.ordre?.statut;
 
@@ -1559,7 +1594,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private refetchOrder(period = 5000) {
-    console.log("Starting order refetch cycle");
     return interval(period)
       .pipe(
         // we need current route information
