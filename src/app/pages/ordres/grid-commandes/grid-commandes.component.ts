@@ -114,11 +114,11 @@ export class GridCommandesComponent
 
   configReportFields = [
     "proprietaireMarchandise.id",
-    // "fournisseur.id",
-    // "ventePrixUnitaire",
-    // "venteUnite.id",
-    // "achatDevisePrixUnitaire",
-    // "achatUnite.id",
+    "fournisseur.id",
+    "ventePrixUnitaire",
+    "venteUnite.id",
+    "achatDevisePrixUnitaire",
+    "achatUnite.id",
     "typePalette.id"
   ]
   mandatoryReportFields = [
@@ -928,15 +928,14 @@ export class GridCommandesComponent
 
   copyFirstPasteAllRows(e, data) {
     e.event.stopImmediatePropagation();
-    const field = data.column.dataField;
+    let field = data.column.dataField;
     this.grid.instance
       .getVisibleRows()
       .map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
     setTimeout(() => this.grid.instance.saveEditData());
-    const message =
-      this.localizeService.localize("cell-report",
-        this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`));
-    notify(message, "success", 3000);
+    field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
+    field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
+    notify(this.localizeService.localize("cell-report", field), "success", 3000);
   }
 
   openFilePopup(e) {
