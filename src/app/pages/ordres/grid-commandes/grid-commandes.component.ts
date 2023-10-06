@@ -112,18 +112,7 @@ export class GridCommandesComponent
     zoom: true,
   };
 
-  configReportFields = [
-    "proprietaireMarchandise.id",
-    "fournisseur.id",
-    "ventePrixUnitaire",
-    "venteUnite.id",
-    "achatDevisePrixUnitaire",
-    "achatUnite.id",
-    "typePalette.id"
-  ]
-  mandatoryReportFields = [
-    "libelleDLV"
-  ]
+  reportedItems = this.ordreLignesService.reportedItems;
 
   private readonly lookupDisplayFields = [
     "proprietaireMarchandise.id",
@@ -243,26 +232,12 @@ export class GridCommandesComponent
         const fields = this.columns.pipe(
           map((columns) => columns.map((column) => column.dataField))
         );
-        this.updateReportBtns(); // Like DLUO...
+        this.ordreLignesService.updateReportBtns(this.grid); // Like DLUO...
       });
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
   }
 
-  async updateReportBtns() {
-    const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField))
-    );
-    (await fields.toPromise()).map(field => {
-      const currClass = this.grid.instance.columnOption(field, "cssClass") ?? "";
-      if (this.configReportFields.concat(this.mandatoryReportFields).includes(field)) {
-        this.grid.instance.columnOption(field, "cssClass", currClass + " headerCellBtnTemplate-show");
-      } else {
-        this.grid.instance.columnOption(field, "cssClass", currClass.replace("headerCellBtnTemplate-show", ""));
-      }
-    });
-    // this.grid.instance.refresh();
-  }
 
   onContentReady(e) {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
@@ -290,6 +265,9 @@ export class GridCommandesComponent
 
   ngAfterViewInit() {
     this.gridsService.register("Commande", this.grid, this.gridsService.orderIdentifier(this.ordre));
+    this.authService.onUserChanged().subscribe(() =>
+      this.ordreLignesService.updateReportBtns(this.grid) // Like DLUO...
+    );
   }
 
   displaySummaryFormat(data) {
@@ -1044,8 +1022,4 @@ export class GridCommandesComponent
     );
   }
 
-  // onGridOut() {
-  //   if (this.grid.instance.hasEditData())
-  //     this.grid.instance.saveEditData();
-  // }
 }

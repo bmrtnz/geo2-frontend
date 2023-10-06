@@ -2,7 +2,7 @@
   #loadPanel
   shadingColor="rgba(0,0,0,0.4)"
   [position]="{ of: '.profile-popup' }"
-  [visible]="saveUserPrefs"
+  [visible]="savingUserPrefs"
   [showPane]="true"
   [shading]="true"
   [hideOnOutsideClick]="false"
@@ -77,7 +77,7 @@
               </div>
               <div class="dx-field-label">
                 {{
-                  "ordreLignes-" + item.name?.split(".").join("-") | localize
+                  "ordreLignes-" + item.caption?.split(".").join("-") | localize
                 }}
               </div>
             </div>

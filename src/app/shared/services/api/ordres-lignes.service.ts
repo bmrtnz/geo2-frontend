@@ -32,6 +32,7 @@ let self;
   providedIn: "root",
 })
 export class OrdreLignesService extends ApiService implements APIRead {
+
   queryFilter = /.*(?:id)$/i;
 
   /**
@@ -55,6 +56,31 @@ export class OrdreLignesService extends ApiService implements APIRead {
   ) {
     super(apollo, OrdreLigne);
     self = this;
+  }
+
+  // Used for "REPORTER" buttons on grid commandes
+  reportedItems = [
+    { name: "reportProprietaire", caption: "proprietaireMarchandise.id", fields: ["proprietaireMarchandise.id"] },
+    { name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
+    { name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
+    { name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
+    { name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
+    { name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
+  ];
+
+  updateReportBtns(grid) {
+    this.reportedItems.map((item) => {
+      item.fields.map(field => {
+        const currClass = grid.instance.columnOption(field, "cssClass") ?? "";
+        if (this.authService.currentUser[item.name] || item.mandatoryValue === true) {
+          grid.instance.columnOption(field, "cssClass", currClass + " headerCellBtnTemplate-show");
+        } else {
+          grid.instance.columnOption(field, "cssClass", currClass.replace("headerCellBtnTemplate-show", ""));
+        }
+      });
+    });
+
+    grid.instance.refresh();
   }
 
   getOne_v2(id: string, columns: Array<string> | Set<string>) {

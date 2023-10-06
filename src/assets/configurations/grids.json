@@ -3127,7 +3127,7 @@
         "dataField": "libelleDLV",
         "visible": true,
         "allowSorting": false,
-        "cssClass": "headerCellBtnTemplate",
+        "cssClass": "headerCellBtnTemplate small-side-padding ",
         "headerCellTemplate": "headerCellBtnTemplate"
       },
       {

@@ -25,11 +25,12 @@ import { AuthService, LocalizationService } from "app/shared/services";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 
 @Component({
   selector: "app-profile-popup",
   templateUrl: "./profile-popup.component.html",
-  styleUrls: ["./profile-popup.component.scss"],
+  styleUrls: ["./profile-popup.component.scss"]
 })
 export class ProfilePopupComponent {
   @Input() public ligneDetail: any;
@@ -43,7 +44,7 @@ export class ProfilePopupComponent {
   public periodes: any[];
   private nomUtilisateur: string;
   private nomInterne: string;
-  public saveUserPrefs: boolean;
+  public savingUserPrefs: boolean;
   public reportedItems: any[];
   public formGroup = new UntypedFormGroup({});
 
@@ -52,6 +53,7 @@ export class ProfilePopupComponent {
   constructor(
     private localizeService: LocalizationService,
     private utilisateursService: UtilisateursService,
+    private ordreLignesService: OrdreLignesService,
     private authService: AuthService,
     public dateManagementService: DateManagementService
   ) {
@@ -59,21 +61,12 @@ export class ProfilePopupComponent {
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateManagementService.periods();
 
-    this.reportedItems = [
-      { name: "proprietaireMarchandise.id", checked: true },
-      { name: "fournisseur.id", checked: true },
-      { name: "ventePrixUnitaire", checked: false },
-      { name: "venteUnite.id", checked: false },
-      { name: "achatDevisePrixUnitaire", checked: false },
-      { name: "achatUnite.id", checked: true },
-      { name: "typePalette.id", checked: false },
-      { name: "libelleDLV", checked: true, disabled: true },
-    ];
+    this.reportedItems = this.ordreLignesService.reportedItems;
 
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
-        value: item.checked,
-        disabled: item.disabled
+        value: item.mandatoryValue ?? !!this.authService.currentUser[item.name],
+        disabled: !!item.mandatoryValue
       }))
     );
   }
@@ -133,11 +126,19 @@ export class ProfilePopupComponent {
     const utilisateur = {
       nomUtilisateur: this.nomUtilisateur,
       periode: newPeriod,
+      reportProprietaire: this.formGroup.get("reportProprietaire").value,
+      reportExpediteur: this.formGroup.get("reportExpediteur").value,
+      reportPrixAchat: this.formGroup.get("reportPrixAchat").value,
+      reportPrixVente: this.formGroup.get("reportPrixVente").value,
+      reportTypePalette: this.formGroup.get("reportTypePalette").value,
     };
-    this.saveUserPrefs = true;
-    this.utilisateursService.save_v2(["periode"], { utilisateur }).subscribe({
+
+    this.savingUserPrefs = true;
+    this.utilisateursService.save_v2([
+      "periode"
+    ], { utilisateur }).subscribe({
       next: () => {
-        this.authService.currentUser.periode = newPeriod;
+        this.authService.setCurrentUser(utilisateur);
         notify(
           this.localizeService.localize("user-profile-saved"),
           "success",
@@ -146,7 +147,7 @@ export class ProfilePopupComponent {
         this.hidePopup();
       },
       error: ({ message }: Error) => {
-        this.saveUserPrefs = false;
+        this.savingUserPrefs = false;
         notify(
           `${this.localizeService.localize(
             "user-profile-save-error"
@@ -156,7 +157,7 @@ export class ProfilePopupComponent {
         );
       },
       complete: () => {
-        this.saveUserPrefs = false;
+        this.savingUserPrefs = false;
       },
     });
   }
