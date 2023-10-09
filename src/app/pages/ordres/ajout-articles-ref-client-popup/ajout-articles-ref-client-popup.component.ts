@@ -82,7 +82,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     if (this.ordre)
       this.additionnalFilter = [
         "and",
-        ["referencesClient.client.id", "=", this.ordre.client.id],
+        ["referencesClient.client.id", "=", this.ordre.client?.id],
       ];
   }
 
@@ -91,13 +91,13 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     if (this.ordre) {
       this.titleMid =
         "n° " +
-        this.ordre.campagne.id +
+        this.ordre.campagne?.id +
         "-" +
         this.ordre.numero +
         " - " +
-        this.ordre.client.code +
+        this.ordre.client?.code +
         "/" +
-        this.ordre.entrepot.code;
+        this.ordre.entrepot?.code;
     }
     this.titleEnd = this.localizeService.localize("via-refs-client");
   }

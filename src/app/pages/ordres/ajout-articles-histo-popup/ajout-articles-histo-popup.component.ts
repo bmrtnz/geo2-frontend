@@ -80,16 +80,16 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
         this.titleStart = this.localizeService.localize("ajout-articles");
         this.titleMid =
           "n° " +
-          this.ordre.campagne.id +
+          this.ordre.campagne?.id +
           "-" +
           this.ordre.numero +
           " - " +
-          this.ordre.client.code +
+          this.ordre.client?.code +
           "/" +
-          this.ordre.entrepot.code;
-        this.clientId = this.ordre.client.id;
-        this.entrepotId = this.ordre.entrepot.id;
-        this.secteurId = this.ordre.secteurCommercial.id;
+          this.ordre.entrepot?.code;
+        this.clientId = this.ordre.client?.id;
+        this.entrepotId = this.ordre.entrepot?.id;
+        this.secteurId = this.ordre.secteurCommercial?.id;
         this.titleEnd = this.localizeService.localize("via-histo-client");
       }
     } else {

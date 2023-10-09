@@ -51,7 +51,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -62,13 +62,13 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
     if (this.ordre) {
       this.titleMid =
         "n° " +
-        this.ordre.campagne.id +
+        this.ordre.campagne?.id +
         "-" +
         this.ordre.numero +
         " - " +
-        this.ordre.client.code +
+        this.ordre.client?.code +
         "/" +
-        this.ordre.entrepot.code;
+        this.ordre.entrepot?.code;
     }
     this.titleEnd = this.localizeService.localize("via-stock");
     this.titlePlus = this.localizeService.localize("resa-article");
@@ -84,7 +84,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
-  clearAll() {}
+  clearAll() { }
 
   hidePopup() {
     this.popup.visible = false;
