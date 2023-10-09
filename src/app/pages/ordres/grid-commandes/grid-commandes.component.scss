@@ -60,15 +60,19 @@
     padding-right: 8px !important;
   }
 
-  .dx-datagrid-headers.dx-datagrid-nowrap td:not(.dx-command-select) {
-    &.headerCellBtnTemplate {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      text-align: center !important;
+  .headerCellBtnTemplate {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 
-      .small-article-button {
-        margin-top: 2px;
-      }
+    .small-article-button {
+      display: none;
+      margin-top: 3px;
+    }
+  }
+
+  .headerCellBtnTemplate-show {
+    .small-article-button {
+      display: flex !important;
     }
   }
 

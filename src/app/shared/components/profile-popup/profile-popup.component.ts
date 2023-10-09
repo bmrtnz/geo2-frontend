@@ -13,19 +13,26 @@ import {
   DxDateBoxModule,
   DxLoadPanelModule,
   DxNumberBoxModule,
+  DxCheckBoxModule,
   DxPopupModule,
   DxSelectBoxComponent,
   DxSelectBoxModule,
   DxTextBoxModule,
+  DxFormModule,
 } from "devextreme-angular";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+import Utilisateur from "app/shared/models/utilisateur.model";
 
 @Component({
   selector: "app-profile-popup",
   templateUrl: "./profile-popup.component.html",
-  styleUrls: ["./profile-popup.component.scss"],
+  styleUrls: ["./profile-popup.component.scss"]
 })
 export class ProfilePopupComponent {
   @Input() public ligneDetail: any;
@@ -39,19 +46,33 @@ export class ProfilePopupComponent {
   public periodes: any[];
   private nomUtilisateur: string;
   private nomInterne: string;
-  public saveUserPrefs: boolean;
+  public savingUserPrefs: boolean;
+  public reportedItems: any[];
+  public formGroup = new UntypedFormGroup({});
 
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
 
   constructor(
     private localizeService: LocalizationService,
     private utilisateursService: UtilisateursService,
+    private ordreLignesService: OrdreLignesService,
     private authService: AuthService,
+    private formUtilsService: FormUtilsService,
     public dateManagementService: DateManagementService
   ) {
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateManagementService.periods();
+
+    this.reportedItems = this.ordreLignesService.reportedItems;
+
+    this.formGroup.addControl("periode", new UntypedFormControl());
+    this.reportedItems.map((item) =>
+      this.formGroup.addControl(item.name, new UntypedFormControl({
+        value: item.mandatoryValue ?? !!this.authService.currentUser[item.name],
+        disabled: !!item.mandatoryValue
+      }))
+    );
   }
 
   cancelClick() {
@@ -64,17 +85,25 @@ export class ProfilePopupComponent {
   }
 
   onShown(e) {
-    this.periodeSB.instance.option(
-      "value",
-      this.dateManagementService.getPeriodFromId(
-        this.authService.currentUser?.periode,
-        this.periodes
+    this.formGroup.get("periode").setValue(
+      this.authService.currentUser?.periode
+    );
+    this.reportedItems.map((item) =>
+      this.formGroup.get(item.name).setValue(
+        item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
   }
 
   onHidden() {
-    this.periodeSB.instance.reset();
+    this.formGroup.get("periode").reset();
+    this.reportedItems
+      .filter((item) => !item.mandatoryValue)
+      .map((item) => {
+        this.formGroup.get(item.name).reset()
+        this.formGroup.get(item.name).setValue(false);
+        this.formGroup.get(item.name).markAsPristine;
+      });
   }
 
   resizePopup() {
@@ -91,6 +120,15 @@ export class ProfilePopupComponent {
     this.titleMid = this.formatName(this.nomInterne);
   }
 
+  resetAllReportCheckboxes() {
+    this.reportedItems
+      .filter((item) => !item.mandatoryValue)
+      .map((item) => {
+        this.formGroup.get(item.name).setValue(false);
+        this.formGroup.get(item.name).markAsDirty();
+      });
+  }
+
   formatName(name) {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
@@ -105,36 +143,39 @@ export class ProfilePopupComponent {
   }
 
   saveAndHidePopup() {
-    const newPeriod = this.periodeSB.value?.id ?? "";
-    const utilisateur = {
-      nomUtilisateur: this.nomUtilisateur,
-      periode: newPeriod,
-    };
-    this.saveUserPrefs = true;
-    this.utilisateursService.save_v2(["periode"], { utilisateur }).subscribe({
-      next: () => {
-        this.authService.currentUser.periode = newPeriod;
-        notify(
-          this.localizeService.localize("user-profile-saved"),
-          "success",
-          1500
-        );
-        this.hidePopup();
-      },
-      error: ({ message }: Error) => {
-        this.saveUserPrefs = false;
-        notify(
-          `${this.localizeService.localize(
-            "user-profile-save-error"
-          )} : ${this.messageFormat(message)}`,
-          "error",
-          7000
-        );
-      },
-      complete: () => {
-        this.saveUserPrefs = false;
-      },
-    });
+    const utilisateur = this.formUtilsService.extractDirty(
+      this.formGroup.controls,
+      Utilisateur.getKeyField()
+    );
+    utilisateur.nomUtilisateur = this.nomUtilisateur;
+
+    this.savingUserPrefs = true;
+    this.utilisateursService.save_v2(
+      Object.keys(utilisateur)
+      , { utilisateur }).subscribe({
+        next: () => {
+          this.authService.setCurrentUser(utilisateur);
+          notify(
+            this.localizeService.localize("user-profile-saved"),
+            "success",
+            2500
+          );
+          this.hidePopup();
+        },
+        error: ({ message }: Error) => {
+          this.savingUserPrefs = false;
+          notify(
+            `${this.localizeService.localize(
+              "user-profile-save-error"
+            )} : ${this.messageFormat(message)}`,
+            "error",
+            7000
+          );
+        },
+        complete: () => {
+          this.savingUserPrefs = false;
+        },
+      });
   }
 
   hidePopup() {
@@ -155,7 +196,11 @@ export class ProfilePopupComponent {
     DxTextBoxModule,
     DxButtonModule,
     DxNumberBoxModule,
+    DxCheckBoxModule,
+    DxFormModule,
     DxDateBoxModule,
+    FormsModule,
+    ReactiveFormsModule,
     DxSelectBoxModule,
   ],
   exports: [ProfilePopupComponent],

@@ -77,4 +77,9 @@ export class FormUtilsService {
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
+
+  isUpperCase(str) {
+    return str === str.toUpperCase() && str !== str.toLowerCase();
+  }
+
 }

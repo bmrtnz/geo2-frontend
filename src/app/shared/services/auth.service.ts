@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import notify from "devextreme/ui/notify";
+import { Observable, Subject } from "rxjs";
 import { concatMap, take, tap } from "rxjs/operators";
 import { Utilisateur } from "../models/utilisateur.model";
 import { UtilisateursService } from "./api/utilisateurs.service";
@@ -10,6 +11,7 @@ import { CurrentCompanyService } from "./current-company.service";
 export class AuthService {
   private loggedIn = false;
   public currentUser: Utilisateur;
+  private userChange = new Subject<void>();
 
   readonly LAST_USER_STORE_KEY = "GEO2:LAST-USER";
   readonly CURRENT_USER_STORE_KEY = "GEO2:CURRENT-USER";
@@ -41,6 +43,11 @@ export class AuthService {
     "configTabsOrdres",
     "periode",
     "filtreRechercheStockEdi",
+    "reportProprietaire",
+    "reportExpediteur",
+    "reportPrixAchat",
+    "reportPrixVente",
+    "reportTypePalette",
 
     // Autres accès
     "indicateurVisualisationIncotermFournisseur",
@@ -64,7 +71,7 @@ export class AuthService {
   logIn(id: string, password: string, redirection = "/") {
     return this.utilisateursService
       .getOne(id, password, this.USER_FIELDS, {
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       })
       .pipe(
         concatMap((res) => {
@@ -118,6 +125,7 @@ export class AuthService {
       this.CURRENT_USER_STORE_KEY,
       JSON.stringify(this.currentUser)
     );
+    this.userChange.next();
   }
 
   logOut() {
@@ -148,4 +156,9 @@ export class AuthService {
   get isAdmin() {
     return this.currentUser.profileClient === "ADMIN";
   }
+
+  onUserChanged() {
+    return this.userChange.asObservable();
+  }
+
 }

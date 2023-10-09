@@ -25,6 +25,7 @@ type OrdreGridId =
  * Helper service to perform actions on datagrids
  */
 @Injectable()
+
 export class GridsService {
   private grids: { [key: string]: DxDataGridComponent } = {};
 
@@ -52,6 +53,10 @@ export class GridsService {
    */
   public get(id: OrdreGridId, order?) {
     return this.grids[id + (order ?? "")] as DxDataGridComponent;
+  }
+
+  public getAllGrids() {
+    return this.grids;
   }
 
   /**

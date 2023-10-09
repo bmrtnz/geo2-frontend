@@ -32,6 +32,13 @@ export class Utilisateur extends Model {
   @Field() public periode?: string;
   @Field() public commentaireStock?: boolean;
   @Field() public filtreRechercheStockEdi?: "S" | "D";
+  @Field() public reportExpediteur?: boolean;
+  @Field() public reportPrixAchat?: boolean;
+  @Field() public reportPrixVente?: boolean;
+  @Field() public reportProprietaire?: boolean;
+  @Field() public reportTypePalette?: boolean;
+
+
 
   public getSUP?() {
     return (

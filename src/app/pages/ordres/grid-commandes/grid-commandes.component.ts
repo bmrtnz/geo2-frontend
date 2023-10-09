@@ -107,7 +107,7 @@ export class GridCommandesComponent
     highlightBio: true,
     rowOrdering: true,
     quickSwitch: true,
-    reportDLUO: true,
+    reportCells: true,
     destockage: true,
     indicateurStock: true,
     zoom: true,
@@ -117,6 +117,7 @@ export class GridCommandesComponent
     "flux",
     "litiges"
   ]
+  reportedItems = this.ordreLignesService.reportedItems;
 
   private readonly lookupDisplayFields = [
     "proprietaireMarchandise.id",
@@ -214,7 +215,7 @@ export class GridCommandesComponent
       ],
     });
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.paramMap
       .pipe(filter((params) => params.has("ordre_id")))
       .subscribe({
@@ -237,10 +238,15 @@ export class GridCommandesComponent
         this.update();
         this.gridCommandesEventsService.updateContext(this.ordre.id).subscribe();
         this.bindSources(event.component);
+        const fields = this.columns.pipe(
+          map((columns) => columns.map((column) => column.dataField))
+        );
+        this.ordreLignesService.updateReportBtns(this.grid); // Like DLUO...
       });
 
     if (this.FEATURE.columnCertifications) this.initFeatures();
   }
+
 
   onContentReady(e) {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
@@ -268,6 +274,9 @@ export class GridCommandesComponent
 
   ngAfterViewInit() {
     this.gridsService.register("Commande", this.grid, this.gridsService.orderIdentifier(this.ordre));
+    this.authService.onUserChanged().subscribe(() =>
+      this.ordreLignesService.updateReportBtns(this.grid) // Like DLUO...
+    );
   }
 
   displaySummaryFormat(data) {
@@ -925,20 +934,16 @@ export class GridCommandesComponent
     this.swapRowArticle.emit(cell.id);
   }
 
-  copyPaste(e, field) {
+  copyFirstPasteAllRows(e, data) {
     e.event.stopImmediatePropagation();
-    let refValue;
-    const rows = this.grid.instance.getVisibleRows();
-    if (rows?.length < 2) return;
-    rows.map((res, index) => {
-      if (!index) {
-        refValue = res.data.libelleDLV;
-      } else {
-        this.grid.instance.cellValue(res.rowIndex, field, refValue);
-      }
-    });
+    let field = data.column.dataField;
+    this.grid.instance
+      .getVisibleRows()
+      .map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
     setTimeout(() => this.grid.instance.saveEditData());
-    notify("Report DLUO effectué", "success", 3000);
+    field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
+    field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
+    notify(this.localizeService.localize("cell-report", field), "success", 3000);
   }
 
   openFilePopup(e) {
@@ -1028,7 +1033,7 @@ export class GridCommandesComponent
   }
 
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
-    if (event.originalEvent.code !== "Enter") return;
+    if (event.originalEvent?.code !== "Enter") return;
     const shiftModifier = event.originalEvent.shiftKey;
     this.grid.instance.closeEditCell();
 

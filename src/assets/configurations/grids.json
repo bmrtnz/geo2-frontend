@@ -2947,10 +2947,11 @@
           "proprietaireMarchandise.code",
           "proprietaireMarchandise.raisonSocial"
         ],
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding headerCellBtnTemplate",
         "visible": true,
         "calculateCellValue": "proprietaireMarchandise.id",
         "calculateSortValue": "proprietaireMarchandise.code",
+        "headerCellTemplate": "headerCellBtnTemplate",
         "editorOptions": {
           "searchTimeout": "50"
         },
@@ -2968,14 +2969,16 @@
       },
       {
         "dataField": "fournisseur.id",
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding headerCellBtnTemplate",
         "visible": true,
+        "headerCellTemplate": "headerCellBtnTemplate",
         "width": 170
       },
       {
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
+        "headerCellTemplate": "headerCellBtnTemplate",
         "visible": true
       },
       {
@@ -2983,8 +2986,9 @@
         "calculateDisplayValue": [
           "venteUnite.id"
         ],
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "visible": true,
+        "headerCellTemplate": "headerCellBtnTemplate",
         "calculateSortValue": "venteUnite.id",
         "width": 90,
         "editorOptions": {
@@ -3035,7 +3039,9 @@
       {
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
+        "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "width": 95,
+        "headerCellTemplate": "headerCellBtnTemplate",
         "visible": true
       },
       {
@@ -3043,10 +3049,11 @@
         "calculateDisplayValue": [
           "achatUnite.id"
         ],
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "visible": true,
         "width": 90,
         "calculateSortValue": "achatUnite.id",
+        "headerCellTemplate": "headerCellBtnTemplate",
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -3073,9 +3080,10 @@
           "typePalette.id"
         ],
         "width": 90,
-        "cssClass": "multi-line-header small-side-padding",
+        "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "visible": true,
         "calculateSortValue": "typePalette.id",
+        "headerCellTemplate": "headerCellBtnTemplate",
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -3119,7 +3127,7 @@
         "dataField": "libelleDLV",
         "visible": true,
         "allowSorting": false,
-        "cssClass": "headerCellBtnTemplate",
+        "cssClass": "headerCellBtnTemplate small-side-padding ",
         "headerCellTemplate": "headerCellBtnTemplate"
       },
       {

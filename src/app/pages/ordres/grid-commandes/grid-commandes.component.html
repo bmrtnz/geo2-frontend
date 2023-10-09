@@ -1,4 +1,3 @@
-<!-- <div (mouseleave)="onGridOut()"> -->
 <dx-data-grid
   class="grid-commandes"
   [remoteOperations]="false"
@@ -174,21 +173,22 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="FEATURE.reportDLUO">
-    <div *dxTemplate="let cell of 'headerCellBtnTemplate'">
+  <ng-container *ngIf="FEATURE.reportCells">
+    <div *dxTemplate="let data of 'headerCellBtnTemplate'">
       <div>
         {{
-          "ordreLignes-" + cell.column.dataField?.split(".").join("-")
+          "ordreLignes-" + data.column.dataField?.split(".").join("-")
             | localize
         }}
       </div>
       <dx-button
         *ngIf="gridRowsTotal > 1"
-        class="small-article-button"
+        class="small-article-button grid-report-button"
         type="default"
         [focusStateEnabled]="false"
-        [text]="'Reporter'"
-        (onClick)="copyPaste($event, cell.column.dataField)"
+        [text]="'report' | localize"
+        [hint]="'report-text' | localize"
+        (onClick)="copyFirstPasteAllRows($event, data)"
       ></dx-button>
     </div>
   </ng-container>
@@ -306,4 +306,3 @@
   [fournisseurLigneId]="fournisseurLigneId"
 >
 </app-zoom-fournisseur-popup>
-<!-- </div> -->
