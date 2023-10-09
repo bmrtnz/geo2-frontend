@@ -1,0 +1,46 @@
+// Var
+@import "themes/generated/variables.base";
+
+h6 {
+  margin: 0;
+  float: left;
+}
+
+.refresh {
+  top: -8px;
+  float: right;
+}
+
+.dx-field-label {
+  text-align: right;
+}
+
+::ng-deep .group-1-header > td {
+  background-color: $base-accent !important;
+  color: white !important;
+
+  div {
+    color: white !important;
+  }
+}
+
+::ng-deep .group-2-header > td {
+  background-color: #91C5DA9E !important;
+}
+
+::ng-deep .dx-row.dx-datagrid-group-footer > td {
+  background-color: transparent !important;
+}
+
+::ng-deep .group-1-footer {
+  background-color: #c0dcc0 !important;
+  color: white !important;
+}
+
+::ng-deep .group-2-footer {
+  background-color: #a6caf0 !important;
+  color: #FFF !important;
+}
+
+
+

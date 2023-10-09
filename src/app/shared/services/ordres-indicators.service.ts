@@ -346,6 +346,19 @@ const indicators: Indicator[] = [
       "../../pages/ordres/indicateurs/declaration-fraude/declaration-fraude.component"
     ),
   },
+  {
+    id: "RepartitionOrdresRegroupement",
+    enabled: true,
+    withCount: false,
+    parameter: "Répartition",
+    subParameter: "des ordres de regroupement",
+    tileBkg: "#8E39C6DF",
+    indicatorIcon: "material-icons account_tree",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/repartition-ordres-regroupement/repartition-ordres-regroupement.component"
+      ),
+  },
 ].map((indicator) => ({ ...indicator, loading: false }));
 
 @Injectable()
@@ -521,6 +534,10 @@ export class OrdresIndicatorsService {
       // Commandes en transit
       if (instance.id === "CommandesTransit") {
         instance.filter = [...instance.filter];
+      }
+
+      if (instance.id === "RepartitionOrdresRegroupement") {
+        instance.detailedFields = grids["ordres-regroupement"].columns;
       }
 
       return instance;

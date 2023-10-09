@@ -1,0 +1,223 @@
+<form
+  class="dx-fieldset"
+  [formGroup]="formGroup"
+>
+
+  <div class="title-container">
+    <h6>{{ "repartition-ordres-regroupement-title" | localize }}</h6>
+    <dx-button
+      class="refresh"
+      type="default"
+      text="{{ 'btn-appliquer' | localize }}"
+      (onClick)="enableFilters()"
+    ></dx-button>
+  </div>
+
+  <dx-box direction="row" width="100%">
+    <dxi-item [ratio]="0.6">
+      <!-- Date de début -->
+      <div class="dx-field field-small">
+        <div class="dx-field-label">
+          {{ "ordres-Du" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-date-box
+            formControlName="dateMin"
+            class="dateStart"
+            type="datetime"
+            [displayFormat]="'dd-MM-yy  HH:mm'"
+            (onValueChanged)="manualDate($event)"
+          ></dx-date-box>
+        </div>
+      </div>
+    </dxi-item>
+
+    <dxi-item [ratio]="0.6">
+      <!-- Date de fin-->
+      <div class="dx-field field-small">
+        <div class="dx-field-label">
+          {{ "ordres-au" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-date-box
+            formControlName="dateMax"
+            class="dateEnd"
+            type="datetime"
+            [displayFormat]="'dd-MM-yy  HH:mm'"
+            (onValueChanged)="manualDate($event)"
+          ></dx-date-box>
+        </div>
+      </div>
+    </dxi-item>
+
+    <!-- Transporteurs -->
+    <dxi-item [ratio]="1">
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "tiers-transporteur-title" | localize }}
+        </div>
+        <dx-select-box
+          formControlName="transporteurCode"
+          [dataSource]="transporteursDataSource"
+          valueExpr="id"
+          [displayExpr]="displayIDBefore"
+          [searchExpr]="['id']"
+          itemTemplate="items"
+        >
+          <div *dxTemplate="let data of 'items'">
+            <div
+              [title]="!data.valide ? 'non valide' : ''"
+              [ngClass]="{ 'not-valid': !data.valide }"
+            >
+              {{ displayCodeBefore(data) }}
+            </div>
+            <dxo-drop-down-options [width]="350"></dxo-drop-down-options>
+          </div>
+        </dx-select-box>
+      </div>
+    </dxi-item>
+
+    <!-- Stations -->
+    <dxi-item [ratio]="0.7">
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "repartition-ordres-regroupement-station" | localize }}
+        </div>
+        <dx-select-box
+          formControlName="stationCode"
+          [dataSource]="stationsDataSource"
+          valueExpr="code"
+          displayExpr="code"
+          [searchExpr]="['code']"
+          itemTemplate="items"
+        >
+          <div *dxTemplate="let data of 'items'">
+            <div
+              [title]="!data.valide ? 'non valide' : ''"
+              [ngClass]="{ 'not-valid': !data.valide }"
+            >
+              {{ data.code }}
+            </div>
+          </div>
+        </dx-select-box>
+      </div>
+    </dxi-item>
+    <!-- Commercial -->
+    <dxi-item [ratio]="1.1">
+      <div class="dx-field">
+        <div class="dx-field-label">
+          {{ "ordres-commercial" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            formControlName="commercialCode"
+            [dataSource]="commerciauxDataSource"
+            valueExpr="id"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['id']"
+            itemTemplate="items"
+          >
+            <div *dxTemplate="let data of 'items'">
+              <div
+                [title]="!data.valide ? 'non valide' : ''"
+                [ngClass]="{ 'not-valid': !data.valide }"
+              >
+                {{ displayCodeBefore(data) }}
+              </div>
+            </div>
+          </dx-select-box>
+        </div>
+      </div>
+    </dxi-item>
+  </dx-box>
+</form>
+
+
+
+<dx-data-grid
+  class="ordres-regroupement"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [focusedRowEnabled]="false"
+  [remoteOperations]="{ paging: true }"
+  [showBorders]="false"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onRowPrepared)="onRowPrepared($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      '',
+      $event,
+      gridConfiguratorService.Grid.OrdresRegroupement,
+      enableFilters.bind(this)
+    )"
+>
+
+  <!-- Grid configuration -->
+  <dxo-header-filter
+    [visible]="true"
+    [allowSearch]="true"
+  ></dxo-header-filter>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdresRegroupement"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [caption]="
+      ('repartition-ordres-regroupement-' + column.dataField?.split('.').join('-')
+        | localize) || column.name
+    "
+    [dataType]="column?.dataType"
+    [showInColumnChooser]="column.showInColumnChooser"
+  ></dxi-column>
+
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+    <dxi-group-item
+      column="description"
+      summaryType="custom"
+      name="totalLabel"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    ></dxi-group-item>
+<!--    <dxi-group-item-->
+<!--      column="description"-->
+<!--      displayFormat="poids net total"-->
+<!--      [showInGroupFooter]="true"-->
+<!--      [alignByColumn]="true"-->
+<!--    ></dxi-group-item>-->
+
+    <!-- total Palettes-->
+    <dxi-group-item
+      column="nombrePalettesCommandees"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+
+    <dxi-group-item
+      column="nombreColis"
+      summaryType="sum"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+      displayFormat="{0}"
+    >
+    </dxi-group-item>
+
+    <dxi-group-item
+      column="poidsNetCommande"
+      summaryType="sum"
+      displayFormat="poids net total : {0}"
+      [showInGroupFooter]="true"
+      [alignByColumn]="true"
+    ></dxi-group-item>
+  </dxo-summary>
+</dx-data-grid>
