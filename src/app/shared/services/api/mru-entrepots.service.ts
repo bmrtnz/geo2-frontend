@@ -87,8 +87,8 @@ export class MruEntrepotsService extends ApiService implements APIRead {
       utilisateur: {
         nomUtilisateur: this.authService.currentUser.nomUtilisateur,
       },
-      codeEntrepot: entrepot.code,
-      entrepot: { id: entrepot.id },
+      codeEntrepot: entrepot?.code,
+      entrepot: { id: entrepot?.id },
       societe: { id: this.currentCompanyService.getCompany().id },
     };
 

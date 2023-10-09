@@ -64,13 +64,13 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
     if (this.ordre) {
       this.titleMid =
         "n° " +
-        this.ordre.campagne.id +
+        this.ordre.campagne?.id +
         "-" +
         this.ordre.numero +
         " - " +
-        this.ordre.client.code +
+        this.ordre.client?.code +
         "/" +
-        this.ordre.entrepot.code;
+        this.ordre.entrepot?.code;
     }
     this.titleEnd = this.localizeService.localize("via-stock");
     this.titlePlus = this.localizeService.localize("resa-article");

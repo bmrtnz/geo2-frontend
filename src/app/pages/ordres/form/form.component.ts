@@ -1253,7 +1253,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = ordre;
           this.changeDetectorRef.detectChanges();
           // France: 2 Incoterms only
-          if (this.ordre.secteurCommercial.id === "F")
+          if (this.ordre.secteurCommercial?.id === "F")
             this.incotermsDS.filter([
               ["id", "=", "CPT"],
               "or",
@@ -1324,7 +1324,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   private initVACMutation() {
     this.allowVenteACommissionMutation =
       this.allowMutations &&
-      ((this.ordre.client.venteACommission && this.ordre.type.id !== "REP") ||
+      ((this.ordre.client?.venteACommission && this.ordre.type?.id !== "REP") ||
         this.authService.currentUser.profileClient === "ADMIN" ||
         !!this.authService.currentUser.geoClient);
   }
@@ -1517,20 +1517,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getGestEntrepot() {
-    if (!this.ordre.entrepot.gestionnaireChep) return;
+    if (!this.ordre.entrepot?.gestionnaireChep) return;
     return (
-      this.ordre.entrepot.gestionnaireChep +
+      this.ordre.entrepot?.gestionnaireChep +
       " " +
-      this.ordre.entrepot.referenceChep
+      this.ordre.entrepot?.referenceChep
     );
   }
 
   getinstructionsComm() {
-    const instCommClt = this.ordre.client.instructionCommercial
-      ? this.ordre.client.instructionCommercial
+    const instCommClt = this.ordre.client?.instructionCommercial
+      ? this.ordre.client?.instructionCommercial
       : "";
-    const instCommEnt = this.ordre.entrepot.instructionSecretaireCommercial
-      ? this.ordre.entrepot.instructionSecretaireCommercial
+    const instCommEnt = this.ordre.entrepot?.instructionSecretaireCommercial
+      ? this.ordre.entrepot?.instructionSecretaireCommercial
       : "";
     return instCommClt + (instCommClt ? " " : "") + instCommEnt;
   }

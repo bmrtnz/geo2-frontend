@@ -100,13 +100,13 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     if (!this.ordre) return;
     this.titleEnd =
       "n° " +
-      this.ordre.campagne.id +
+      this.ordre.campagne?.id +
       "-" +
       this.ordre.numero +
       " - " +
-      this.ordre.client.code +
+      this.ordre.client?.code +
       "/" +
-      this.ordre.entrepot.code;
+      this.ordre.entrepot?.code;
   }
 
   openZoomArticle(e) {
