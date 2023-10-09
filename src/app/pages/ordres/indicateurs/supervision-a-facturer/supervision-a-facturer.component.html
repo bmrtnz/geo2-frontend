@@ -181,6 +181,14 @@
 
 <dx-button
   class="launch"
+  [style]="{ right: '240px' }"
+  type="default"
+  [disabled]="!clotureEnabled"
+  text="{{ 'btn-cloture-sp' | localize }}"
+></dx-button>
+
+<dx-button
+  class="launch"
   type="default"
   [disabled]="!launchEnabled || !gridItemsSelected"
   text="{{ 'btn-launch' | localize }}"

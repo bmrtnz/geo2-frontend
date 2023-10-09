@@ -133,6 +133,7 @@
     "btn-delete-destockage": "Supprimer le déstockage",
     "btn-delete-destockages": "Supprimer les déstockages",
     "btn-launch": "lancer",
+    "btn-cloture-sp": "Clôturer SP",
     "btn-valider-article": "Ajouter && article",
     "btn-valider-articles": "Ajouter && articles",
     "btn-remplacer-article": "Remplacer",

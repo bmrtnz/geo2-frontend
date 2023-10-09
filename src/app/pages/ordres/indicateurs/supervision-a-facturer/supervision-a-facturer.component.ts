@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
+import { ModeLivraison } from "app/shared/models";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
 import Ordre, { Statut } from "app/shared/models/ordre.model";
 import { Role } from "app/shared/models/personne.model";
@@ -25,6 +26,7 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import { ClickEvent } from "devextreme/ui/button";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -73,6 +75,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   public gridItemsSelected: boolean;
   public launchEnabled: boolean;
+  public clotureEnabled: boolean;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -156,9 +159,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    this.ordresDataSource = this.ordresBafService.getDataSource_v2(
-      await fields.toPromise()
-    );
+    this.ordresDataSource = this.ordresBafService.getDataSource_v2([
+      ...await fields.toPromise(),
+      "ordre.entrepot.modeLivraison",
+    ]);
   }
 
   ngAfterViewInit() {
@@ -276,7 +280,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.value) this.entrepots.filter(["client.id", "=", e.value.id]);
   }
 
-  onGridContentReady(e) { }
+  onGridContentReady(e) {
+    this.clotureEnabled = this.datagrid.instance.getVisibleRows()
+      .some(row => ModeLivraison[row.data.ordre.entrepot.modeLivraison] === ModeLivraison.SORTIE_STOCK);
+  }
 
   manualDate(e) {
     // We check that this change is coming from the user, not following a period change
