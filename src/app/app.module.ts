@@ -29,4 +29,4 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   providers: [AuthService, ScreenService, DatePipe, OrdresIndicatorsService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
