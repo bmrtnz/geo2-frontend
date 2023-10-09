@@ -211,7 +211,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       r2: Partial<DeclarationFraude>
     ) =>
       r1.numeroOrdre === r2.numeroOrdre &&
-      r1.varieteCode === r2.varieteCode &&
+      r1.gtinColis === r2.gtinColis &&
       r1.fournisseurCode === r2.fournisseurCode;
 
     return data.map((row) => {
@@ -292,7 +292,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "commentaireInterne",
           "entrepotCode",
           "typeTransportDescription",
-          "baseTarifTransportCode"
+          "baseTarifTransportCode",
+          "gtinColis",
         ]),
         this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,

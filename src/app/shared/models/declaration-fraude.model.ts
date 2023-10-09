@@ -35,5 +35,6 @@ export class DeclarationFraude extends Model {
   @Field() typeTransportCode: string;
   @Field() typeTransportDescription: string;
   @Field() baseTarifTransportCode: string;
+  @Field() gtinColis: string;
 }
 export default DeclarationFraude;
