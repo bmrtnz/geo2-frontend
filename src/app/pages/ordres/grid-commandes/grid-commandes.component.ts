@@ -47,9 +47,11 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { DxoLoadPanelComponent } from "devextreme-angular/ui/nested";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import { EventObject } from "devextreme/events";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import dxSelectBox from "devextreme/ui/select_box";
 import { from, iif, lastValueFrom, Observable, of } from "rxjs";
 import {
   concatMap,
@@ -864,6 +866,9 @@ export class GridCommandesComponent
       e.editorOptions.valueExpr = "id";
       e.editorOptions.searchExpr = ["code"];
       e.editorOptions.dataSource = this.fournisseursSource;
+      e.editorOptions.onEnterKey = (component: dxSelectBox, element: HTMLElement, event: EventObject) => {
+        console.log("enter !")
+      };
       e.editorOptions.displayExpr = rowData => {
         const displayValue = rowData?.code ? `${rowData?.code} - ${rowData?.raisonSocial}` : "";
         if (rowData?.id)
@@ -1027,10 +1032,10 @@ export class GridCommandesComponent
     const shiftModifier = event.originalEvent.shiftKey;
     this.grid.instance.closeEditCell();
 
-    // Only act on lookup
-    if (
-      !this.grid.instance.columnOption(this.grid.focusedColumnIndex - 1)?.lookup
-    )
+    const columnOptions = this.grid.instance.columnOption(this.grid.focusedColumnIndex - 1);
+
+    // Only act on lookups & selectBoxs
+    if (!columnOptions?.lookup && columnOptions.name !== "fournisseur.id")
       return;
 
     // switch focus
@@ -1042,8 +1047,4 @@ export class GridCommandesComponent
     );
   }
 
-  // onGridOut() {
-  //   if (this.grid.instance.hasEditData())
-  //     this.grid.instance.saveEditData();
-  // }
 }
