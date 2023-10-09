@@ -26,6 +26,8 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import { UtilisateursService } from "app/shared/services/api/utilisateurs.service";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+import Utilisateur from "app/shared/models/utilisateur.model";
 
 @Component({
   selector: "app-profile-popup",
@@ -55,6 +57,7 @@ export class ProfilePopupComponent {
     private utilisateursService: UtilisateursService,
     private ordreLignesService: OrdreLignesService,
     private authService: AuthService,
+    private formUtilsService: FormUtilsService,
     public dateManagementService: DateManagementService
   ) {
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
@@ -63,6 +66,7 @@ export class ProfilePopupComponent {
 
     this.reportedItems = this.ordreLignesService.reportedItems;
 
+    this.formGroup.addControl("periode", new UntypedFormControl());
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
         value: item.mandatoryValue ?? !!this.authService.currentUser[item.name],
@@ -81,17 +85,25 @@ export class ProfilePopupComponent {
   }
 
   onShown(e) {
-    this.periodeSB.instance.option(
-      "value",
-      this.dateManagementService.getPeriodFromId(
-        this.authService.currentUser?.periode,
-        this.periodes
+    this.formGroup.get("periode").setValue(
+      this.authService.currentUser?.periode
+    );
+    this.reportedItems.map((item) =>
+      this.formGroup.get(item.name).setValue(
+        item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
   }
 
   onHidden() {
-    this.periodeSB.instance.reset();
+    this.formGroup.get("periode").reset();
+    this.reportedItems
+      .filter((item) => !item.mandatoryValue)
+      .map((item) => {
+        this.formGroup.get(item.name).reset()
+        this.formGroup.get(item.name).setValue(false);
+        this.formGroup.get(item.name).markAsPristine;
+      });
   }
 
   resizePopup() {
@@ -108,6 +120,15 @@ export class ProfilePopupComponent {
     this.titleMid = this.formatName(this.nomInterne);
   }
 
+  resetAllReportCheckboxes() {
+    this.reportedItems
+      .filter((item) => !item.mandatoryValue)
+      .map((item) => {
+        this.formGroup.get(item.name).setValue(false);
+        this.formGroup.get(item.name).markAsDirty();
+      });
+  }
+
   formatName(name) {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
@@ -122,44 +143,39 @@ export class ProfilePopupComponent {
   }
 
   saveAndHidePopup() {
-    const newPeriod = this.periodeSB.value?.id ?? "";
-    const utilisateur = {
-      nomUtilisateur: this.nomUtilisateur,
-      periode: newPeriod,
-      reportProprietaire: this.formGroup.get("reportProprietaire").value,
-      reportExpediteur: this.formGroup.get("reportExpediteur").value,
-      reportPrixAchat: this.formGroup.get("reportPrixAchat").value,
-      reportPrixVente: this.formGroup.get("reportPrixVente").value,
-      reportTypePalette: this.formGroup.get("reportTypePalette").value,
-    };
+    const utilisateur = this.formUtilsService.extractDirty(
+      this.formGroup.controls,
+      Utilisateur.getKeyField()
+    );
+    utilisateur.nomUtilisateur = this.nomUtilisateur;
 
     this.savingUserPrefs = true;
-    this.utilisateursService.save_v2([
-      "periode"
-    ], { utilisateur }).subscribe({
-      next: () => {
-        this.authService.setCurrentUser(utilisateur);
-        notify(
-          this.localizeService.localize("user-profile-saved"),
-          "success",
-          2500
-        );
-        this.hidePopup();
-      },
-      error: ({ message }: Error) => {
-        this.savingUserPrefs = false;
-        notify(
-          `${this.localizeService.localize(
-            "user-profile-save-error"
-          )} : ${this.messageFormat(message)}`,
-          "error",
-          7000
-        );
-      },
-      complete: () => {
-        this.savingUserPrefs = false;
-      },
-    });
+    this.utilisateursService.save_v2(
+      Object.keys(utilisateur)
+      , { utilisateur }).subscribe({
+        next: () => {
+          this.authService.setCurrentUser(utilisateur);
+          notify(
+            this.localizeService.localize("user-profile-saved"),
+            "success",
+            2500
+          );
+          this.hidePopup();
+        },
+        error: ({ message }: Error) => {
+          this.savingUserPrefs = false;
+          notify(
+            `${this.localizeService.localize(
+              "user-profile-save-error"
+            )} : ${this.messageFormat(message)}`,
+            "error",
+            7000
+          );
+        },
+        complete: () => {
+          this.savingUserPrefs = false;
+        },
+      });
   }
 
   hidePopup() {

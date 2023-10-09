@@ -51,8 +51,9 @@
           </div>
           <div class="dx-field-value period-value">
             <dx-select-box
-              #periodeSB
+              formControlName="periode"
               [items]="periodes"
+              [valueExpr]="'id'"
               [showClearButton]="true"
               [displayExpr]="dateManagementService.displayPeriodText"
             >
@@ -60,12 +61,20 @@
           </div>
         </div>
         <br />
+
         <!-- ---------------- -->
         <!-- Boutons reporter -->
         <!-- ---------------- -->
         <div class="items-title">
           {{ "text-report-items" | localize }}
         </div>
+        <dx-button
+          class="report-reset-button"
+          type="success"
+          [focusStateEnabled]="false"
+          [text]="'btn-reinit' | localize"
+          (onClick)="resetAllReportCheckboxes()"
+        ></dx-button>
         <div class="to-report-list">
           <div
             *ngFor="let item of reportedItems"
@@ -90,6 +99,7 @@
           <dx-button
             type="normal"
             text="{{ 'btn-appliquer' | localize }}"
+            [disabled]="formGroup?.pristine"
             (onClick)="saveAndHidePopup()"
           ></dx-button>
           <dx-button

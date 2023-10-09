@@ -73,13 +73,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
       item.fields.map(field => {
         const currClass = grid.instance.columnOption(field, "cssClass") ?? "";
         if (this.authService.currentUser[item.name] || item.mandatoryValue === true) {
-          grid.instance.columnOption(field, "cssClass", currClass + " headerCellBtnTemplate-show");
+          if (!currClass.includes("headerCellBtnTemplate-show")) grid.instance.columnOption(field, "cssClass", currClass + " headerCellBtnTemplate-show");
         } else {
           grid.instance.columnOption(field, "cssClass", currClass.replace("headerCellBtnTemplate-show", ""));
         }
       });
     });
-
     grid.instance.refresh();
   }
 

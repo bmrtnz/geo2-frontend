@@ -2038,6 +2038,7 @@
     "litige-save-success": "Sauvegarde du litige effectuée",
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
     "report": "reporter",
+    "report-text": "Reporter la valeur de la première cellule sur toutes les autres",
     "cell-report": "Report {0} effectué",
     "text-report-items": "Lignes de commande - report possible des champs suivants :",
     "associated-docs": "Documents associés",

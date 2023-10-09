@@ -183,10 +183,11 @@
       </div>
       <dx-button
         *ngIf="gridRowsTotal > 1"
-        class="small-article-button"
+        class="small-article-button grid-report-button"
         type="default"
         [focusStateEnabled]="false"
         [text]="'report' | localize"
+        [hint]="'report-text' | localize"
         (onClick)="copyFirstPasteAllRows($event, data)"
       ></dx-button>
     </div>
