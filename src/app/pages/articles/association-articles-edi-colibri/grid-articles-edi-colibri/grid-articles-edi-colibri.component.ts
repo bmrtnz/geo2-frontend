@@ -49,7 +49,6 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
   public columns: Observable<GridColumn[]>;
   public dataSource: DataSource;
   public clients: DataSource;
-  public gridHasData: boolean;
 
   public formGroup = new UntypedFormGroup({
     client: new UntypedFormControl(),
@@ -109,9 +108,6 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
     this.formGroup.get("client").reset();
 
     this.formGroup.get("valide").setValue(true);
-
-    // this.formGroup.get("client").patchValue("000463"); // A VIRER !!
-    // setTimeout(() => this.enableFilters(), 500); // A VIRER !!
   }
 
 
@@ -142,10 +138,6 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
       this.dataSource.filter(filter);
       this.datagrid.dataSource = this.dataSource;
     }
-  }
-
-  onContentReady(e) {
-    this.gridHasData = (this.datagrid.dataSource as DataSource)?.items()?.length > 0;
   }
 
   onRowDblClick(e) {
@@ -183,11 +175,18 @@ export class GridArticlesEdiColibriComponent implements OnInit, AfterViewInit {
 
   addEDIArticle() {
     const lignesDS = (this.datagrid.dataSource as DataSource)?.items();
-    if (lignesDS?.length) {
-      this.EdiArticle = null;
-      this.clientId = lignesDS[0].client?.id;
-      this.modifPopup.show("ajout");
-    }
+    this.EdiArticle = null;
+    this.clientId = lignesDS?.length ? lignesDS[0].client?.id : this.formGroup.get("client").value;
+    this.modifPopup.show("ajout");
+  }
+
+  isClient() {
+    const lignesDS = (this.datagrid.dataSource as DataSource)?.items();
+    return !!lignesDS?.length || !!this.formGroup.get("client").value;
+  }
+
+  onClientValueChanged(e) {
+    if (!e.value) this.datagrid.dataSource = null;
   }
 
   displayCodeBefore(data) {

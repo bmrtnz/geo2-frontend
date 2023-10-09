@@ -3,7 +3,9 @@ import { AjoutArticlesHistoPopupComponent } from 'app/pages/ordres/ajout-article
 import { AjoutArticlesManuPopupComponent } from 'app/pages/ordres/ajout-articles-manu-popup/ajout-articles-manu-popup.component';
 import { AjoutArticlesRefClientPopupComponent } from 'app/pages/ordres/ajout-articles-ref-client-popup/ajout-articles-ref-client-popup.component';
 import { AjoutArticlesStockPopupComponent } from 'app/pages/ordres/ajout-articles-stock-popup/ajout-articles-stock-popup.component';
+import { EdiLigne } from 'app/shared/models';
 import Ordre from 'app/shared/models/ordre.model';
+import { Maybe } from 'graphql/jsutils/Maybe';
 import { GridsService } from '../grids.service';
 
 
@@ -23,6 +25,7 @@ export class AddArticleToOrderButtonsComponent implements OnChanges {
   @Input() public histoLigneOrdreROTextAlias: string;
   @Input() public ordreAlias: Ordre
   @Input() public readOnlyModeAlias: boolean;
+  @Input() public ediLigneID: EdiLigne["id"];
 
   @Output() public gridCommandes;
   @Output() public articleRowKey: string;

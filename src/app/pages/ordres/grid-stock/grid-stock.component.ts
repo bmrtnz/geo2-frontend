@@ -6,7 +6,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { Article } from "app/shared/models";
+import { Article, EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
 import {
@@ -56,6 +56,8 @@ export class GridStockComponent implements OnInit {
   @Input() public reserv: boolean;
   @Input() public recap: boolean;
   @Input() public clientsRef: boolean;
+  @Input() public ediLigneID: EdiLigne["id"];
+
   @Output() selectChange = new EventEmitter<any>();
   @Output() public articleLigneId: string;
   @Output() public article: Partial<Article>;

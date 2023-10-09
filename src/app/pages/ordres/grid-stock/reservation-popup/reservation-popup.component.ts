@@ -1,17 +1,20 @@
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
+import { EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import StockArticle from "app/shared/models/stock-article.model";
 import { LocalizationService } from "app/shared/services";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { StocksService } from "app/shared/services/api/stocks.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   DxNumberBoxComponent,
   DxPopupComponent,
-  DxTextBoxComponent,
+  DxTextBoxComponent
 } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { takeWhile } from "rxjs/operators";
+import { lastValueFrom } from "rxjs";
+import { concatMap } from "rxjs/operators";
 
 @Component({
   selector: "app-reservation-popup",
@@ -19,6 +22,7 @@ import { takeWhile } from "rxjs/operators";
   styleUrls: ["./reservation-popup.component.scss"],
 })
 export class ReservationPopupComponent {
+  @Input() public ediLigneID: EdiLigne["id"];
   @Output() public ajoutReservation = new EventEmitter();
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -40,10 +44,11 @@ export class ReservationPopupComponent {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
+    private ordreLignesService: OrdreLignesService,
     private stocksService: StocksService,
     public localizeService: LocalizationService,
     private currentCompanyService: CurrentCompanyService
-  ) {}
+  ) { }
 
   clickSubmitBtn() {
     const submitBtn = document.getElementById(
@@ -66,6 +71,18 @@ export class ReservationPopupComponent {
         this.rowData.stockArticle.stockID,
         this.formGroup.get("quantite").value,
         this.formGroup.get("commentaire").value
+      )
+      .pipe(
+        concatMap(async res => {
+          if (this.ediLigneID)
+            await lastValueFrom(this.ordreLignesService.save_v2(["id"], {
+              ordreLigne: {
+                id: res.data.reservationStock.data.new_orl_ref,
+                ediLigne: { id: this.ediLigneID },
+              },
+            }));
+          return res;
+        }),
       )
       .subscribe({
         error: (error: Error) => {

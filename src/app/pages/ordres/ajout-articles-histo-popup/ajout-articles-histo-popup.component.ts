@@ -6,9 +6,11 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { ArticlesService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
@@ -17,7 +19,7 @@ import {
   DxScrollViewComponent,
 } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
-import { from } from "rxjs";
+import { from, lastValueFrom } from "rxjs";
 import { concatMap, takeWhile, tap } from "rxjs/operators";
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-lignes-historique.component";
@@ -31,6 +33,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public readOnlyMode: boolean;
   @Input() public single: boolean;
+  @Input() public ediLigneID: EdiLigne["id"];
   @Output() public singleSelection: boolean;
   @Output() public gridSelectionEnabled: boolean;
   @Output() public lignesChanged = new EventEmitter();
@@ -62,6 +65,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
 
   constructor(
     private functionsService: FunctionsService,
+    private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService,
     private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
@@ -175,6 +179,16 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
               this.gridLignesHisto.datagrid.instance.getSelectedRowKeys()[index]
             )
             .valueChanges.pipe(
+              concatMap(async res => {
+                if (this.ediLigneID)
+                  await lastValueFrom(this.ordreLignesService.save_v2(["id"], {
+                    ordreLigne: {
+                      id: res.data.ofInitArticleHistory.data.new_orl_ref,
+                      ediLigne: { id: this.ediLigneID },
+                    },
+                  }));
+                return res;
+              }),
               concatMap((res) => {
                 this.associatedPrompt.ordreLigneID =
                   res.data.ofInitArticleHistory.data.new_orl_ref;

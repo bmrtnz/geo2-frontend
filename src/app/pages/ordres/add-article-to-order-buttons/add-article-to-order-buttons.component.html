@@ -44,6 +44,7 @@
 <app-ajout-articles-ref-client-popup
   [ordre]="ordre"
   [single]="single"
+  [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
 >
 </app-ajout-articles-ref-client-popup>
@@ -52,6 +53,7 @@
   [gridCommandes]="gridCommandes"
   [articleRowKey]="articleRowKey"
   [single]="single || !!articleRowKey"
+  [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
 >
 </app-ajout-articles-manu-popup>
@@ -59,11 +61,13 @@
   [ordre]="ordre"
   [readOnlyMode]="readOnlyMode"
   [single]="single"
+  [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
 >
 </app-ajout-articles-histo-popup>
 <app-ajout-articles-stock-popup
   [ordre]="ordre"
+  [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
 >
 </app-ajout-articles-stock-popup>

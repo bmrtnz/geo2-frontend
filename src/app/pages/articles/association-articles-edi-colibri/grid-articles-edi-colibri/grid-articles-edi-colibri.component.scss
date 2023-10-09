@@ -4,14 +4,13 @@
 
 ::ng-deep app-grid-articles-edi-colibri {
 
-
   .dx-fieldset {
     display: flex;
     margin-top: 0;
   }
 
   .grid-articles-edi-colibri {
-    max-height: 550px;
+    max-height: calc(100vh - 314px) !important;
 
     .dx-datagrid-nodata {
       width: 110px;
