@@ -35,7 +35,7 @@ let self;
 enum FormInput {
   valide = "valide",
   transporteurCode = "transporteur",
-  bureauAchat = "bureauAchat",
+  bureauAchatCode = "bureauAchat",
   dateMin = "dateDepartPrevueFournisseur",
   dateMax = "dateDepartPrevueFournisseur",
   // valideClient = 'valideClient',
@@ -75,7 +75,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     transporteurCode: new UntypedFormControl(),
     dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
-    bureauAchat: new UntypedFormControl(),
+    bureauAchatCode: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
   constructor(
@@ -164,6 +164,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       dateMax: values.dateMax,
       societeCode: "%", // All companies
       transporteurCode: values.transporteurCode || '%',
+      bureauAchatCode: values.bureauAchatCode || '%',
       // valideClient: values.valideClient,
       // valideEntrepot: values.valideEntrepot,
       // valideFournisseur: values.valideFournisseur,
@@ -174,7 +175,6 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     const filter = [];
     if (societe === "BUK") filter.push(["ordre.type.id", "<>", "RGP"], "and");
     if (societe === "SA") filter.push(["ordre.type.id", "<>", "ORI"], "and");
-    if (values.bureauAchat?.id) filter.push(["fournisseurBassin.id", "=", values.bureauAchat.id], "and");
     filter.pop();
     if (filter.length) this.ordresDataSource.filter(filter);
 
