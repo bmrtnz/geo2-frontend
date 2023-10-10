@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { TabContext } from "app/pages/ordres/root/root.component";
 import { EdiOrdre } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -33,7 +34,7 @@ import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-ed
 export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   @Input() public refOrdreEDI: EdiOrdre["id"];
   @Output() public gridSelectionEnabled: boolean;
-
+  @Output() refreshGridCdeEdi = new EventEmitter<any>();
 
   visible: boolean;
   nbLignes: number;
@@ -43,6 +44,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   titleMid: string;
   pulseBtnOn: boolean;
   popupFullscreen = true;
+  creatingOrder = false;
+
 
   @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false })
   gridRecap: GridRecapStockCdeEdiColibriComponent;
@@ -52,12 +55,13 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   dxScrollView: DxScrollViewComponent;
 
   constructor(
-    private gridUtilsService: GridUtilsService,
     private functionsService: FunctionsService,
     private currentCompanyService: CurrentCompanyService,
     private stockArticleEdiBassinService: StockArticleEdiBassinService,
     private ordresEdiService: OrdresEdiService,
+    private gridUtilsService: GridUtilsService,
     private datePipe: DatePipe,
+    private tabContext: TabContext,
     private authService: AuthService,
     private localization: LocalizationService,
     private localizeService: LocalizationService
@@ -107,6 +111,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
 
   hidePopup() {
     this.popup.visible = false;
+    this.creatingOrder = false;
   }
 
   resizePopup() {
@@ -121,6 +126,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   createOrder() {
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     if (!rows.length) return;
+    this.creatingOrder = true;
+    notify(this.localization.localize("creer-ordre(s)-en-cours"), "info", 5000);
     const updatedRows = rows.map(row => ({
       id: row.data.id,
       choix: row.isSelected,
@@ -144,12 +151,25 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
         this.refOrdreEDI.toFixed(),
         this.authService.currentUser.nomUtilisateur
       )),
-      finalize(() => this.gridRecap.refreshGrid()),
     )
       .subscribe({
         next: res => {
-          const text = this.localization.localize("ordre-cree", res.data.fCreeOrdresEdi.data?.ls_nordre_tot);
-          notify(text, "success", 3000);
+          let noOrdres = res.data.fCreeOrdresEdi.data?.ls_nordre_tot;
+          noOrdres = noOrdres.split(",");
+          noOrdres.pop();
+          const text = this.localization.localize("ordre-crees", this.gridUtilsService.friendlyFormatList(noOrdres));
+          notify(text, "success", 5000);
+          this.clearAndHidePopup();
+          noOrdres.map(numero => {
+            setTimeout(() =>
+              this.tabContext.openOrdre(
+                numero,
+                this.currentCompanyService.getCompany().campagne.id,
+                false
+              )
+            );
+          });
+          this.refreshGridCdeEdi.emit();
         },
         error: (err: Error) => notify(err.message, "error", 3000),
       });
