@@ -1472,6 +1472,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.dotLitiges = this.getLitigeBadgeIndicator(this.ordre.hasLitige);
       this.dotCQ = this.ordre.cqLignesCount;
       this.dotCommentaires = this.ordre.commentairesOrdreCount;
+      console.log(this.ordre.hasLitige)
     }
   }
 
