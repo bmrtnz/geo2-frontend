@@ -9,8 +9,9 @@ import {
   AuthService,
   ClientsService,
   EntrepotsService,
-  LocalizationService,
+  LocalizationService
 } from "app/shared/services";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
@@ -20,7 +21,7 @@ import { DateManagementService } from "app/shared/services/date-management.servi
 import {
   Grid,
   GridConfig,
-  GridConfiguratorService,
+  GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
@@ -30,7 +31,7 @@ import { ClickEvent } from "devextreme/ui/button";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { concatMap, filter, map, toArray } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 
 enum InputField {
@@ -104,7 +105,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     private currentCompanyService: CurrentCompanyService,
     public ordresBafService: OrdresBafService,
     public authService: AuthService,
-    private tabContext: TabContext
+    private tabContext: TabContext,
+    private functionsService: FunctionsService,
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdresAFacturer
@@ -162,6 +164,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.ordresDataSource = this.ordresBafService.getDataSource_v2([
       ...await fields.toPromise(),
       "ordre.entrepot.modeLivraison",
+      "ordre.logistiques.expedieStation",
     ]);
   }
 
@@ -539,6 +542,19 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         break;
     }
     return (cellClassColor ? cellClassColor : "OK") + "-color";
+  }
+
+  clotureSP(event: ClickEvent) {
+    from(this.datagrid.instance.getVisibleRows())
+      .pipe(
+        filter(row => ModeLivraison[row.data.ordre.entrepot.modeLivraison] === ModeLivraison.SORTIE_STOCK
+          && row.data.ordre.logistiques.some(logistique => !logistique.expedieStation)),
+        map(row => row.data.ordreRef),
+        toArray(),
+        concatMap(ordres => this.functionsService.clotureSP(ordres)),
+      ).subscribe({
+        complete: () => this.datagrid.instance.refresh(),
+      });
   }
 }
 

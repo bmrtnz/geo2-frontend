@@ -185,6 +185,7 @@
   type="default"
   [disabled]="!clotureEnabled"
   text="{{ 'btn-cloture-sp' | localize }}"
+  (onClick)="clotureSP($event)"
 ></dx-button>
 
 <dx-button

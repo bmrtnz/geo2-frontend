@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Apollo, gql } from "apollo-angular";
 import { BaseTarif, Devise } from "app/shared/models";
+import Ordre from "app/shared/models/ordre.model";
 import { ApiService } from "../api.service";
 
 export enum FunctionResult {
@@ -781,6 +782,35 @@ export class FunctionsService {
         tvtCode,
         modeCulture,
         origine,
+      },
+      fetchPolicy: "network-only",
+    });
+
+  public clotureSP = (
+    ordresRef: Array<Ordre["id"]>,
+  ) =>
+    this.apollo.query<{
+      clotureSP: FunctionResponse;
+    }>({
+      query: gql(
+        ApiService.buildGraph(
+          "query",
+          [
+            {
+              name: "clotureSP",
+              body: functionBody,
+              params: [
+                { name: "ordresRef", value: "ordresRef", isVariable: true },
+              ],
+            },
+          ],
+          [
+            { name: "ordresRef", type: "[String]", isOptionnal: false },
+          ]
+        )
+      ),
+      variables: {
+        ordresRef,
       },
       fetchPolicy: "network-only",
     });
