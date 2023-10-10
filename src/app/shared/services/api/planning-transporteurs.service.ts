@@ -10,8 +10,7 @@ import { APIRead, ApiService } from "../api.service";
 })
 export class PlanningTransporteursService
   extends ApiService
-  implements APIRead
-{
+  implements APIRead {
   readonly operation = "allPlanningTransporteurs";
 
   constructor(apollo: Apollo) {
@@ -104,13 +103,15 @@ export class PlanningTransporteursService
         $dateMin: LocalDateTime!,
         $dateMax: LocalDateTime!,
         $societeCode: String!,
-        $transporteurCode: String!
+        $transporteurCode: String!,
+        $bureauAchatCode: String!
       ) {
         ${operationName}(
           dateMin: $dateMin,
           dateMax: $dateMax,
           societeCode: $societeCode,
-          transporteurCode: $transporteurCode
+          transporteurCode: $transporteurCode,
+          bureauAchatCode: $bureauAchatCode
         ) {
           ${await this.model.getGQLObservable(columns).toPromise()}
         }
