@@ -48,7 +48,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { filter, switchMap, tap } from "rxjs/operators";
 import {
   Certification,
   CertificationFournisseur,
@@ -68,7 +68,7 @@ export class FournisseurDetailsComponent
 
   @Input() public fournisseurLigneId: string;
   @Output() fournisseurLigneCode = new EventEmitter<string>();
-  @Output() modifUserIds: string[];
+  @Output() userModifsInfo: string;
 
   formGroup = this.fb.group({
     code: [""],
@@ -299,21 +299,22 @@ export class FournisseurDetailsComponent
     this.isReadOnlyMode = value;
   }
 
-  checkEmptyModificationList(listLength) {
-    if (listLength === 0 && this.authService.currentUser.adminClient) {
+  saveAfterModification(info) {
+    this.userModifsInfo = info.info;
+    if (this.authService.currentUser.adminClient) {
       if (this.formGroup.valid) {
         const fournisseur = {
           id: this.fournisseur.id,
-          preSaisie: false,
+          preSaisie: !info.last,
+          valide: this.fournisseur.valide
         };
-        this.preSaisie = "";
-        this.saveData(fournisseur);
+        if (info.last) this.preSaisie = "";
+        this.saveData(fournisseur, true);
       }
     }
   }
 
   ngOnInit() {
-    this.resetModifUserIds();
     this.pays = this.paysService.getDataSource_v2(["id", "description"]);
     this.pays.filter(["valide", "=", "true"]);
     this.bureauxAchat = this.bureauxAchatService.getDataSource_v2([
@@ -411,15 +412,6 @@ export class FournisseurDetailsComponent
     this.updateZeroTracaValue();
     this.preSaisie = this.fournisseur.preSaisie === true ? "preSaisie" : "";
     this.fournisseurLigneCode.emit(this.fournisseur.code);
-  }
-
-  addModificationUserIds(userIdFromModifList) {
-    if (!this.modifUserIds.includes(userIdFromModifList))
-      this.modifUserIds.push(userIdFromModifList);
-  }
-
-  resetModifUserIds() {
-    this.modifUserIds = [];
   }
 
   updateZeroTracaValue() {
@@ -603,6 +595,7 @@ export class FournisseurDetailsComponent
       : of(undefined)
     )
       .pipe(
+        filter(() => !this.formGroup.pristine && this.formGroup.valid),
         switchMap((_) =>
           certifications
             ? this.certDatePopup.present(certifications)
@@ -622,7 +615,6 @@ export class FournisseurDetailsComponent
           if (this.createMode || this.authService.currentUser.adminClient)
             notify("Sauvegardé", "success", 3000);
           this.refreshGrid.emit();
-          this.resetModifUserIds();
           // Show red badges (unvalidated forms)
           this.validationService.showToValidateBadges();
           if (!this.createMode) {

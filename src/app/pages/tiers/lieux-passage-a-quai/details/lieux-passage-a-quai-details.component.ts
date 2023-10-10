@@ -40,6 +40,7 @@ export class LieuxPassageAQuaiDetailsComponent
   @Input() public lieupassageaquaiLigneId: string;
   @Input() public lieupassageaquaiTitle: string;
 
+
   formGroup = this.fb.group({
     id: [""],
     raisonSocial: [""],
@@ -284,11 +285,11 @@ export class LieuxPassageAQuaiDetailsComponent
       });
   }
 
-  checkEmptyModificationList(listLength) {
-    if (listLength === 0 && this.authService.currentUser.adminClient) {
+  saveAfterModification(info?) {
+    if (this.authService.currentUser.adminClient) {
       const lieuPassageAQuai = {
         id: this.lieupassageaquai.id,
-        preSaisie: false,
+        preSaisie: !info.last,
       };
       this.lieupassageaquaiService
         .save_v2(["id", "preSaisie"], {
@@ -298,7 +299,7 @@ export class LieuxPassageAQuaiDetailsComponent
           next: () => {
             this.refreshGrid.emit();
             this.formGroup.markAsPristine();
-            this.preSaisie = "";
+            if (info.last) this.preSaisie = "";
             this.validationService.showToValidateBadges();
           },
           error: (err) => {

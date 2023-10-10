@@ -81,7 +81,7 @@
       ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
-          (listChange)="checkEmptyModificationList($event)"
+          (listChange)="saveAfterModification($event)"
           [entite]="'LieuPassageAQuai'"
           [entiteID]="lieupassageaquai.id"
           *ngIf="!createMode && lieupassageaquai"

@@ -47,7 +47,7 @@ import {
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { filter, switchMap, tap } from "rxjs/operators";
 import {
   Certification,
   CertificationClient,
@@ -280,7 +280,7 @@ export class ClientDetailsComponent
   };
 
   @Input() clientId: string;
-  @Output() modifUserIds: string[];
+  @Output() userModifsInfo: string;
   @Output() openEncoursOrder = new EventEmitter<any>();
   @Output() orderCurrOrder = new EventEmitter<any>();
 
@@ -466,8 +466,6 @@ export class ClientDetailsComponent
       ["valide", "=", true],
     ]);
 
-    this.resetModifUserIds();
-
     if (this.route.snapshot.url[1]?.path !== "clients") return;
 
     this.route.params
@@ -614,9 +612,13 @@ export class ClientDetailsComponent
   }
 
   onRefusCofaceChange(e) {
+    // We check that this change is coming from the user
+    if (!e.event) return;
+
     const cofaceBlocked = e.value === true;
     this.cofaceBlocked = cofaceBlocked;
     if (cofaceBlocked) {
+
       this.formGroup.get("agrement").setValue(0);
       this.formGroup.get("agrement").markAsDirty();
       this.formGroup.get("enCoursTemporaire").setValue(0);
@@ -660,26 +662,19 @@ export class ClientDetailsComponent
     });
   }
 
-  checkEmptyModificationList(listLength) {
-    if (listLength === 0 && this.authService.currentUser.adminClient) {
+  saveAfterModification(info) {
+    this.userModifsInfo = info.info;
+    if (this.authService.currentUser.adminClient) {
       if (this.formGroup.valid) {
         const client = {
           id: this.client.id,
-          preSaisie: false,
+          preSaisie: !info.last,
+          valide: this.client.valide
         };
-        this.preSaisie = "";
-        this.saveData(client);
+        if (info.last) this.preSaisie = "";
+        this.saveData(client, true);
       }
     }
-  }
-
-  addModificationUserIds(userIdFromModifList) {
-    if (!this.modifUserIds.includes(userIdFromModifList))
-      this.modifUserIds.push(userIdFromModifList);
-  }
-
-  resetModifUserIds() {
-    this.modifUserIds = [];
   }
 
   onSubmit() {
@@ -777,6 +772,7 @@ export class ClientDetailsComponent
       : of(undefined)
     )
       .pipe(
+        filter(() => !this.formGroup.pristine && this.formGroup.valid),
         switchMap((_) =>
           this.clientsService.save_v2(this.getDirtyFieldsPath(), {
             client: {
@@ -790,7 +786,6 @@ export class ClientDetailsComponent
         next: (e) => {
           notify("Sauvegardé", "success", 3000);
           this.refreshGrid.emit();
-          this.resetModifUserIds();
           // Show red badges (unvalidated forms)
           this.validationService.showToValidateBadges();
           if (!this.createMode) {
@@ -808,10 +803,25 @@ export class ClientDetailsComponent
           this.client.historique = e.data.saveClient.historique;
           this.client.typeTiers = e.data.saveClient.typeTiers;
           this.client.certifications = certifications;
-          // e.data.saveClient.certifications;
           this.formGroup.markAsPristine();
         },
-        error: () => notify("Échec de la sauvegarde", "error", 3000),
+        // complete: () => {
+        //   this.clientsService
+        //     .getOne_v2(this.client.id, [
+        //       "historique.id",
+        //       "historique.commentaire",
+        //       "historique.valide",
+        //       "historique.userModification",
+        //       "historique.dateModification",
+        //     ])
+        //     .subscribe((res) => {
+        //       this.client.historique = res.data.client.historique;
+        //     });
+        // },
+        error: (err) => {
+          console.log(err);
+          notify("Échec de la sauvegarde", "error", 3000);
+        },
       });
   }
 

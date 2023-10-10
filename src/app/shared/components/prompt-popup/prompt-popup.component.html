@@ -40,7 +40,7 @@
       <dx-text-box
         ngModel
         #commentBox
-        [visible]="!commentItemsList && !dateOnly"
+        [visible]="!commentItemsList && !dateOnly && !textarea"
         name="commentaire"
         valueChangeEvent="keyup"
         [showClearButton]="true"
@@ -53,6 +53,22 @@
           name="{{ 'valide-motif' | localize }}"
         ></dx-validator>
       </dx-text-box>
+
+      <dx-text-area
+        ngModel
+        #textareaBox
+        [visible]="textarea"
+        name="textarea"
+        valueChangeEvent="keyup"
+        (onEnterKey)="quickValidate(form)"
+        [placeholder]="placeholder"
+      >
+        <dx-validator
+          #validatorTextarea
+          [validationRules]="commentValidationRules"
+          name="{{ 'valide-motif' | localize }}"
+        ></dx-validator>
+      </dx-text-area>
 
       <dx-date-box
         #dateBox
@@ -87,6 +103,7 @@
           *ngIf="validator.instance"
           [disabled]="
             !validator.instance.validate().isValid &&
+            !validatorTextarea.instance.validate().isValid &&
             !validatorSB.instance.validate().isValid &&
             !validatorDate.instance.validate().isValid
           "

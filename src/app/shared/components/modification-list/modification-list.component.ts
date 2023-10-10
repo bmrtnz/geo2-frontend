@@ -15,7 +15,7 @@ import {
   DxBoxModule,
 } from "devextreme-angular";
 import { CommonModule } from "@angular/common";
-import { AuthService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { SharedModule } from "app/shared/shared.module";
 import DataSource from "devextreme/data/data_source";
 import { ModificationsService } from "app/shared/services/api/modification.service";
@@ -33,18 +33,17 @@ export class ModificationListComponent implements OnChanges {
   @Input() entite: string;
   @Input() entiteID: string;
   @Output() modifs: any;
-
   @Output() listChange = new EventEmitter();
-  @Output() idUtilisateur = new EventEmitter();
 
   modifications: DataSource;
 
   constructor(
     public authService: AuthService,
+    private localizationService: LocalizationService,
     private dateManagementService: DateManagementService,
     public modificationsService: ModificationsService,
     public validationService: ValidationService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     this.modifs = [];
@@ -85,17 +84,28 @@ export class ModificationListComponent implements OnChanges {
           this.modifs = liste;
           this.modifs.map(
             (result) =>
-              (result.dateModification =
-                this.dateManagementService.friendlyDate(
-                  result.dateModification
-                ))
+            (result.dateModification =
+              this.dateManagementService.friendlyDate(
+                result.dateModification
+              ))
           );
         }
       });
   }
 
-  clearModifications(modifID, modifIDUtilisateur) {
-    this.idUtilisateur.emit(modifIDUtilisateur);
+  clearModifications(modif) {
+    const modifID = modif?.id;
+
+    // Create detailed info text
+    let info = this.displayCapitalize(this.localizationService.localize("of")) + " ";
+    info += modif.initiateur.personne.id + " - " + modif.initiateur.nomUtilisateur + " ";
+    info += this.localizationService.localize("the");
+    info += " " + modif.dateModification + " ";
+    modif.corps.map(corps => {
+      info += this.localizationService.localize(corps.traductionKey) + " : ";
+      info += corps.affichageActuel.replace(this.localizationService.localize("not-set"), "") + " => ";
+      info += corps.affichageDemande + " ";
+    });
 
     const modification: Partial<Modification> = {
       id: modifID,
@@ -106,13 +116,18 @@ export class ModificationListComponent implements OnChanges {
         this.modifs = this.modifs.filter((res) => res.id !== modifID);
         // Show red badges (unvalidated forms)
         this.validationService.showToValidateBadges();
-        this.listChange.emit(this.modifs.length);
-        notify("Suppression demande effectuée !", "success", 3000);
+        this.listChange.emit({ info: info, last: !this.modifs.length });
+        notify(this.localizationService.localize("delete-ok"), "success", 3000);
       },
       error: () =>
-        notify("Erreur lors de la demande de suppression", "error", 3000),
+        notify(this.localizationService.localize("delete-error"), "error", 3000),
     });
   }
+
+  displayCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
 }
 
 @NgModule({
@@ -128,4 +143,4 @@ export class ModificationListComponent implements OnChanges {
   declarations: [ModificationListComponent],
   exports: [ModificationListComponent],
 })
-export class ModificationListModule {}
+export class ModificationListModule { }
