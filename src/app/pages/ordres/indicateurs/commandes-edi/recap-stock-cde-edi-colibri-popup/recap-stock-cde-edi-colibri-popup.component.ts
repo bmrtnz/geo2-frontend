@@ -9,7 +9,6 @@ import {
 } from "@angular/core";
 import { TabContext } from "app/pages/ordres/root/root.component";
 import { EdiOrdre } from "app/shared/models";
-import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
@@ -17,10 +16,10 @@ import { StockArticleEdiBassinService } from "app/shared/services/api/stock-arti
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
-  DxButtonComponent,
   DxPopupComponent,
   DxScrollViewComponent,
 } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { concatMap, finalize, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
@@ -45,14 +44,12 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   pulseBtnOn: boolean;
   popupFullscreen = true;
   creatingOrder = false;
+  selectedGTIN: string[];
+  resultsGTIN: string[];
 
-
-  @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false })
-  gridRecap: GridRecapStockCdeEdiColibriComponent;
+  @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false }) gridRecap: GridRecapStockCdeEdiColibriComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
     private functionsService: FunctionsService,
@@ -84,11 +81,21 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.nbLignesOld = this.nbLignes;
   }
 
+
   getGridSelectedArticles() {
+    // We ensure that all GTIN are selected
+    this.selectedGTIN = [];
+    this.resultsGTIN = [];
+    this.gridRecap.datagrid.instance.getSelectedRowsData().map(row => this.selectedGTIN.push(row.gtin))
+    this.selectedGTIN = Array.from(new Set(this.selectedGTIN));
+    (this.gridRecap.datagrid.dataSource as DataSource).items().map((ds) => this.resultsGTIN.push(ds.gtin));
+    this.resultsGTIN = Array.from(new Set(this.resultsGTIN));
+
     return this.gridRecap.datagrid.instance.getSelectedRowsData();
   }
 
   selectFromGrid(e) {
+    if (!this.gridRecap.datagrid.dataSource) return;
     this.updateChosenArticles();
   }
 
@@ -106,7 +113,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   clearAll() {
     this.gridRecap.datagrid.instance.clearSelection();
     this.gridRecap.datagrid.dataSource = null;
-    this.updateChosenArticles();
   }
 
   hidePopup() {

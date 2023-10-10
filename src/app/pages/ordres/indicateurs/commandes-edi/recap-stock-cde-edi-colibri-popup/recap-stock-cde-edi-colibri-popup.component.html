@@ -29,8 +29,10 @@
       [ngClass]="{ pulse: pulseBtnOn }"
       class="create-order-button"
       type="success"
-      [visible]="nbLignes > 0"
       [disabled]="creatingOrder"
+      [visible]="
+        selectedGTIN?.length > 0 && selectedGTIN?.length === resultsGTIN?.length
+      "
       text="{{ 'creer-ordre(s)' | localize }}"
       (onClick)="createOrder()"
     ></dx-button>
