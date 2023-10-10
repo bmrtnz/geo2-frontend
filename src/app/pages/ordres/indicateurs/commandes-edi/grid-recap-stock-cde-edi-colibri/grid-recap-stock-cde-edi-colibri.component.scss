@@ -21,6 +21,10 @@
   .green-row {
     background-color: #D7FF97 !important;
 
+    td.dx-command-select {
+      background-color: white !important;
+    }
+
     &.dx-row-focused td {
       color: #333 !important;
       background-color: #9CDF33 !important;
@@ -29,6 +33,10 @@
 
   .blue-row {
     background-color: #DDFFFC !important;
+
+    td.dx-command-select {
+      background-color: white !important;
+    }
   }
 
   .textArticleTemplate {
