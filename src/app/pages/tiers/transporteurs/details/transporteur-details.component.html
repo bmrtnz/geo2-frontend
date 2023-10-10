@@ -84,7 +84,7 @@
       ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
-          (listChange)="checkEmptyModificationList($event)"
+          (listChange)="saveAfterModification($event)"
           [entite]="'Transporteur'"
           [entiteID]="transporteur.id"
           *ngIf="!createMode && transporteur"
@@ -622,7 +622,7 @@
 <app-push-history-popup
   [title]="'valide-comment-title' | localize"
   [placeholder]="'valide-comment' | localize"
-  [modifUserIds]="modifUserIds"
+  [userModifsInfo]="userModifsInfo"
 >
 </app-push-history-popup>
 <app-file-manager-popup

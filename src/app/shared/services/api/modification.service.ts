@@ -17,6 +17,7 @@ import {
 } from "@angular/forms";
 import { from, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
+import { LocalizationService } from "../localization.service";
 
 @Injectable({
   providedIn: "root",
@@ -24,11 +25,12 @@ import { catchError, tap } from "rxjs/operators";
 export class ModificationsService extends ApiService implements APIRead {
   fieldsFilter =
     /.*\.(?:id|entite|entiteID|dateModification|initiateur|corps|statut)$/i;
-  notSet = "(non renseigné)";
+  notSet = "(" + this.localizationService.localize("not-set") + ")";
 
   constructor(
     apollo: Apollo,
     public authService: AuthService,
+    private localizationService: LocalizationService,
     private router: Router
   ) {
     super(apollo, Modification);
@@ -77,13 +79,13 @@ export class ModificationsService extends ApiService implements APIRead {
       const suffix =
         key !== "incoterm"
           ? " - " +
-            (el.nomUtilisateur
-              ? el.nomUtilisateur
-              : el.libelle
+          (el.nomUtilisateur
+            ? el.nomUtilisateur
+            : el.libelle
               ? el.libelle
               : el.raisonSocial
-              ? el.raisonSocial
-              : el.description)
+                ? el.raisonSocial
+                : el.description)
           : "";
       return el.id + suffix;
     } else {

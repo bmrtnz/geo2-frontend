@@ -28,12 +28,16 @@ export class HistoriqueValideComponent implements OnChanges {
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent;
 
-  constructor() {}
+  constructor() { }
 
   ngOnChanges() {
     if (this.historique) {
       this.btnVisible = this.historique.length > 0;
     }
+  }
+
+  onShowing(e) {
+    e.component.content().parentNode.classList.add("histo-change-tiers-popup");
   }
 
   sortGrid() {
@@ -48,4 +52,4 @@ export class HistoriqueValideComponent implements OnChanges {
   imports: [DxButtonModule, DxPopupModule, DxDataGridModule, SharedModule],
   exports: [HistoriqueValideComponent],
 })
-export class HistoriqueValideModule {}
+export class HistoriqueValideModule { }

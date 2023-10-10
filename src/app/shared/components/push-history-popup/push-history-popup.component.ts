@@ -31,7 +31,7 @@ export class PushHistoryPopupComponent {
 
   @Input() title = "";
   @Input() placeholder = "";
-  @Input() modifUserIds;
+  @Input() userModifsInfo = "";
 
   persist = new EventEmitter<Observable<FetchResult>>();
 
@@ -41,15 +41,14 @@ export class PushHistoryPopupComponent {
   constructor(
     private historiqueService: HistoriqueService,
     private modifiedFieldsService: ModifiedFieldsService
-  ) {}
+  ) { }
 
   async onSubmit(comment: string) {
-    const modifiedFields = this.modifiedFieldsService.getModifiedFields();
+    // const modifiedFields = this.modifiedFieldsService.getModifiedFields();
     const save = this.historiqueService.saveByType(this.historyType, {
       ...this.sourceData,
-      // Adding modified fields list to user comment
-      commentaire: comment + (modifiedFields ? " " + modifiedFields : ""),
-    });
+      commentaire: comment,
+    })
     this.persist.emit(save);
   }
 
@@ -59,14 +58,14 @@ export class PushHistoryPopupComponent {
 
   onShown() {
     // If applicable, populates field with the ids of the users who suggested modifications
-    if (this.modifUserIds?.length)
-      this.promptPopupComponent.setText(`(${this.modifUserIds.join(" / ")}) `);
+    if (this.userModifsInfo?.length)
+      this.promptPopupComponent.setText(this.userModifsInfo);
   }
 
   present(type: HistoryType, data) {
     this.historyType = type;
     this.sourceData = data;
-    this.promptPopupComponent.show();
+    this.promptPopupComponent.show({ commentMaxLength: 512 });
     return this.persist.asObservable().pipe(take(1), mergeAll());
   }
 }
@@ -76,4 +75,4 @@ export class PushHistoryPopupComponent {
   imports: [SharedModule, PromptPopupModule],
   exports: [PushHistoryPopupComponent],
 })
-export class PushHistoryPopupModule {}
+export class PushHistoryPopupModule { }

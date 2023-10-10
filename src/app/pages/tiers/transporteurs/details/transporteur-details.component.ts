@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   OnInit,
+  Output,
   ViewChild,
   ViewChildren,
 } from "@angular/core";
@@ -44,6 +45,7 @@ import { switchMap, tap } from "rxjs/operators";
 export class TransporteurDetailsComponent
   implements OnInit, AfterViewInit, OnChanges, NestedPart, Editable {
   @Input() public transporteurLigneId: string;
+  @Output() userModifsInfo: string;
 
   formGroup = this.fb.group({
     id: [""],
@@ -111,8 +113,6 @@ export class TransporteurDetailsComponent
   };
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
-
-  modifUserIds: string[];
 
   @ViewChild(EditingAlertComponent, { static: true })
   alertComponent: EditingAlertComponent;
@@ -206,8 +206,6 @@ export class TransporteurDetailsComponent
     ]);
 
     if (this.route.snapshot.url[1]?.path !== "transporteurs") return;
-
-    this.resetModifUserIds();
 
     this.route.params
       .pipe(tap((_) => this.formGroup.reset()))
@@ -395,7 +393,6 @@ export class TransporteurDetailsComponent
       )
       .subscribe({
         next: (e) => {
-          this.resetModifUserIds();
 
           if (this.createMode || this.authService.currentUser.adminClient)
             notify("Sauvegardé", "success", 3000);
@@ -420,11 +417,12 @@ export class TransporteurDetailsComponent
       });
   }
 
-  checkEmptyModificationList(listLength) {
-    if (listLength === 0 && this.authService.currentUser.adminClient) {
+  saveAfterModification(info) {
+    this.userModifsInfo = info.info;
+    if (this.authService.currentUser.adminClient) {
       const transporteur = {
         id: this.transporteur.id,
-        preSaisie: false,
+        preSaisie: !info.last,
       };
       this.transporteursService
         .save_v2(["id", "preSaisie"], {
@@ -434,7 +432,7 @@ export class TransporteurDetailsComponent
           next: () => {
             this.refreshGrid.emit();
             this.formGroup.markAsPristine();
-            this.preSaisie = "";
+            if (info.last) this.preSaisie = "";
             this.validationService.showToValidateBadges();
           },
           error: (err) => {
@@ -480,12 +478,4 @@ export class TransporteurDetailsComponent
     return [...this.formUtils.extractPaths(dirtyFields), ...gridFields];
   }
 
-  addModificationUserIds(userIdFromModifList) {
-    if (!this.modifUserIds.includes(userIdFromModifList))
-      this.modifUserIds.push(userIdFromModifList);
-  }
-
-  resetModifUserIds() {
-    this.modifUserIds = [];
-  }
 }

@@ -121,8 +121,7 @@
       ></dxi-item>
       <dxi-item [ratio]="8.2">
         <app-modification-list
-          (listChange)="checkEmptyModificationList($event)"
-          (idUtilisateur)="addModificationUserIds($event)"
+          (listChange)="saveAfterModification($event)"
           [entite]="'Client'"
           [entiteID]="client.id"
           *ngIf="!createMode && client"
@@ -2115,7 +2114,7 @@
 <app-push-history-popup
   [title]="'valide-comment-title' | localize"
   [placeholder]="'valide-comment' | localize"
-  [modifUserIds]="modifUserIds"
+  [userModifsInfo]="userModifsInfo"
 >
 </app-push-history-popup>
 

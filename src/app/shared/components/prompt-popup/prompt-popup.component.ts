@@ -16,6 +16,8 @@ import {
   DxDateBoxComponent,
   DxTextBoxComponent,
   DxTextBoxModule,
+  DxTextAreaModule,
+  DxTextAreaComponent,
   DxValidatorComponent,
   DxValidatorModule,
   DxDateBoxModule,
@@ -34,19 +36,19 @@ export class PromptPopupComponent {
   @ViewChild("commentBox", { static: false }) commentBox: DxTextBoxComponent;
   @ViewChild("commentSelectBox", { static: false })
   commentSelectBox: DxSelectBoxComponent;
+  @ViewChild("textareaBox", { static: false }) textareaBox: DxTextAreaComponent;
   @ViewChild("dateBox", { static: false }) dateBox: DxDateBoxComponent;
 
-  @ViewChild("validator", { static: false })
-  commentValidator: DxValidatorComponent;
-  @ViewChild("validatorSB", { static: false })
-  commentSBValidator: DxValidatorComponent;
-  @ViewChild("validatorDate", { static: false })
-  dateValidator: DxValidatorComponent;
+  @ViewChild("validator", { static: false }) commentValidator: DxValidatorComponent;
+  @ViewChild("validatorSB", { static: false }) commentSBValidator: DxValidatorComponent;
+  @ViewChild("validatorTextarea", { static: false }) textareaValidator: DxValidatorComponent;
+  @ViewChild("validatorDate", { static: false }) dateValidator: DxValidatorComponent;
 
   @Input() title = "";
   @Input() purpose = "";
   @Input() placeholder = "";
   @Input() dateOnly: boolean;
+  @Input() textarea: boolean;
 
   @Output() whenValidate = new EventEmitter<string>();
   @Output() whenHiding = new EventEmitter<any>();
@@ -75,7 +77,7 @@ export class PromptPopupComponent {
   }
 
   setText(text: string) {
-    this.commentBox.value = text;
+    this.textarea ? this.textareaBox.value = text : this.commentBox.value = text;
   }
 
   setDate(date: Date) {
@@ -103,6 +105,7 @@ export class PromptPopupComponent {
 
   onHidden() {
     this.commentBox.instance.reset();
+    this.textareaBox.instance.reset();
     this.commentSelectBox.instance.reset();
     this.dateBox.instance.reset();
   }
@@ -110,6 +113,7 @@ export class PromptPopupComponent {
   onShown() {
     this.whenShown.emit();
     this.commentBox?.instance.focus();
+    if (this.textarea) this.textareaBox.instance.focus();
     this.setValidationRules();
   }
 
@@ -121,10 +125,14 @@ export class PromptPopupComponent {
     if (
       this.commentValidator.instance.validate().isValid ||
       this.commentSBValidator.instance.validate().isValid ||
+      this.textareaValidator.instance.validate().isValid ||
       this.dateValidator.instance.validate().isValid
     ) {
       this.whenValidate.emit(
-        form.value.commentaire || form.value.commentaireSB || this.dateBox.value
+        form.value.commentaire ||
+        this.textareaBox.value ||
+        form.value.commentaireSB ||
+        this.dateBox.value
       );
       this.popupComponent.instance.hide();
     }
@@ -140,6 +148,7 @@ export class PromptPopupComponent {
     DxTextBoxModule,
     DxDateBoxModule,
     DxButtonModule,
+    DxTextAreaModule,
     DxSelectBoxModule,
     DxValidatorModule,
   ],
