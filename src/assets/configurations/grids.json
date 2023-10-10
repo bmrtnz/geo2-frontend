@@ -8616,23 +8616,24 @@
       {
         "visibleIndex": 1,
         "dataField": "codeChargement",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 2,
         "dataField": "ordreOrigine",
         "visible": true,
+        "calculateCellValue": "calculateGroupeOrdreLibelle",
         "groupIndex": 1
       },
       {
         "visibleIndex": 3,
         "dataField": "raisonSociale",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 4,
         "dataField": "ville",
-        "visible": true
+        "visible": false
       },
       {
         "visibleIndex": 5,
