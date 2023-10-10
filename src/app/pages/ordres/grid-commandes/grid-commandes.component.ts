@@ -875,9 +875,6 @@ export class GridCommandesComponent
       e.editorOptions.valueExpr = "id";
       e.editorOptions.searchExpr = ["code"];
       e.editorOptions.dataSource = this.fournisseursSource;
-      e.editorOptions.onEnterKey = (component: dxSelectBox, element: HTMLElement, event: EventObject) => {
-        console.log("enter !")
-      };
       e.editorOptions.displayExpr = rowData => {
         const displayValue = rowData?.code ? `${rowData?.code} - ${rowData?.raisonSocial}` : "";
         if (rowData?.id)
@@ -1033,7 +1030,7 @@ export class GridCommandesComponent
   }
 
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
-    if (event.originalEvent?.code !== "Enter") return;
+    if (!["Enter", "NumpadEnter"].includes(event.originalEvent?.code)) return;
     const shiftModifier = event.originalEvent.shiftKey;
     this.grid.instance.closeEditCell();
 
