@@ -1,22 +1,18 @@
 import { DatePipe } from "@angular/common";
 import {
   Component,
-  EventEmitter,
   Input,
   OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
 import { EdiOrdre } from "app/shared/models";
-import Ordre from "app/shared/models/ordre.model";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
-  DxButtonComponent,
   DxPopupComponent,
   DxScrollViewComponent,
 } from "devextreme-angular";
@@ -47,15 +43,11 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   selectedGTIN: string[];
   resultsGTIN: string[];
 
-  @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false })
-  gridRecap: GridRecapStockCdeEdiColibriComponent;
+  @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false }) gridRecap: GridRecapStockCdeEdiColibriComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   constructor(
-    private gridUtilsService: GridUtilsService,
     private functionsService: FunctionsService,
     private currentCompanyService: CurrentCompanyService,
     private stockArticleEdiBassinService: StockArticleEdiBassinService,
@@ -82,6 +74,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     }
     this.nbLignesOld = this.nbLignes;
   }
+
 
   getGridSelectedArticles() {
     this.selectedGTIN = [];
