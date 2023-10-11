@@ -20,6 +20,7 @@ import {
   DxPopupComponent,
   DxScrollViewComponent,
 } from "devextreme-angular";
+import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { concatMap, finalize, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
@@ -43,6 +44,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   titleMid: string;
   pulseBtnOn: boolean;
   popupFullscreen = true;
+  selectedGTIN: string[];
+  resultsGTIN: string[];
 
   @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false })
   gridRecap: GridRecapStockCdeEdiColibriComponent;
@@ -81,6 +84,13 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   getGridSelectedArticles() {
+    this.selectedGTIN = [];
+    this.resultsGTIN = [];
+    this.gridRecap.datagrid.instance.getSelectedRowsData().map(row => this.selectedGTIN.push(row.gtin))
+    this.selectedGTIN = Array.from(new Set(this.selectedGTIN));
+    (this.gridRecap.datagrid.dataSource as DataSource).items().map((ds) => this.resultsGTIN.push(ds.gtin));
+    this.resultsGTIN = Array.from(new Set(this.resultsGTIN));
+
     return this.gridRecap.datagrid.instance.getSelectedRowsData();
   }
 
