@@ -77,6 +77,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
 
 
   getGridSelectedArticles() {
+    // We ensure that all GTIN are selected
     this.selectedGTIN = [];
     this.resultsGTIN = [];
     this.gridRecap.datagrid.instance.getSelectedRowsData().map(row => this.selectedGTIN.push(row.gtin))
@@ -88,6 +89,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   selectFromGrid(e) {
+    if (!this.gridRecap.datagrid.dataSource) return;
     this.updateChosenArticles();
   }
 
@@ -105,7 +107,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   clearAll() {
     this.gridRecap.datagrid.instance.clearSelection();
     this.gridRecap.datagrid.dataSource = null;
-    this.updateChosenArticles();
   }
 
   hidePopup() {
