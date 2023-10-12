@@ -127,7 +127,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     if (!rows.length) return;
     this.creatingOrder = true;
-    notify("creer-ordre(s)-en-cours", "info", 5000);
+    notify(this.localization.localize("creer-ordre(s)-en-cours"), "info", 5000);
     const updatedRows = rows.map(row => ({
       id: row.data.id,
       choix: row.isSelected,
