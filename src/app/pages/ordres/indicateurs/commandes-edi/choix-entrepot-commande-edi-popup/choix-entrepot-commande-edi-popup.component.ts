@@ -17,7 +17,7 @@ import DataSource from "devextreme/data/data_source";
   styleUrls: ["./choix-entrepot-commande-edi-popup.component.scss"],
 })
 export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
-  @Input() public commandeEdi: Partial<CommandeEdi>;
+  @Input() public clientId: string;
   @Output() public entrepotChosen = new EventEmitter();
 
   visible: boolean;
@@ -31,12 +31,13 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   constructor(
     private clientsService: ClientsService,
     private entrepotsService: EntrepotsService
-  ) {}
+  ) { }
 
   ngOnChanges() {
-    if (this.commandeEdi) {
+    if (this.clientId) {
       this.clientDS = this.clientsService.getDataSource_v2([
         "id",
+        "code",
         "raisonSocial",
       ]);
       this.entrepotDS = this.entrepotsService.getDataSource_v2([
@@ -47,7 +48,7 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
       this.entrepotDS.filter([
         ["valide", "=", true],
         "and",
-        ["client.id", "=", this.commandeEdi.client?.id],
+        ["client.id", "=", this.clientId],
       ]);
     }
   }
@@ -71,12 +72,12 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 

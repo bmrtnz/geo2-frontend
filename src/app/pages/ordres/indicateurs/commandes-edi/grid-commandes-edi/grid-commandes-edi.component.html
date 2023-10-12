@@ -320,7 +320,7 @@
   </div>
 </dx-data-grid>
 <app-choix-entrepot-commande-edi-popup
-  [commandeEdi]="commandeEdi"
+  [clientId]="commandeEdi?.client?.id"
   (entrepotChosen)="onEdiEntrepotChoosed(commandeEdi, $event)"
 >
 </app-choix-entrepot-commande-edi-popup>

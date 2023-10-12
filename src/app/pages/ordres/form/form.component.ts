@@ -94,6 +94,7 @@ import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.c
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
+import { ChoixEntrepotCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
@@ -412,6 +413,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
   @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+  @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
 
 
 
@@ -1581,16 +1583,24 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.clientId !== null) this.zoomClientFilePopup.visible = true;
   }
 
-  openEntrepotFilePopup() {
-    this.entrepotId = this.ordre?.entrepot?.id;
-    this.entrepotCode = this.ordre?.entrepot?.code;
-    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
+  openChoixEntrepotPopup() {
+    this.choixEntPopup.visible = true;
+  }
+
+  onEntrepotChosen(e) {
+    console.log(e)
   }
 
   openTransporteurFilePopup() {
     this.transporteurLigneId = this.formGroup.get("transporteur").value?.id;
     if (this.transporteurLigneId !== null)
       this.zoomTransporteurFilePopup.visible = true;
+  }
+
+  openEntrepotFilePopup() {
+    this.entrepotId = this.ordre?.entrepot?.id;
+    this.entrepotCode = this.ordre?.entrepot?.code;
+    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
   }
 
   private refetchOrder(period = 5000) {
