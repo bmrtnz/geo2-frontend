@@ -2,7 +2,6 @@
   class="dx-fieldset"
   [formGroup]="formGroup"
 >
-
   <div class="title-container">
     <h6>{{ "repartition-ordres-regroupement-title" | localize }}</h6>
     <dx-button
@@ -13,7 +12,10 @@
     ></dx-button>
   </div>
 
-  <dx-box direction="row" width="100%">
+  <dx-box
+    direction="row"
+    width="100%"
+  >
     <dxi-item [ratio]="0.6">
       <!-- Date de début -->
       <div class="dx-field field-small">
@@ -132,16 +134,20 @@
   </dx-box>
 </form>
 
-
-
+<dx-button
+  class="grid-grouping-button"
+  type="default"
+  icon="material-icons menu_open"
+  hint="{{ 'btn-grouping' | localize }}"
+  (onClick)="gridsService.expandCollapseGroups(this)"
+></dx-button>
 <dx-data-grid
-  class="ordres-regroupement"
+  class="grid-ordres-regroupement"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [focusedRowEnabled]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
-  (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
@@ -149,10 +155,11 @@
       $event,
       gridConfiguratorService.Grid.OrdresRegroupement,
       enableFilters.bind(this)
-    )"
+    )
+  "
 >
-
   <!-- Grid configuration -->
+  <dxo-export fileName="Répartition ordres regroupement"></dxo-export>
   <dxo-header-filter
     [visible]="true"
     [allowSearch]="true"
@@ -166,16 +173,21 @@
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
   <dxo-group-panel [visible]="true"></dxo-group-panel>
-  <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+  <dxo-grouping
+    #expand
+    [autoExpandAll]="true"
+  ></dxo-grouping>
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [caption]="
-      ('repartition-ordres-regroupement-' + column.dataField?.split('.').join('-')
-        | localize) || column.name
+      ('repartition-ordres-regroupement-' +
+        column.dataField?.split('.').join('-') | localize) || column.name
     "
     [dataType]="column?.dataType"
+    [encodeHtml]="false"
     [showInColumnChooser]="column.showInColumnChooser"
+    [calculateCellValue]="this[column?.calculateCellValue]"
   ></dxi-column>
 
   <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
@@ -186,12 +198,12 @@
       [showInGroupFooter]="true"
       [alignByColumn]="true"
     ></dxi-group-item>
-<!--    <dxi-group-item-->
-<!--      column="description"-->
-<!--      displayFormat="poids net total"-->
-<!--      [showInGroupFooter]="true"-->
-<!--      [alignByColumn]="true"-->
-<!--    ></dxi-group-item>-->
+    <!--    <dxi-group-item-->
+    <!--      column="description"-->
+    <!--      displayFormat="poids net total"-->
+    <!--      [showInGroupFooter]="true"-->
+    <!--      [alignByColumn]="true"-->
+    <!--    ></dxi-group-item>-->
 
     <!-- total Palettes-->
     <dxi-group-item

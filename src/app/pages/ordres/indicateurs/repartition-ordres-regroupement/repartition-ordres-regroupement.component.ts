@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import {
   FournisseursService,
@@ -20,8 +20,9 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import {from, lastValueFrom, Observable} from "rxjs";
+import { from, lastValueFrom, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { GridsService } from "../../grids.service";
 
 enum FormInput {
   dateMin = "dateDepartPrevueFournisseur",
@@ -38,7 +39,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
   templateUrl: "./repartition-ordres-regroupement.component.html",
   styleUrls: ["./repartition-ordres-regroupement.component.scss"],
 })
-export class RepartitionOrdresRegroupementComponent {
+export class RepartitionOrdresRegroupementComponent implements OnInit {
   private gridConfig: Promise<GridConfig>;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -49,18 +50,18 @@ export class RepartitionOrdresRegroupementComponent {
   public columns: Observable<GridColumn[]>;
   public ordresRegroupementDataSource: DataSource;
   public formGroup = new UntypedFormGroup({
-  transporteurCode: new UntypedFormControl(),
-  stationCode: new UntypedFormControl(),
-  commercialCode: new UntypedFormControl(),
-  dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
-  dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
-} as Inputs<UntypedFormControl>);
+    transporteurCode: new UntypedFormControl(),
+    stationCode: new UntypedFormControl(),
+    commercialCode: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
+    dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
+  } as Inputs<UntypedFormControl>);
 
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
+    public gridsService: GridsService,
     public localizeService: LocalizationService,
-
     private repartitionOrdresRegroupement: RepartitionOrdresRegroupementService,
     private transporteursService: TransporteursService,
     private personnesService: PersonnesService,
@@ -101,19 +102,19 @@ export class RepartitionOrdresRegroupementComponent {
 
   async enableFilters() {
 
-      const values: Inputs = {
-        ...this.formGroup.value,
-      };
+    const values: Inputs = {
+      ...this.formGroup.value,
+    };
 
-      this.repartitionOrdresRegroupement.setPersisantVariables({
-        dateMin: values.dateMin,
-        dateMax: values.dateMax,
-        transporteurCode: values.transporteurCode,
-        stationCode: values.stationCode,
-        commercialCode: values.commercialCode
-      } as Inputs);
+    this.repartitionOrdresRegroupement.setPersisantVariables({
+      dateMin: values.dateMin,
+      dateMax: values.dateMax,
+      transporteurCode: values.transporteurCode,
+      stationCode: values.stationCode,
+      commercialCode: values.commercialCode
+    } as Inputs);
 
-      this.datagrid.dataSource = this.ordresRegroupementDataSource;
+    this.datagrid.dataSource = this.ordresRegroupementDataSource;
 
   }
 
@@ -155,33 +156,19 @@ export class RepartitionOrdresRegroupementComponent {
       : null;
   }
 
-  onCellPrepared(e) {
-    if (e.rowType === "group") {
-      if (e.column.dataField === "ordreRegroupement" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-      }
-      // Si ligne = Ordre Origine
-      if (e.column.dataField === "ordreOrigine" && e.cellElement.textContent) {
-        let data = e.data.items ?? e.data.collapsedItems;
-        if (!data[0]) return;
-        data = data[0];
-        const dateDepart = new Date(data.dateDepartPrevue);
-        const dateLivraison = new Date(data.dateLivraisonPrevue);
 
-        const continuationOnNextPage = e.cellElement.textContent.indexOf("(") !== -1
-                                          ? e.cellElement.textContent.substring(e.cellElement.textContent.indexOf("("), e.cellElement.textContent.length)
-                                          : "";
+  calculateGroupeOrdreLibelle(data) {
+    const dateDepart = new Date(data.dateDepartPrevue);
+    const dateLivraison = new Date(data.dateLivraisonPrevue);
 
-        // Showing Transporteur and Dates in group header
-        e.cellElement.textContent =
-          "Ordre origine : " + data.ordreOrigine +
-          (data.transporteurCode ? " - " + " Transporteur : " + data.transporteurCode + " " : "") +
-          (data.dateDepartPrevue ? " - " + " Date de départ : " + dateDepart.toLocaleString() + " " : "") +
-          (data.dateLivraisonPrevue ? " - " + " Date de livraison : " + dateLivraison.toLocaleString() + " " : "") +
-          (continuationOnNextPage.trim() !== "" ? continuationOnNextPage : "");
-      }
-    }
+    // Showing Transporteur and Dates in group header
+    return data.ordreOrigine +
+      (data.transporteurCode ? " - " + " Transporteur : " + data.transporteurCode + " " : "") +
+      (data.dateDepartPrevue ? " - " + " Date départ : " + dateDepart.toLocaleString() + " " : "") +
+      (data.dateLivraisonPrevue ? " - " + " Date livraison : " + dateLivraison.toLocaleString() + " " : "") +
+      "<br>" +
+      (data.codeChargement ? "Chargement : " + data.codeChargement + " " : "") +
+      (data.raisonSociale ? " - Entrepôt : " + data.raisonSociale + " (" + data.ville + ")" : "")
   }
 
   onRowPrepared(e) {
@@ -191,6 +178,7 @@ export class RepartitionOrdresRegroupementComponent {
       }
       if (e.groupIndex === 1) {
         e.rowElement.classList.add('group-2-header');
+        e.rowElement.classList.add('lineHeight16tr');
       }
     }
     if (e.rowType === "groupFooter") {
@@ -205,7 +193,7 @@ export class RepartitionOrdresRegroupementComponent {
 
   calculateCustomSummary(options) {
     if (options.groupIndex === 0) {
-        options.totalValue = (options.name === "totalLabel") ? "TOTAL GÉNÉRAL" : "";
+      options.totalValue = (options.name === "totalLabel") ? "TOTAL GÉNÉRAL" : "";
 
     }
     if (options.groupIndex === 1) {

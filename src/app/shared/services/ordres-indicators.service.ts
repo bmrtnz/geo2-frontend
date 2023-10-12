@@ -350,14 +350,14 @@ const indicators: Indicator[] = [
     id: "RepartitionOrdresRegroupement",
     enabled: true,
     withCount: false,
-    parameter: "Répartition",
-    subParameter: "des ordres de regroupement",
+    parameter: "Répartition ordres",
+    subParameter: "de regroupement",
     tileBkg: "#8E39C6DF",
     indicatorIcon: "material-icons account_tree",
     warningIcon: "",
     component: import(
       "../../pages/ordres/indicateurs/repartition-ordres-regroupement/repartition-ordres-regroupement.component"
-      ),
+    ),
   },
 ].map((indicator) => ({ ...indicator, loading: false }));
 
