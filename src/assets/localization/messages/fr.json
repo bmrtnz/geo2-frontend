@@ -1357,6 +1357,8 @@
     "ordreLignesHisto-gtinColisKit": "GTIN Kit",
     "ordreLignesHisto-article-matierePremiere-origine-id": " ",
     "ordreLignesHisto-achatDevise": "Devise achat",
+    "ordreLignesHisto-ordre-portTypeD-name": "Port de départ",
+    "ordreLignesHisto-ordre-portTypeA-name": "Port d'arrivée",
     "ordreRecapCdeEdi-ordre-numero": "N° ordre",
     "ordreRecapCdeEdi-ligne-numero": "N° ligne",
     "ordreRecapCdeEdi-numeroOrdreEDI": "N° ordre",

@@ -3586,6 +3586,18 @@
         "visible": true
       },
       {
+        "visibleIndex": 28,
+        "dataField": "ordre.portTypeD.name",
+        "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 30,
+        "dataField": "ordre.portTypeA.name",
+        "dataType": "string",
+        "visible": true
+      },
+      {
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
         "visible": false
