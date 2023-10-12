@@ -285,6 +285,7 @@
     "visualiser": "Visualiser",
     "creer-ordre": "Créer ordre",
     "creer-ordre(s)": "Créer ordre(s)",
+    "creer-ordre(s)-en-cours": "Création ordre(s) en cours...",
     "creer-ordre-compl": "Créer ordre compl.",
     "button-bascule-clients-valide": "CV",
     "button-bascule-entrepots-valide": "EV",

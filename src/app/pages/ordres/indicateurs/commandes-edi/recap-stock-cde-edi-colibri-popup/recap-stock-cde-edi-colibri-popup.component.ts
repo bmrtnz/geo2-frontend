@@ -44,6 +44,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   titleMid: string;
   pulseBtnOn: boolean;
   popupFullscreen = true;
+  creatingOrder = false;
+
 
   @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false })
   gridRecap: GridRecapStockCdeEdiColibriComponent;
@@ -109,6 +111,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
 
   hidePopup() {
     this.popup.visible = false;
+    this.creatingOrder = false;
   }
 
   resizePopup() {
@@ -123,6 +126,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   createOrder() {
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     if (!rows.length) return;
+    this.creatingOrder = true;
+    notify("creer-ordre(s)-en-cours", "info", 5000);
     const updatedRows = rows.map(row => ({
       id: row.data.id,
       choix: row.isSelected,
@@ -146,7 +151,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
         this.refOrdreEDI.toFixed(),
         this.authService.currentUser.nomUtilisateur
       )),
-      // finalize(() => this.gridRecap.refreshGrid()),
     )
       .subscribe({
         next: res => {

@@ -30,6 +30,7 @@
       class="create-order-button"
       type="success"
       [visible]="nbLignes > 0"
+      [disabled]="creatingOrder"
       text="{{ 'creer-ordre(s)' | localize }}"
       (onClick)="createOrder()"
     ></dx-button>
