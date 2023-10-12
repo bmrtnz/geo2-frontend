@@ -326,9 +326,19 @@ $left-panel-btn-height: 44px;
     text-transform: none;
   }
 
-  &.facture-btn {
+  &.facture-btn,
+  &.avoir-btn {
     vertical-align: unset;
     top: -2px;
+  }
+
+  &.avoir-btn {
+    margin: 0px 7px;
+    background: #ffc107 !important;
+
+    &:hover {
+      background: #EEB107 !important;
+    }
   }
 }
 
