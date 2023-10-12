@@ -1,14 +1,13 @@
 // Var
 @import "themes/generated/variables.base";
 
-h6 {
-  margin: 0;
-  float: left;
+.regroup-filter-area {
+  margin: 30px 20px 0 0;
 }
 
-.refresh {
-  top: -8px;
-  float: right;
+.refresh-btn-regroup {
+  float: left;
+  margin: 25px 0 0 25px;
 }
 
 .dx-field-label {
