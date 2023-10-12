@@ -1501,7 +1501,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           const litigeDs = this.litigesService.getDataSource_v2(["ordreAvoirFournisseur.numeroFacture"]);
           litigeDs.filter(["ordreOrigine.id", "=", this.ordre.id]);
           litigeDs.load().then(res =>
-            this.numeroAvoir = res[0]?.ordreAvoirFournisseur.numeroFacture
+            this.numeroAvoir = (res[0]?.ordreAvoirFournisseur?.numeroFacture) ?? ""
           );
         }
       });
