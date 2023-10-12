@@ -40,16 +40,6 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
         "code",
         "raisonSocial",
       ]);
-      this.entrepotDS = this.entrepotsService.getDataSource_v2([
-        "id",
-        "code",
-        "raisonSocial",
-      ]);
-      this.entrepotDS.filter([
-        ["valide", "=", true],
-        "and",
-        ["client.id", "=", this.clientId],
-      ]);
     }
   }
 
@@ -60,6 +50,17 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.entrepotDS = this.entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+    ]);
+    this.entrepotDS.filter([
+      ["valide", "=", true],
+      "and",
+      ["client.id", "=", this.clientId],
+    ]);
+
     e.component
       .content()
       .parentNode.classList.add("choix-entrepot-commande-edi-popup");
@@ -87,5 +88,6 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
 
   clearData() {
     this.entrepotSB.value = null;
+    this.entrepotDS = null;
   }
 }
