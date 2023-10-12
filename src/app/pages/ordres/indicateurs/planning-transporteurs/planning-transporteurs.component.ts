@@ -171,7 +171,9 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
     // Filtering vs company
     const societe = this.currentCompanyService.getCompany().id;
-    const filter = [];
+    const filter = [
+      ["ordre.statut", "<>", Statut.NON_CONFIRME], "and"
+    ];
     if (societe === "BUK") filter.push(["ordre.type.id", "<>", "RGP"], "and");
     if (societe === "SA") filter.push(["ordre.type.id", "<>", "ORI"], "and");
     if (values.bureauAchat?.id) filter.push(["fournisseurBassin.id", "=", values.bureauAchat.id], "and");

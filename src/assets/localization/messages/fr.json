@@ -1187,6 +1187,8 @@
     "ordres-planningMaritime-referenceLogistiqueComplete": "Référence logistique compl.",
     "ordres-planningMaritime-departs": "Départs",
     "ordres-planningMaritime-arrivees": "Arrivées",
+    "ordres-planningMaritime-ordre-portTypeD-name": "Port de départ",
+    "ordres-planningMaritime-ordre-portTypeA-name": "Port d'arrivée",
     "ordresTransporteur-numero": "Ordre - version",
     "ordresTransporteur-version": "Version",
     "ordresTransporteur-fournisseur": "Fournisseur",
