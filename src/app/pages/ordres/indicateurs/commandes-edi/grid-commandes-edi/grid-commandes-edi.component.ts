@@ -407,6 +407,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     });
   }
 
+  refreshGrid() {
+    this.datagrid.instance.refresh();
+  }
+
   onEdiEntrepotChoosed(data, id?) {
     this.runCreationProcess({ ...data, entrepot: { id } });
   }
