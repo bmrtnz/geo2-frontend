@@ -191,6 +191,7 @@
     "warning-expected-comment": "Veuillez saisir un commentaire",
     "warning-no-other-entrepot": "Cet entrepôt est le seul disponible",
     "success-entrepot-modified": "Entrepôt modifié avec succès",
+    "modification-entrepot": "Modification Entrepôt",
     "warning-entrepot-modification-error": "Erreur sauvegarde entrepôt",
     "please-select-transporteur": "Veuillez spécifier un transporteur",
     "please-wait-order-creation": "Process de création ordre en cours, veuillez patienter...",

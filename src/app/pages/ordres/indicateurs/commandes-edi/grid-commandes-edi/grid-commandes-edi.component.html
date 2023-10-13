@@ -321,6 +321,7 @@
 </dx-data-grid>
 <app-choix-entrepot-commande-edi-popup
   [clientId]="commandeEdi?.client?.id"
+  [title]="'ordre-edi-creation' | localize"
   (entrepotChosen)="onEdiEntrepotChoosed(commandeEdi, $event)"
 >
 </app-choix-entrepot-commande-edi-popup>

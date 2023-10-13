@@ -19,6 +19,7 @@ import notify from "devextreme/ui/notify";
 })
 export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   @Input() public clientId: string;
+  @Input() public title: string;
   @Output() public entrepotChosen = new EventEmitter();
 
   visible: boolean;

@@ -1454,6 +1454,7 @@
 <app-confirmation-result-popup></app-confirmation-result-popup>
 <app-choix-entrepot-commande-edi-popup
   [clientId]="ordre?.client?.id"
+  [title]="'modification-entrepot' | localize"
   (entrepotChosen)="onEntrepotChosen($event)"
 >
 </app-choix-entrepot-commande-edi-popup>
