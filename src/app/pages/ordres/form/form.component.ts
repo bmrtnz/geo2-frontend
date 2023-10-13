@@ -265,7 +265,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreRefPaloxPere",
     "factureAvoir",
     "ordreEDI.id",
-    "ordreEDI.canalCde"
+    "ordreEDI.canalCde",
+    "entrepot.client.instructionLogistique",
+    "entrepot.instructionLogistique"
   ];
 
   private destroy = new Subject<boolean>();
@@ -583,6 +585,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
+
+      console.log(ordre)
 
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
@@ -1584,11 +1588,42 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openChoixEntrepotPopup() {
-    this.choixEntPopup.visible = true;
+    const dataSourceEnt = this.entrepotsService.getDataSource_v2(["id"]);
+    dataSourceEnt.filter([
+      ["valide", "=", true],
+      "and",
+      ["client.id", "=", this.ordre?.client?.id],
+    ]);
+    // Checks if we can really change the entrepot
+    dataSourceEnt.load().then((ent) => {
+      if (ent?.length === 1) return notify(this.localization.localize("warning-no-other-entrepot"), "warning", 4000);
+      this.choixEntPopup.visible = true;
+    });
   }
 
-  onEntrepotChosen(e) {
-    console.log(e)
+  onEntrepotChosen(entrepot) {
+    const instLogClt = this.ordre.entrepot.client.instructionLogistique ?? "";
+    const instLogEnt = entrepot.instructionLogistique ?? "";
+    let instLog = instLogClt + (instLogEnt ? " " : "") + instLogEnt;
+    instLog = instLog.substring(0, 280);
+
+    const ordre = {
+      id: this.ordre.id,
+      instructionsLogistiques: instLog,
+      entrepot: entrepot
+    };
+
+    this.ordresService.save({ ordre }).subscribe({
+      next: () => {
+        this.ordre = { ...this.ordre, ...ordre };
+        notify(this.localization.localize("success-entrepot-modified"), "success");
+        this.refreshHeader();
+      },
+      error: (err) => {
+        console.log(err);
+        notify(this.localization.localize("warning-entrepot-modification-error"), "error", 3000);
+      },
+    });
   }
 
   openTransporteurFilePopup() {

@@ -6,10 +6,11 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import CommandeEdi from "app/shared/models/commande-edi.model";
+
 import { ClientsService, EntrepotsService } from "app/shared/services";
 import { DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-choix-entrepot-commande-edi-popup",
@@ -38,36 +39,31 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
       this.clientDS = this.clientsService.getDataSource_v2([
         "id",
         "code",
-        "raisonSocial",
+        "raisonSocial"
       ]);
     }
   }
 
   applyClick() {
-    this.entrepotId = this.entrepotSB.value.id;
-    this.entrepotChosen.emit(this.entrepotId);
+    this.entrepotChosen.emit(this.entrepotSB.value);
     this.visible = false;
   }
 
   onShowing(e) {
+    e.component
+      .content()
+      .parentNode.classList.add("choix-entrepot-commande-edi-popup");
     this.entrepotDS = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial",
+      "instructionLogistique"
     ]);
     this.entrepotDS.filter([
       ["valide", "=", true],
       "and",
       ["client.id", "=", this.clientId],
     ]);
-
-    e.component
-      .content()
-      .parentNode.classList.add("choix-entrepot-commande-edi-popup");
-    // Autocomplete
-    this.entrepotDS.load().then((ent) => {
-      if (ent?.length === 1) this.entrepotSB.value = { id: ent[0].id };
-    });
   }
 
   displayCodeBefore(data) {
