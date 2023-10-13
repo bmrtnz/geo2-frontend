@@ -1549,7 +1549,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
     this.ordreBAFOuFacture =
-      this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
+      this.ordreFacture ||
+      Statut[statut] === Statut.A_FACTURER.toString() ||
+      Statut[statut] === Statut.FACTURE_EDI.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
     this.updateTabStatusDot();

@@ -376,6 +376,7 @@
                           type="default"
                           icon="material-icons swap_horiz"
                           [focusStateEnabled]="false"
+                          [visible]="!ordreBAFOuFacture"
                           hint="{{ 'hint-entrep-change' | localize }}"
                           (onClick)="openChoixEntrepotPopup()"
                         >
