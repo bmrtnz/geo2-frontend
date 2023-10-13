@@ -262,12 +262,7 @@
                   type="default"
                   hint="{{ 'hint-ordres-avoirs' | localize }}"
                   text="Avoir {{ numeroAvoir }}"
-                  (onClick)="
-                    viewFacture(
-                      'ordres-view-avoir-title',
-                      ordre.documentFacture
-                    )
-                  "
+                  (onClick)="viewAvoir()"
                 >
                 </dx-button>
 

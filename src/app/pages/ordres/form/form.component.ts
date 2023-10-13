@@ -281,6 +281,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public canalOrdreEdi: any;
   public numeroFacture: string;
   public numeroAvoir: string;
+  public idOrdreAvoir: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [""],
@@ -1494,15 +1495,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshAvoirIndicator() {
     this.numeroAvoir = "";
+    this.idOrdreAvoir = "";
     this.ordresService
       .getOne_v2(this.ordre.id, ["id", "hasLitige"])
       .subscribe(res => {
         if (res.data.ordre.hasLitige) {
-          const litigeDs = this.litigesService.getDataSource_v2(["ordreAvoirFournisseur.numeroFacture"]);
+          const litigeDs = this.litigesService.getDataSource_v2(["id", "ordreAvoirClient.id", "ordreAvoirClient.numeroFacture"]);
           litigeDs.filter(["ordreOrigine.id", "=", this.ordre.id]);
-          litigeDs.load().then(res =>
-            this.numeroAvoir = (res[0]?.ordreAvoirFournisseur?.numeroFacture) ?? ""
-          );
+          litigeDs.load().then(res => {
+            this.numeroAvoir = (res[0]?.ordreAvoirClient?.numeroFacture) ?? "";
+            this.idOrdreAvoir = res[0]?.ordreAvoirClient?.id;
+          });
         }
       });
   }
@@ -1705,6 +1708,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.factureVisible = true;
+  }
+
+  viewAvoir() {
+    this.ordresService.getOne_v2(this.idOrdreAvoir, [
+      "numeroFacture",
+      "documentFacture.isPresent",
+      "documentFacture.uri",
+      "documentFacture.type"
+    ]).subscribe(res => {
+      this.viewFacture(
+        'ordres-view-avoir-title',
+        res.data.ordre.documentFacture
+      )
+    });
   }
 
   public async bonAFacturer() {
