@@ -1437,6 +1437,8 @@
     "packing-list-date-impression": "Date d'impression",
     "packing-list-PO": "PO",
     "packing-list-facture": "Facture :",
+    "packing-list-date-depart-prevue": "Date départ prévue",
+    "packing-list-date-arrivee-prevue": "Date arrivée prévue",
     "choixEnvois-typeTiers-description": "Type",
     "choixEnvois-flux-description": "Flux",
     "choixEnvois-flux-id": "Flux",
