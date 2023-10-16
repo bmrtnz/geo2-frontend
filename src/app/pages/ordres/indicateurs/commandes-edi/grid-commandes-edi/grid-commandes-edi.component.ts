@@ -472,7 +472,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
           }
           if ("fCreateEdiEsp" in res.data) {
-            const text = this.localization.localize("ordre-cree", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
+            const text = this.localization.localize("ordre-cree-edi", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
             notify(text, "success", 3000);
           }
         }
