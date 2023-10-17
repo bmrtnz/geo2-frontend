@@ -123,6 +123,7 @@
     "btn-fraisAnnnexes-ajout-visualiser": "Ajouter - visualiser Frais annexes",
     "btn-fraisAnnnexes-visualiser": "Visualiser Frais annexes",
     "btn-invoice": "Passer \"bon à facturer\"",
+    "btn-sup-lignes-cloturees-zero": "Suppr. lignes cloturées à zéro",
     "btn-envoiBL": "Envoi automatique des BL",
     "btn-clotAdmin": "Clôture administratif",
     "btn-blAutoSend": "Envoi automatique des BL",

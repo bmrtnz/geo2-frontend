@@ -1221,6 +1221,11 @@
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
+                      <dx-button
+                        class="totaux-btn-supp"
+                        type="default"
+                        text="{{ 'btn-sup-lignes-cloturees-zero' | localize }}"
+                      ></dx-button>
                       <app-grid-lignes-totaux-detail
                         [ordre]="data"
                       ></app-grid-lignes-totaux-detail>
