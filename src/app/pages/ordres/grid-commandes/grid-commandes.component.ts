@@ -1042,6 +1042,8 @@ export class GridCommandesComponent
     // Only act on lookups & selectBoxs
     if (!columnOptions?.lookup && columnOptions.name !== "fournisseur.id")
       return;
+    // Avoid some unwanted linebreaks (as we had typed Enter twice)
+    if (columnOptions?.lookup && document.activeElement.localName === "body") return;
 
     // switch focus
     this.grid.instance.focus(
