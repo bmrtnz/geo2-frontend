@@ -1212,6 +1212,7 @@
     "ordresTransporteur-sommeColisPalette": "Nb Colis /Pal",
     "ordresTransporteur-sommeColisPaletteBis": "Pal. réel",
     "ordresTransporteur-entrepot": "Entrepôt",
+    "ordresTransporteur-ordre-secteurCommercial-id": "Secteur",
     "ordresTransporteur-transporteur": "Transporteur",
     "ordresTransporteur-dateDepartPrevueFournisseur": "Départ",
     "ordresTransporteur-dateDepartPrevueGroupage": "Départ Groupage",
