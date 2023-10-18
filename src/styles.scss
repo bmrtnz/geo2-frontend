@@ -809,3 +809,39 @@ body app-root.production {
     line-height: 1;
   }
 }
+
+//////////////////////////////////////////
+/// Better visibility vert. scrollbar  ///
+//////////////////////////////////////////
+
+.dx-datagrid {
+  .dx-scrollable-wrapper:hover .dx-scrollbar-horizontal {
+    .dx-scrollable-scroll-content {
+      transition: 0.5s;
+      background-color: rgba(95, 142, 158, 0.50) !important;
+    }
+  }
+
+  .dx-scrollbar-vertical {
+    width: 3px !important;
+    margin-right: 5px;
+    background-color: rgba(175, 198, 206, 1) !important;
+
+    .dx-scrollable-scroll {
+      width: 15px !important;
+      overflow: visible;
+
+      &:hover {
+        .dx-scrollable-scroll-content {
+          background-color: rgba(175, 198, 206, 1) !important;
+        }
+      }
+
+      .dx-scrollable-scroll-content {
+        margin-left: 5px !important;
+        background-color: rgba(175, 198, 206, 1) !important;
+      }
+
+    }
+  }
+}
