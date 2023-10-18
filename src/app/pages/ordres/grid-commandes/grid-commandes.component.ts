@@ -1039,7 +1039,6 @@ export class GridCommandesComponent
     // Only act on lookups & selectBoxs
     if (!columnOptions?.lookup && columnOptions.name !== "fournisseur.id")
       return;
-
     // switch focus
     this.grid.instance.focus(
       this.grid.instance.getCellElement(
@@ -1047,6 +1046,7 @@ export class GridCommandesComponent
         this.grid.focusedColumnIndex
       )
     );
+    event.originalEvent.preventDefault();
   }
 
 }
