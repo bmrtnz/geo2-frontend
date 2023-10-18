@@ -1205,7 +1205,7 @@
     "ordresTransporteur-entrepotVille": "Ville livraison",
     "ordresTransporteur-entrepotPays": "Pays livraison",
     "ordresTransporteur-codeChargement": "Code chargement",
-    "ordresTransporteur-sommeColisCommandes": "Nb Colis / Type colis",
+    "ordresTransporteur-sommeColisCommandes": "Nb Colis",
     "ordresTransporteur-sommeColisPalette": "Nb Colis /Pal",
     "ordresTransporteur-sommeColisPaletteBis": "Pal. réel",
     "ordresTransporteur-entrepot": "Entrepôt",

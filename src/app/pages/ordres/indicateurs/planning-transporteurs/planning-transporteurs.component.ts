@@ -260,11 +260,6 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     }
   }
 
-  calculateSommeColisCommandes(data) {
-    // Ajout type colis
-    return data.sommeColisCommandes + "/" + data.colis;
-  }
-
   calculateEspece(data) {
     // Ajout type palette
     return data.espece + "/" + data.palette;

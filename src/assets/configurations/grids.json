@@ -5143,7 +5143,11 @@
       {
         "visibleIndex": 8,
         "dataField": "sommeColisCommandes",
-        "calculateCellValue": "calculateSommeColisCommandes",
+        "visible": true
+      },
+      {
+        "visibleIndex": 9,
+        "dataField": "colis",
         "visible": true
       },
       {
