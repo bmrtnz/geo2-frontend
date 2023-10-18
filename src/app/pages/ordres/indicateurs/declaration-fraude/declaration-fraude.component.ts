@@ -335,12 +335,14 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   setDates(e) {
     // We check that this change is coming from the user, not following a prog change
+
     if (!e.event) return;
 
     const datePeriod = this.dateManagementService.getDates(e);
 
     this.preFilterData.dateDepartMin = datePeriod.dateDebut;
     this.preFilterData.dateDepartMax = datePeriod.dateFin;
+    this.updateModifiedDate(new Date(datePeriod.dateDebut));
   }
 
   manuelDateStart(e) {
@@ -349,6 +351,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   manualDate(e, type?) {
     // We check that this change is coming from the user, not following a period change
+
     if (!e.event) return;
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
