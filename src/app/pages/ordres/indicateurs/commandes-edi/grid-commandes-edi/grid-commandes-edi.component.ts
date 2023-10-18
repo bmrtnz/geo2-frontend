@@ -472,7 +472,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
           }
           if ("fCreateEdiEsp" in res.data) {
-            const text = this.localization.localize("ordre-cree", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
+            const text = this.localization.localize("ordre-cree-edi", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
             notify(text, "success", 3000);
           }
         }
@@ -714,10 +714,12 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         e.cellElement.childNodes[0].children[1].innerText = leftTextContent;
 
         // Fill right text of the group row
-        e.cellElement.childNodes[0].children[2].innerText =
-          "Livraison : " +
-          this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
-          "";
+        if (data.dateLivraison) {
+          e.cellElement.childNodes[0].children[2].innerText =
+            "Livraison : " +
+            this.dateMgtService.formatDate(data.dateLivraison, DATEFORMAT) ??
+            "";
+        }
 
         // Fill indicator button text and sets its bck depending on the status
         e.cellElement.childNodes[0].children[0].innerHTML = data.status;

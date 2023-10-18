@@ -163,7 +163,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
           let noOrdres = res.data.fCreeOrdresEdi.data?.ls_nordre_tot;
           noOrdres = noOrdres.split(",");
           noOrdres.pop();
-          const text = this.localization.localize("ordre-crees", this.gridUtilsService.friendlyFormatList(noOrdres));
+          const text = this.localization.localize("ordre-crees-edi", this.gridUtilsService.friendlyFormatList(noOrdres));
           notify(text, "success", 5000);
           this.clearAndHidePopup();
           noOrdres.map(numero => {
