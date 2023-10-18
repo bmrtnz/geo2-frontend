@@ -178,7 +178,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     setTimeout(() => {
       const toSearch = this.autocomplete.value;
       if (toSearch?.length) {
-        this.enableFilters(toSearch);
+        this.enableFilters(toSearch.trim());
         this.showGridResults = true;
       }
     }, 1);
