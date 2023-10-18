@@ -59,9 +59,10 @@
             </div>
             <div class="dx-field-value">
               <dx-select-box
-                formControlName="bureauAchat"
+                formControlName="bureauAchatCode"
                 [dataSource]="bureauxAchat"
                 [displayExpr]="displayCodeBefore"
+                valueExpr="id"
                 [searchExpr]="['id']"
                 [showClearButton]="true"
               >
