@@ -31,6 +31,7 @@ import { DevisesService } from "app/shared/services/api/devises.service";
 import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
 import { IncotermsService } from "app/shared/services/api/incoterms.service";
 import { InstructionsService } from "app/shared/services/api/instructions.service";
+import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
@@ -146,6 +147,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private typesCamionService: TypesCamionService,
     private devisesService: DevisesService,
     private incotermsService: IncotermsService,
+    private litigesService: LitigesService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private instructionsService: InstructionsService,
@@ -278,6 +280,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public refOrdreEdi: any;
   public canalOrdreEdi: any;
   public numeroFacture: string;
+  public numeroAvoir: string;
+  public idOrdreAvoir: string;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [""],
@@ -1472,7 +1476,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.dotLitiges = this.getLitigeBadgeIndicator(this.ordre.hasLitige);
       this.dotCQ = this.ordre.cqLignesCount;
       this.dotCommentaires = this.ordre.commentairesOrdreCount;
-      console.log(this.ordre.hasLitige)
+      if (this.ordre.hasLitige) this.refreshAvoirIndicator();
     }
   }
 
@@ -1485,6 +1489,24 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .getOne_v2(this.ordre.id, ["id", "hasLitige"])
       .subscribe(res => {
         this.dotLitiges = this.getLitigeBadgeIndicator(res.data.ordre.hasLitige);
+        if (this.ordre.hasLitige) this.refreshAvoirIndicator();
+      });
+  }
+
+  public refreshAvoirIndicator() {
+    this.numeroAvoir = "";
+    this.idOrdreAvoir = "";
+    this.ordresService
+      .getOne_v2(this.ordre.id, ["id", "hasLitige"])
+      .subscribe(res => {
+        if (res.data.ordre.hasLitige) {
+          const litigeDs = this.litigesService.getDataSource_v2(["id", "ordreAvoirClient.id", "ordreAvoirClient.numeroFacture"]);
+          litigeDs.filter(["ordreOrigine.id", "=", this.ordre.id]);
+          litigeDs.load().then(res => {
+            this.numeroAvoir = (res[0]?.ordreAvoirClient?.numeroFacture) ?? "";
+            this.idOrdreAvoir = res[0]?.ordreAvoirClient?.id;
+          });
+        }
       });
   }
 
@@ -1673,7 +1695,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async viewFacture(titleKey: string, document: Document) {
     if (!document || !document.isPresent) {
-      notify("Désolé, facture non accessible", "error");
+      notify(
+        this.localization.localize("doc-not-found",
+          this.localization.localize(titleKey).toLowerCase()),
+        "error");
       return;
     }
 
@@ -1683,6 +1708,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.factureVisible = true;
+  }
+
+  viewAvoir() {
+    this.ordresService.getOne_v2(this.idOrdreAvoir, [
+      "numeroFacture",
+      "documentFacture.isPresent",
+      "documentFacture.uri",
+      "documentFacture.type"
+    ]).subscribe(res => {
+      this.viewFacture(
+        'ordres-view-avoir-title',
+        res.data.ordre.documentFacture
+      )
+    });
   }
 
   public async bonAFacturer() {

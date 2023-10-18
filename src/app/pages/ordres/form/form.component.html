@@ -255,6 +255,17 @@
                   "
                 >
                 </dx-button>
+
+                <dx-button
+                  *ngIf="numeroAvoir?.length"
+                  class="small-button avoir-btn"
+                  type="default"
+                  hint="{{ 'hint-ordres-avoirs' | localize }}"
+                  text="Avoir {{ numeroAvoir }}"
+                  (onClick)="viewAvoir()"
+                >
+                </dx-button>
+
                 <span
                   *ngIf="!!refOrdreEdi"
                   class="edi-order-ref"
