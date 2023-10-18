@@ -1032,9 +1032,9 @@ export class GridCommandesComponent
       );
   }
 
-  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
-    if (event.originalEvent?.code !== "Enter") return;
-    const shiftModifier = event.originalEvent.shiftKey;
+  onKeyDown(e) {
+    if (e.event.originalEvent?.code !== "Enter") return;
+    const shiftModifier = e.event.originalEvent.shiftKey;
     this.grid.instance.closeEditCell();
 
     const columnOptions = this.grid.instance.columnOption(this.grid.focusedColumnIndex - 1);
@@ -1042,9 +1042,6 @@ export class GridCommandesComponent
     // Only act on lookups & selectBoxs
     if (!columnOptions?.lookup && columnOptions.name !== "fournisseur.id")
       return;
-    // Avoid some unwanted linebreaks (as we had typed Enter twice)
-    if (columnOptions?.lookup && document.activeElement.localName === "body") return;
-
     // switch focus
     this.grid.instance.focus(
       this.grid.instance.getCellElement(
@@ -1052,6 +1049,7 @@ export class GridCommandesComponent
         this.grid.focusedColumnIndex
       )
     );
+    e.event.preventDefault();
   }
 
 }
