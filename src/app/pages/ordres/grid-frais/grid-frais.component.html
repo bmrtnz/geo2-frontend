@@ -8,100 +8,100 @@
   (onClick)="decDedouan()"
 ></dx-button>
 
-<div (mouseleave)="onGridOut()">
-  <dx-data-grid
-    class="dx-card wide-card grid-frais"
-    [remoteOperations]="true"
-    [showBorders]="false"
-    [columnAutoWidth]="true"
-    [columnHidingEnabled]="false"
-    [allowColumnReordering]="true"
-    (onEditingStart)="onEditingStart($event)"
-    (onInitNewRow)="onInitNewRow($event)"
-    (onCellPrepared)="onCellPrepared($event)"
-    (onEditorPreparing)="onEditorPreparing($event)"
-    (onFocusedCellChanging)="onFocusedCellChanging($event)"
-    (onToolbarPreparing)="
-      gridConfiguratorService.onToolbarPreparing(
-        'Frais',
-        $event,
-        gridConfiguratorService.Grid.OrdreFrais,
-        enableFilters.bind(this)
-      )
-    "
+<dx-data-grid
+  class="dx-card wide-card grid-frais"
+  [remoteOperations]="true"
+  [showBorders]="false"
+  [columnAutoWidth]="true"
+  [columnHidingEnabled]="false"
+  [allowColumnReordering]="true"
+  (onEditingStart)="onEditingStart($event)"
+  (onInitNewRow)="onInitNewRow($event)"
+  (onCellPrepared)="onCellPrepared($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
+  (onFocusedCellChanging)="onFocusedCellChanging($event)"
+  (onToolbarPreparing)="
+    gridConfiguratorService.onToolbarPreparing(
+      'Frais',
+      $event,
+      gridConfiguratorService.Grid.OrdreFrais,
+      enableFilters.bind(this)
+    )
+  "
+>
+  <!-- Grid configuration -->
+  <dxo-export fileName="Frais"></dxo-export>
+  <dxo-paging></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+  ></dxo-pager>
+  <dxo-editing
+    [selectTextOnEditStart]="true"
+    [allowAdding]="true"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [newRowPosition]="'last'"
+    [mode]="'batch'"
+  ></dxo-editing>
+  <dxo-keyboard-navigation
+    [enterKeyAction]="'moveFocus'"
+    [enterKeyDirection]="'row'"
+    [editOnKeyPress]="true"
+  ></dxo-keyboard-navigation>
+  <dxo-state-storing
+    [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
+    [enabled]="true"
+    type="custom"
+    [customLoad]="gridConfiguratorService.load"
+    [customSave]="gridConfiguratorService.save"
+  ></dxo-state-storing>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-column-chooser
+    [enabled]="true"
+    mode="select"
+    title="{{ 'columnChooser' | localize }}"
+    [allowSearch]="true"
+    [width]="columnChooser.width"
+    [height]="columnChooser.height"
   >
-    <!-- Grid configuration -->
-    <dxo-export fileName="Frais"></dxo-export>
-    <dxo-paging></dxo-paging>
-    <dxo-pager
-      [showPageSizeSelector]="true"
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-pager>
-    <dxo-editing
-      [selectTextOnEditStart]="true"
-      [allowAdding]="true"
-      [allowUpdating]="true"
-      [allowDeleting]="true"
-      [newRowPosition]="'last'"
-      [mode]="'batch'"
-    ></dxo-editing>
-    <dxo-keyboard-navigation
-      [enterKeyAction]="'moveFocus'"
-      [enterKeyDirection]="'row'"
-      [editOnKeyPress]="true"
-    ></dxo-keyboard-navigation>
-    <dxo-state-storing
-      [storageKey]="gridConfiguratorService.Grid.OrdreFrais"
-      [enabled]="true"
-      type="custom"
-      [customLoad]="gridConfiguratorService.load"
-      [customSave]="gridConfiguratorService.save"
-    ></dxo-state-storing>
-    <dxo-filter-row [visible]="false"></dxo-filter-row>
-    <dxo-column-chooser
-      [enabled]="true"
-      mode="select"
-      title="{{ 'columnChooser' | localize }}"
-      [allowSearch]="true"
-      [width]="columnChooser.width"
-      [height]="columnChooser.height"
-    >
-    </dxo-column-chooser>
+  </dxo-column-chooser>
 
-    <dxi-column
-      *ngFor="let column of this.columns | async"
-      [dataField]="column.dataField"
-      [visible]="false"
-      [caption]="
-        ('ordreFrais-' + column.dataField?.split('.').join('-') | localize) ||
-        column.name
-      "
-      [dataType]="column?.dataType"
-      [cssClass]="column.cssClass"
-      [width]="column.width"
-      [allowEditing]="column.allowEditing"
-      [allowSearch]="
-        column?.allowSearch || ['string'].includes(column?.dataType)
-      "
-      [format]="column.format"
-      [editorOptions]="column.editorOptions"
-      [editCellTemplate]="column.editCellTemplate"
-      [calculateCellValue]="this[column?.calculateCellValue]"
-      [calculateDisplayValue]="
-        column?.calculateDisplayValue
-          ? (column.calculateDisplayValue | evalDisplay)
-          : column?.dataField
-      "
-      [calculateSortValue]="column?.calculateSortValue"
-      [lookup]="column?.lookup"
-      [allowHeaderFiltering]="
-        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-      "
-      [showInColumnChooser]="column.showInColumnChooser"
-      [setCellValue]="setCellValue"
-    >
-    </dxi-column>
-  </dx-data-grid>
-</div>
+  <dxi-column
+    *ngFor="let column of this.columns | async"
+    [dataField]="column.dataField"
+    [visible]="false"
+    [caption]="
+      ('ordreFrais-' + column.dataField?.split('.').join('-') | localize) ||
+      column.name
+    "
+    [dataType]="column?.dataType"
+    [cssClass]="column.cssClass"
+    [width]="column.width"
+    [allowEditing]="column.allowEditing"
+    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
+    [format]="column.format"
+    [editorOptions]="column.editorOptions"
+    [editCellTemplate]="column.editCellTemplate"
+    [calculateCellValue]="this[column?.calculateCellValue]"
+    [calculateDisplayValue]="
+      column?.calculateDisplayValue
+        ? (column.calculateDisplayValue | evalDisplay)
+        : column?.dataField
+    "
+    [calculateSortValue]="column?.calculateSortValue"
+    [lookup]="column?.lookup"
+    [allowHeaderFiltering]="
+      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+    "
+    [showInColumnChooser]="column.showInColumnChooser"
+    [setCellValue]="setCellValue"
+  >
+    <dxi-validation-rule
+      *ngIf="column.dataField === 'frais.id' || column.dataField === 'codePlus'"
+      type="required"
+    ></dxi-validation-rule>
+  </dxi-column>
+</dx-data-grid>

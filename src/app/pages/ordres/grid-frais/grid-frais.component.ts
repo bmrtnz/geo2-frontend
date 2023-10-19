@@ -309,11 +309,6 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     newData.montantTotal = achatQuantite() * achatPU();
   }
 
-  onGridOut() {
-    if (this.datagrid.instance.hasEditData())
-      this.datagrid.instance.saveEditData();
-  }
-
   onFocusedCellChanging(e) {
     if (e.columns[e.newColumnIndex].dataField === "codePlus") {
       const fraisID = e.rows?.[e.newRowIndex]?.data?.frais?.id;

@@ -1712,7 +1712,7 @@
     "ordreMarge-margeBrute": "Marge Brute",
     "ordreMarge-pourcentageMargeBrute": "Marge Brute %",
     "ordreMarge-pourcentageMargeNette": "Marge Nette %",
-    "ordreFrais-frais": "Type de Frais",
+    "ordreFrais-frais-id": "Type de Frais",
     "ordreFrais-montant": "Montant devise",
     "ordreFrais-devise": "Devise",
     "ordreFrais-deviseTaux": "Taux",
