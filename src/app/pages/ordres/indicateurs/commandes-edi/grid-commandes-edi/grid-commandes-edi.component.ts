@@ -473,6 +473,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           }
           if ("fCreateEdiEsp" in res.data) {
             const text = this.localization.localize("ordre-cree-edi", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
+            //Refresh datagrid with filters
+            this.enableFilters();
             notify(text, "success", 3000);
           }
         }
