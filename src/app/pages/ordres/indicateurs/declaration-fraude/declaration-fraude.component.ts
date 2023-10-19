@@ -35,6 +35,7 @@ import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
+import { TabContext } from "../../root/root.component";
 @Component({
   selector: "app-declaration-fraude",
   templateUrl: "./declaration-fraude.component.html",
@@ -62,7 +63,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     public dateManagementService: DateManagementService,
     private authService: AuthService,
     private datePipe: DatePipe,
-    private localizer: LocalizationService
+    private localizer: LocalizationService,
+    private tabContext: TabContext
   ) {
     this.periodes = this.dateManagementService.periods();
 
@@ -397,6 +399,20 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       // console.log(e);
       if (e.data.nombreColisCommandes)
         e.cellElement.classList.add("bold-black");
+    }
+  }
+
+  // Open selected ordre on group/line row double-click
+  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
+    console.log(data)
+    return
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems.ordre) return;
+      this.tabContext.openOrdre(dataItems.ordre.numero, dataItems.ordre.campagne.id);
+    } else {
+      this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
     }
   }
 
