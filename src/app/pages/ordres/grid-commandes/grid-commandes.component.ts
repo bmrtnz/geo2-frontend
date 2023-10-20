@@ -888,9 +888,15 @@ export class GridCommandesComponent
       e.editorOptions.onOpened = (elem) =>
         elem.component._popup.option("width", 300);
       e.editorOptions.onInput = (elem) => {
-        const myInput = elem.element?.querySelector("input.dx-texteditor-input");
-        myInput?.focus()
+        this.gridUtilsService.secureTypedValueSBWithEditGrid(elem);
+        // const myInput = elem.element?.querySelector("input.dx-texteditor-input");
+        // myInput?.focus()
       }
+      // KEEP THIS !!! See secureFocusSBTypedValueWithEditGrid() comment
+      e.editorOptions.onFocusIn = (elem) => {
+        this.gridUtilsService.secureFocusSBTypedValueWithEditGrid(elem);
+      }
+
     }
   }
 
@@ -1032,13 +1038,13 @@ export class GridCommandesComponent
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
     if (!["Enter", "NumpadEnter"].includes(event.originalEvent?.code)) return;
     const shiftModifier = event.originalEvent.shiftKey;
-    this.grid.instance.closeEditCell();
 
     const columnOptions = this.grid.instance.columnOption(this.grid.focusedColumnIndex - 1);
 
     // Only act on lookups & selectBoxs
     if (!columnOptions?.lookup && columnOptions.name !== "fournisseur.id")
       return;
+    this.grid.instance.closeEditCell();
     // switch focus
     this.grid.instance.focus(
       this.grid.instance.getCellElement(
