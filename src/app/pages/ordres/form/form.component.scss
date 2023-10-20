@@ -355,8 +355,14 @@ $left-panel-btn-height: 44px;
 
 .order-id {
   font-size: 15px;
+  color: #00759c;
+  float: right;
+}
+
+.order-type {
+  font-size: 15px;
+  padding-left: 6px;
   border-left: 1px solid #00759c;
-  padding-left: 2px;
   color: #00759c;
   float: right;
 }
