@@ -51,7 +51,7 @@
           </div>
           <div class="dx-field-value period-value">
             <dx-select-box
-              formControlName="periode"
+              [formControlName]="simpleParams[0]"
               [items]="periodes"
               [valueExpr]="'id'"
               [showClearButton]="true"
@@ -106,6 +106,7 @@
           </div>
           <div class="dx-field-value">
             <dx-switch
+              [formControlName]="simpleParams[1]"
               [switchedOnText]=""
               [switchedOffText]=""
             ></dx-switch>

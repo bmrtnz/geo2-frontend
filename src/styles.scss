@@ -13,6 +13,11 @@
 @import "scss/dx/form";
 @import "scss/dx/accordion";
 
+
+:root {
+  --pos-scrollbar: 0;
+}
+
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -246,8 +251,9 @@ body app-root.production {
 }
 
 // Datagrid horizontal scrollbar on top
+// https://stackoverflow.com/questions/51372501/how-to-set-a-global-variable-with-css-var-without-having-to-set-the-property
 .dx-scrollbar-horizontal {
-  top: 0;
+  top: var(--pos-scrollbar);
 }
 
 .dx-scrollbar-horizontal,
