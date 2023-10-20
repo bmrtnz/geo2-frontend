@@ -5032,6 +5032,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 29,
+        "dataField": "ordreLogistique.lignes.typePalette.id",
+        "cssClass": "no-padding",
+        "visible": false
+      },
+      {
         "visibleIndex": 30,
         "width": 50,
         "dataField": "ordreLogistique.ordre.totalNombrePalettesCommandees",
