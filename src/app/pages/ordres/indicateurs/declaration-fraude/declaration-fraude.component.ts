@@ -296,6 +296,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "typeTransportDescription",
           "baseTarifTransportCode",
           "gtinColis",
+          "campagne"
         ]),
         this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,
@@ -392,11 +393,18 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     // add custom style to main group row
     if (e.rowType === "group" && e.groupIndex === 0)
       e.rowElement.classList.add("justified-row");
+
+    if (e.rowType === "data") {
+      e.rowElement.classList.add("cursor-pointer");
+      e.rowElement.setAttribute(
+        "title",
+        this.localizer.localize("hint-dblClick-ordre")
+      );
+    }
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // console.log(e);
       if (e.data.nombreColisCommandes)
         e.cellElement.classList.add("bold-black");
     }
@@ -404,15 +412,13 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   // Open selected ordre on group/line row double-click
   public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
-    console.log(data)
-    return
     if (rowType === "group") {
       if (!data.items && !data.collapsedItems) return;
-      const dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-      if (!dataItems.ordre) return;
-      this.tabContext.openOrdre(dataItems.ordre.numero, dataItems.ordre.campagne.id);
+      let dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems?.numero) return;
+      this.tabContext.openOrdre(dataItems.numero, dataItems.campagne.id);
     } else {
-      this.tabContext.openOrdre(data.ordre.numero, data.ordre.campagne.id);
+      this.tabContext.openOrdre(data.numeroOrdre, data.campagne);
     }
   }
 

@@ -2079,6 +2079,7 @@
     "fraude-column-incotermCode": "Incoterm",
     "fraude-column-typeTransportDescription": "Type transp.",
     "fraude-column-baseTarifTransportCode": "Unité transp.",
+    "fraude-column-campagne": "Campagne",
     "btn-duplicate": "Dupliquer",
     "hint-client-duplicate": "Dupliquer le client",
     "hint-search-edi-articles": "Recherche dans le GTIN client, les codes articles client et BW",
