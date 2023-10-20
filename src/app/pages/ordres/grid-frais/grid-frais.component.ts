@@ -28,6 +28,7 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { EditorPreparingEvent } from "devextreme/ui/data_grid";
 import { alert } from "devextreme/ui/dialog";
@@ -243,6 +244,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       return this.lieuxPassageAQuaiSource;
     if (frais === "ENTBWS")
       return this.entrepotSource;
+    return null;
   }
 
   onCellPrepared(e) {
@@ -278,13 +280,15 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       e.editorOptions.dataSource = this.deviseSource;
     if (e.dataField === "codePlus") {
       e.editorName = "dxSelectBox";
-      e.editorOptions.acceptCustomValue = true;
+      e.editorOptions.searchEnabled = true;
+      e.editorOptions.searchExpr = ["id"];
+      // e.editorOptions.acceptCustomValue = true;
       // Create on `Enter` https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#customItemCreateEvent
-      e.editorOptions.customItemCreateEvent = '';
-      e.editorOptions.onCustomItemCreating = (event: CustomItemCreatingEvent) => {
-        if (!event.customItem)
-          event.customItem = { codePlus: event.text };
-      }
+      // e.editorOptions.customItemCreateEvent = '';
+      // e.editorOptions.onCustomItemCreating = (event: CustomItemCreatingEvent) => {
+      //   if (!event.customItem)
+      //     event.customItem = { codePlus: event.text };
+      // }
       e.editorOptions.onValueChanged = args => {
         e.setValue({ codePlus: args.value });
       };
@@ -314,8 +318,17 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
       const fraisID = e.rows?.[e.newRowIndex]?.data?.frais?.id;
       if (!fraisID)
         notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
-      else
-        e.columns[e.newColumnIndex].editorOptions.dataSource = this.fetchCodePlusDataSource(fraisID);
+      else {
+        let DS = this.fetchCodePlusDataSource(fraisID);
+        // if (DS) {
+        //   const store = DS.store() as CustomStore;
+        //   store.push([
+        //     { type: "insert", data: { id: "AAAAAAA", raisonSocial: "TATTATATT" } },
+        //   ])
+        //   DS.reload();
+        // }
+        e.columns[e.newColumnIndex].editorOptions.dataSource = DS;
+      }
     }
 
     if (e.prevColumnIndex === e.columns.length - 1)
