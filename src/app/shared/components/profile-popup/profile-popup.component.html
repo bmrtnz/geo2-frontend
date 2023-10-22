@@ -114,6 +114,23 @@
           <div class="dx-field-label dx-field-label-right">
             {{ "bottom" | localize }}
           </div>
+          <!-- May be used later ? -->
+          <div class="display-none">
+            <div class="dx-field-label dx-field-label-left">
+              {{ "top" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-switch
+                [formControlName]="simpleParams[2]"
+                [switchedOnText]=""
+                [switchedOffText]=""
+                [value]="!formGroup.get(simpleParams[1]).value"
+              ></dx-switch>
+            </div>
+            <div class="dx-field-label dx-field-label-right">
+              {{ "bottom" | localize }}
+            </div>
+          </div>
         </div>
 
         <!-- --------------- -->

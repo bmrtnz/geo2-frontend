@@ -250,8 +250,7 @@ body app-root.production {
   }
 }
 
-// Datagrid horizontal scrollbar on top
-// https://stackoverflow.com/questions/51372501/how-to-set-a-global-variable-with-css-var-without-having-to-set-the-property
+// Datagrid horizontal scrollbar on top - linked to user profile setting
 .dx-scrollbar-horizontal {
   top: var(--pos-scrollbar);
 }

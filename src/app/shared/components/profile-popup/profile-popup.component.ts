@@ -50,7 +50,8 @@ export class ProfilePopupComponent {
   public formGroup = new UntypedFormGroup({});
   public simpleParams = [
     "periode",
-    "scrollbar"
+    "scrollbarTop",
+    "scrollbarBottom",
   ]
 
   constructor(
@@ -142,7 +143,7 @@ export class ProfilePopupComponent {
       Utilisateur.getKeyField()
     );
     utilisateur.nomUtilisateur = this.nomUtilisateur;
-    this.applySpecificParameters();
+    this.authService.applySpecificParameters(utilisateur);
 
     this.savingUserPrefs = true;
     this.utilisateursService.save_v2(
@@ -180,14 +181,6 @@ export class ProfilePopupComponent {
         (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
     );
     return mess;
-  }
-
-  applySpecificParameters() {
-    // Scrollbar position
-    document.documentElement.style.setProperty(
-      '--pos-scrollbar',
-      this.formGroup.get(this.simpleParams[1]).value ? "0" : "auto"
-    );
   }
 
   hidePopup() {
