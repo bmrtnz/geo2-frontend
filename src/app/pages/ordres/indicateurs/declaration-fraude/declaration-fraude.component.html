@@ -215,6 +215,7 @@
   [width]="'100%'"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
+  (onRowDblClick)="onRowDblClick($event)"
   (onExporting)="onExporting($event)"
 >
   <dxo-grouping></dxo-grouping>
@@ -306,6 +307,12 @@
   <dxi-column
     [dataField]="'baseTarifTransportCode'"
     [caption]="'fraude-column-baseTarifTransportCode' | localize"
+    [cssClass]="'small-side-padding'"
+    [width]="'auto'"
+  ></dxi-column>
+  <dxi-column
+    [dataField]="'campagne'"
+    [caption]="'fraude-column-campagne' | localize"
     [cssClass]="'small-side-padding'"
     [width]="'auto'"
   ></dxi-column>

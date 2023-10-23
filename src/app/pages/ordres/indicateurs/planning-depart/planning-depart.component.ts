@@ -180,6 +180,13 @@ export class PlanningDepartComponent implements AfterViewInit {
             commercial: { id: data.ordreLogistique.ordre.commercial.id },
           };
         } else {
+          // Concatenate (with no duplicates) palette type ids
+          const palettes = [];
+          data.ordreLogistique.lignes.map((pal) => {
+            if (pal.typePalette?.id) palettes.push(pal.typePalette?.id);
+          });
+          if (palettes.length)
+            data.ordreLogistique.lignes.typePalette = { id: Array.from(new Set(palettes)).join(" - ") };
           oldOrderId = data.ordreLogistique.ordre.id;
         }
       });

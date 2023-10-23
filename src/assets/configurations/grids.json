@@ -4932,12 +4932,14 @@
         "visibleIndex": 1,
         "dataField": "ordreLogistique.ordre.codeClient",
         "cssClass": "no-padding",
+        "width": 90,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "ordreLogistique.ordre.transporteur.id",
-        "visible": false
+        "visible": false,
+        "width": 120
       },
       {
         "visibleIndex": 4,
@@ -4963,7 +4965,8 @@
       {
         "visibleIndex": 10,
         "dataField": "ordreLogistique.fournisseur.code",
-        "visible": true
+        "visible": true,
+        "width": 130
       },
       {
         "visibleIndex": 12,
@@ -5009,7 +5012,8 @@
       {
         "visibleIndex": 22,
         "dataField": "ordreLogistique.fournisseurReferenceDOC",
-        "visible": true
+        "visible": true,
+        "width": 90
       },
       {
         "visibleIndex": 24,
@@ -5030,6 +5034,12 @@
         "width": 40,
         "cssClass": "no-padding",
         "visible": true
+      },
+      {
+        "visibleIndex": 29,
+        "dataField": "ordreLogistique.lignes.typePalette.id",
+        "cssClass": "no-padding",
+        "visible": false
       },
       {
         "visibleIndex": 30,
@@ -5061,7 +5071,8 @@
       },
       {
         "dataField": "ordreLogistique.ordre.referenceClient",
-        "visible": true
+        "visible": true,
+        "width": 95
       },
       {
         "dataField": "ordreLogistique.ordre.codeChargement",
@@ -5073,7 +5084,8 @@
       },
       {
         "dataField": "ordreLogistique.ordre.codeAlphaEntrepot",
-        "visible": false
+        "visible": false,
+        "width": 150
       },
       {
         "dataField": "ordreLogistique.ordre.id",

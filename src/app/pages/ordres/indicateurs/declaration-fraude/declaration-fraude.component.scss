@@ -3,6 +3,11 @@
 
 ::ng-deep .grid-fraude {
   max-height: calc(100vh - 425px) !important;
+
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
 }
 
 ::ng-deep {

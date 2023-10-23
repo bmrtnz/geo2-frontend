@@ -6,6 +6,7 @@ export class DeclarationFraude extends Model {
   @Field({ asKey: true }) public id?: string;
   @Field({ asLabel: true }) public description?: string;
   @Field({ model: import("./societe.model") }) societe: Societe;
+  @Field() campagne: string;
   @Field() numeroOrdre: string;
   @Field({ dataType: "datetime" }) dateDepartPrevue: string;
   @Field() clientCode: string;

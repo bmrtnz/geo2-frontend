@@ -293,11 +293,6 @@ export class GridLogistiquesComponent implements OnInit, OnChanges, AfterViewIni
     this.gridLignesLogistique.refresh();
   }
 
-  onGridOut() {
-    if (this.datagrid.instance.hasEditData())
-      this.datagrid.instance.saveEditData();
-  }
-
   setCellValue(newData: Partial<OrdreLogistique>, value, currentData: Partial<OrdreLogistique>) {
     const context: any = this;
     context.defaultSetCellValue(newData, value);

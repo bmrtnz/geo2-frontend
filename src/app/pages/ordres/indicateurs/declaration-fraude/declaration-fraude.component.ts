@@ -35,6 +35,7 @@ import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
+import { TabContext } from "../../root/root.component";
 @Component({
   selector: "app-declaration-fraude",
   templateUrl: "./declaration-fraude.component.html",
@@ -62,7 +63,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     public dateManagementService: DateManagementService,
     private authService: AuthService,
     private datePipe: DatePipe,
-    private localizer: LocalizationService
+    private localizer: LocalizationService,
+    private tabContext: TabContext
   ) {
     this.periodes = this.dateManagementService.periods();
 
@@ -294,6 +296,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "typeTransportDescription",
           "baseTarifTransportCode",
           "gtinColis",
+          "campagne"
         ]),
         this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,
@@ -390,13 +393,32 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     // add custom style to main group row
     if (e.rowType === "group" && e.groupIndex === 0)
       e.rowElement.classList.add("justified-row");
+
+    if (e.rowType === "data") {
+      e.rowElement.classList.add("cursor-pointer");
+      e.rowElement.setAttribute(
+        "title",
+        this.localizer.localize("hint-dblClick-ordre")
+      );
+    }
   }
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      // console.log(e);
       if (e.data.nombreColisCommandes)
         e.cellElement.classList.add("bold-black");
+    }
+  }
+
+  // Open selected ordre on group/line row double-click
+  public onRowDblClick({ data, rowType }: { rowType: "group"; data: any }) {
+    if (rowType === "group") {
+      if (!data.items && !data.collapsedItems) return;
+      let dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      if (!dataItems?.numero) return;
+      this.tabContext.openOrdre(dataItems.numero, dataItems.campagne.id);
+    } else {
+      this.tabContext.openOrdre(data.numeroOrdre, data.campagne);
     }
   }
 
