@@ -50,8 +50,9 @@ export class ProfilePopupComponent {
   public formGroup = new UntypedFormGroup({});
   public simpleParams = [
     "periode",
-    "scrollbarTop",
-    "scrollbarBottom",
+    "barreDefilementHaut",
+    "barreDefilementBas",
+    "diffSurExpedition"
   ]
 
   constructor(
