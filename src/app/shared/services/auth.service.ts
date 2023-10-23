@@ -136,7 +136,7 @@ export class AuthService {
     // Scrollbar position
     document.documentElement.style.setProperty(
       '--pos-scrollbar',
-      utilisateur.scrollbarTop ? "0" : "auto"
+      utilisateur.barreDefilementHaut ? "0" : "auto"
     );
   }
 
