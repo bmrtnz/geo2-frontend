@@ -48,6 +48,9 @@ export class AuthService {
     "reportPrixAchat",
     "reportPrixVente",
     "reportTypePalette",
+    "barreDefilementHaut",
+    "barreDefilementBas",
+    "diffSurExpedition",
 
     // Autres accès
     "indicateurVisualisationIncotermFournisseur",
