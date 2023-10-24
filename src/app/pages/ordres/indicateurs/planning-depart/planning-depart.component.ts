@@ -108,7 +108,10 @@ export class PlanningDepartComponent implements AfterViewInit {
     this.titleElement = this.datagrid.instance
       .$element()[0]
       .querySelector(".dx-toolbar-before .dx-placeholder") as HTMLInputElement;
-    // this.updateFilters();
+    // Profile vs diffSurExpedition
+    this.authService.onUserChanged().subscribe(() =>
+      this.diffSumColisOrNotDetail.value = !!this.authService.currentUser.diffSurExpedition
+    );
   }
 
   setDefaultPeriod(periodId) {
