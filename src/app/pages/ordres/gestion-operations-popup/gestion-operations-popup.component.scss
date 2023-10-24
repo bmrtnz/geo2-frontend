@@ -88,6 +88,23 @@
       background: rgb(245, 245, 245);
       z-index: 1000;
 
+      .dx-scrollbar-vertical {
+        width: 3px !important;
+        margin-right: 5px;
+        background-color: rgba(175, 198, 206, 1) !important;
+
+        .dx-scrollable-scroll {
+          width: 15px !important;
+          overflow: visible;
+
+          .dx-scrollable-scroll-content {
+            margin-left: 5px !important;
+            background-color: rgba(175, 198, 206, 1) !important;
+          }
+
+        }
+      }
+
       .dx-list-item {
         margin: 0;
 
