@@ -75,7 +75,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public selectedConsequence: string;
   public selectedResponsible: string;
   public title: string;
-  public popupFullscreen = false;
+  public popupFullscreen = true;
   public firstShown: boolean;
   public ordreGenNumero: string;
 
