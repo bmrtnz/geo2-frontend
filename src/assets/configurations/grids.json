@@ -2953,7 +2953,7 @@
         "calculateSortValue": "proprietaireMarchandise.code",
         "headerCellTemplate": "headerCellBtnTemplate",
         "editorOptions": {
-          "searchTimeout": "50"
+          "searchTimeout": "0"
         },
         "lookup": {
           "valueExpr": "id",
