@@ -9,12 +9,16 @@ import {
   ViewDocument,
   ViewDocumentPopupComponent,
 } from "../../../shared/components/view-document-popup/view-document-popup.component";
+import {
+  LocalizationService,
+} from "app/shared/services";
 import { PackingListPopupComponent } from ".././packing-list-popup/packing-list-popup.component";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
+import notify from "devextreme/ui/notify";
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -54,7 +58,8 @@ export class ActionsDocumentsOrdresComponent {
   constructor(
     private gridsService: GridsService,
     private envoisService: EnvoisService,
-    private fluxEnvoisService: FluxEnvoisService
+    private fluxEnvoisService: FluxEnvoisService,
+    private localization: LocalizationService
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },
@@ -157,6 +162,9 @@ export class ActionsDocumentsOrdresComponent {
   }
 
   async onClickSendAction(e, annulation?) {
+    if (e === "ORDRE" && (this.ordre.transporteur.id === "-" || !this.ordre.transporteur.id))
+      return notify(this.localization.localize("ordre-erreur-transporteur"), "error", 3000);
+
     if (this.gridCommandes) {
       await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
       this.sendAction(e, annulation);
