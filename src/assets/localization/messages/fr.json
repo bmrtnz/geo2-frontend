@@ -1160,7 +1160,7 @@
     "ordres-planningDepart-sommeColisCommandes": "Colis cdés stat.",
     "ordres-planningDepart-sommeColisExpedies": "Colis exp. stat.",
     "ordres-planningDepart-ordreLogistique-ordre-sommeColisCommandes": "Tot. colis cdés",
-    "ordres-planningDepart-ordreLogistique-lignes-typePalette-id": "Palettes",
+    "ordres-planningDepart-ordreLogistique-lignes-typePalette-id": "Type(s) palettes",
     "ordres-planningDepart-ordreLogistique-ordre-sommeColisExpedies": "Tot. colis exp.",
     "ordres-planningDepart-ordreLogistique-ordre-totalNombrePalettesCommandees": "Tot. pal cdées",
     "ordres-planningDepart-ordreLogistique-ordre-totalNombrePalettesExpediees": "Tot. pal. exp.",
