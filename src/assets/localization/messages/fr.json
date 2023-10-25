@@ -2001,6 +2001,7 @@
     "selectionLignesCde-ordreLigne-libelleDLV": "DLUO / Best before",
     "selectionLignesCde-ordreLigne-ordreLigne-id": "Id ligne cde",
     "selectionLignesCde-ordreLigne-totalNombreColis": "Total nbre colis",
+    "selectionLignesCde-ordreLigne-id": "Id ligne",
     "mutate-lot-invalid-inputs": "La sélection du responsable, de la cause et de la conséquence est obligatoire",
     "litige-lignes-lot-descriptionLongue": "Produit",
     "litige-lignes-lot-clientNombrePalettes": "Nb pal.",

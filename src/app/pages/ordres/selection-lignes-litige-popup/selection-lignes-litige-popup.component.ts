@@ -104,6 +104,21 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       return self.gridUtils.numberWithSpaces(data.ordreLigne.poidsNetExpedie) + " " + self.localizeService.localize("kilos");
   }
 
+  calculateVentePrixUnitaire(data) {
+    // Ajout type colis
+    //+ data.ordre.devise
+    if (data?.ordreLigne?.ventePrixUnitaire)
+      return self.gridUtils.numberWithSpaces(data.ordreLigne.ventePrixUnitaire) +
+        " " + data.ordreLigne.ordre.devise.id + "/" + data.ordreLigne.venteUnite.id;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    // Ajout type colis
+    if (data?.ordreLigne?.achatDevisePrixUnitaire)
+      return self.gridUtils.numberWithSpaces(data.ordreLigne.achatDevisePrixUnitaire) +
+        " " + data.ordreLigne.achatDevise + "/" + data.ordreLigne.achatUnite.id;
+  }
+
   onSelectionChanged() {
     this.selectedLignesIds = this.datagrid?.instance.getSelectedRowKeys();
     this.buttonText = this.localizeService.localize(

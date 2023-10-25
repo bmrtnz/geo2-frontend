@@ -7681,13 +7681,13 @@
         "dataField": "ordreLigne.numero",
         "visible": true,
         "sortOrder": "asc",
-        "cssClass": "medium-horiz-padding text-align-center number-column"
+        "cssClass": "small-side-padding text-align-center number-column"
       },
       {
         "visibleIndex": 2,
         "dataField": "ordreLigne.article.id",
         "visible": true,
-        "cssClass": "medium-horiz-padding text-align-center number-column"
+        "cssClass": "small-side-padding text-align-center number-column"
       },
       {
         "dataField": "ordreLigne.article.articleDescription.id",
@@ -7697,7 +7697,7 @@
       {
         "visibleIndex": 4,
         "dataField": "ordreLigne.article.articleDescription.descriptionReferenceLongue",
-        "cssClass": "no-padding",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -7708,12 +7708,13 @@
       {
         "dataField": "ordreLigne.nombrePalettesExpediees",
         "showInColumnChooser": false,
-        "cssClass": "no-padding",
+        "cssClass": "small-side-padding",
         "visible": false
       },
       {
         "visibleIndex": 8,
         "dataField": "ordreLigne.nombreColisCommandes",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -7729,8 +7730,8 @@
           "type": "fixedPoint",
           "precision": 2
         },
-        "width": 95,
-        "cssClass": "no-padding",
+        "cssClass": "small-side-padding",
+        "calculateCellValue": "calculateVentePrixUnitaire",
         "visible": true
       },
       {
@@ -7741,30 +7742,33 @@
           "type": "fixedPoint",
           "precision": 2
         },
-        "width": 95,
+        "cssClass": "small-side-padding",
+        "calculateCellValue": "calculateAchatDevisePrixUnitaire",
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "ordreLigne.poidsNetExpedie",
-        "cssClass": "no-padding text-align-right",
+        "cssClass": "small-side-padding text-align-right",
         "calculateCellValue": "calculatePoidsNetExpedie",
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "ordreLigne.proprietaireMarchandise.code",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "ordreLigne.fournisseur.code",
-        "cssClass": "no-padding",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "ordreLigne.libelleDLV",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -7777,6 +7781,27 @@
       },
       {
         "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.achatDevise",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.achatUnite.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.venteUnite.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordreLigne.ordre.devise.id",
+        "showInColumnChooser": false,
         "visible": false
       }
     ]
