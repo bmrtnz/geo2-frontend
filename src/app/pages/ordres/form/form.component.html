@@ -576,7 +576,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-number-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 class="alignright"
                                 formControlName="transporteurDEVPrixUnitaire"
                                 [format]="'#0.00'"
@@ -596,7 +598,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 formControlName="transporteurDEVCode"
                                 [dataSource]="deviseDS"
                                 [displayExpr]="displayIDBefore"
@@ -620,7 +624,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"

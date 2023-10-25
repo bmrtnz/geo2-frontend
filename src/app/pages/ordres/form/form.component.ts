@@ -331,6 +331,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public headerSaving: boolean;
   public headerRefresh: boolean;
   public instructionsList: string[];
+  public blockPUDevUniteTransp: boolean;
 
   public clientsDS: DataSource;
   public entrepotDS: DataSource;
@@ -618,6 +619,24 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
     }
   }
+
+  checkForfaitTransp() {
+    this.ordresService
+      .fReturnForfaitsTrp(
+        this.ordre.type?.id,
+        this.ordre.entrepot?.id,
+        this.ordre.incoterm?.id
+      )
+      .subscribe({
+        next: (res) => {
+          this.blockPUDevUniteTransp = !!(res?.data?.fReturnForfaitsTrp?.data?.arg_trp_dev_pu);
+        },
+        error: (error: Error) =>
+          console.log(this.messageFormat(error.message))
+      });
+  }
+
+
 
   warnNoSelectedRows() {
     this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
@@ -1010,6 +1029,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "fCreeOrdreComplementaire",
       "fnMajOrdreRegroupementV2",
       "fBonAFacturer",
+      "fReturnForfaitsTrp"
     ];
     functionNames.map(
       (fn) =>
@@ -1232,6 +1252,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initializeForm(fetchPol?) {
+    this.blockPUDevUniteTransp = true;
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
       .pipe(
@@ -1299,6 +1320,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.formGroup.valueChanges.subscribe((_) => {
             this.saveHeaderOnTheFly();
           });
+          this.checkForfaitTransp();
 
           this.refOrdreEdi = this.ordre.ordreEDI?.id;
           this.canalOrdreEdi = this.ordre.ordreEDI?.canalCde;

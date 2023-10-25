@@ -591,6 +591,22 @@ export class OrdresService
     ]);
   }
 
+  /**
+  * retourne les infos forfait transport
+  */
+
+  public fReturnForfaitsTrp(
+    typeOrd: string,
+    cenRef: string,
+    incCode: string
+  ) {
+    return this.functionsService.queryFunction("fReturnForfaitsTrp", [
+      { name: "typeOrd", type: "String", value: typeOrd },
+      { name: "cenRef", type: "String", value: cenRef },
+      { name: "incCode", type: "String", value: incCode }
+    ]);
+  }
+
   public fDuplicationBukSa(
     ordreRef: string,
     socCode: string,
