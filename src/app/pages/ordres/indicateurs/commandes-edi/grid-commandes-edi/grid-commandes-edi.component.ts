@@ -220,8 +220,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.gridTitleInput = dxGridElement.querySelector(
       ".dx-toolbar .grid-title input"
     );
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
-
+    this.authService.onUserChanged().subscribe(() =>
+      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
+    );
     const initFilterStockKey = this.authService.currentUser.filtreRechercheStockEdi ?? "S";
     this.formGroup.get("filtreStock").setValue(initFilterStockKey);
   }

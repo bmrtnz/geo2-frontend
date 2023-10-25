@@ -179,7 +179,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         .patchValue(this.authService.currentUser.secteurCommercial);
     }
 
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+    this.authService.onUserChanged().subscribe(() =>
+      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
+    );
 
     // Fill commercial/assistante input from user role
     if (
