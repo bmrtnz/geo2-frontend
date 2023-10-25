@@ -8066,7 +8066,8 @@
         "dataField": "prixUnitaire",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding text-align-right",
+        "cssClass": "small-side-padding text-align-center",
+        "width": 95,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8107,6 +8108,7 @@
         "visible": true,
         "allowEditing": false,
         "cssClass": "small-side-padding text-align-center",
+        "width": 95,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
