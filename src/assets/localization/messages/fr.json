@@ -1181,6 +1181,7 @@
     "ordres-planningDepart-ordreLogistique-ordre-referenceClient": "Réf. client",
     "ordres-planningDepart-ordreLogistique-ordre-transporteur-id": "Transporteur",
     "ordres-planningDepart-ordreLogistique-ordre-codeChargement": "Code chargement",
+    "ordres-planningDepart-ordreLogistique-groupage-id": "Groupage",
     "ordres-planningDepart-ordreLogistique-ordre-campagne-id": "Campagne",
     "ordresTransporteur-entrepotRaisonSocial": "Lieu de livraison",
     "ordres-planningMaritime-dateDepartPrevueFournisseur": "Date dép.",

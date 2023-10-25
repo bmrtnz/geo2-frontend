@@ -4938,7 +4938,7 @@
       {
         "visibleIndex": 2,
         "dataField": "ordreLogistique.ordre.transporteur.id",
-        "visible": false,
+        "visible": true,
         "width": 120
       },
       {
@@ -5079,6 +5079,10 @@
         "visible": false
       },
       {
+        "dataField": "ordreLogistique.groupage.id",
+        "visible": false
+      },
+      {
         "dataField": "ordreLogistique.ordre.campagne.id",
         "visible": false
       },
@@ -5086,6 +5090,11 @@
         "dataField": "ordreLogistique.ordre.codeAlphaEntrepot",
         "visible": false,
         "width": 150
+      },
+      {
+        "dataField": "ordreLogistique.transporteurGroupage.id",
+        "showInColumnChooser": false,
+        "visible": false
       },
       {
         "dataField": "ordreLogistique.ordre.id",

@@ -9,8 +9,25 @@
   }
 }
 
+::ng-deep .groupage-row {
+  font-weight: bold;
+  font-style: italic;
+}
+
+::ng-deep .groupage-legend {
+  position: absolute;
+  z-index: 1;
+  right: 200px;
+  margin-top: 18px;
+}
+
 ::ng-deep .grid-planning-departs {
   max-height: calc(100vh - 390px) !important;
+
+  .groupage-row {
+    font-weight: bold;
+    font-style: italic;
+  }
 
   .dx-toolbar .dx-texteditor-container {
     width: 750px;
