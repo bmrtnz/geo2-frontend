@@ -7746,7 +7746,8 @@
       {
         "visibleIndex": 16,
         "dataField": "ordreLigne.poidsNetExpedie",
-        "cssClass": "no-padding",
+        "cssClass": "no-padding text-align-right",
+        "calculateCellValue": "calculatePoidsNetExpedie",
         "visible": true
       },
       {
