@@ -67,15 +67,6 @@
     @include cell(darken($base-success, 20%));
   }
 
-  .dx-data-row td.disabled-cell {
-    background-color: #F5F5F5;
-  }
-
-  .edit-cell,
-  .edit-cell input {
-    cursor: pointer !important;
-  }
-
   .dx-checkbox-container {
     cursor: auto !important;
   }

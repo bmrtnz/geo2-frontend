@@ -7807,6 +7807,7 @@
       {
         "dataField": "article.articleDescription.descriptionLongue",
         "allowEditing": false,
+        "cssClass": "disabled-cell",
         "visible": true
       },
       {
@@ -7819,7 +7820,7 @@
       {
         "dataField": "prixUnitaire",
         "visible": true,
-        "cssClass": "text-align-right no-padding-right",
+        "cssClass": "text-align-right no-padding-right disabled-cell",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7841,7 +7842,7 @@
       {
         "dataField": "uniteFactureCode",
         "visible": true,
-        "cssClass": "text-align-right no-padding",
+        "cssClass": "text-align-right no-padding disabled-cell",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7863,7 +7864,7 @@
       {
         "dataField": "devise",
         "visible": true,
-        "cssClass": "text-align-center no-padding",
+        "cssClass": "text-align-center no-padding disabled-cell",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7885,7 +7886,7 @@
       {
         "dataField": "quantite",
         "visible": true,
-        "cssClass": "text-align-right no-padding",
+        "cssClass": "text-align-right no-padding disabled-cell",
         "allowEditing": false,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -7908,7 +7909,7 @@
       {
         "dataField": "forfait",
         "visible": true,
-        "cssClass": "text-align-right no-padding-left",
+        "cssClass": "text-align-right no-padding-left edit-cell",
         "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "editCellTemplate": "mergeEditCellsTemplate",
@@ -7929,6 +7930,7 @@
         "allowEditing": true,
         "showInColumnChooser": false,
         "visible": true,
+        "cssClass": "edit-cell",
         "datatype": "number",
         "setCellValue": "calcTaux",
         "calculateCellValue": "calculateTaux"

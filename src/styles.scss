@@ -845,3 +845,16 @@ body app-root.production {
     }
   }
 }
+
+////////////////////////////////////////////////////////
+/// Better visibility editable / non-editable cells  ///
+////////////////////////////////////////////////////////
+
+.dx-data-row td.disabled-cell {
+  background-color: #F5F5F5;
+}
+
+.edit-cell,
+.edit-cell input {
+  cursor: pointer !important;
+}
