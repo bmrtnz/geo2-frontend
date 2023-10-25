@@ -54,6 +54,11 @@
     }
   }
 
+  .sum-cell {
+    text-align: right;
+    padding-right: 5px;
+  }
+
   .client-cell {
     @include cell(darken($base-danger, 10%));
   }
