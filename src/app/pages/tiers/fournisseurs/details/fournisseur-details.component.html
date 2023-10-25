@@ -241,9 +241,8 @@
                       formControlName="idTracabilite"
                       [readOnly]="
                         !createMode &&
-                        (readOnlyMode ||
-                          !zeroTracaValue ||
-                          !authService.currentUser.adminClient)
+                        (readOnlyMode || !zeroTracaValue) &&
+                        !authService.currentUser.adminClient
                       "
                       (onValueChanged)="onIDTracaChange($event)"
                       valueChangeEvent="keyup change"
