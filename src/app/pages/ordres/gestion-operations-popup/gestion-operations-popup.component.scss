@@ -123,6 +123,8 @@
     .bottom-buttons-container {
       display: inline-block;
       position: relative;
+      left: 50%;
+      transform: translateX(-50%);
 
       .dx-button {
         margin: 5px;
