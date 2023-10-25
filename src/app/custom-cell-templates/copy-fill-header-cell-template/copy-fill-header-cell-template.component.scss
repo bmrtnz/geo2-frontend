@@ -3,11 +3,12 @@
   flex-direction: column;
 
   .dx-button {
-    font-size: 11px;
+    font-size: 10px;
     height: initial;
     margin-top: 4px;
+    padding: 2px 0;
 
-    > .dx-button-content {
+    >.dx-button-content {
       padding: 0 !important;
 
       .dx-icon {

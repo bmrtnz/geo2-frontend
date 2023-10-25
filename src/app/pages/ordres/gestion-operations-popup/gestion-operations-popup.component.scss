@@ -40,6 +40,23 @@
       width: 170px;
       overflow: hidden;
 
+      .frais-ann-indicator {
+        display: inline;
+        position: absolute;
+        min-width: 15px;
+        height: 15px;
+        margin: -1px 0 0 1px;
+        border-radius: 13px;
+        font-size: 10px;
+        font-weight: normal;
+        padding: 2px 5px 3px 3px;
+        line-height: 7px;
+        background-color: #FE3B2F;
+        border: 1px solid #FF8888;
+        color: #fff !important;
+        z-index: 1;
+      }
+
       .dx-button {
         width: calc(100% - 10px);
         margin: 4px 2px;

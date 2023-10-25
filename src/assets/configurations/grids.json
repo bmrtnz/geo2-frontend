@@ -6892,13 +6892,14 @@
       {
         "visibleIndex": 2,
         "dataField": "transporteurCodePlus",
+        "width": 260,
         "editCellTemplate": "selectBoxTemplate",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "montant",
-        "width": 120,
+        "width": 160,
         "format": {
           "type": "fixedPoint",
           "precision": 2
@@ -7958,27 +7959,28 @@
         "dataField": "ligne.ordreLigne.article.articleDescription.descriptionLongue",
         "visible": true,
         "allowEditing": false,
+        "cssClass": "disabled-cell",
         "cellTemplate": "extendedCellTemplate"
       },
       {
         "dataField": "ligne.clientNombrePalettes",
         "visible": true,
         "allowEditing": true,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding edit-cell",
         "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientNombreColisReclamation",
         "visible": true,
         "allowEditing": true,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding edit-cell",
         "cellTemplate": "byCellTemplate"
       },
       {
         "dataField": "ligne.clientPoidsNet",
         "visible": true,
         "allowEditing": true,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding edit-cell",
         "cellTemplate": "byCellTemplate"
       },
       {
@@ -7993,7 +7995,7 @@
         "dataField": "indicateurForfait",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8017,7 +8019,7 @@
         "dataField": "quantite",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8041,7 +8043,7 @@
         "dataField": "uniteFactureCode",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8066,7 +8068,7 @@
         "dataField": "prixUnitaire",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding text-align-center",
+        "cssClass": "small-side-padding text-align-center disabled-cell",
         "width": 95,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
@@ -8107,7 +8109,7 @@
         "dataField": "avoir",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding text-align-center",
+        "cssClass": "small-side-padding text-align-center disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8125,6 +8127,7 @@
         "dataField": "ligne.commentaireResponsable",
         "visible": true,
         "allowEditing": true,
+        "cssClass": "edit-cell",
         "headerCellTemplate": "copyFillHeaderCellTemplate"
       },
       {
