@@ -2,6 +2,7 @@
 
 // Var
 @import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 // App style
 @import "scss/font";
@@ -462,6 +463,15 @@ body app-root.production {
 
 .dx-editor-cell.dx-focused .SB-edit-title-element {
   display: none;
+}
+
+// Print button
+.print-button {
+  background-color: $BW-turquoise-light !important;
+
+  &:hover {
+    background-color: $BW-turquoise-medium !important;
+  }
 }
 
 // Better readibility

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -63,7 +62,7 @@ import { StatistiquesArticlePopupComponent } from "../statistiques/statistiques-
   styleUrls: ["./article-details.component.scss"],
 })
 export class ArticleDetailsComponent
-  implements OnInit, NestedPart, Editable, OnChanges, AfterViewInit {
+  implements OnInit, NestedPart, Editable, OnChanges {
   @Input() public articleLigneId: string;
 
   formGroup = this.fb.group({
@@ -243,12 +242,9 @@ export class ArticleDetailsComponent
       .subscribe((res) => this.afterLoadInitForm(res));
   }
 
-  ngAfterViewInit() {
-    window.removeEventListener("beforeprint", () => { });
-    window.addEventListener("beforeprint", (event) => {
-      console.log("Before print");
-      this.openCloseAccordions(true);
-    });
+  onPrint() {
+    this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   ngOnChanges() {

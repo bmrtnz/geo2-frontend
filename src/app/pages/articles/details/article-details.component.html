@@ -53,6 +53,14 @@
         [visible]="!readOnlyMode"
         (onClick)="onCancel()"
       ></dx-button>
+      <dx-button
+        class="upperButton print-button"
+        type="default"
+        text="{{ 'btn-print' | localize }}"
+        [focusStateEnabled]="false"
+        [visible]="true"
+        (onClick)="onPrint()"
+      ></dx-button>
     </h2>
   </div>
   <div class="content-block article-page">
