@@ -70,8 +70,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public currCompanyId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild(LitigeCloturePopupComponent, { static: false })
-  cloturePopup: LitigeCloturePopupComponent;
+  @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
 
   public formGroup = new UntypedFormGroup({
     codeSecteur: new UntypedFormControl(),
@@ -163,7 +162,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    this.datagrid.instance.beginCustomLoading("");
+    // this.datagrid.instance.beginCustomLoading("");
+    setTimeout(() => this.datagrid.instance.beginCustomLoading(""), 100);
     this.litigesService
       .allSupervisionLitige(
         this.typeFiltrage,
@@ -214,7 +214,6 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   onOpenNewOrder(ds) {
     const sameCompany =
       ds.data.societe.id === this.currentCompanyService.getCompany().id;
-    console.log(ds.data.numeroOrdre, sameCompany);
     if (ds.data.numeroOrdre && sameCompany)
       this.tabContext.openOrdre(
         ds.data.numeroOrdreRemplacement,
