@@ -465,13 +465,17 @@ body app-root.production {
   display: none;
 }
 
-// Print button
+// Print stuff
 .print-button {
   background-color: $BW-turquoise-light !important;
 
   &:hover {
     background-color: $BW-turquoise-medium !important;
   }
+}
+
+.print-mode {
+  display: none;
 }
 
 // Better readibility

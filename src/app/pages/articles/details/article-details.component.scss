@@ -11,7 +11,7 @@
     body {
       margin: 0mm;
       height: auto !important;
-      width: 1400px;
+      width: 1300px;
     }
 
     .print-mode {
@@ -28,6 +28,7 @@
     .col-not-printed>.dx-box-item:nth-child(2),
     .box-not-printed>.dx-box-item:last-child,
     .backtotop,
+    .dx-placeholder,
     .dx-drawer-panel-content {
       display: none !important;
     }
@@ -43,10 +44,6 @@
 ////////////////////
 /// Standard CSS
 ////////////////////
-
-.print-mode {
-  display: none;
-}
 
 ::ng-deep .tabpanel-item {
   // height: 200px;

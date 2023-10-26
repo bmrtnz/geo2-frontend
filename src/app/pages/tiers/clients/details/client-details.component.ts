@@ -554,6 +554,11 @@ export class ClientDetailsComponent
     this.preSaisie = this.client.preSaisie === true ? "preSaisie" : "";
   }
 
+  onPrint() {
+    this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
+  }
+
   checkCode(params) {
     this.client.id = this.client.id;
     const code = params.value;

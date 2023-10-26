@@ -6,8 +6,13 @@
     <h2>
       <ng-container *ngIf="!clientId; else emptyLabel">
         <span *ngIf="createMode === true">{{ "create" | localize }}</span>
-        {{ "tiers-clients-details-title" | localize
-        }}<span class="red-font"> {{ preSaisie | localize }}</span>
+        {{ "tiers-clients-details-title" | localize }}
+        <span
+          *ngIf="!clientId"
+          class="print-mode"
+          >&nbsp;{{ client?.code }} ({{ client?.id }})</span
+        >
+        <span class="red-font"> {{ preSaisie | localize }}</span>
       </ng-container>
       <ng-template #emptyLabel>&nbsp;</ng-template>
       <div class="right">
@@ -59,12 +64,23 @@
           (onClick)="onEncoursClick()"
           text="{{ 'btn-encours' | localize }}"
         ></dx-button>
+        <dx-button
+          class="upperButton print-button"
+          type="default"
+          text="{{ 'btn-print' | localize }}"
+          [focusStateEnabled]="false"
+          [visible]="true"
+          (onClick)="onPrint()"
+        ></dx-button>
       </div>
     </h2>
   </div>
 
   <div class="content-block client-page">
-    <dx-box direction="row">
+    <dx-box
+      direction="row"
+      class="col-not-printed"
+    >
       <dxi-item
         class="left-button-container-detail"
         [ratio]="1"
@@ -136,6 +152,25 @@
               }}</span>
 
               <div class="dx-form-group-content">
+                <!-- Valide (Print) -->
+                <div class="print-mode">
+                  <dx-box>
+                    <dxi-item [ratio]="4">
+                      <div class="dx-field field-large">
+                        <div class="dx-field-label checkbox-label">
+                          {{ "tiers-clients-valide" | localize }}
+                        </div>
+                        <div class="dx-field-value">
+                          <dx-check-box
+                            formControlName="valide"
+                            [readOnly]="true"
+                          ></dx-check-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [ratio]="5"></dxi-item>
+                  </dx-box>
+                </div>
                 <!-- Code -->
                 <div class="dx-field field-large">
                   <div class="dx-field-label">

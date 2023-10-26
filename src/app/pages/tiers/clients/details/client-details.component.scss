@@ -1,3 +1,46 @@
+////////////////
+/// Print CSS
+////////////////
+
+::ng-deep {
+
+  @media print {
+    body {
+      margin: 0mm;
+      height: auto !important;
+      width: 1300px;
+    }
+
+    .print-mode {
+      display: inline !important;
+    }
+
+    header,
+    app-footer,
+    app-clients-list,
+    app-grid-navigator,
+    .upperButton,
+    .not-print-mode,
+    .col-not-printed>.dx-box-item:first-child,
+    .col-not-printed>.dx-box-item:nth-child(2),
+    .backtotop,
+    .dx-placeholder,
+    .dx-drawer-panel-content {
+      display: none !important;
+    }
+
+    @page {
+      margin: 0mm;
+      size: auto;
+    }
+
+  }
+}
+
+////////////////////
+/// Standard CSS
+////////////////////
+
 .upperButton {
   margin-left: 10px;
   float: right;
@@ -9,7 +52,7 @@
     display: grid;
   }
 
-  .dx-tag ~ .dx-texteditor-input {
+  .dx-tag~.dx-texteditor-input {
     display: none;
   }
 }
