@@ -22,6 +22,7 @@ import {
   ProfilePopupComponent,
   ProfilePopupModule,
 } from "../profile-popup/profile-popup.component";
+import { BrowserService } from "app/shared/services/browser.service";
 
 @Component({
   selector: "app-header",
@@ -45,10 +46,11 @@ export class HeaderComponent implements OnInit {
   @ViewChild(ProfilePopupComponent) profilePopup: ProfilePopupComponent;
 
   constructor(
-    private localizeService: LocalizationService,
+    public localizeService: LocalizationService,
     private authService: AuthService,
     public societeService: SocietesService,
-    public currentCompanyService: CurrentCompanyService
+    public currentCompanyService: CurrentCompanyService,
+    public browserService: BrowserService
   ) {
     this.perimetre = this.authService.currentUser?.perimetre;
     this.userMenuItems = [
@@ -87,7 +89,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  @HostListener("scroll", ["$event"]) onScrollEvent($event) {}
+  @HostListener("scroll", ["$event"]) onScrollEvent($event) { }
 
   toggleMenu = () => {
     this.menuToggle.emit();
@@ -107,4 +109,4 @@ export class HeaderComponent implements OnInit {
   declarations: [HeaderComponent],
   exports: [HeaderComponent],
 })
-export class HeaderModule {}
+export class HeaderModule { }

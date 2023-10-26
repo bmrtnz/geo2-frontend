@@ -33,6 +33,14 @@
     >
       <div *dxTemplate="let data of 'item'">
         <dx-button
+          class="buttonWiki"
+          type="normal"
+          CornerRadius="100"
+          [text]="localizeService.localize('btn-wiki')"
+          (onClick)="this.browserService.openWikiMain()"
+        ></dx-button>
+
+        <dx-button
           class="user-button authorization"
           height="100%"
           stylingMode="text"
@@ -44,6 +52,7 @@
             ></app-user-panel>
           </div>
         </dx-button>
+
         <dx-button
           class="company-button"
           height="100%"
