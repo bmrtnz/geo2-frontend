@@ -63,7 +63,7 @@ import { StatistiquesArticlePopupComponent } from "../statistiques/statistiques-
   styleUrls: ["./article-details.component.scss"],
 })
 export class ArticleDetailsComponent
-  implements OnInit, NestedPart, Editable, OnChanges {
+  implements OnInit, NestedPart, Editable, OnChanges, AfterViewInit {
   @Input() public articleLigneId: string;
 
   formGroup = this.fb.group({
@@ -241,6 +241,14 @@ export class ArticleDetailsComponent
     this.route.params
       .pipe(switchMap((params) => this.articlesService.getOne(params.id)))
       .subscribe((res) => this.afterLoadInitForm(res));
+  }
+
+  ngAfterViewInit() {
+    window.removeEventListener("beforeprint", () => { });
+    window.addEventListener("beforeprint", (event) => {
+      console.log("Before print");
+      this.openCloseAccordions(true);
+    });
   }
 
   ngOnChanges() {
