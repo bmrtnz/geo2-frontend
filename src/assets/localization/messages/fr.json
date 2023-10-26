@@ -190,6 +190,7 @@
     "warning-option-on-option": "Impossible de prendre une option sur une option",
     "warning-option-noQty": "Veuillez saisir la quantité à réserver",
     "warning-expected-comment": "Veuillez saisir un commentaire",
+    "warning-no-data": "Pas de données chargées",
     "please-select-transporteur": "Veuillez spécifier un transporteur",
     "please-wait-order-creation": "Process de création ordre en cours, veuillez patienter...",
     "please-select-client": "Veuillez spécifier un client",

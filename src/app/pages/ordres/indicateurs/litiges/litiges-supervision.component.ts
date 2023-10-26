@@ -24,6 +24,7 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -195,6 +196,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (e.summaryItems[0]?.column === "id") {
         const data = e.data.items ?? e.data.collapsedItems;
         this.infosLitige = data[0];
+        if (!this.infosLitige) return notify(this.localization.localize("warning-no-data"), "warning", 4000);
         this.cloturePopup.visible = true;
       }
     }
