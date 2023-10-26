@@ -8,8 +8,13 @@
   >
     <h2>
       <span *ngIf="cloneMode">{{ "create" | localize }}</span>
-      {{ "articles-details-title" | localize
-      }}<span
+      {{ "articles-details-title" | localize }}
+      <span
+        *ngIf="!articleLigneId"
+        class="print-mode"
+        >&nbsp;N°&nbsp;{{ article?.id }}</span
+      >
+      <span
         *ngIf="!cloneMode"
         class="red-font"
       >
@@ -51,7 +56,10 @@
     </h2>
   </div>
   <div class="content-block article-page">
-    <dx-box direction="row">
+    <dx-box
+      direction="row"
+      class="col-not-printed"
+    >
       <dxi-item
         class="left-button-container-detail"
         [ratio]="1"
@@ -107,6 +115,25 @@
       <dxi-item [ratio]="4">
         <div class="dx-form-group dx-card responsive-paddings">
           <div class="dx-form-group-content">
+            <!-- Valide (Print) -->
+            <div class="print-mode">
+              <dx-box>
+                <dxi-item [ratio]="4">
+                  <div class="dx-field">
+                    <div class="dx-field-label checkbox-label">
+                      {{ "tiers-clients-valide" | localize }}
+                    </div>
+                    <div class="dx-field-value">
+                      <dx-check-box
+                        formControlName="valide"
+                        [readOnly]="true"
+                      ></dx-check-box>
+                    </div>
+                  </div>
+                </dxi-item>
+                <dxi-item [ratio]="10"></dxi-item>
+              </dx-box>
+            </div>
             <!-- Code -->
             <div
               *ngIf="!cloneMode"
@@ -176,7 +203,7 @@
               </div>
             </div>
 
-            <dx-box>
+            <dx-box class="box-not-printed">
               <dxi-item [ratio]="4">
                 <!-- BWSTOCK -->
                 <div class="dx-field">
@@ -209,8 +236,7 @@
                   </div>
                 </div>
               </dxi-item>
-              <dxi-item [ratio]="1"></dxi-item>
-              <dxi-item [ratio]="4"> </dxi-item>
+              <dxi-item [ratio]="5"></dxi-item>
             </dx-box>
           </div>
         </div>
