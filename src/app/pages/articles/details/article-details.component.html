@@ -2,13 +2,14 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div
-    class="content-block"
-    *ngIf="!articleLigneId"
-  >
+  <div class="content-block">
     <h2>
-      <span *ngIf="cloneMode">{{ "create" | localize }}</span>
-      {{ "articles-details-title" | localize }}
+      <span *ngIf="cloneMode && !articleLigneId">{{
+        "create" | localize
+      }}</span>
+      <span *ngIf="!articleLigneId">{{
+        "articles-details-title" | localize
+      }}</span>
       <span
         *ngIf="!articleLigneId"
         class="print-mode"
@@ -18,10 +19,11 @@
         *ngIf="!cloneMode"
         class="red-font"
       >
-        {{ preSaisie | localize }} </span
-      ><!-- {{ article.id }} -->
+        {{ preSaisie | localize }}
+      </span>
       <span *ngIf="cloneMode"> ({{ "clone" | localize }})</span>
       <dx-button
+        *ngIf="!articleLigneId"
         class="upperButton submit"
         type="default"
         text="{{ 'btn-valider' | localize }}"
@@ -30,6 +32,7 @@
       >
       </dx-button>
       <dx-button
+        *ngIf="!articleLigneId"
         class="upperButton"
         type="default"
         text="{{ 'btn-modifier' | localize }}"
@@ -39,6 +42,7 @@
         (onClick)="onEdit()"
       ></dx-button>
       <dx-button
+        *ngIf="!articleLigneId"
         class="upperButton"
         type="default"
         [visible]="readOnlyMode && authService.currentUser.accessGeoProduct"
@@ -47,6 +51,7 @@
       >
       </dx-button>
       <dx-button
+        *ngIf="!articleLigneId"
         class="upperButton"
         type="normal"
         text="{{ 'btn-annuler' | localize }}"
@@ -61,6 +66,7 @@
         [visible]="true"
         (onClick)="onPrint()"
       ></dx-button>
+      <div style="clear: both"></div>
     </h2>
   </div>
   <div class="content-block article-page">

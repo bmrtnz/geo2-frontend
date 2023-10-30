@@ -1,52 +1,8 @@
 // Var
 @import "themes/generated/variables.base";
 
-////////////////
-/// Print CSS
-////////////////
-
-::ng-deep {
-
-  @media print {
-    body {
-      margin: 0mm;
-      height: auto !important;
-      width: 1300px;
-    }
-
-    .print-mode {
-      display: inline !important;
-    }
-
-    header,
-    app-footer,
-    app-articles-list,
-    app-grid-navigator,
-    .upperButton,
-    .not-print-mode,
-    .col-not-printed>.dx-box-item:first-child,
-    .col-not-printed>.dx-box-item:nth-child(2),
-    .box-not-printed>.dx-box-item:last-child,
-    .backtotop,
-    .dx-placeholder,
-    .dx-drawer-panel-content {
-      display: none !important;
-    }
-
-    @page {
-      margin: 0mm;
-      size: auto;
-    }
-
-  }
-}
-
-////////////////////
-/// Standard CSS
-////////////////////
 
 ::ng-deep .tabpanel-item {
-  // height: 200px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

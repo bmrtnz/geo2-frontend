@@ -14,6 +14,10 @@
 @import "scss/dx/form";
 @import "scss/dx/accordion";
 
+// Media print style
+@import "scss/print";
+
+
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -644,6 +648,10 @@ body app-root.production {
 .min-max-imize-popup-icon {
   top: 13px;
   float: right;
+}
+
+.zoom-popup h2 {
+  font-size: initial;
 }
 
 // Excel download buttons - grids

@@ -36,7 +36,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   onShowing(e) {
     e.component
       .content()
-      .parentNode.classList.add("zoom-lieupassageaquai-popup");
+      .parentNode.classList.add("zoom-lieupassageaquai-popup", "zoom-popup");
   }
 
   hidePopup() {

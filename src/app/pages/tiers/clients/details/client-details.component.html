@@ -2,7 +2,7 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div class="content-block">
+  <div class="content-block top-info">
     <h2>
       <ng-container *ngIf="!clientId; else emptyLabel">
         <span *ngIf="createMode === true">{{ "create" | localize }}</span>

@@ -26,7 +26,7 @@ export class ZoomFournisseurPopupComponent {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-fournisseur-popup");
+    e.component.content().parentNode.classList.add("zoom-fournisseur-popup", "zoom-popup");
   }
 
   hidePopup() {

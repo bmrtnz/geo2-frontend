@@ -2,40 +2,84 @@
 /// Print CSS
 ////////////////
 
-::ng-deep {
+// ::ng-deep {
 
-  @media print {
-    body {
-      margin: 0mm;
-      height: auto !important;
-      width: 1300px;
-    }
+//   @media print {
+//     body {
+//       margin: 0mm;
+//       height: auto !important;
+//       width: 1300px;
+//     }
 
-    .print-mode {
-      display: inline !important;
-    }
+//     .dx-popup-wrapper {
+//       position: static !important;
+//       width: 100% !important;
+//       height: auto !important;
 
-    header,
-    app-footer,
-    app-clients-list,
-    app-grid-navigator,
-    .upperButton,
-    .not-print-mode,
-    .col-not-printed>.dx-box-item:first-child,
-    .col-not-printed>.dx-box-item:nth-child(2),
-    .backtotop,
-    .dx-placeholder,
-    .dx-drawer-panel-content {
-      display: none !important;
-    }
+//       .zoom-popup {
+//         left: 0;
+//         top: 0;
+//         width: 100% !important;
+//         height: auto !important;
+//         transform: none !important;
+//         box-shadow: none !important;
 
-    @page {
-      margin: 0mm;
-      size: auto;
-    }
+//         .top-info {
+//           display: none;
+//         }
 
-  }
-}
+//         .dx-popup-title {
+//           border: 0;
+
+//           div {
+//             font-size: 30px !important;
+//             font-weight: 300 !important;
+//           }
+
+//           .popup-top-right-items {
+//             display: none;
+
+//           }
+//         }
+
+//         .dx-popup-content {
+//           height: auto !important;
+
+//           .dx-scrollable-scrollbar {
+//             display: none;
+//           }
+//         }
+//       }
+//     }
+
+//     .print-mode {
+//       display: inline !important;
+//     }
+
+//     header,
+//     app-footer,
+//     app-clients-list,
+//     app-grid-navigator,
+//     app-contacts,
+//     .tabs-ordres-page,
+//     .upperButton,
+//     .not-print-mode,
+//     .col-not-printed>.dx-box-item:first-child,
+//     .col-not-printed>.dx-box-item:nth-child(2),
+//     .backtotop,
+//     .dx-placeholder,
+//     .dx-drawer-panel-content {
+//       display: none !important;
+//     }
+
+//     @page {
+//       margin: 0mm;
+//       size: auto;
+//     }
+
+//   }
+
+// }
 
 ////////////////////
 /// Standard CSS

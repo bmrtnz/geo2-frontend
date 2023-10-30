@@ -35,7 +35,7 @@ export class ZoomClientArticlePopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-article-popup");
+    e.component.content().parentNode.classList.add("zoom-client-article-popup", "zoom-popup");
   }
 
   hidePopup() {

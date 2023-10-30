@@ -556,6 +556,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
+
+    // this.clientId = '005527'; ///// A VIRER !!!
+    // this.zoomClientFilePopup.visible = true; ///// A VIRER !!!
   }
 
   ngOnDestroy() {
