@@ -47,8 +47,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
   styleUrls: ["./entrepot-details.component.scss"],
 })
 export class EntrepotDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
-{
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
   formGroup = this.fb.group({
     code: [""],
     client: [""],
@@ -373,6 +372,11 @@ export class EntrepotDetailsComponent
     }
   }
 
+  onPrint() {
+    this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
+  }
+
   openCloseAccordions(action) {
     if (!this.accordion) return;
     this.accordion.toArray().forEach((element) => {
@@ -488,12 +492,12 @@ export class EntrepotDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
