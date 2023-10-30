@@ -28,6 +28,11 @@
     color: $base-accent;
   }
 
+  // Highlight canceled orders
+  .canceled-orders td {
+    color: #ff325a !important;
+  }
+
 }
 
 .labels {

@@ -298,7 +298,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           "typeTransportDescription",
           "baseTarifTransportCode",
           "gtinColis",
-          "campagne"
+          "campagne",
+          "ordreAnnule"
         ]),
         this.secteurSB?.value?.id,
         this.currentCompanyService.getCompany().id,
@@ -393,15 +394,31 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       e.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
-    if (e.rowType === "group" && e.groupIndex === 0)
-      e.rowElement.classList.add("justified-row");
+    if (e.rowType === "group") {
+      if (e.groupIndex === 0) e.rowElement.classList.add("justified-row");
+      // Canceled orders
+
+      let isCanceled;
+      let data = e.data.items ?? e.data.collapsedItems;
+      data = data[0];
+      isCanceled = data?.ordreAnnule === true || (data.items ? data.items[0]?.ordreAnnule : false);
+
+      if (isCanceled) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title += e.rowElement.title ?? " - ";
+        e.rowElement.title += this.localizer.localize("ordre-annule");
+      }
+    }
 
     if (e.rowType === "data") {
+      // Canceled orders
+      if (e.data?.ordreAnnule === true) {
+        e.rowElement.classList.add("canceled-orders");
+        e.rowElement.title += this.localizer.localize("ordre-annule") + " - ";
+      }
+      // Dble click
       e.rowElement.classList.add("cursor-pointer");
-      e.rowElement.setAttribute(
-        "title",
-        this.localizer.localize("hint-dblClick-ordre")
-      );
+      e.rowElement.title += this.localizer.localize("hint-dblClick-ordre")
     }
   }
 

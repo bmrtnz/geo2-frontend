@@ -28,6 +28,7 @@ export class DeclarationFraude extends Model {
   @Field({ dataType: "datetime" }) etaDate: string;
   @Field() etaLocation: string;
   @Field() colisPrepese: boolean;
+  @Field() ordreAnnule: boolean;
   @Field() incotermCode: string;
   @Field() poidsNetClient: number;
   @Field() transporteurCode: string;
