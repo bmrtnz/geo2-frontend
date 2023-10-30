@@ -671,7 +671,11 @@ export class ClientDetailsComponent
           preSaisie: !info.last,
           valide: this.client.valide
         };
-        if (info.last) this.preSaisie = "";
+        if (info.last) {
+          this.formGroup.get("valide").markAsDirty();
+          this.formGroup.markAsDirty();
+          this.preSaisie = "";
+        }
         this.saveData(client, true);
       }
     }
