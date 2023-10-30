@@ -23,6 +23,8 @@ import {
   ProfilePopupModule,
 } from "../profile-popup/profile-popup.component";
 import { BrowserService } from "app/shared/services/browser.service";
+import { SharedModule } from "../../shared.module";
+
 
 @Component({
   selector: "app-header",
@@ -97,6 +99,8 @@ export class HeaderComponent implements OnInit {
 }
 
 @NgModule({
+  declarations: [HeaderComponent],
+  exports: [HeaderComponent],
   imports: [
     CommonModule,
     DxButtonModule,
@@ -105,8 +109,7 @@ export class HeaderComponent implements OnInit {
     FileManagerModule,
     DxToolbarModule,
     ProfilePopupModule,
-  ],
-  declarations: [HeaderComponent],
-  exports: [HeaderComponent],
+    SharedModule
+  ]
 })
 export class HeaderModule { }

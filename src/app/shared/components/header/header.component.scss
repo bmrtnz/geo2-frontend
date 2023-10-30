@@ -46,6 +46,11 @@
   display: block;
 }
 
+.user-company-box {
+  position: relative;
+  float: right;
+}
+
 ::ng-deep .main-navbar .dx-toolbar-items-container {
   height: auto !important;
 
@@ -55,10 +60,22 @@
 }
 
 ::ng-deep .buttonWiki {
-  background-color: rgb(33, 18, 236) !important;
-  margin-right: 50px;
-  width: 50px !important;
-  height: 50px !important;
+  margin: 6px 11px 0 0;
   border-radius: 100% !important;
-  //padding-top: 50px !important;
+  border: 2px solid white;
+  background: transparent !important;
+  height: auto !important;
+  padding: 5px 0 !important;
+  font-size: 12px !important;
+  min-width: 0 !important;
+  transition: color 0.1s, background-color 0.1s;
+
+  &:hover {
+    background-color: white !important;
+    color: $base-accent;
+  }
+
+  .dx-button-text {
+    text-transform: none;
+  }
 }
