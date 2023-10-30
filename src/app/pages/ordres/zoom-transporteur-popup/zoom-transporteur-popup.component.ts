@@ -29,14 +29,14 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   setTitle() {
     this.title =
       this.localizeService.localize(
-        "zoom-" + (this.transporteurTitle ?? "transporteur", "zoom-popup")
+        "zoom-" + (this.transporteurTitle ?? "transporteur")
       ) +
       " " +
       this.transporteurLigneId;
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-transporteur-popup");
+    e.component.content().parentNode.classList.add("zoom-transporteur-popup", "zoom-popup");
   }
 
   hidePopup() {

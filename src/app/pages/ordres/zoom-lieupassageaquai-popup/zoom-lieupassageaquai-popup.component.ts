@@ -27,7 +27,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   setTitle() {
     this.title =
       this.localizeService.localize(
-        "zoom-" + (this.lieupassageaquaiTitle ?? "transporteur")
+        "zoom-" + (this.lieupassageaquaiTitle ?? "lieupassageaquai")
       ) +
       " " +
       this.lieupassageaquaiLigneId;

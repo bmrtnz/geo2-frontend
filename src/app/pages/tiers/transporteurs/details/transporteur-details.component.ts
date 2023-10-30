@@ -243,6 +243,11 @@ export class TransporteurDetailsComponent
     this.preSaisie = this.transporteur.preSaisie === true ? "preSaisie" : "";
   }
 
+  onPrint() {
+    this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
+  }
+
   checkCode(params) {
     const code = params.value.toUpperCase();
     const transporteursSource = this.transporteursService.getDataSource_v2([

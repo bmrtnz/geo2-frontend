@@ -650,8 +650,10 @@ body app-root.production {
   float: right;
 }
 
-.zoom-popup h2 {
-  font-size: initial;
+.zoom-popup {
+  h2 {
+    font-size: initial;
+  }
 }
 
 // Excel download buttons - grids

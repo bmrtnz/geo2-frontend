@@ -414,6 +414,11 @@ export class FournisseurDetailsComponent
     this.fournisseurLigneCode.emit(this.fournisseur.code);
   }
 
+  onPrint() {
+    this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
+  }
+
   updateZeroTracaValue() {
     this.zeroTracaValue = this.formGroup.get("idTracabilite").value === "0";
   }

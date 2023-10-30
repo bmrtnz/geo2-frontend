@@ -2,16 +2,19 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div
-    class="content-block top-info"
-    *ngIf="!fournisseurLigneId"
-  >
+  <div class="content-block top-info">
     <h2>
       <span *ngIf="createMode === true">{{ "create" | localize }}</span>
-      {{ "tiers-fournisseurs-details-title" | localize
-      }}<span class="red-font"> {{ preSaisie | localize }}</span>
+      {{ "tiers-fournisseurs-details-title" | localize }}
+      <span
+        *ngIf="!fournisseurLigneId"
+        class="print-mode"
+        >&nbsp;{{ fournisseur?.code }} ({{ fournisseur?.id }})</span
+      >
+      <span class="red-font"> {{ preSaisie | localize }}</span>
       <div class="right">
         <dx-button
+          *ngIf="!fournisseurLigneId"
           class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
@@ -19,6 +22,7 @@
           [useSubmitBehavior]="true"
         ></dx-button>
         <dx-button
+          *ngIf="!fournisseurLigneId"
           class="upperButton"
           type="default"
           text="{{ 'btn-modifier' | localize }}"
@@ -28,18 +32,30 @@
           "
         ></dx-button>
         <dx-button
+          *ngIf="!fournisseurLigneId"
           class="upperButton"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
           [visible]="!readOnlyMode"
           (onClick)="onCancel()"
         ></dx-button>
+        <dx-button
+          class="upperButton print-button"
+          type="default"
+          text="{{ 'btn-print' | localize }}"
+          [focusStateEnabled]="false"
+          [visible]="true"
+          (onClick)="onPrint()"
+        ></dx-button>
       </div>
     </h2>
   </div>
 
   <div class="content-block fournisseur-page">
-    <dx-box direction="row">
+    <dx-box
+      direction="row"
+      class="col-not-printed"
+    >
       <dxi-item
         class="left-button-container-detail"
         [ratio]="1"
@@ -108,6 +124,25 @@
               }}</span>
 
               <div class="dx-form-group-content">
+                <!-- Valide (Print) -->
+                <div class="print-mode">
+                  <dx-box>
+                    <dxi-item [ratio]="4">
+                      <div class="dx-field field-large">
+                        <div class="dx-field-label checkbox-label">
+                          {{ "tiers-clients-valide" | localize }}
+                        </div>
+                        <div class="dx-field-value">
+                          <dx-check-box
+                            formControlName="valide"
+                            [readOnly]="true"
+                          ></dx-check-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [ratio]="8"></dxi-item>
+                  </dx-box>
+                </div>
                 <!-- Code -->
                 <div class="dx-field">
                   <div class="dx-field-label">

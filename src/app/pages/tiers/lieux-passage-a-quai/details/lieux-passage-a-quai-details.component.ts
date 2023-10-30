@@ -180,6 +180,11 @@ export class LieuxPassageAQuaiDetailsComponent
       this.lieupassageaquai.preSaisie === true ? "preSaisie" : "";
   }
 
+  onPrint() {
+    // this.openCloseAccordions(true);
+    setTimeout(() => window.print(), 100); // Thanx Dx
+  }
+
   checkCode(params) {
     const code = params.value.toUpperCase();
     const lieuxpassageaquaiSource =
