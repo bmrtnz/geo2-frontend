@@ -31,6 +31,7 @@ import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-
 import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
 import { EdiLigne } from "app/shared/models";
 
+
 @Component({
   selector: "app-ajout-articles-ref-client-popup",
   templateUrl: "./ajout-articles-ref-client-popup.component.html",
@@ -64,10 +65,9 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("addButton", { static: false }) addButton: DxButtonComponent;
   @ViewChild("deleteButton", { static: false }) deleteButton: DxButtonComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
-  @ViewChild(AssociatedArticlePromptComponent)
-  associatedPrompt: AssociatedArticlePromptComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
+
 
   constructor(
     public OrdreLigneService: OrdreLignesService,
