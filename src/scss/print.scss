@@ -2,12 +2,19 @@
 ///   Print CSS   ///
 /////////////////////
 
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 @media print {
   body {
     margin: 0mm;
     height: auto !important;
     width: 1300px;
+  }
+
+  .dx-state-readonly.dx-checkbox-checked .dx-checkbox-icon {
+    background-color: $base-accent !important;
   }
 
   .dx-popup-wrapper {
