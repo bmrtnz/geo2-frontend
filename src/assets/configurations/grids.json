@@ -3548,7 +3548,6 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "calculateCellValue": "calculateVentePrixUnitaire",
-        "width": 100,
         "visible": true
       },
       {
@@ -3556,7 +3555,6 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "calculateCellValue": "calculateAchatDevisePrixUnitaire",
-        "width": 100,
         "visible": true
       },
       {
