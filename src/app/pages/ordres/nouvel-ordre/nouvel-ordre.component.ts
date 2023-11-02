@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
 import { Devise, Entrepot, Societe } from "app/shared/models";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
@@ -16,6 +16,7 @@ import { defer, EMPTY, Observable, zip } from "rxjs";
 import {
   catchError,
   debounceTime,
+  filter,
   first,
   map,
   mapTo,
@@ -26,14 +27,15 @@ import { GridEntrepotsComponent } from "../grid-entrepots/grid-entrepots.compone
 import { GridHistoriqueEntrepotsComponent } from "../grid-historique-entrepots/grid-historique-entrepots.component";
 import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
 import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
-import { TabContext } from "../root/root.component";
+import { RouteParam, TabContext } from "../root/root.component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-nouvel-ordre",
   templateUrl: "./nouvel-ordre.component.html",
   styleUrls: ["./nouvel-ordre.component.scss"],
 })
-export class NouvelOrdreComponent implements OnInit {
+export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   readonly inheritedFields = new Set([
     "transporteur.id",
     "transitaire.id",
@@ -72,6 +74,7 @@ export class NouvelOrdreComponent implements OnInit {
     "client.fraisPlateforme",
     "client.fraisExcluArticlePasOrigineFrance",
   ]);
+  readonly INDICATOR_ID = "create";
 
   public typeEntrepots = ["Favoris", "Tous"];
   public favorites = false;
@@ -113,6 +116,7 @@ export class NouvelOrdreComponent implements OnInit {
     private entrepotsService: EntrepotsService,
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
+    private route: ActivatedRoute,
     public authService: AuthService
   ) { }
 
@@ -131,6 +135,18 @@ export class NouvelOrdreComponent implements OnInit {
         text: prog,
       });
     });
+  }
+
+  ngAfterViewInit() {
+    this.route.paramMap
+      .pipe(
+        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID)
+      )
+      .subscribe((_) => {
+        this.favorites ?
+          this.historiqueEntrepotGrid.reload() :
+          this.EntrepotGrid.reload();
+      });
   }
 
   onButtonLoaderClick() {

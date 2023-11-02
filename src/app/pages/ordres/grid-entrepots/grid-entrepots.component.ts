@@ -36,7 +36,7 @@ export class GridEntrepotsComponent
   @Output() public createOrder = new EventEmitter();
 
   @ViewChild(DxDataGridComponent, { static: false })
-  private grid: DxDataGridComponent;
+  public grid: DxDataGridComponent;
 
   public columns: Observable<GridColumn[]>;
   public gridConfigHandler = (event) =>
@@ -53,7 +53,7 @@ export class GridEntrepotsComponent
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public tabContext: TabContext
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
@@ -98,20 +98,30 @@ export class GridEntrepotsComponent
         )
       )
       .subscribe((datasource) => {
-        datasource.filter([
-          [
-            "client.societe.id",
-            "=",
-            this.currentCompanyService.getCompany().id,
-          ],
-          "and",
-          ["valide", "=", true],
-          "and",
-          ["client.valide", "=", true],
-        ]);
+        datasource.filter(this.buildFilters());
         this.grid.dataSource = datasource;
       });
   }
+
+  buildFilters() {
+    return [
+      [
+        "client.societe.id",
+        "=",
+        this.currentCompanyService.getCompany().id,
+      ],
+      "and",
+      ["valide", "=", true],
+      "and",
+      ["client.valide", "=", true],
+    ]
+  }
+
+  public reload() {
+    (this.grid.dataSource as DataSource)?.filter(this.buildFilters());
+    this.grid.instance.refresh();
+  }
+
 
   onColumnsChange({ current }: { current: GridColumn[] }) {
     this.updateData(current);

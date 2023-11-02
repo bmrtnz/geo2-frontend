@@ -23,6 +23,7 @@ import { map } from "rxjs/operators";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import notify from "devextreme/ui/notify";
+import DataSource from "devextreme/data/data_source";
 
 @Component({
   selector: "app-grid-historique-entrepots",
@@ -57,7 +58,7 @@ export class GridHistoriqueEntrepotsComponent
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public tabContext: TabContext
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.columns = this.gridConfiguratorService.fetchColumns(this.gridID);
@@ -82,29 +83,38 @@ export class GridHistoriqueEntrepotsComponent
         )
       )
       .subscribe((datasource) => {
-        const filters = [
-          ["societe.id", "=", this.currentCompanyService.getCompany().id],
-          "and",
-          ["entrepot.valide", "=", true],
-          "and",
-          ["entrepot.client.valide", "=", true],
-          "and",
-          // We show only the year history
-          [
-            "dateModification",
-            ">=",
-            new Date(this.dateManagementService.findDate(-365)),
-          ],
-          "and",
-          [
-            "utilisateur.nomUtilisateur",
-            "=",
-            this.authService.currentUser.nomUtilisateur,
-          ],
-        ];
+        const filters = this.buildFilters();
         datasource.filter(filters);
         this.grid.dataSource = datasource;
       });
+  }
+
+  buildFilters() {
+    return [
+      ["societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
+      ["entrepot.valide", "=", true],
+      "and",
+      ["entrepot.client.valide", "=", true],
+      "and",
+      // We show only the year history
+      [
+        "dateModification",
+        ">=",
+        new Date(this.dateManagementService.findDate(-365)),
+      ],
+      "and",
+      [
+        "utilisateur.nomUtilisateur",
+        "=",
+        this.authService.currentUser.nomUtilisateur,
+      ],
+    ]
+  }
+
+  public reload() {
+    (this.grid.dataSource as DataSource).filter(this.buildFilters());
+    this.grid.instance.refresh();
   }
 
   getSelectedItem() {
