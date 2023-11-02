@@ -15,6 +15,7 @@ import { SingleSelection } from "basic";
 import { defer, EMPTY, Observable, zip } from "rxjs";
 import {
   catchError,
+  concatMap,
   debounceTime,
   filter,
   first,
@@ -121,12 +122,6 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    const { id } = this.currentCompanyService.getCompany();
-    this.societesService
-      .getOne(id, ["id", "devise.id", "campagne.id"])
-      .subscribe((res) => {
-        this.societe = res.data.societe;
-      });
     this.programs = [];
     Object.keys(Program).map((prog) => {
       this.programs.push({
@@ -140,9 +135,12 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.route.paramMap
       .pipe(
-        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID)
+        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID),
+        concatMap(() => this.societesService
+          .getOne(this.currentCompanyService.getCompany().id, ["id", "devise.id", "campagne.id"])),
       )
-      .subscribe((_) => {
+      .subscribe((res) => {
+        this.societe = res.data.societe;
         this.favorites ?
           this.historiqueEntrepotGrid.reload() :
           this.EntrepotGrid.reload();
