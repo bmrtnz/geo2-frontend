@@ -88,7 +88,7 @@
     [calculateCellValue]="this[column?.calculateCellValue]"
     [calculateDisplayValue]="
       column?.calculateDisplayValue
-        ? (column.calculateDisplayValue | evalDisplay)
+        ? this[column?.calculateDisplayValue]
         : column?.dataField
     "
     [calculateSortValue]="column?.calculateSortValue"
@@ -100,7 +100,11 @@
     [setCellValue]="setCellValue"
   >
     <dxi-validation-rule
-      *ngIf="column.dataField === 'frais.id' || column.dataField === 'codePlus'"
+      *ngIf="
+        column.dataField === 'frais.id' ||
+        column.dataField === 'codePlus' ||
+        (column.dataField === 'description' && descriptionMandatory)
+      "
       type="required"
     ></dxi-validation-rule>
   </dxi-column>

@@ -28,6 +28,11 @@
           width: $side-panel-min-width !important;
           margin: 0 !important;
         }
+
+        span,
+        div {
+          margin-top: 1px !important;
+        }
       }
 
       // ##
