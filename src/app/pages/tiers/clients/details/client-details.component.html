@@ -70,7 +70,7 @@
           text="{{ 'btn-print' | localize }}"
           [focusStateEnabled]="false"
           [visible]="true"
-          (onClick)="onPrint()"
+          (onClick)="formUtils.onPrint(this)"
         ></dx-button>
       </div>
     </h2>

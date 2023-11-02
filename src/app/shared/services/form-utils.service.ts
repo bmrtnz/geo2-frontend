@@ -67,6 +67,37 @@ export class FormUtilsService {
     formGroup.get(field).patchValue({ id: null });
   }
 
+  /**
+  * Prints Zoom/fiches articles/tiers
+  */
+  public onPrint(component) {
+    if (component?.accordion) component.openCloseAccordions(true);
+    const zoomMode = document.querySelector('.dx-popup-wrapper');
+    let appRoot;
+    let display;
+    setTimeout(() => {
+      // Different behaviour when zoom popup => app-root must be hidden to
+      // avoid 2 print elements
+      if (zoomMode) {
+        const popup = document.querySelector(".dx-popup-wrapper");
+        let previousEl = popup.previousElementSibling;
+        while (previousEl) {
+          if (previousEl.tagName === "APP-ROOT") {
+            appRoot = previousEl;
+            break;
+          }
+          previousEl = previousEl.previousElementSibling;
+        }
+        const style = getComputedStyle(appRoot);
+        display = style.display;
+        if (appRoot) appRoot.style.display = 'none';
+      }
+      window.print()
+      if (appRoot) appRoot.style.display = display;
+    }, 100); // Thanx Dx - otherwide accordions aren't opened
+  }
+
+
   // Best user experience
   selectTextOnFocusIn(e: any) {
     const myInput = e.element?.querySelector("input.dx-texteditor-input");

@@ -264,7 +264,7 @@ export class FournisseurDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private fournisseursService: FournisseursService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,
@@ -412,11 +412,6 @@ export class FournisseurDetailsComponent
     this.updateZeroTracaValue();
     this.preSaisie = this.fournisseur.preSaisie === true ? "preSaisie" : "";
     this.fournisseurLigneCode.emit(this.fournisseur.code);
-  }
-
-  onPrint() {
-    this.openCloseAccordions(true);
-    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   updateZeroTracaValue() {

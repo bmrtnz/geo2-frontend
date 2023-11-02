@@ -96,7 +96,7 @@ export class LieuxPassageAQuaiDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
@@ -178,11 +178,6 @@ export class LieuxPassageAQuaiDetailsComponent
     this.contentReadyEvent.emit();
     this.preSaisie =
       this.lieupassageaquai.preSaisie === true ? "preSaisie" : "";
-  }
-
-  onPrint() {
-    // this.openCloseAccordions(true);
-    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   checkCode(params) {

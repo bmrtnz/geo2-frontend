@@ -224,7 +224,7 @@ export class ArticleDetailsComponent
     private router: Router,
     private route: ActivatedRoute,
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     public authService: AuthService,
     private localization: LocalizationService
   ) { }
@@ -240,11 +240,6 @@ export class ArticleDetailsComponent
     this.route.params
       .pipe(switchMap((params) => this.articlesService.getOne(params.id)))
       .subscribe((res) => this.afterLoadInitForm(res));
-  }
-
-  onPrint() {
-    this.openCloseAccordions(true);
-    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   ngOnChanges() {

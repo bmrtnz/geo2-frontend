@@ -193,7 +193,7 @@ export class EntrepotDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
@@ -370,11 +370,6 @@ export class EntrepotDetailsComponent
       const Element = document.querySelector(".submit") as HTMLElement;
       Element.click();
     }
-  }
-
-  onPrint() {
-    this.openCloseAccordions(true);
-    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   openCloseAccordions(action) {

@@ -146,7 +146,7 @@ export class TransporteurDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private transporteursService: TransporteursService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
@@ -241,11 +241,6 @@ export class TransporteurDetailsComponent
     this.formGroup.patchValue(this.transporteur);
     this.contentReadyEvent.emit();
     this.preSaisie = this.transporteur.preSaisie === true ? "preSaisie" : "";
-  }
-
-  onPrint() {
-    this.openCloseAccordions(true);
-    setTimeout(() => window.print(), 100); // Thanx Dx
   }
 
   checkCode(params) {

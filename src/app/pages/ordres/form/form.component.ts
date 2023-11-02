@@ -139,7 +139,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private ordresService: OrdresService,
     private ordresBafService: OrdresBafService,
     private currentCompanyService: CurrentCompanyService,
