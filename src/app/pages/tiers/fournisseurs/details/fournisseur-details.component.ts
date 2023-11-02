@@ -309,6 +309,8 @@ export class FournisseurDetailsComponent
           valide: this.fournisseur.valide
         };
         if (info.last) this.preSaisie = "";
+        this.formGroup.get("valide").markAsDirty();
+        this.formGroup.markAsDirty();
         this.saveData(fournisseur, true);
       }
     }
