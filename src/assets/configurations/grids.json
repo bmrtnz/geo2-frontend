@@ -5355,6 +5355,7 @@
       {
         "visibleIndex": 18,
         "dataField": "article.matierePremiere.espece.id",
+        "dataType": "string",
         "visible": false
       },
       {
