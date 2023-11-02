@@ -1,47 +1,60 @@
-h6 {
-  margin: 0;
-  float: left;
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+.supervision-BAF {
+  margin: 30px 20px 0 20px;
+
+  h6 {
+    margin: 0;
+    float: left;
+  }
+
+  .refresh {
+    top: -8px;
+    float: right;
+  }
 }
 
-.refresh {
-  top: -8px;
-  float: right;
-}
-
-.launch {
+.launch-container {
   position: absolute;
-  right: 147px;
-  margin-top: 7px;
+  right: 150px;
+  margin-top: 6px;
   z-index: 1;
+
+  dx-button {
+    position: relative;
+    margin: 0 10px;
+  }
 }
 
 ::ng-deep .ordresBAF-grid {
   max-height: calc(100vh - 426px) !important;
-}
 
-::ng-deep .blocked-color {
-  background-color: #ff325a !important;
-}
-
-::ng-deep .alert-color {
-  background-color: #ffa100 !important;
-}
-
-::ng-deep .OK-color {
-  background-color: #8fc459 !important;
-}
-
-::ng-deep .BAFstatus-cell {
-  cursor: help !important;
-  color: #fff !important;
-  transition: 0.1s;
-
-  &:hover {
-    opacity: 0.65;
+  .blocked-color {
+    background-color: #ff325a !important;
   }
-}
 
-::ng-deep .refClient-BAF {
-  cursor: pointer !important;
-  background-color: #e2f5f1 !important;
+  .alert-color {
+    background-color: #ffa100 !important;
+  }
+
+  .OK-color {
+    background-color: #8fc459 !important;
+  }
+
+  .BAFstatus-cell {
+    cursor: help !important;
+    color: #fff !important;
+    transition: 0.1s;
+
+    &:hover {
+      opacity: 0.65;
+    }
+  }
+
+  .refClient-BAF {
+    cursor: pointer !important;
+    background-color: #e2f5f1 !important;
+  }
 }

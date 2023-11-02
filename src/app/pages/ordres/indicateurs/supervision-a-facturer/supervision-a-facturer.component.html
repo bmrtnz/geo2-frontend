@@ -1,5 +1,5 @@
 <form
-  class="dx-fieldset"
+  class="dx-fieldset supervision-BAF"
   [formGroup]="formGroup"
 >
   <div class="title-container">
@@ -179,22 +179,23 @@
   <br />
 </form>
 
-<dx-button
-  class="launch"
-  [style]="{ right: '240px' }"
-  type="default"
-  [disabled]="!clotureEnabled"
-  text="{{ 'btn-cloture-sp' | localize }}"
-  (onClick)="clotureSP($event)"
-></dx-button>
+<div class="launch-container">
+  <dx-button
+    class="launch2"
+    type="default"
+    [disabled]="!clotureEnabled"
+    text="{{ 'btn-cloture-sp' | localize }}"
+    (onClick)="clotureSP($event)"
+  ></dx-button>
 
-<dx-button
-  class="launch"
-  type="default"
-  [disabled]="!launchEnabled || !gridItemsSelected"
-  text="{{ 'btn-launch' | localize }}"
-  (onClick)="launch($event)"
-></dx-button>
+  <dx-button
+    class="launch"
+    type="default"
+    [disabled]="!launchEnabled || !gridItemsSelected"
+    text="{{ 'btn-launch' | localize }}"
+    (onClick)="launch($event)"
+  ></dx-button>
+</div>
 
 <dx-data-grid
   class="ordresBAF-grid"

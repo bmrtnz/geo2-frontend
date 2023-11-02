@@ -234,6 +234,8 @@
     "choose-order-text": "Quel ordre souhaitez-vous ouvrir ?",
     "choose-delete-reason": "Veuillez préciser la raison de la suppression de l'ordre :",
     "preSaisie": "(Pré-saisie)",
+    "invoice-running": "Facturation en cours...",
+    "invoice-finished": "Facturation terminée !",
     "via-histo-client": "via l'historique client",
     "via-stock": "via le stock",
     "via-refs-client": "à partir des références client",
