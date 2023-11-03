@@ -2,7 +2,7 @@
   class="dx-fieldset supervision-BAF"
   [formGroup]="formGroup"
 >
-  <div class="title-container">
+  <!-- <div class="title-container">
     <h6>{{ "preFilter-title" | localize }}</h6>
     <dx-button
       class="refresh"
@@ -10,7 +10,7 @@
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
     ></dx-button>
-  </div>
+  </div> -->
   <div style="clear: both"></div>
   <div class="BAFFilterArea">
     <dx-box>
@@ -181,16 +181,21 @@
 
 <div class="launch-container">
   <dx-button
-    class="launch2"
+    class="refresh"
     type="default"
+    text="{{ 'btn-refresh' | localize }}"
+    (onClick)="enableFilters()"
+  ></dx-button>
+  <dx-button
+    class="launchSP"
+    type="normal"
     [disabled]="!clotureEnabled"
     text="{{ 'btn-cloture-sp' | localize }}"
     (onClick)="clotureSP($event)"
   ></dx-button>
-
   <dx-button
     class="launch"
-    type="default"
+    type="success"
     [disabled]="!launchEnabled || !gridItemsSelected"
     text="{{ 'btn-launch' | localize }}"
     (onClick)="launch($event)"

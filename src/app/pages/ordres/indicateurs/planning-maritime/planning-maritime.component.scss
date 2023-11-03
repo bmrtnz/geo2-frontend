@@ -10,7 +10,7 @@
   margin-right: 20px;
 }
 
-::ng-deep .orderTileFilterArea {
+::ng-deep .PlannMarFilterArea {
   width: 830px;
 
   .dx-datebox .dx-texteditor-input {
@@ -54,7 +54,7 @@
 }
 
 ::ng-deep .grid-planning-maritime {
-  max-height: calc(100vh - 340px) !important;
+  max-height: calc(100vh - 270px) !important;
 
   .dx-toolbar .dx-texteditor-container {
     width: 750px;

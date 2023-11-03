@@ -3,16 +3,18 @@
 @import "scss/variables.scss";
 
 .supervision-BAF {
-  margin: 30px 20px 0 20px;
+  margin: 15px 20px 0 20px;
 
-  h6 {
-    margin: 0;
-    float: left;
-  }
+  .title-container {
+    h6 {
+      margin: 0;
+      float: left;
+    }
 
-  .refresh {
-    top: -8px;
-    float: right;
+    .refresh {
+      top: -8px;
+      float: right;
+    }
   }
 }
 
@@ -25,11 +27,25 @@
   dx-button {
     position: relative;
     margin: 0 10px;
+
+    &.launchSP {
+      background-color: $BW-turquoise-light !important;
+
+      &:hover {
+        background-color: $BW-turquoise-medium !important;
+      }
+    }
+
   }
 }
 
 ::ng-deep .ordresBAF-grid {
-  max-height: calc(100vh - 426px) !important;
+  max-height: calc(100vh - 280px) !important;
+
+  // Souhait Léa de rendre le plus de lignes possibles - 03/11/2023
+  tr {
+    height: 28px !important;
+  }
 
   .blocked-color {
     background-color: #ff325a !important;
