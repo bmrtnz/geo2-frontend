@@ -98,6 +98,30 @@
       }
     }
 
+    .bottom-side-nav {
+      position: absolute;
+      bottom: 25px;
+      font-size: 13px;
+      line-height: 15px;
+      text-align: center;
+      left: 50%;
+      transform: translatex(-50%);
+      width: 250px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: opacity 0.2s;
+      opacity: 0 !important;
+
+      &.copyright-short-label {
+        color: white;
+        letter-spacing: -1px;
+      }
+    }
+
+    .copyright-labels-full-opacity {
+      transition-delay: 0.25s;
+      opacity: 1 !important;
+    }
+
     :host-context(.dx-theme-generic) ::ng-deep.dx-treeview {
       .dx-treeview-node-container .dx-treeview-node.dx-state-selected.dx-state-focused>.dx-treeview-item * {
         color: inherit;

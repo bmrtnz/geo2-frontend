@@ -25,6 +25,7 @@ import { Router, NavigationEnd } from "@angular/router";
 import { DxButtonModule } from "devextreme-angular";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { ChooseArticleZoomPopupComponent } from "../choose-article-zoom/choose-article-zoom-popup.component";
+import { VersionService } from "app/shared/services/version.service";
 
 
 @Component({
@@ -42,8 +43,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
   @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
   @ViewChild(ChooseArticleZoomPopupComponent, { static: false }) chooseArticlePopup: ChooseArticleZoomPopupComponent;
 
-  @Input()
-  title: string;
+  @Input() title: string;
 
   menuMode = "shrink";
   menuRevealMode = "expand";
@@ -53,12 +53,13 @@ export class SideNavOuterToolbarComponent implements OnInit {
   constructor(
     private screen: ScreenService,
     private router: Router,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private versionService: VersionService
   ) { }
 
   ngOnInit() {
     this.menuOpened = this.screen.sizes["screen-large"];
-    if (window.localStorage.getItem("HideMainDrawer") === "true") {
+    if (window.sessionStorage.getItem("HideMainDrawer") === "true") {
       this.menuOpened = false;
     }
 
@@ -151,10 +152,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
   menuToggle() {
     this.menuOpened = !this.menuOpened;
-    window.localStorage.setItem(
+    window.sessionStorage.setItem(
       "HideMainDrawer",
       !this.menuOpened ? "true" : "false"
     );
+    this.versionService.updateCopyrightTextDisplay();
   }
 
   navigationClick() {

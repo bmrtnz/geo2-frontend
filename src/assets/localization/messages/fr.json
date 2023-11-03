@@ -2,7 +2,8 @@
   "fr": {
     "title": "Geo2",
     "home": "Accueil",
-    "copyright": "Copyright © 2020{0} Microtec Informatique ",
+    "copyright": "© 2020{0}",
+    "microtec": "Microtec Informatique",
     "documents": "Documents",
     "valide": "Validé",
     "valide-uniq": "Uniq. valides",
