@@ -124,8 +124,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
     this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
 
-    this.secteurSB.value = { id: "GB" }; // A VIRER !!!!!!!!!!!!!!!!
-    this.clientSB.value = { id: "001234" }; // A VIRER !!!!!!!!!!!!!!!!
+    // this.secteurSB.value = { id: "GB" }; // A VIRER !!!!!!!!!!!!!!!!
+    // this.clientSB.value = { id: "001234" }; // A VIRER !!!!!!!!!!!!!!!!
   }
 
   setDefaultPeriod(periodId) {
