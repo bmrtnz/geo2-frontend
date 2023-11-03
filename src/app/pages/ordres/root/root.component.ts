@@ -245,6 +245,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public tabsUnpined: boolean;
   public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
   public moreThanOneOpenOrder: number;
+  public atLeastOneOpenIndicator: number;
   private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
@@ -264,6 +265,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private tabContext: TabContext
   ) {
     this.moreThanOneOpenOrder = 0;
+    this.atLeastOneOpenIndicator = 0;
   }
 
   ngOnInit() {
@@ -406,6 +408,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
 
     if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
+      if (window.localStorage.getItem("ctrlKey") === "true") return this.closeEveryIndicator();
       this.closeEveryOrdre();
     } else {
       const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
@@ -503,13 +506,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!ordre?.length;
     this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
+    this.atLeastOneOpenIndicator = (indicateur?.length) ? 1 : 0;
   }
 
   closeEveryOrdre() {
     this.selectTab(TAB_LOAD_ID);
-    const indicateur = this.route.snapshot.queryParamMap.getAll(
-      TabType.Indicator
-    );
+    const indicateur = this.route.snapshot.queryParamMap.getAll(TabType.Indicator);
     let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
 
     // Checking if grids have unsaved data
@@ -528,6 +530,23 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     notify(this.localizationService.localize(
       this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
     );
+  }
+
+  // Keep CTRL pressed when clicking - dev util
+  closeEveryIndicator() {
+    if (!this.atLeastOneOpenIndicator) return;
+    this.selectTab(TAB_LOAD_ID);
+    const ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
+    let indicateur = [];
+    const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+
+    this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
+      this.router.navigate(["pages/ordres", navID], {
+        queryParams: { indicateur, ordre },
+      })
+    );
+    this.atLeastOneOpenIndicator = 0;
+    notify(this.localizationService.localize("indicators-were-closed"));
   }
 
   private handleRouting() {
@@ -694,7 +713,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
     this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
-
+    this.atLeastOneOpenIndicator = this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length ? 1 : 0;
     return this.items.indexOf(data);
   }
 
