@@ -1,5 +1,4 @@
 <br />
-<br />
 <dx-form
   [(formData)]="preFilterData"
   class="fraud-form"
@@ -133,7 +132,7 @@
   </dxi-item>
   <dxi-item
     itemType="group"
-    [colCount]="3"
+    [colCount]="5"
   >
     <dxi-item name="periode">
       <dxo-label text="{{ 'ordres-periode' | localize }}"></dxo-label>
@@ -171,16 +170,8 @@
         text="{{ 'packing-list-date-depart-max' | localize }}"
       ></dxo-label>
     </dxi-item>
-  </dxi-item>
-  <dxi-item
-    [cssClass]="'modified-orders-from'"
-    itemType="group"
-    [colCount]="2"
-  >
-    <dxo-label
-      text="{{ 'filter-modified-orders-from' | localize }}"
-    ></dxo-label>
     <dxi-item
+      [cssClass]="'modified-orders-from'"
       dataField="dateModification"
       editorType="dxDateBox"
       [editorOptions]="{
@@ -189,21 +180,25 @@
         type: 'datetime'
       }"
     >
-      <dxo-label [visible]="false"></dxo-label>
+      <dxo-label
+        text="{{ 'filter-modified-orders-from' | localize }}"
+      ></dxo-label>
     </dxi-item>
     <dxi-item
       itemType="button"
       verticalAlignment="center"
       [buttonOptions]="{
+        focusStateEnabled: false,
         type: 'default',
-        text: 'btn-launch' | localize,
+        text: 'btn-refresh' | localize,
         onClick: applyPrefilter.bind(this)
       }"
-    ></dxi-item>
+    >
+      <dxo-label [visible]="false"></dxo-label>
+    </dxi-item>
   </dxi-item>
 </dx-form>
 
-<br />
 <div class="labels">
   <span>{{ this.resumeLabel }}</span>
   <span class="label-right">{{ this.etatLabel }}</span>
