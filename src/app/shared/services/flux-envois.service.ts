@@ -10,7 +10,7 @@ import { Flux, Societe } from "../models";
 import { Ordre } from "../models/ordre.model";
 import { DepotEnvoisService } from "./api/depot-envois.service";
 import { EnvoisService } from "./api/envois.service";
-import { FunctionResult } from "./api/functions.service";
+import {FunctionResult, FunctionsService} from "./api/functions.service";
 import { CurrentCompanyService } from "./current-company.service";
 
 @Injectable({
@@ -21,7 +21,8 @@ export class FluxEnvoisService {
     private currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
     private depotEnvoisService: DepotEnvoisService,
-    private envoisService: EnvoisService
+    private envoisService: EnvoisService,
+    private functionsService: FunctionsService
   ) {}
 
   prompt(
@@ -70,6 +71,16 @@ export class FluxEnvoisService {
           return this.pushDepotEnvoi("IMPORD", ordreID), of(null);
         // "CUSINV" | "PROFOR" | "RESLIT" | "INCLIT"
         // No initialization phase, continuing to flux selection
+        case "DETAIM":
+          return this.functionsService
+            .geoPrepareEnvois(
+              ordreID,
+              "DETAIM",
+              true,
+              false,
+              this.authService.currentUser.nomUtilisateur
+            );
+        //return this.envoisService.fDocumentEnvoiCominv(ordreID);
         default:
           return of({ data: { res: 1 } });
       }
