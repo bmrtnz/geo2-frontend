@@ -159,9 +159,13 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
+    if (this.secteurId) {
+      this.formGroup.get("valide").patchValue(true);
+      this.formGroup.patchValue({
+        secteur: { id: this.secteurId },
+      });
+    }
   }
-
-
 
   ngOnChanges() {
     if (this.clientId && this.popupShown) {
