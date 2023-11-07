@@ -302,7 +302,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       this.infosLitige.litige.id,
       this.grid.getSelectedRowData().numeroGroupementLitige,
     ).subscribe({
-      error: (err: Error) => notify(err.message, "warning"),
+      error: (err: Error) => notify(this.messageFormat(err.message), "warning", 7000),
       complete: () => this.grid.reload(),
     });
   }
@@ -343,4 +343,15 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     this.loadForm();
     if (dataMutated) this.incidentLitige();
   }
+
+  private messageFormat(mess) {
+    const functionNames = ["deleteLot"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
+  }
+
 }

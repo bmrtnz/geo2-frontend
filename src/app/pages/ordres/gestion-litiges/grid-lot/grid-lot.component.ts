@@ -172,6 +172,20 @@ export class GridLotComponent implements OnInit, OnChanges {
       this.setResponsableQuantite(newData, value, rowData);
   }
 
+  public setPrixUnitaires(newData, value, currentRowData) {
+    // Focus on forfait responsable - Uggly but works
+    setTimeout(() => {
+      self.grid.instance.editCell(
+        self.grid.instance.getRowIndexByKey(currentRowData.ligne.id),
+        "prixUnitaire"
+      );
+      setTimeout(() => {
+        const myInput = document.querySelector(".dx-state-focused");
+        myInput?.nextElementSibling?.querySelector("input").focus();
+      });
+    }, 100);
+  }
+
   public gridConfigHandler = (event) =>
     this.gridConfiguratorService.init(Grid.LitigeLignesLot, {
       ...event,
@@ -281,7 +295,6 @@ export class GridLotComponent implements OnInit, OnChanges {
             }
           } else
             Object.entries(data).forEach(([field, value]) => {
-              // console.log(rowIndex, `ligne.${field}`, value);
               this.grid.instance.cellValue(rowIndex, `ligne.${field}`, value);
             });
         });
@@ -314,7 +327,7 @@ export class GridLotComponent implements OnInit, OnChanges {
 
   public calculateResponsableAvoir(rowData: Partial<LitigeLigneFait>) {
     return (
-      rowData.ligne.responsablePrixUnitaire * rowData.ligne.responsableQuantite
+      rowData.ligne.devisePrixUnitaire * rowData.ligne.responsableQuantite
     );
   }
 
@@ -441,6 +454,8 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     const context: any = this;
     context.defaultSetCellValue(newData, value, rowData);
+    if (newData.hasOwnProperty("prixUnitaire")) return;
+    if (newData.ligne?.hasOwnProperty("clientPrixUnitaire")) return self.setPrixUnitaires(newData, value, rowData);
     self.setQuantite(newData, value, rowData);
   }
 

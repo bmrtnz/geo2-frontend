@@ -8076,13 +8076,15 @@
       {
         "dataField": "prixUnitaire",
         "visible": true,
-        "allowEditing": false,
-        "cssClass": "small-side-padding text-align-right",
+        "cssClass": "text-align-right no-padding-left",
+        "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
+        "editCellTemplate": "mergeEditCellsTemplate",
+        "formatter": "formatToResponsableCurrency",
         "virtual": true
       },
       {
-        "dataField": "ligne.responsablePrixUnitaire",
+        "dataField": "ligne.devisePrixUnitaire",
         "visible": true,
         "allowEditing": true,
         "showInColumnChooser": false,
@@ -8172,12 +8174,6 @@
       },
       {
         "dataField": "ligne.numeroOrdreReplacement",
-        "visible": false,
-        "showInColumnChooser": false,
-        "allowEditing": false
-      },
-      {
-        "dataField": "ligne.devisePrixUnitaire",
         "visible": false,
         "showInColumnChooser": false,
         "allowEditing": false
