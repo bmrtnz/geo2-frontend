@@ -260,8 +260,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
   lockFields(e, allowMutations?) {
     // Locking step
     const data = e.data;
-    const bloquer =
-      window.sessionStorage.getItem("blockage") === "true" ? true : false;
+    const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
+    console.log("Blocage : " + (bloquer === true ? "Oui" : "Non"));
 
     // Global case
     if ([Statut.ANNULE.toString(), Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut]))
@@ -347,40 +347,39 @@ export class OrdreLignesService extends ApiService implements APIRead {
           this.lock(e);
         break;
       }
-      case "ventePrixUnitaire": {
-        if (
-          data.ordre.venteACommission !== true &&
-          data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF" &&
-          bloquer === true
-        )
-          this.lock(e);
-        break;
-      }
-      case "venteUnite.id": {
-        if (
-          data.ordre.venteACommission !== true &&
-          data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF" &&
-          bloquer === true
-        )
-          this.lock(e);
-        break;
-      }
-      case "gratuit": {
-        if (
-          data.ordre.venteACommission !== true &&
-          (data.ordre.bonAFacturer === true || bloquer === true)
-        )
-          this.lock(e);
-        break;
-      }
+      // Lignes commentées Dde BW 06/11/2023 #23099
+
+      // case "ventePrixUnitaire": {
+      //   if (
+      //     data.ordre.venteACommission !== true &&
+      //     data.ordre.type?.id !== "REP" &&
+      //     data.ordre.type?.id !== "RPF"
+      //   )
+      //     this.lock(e);
+      //   break;
+      // }
+      // case "venteUnite.id": {
+      //   if (
+      //     data.ordre.venteACommission !== true &&
+      //     data.ordre.type?.id !== "REP" &&
+      //     data.ordre.type?.id !== "RPF"
+      //   )
+      //     this.lock(e);
+      //   break;
+      // }
+      // case "gratuit": {
+      //   if (
+      //     data.ordre.venteACommission !== true &&
+      //     (data.ordre.bonAFacturer === true)
+      //   )
+      //     this.lock(e);
+      //   break;
+      // }
       case "achatDevisePrixUnitaire": {
         if (
           data.ordre.venteACommission !== true &&
           data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF" &&
-          (data.logistique?.expedieStation === true || bloquer === true)
+          data.ordre.type?.id !== "RPF"
         )
           this.lock(e);
         break;
@@ -389,8 +388,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
         if (
           data.ordre.venteACommission !== true &&
           data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF" &&
-          bloquer === true
+          data.ordre.type?.id !== "RPF"
         )
           this.lock(e);
         break;
