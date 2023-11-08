@@ -76,7 +76,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public selectedResponsible: string;
   public title: string;
   public popupFullscreen = false;
-  public firstShown: boolean;
   public ordreGenNumero: string;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -191,18 +190,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
           // Régularisation is disabled by default but must appear
           this.consequenceItems.filter((c) => c.id === "I")[0].disabled = true;
 
-          // Firstly on "Retour station"
-          if (this.firstShown) {
-            this.firstShown = false;
-          }
           // Filter indemnisation
-          if (
-            ["transporteur", "transpApproche"].includes(
-              this.selectedResponsible
-            )
-          )
-            this.consequenceItems.filter((c) => c.id === "G")[0].visible =
-              false;
+          this.consequenceItems
+            .filter((c) => c.id === "G")[0]
+            .visible = ["transporteur", "transpApproche"].includes(this.selectedResponsible);
         })
       )
       .subscribe();
@@ -618,7 +609,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     e.component.content().parentNode.classList.remove("no-opacity"); // To avoid flash effect (Dx bug)
     if (!this.lot[1]) {
       // lot creation
-      this.firstShown = true;
       this.responsibles.value = this.responsibleList[0];
       // Is there a transporteur approche? Then show corresponding radio btn
       this.ordresLogistiquesService
