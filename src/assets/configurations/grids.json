@@ -4288,7 +4288,7 @@
       },
       {
         "visibleIndex": 1,
-        "dataField": "ordreLigne.article.description",
+        "dataField": "ordreLigne.article.articleDescription.descriptionReferenceLongue",
         "dataType": "string",
         "visible": true
       },

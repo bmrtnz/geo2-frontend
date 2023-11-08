@@ -1637,7 +1637,7 @@
     "ordres-program-loadRef-preordres": "Station",
     "ordres-program-loadRef-others": "Load référence",
     "ordreLitigesLignes-numeroGroupementLitige": "N°",
-    "ordreLitigesLignes-ordreLigne-article-description": "Produit",
+    "ordreLitigesLignes-ordreLigne-article-articleDescription-descriptionReferenceLongue": "Produit",
     "ordreLitigesLignes-ordreLigne-proprietaireMarchandise-code": "Propriétaire",
     "ordreLitigesLignes-ordreLigne-fournisseur-code": "Emball./expéd.",
     "ordreLitigesLignes-ordreLigne-nombrePalettesExpediees": "Nb Pal",
