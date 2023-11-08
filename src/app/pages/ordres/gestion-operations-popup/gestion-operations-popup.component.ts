@@ -330,12 +330,12 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.chooseEntrepotPopup
       .prompt()
       .pipe(
-        concatMap((entrepotID) =>
+        concatMap((selected) =>
           this.ordresService.fCreeOrdreReplacement(
             this.ordre.id,
-            entrepotID,
-            this.authService.currentUser.nomUtilisateur,
-            this.currentCompanyService.getCompany().id
+            selected.entrepotID,
+            selected.societeID,
+            this.authService.currentUser.nomUtilisateur
           )
         ),
         map(
@@ -759,7 +759,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
                 .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
                 .replace("&O", this.ordreGenNumero),
               "success",
-              7000
+              9000
             );
           }
           return this.gridLot.updateLot({
