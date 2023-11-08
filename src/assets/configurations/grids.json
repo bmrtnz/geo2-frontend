@@ -5171,8 +5171,8 @@
       {
         "visibleIndex": 12,
         "dataField": "dateDepartPrevueFournisseur",
-        "dataType": "date",
-        "format": "dd-MM-yyyy",
+        "dataType": "datetime",
+        "format": "dd-MM-yyyy HH:mm",
         "visible": true
       },
       {
@@ -5221,9 +5221,6 @@
       },
       {
         "dataField": "version"
-      },
-      {
-        "dataField": "colis"
       },
       {
         "dataField": "palette"
