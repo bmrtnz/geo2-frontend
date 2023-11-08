@@ -47,6 +47,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
   DxAccordionComponent,
+  DxButtonComponent,
   DxCheckBoxComponent,
   DxSelectBoxComponent,
 } from "devextreme-angular";
@@ -357,6 +358,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public promptPopupDateOnly: boolean;
   private savedGridCdeStandby: boolean;
 
+  public accordionButtons: HTMLElement[];
   public factureVisible = false;
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
@@ -371,6 +373,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("leftAccessPanel", { static: false })
   leftAccessPanel: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: QueryList<DxAccordionComponent>;
+  @ViewChildren(DxButtonComponent) buttons: QueryList<ElementRef | DxButtonComponent>;
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
   @ViewChild(AjoutArticlesRefClientPopupComponent, { static: false })
   ajoutArtRefClt: AjoutArticlesRefClientPopupComponent;
@@ -556,11 +559,27 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
+    this.setAccordionsButtons();
+
   }
 
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
+  }
+
+  setAccordionsButtons() {
+    this.accordionButtons = [];
+    this.buttons.forEach((button) => {
+      const element = this.getButtonElement(button);
+      if (element.classList.contains("scrollTo-buttons")) this.accordionButtons.push(element);
+    });
+  }
+
+  scrollOpenAccordion(fragment) {
+    this.accordionButtons
+      .find(el => el.dataset.accordion === fragment)
+      .click();
   }
 
   onComChanged() {
@@ -1263,7 +1282,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               "or",
               ["id", "=", "EXW"],
             ])
-
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
@@ -1310,6 +1328,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.histoLigneOrdreReadOnlyText = `${this.localization.localize(
             "hint-client-historique"
           )}`;
+
+          // Auto open accordion when required (E.g. litiges form supervision litiges)
+          const showAccordion = sessionStorage.getItem("showAccordion");
+          if (showAccordion) {
+            this.scrollOpenAccordion(showAccordion);
+            sessionStorage.removeItem("showAccordion");
+          }
 
           this.showBAFButton =
             this.ordre.bonAFacturer === false &&
@@ -1359,6 +1384,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       map(([item]) => item),
       takeUntil(this.destroy)
     );
+  }
+
+  private getButtonElement(
+    button: DxButtonComponent | ElementRef<any>
+  ): dxElement | HTMLElement {
+    return button instanceof DxButtonComponent
+      ? button.instance.element()
+      : button.nativeElement;
   }
 
   private getAnchorElement(

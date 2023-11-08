@@ -23,7 +23,7 @@ export class GridHistoriqueComponent {
   @ViewChild(DxDataGridComponent, { static: true })
   histoGrid: DxDataGridComponent;
 
-  @Output() public ordreSelected = new EventEmitter<Ordre["id"]>();
+  @Output() public ordreSelected = new EventEmitter();
 
   readonly INDICATOR_NAME = "Historique";
 
