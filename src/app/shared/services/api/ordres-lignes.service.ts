@@ -261,7 +261,6 @@ export class OrdreLignesService extends ApiService implements APIRead {
     // Locking step
     const data = e.data;
     const bloquer = window.sessionStorage.getItem("blockage") === "true" ? true : false;
-    console.log("Blocage : " + (bloquer === true ? "Oui" : "Non"));
 
     // Global case
     if ([Statut.ANNULE.toString(), Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut]))
