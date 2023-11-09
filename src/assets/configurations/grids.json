@@ -3529,7 +3529,7 @@
       {
         "visibleIndex": 12,
         "dataField": "article.matierePremiere.origine.id",
-        "width": 22,
+        "width": 25,
         "cssClass": "multi-line-header",
         "showInColumnChooser": false,
         "cellTemplate": "zoomButtonTemplate",
@@ -3712,6 +3712,16 @@
       },
       {
         "dataField": "ordre.flagAnnule",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.litige.id",
+        "showInColumnChooser": false,
+        "visible": false
+      },
+      {
+        "dataField": "ordre.litige.dateCreation",
         "showInColumnChooser": false,
         "visible": false
       }

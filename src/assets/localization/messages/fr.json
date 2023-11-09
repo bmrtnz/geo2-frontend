@@ -336,6 +336,7 @@
     "hint-not-valid-client": "client non-valide",
     "hint-voir-encours": "Double-cliquez pour voir les en-cours client",
     "hint-open-program": "Importer un programme",
+    "hint-previous-litige": "Litige fournisseur",
     "title-forfait-litige-popup": "Saisie forfait",
     "title-gestion-operations-popup": "Gestion des opérations",
     "title-historique-modif-detail-popup": "Historique des changements du détail d'expédition",
