@@ -2979,6 +2979,10 @@
         "dataType": "number",
         "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "headerCellTemplate": "headerCellBtnTemplate",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
         "visible": true
       },
       {
@@ -3042,6 +3046,10 @@
         "cssClass": "multi-line-header small-side-padding headerCellBtnTemplate",
         "width": 95,
         "headerCellTemplate": "headerCellBtnTemplate",
+        "format": {
+          "type": "fixedPoint",
+          "precision": 2
+        },
         "visible": true
       },
       {
