@@ -30,13 +30,13 @@
               {{ "tiers-clients-secteur" | localize }}
             </div>
             <div class="dx-field-value">
-              <dx-select-box
+              <dx-tag-box
                 formControlName="secteurCommercial"
                 [dataSource]="secteurs"
                 displayExpr="description"
                 searchExpr="description"
               >
-              </dx-select-box>
+              </dx-tag-box>
             </div>
           </div>
           <!-- Fournisseur -->
@@ -45,16 +45,15 @@
               {{ "fournisseur" | localize }}
             </div>
             <div class="dx-field-value">
-              <dx-select-box
+              <dx-tag-box
                 formControlName="fournisseur"
                 [dataSource]="fournisseurs"
                 [displayExpr]="displayCodeBefore"
                 [showClearButton]="true"
                 [searchExpr]="['code']"
-                [showClearButton]="true"
               >
                 <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
-              </dx-select-box>
+              </dx-tag-box>
             </div>
           </div>
         </div>
@@ -213,7 +212,6 @@
       [showPageSizeSelector]="true"
       [showInfo]="true"
       [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
     ></dxo-pager>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.PlanningFournisseurs"
