@@ -383,7 +383,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
           data.ordre.type?.id === "RPO" ||
           data.ordre.type?.id === "RPR" ||
           data.ordre.type?.id === "REF" ||
-          data.proprietaireMarchandise.code.substring(0, 2) === "BW"
+          data.proprietaireMarchandise?.code.substring(0, 2) === "BW"
         ) {
         } else {
           if (data.logistique?.expedieStation === true || bloquer === true) this.lock(e);
