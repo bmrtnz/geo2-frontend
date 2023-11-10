@@ -559,8 +559,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
-    this.setAccordionsButtons();
-
   }
 
   ngOnDestroy() {
@@ -568,18 +566,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy.unsubscribe();
   }
 
-  setAccordionsButtons() {
-    this.accordionButtons = [];
-    this.buttons.forEach((button) => {
-      const element = this.getButtonElement(button);
-      if (element.classList.contains("scrollTo-buttons")) this.accordionButtons.push(element);
-    });
-  }
-
   scrollOpenAccordion(fragment) {
-    this.accordionButtons
-      .find(el => el.dataset.accordion === fragment)
-      .click();
+    this.openFormAccordions(fragment)
+    this.accordion.find(r => r.instance.$element()[0].id === fragment).instance.$element()[0].scrollIntoView();
   }
 
   onComChanged() {
