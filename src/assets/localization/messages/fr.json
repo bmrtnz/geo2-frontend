@@ -1288,6 +1288,7 @@
     "ordreLignes-article-id": "Article",
     "ordreLignes-article-articleDescription-descriptionReferenceLongue": "Article",
     "ordreLignes-article-articleDescription-descriptionReferenceCourte": "Article - desc. abrégée",
+    "ordreLignes-article-normalisation-marque-description": "Marque",
     "ordreLignes-article-description": "Description abrégée",
     "ordreLignes-nombrePalettesCommandees": "Pal. sol",
     "ordreLignes-nombrePalettesExpediees": "Pal. sol exp.",

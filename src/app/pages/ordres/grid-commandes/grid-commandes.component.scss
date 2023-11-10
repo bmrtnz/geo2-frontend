@@ -175,7 +175,13 @@
     background-color: transparent;
   }
 
-  .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
+  .dx-row-alt>td {
+    background-color: #F0F0F0;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+  }
+
+  .dx-command-edit.dx-command-edit-with-icons {
     padding: 0 !important;
   }
 

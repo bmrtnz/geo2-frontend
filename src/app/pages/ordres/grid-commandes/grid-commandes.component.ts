@@ -395,6 +395,7 @@ export class GridCommandesComponent
                   "ordre.numero",
                   "ordre.entrepot.code",
                   "article.description",
+                  "article.articleDescription.descriptionReferenceCourte",
                   "article.matierePremiere.variete.description",
                   "article.matierePremiere.origine.description",
                   "article.cahierDesCharge.categorie.description",
@@ -409,6 +410,7 @@ export class GridCommandesComponent
                   "article.normalisation.etiquetteEvenementielle.description",
                   "article.normalisation.etiquetteColis.description",
                   "article.normalisation.etiquetteUc.description",
+                  "article.normalisation.marque.description",
                   "article.emballage.conditionSpecial.description",
                   "article.emballage.alveole.description",
                   "article.normalisation.gtinUc",
@@ -462,10 +464,6 @@ export class GridCommandesComponent
                 "article.matierePremiere.origine.id",
                 "article.matierePremiere.modeCulture.id",
               ],
-              // Article description
-              ...[
-                "article.normalisation.marque.description",
-              ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
               ["ordre.id", "=", this.ordre?.id],
@@ -736,8 +734,6 @@ export class GridCommandesComponent
         // Bio en vert
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
-        if (e.column?.dataField.indexOf("descriptionReferenceLongue"))
-          e.cellElement.classList.add("format-description");
       }
       // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {
@@ -910,11 +906,6 @@ export class GridCommandesComponent
     if (self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id])
       return self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id];
     return rowData.fournisseur?.id ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
-  }
-
-  calculateDescriptionDisplayValue(rowData) {
-    const marque = rowData.article?.normalisation?.marque?.description;
-    return rowData.article.articleDescription.descriptionReferenceLongue + " marq&nbsp;:&nbsp;" + marque;
   }
 
   onEditorPrepared(e) {

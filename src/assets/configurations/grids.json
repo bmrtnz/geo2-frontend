@@ -2906,6 +2906,12 @@
         "visible": false
       },
       {
+        "dataField": "article.normalisation.marque.description",
+        "allowEditing": false,
+        "cssClass": "small-left-padding",
+        "visible": false
+      },
+      {
         "dataField": "nombrePalettesCommandees",
         "width": 35,
         "editorOptions": {
