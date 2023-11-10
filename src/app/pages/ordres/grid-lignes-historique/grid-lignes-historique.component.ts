@@ -358,13 +358,13 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   calculateVentePrixUnitaire(data) {
     if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
       return "";
-    } else return data.ventePrixUnitaire?.toFixed(2) + "/" + data.venteUnite.description;
+    } else return data.ventePrixUnitaire.toFixed(2) + "/" + data.venteUnite.description;
   }
 
   calculateAchatDevisePrixUnitaire(data) {
     if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
       return "";
-    } else return data.achatDevisePrixUnitaire?.toFixed(2) + "/" + data.achatUnite.description;;
+    } else return data.achatDevisePrixUnitaire.toFixed(2) + "/" + data.achatUnite.description;
   }
 
   openFilePopup(cell, e) {
