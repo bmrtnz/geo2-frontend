@@ -22,7 +22,17 @@
 
 ::ng-deep .grid-commandes {
 
+  .format-description {
+    min-width: 400px !important;
+    max-width: 400px !important;
+    white-space: normal;
+    line-height: 14px !important;
+  }
+
   .dx-row.dx-header-row td {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+
     .dx-datagrid-text-content {
       text-overflow: initial;
     }

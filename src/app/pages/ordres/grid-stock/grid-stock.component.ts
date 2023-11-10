@@ -191,6 +191,7 @@ export class GridStockComponent implements OnInit {
     "calibreFournisseurID",
     "statut",
     "dateStatut",
+    "stock.article.normalisation.marque.description",
   ]);
 
   constructor(
@@ -628,6 +629,11 @@ export class GridStockComponent implements OnInit {
     this.stocksService.refreshStockHebdo().subscribe(() => {
       this.refreshArticlesGrid();
     });
+  }
+
+  public calculateDescription(rowData) {
+    const marque = rowData.stock?.article?.normalisation?.marque?.description;
+    return rowData.articleDescription + " marq : " + marque;
   }
 
   public calculateCustomSummary(options) {

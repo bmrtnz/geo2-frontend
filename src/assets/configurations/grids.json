@@ -1396,6 +1396,7 @@
         "dataType": "string",
         "groupIndex": 0,
         "groupCellTemplate": "groupCellButtonsTemplate",
+        "calculateCellValue": "calculateDescription",
         "visible": true
       },
       {
@@ -2893,7 +2894,7 @@
       {
         "dataField": "article.articleDescription.descriptionReferenceLongue",
         "allowEditing": false,
-        "cssClass": "small-left-padding article-column",
+        "cssClass": "small-side-padding article-column",
         "fixed": true,
         "visible": true
       },
@@ -3135,7 +3136,7 @@
         "dataField": "libelleDLV",
         "visible": true,
         "allowSorting": false,
-        "cssClass": "headerCellBtnTemplate small-side-padding ",
+        "cssClass": "headerCellBtnTemplate multi-line-header",
         "headerCellTemplate": "headerCellBtnTemplate"
       },
       {

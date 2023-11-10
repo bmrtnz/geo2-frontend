@@ -197,6 +197,7 @@
     *ngFor="let column of this.columns | async"
     [fixed]="column.fixed"
     [width]="column.width"
+    [encodeHtml]="false"
     [dataField]="column.dataField"
     [allowEditing]="column.allowEditing"
     [allowSorting]="false"
@@ -206,6 +207,9 @@
     [calculateDisplayValue]="
       column.dataField === 'fournisseur.id'
         ? calculateFournisseurDisplayValue
+        : column.dataField ===
+          'article.articleDescription.descriptionReferenceLongue'
+        ? calculateDescriptionDisplayValue
         : column?.calculateDisplayValue
         ? (column.calculateDisplayValue | evalDisplay)
         : column?.dataField

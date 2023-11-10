@@ -53,7 +53,7 @@
     position: relative;
     margin-top: 3px;
     height: auto;
-    width: 400px;
+    width: 600px;
     white-space: initial;
     line-height: 16px;
     cursor: pointer;
@@ -112,6 +112,10 @@
 
     .not-france-origin {
       color: #FFC8EA !important;
+    }
+
+    .comment-with-pen {
+      color: #FFF !important;
     }
   }
 

@@ -461,6 +461,10 @@ export class GridCommandesComponent
                 "article.cahierDesCharge.categorie.cahierDesChargesBlueWhale",
                 "article.matierePremiere.origine.id",
                 "article.matierePremiere.modeCulture.id",
+              ],
+              // Article description
+              ...[
+                "article.normalisation.marque.description",
               ]
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
@@ -727,11 +731,13 @@ export class GridCommandesComponent
           "article.articleDescription.descriptionReferenceCourte",
         ].includes(e.column?.dataField)
       ) {
-        e.cellElement.title = e.value + "\r\n" + this.hintDblClick;
+        e.cellElement.title = this.hintDblClick;
         e.cellElement.classList.add("cursor-pointer");
         // Bio en vert
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
+        if (e.column?.dataField.indexOf("descriptionReferenceLongue"))
+          e.cellElement.classList.add("format-description");
       }
       // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {
@@ -904,6 +910,11 @@ export class GridCommandesComponent
     if (self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id])
       return self.fournisseurDisplayValueStore?.[rowData.fournisseur?.id];
     return rowData.fournisseur?.id ? `${rowData.fournisseur?.code} - ${rowData.fournisseur?.raisonSocial}` : "";
+  }
+
+  calculateDescriptionDisplayValue(rowData) {
+    const marque = rowData.article?.normalisation?.marque?.description;
+    return rowData.article.articleDescription.descriptionReferenceLongue + " marq&nbsp;:&nbsp;" + marque;
   }
 
   onEditorPrepared(e) {
