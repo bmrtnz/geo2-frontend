@@ -185,7 +185,7 @@ export class DuplicationOrdrePopupComponent {
         next: (res) => {
           const numero = res.data?.wDupliqueOrdreOnDuplique?.data?.nordre;
           if (numero) {
-            this.tabContext.openIndicator("loading"); // KEEP THIS!!! See #22195
+            // NB #23103 The openIndicator("loading") has been translated to openOrdre()
             notify(
               this.localization.localize("ordre-cree").replace("&O", numero),
               "success",
