@@ -281,7 +281,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public canalOrdreEdi: any;
   public numeroFacture: string;
   public numeroAvoir: string;
-  public idOrdreAvoir: string;
+  public ordreAvoir: Partial<Ordre>;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [""],
@@ -1495,16 +1495,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshAvoirIndicator() {
     this.numeroAvoir = "";
-    this.idOrdreAvoir = "";
+    this.ordreAvoir = {};
     this.ordresService
       .getOne_v2(this.ordre.id, ["id", "hasLitige"])
       .subscribe(res => {
         if (res.data.ordre.hasLitige) {
-          const litigeDs = this.litigesService.getDataSource_v2(["id", "ordreAvoirClient.id", "ordreAvoirClient.numeroFacture"]);
+          const litigeDs = this.litigesService.getDataSource_v2([
+            "id",
+            "ordreAvoirClient.numero",
+            "ordreAvoirClient.numeroFacture",
+            "ordreAvoirClient.campagne.id",
+            "ordreAvoirClient.societe.id"
+          ]);
           litigeDs.filter(["ordreOrigine.id", "=", this.ordre.id]);
           litigeDs.load().then(res => {
             this.numeroAvoir = (res[0]?.ordreAvoirClient?.numeroFacture) ?? "";
-            this.idOrdreAvoir = res[0]?.ordreAvoirClient?.id;
+            this.ordreAvoir = res[0]?.ordreAvoirClient;
           });
         }
       });
@@ -1694,34 +1700,41 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async viewFacture(titleKey: string, document: Document) {
-    if (!document || !document.isPresent) {
-      notify(
+    console.log(document)
+    if (!document)
+      return notify(
+        this.localization.localize("doc-not-loaded",
+          this.localization.localize(titleKey).toLowerCase()),
+        "error");
+    if (!document.isPresent)
+      return notify(
         this.localization.localize("doc-not-found",
           this.localization.localize(titleKey).toLowerCase()),
         "error");
-      return;
-    }
 
     this.currentFacture = {
       title: this.localization.localize(titleKey),
       document,
     };
-
     this.factureVisible = true;
   }
 
   viewAvoir() {
-    this.ordresService.getOne_v2(this.idOrdreAvoir, [
-      "numeroFacture",
-      "documentFacture.isPresent",
-      "documentFacture.uri",
-      "documentFacture.type"
-    ]).subscribe(res => {
-      this.viewFacture(
-        'ordres-view-avoir-title',
-        res.data.ordre.documentFacture
-      )
-    });
+    this.ordresService.getOneByNumeroAndSocieteAndCampagne(
+      this.ordreAvoir.numero,
+      this.ordreAvoir.societe?.id,
+      this.ordreAvoir.campagne?.id,
+      [
+        "numeroFacture",
+        "documentFacture.isPresent",
+        "documentFacture.uri",
+        "documentFacture.type"
+      ]).subscribe(res => {
+        this.viewFacture(
+          'ordres-view-avoir-title',
+          res.data.ordreByNumeroAndSocieteAndCampagne.documentFacture
+        )
+      });
   }
 
   public async bonAFacturer() {

@@ -402,6 +402,7 @@
     "ordre-annule": "Ordre annulé",
     "ordre-not-found": "Désolé, ordre non trouvé",
     "doc-not-found": "Désolé, {0} non accessible",
+    "doc-not-loaded": "Désolé, erreur de chargement {0}",
     "controle-qualité-popup-title": "Contrôle qualité - N° Ordre : ",
     "text-popup-etdeta-current-order-missing": "Date(s) ETD et/ou ETA non renseignée(s) dans l'ordre en cours",
     "text-popup-etdeta-selected-orders-missing": "Date(s) ETD et/ou ETA non renseignée(s) dans les ordres sélectionnés",
