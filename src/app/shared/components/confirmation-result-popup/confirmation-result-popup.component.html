@@ -15,7 +15,7 @@
   >
   </dxi-toolbar-item>
   <dxi-toolbar-item
-    *ngIf="state === 'WARNING'"
+    [visible]="state === 'WARNING'"
     widget="dxButton"
     toolbar="bottom"
     location="center"
