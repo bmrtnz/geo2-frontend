@@ -163,16 +163,19 @@ export class TabContext {
    */
   public openOrdre(numero: string, campagne?: string, toastInfo?: boolean, specialText?: string) {
     if (!numero) return;
-    toastInfo = toastInfo === undefined ? true : toastInfo;
-    if (toastInfo)
-      notify(
-        (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
-        "info",
-        1500
-      );
-    const campagneID =
-      campagne ?? this.currentCompanyService.getCompany().campagne.id;
-    return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+    this.openIndicator("loading"); // KEEP THIS & the timeout !!! Possible previous order display error See #22195
+    setTimeout(() => {
+      toastInfo = toastInfo === undefined ? true : toastInfo;
+      if (toastInfo)
+        notify(
+          (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
+          "info",
+          1500
+        );
+      const campagneID =
+        campagne ?? this.currentCompanyService.getCompany().campagne.id;
+      return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+    }, 100);
   }
 
   /**
@@ -195,7 +198,7 @@ export class TabContext {
   }
 
   private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
-    const previous = this.componentRef.route.snapshot.paramMap.get(
+    let previous = this.componentRef.route.snapshot.paramMap.get(
       RouteParam.TabID
     );
     const alter = (params: ParamMap) =>
@@ -203,19 +206,18 @@ export class TabContext {
         ? new Set([...params.getAll(tabType), id])
         : new Set([...params.getAll(tabType)].filter((v) => v !== id));
 
-    let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
-    navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
+    if (action === "CLOSE") previous = TAB_HOME_ID;
 
     this.route.queryParamMap
       .pipe(
         first(),
         switchMap((params) =>
-          this.router.navigate(["pages/ordres", action === "OPEN" ? id : navID], {
+          this.router.navigate(["pages/ordres", id], {
             queryParams: {
               [tabType]: [...alter(params)],
             },
             queryParamsHandling: "merge",
-            state: { [PREVIOUS_STATE]: action === "OPEN" ? previous : TAB_HOME_ID },
+            state: { [PREVIOUS_STATE]: (previous !== TAB_LOAD_ID) ? previous : TAB_HOME_ID },
           })
         )
       )
