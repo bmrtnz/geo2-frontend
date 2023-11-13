@@ -257,7 +257,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     this.dataSource = null;
 
     this.setGridTitle();
-    setTimeout(() => this.grid.instance.beginCustomLoading(""), 100);
+    setTimeout(() => this.grid.instance.beginCustomLoading(""), 50);
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
