@@ -102,10 +102,11 @@
           type="default"
           *ngIf="validator.instance"
           [disabled]="
-            !validator.instance.validate().isValid &&
-            !validatorTextarea.instance.validate().isValid &&
-            !validatorSB.instance.validate().isValid &&
-            !validatorDate.instance.validate().isValid
+            !shown ||
+            (!validator.instance.validate().isValid &&
+              !validatorTextarea.instance.validate().isValid &&
+              !validatorSB.instance.validate().isValid &&
+              !validatorDate.instance.validate().isValid)
           "
           (onClick)="onSubmit(form)"
         ></dx-button>
