@@ -1,13 +1,5 @@
 import { DatePipe } from "@angular/common";
 import { AfterViewInit, Component, ViewChild } from "@angular/core";
-import {
-  BureauAchat,
-  Client,
-  Entrepot,
-  Fournisseur,
-  Secteur,
-  Transporteur,
-} from "app/shared/models";
 import DeclarationFraude from "app/shared/models/declaration-fraude.model";
 import {
   AuthService,
@@ -36,6 +28,9 @@ import { saveAs } from "file-saver";
 import { of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+
+let self;
+
 @Component({
   selector: "app-declaration-fraude",
   templateUrl: "./declaration-fraude.component.html",
@@ -66,6 +61,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     private localizer: LocalizationService,
     private tabContext: TabContext
   ) {
+    self = this;
     this.periodes = this.dateManagementService.periods();
 
     this.secteurs = secteursService.getDataSource();
@@ -123,6 +119,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
     this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
+
+    // this.secteurSB.value = { id: "GB" }; // A VIRER !!!!!!!!!!!!!!!!
+    // this.clientSB.value = { id: "001234" }; // A VIRER !!!!!!!!!!!!!!!!
   }
 
   setDefaultPeriod(periodId) {
@@ -331,11 +330,6 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       });
   }
 
-  isValue(data, field) {
-    const value = data.data.items[0].items[0][field];
-    return value !== null && value !== undefined;
-  }
-
   setDates(e) {
     // We check that this change is coming from the user, not following a prog change
 
@@ -422,6 +416,12 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     }
   }
 
+  isValue(rowData: Partial<DeclarationFraude>, dataField: string) {
+    const value = rowData[dataField];
+    return value !== null && value !== undefined;
+  }
+
+
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
     return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetClient} kg - ${rowData.origineDescription}`;
   }
@@ -432,6 +432,22 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {
     return `${rowData.paysCode} - ${rowData.paysDescription}`;
+  }
+
+  calculateGroupeOrdreLibelle(rowData: Partial<DeclarationFraude>) {
+    // Ajout client / entrep. + réf client + code transp. ...
+    let gText = `${rowData.numeroOrdre.ucFirst()} `;
+    gText += `${self.localizer.localize("client").ucFirst()} : `;
+    gText += `${rowData.clientCode} / ${rowData.entrepotCode} `;
+    gText += `- ${self.localizer.localize("ref")} : ` + (self.isValue(rowData, "referenceClient") ? `${rowData.referenceClient} ` : ``);
+    gText += self.isValue(rowData, "codeChargement") ? `${rowData.codeChargement} ` : ``;
+    gText += self.isValue(rowData, "etdDate") ? `ETD : ${self.datePipe.transform(rowData.etdDate, "dd-MM-yyyy")} ${rowData.etdLocation} ` : ` `;
+    gText += self.isValue(rowData, "etaDate") ? `ETA : ${self.datePipe.transform(rowData.etaDate, "dd-MM-yyyy")} ${rowData.etaLocation} ` : ` `;
+    gText += `(${self.datePipe.transform(rowData.dateModification, "dd-MM-yyyy hh:mm:ss")}) `;
+    gText += self.isValue(rowData, "commentaireInterne") ? `${self.localizer.localize("fraude-douane")} : ${rowData.commentaireInterne} ` : ``;
+    gText += `${self.localizer.localize("transporteur").ucFirst()} : ${rowData.transporteurCode} `;
+
+    return gText;
   }
 
   onExporting(event: { component: dxDataGrid; cancel: boolean }) {
@@ -462,5 +478,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     event.cancel = true;
   }
 }
+
+String.prototype.ucFirst = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+};
 
 export default DeclarationFraudeComponent;

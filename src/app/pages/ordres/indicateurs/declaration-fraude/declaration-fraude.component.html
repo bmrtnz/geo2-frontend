@@ -228,14 +228,16 @@
     [name]="'dateDepartPrevueFournisseurHead'"
     [groupIndex]="0"
     [dataType]="'date'"
-    [groupCellTemplate]="'groupDPFTemplate'"
+    [format]="'dd-MM-yyyy'"
+    [caption]="'fraude-depart-station' | localize"
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
     [dataField]="'numeroOrdre'"
     [groupIndex]="1"
-    [groupCellTemplate]="'groupOrdreTemplate'"
     [width]="'auto'"
+    [caption]="'fraude-column-numeroOrdre' | localize"
+    [calculateCellValue]="calculateGroupeOrdreLibelle"
   ></dxi-column>
   <dxi-column
     [dataField]="'fournisseurCode'"
@@ -288,6 +290,7 @@
   ></dxi-column>
   <dxi-column
     [dataField]="'pays'"
+    [caption]="'pays-description' | localize"
     [calculateCellValue]="calculatePaysValue"
     [cssClass]="'small-side-padding'"
     [width]="'auto'"
@@ -338,52 +341,4 @@
     >
     </dxi-group-item>
   </dxo-summary> -->
-
-  <div *dxTemplate="let data of 'groupDPFTemplate'">
-    <div>
-      {{ "fraude-depart-station" | localize }}
-      {{ data.value | date : "dd/MM/yyyy" }}
-    </div>
-  </div>
-
-  <div *dxTemplate="let data of 'groupOrdreTemplate'">
-    <div>
-      <span>{{ "order" | localize | titlecase }} : </span>
-      {{ data.value }}
-      <span>{{ "client" | localize | titlecase }} : </span>
-      <span
-        >{{ data.data.items[0].items[0].clientCode }} /
-        {{ data.data.items[0].items[0].entrepotCode }}</span
-      >
-      <span> - Réf. : </span>
-      <span *ngIf="isValue(data, 'referenceClient')">
-        {{ data.data.items[0].items[0].referenceClient }}
-      </span>
-      <span *ngIf="isValue(data, 'codeChargement')">
-        {{ data.data.items[0].items[0].codeChargement }}
-      </span>
-      <span *ngIf="isValue(data, 'etdDate')">
-        ETD : {{ data.data.items[0].items[0].etdDate | date : "dd/MM/yyyy" }}
-        {{ data.data.items[0].items[0].etdLocation }}
-      </span>
-      <span *ngIf="isValue(data, 'etaDate')">
-        ETA : {{ data.data.items[0].items[0].etaDate | date : "dd/MM/yyyy" }}
-        {{ data.data.items[0].items[0].etaLocation }}
-      </span>
-      <span>
-        ({{
-          data.data.items[0].items[0].dateModification
-            | date : "dd/MM/yyyy hh:mm:ss"
-        }})
-      </span>
-      <span *ngIf="isValue(data, 'commentaireInterne')">
-        {{ "fraude-douane" | localize }} :
-        {{ data.data.items[0].items[0].commentaireInterne }}
-      </span>
-      <span>
-        {{ "transporteur" | localize | titlecase }}:
-        {{ data.data.items[0].items[0].transporteurCode }}
-      </span>
-    </div>
-  </div>
 </dx-data-grid>
