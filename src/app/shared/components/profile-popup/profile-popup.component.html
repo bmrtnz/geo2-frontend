@@ -61,6 +61,7 @@
             </div>
           </div>
           <br />
+          <br />
 
           <!-- ----------------- -->
           <!-- Bandeau déroulant -->
@@ -92,6 +93,72 @@
               </div>
             </div>
           </div>
+          <br />
+          <br />
+
+          <!-- --------------------------------->
+          <!-- Position Scrollbar horizontale -->
+          <!-- --------------------------------->
+          <div class="items-title">
+            {{ "text-scrollbar-position" | localize }}
+          </div>
+          <div class="dx-field scrollbar-side-switch">
+            <div class="dx-field-label dx-field-label-left">
+              {{ "top" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-switch
+                [formControlName]="simpleParams[1]"
+                [switchedOnText]=""
+                [switchedOffText]=""
+              ></dx-switch>
+            </div>
+            <div class="dx-field-label dx-field-label-right">
+              {{ "bottom" | localize }}
+            </div>
+            <!-- May be used later ? -->
+            <div class="display-none">
+              <div class="dx-field-label dx-field-label-left">
+                {{ "top" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-switch
+                  [formControlName]="simpleParams[2]"
+                  [switchedOnText]=""
+                  [switchedOffText]=""
+                  [value]="!formGroup.get(simpleParams[1]).value"
+                ></dx-switch>
+              </div>
+              <div class="dx-field-label dx-field-label-right">
+                {{ "bottom" | localize }}
+              </div>
+            </div>
+          </div>
+          <br />
+          <br />
+
+          <!-- ----------------------------->
+          <!-- Affichage Planning Départs -->
+          <!-- ----------------------------->
+          <div class="items-title">
+            {{ "display-panning-departs" | localize }}
+          </div>
+          <div class="dx-field planning-depart-detail-switch">
+            <div class="dx-field-label dx-field-label-left">
+              {{ "all" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-switch
+                [formControlName]="simpleParams[3]"
+                [switchedOnText]=""
+                [switchedOffText]=""
+              ></dx-switch>
+            </div>
+            <div class="dx-field-label dx-field-label-right">
+              {{ "ecarts-uniq-details-non-envoyes" | localize }}
+            </div>
+          </div>
+          <br />
           <br />
 
           <!-- ---------------- -->
@@ -126,19 +193,22 @@
             </div>
           </div>
 
+          <!-- --------------- -->
+          <!-- Save ou annuler -->
+          <!-- --------------- -->
           <div style="clear: both"></div>
           <br />
           <div class="popup-buttons-container">
+            <dx-button
+              type="default"
+              text="{{ 'btn-annuler' | localize }}"
+              (onClick)="cancelClick()"
+            ></dx-button>
             <dx-button
               type="normal"
               text="{{ 'btn-appliquer' | localize }}"
               [disabled]="formGroup?.pristine"
               (onClick)="saveAndHidePopup()"
-            ></dx-button>
-            <dx-button
-              type="default"
-              text="{{ 'btn-annuler' | localize }}"
-              (onClick)="cancelClick()"
             ></dx-button>
           </div>
         </form>

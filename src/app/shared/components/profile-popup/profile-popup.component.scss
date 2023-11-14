@@ -54,15 +54,15 @@
     }
 
     .items-title {
+      display: inline-block;
       position: relative;
-      margin-bottom: 10px;
+      margin: 0 10px 10px 0;
       color: $base-accent;
     }
 
     .small-option-button {
       position: absolute;
       right: 25px;
-      margin-top: -28px;
       height: 18px;
       min-width: 0;
       padding: 0 4px !important;
@@ -78,9 +78,76 @@
       }
 
       &.admin-option-button {
+        position: relative;
+        right: auto;
+        margin: -3px 0 0 0;
         pointer-events: none;
       }
 
+    }
+
+
+    .planning-depart-detail-switch {
+      background: #F5F5F5;
+      padding: 10px;
+
+      .dx-field-value {
+        width: 33px !important;
+
+        dx-switch {
+          margin: 0;
+        }
+      }
+
+      .dx-field-label {
+        width: 40% !important;
+
+        &.dx-field-label-left {
+          margin-right: 1px;
+          width: 50px !important;
+          text-align: right !important;
+        }
+
+        &.dx-field-label-right {
+          margin-left: 10px;
+          width: 80% !important;
+          text-align: left !important;
+        }
+      }
+    }
+
+    .scrollbar-side-switch {
+      background: #F5F5F5;
+      padding: 10px;
+
+      .dx-field-value {
+        margin-top: 9px;
+        width: 33px !important;
+
+        dx-switch {
+          margin: 0;
+          transform: rotate(270deg);
+        }
+      }
+
+      .dx-field-label {
+        margin-top: 9px;
+        width: 40% !important;
+
+        &.dx-field-label-left {
+          margin-right: 1px;
+          margin-top: -15px;
+          width: 50px !important;
+          text-align: right !important;
+        }
+
+        &.dx-field-label-right {
+          margin-left: 10px;
+          margin-top: 19px;
+          width: 50px !important;
+          text-align: left !important;
+        }
+      }
     }
 
     .to-report-list {

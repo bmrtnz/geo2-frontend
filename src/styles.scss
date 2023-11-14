@@ -13,6 +13,11 @@
 @import "scss/dx/form";
 @import "scss/dx/accordion";
 
+
+:root {
+  --pos-scrollbar: 0;
+}
+
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -245,9 +250,9 @@ body app-root.production {
   }
 }
 
-// Datagrid horizontal scrollbar on top
+// Datagrid horizontal scrollbar on top - linked to user profile setting
 .dx-scrollbar-horizontal {
-  top: 0;
+  top: var(--pos-scrollbar);
 }
 
 .dx-scrollbar-horizontal,
