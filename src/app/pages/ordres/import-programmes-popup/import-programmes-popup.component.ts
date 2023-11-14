@@ -106,7 +106,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
     if (!DSitems?.length) return this.noDataError();
 
-    if (this.programID === Program.PRÉORDRES) {
+    if ([Program.PRÉORDRES, Program.ORCHARD].map(p => p.toString()).includes(this.programID)) {
       const ordreNums = DSitems.filter(item => !item.erreurs.length).map(item => item.ordreNum);
       const response = await this.handleConfirmationsCommande(ordreNums);
       response.forEach(({ ordreNum, envoisDone }) => {
