@@ -166,9 +166,9 @@ export class GridEncoursClientComponent implements OnChanges {
     this.formGroup.patchValue({
       encoursTotal: null,
       encoursAutorise:
-        (values.client.agrement ?? 0) +
-        (values.client.enCoursTemporaire ?? 0) +
-        (values.client.enCoursBlueWhale ?? 0),
+        (values.client.agrement ? values.client.agrement : 0) +
+        (values.client.enCoursTemporaire ? values.client.enCoursTemporaire : 0) +
+        (values.client.enCoursBlueWhale ? values.client.enCoursBlueWhale : 0),
       encoursRetard: null,
       encoursDepassement: null,
     });
@@ -215,7 +215,7 @@ export class GridEncoursClientComponent implements OnChanges {
     this.sumDebit = 0;
     this.sumCredit = 0;
     data.map((enc) => {
-      const montant = enc.cfcMontantDevise ?? enc.cfcMontantEuros;
+      const montant = enc.cfcMontantDevise ? enc.cfcMontantDevise : enc.cfcMontantEuros;
       if (enc.cfcSens === "D") {
         encTotal += montant;
         encTotalEuros += enc.cfcMontantEuros;
@@ -252,13 +252,13 @@ export class GridEncoursClientComponent implements OnChanges {
 
   calculateMontantEuroValue(rowData) {
     // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
-    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    const montant = rowData.cfcMontantDevise ? rowData.cfcMontantDevise : rowData.cfcMontantEuros;
     return rowData.cfcSens === "C" ? null : montant;
   }
 
   calculateMontantDeviseValue(rowData) {
     // Columns Credit and Debit display management (D : cfcMontantEuros - C : cfcMontantDevise)
-    const montant = rowData.cfcMontantDevise ?? rowData.cfcMontantEuros;
+    const montant = rowData.cfcMontantDevise ? rowData.cfcMontantDevise : rowData.cfcMontantEuros;
     return rowData.cfcSens === "C" ? montant : null;
   }
 
