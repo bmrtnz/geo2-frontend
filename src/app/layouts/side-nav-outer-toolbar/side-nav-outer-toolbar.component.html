@@ -17,6 +17,7 @@
   [(opened)]="menuOpened"
 >
   <!-- [compactMode]="!menuOpened" -->
+
   <app-side-navigation-menu
     [items]="menuItems"
     [compactMode]="false"
@@ -33,6 +34,16 @@
     [useNative]="true"
     (onScroll)="onScroll($event)"
   >
+    <div class="info-banner">
+      <div
+        class="banner-text"
+        [ngClass]="{ 'anim-banner-text': true }"
+      >
+        Ce texte est un exemple de texte à faire défiler To make text scroll
+        right-to-left, place it inside a div with the id scroll-text . This
+        element will move inside its container div
+      </div>
+    </div>
     <div class="content">
       <ng-content></ng-content>
     </div>

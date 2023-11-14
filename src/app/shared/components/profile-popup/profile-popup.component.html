@@ -16,7 +16,6 @@
   [hideOnOutsideClick]="true"
   [(visible)]="visible"
   [width]="700"
-  [height]="'auto'"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
   (onHidden)="onHidden()"
@@ -40,75 +39,110 @@
   </div>
 
   <div *dxTemplate="let data of 'content'">
-    <div id="profil-content">
-      <form [formGroup]="formGroup">
-        <!-- ------- -->
-        <!-- Période -->
-        <!-- ------- -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-periode-utilisateur" | localize }}
+    <dx-scroll-view>
+      <div id="profile-content">
+        <form [formGroup]="formGroup">
+          <!-- ------- -->
+          <!-- Période -->
+          <!-- ------- -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "ordres-periode-utilisateur" | localize }}
+            </div>
+            <div class="dx-field-value period-value">
+              <dx-select-box
+                formControlName="periode"
+                [items]="periodes"
+                [valueExpr]="'id'"
+                [showClearButton]="true"
+                [displayExpr]="dateManagementService.displayPeriodText"
+              >
+              </dx-select-box>
+            </div>
           </div>
-          <div class="dx-field-value period-value">
-            <dx-select-box
-              formControlName="periode"
-              [items]="periodes"
-              [valueExpr]="'id'"
-              [showClearButton]="true"
-              [displayExpr]="dateManagementService.displayPeriodText"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-        <br />
+          <br />
 
-        <!-- ---------------- -->
-        <!-- Boutons reporter -->
-        <!-- ---------------- -->
-        <div class="items-title">
-          {{ "text-report-items" | localize }}
-        </div>
-        <dx-button
-          class="report-reset-button"
-          type="success"
-          [focusStateEnabled]="false"
-          [text]="'btn-reinit' | localize"
-          (onClick)="resetAllReportCheckboxes()"
-        ></dx-button>
-        <div class="to-report-list">
-          <div
-            *ngFor="let item of reportedItems"
-            class="to-report-item"
-          >
-            <div class="dx-field field-large midLarge">
-              <div class="dx-field-value">
-                <dx-check-box [formControlName]="item.name"></dx-check-box>
-              </div>
-              <div class="dx-field-label">
-                {{
-                  "ordreLignes-" + item.caption?.split(".").join("-") | localize
-                }}
+          <!-- ----------------- -->
+          <!-- Bandeau déroulant -->
+          <!-- ----------------- -->
+          <div class="items-title">
+            {{ "text-general-banner" | localize }}
+          </div>
+          <dx-button
+            class="admin-option-button small-option-button"
+            type="danger"
+            [focusStateEnabled]="false"
+            [text]="'btn-admin' | localize"
+          ></dx-button>
+          <div class="to-report-list">
+            <div
+              *ngFor="let item of reportedItems"
+              class="to-report-item"
+            >
+              <div class="dx-field field-large midLarge">
+                <div class="dx-field-value">
+                  <dx-check-box [formControlName]="item.name"></dx-check-box>
+                </div>
+                <div class="dx-field-label">
+                  {{
+                    "ordreLignes-" + item.caption?.split(".").join("-")
+                      | localize
+                  }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <br />
 
-        <div style="clear: both"></div>
-        <br />
-        <div class="popup-buttons-container">
+          <!-- ---------------- -->
+          <!-- Boutons reporter -->
+          <!-- ---------------- -->
+          <div class="items-title">
+            {{ "text-report-items" | localize }}
+          </div>
           <dx-button
-            type="normal"
-            text="{{ 'btn-appliquer' | localize }}"
-            [disabled]="formGroup?.pristine"
-            (onClick)="saveAndHidePopup()"
+            class="report-reset-button small-option-button"
+            type="success"
+            [focusStateEnabled]="false"
+            [text]="'btn-reinit' | localize"
+            (onClick)="resetAllReportCheckboxes()"
           ></dx-button>
-          <dx-button
-            type="default"
-            text="{{ 'btn-annuler' | localize }}"
-            (onClick)="cancelClick()"
-          ></dx-button>
-        </div>
-      </form>
-    </div>
+          <div class="to-report-list">
+            <div
+              *ngFor="let item of reportedItems"
+              class="to-report-item"
+            >
+              <div class="dx-field field-large midLarge">
+                <div class="dx-field-value">
+                  <dx-check-box [formControlName]="item.name"></dx-check-box>
+                </div>
+                <div class="dx-field-label">
+                  {{
+                    "ordreLignes-" + item.caption?.split(".").join("-")
+                      | localize
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="clear: both"></div>
+          <br />
+          <div class="popup-buttons-container">
+            <dx-button
+              type="normal"
+              text="{{ 'btn-appliquer' | localize }}"
+              [disabled]="formGroup?.pristine"
+              (onClick)="saveAndHidePopup()"
+            ></dx-button>
+            <dx-button
+              type="default"
+              text="{{ 'btn-annuler' | localize }}"
+              (onClick)="cancelClick()"
+            ></dx-button>
+          </div>
+        </form>
+      </div>
+    </dx-scroll-view>
   </div>
 </dx-popup>
