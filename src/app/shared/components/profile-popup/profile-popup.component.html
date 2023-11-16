@@ -150,7 +150,61 @@
                     {{ "actif" | localize }}
                   </div>
                   <div class="dx-field-value">
-                    <dx-switch [formControlName]="simpleParams[4]"></dx-switch>
+                    <dx-switch
+                      [formControlName]="simpleParams[4]"
+                      (onValueChanged)="messageValidator?.instance?.validate()"
+                    ></dx-switch>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Date de début -->
+              <div class="admin-banner-date">
+                <div
+                  class="dx-field small-box-format"
+                  [ngClass]="{
+                    disabled: !formGroup?.get(simpleParams[4])?.value
+                  }"
+                >
+                  <div class="dx-field-label dx-field-label-small">
+                    {{ firstUpper(localizeService.localize("debut")) }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-check-box
+                      #bandeauDateDebCB
+                      [focusStateEnabled]="false"
+                      (onValueChanged)="onBannerDateDebClick($event)"
+                    ></dx-check-box>
+                  </div>
+                </div>
+                <div
+                  class="dx-field date-box-format"
+                  [ngClass]="{
+                    disabled: !formGroup?.get(simpleParams[4])?.value
+                  }"
+                >
+                  <div class="dx-field-value">
+                    <dx-date-box
+                      #dateDeb
+                      [disabled]="
+                        !formGroup?.get(simpleParams[4])?.value ||
+                        !bandeauDateDebCB.value
+                      "
+                      [formControlName]="simpleParams[8]"
+                      [displayFormat]="'dd-MM-yyyy  à  HH:mm:ss   (EEEE)'"
+                      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+                      type="datetime"
+                      (onValueChanged)="dateFinValidator?.instance?.validate()"
+                    >
+                      <dx-validator #dateDebValidator>
+                        <dxi-validation-rule
+                          *ngIf="!!formGroup?.get(simpleParams[8])?.value"
+                          type="async"
+                          message="{{ 'warning-wrong-date' | localize }}"
+                          [validationCallback]="checkValidDebDate"
+                        ></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-date-box>
                   </div>
                 </div>
               </div>
@@ -163,14 +217,14 @@
                     disabled: !formGroup?.get(simpleParams[4])?.value
                   }"
                 >
-                  <div class="dx-field-label dx-field-label-very-small">
+                  <div class="dx-field-label dx-field-label-small">
                     {{ firstUpper(localizeService.localize("fin")) }}
                   </div>
                   <div class="dx-field-value">
                     <dx-check-box
-                      #bandeauDateCB
+                      #bandeauDateFinCB
                       [focusStateEnabled]="false"
-                      (onValueChanged)="onBannerDateClick($event)"
+                      (onValueChanged)="onBannerDateFinClick($event)"
                     ></dx-check-box>
                   </div>
                 </div>
@@ -182,21 +236,23 @@
                 >
                   <div class="dx-field-value">
                     <dx-date-box
+                      #dateFin
                       [disabled]="
                         !formGroup?.get(simpleParams[4])?.value ||
-                        !bandeauDateCB.value
+                        !bandeauDateFinCB.value
                       "
-                      [formControlName]="simpleParams[8]"
-                      [displayFormat]="'dd-MM-yyyy  à  HH:mm   (EEEE)'"
+                      [formControlName]="simpleParams[9]"
+                      [displayFormat]="'dd-MM-yyyy  à  HH:mm:ss   (EEEE)'"
                       dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                       type="datetime"
+                      (onValueChanged)="dateDebValidator?.instance?.validate()"
                     >
-                      <dx-validator #dateValidator>
+                      <dx-validator #dateFinValidator>
                         <dxi-validation-rule
-                          *ngIf="formGroup?.get(simpleParams[8])?.value"
+                          *ngIf="!!formGroup?.get(simpleParams[9])?.value"
                           type="async"
-                          message="{{ 'warning-old-date' | localize }}"
-                          [validationCallback]="checkValidDate"
+                          message="{{ 'warning-out-wrong-date' | localize }}"
+                          [validationCallback]="checkValidFinDate"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-date-box>
@@ -225,17 +281,17 @@
                       fieldTemplate="field"
                     >
                       <div *dxTemplate="let data of 'field'">
-                        <dx-text-area
-                          class="input-text-box"
-                          [value]="data"
-                        ></dx-text-area>
+                        <dx-text-area [value]="data"></dx-text-area>
                       </div>
-                      <dx-validator name="{{ 'displayed-message' | localize }}">
+                      <dx-validator
+                        #messageValidator
+                        name="{{ 'displayed-message' | localize }}"
+                      >
                         <dxi-validation-rule
                           *ngIf="formGroup?.get(simpleParams[4])?.value"
                           type="stringLength"
                           [min]="2"
-                          [max]="280"
+                          [max]="1024"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-select-box>

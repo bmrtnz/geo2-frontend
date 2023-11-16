@@ -8,18 +8,6 @@ $light-grey: rgba(0, 0, 0, 0.2);
   width: 20px;
 }
 
-.admin-type-warning {
-  background-color: #FF325A !important;
-}
-
-.admin-type-success {
-  background-color: #8FC459 !important;
-}
-
-.admin-type-info {
-  background-color: #B2D5E1 !important;
-}
-
 ::ng-deep .profile-popup {
 
   .dx-template-wrapper.dx-popup-title {
@@ -57,6 +45,8 @@ $light-grey: rgba(0, 0, 0, 0.2);
 
     .dx-invalid-message>.dx-overlay-content {
       background-color: rgba(255, 255, 255, 0);
+      font-size: 12px;
+      padding: 0 8px 4px 0px;
     }
 
     .midLarge {
@@ -133,8 +123,9 @@ $light-grey: rgba(0, 0, 0, 0.2);
           text-align: right !important;
         }
 
-        &.dx-field-label-very-small {
-          width: 20px !important;
+        &.dx-field-label-small {
+          width: 60px !important;
+          text-align: right !important;
         }
 
         &.dx-field-label-right {

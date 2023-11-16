@@ -18,6 +18,7 @@ import {
   DxCheckBoxComponent,
   DxScrollViewComponent,
   DxValidatorComponent,
+  DxDateBoxComponent,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -37,9 +38,13 @@ let self;
 })
 export class ProfilePopupComponent {
 
-  @ViewChild("form") NgForm: any;
-  @ViewChild("bandeauDateCB", { static: false }) bandeauDateCB: DxCheckBoxComponent;
-  @ViewChild("dateValidator", { static: false }) dateValidator: DxValidatorComponent;
+  @ViewChild("bandeauDateDebCB", { static: false }) bandeauDateDebCB: DxCheckBoxComponent;
+  @ViewChild("bandeauDateFinCB", { static: false }) bandeauDateFinCB: DxCheckBoxComponent;
+  @ViewChild("dateDeb", { static: false }) dateDeb: DxDateBoxComponent;
+  @ViewChild("dateFin", { static: false }) dateFin: DxDateBoxComponent;
+  @ViewChild("dateDebValidator", { static: false }) dateDebValidator: DxValidatorComponent;
+  @ViewChild("dateFinValidator", { static: false }) dateFinValidator: DxValidatorComponent;
+  @ViewChild("messageValidator", { static: false }) messageValidator: DxValidatorComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   public visible: boolean;
@@ -61,9 +66,10 @@ export class ProfilePopupComponent {
     "bandeauType",
     "bandeauTexte",
     "bandeauScroll",
-    "bandeauDateFIn"
+    "bandeauDateDeb",
+    "bandeauDateFin",
   ];
-  public infoMessage = [];
+  public infoMessage: string[];
   public typeMessage = [
     {
       id: "info"
@@ -111,6 +117,7 @@ export class ProfilePopupComponent {
   }
 
   onShown() {
+    this.infoMessage = [];
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0); // Scroll top
     // Apply all parameters to widgets
     // Standard
@@ -124,18 +131,26 @@ export class ProfilePopupComponent {
         item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
+    const bannerInfo = window.localStorage.getItem("bannerInfo");
+    if (bannerInfo) {
+      const bandeau = JSON.parse(bannerInfo);
+      if (bandeau[this.simpleParams[8]]) this.bandeauDateDebCB.value = true;
+      if (bandeau[this.simpleParams[9]]) this.bandeauDateFinCB.value = true;
+      this.simpleParams.map(prop => {
+        if (prop.indexOf("bandeau") === 0) this.formGroup.get(prop).patchValue(bandeau[prop]);
+      });
+      // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
+      this.infoMessage.push(bandeau[this.simpleParams[6]])
+    }
     // Unuseful for the moment but in case of...
     this.formGroup.get(this.simpleParams[2]).setValue(!this.formGroup.get(this.simpleParams[1]).value);
-
-
-    this.formGroup.get(this.simpleParams[4]).setValue(true); /// !!!! A VIRER
-    this.formGroup.get(this.simpleParams[5]).setValue(this.typeMessage[1].id); /// !!!! A VIRER
-    this.formGroup.get(this.simpleParams[7]).setValue(true); /// !!!! A VIRER
   }
 
   onHidden() {
     // Reset fields
     this.simpleParams.map(param => this.formGroup.get(param).reset());
+    this.bandeauDateDebCB.value = false;
+    this.bandeauDateFinCB.value = false;
     this.reportedItems
       .filter((item) => !item.mandatoryValue)
       .map((item) => {
@@ -189,12 +204,14 @@ export class ProfilePopupComponent {
 
     // Save banner info
     if (Object.keys(bannerInfo).length) {
+      console.log("save ", bannerInfo)
       window.localStorage.setItem("bannerInfo", JSON.stringify(bannerInfo));
       notify(
         this.localizeService.localize("user-profile-saved"),
         "success",
         2500
       );
+      this.hidePopup();
     }
 
     // Save user info
@@ -252,15 +269,29 @@ export class ProfilePopupComponent {
   // Specific option functions
   ////////////////////////////////
 
-  async checkValidDate(e) {
-    return new Date(e?.value) > new Date();
+  async checkValidFinDate(e) {
+    const isDeltaValid = (!self.bandeauDateDebCB?.value || (new Date(e?.value) > new Date(self.formGroup.get(self.simpleParams[8])?.value)));
+    return isDeltaValid && new Date(e?.value) > new Date();
   }
 
-  onBannerDateClick(e) {
+  async checkValidDebDate(e) {
+    const isDeltaValid = (!self.bandeauDateFinCB?.value || (new Date(e?.value) < new Date(self.formGroup.get(self.simpleParams[9])?.value)));
+    return isDeltaValid;
+  }
+
+  onBannerDateDebClick(e) {
     if (!e.event) return; // Only user event
-    const date = this.dateMgt.datePipe.transform(this.dateMgt.addHours(new Date(), 1).valueOf(), "yyyy-MM-ddTHH:mm:ss");
+    const date = this.dateMgt.datePipe.transform(new Date().setSeconds(0).valueOf(), "yyyy-MM-ddTHH:mm:ss");
     this.formGroup.get(this.simpleParams[8]).patchValue(e.value ? date : null);
     this.formGroup.get(this.simpleParams[8]).markAsDirty();
+  }
+
+  onBannerDateFinClick(e) {
+    if (!e.event) return; // Only user event
+    let date = this.dateMgt.datePipe.transform(this.dateMgt.addHours(new Date(), 1).valueOf(), "yyyy-MM-ddTHH:mm:ss");
+    date = date.slice(0, -2) + "00";
+    this.formGroup.get(this.simpleParams[9]).patchValue(e.value ? date : null);
+    this.formGroup.get(this.simpleParams[9]).markAsDirty();
   }
 
 }

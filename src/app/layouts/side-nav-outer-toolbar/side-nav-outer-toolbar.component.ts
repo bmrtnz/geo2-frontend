@@ -49,6 +49,11 @@ export class SideNavOuterToolbarComponent implements OnInit {
   menuRevealMode = "expand";
   minMenuSize = 0;
   shaderEnabled = false;
+  mainBannerInterval: any;
+  bannerVisible = false;
+
+  public bannerInfo: any;
+
 
   constructor(
     private screen: ScreenService,
@@ -74,6 +79,20 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
     // Show red badges (unvalidated forms)
     this.validationService.showToValidateBadges();
+
+    // Starts banner info retrieval
+    clearInterval(this.mainBannerInterval);
+    this.mainBannerInterval = setInterval(() => {
+      const banner = window.localStorage.getItem("bannerInfo");
+      if (banner) {
+        this.bannerInfo = JSON.parse(banner);
+        const timingOk = (!this.bannerInfo?.bandeauDateDeb || (this.bannerInfo?.bandeauDateDeb &&
+          new Date() > new Date(this.bannerInfo?.bandeauDateDeb))) &&
+          (!this.bannerInfo?.bandeauDateFin || (this.bannerInfo?.bandeauDateFin && new Date() < new Date(this.bannerInfo?.bandeauDateFin)));
+        this.bannerVisible = this.bannerInfo?.bandeauActif && timingOk;
+      }
+    }, 1000);
+
   }
 
   onScroll(e) {

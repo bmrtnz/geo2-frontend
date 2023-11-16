@@ -850,3 +850,56 @@ body app-root.production {
     }
   }
 }
+
+////////////////////////////
+/// Banner
+////////////////////////////
+
+// Used for banner background
+
+.info-banner {
+  position: fixed !important;
+  width: 100%;
+  height: 20px;
+  background-color: #FE3B2F;
+  line-height: 18px !important;
+  font-size: 15px;
+  overflow: hidden;
+  z-index: 1000;
+
+  .banner-text {
+    color: #FFF;
+    text-align: center;
+  }
+}
+
+.anim-banner-text {
+  transform: translateX(100%);
+  animation: my-animation 60s linear infinite;
+}
+
+@keyframes my-animation {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.admin-type-warning {
+  background-color: #FF325A !important;
+}
+
+.admin-type-success {
+  background-color: #8FC459 !important;
+}
+
+.admin-type-info {
+  background-color: #B2D5E1 !important;
+
+  div {
+    color: rgba(0, 0, 0, 0.8) !important;
+  }
+}
