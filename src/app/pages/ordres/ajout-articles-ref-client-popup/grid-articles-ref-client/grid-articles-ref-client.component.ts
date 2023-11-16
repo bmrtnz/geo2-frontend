@@ -28,7 +28,8 @@ import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
+import { ZoomArticlePopupComponent } from "../../zoom-article-popup/zoom-article-popup.component";
 
 @Component({
   selector: "app-grid-articles-ref-client",
@@ -46,17 +47,16 @@ export class GridArticlesRefClientComponent
   articles: DataSource;
   contentReadyEvent = new EventEmitter<any>();
   apiService: ApiService;
-  @ViewChild(DxDataGridComponent, { static: true })
-  dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: true }) dataGrid: DxDataGridComponent;
+  @ViewChild(ZoomArticlePopupComponent, { static: false }) zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild("especeSB", { static: false }) especesSB: DxSelectBoxComponent;
   @ViewChild("varieteSB", { static: false }) varietesSB: DxSelectBoxComponent;
-  @ViewChild("modesCultureSB", { static: false })
-  modesCultureSB: DxSelectBoxComponent;
+  @ViewChild("modesCultureSB", { static: false }) modesCultureSB: DxSelectBoxComponent;
   @ViewChild("groupeSB") groupesSB: DxSelectBoxComponent;
-  @ViewChild("emballageSB", { static: false })
-  emballagesSB: DxSelectBoxComponent;
+  @ViewChild("emballageSB", { static: false }) emballagesSB: DxSelectBoxComponent;
   @ViewChild("origineSB", { static: false }) originesSB: DxSelectBoxComponent;
   @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
+
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   columnChooser = environment.columnChooser;
@@ -69,6 +69,7 @@ export class GridArticlesRefClientComponent
   origines: Observable<DataSource>;
   trueFalse: any;
   allGridFilters: any;
+  public articleLigneId: string;
 
   constructor(
     public articlesService: ArticlesService,
@@ -181,13 +182,25 @@ export class GridArticlesRefClientComponent
 
   onCellPrepared(e) {
     // Best expression for emballage display
-    if (
-      e.rowType === "data" &&
-      e.column.dataField === "emballage.emballage.description"
-    ) {
-      e.cellElement.textContent =
-        e.data.emballage.emballage.id + " - " + e.value;
+    if (e.rowType === "data") {
+      if (e.column.dataField === "emballage.emballage.description")
+        e.cellElement.textContent = e.data.emballage.emballage.id + " - " + e.value;
+      if (e.column.dataField === "id") {
+        e.cellElement.title = this.localizeService.localize("hint-click-file");
+        e.cellElement.classList.add("text-underlined");
+      }
     }
+  }
+
+  onCellClick(e) {
+    if (e.column.dataField === "id") {
+      this.openFilePopup(e.data?.id);
+    }
+  }
+
+  openFilePopup(data) {
+    this.articleLigneId = data;
+    if (this.articleLigneId) this.zoomArticlePopup.visible = true;
   }
 
   /**
