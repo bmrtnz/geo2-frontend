@@ -141,10 +141,9 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.authService.currentUser.secteurCommercial) {
-      this.formGroup.get("secteurCommercial").patchValue({
-        id: this.authService.currentUser.secteurCommercial.id,
-        description: this.authService.currentUser.secteurCommercial.description,
-      });
+      this.formGroup.get("secteurCommercial").patchValue([
+        this.authService.currentUser.secteurCommercial
+      ]);
     }
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
   }
@@ -197,12 +196,26 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       "raisonSocial",
     ]);
     this.fournisseurs.filter(["valide", "=", true]);
-    if (bureauAchat)
-      this.fournisseurs.filter([
-        ["valide", "=", true],
-        "and",
-        ["bureauAchat.id", "=", bureauAchat.id],
-      ]);
+    if (bureauAchat) {
+      const bureauAchatFilters = []
+      bureauAchat.forEach((bureauAchat) => {
+        bureauAchatFilters.push(["bureauAchat.id", "=", bureauAchat.id], "or")
+      });
+      if (bureauAchatFilters.length) {
+        bureauAchatFilters.reduce((a, b) => {
+          return a.concat(b);
+        })
+
+        bureauAchatFilters.pop();
+
+        this.fournisseurs.filter([
+          ["valide", "=", true],
+          "and",
+          bureauAchatFilters,
+        ]);
+      }
+    }
+
   }
 
   validOrAll(e) {
@@ -263,18 +276,42 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
       }
     });
 
-    if (values.bureauAchat)
-      filter.push([InputField.bureauAchat, "=", values.bureauAchat]);
+    try {
+      if (values.bureauAchat != null) {
+        if (values.bureauAchat.length) {
+          const bureauAchatFilters = [];
+          values.bureauAchat.forEach((bureauAchat) => {
+            bureauAchatFilters.push([InputField.bureauAchat, "=", bureauAchat], "or");
+          })
+          bureauAchatFilters.pop()
+          filter.push(bureauAchatFilters)
+        }
+      }
 
-    if (values.secteurCommercial)
-      filter.push([
-        InputField.secteurCommercial,
-        "=",
-        values.secteurCommercial,
-      ]);
+      if (values.secteurCommercial != null) {
+        if (values.secteurCommercial.length) {
+          var secteurCommercialFilters = [];
+          values.secteurCommercial.forEach((secteurCommercial) => {
+            secteurCommercialFilters.push([InputField.secteurCommercial, "=", secteurCommercial], "or");
+          })
+          secteurCommercialFilters.pop()
+          filter.push(secteurCommercialFilters)
+        }
+      }
 
-    if (values.fournisseur)
-      filter.push([InputField.fournisseur, "=", values.fournisseur]);
+      if (values.fournisseur != null) {
+        if (values.fournisseur.length) {
+          const fournisseursFilter = [];
+          values.fournisseur.forEach((fournisseur) => {
+            fournisseursFilter.push([InputField.fournisseur, "=", fournisseur], "or");
+          })
+          fournisseursFilter.pop()
+          filter.push(fournisseursFilter)
+        }
+      }
+
+    } catch (error) {
+    }
 
     if (values.from) filter.push([InputField.from, ">=", values.from]);
 
