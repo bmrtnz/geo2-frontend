@@ -48,6 +48,9 @@ export class AuthService {
     "reportPrixAchat",
     "reportPrixVente",
     "reportTypePalette",
+    "barreDefilementHaut",
+    "barreDefilementBas",
+    "diffSurExpedition",
 
     // Autres accès
     "indicateurVisualisationIncotermFournisseur",
@@ -126,6 +129,15 @@ export class AuthService {
       JSON.stringify(this.currentUser)
     );
     this.userChange.next();
+    this.applySpecificParameters(this.currentUser);
+  }
+
+  applySpecificParameters(utilisateur) {
+    // Scrollbar position
+    document.documentElement.style.setProperty(
+      '--pos-scrollbar',
+      utilisateur.barreDefilementHaut ? "0" : "auto"
+    );
   }
 
   logOut() {

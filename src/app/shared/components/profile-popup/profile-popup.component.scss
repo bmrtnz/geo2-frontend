@@ -69,6 +69,70 @@
     }
   }
 
+  .scrollbar-side-switch {
+    background: #F5F5F5;
+    padding: 10px;
+
+    .dx-field-value {
+      margin-top: 9px;
+      width: 33px !important;
+
+      dx-switch {
+        margin: 0;
+        transform: rotate(270deg);
+      }
+    }
+
+    .dx-field-label {
+      margin-top: 9px;
+      width: 40% !important;
+
+      &.dx-field-label-left {
+        margin-right: 1px;
+        margin-top: -15px;
+        width: 50px !important;
+        text-align: right !important;
+      }
+
+      &.dx-field-label-right {
+        margin-left: 10px;
+        margin-top: 19px;
+        width: 50px !important;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .planning-depart-detail-switch {
+    background: #F5F5F5;
+    padding: 10px;
+
+    .dx-field-value {
+      width: 33px !important;
+
+      dx-switch {
+        margin: 0;
+      }
+    }
+
+    .dx-field-label {
+      width: 40% !important;
+
+      &.dx-field-label-left {
+        margin-right: 1px;
+        width: 50px !important;
+        text-align: right !important;
+      }
+
+      &.dx-field-label-right {
+        margin-left: 10px;
+        width: 80% !important;
+        text-align: left !important;
+      }
+    }
+  }
+
+
   .dx-template-wrapper.dx-popup-title {
     overflow: hidden;
     padding: 0 8px 0 24px;

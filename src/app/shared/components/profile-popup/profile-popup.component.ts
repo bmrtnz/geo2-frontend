@@ -14,6 +14,7 @@ import {
   DxLoadPanelModule,
   DxNumberBoxModule,
   DxCheckBoxModule,
+  DxSwitchModule,
   DxPopupModule,
   DxSelectBoxComponent,
   DxSelectBoxModule,
@@ -35,9 +36,7 @@ import Utilisateur from "app/shared/models/utilisateur.model";
   styleUrls: ["./profile-popup.component.scss"]
 })
 export class ProfilePopupComponent {
-  @Input() public ligneDetail: any;
   @ViewChild("form") NgForm: any;
-  @Output() refreshGrid = new EventEmitter();
 
   public visible: boolean;
   public titleStart: string;
@@ -49,8 +48,12 @@ export class ProfilePopupComponent {
   public savingUserPrefs: boolean;
   public reportedItems: any[];
   public formGroup = new UntypedFormGroup({});
-
-  @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
+  public simpleParams = [
+    "periode",
+    "barreDefilementHaut",
+    "barreDefilementBas",
+    "diffSurExpedition"
+  ]
 
   constructor(
     private localizeService: LocalizationService,
@@ -66,7 +69,7 @@ export class ProfilePopupComponent {
 
     this.reportedItems = this.ordreLignesService.reportedItems;
 
-    this.formGroup.addControl("periode", new UntypedFormControl());
+    this.simpleParams.map(param => this.formGroup.addControl(param, new UntypedFormControl()));
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
         value: item.mandatoryValue ?? !!this.authService.currentUser[item.name],
@@ -85,8 +88,10 @@ export class ProfilePopupComponent {
   }
 
   onShown(e) {
-    this.formGroup.get("periode").setValue(
-      this.authService.currentUser?.periode
+    // Apply all parameters to widgets
+    this.simpleParams.map(param =>
+      this.formGroup.get(param).setValue(
+        this.authService.currentUser[param])
     );
     this.reportedItems.map((item) =>
       this.formGroup.get(item.name).setValue(
@@ -96,7 +101,7 @@ export class ProfilePopupComponent {
   }
 
   onHidden() {
-    this.formGroup.get("periode").reset();
+    this.simpleParams.map(param => this.formGroup.get(param).reset());
     this.reportedItems
       .filter((item) => !item.mandatoryValue)
       .map((item) => {
@@ -133,21 +138,13 @@ export class ProfilePopupComponent {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
 
-  messageFormat(mess) {
-    const functionNames = ["saveUtilisateur"];
-    functionNames.map(
-      (fn) =>
-        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
-    );
-    return mess;
-  }
-
   saveAndHidePopup() {
     const utilisateur = this.formUtilsService.extractDirty(
       this.formGroup.controls,
       Utilisateur.getKeyField()
     );
     utilisateur.nomUtilisateur = this.nomUtilisateur;
+    this.authService.applySpecificParameters(utilisateur);
 
     this.savingUserPrefs = true;
     this.utilisateursService.save_v2(
@@ -178,6 +175,15 @@ export class ProfilePopupComponent {
       });
   }
 
+  messageFormat(mess) {
+    const functionNames = ["saveUtilisateur"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    return mess;
+  }
+
   hidePopup() {
     this.visible = false;
   }
@@ -198,6 +204,7 @@ export class ProfilePopupComponent {
     DxNumberBoxModule,
     DxCheckBoxModule,
     DxFormModule,
+    DxSwitchModule,
     DxDateBoxModule,
     FormsModule,
     ReactiveFormsModule,
