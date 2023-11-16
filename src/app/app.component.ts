@@ -79,6 +79,7 @@ export class AppComponent {
         searchMode: "startswith",
         searchEnabled: true,
         onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+        onValueChanged: this.formUtilsService.scrollLeftInputText,
       },
     });
     // The below lookup part seems not to work...

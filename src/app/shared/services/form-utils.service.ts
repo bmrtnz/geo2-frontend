@@ -104,6 +104,12 @@ export class FormUtilsService {
     if (!myInput?.hasAttribute("readonly")) myInput?.select();
   }
 
+  // Scroll left on selection (notably done for long texts in selectboxes)
+  scrollLeftInputText(e: any) {
+    const myInput = e.element?.querySelector("input.dx-texteditor-input");
+    if (myInput?.value?.length) myInput?.setSelectionRange(0, 0);
+  }
+
   // Replace diacritics in a string
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
