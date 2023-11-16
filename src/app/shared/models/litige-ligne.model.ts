@@ -32,6 +32,7 @@ export class LitigeLigne extends Model {
   @Field() public responsableNombreColis?: number;
   @Field() public responsablePoidsNet?: number;
   @Field() public responsablePrixUnitaire?: number;
+  @Field() public devisePrixUnitaire?: number; // Fournisseur dans la devise
   @Field() public responsableQuantite?: number;
   @Field() public responsableUniteFactureCode?: string;
   @Field() public clientIndicateurForfait?: boolean;
