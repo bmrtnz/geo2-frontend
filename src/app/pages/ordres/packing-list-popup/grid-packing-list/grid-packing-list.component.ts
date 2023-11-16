@@ -82,13 +82,18 @@ export class GridPackingListComponent {
       await fields.toPromise()
     );
     // Retrieves all orders from the same entrepot
-    this.dataSource.filter(["entrepot.id", "=", this.entrepotId]);
 
-    // Retrieves orders of less than 60 days
+
+    // Retrieves orders of less than 180 days
+    // and all orders from the same entrepot
     const minDate = new Date();
-    minDate.setDate(minDate.getDate() - 60);
-    this.dataSource.filter(["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")])
-
+    minDate.setDate(minDate.getDate() - 180);
+    const array = [];
+    this.dataSource.filter([
+      ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
+      "and",
+      ["entrepot.id", "=", this.entrepotId]
+    ])
     this.datagrid.dataSource = this.dataSource;
   }
 }
