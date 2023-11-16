@@ -33,29 +33,39 @@
     >
       <div *dxTemplate="let data of 'item'">
         <dx-button
-          class="user-button authorization"
-          height="100%"
-          stylingMode="text"
-        >
-          <div *dxTemplate="let data of 'content'">
-            <app-user-panel
-              [menuItems]="userMenuItems"
-              menuMode="context"
-            ></app-user-panel>
-          </div>
-        </dx-button>
-        <dx-button
-          class="company-button"
-          height="100%"
-          stylingMode="text"
-        >
-          <div *dxTemplate="let data of 'content'">
-            <app-company-chooser-panel
-              [companyItems]="societeSource"
-              menuMode="context"
-            ></app-company-chooser-panel>
-          </div>
-        </dx-button>
+          class="buttonWiki"
+          type="normal"
+          text="{{ 'btn-wiki' | localize }}"
+          hint="{{ 'hint-btn-wiki' | localize }}"
+          (onClick)="browserService.openWikiMain()"
+        ></dx-button>
+        <div class="user-company-box">
+          <dx-button
+            class="user-button authorization"
+            height="100%"
+            stylingMode="text"
+          >
+            <div *dxTemplate="let data of 'content'">
+              <app-user-panel
+                [menuItems]="userMenuItems"
+                menuMode="context"
+              ></app-user-panel>
+            </div>
+          </dx-button>
+
+          <dx-button
+            class="company-button"
+            height="100%"
+            stylingMode="text"
+          >
+            <div *dxTemplate="let data of 'content'">
+              <app-company-chooser-panel
+                [companyItems]="societeSource"
+                menuMode="context"
+              ></app-company-chooser-panel>
+            </div>
+          </dx-button>
+        </div>
       </div>
     </dxi-item>
     <div *dxTemplate="let data of 'menuItem'">
