@@ -9,12 +9,14 @@ import {
   AfterViewInit,
   OnDestroy,
 } from "@angular/core";
+import { VersionService } from "app/shared/services/version.service";
 import {
   DxTreeViewModule,
   DxTreeViewComponent,
 } from "devextreme-angular/ui/tree-view";
 
 import * as events from "devextreme/events";
+import { SharedModule } from "../../shared.module";
 
 @Component({
   selector: "app-side-navigation-menu",
@@ -25,14 +27,11 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   @ViewChild(DxTreeViewComponent, { static: true })
   menu: DxTreeViewComponent;
 
-  @Output()
-  selectedItemChanged = new EventEmitter<string>();
+  @Output() selectedItemChanged = new EventEmitter<string>();
 
-  @Output()
-  openMenu = new EventEmitter<any>();
+  @Output() openMenu = new EventEmitter<any>();
 
-  @Input()
-  items: any[];
+  @Input() items: any[];
 
   @Input()
   set selectedItem(value: string) {
@@ -53,7 +52,16 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  constructor(private elementRef: ElementRef) {}
+  public copyrightYear = "";
+
+  constructor(
+    private elementRef: ElementRef,
+    public versionService: VersionService,
+  ) {
+    const year = new Date().getFullYear();
+    this.copyrightYear = "-" + year;
+  }
+
 
   updateSelection(event) {
     const nodeClass = "dx-treeview-node";
@@ -86,14 +94,11 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     event.component.option("deferRendering", false);
   }
 
-  onItemRendered(e) {
-    // console.log(e.itemData.id)
-  }
-
   ngAfterViewInit() {
     events.on(this.elementRef.nativeElement, "dxclick", (e) => {
       this.openMenu.next(e);
     });
+    this.versionService.updateCopyrightTextDisplay();
   }
 
   ngOnDestroy() {
@@ -102,8 +107,8 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [DxTreeViewModule],
   declarations: [SideNavigationMenuComponent],
   exports: [SideNavigationMenuComponent],
+  imports: [DxTreeViewModule, SharedModule]
 })
-export class SideNavigationMenuModule {}
+export class SideNavigationMenuModule { }

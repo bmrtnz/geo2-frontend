@@ -6,7 +6,6 @@
     width="100%"
     [items]="items"
     (onInitialized)="onMenuInitialized($event)"
-    (onItemRendered)="onItemRendered($event)"
     (onItemClick)="onItemClick($event)"
     (onContentReady)="updateSelection($event)"
     (onSelectionChanged)="updateSelection($event)"
@@ -15,4 +14,12 @@
     keyExpr="path"
   >
   </dx-tree-view>
+  <div></div>
+  <div class="copyright-label bottom-side-nav">
+    {{ versionService.getLabel() }}<br />
+    {{ "copyright" | localize : copyrightYear }} {{ "microtec" | localize }}
+  </div>
+  <div class="copyright-short-label bottom-side-nav">
+    {{ versionService.getShortLabel() }}
+  </div>
 </div>

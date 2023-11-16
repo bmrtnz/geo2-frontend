@@ -2,7 +2,8 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .grid-fraude {
-  max-height: calc(100vh - 425px) !important;
+  margin-top: 5px;
+  max-height: calc(100vh - 300px) !important;
 
   .cursor-pointer {
     cursor: pointer !important;
@@ -39,7 +40,7 @@
   position: absolute;
   height: 20px;
   overflow: hidden;
-  margin: 14px 0 0 19px;
+  margin: 19px 0 0 19px;
   background-color: white;
   font-weight: bold;
   font-size: 17px;
@@ -53,7 +54,11 @@
 
 ::ng-deep .fraud-form {
   .dx-first-col.dx-last-col.dx-field-item.dx-col-0.dx-field-item-optional.dx-field-item-has-group {
-    padding: 5px 0;
+    padding: 0 0 5px 0;
+  }
+
+  .dx-first-row.dx-last-row.dx-field-item {
+    padding: 0 10px !important;
   }
 
   .dx-field-item-label-text {
@@ -63,5 +68,17 @@
 
   .dx-texteditor-input {
     padding: 5px 0 !important;
+  }
+
+  .modified-orders-from label {
+    position: relative;
+    top: -7px;
+    white-space: break-spaces !important;
+  }
+
+  .dx-box-flex.dx-box.dx-widget.dx-collection .dx-box-item:last-of-type .dx-box-item:last-of-type .dx-box-item {
+    &:last-of-type {
+      flex: 0.4 1 0px !important;
+    }
   }
 }

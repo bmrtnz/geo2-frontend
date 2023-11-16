@@ -41,6 +41,9 @@ export class AppComponent {
   ) {
     // Close columnchooser on outside click (non standard)
     document.addEventListener("mousedown", (e) => {
+      // Store as may be useful for some cases
+      window.localStorage.setItem("shiftKey", e?.shiftKey.toString());
+      window.localStorage.setItem("ctrlKey", e?.ctrlKey.toString());
       const el = e.target;
       const context = el as HTMLElement;
       const context2 = context.closest(".dx-datagrid-column-chooser");
@@ -130,12 +133,6 @@ export class AppComponent {
           allowedPageSizes: [10, 20, 50, 100],
           pageSize: 20,
         },
-        // TODO for better keyboard navigation
-        /*keyboardNavigation: {
-          enterKeyAction: "moveFocus",
-          enterKeyDirection: "column",
-          editOnKeyPress: true,
-        }*/
       },
     });
   }

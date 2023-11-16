@@ -3548,7 +3548,6 @@
         "dataField": "ventePrixUnitaire",
         "dataType": "number",
         "calculateCellValue": "calculateVentePrixUnitaire",
-        "width": 100,
         "visible": true
       },
       {
@@ -3556,7 +3555,6 @@
         "dataField": "achatDevisePrixUnitaire",
         "dataType": "number",
         "calculateCellValue": "calculateAchatDevisePrixUnitaire",
-        "width": 100,
         "visible": true
       },
       {
@@ -5232,9 +5230,6 @@
         "dataField": "version"
       },
       {
-        "dataField": "colis"
-      },
-      {
         "dataField": "palette"
       },
       {
@@ -5366,6 +5361,7 @@
       {
         "visibleIndex": 18,
         "dataField": "article.matierePremiere.espece.id",
+        "dataType": "string",
         "visible": false
       },
       {
