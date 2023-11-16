@@ -22,7 +22,7 @@ import { AuthService } from "app/shared/services/auth.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
-import { DxTabPanelComponent } from "devextreme-angular";
+import { DxLoadPanelComponent, DxTabPanelComponent } from "devextreme-angular";
 import { on } from "devextreme/events";
 import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
@@ -250,6 +250,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true }) tabPanel: DxTabPanelComponent;
+  @ViewChild("tabLoadPanel") tabLoadPanel: DxLoadPanelComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -288,7 +289,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         filter<NavigationStart>((event) => event instanceof NavigationStart),
         debounceTime(10),
         switchMapTo(this.handleRouting()),
-        takeUntil(this.destroy)
+        takeUntil(this.destroy),
       )
       .subscribe();
     this.surveyBlockage();
@@ -551,6 +552,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private handleRouting() {
     return of(this.selectTab(TAB_LOAD_ID)).pipe(
+      tap(() => this.tabLoadPanel.visible = true),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap((queries) => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap),
@@ -574,7 +576,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         const item = this.getTabItem(currentParams.get(RouteParam.TabID));
         this.tabChangeEvent.emit({ status: "in", item });
         return of("done");
-      })
+      }),
+      tap(() => this.tabLoadPanel.visible = false),
     );
   }
 

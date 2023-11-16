@@ -87,6 +87,18 @@
     </div>
   </dx-tab-panel>
 
+  <dx-load-panel
+    #tabLoadPanel
+    shadingColor="rgba(0,0,0,0.4)"
+    [position]="{ of: '.dx-tabpanel-tabs' }"
+    [showIndicator]="true"
+    [showPane]="true"
+    [shading]="true"
+    [hideOnOutsideClick]="false"
+    [height]="'40px'"
+    [width]="'40px'"
+  ></dx-load-panel>
+
   <!-- Défilement rapide onglets (droite) -->
   <dx-button
     type="default"
