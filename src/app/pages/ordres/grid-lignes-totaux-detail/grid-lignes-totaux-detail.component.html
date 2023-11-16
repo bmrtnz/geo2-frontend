@@ -43,73 +43,19 @@
     [height]="columnChooser.height"
   >
   </dxo-column-chooser>
-  <dxo-summary [totalItems]="totalItems"></dxo-summary>
-  <dxo-summary>
+  <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
     <dxi-group-item
-      column="nombrePalettesExpediees"
-      summaryType="sum"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
+      *ngFor="let field of summaryFields"
+      [name]="field.column"
+      [column]="field.column"
+      [summaryType]="'custom'"
       [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="nombreColisExpedies"
-      summaryType="sum"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="poidsBrutExpedie"
-      summaryType="sum"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="poidsNetExpedie"
-      summaryType="sum"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="logistique.nombrePalettesAuSol"
-      summaryType="avg"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="logistique.nombrePalettes100x120"
-      summaryType="avg"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="logistique.nombrePalettes80x120"
-      summaryType="avg"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="logistique.nombrePalettes60x80"
-      summaryType="avg"
-      displayFormat="{0}"
-      [showInGroupFooter]="false"
-      [alignByColumn]="true"
+      [displayFormat]="'{0}'"
     >
     </dxi-group-item>
   </dxo-summary>
+  <dxo-summary [totalItems]="totalItems"></dxo-summary>
+
   <dxi-column
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"

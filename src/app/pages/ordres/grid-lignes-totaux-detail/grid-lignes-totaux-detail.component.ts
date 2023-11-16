@@ -19,6 +19,8 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
 
+let self;
+
 @Component({
   selector: "app-grid-lignes-totaux-detail",
   templateUrl: "./grid-lignes-totaux-detail.component.html",
@@ -36,6 +38,7 @@ export class GridLignesTotauxDetailComponent
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public totalItems: TotalItem[] = [];
+  public summaryFields: any[];
 
   constructor(
     private ordreLignesService: OrdreLignesService,
@@ -43,6 +46,17 @@ export class GridLignesTotauxDetailComponent
     private gridsService: GridsService,
     public localizeService: LocalizationService
   ) {
+    self = this;
+    this.summaryFields = [
+      { column: "nombrePalettesExpediees", type: "sum", total: 0 },
+      { column: "nombreColisExpedies", type: "sum", total: 0 },
+      { column: "poidsBrutExpedie", type: "sum", total: 0 },
+      { column: "poidsNetExpedie", type: "sum", total: 0 },
+      { column: "logistique.nombrePalettesAuSol", type: "avg", total: 0 },
+      { column: "logistique.nombrePalettes100x120", type: "avg", total: 0 },
+      { column: "logistique.nombrePalettes80x120", type: "avg", total: 0 },
+      { column: "logistique.nombrePalettes60x80", type: "avg", total: 0 }
+    ];
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdreLignesTotauxDetail
     );
@@ -58,20 +72,9 @@ export class GridLignesTotauxDetailComponent
   }
 
   async enableFilters() {
-    const sumFields = [
-      "nombrePalettesExpediees",
-      "nombreColisExpedies",
-      "poidsBrutExpedie",
-      "poidsNetExpedie",
-      "logistique.nombrePalettesAuSol",
-      "logistique.nombrePalettes100x120",
-      "logistique.nombrePalettes80x120",
-      "logistique.nombrePalettes60x80",
-    ];
-
     const summaryInputs: SummaryInput[] = [];
-    sumFields.map((field) =>
-      summaryInputs.push({ selector: field, summaryType: SummaryType.SUM })
+    this.summaryFields.map((field) =>
+      summaryInputs.push({ selector: field.column, summaryType: SummaryType.SUM })
     );
 
     const columns = await this.columns.toPromise();
@@ -82,8 +85,8 @@ export class GridLignesTotauxDetailComponent
         column,
         summaryType,
         displayFormat: !index
-          ? this.localizeService.localize("totaux") + " : {0}"
-          : "{0}",
+          ? this.localizeService.localize("totaux") + " : "
+          : " ",
         valueFormat: columns?.find(({ dataField }) => dataField === column)
           ?.format,
         showInGroupFooter: true,
@@ -110,6 +113,27 @@ export class GridLignesTotauxDetailComponent
       } else {
         if (e.columnIndex === 0) e.cellElement.textContent = e.data.key;
       }
+    }
+    // Reassigning real total values
+    if (e.rowType === "totalFooter" && e.cellElement.textContent.includes(" ")) {
+      const summaryField = this.summaryFields.find(field => field.column === e.column.dataField);
+      e.cellElement.textContent += summaryField?.total;
+    }
+
+  }
+
+  public calculateCustomSummary(options) {
+    // Calculating real total values
+    if (options.summaryProcess === "start") {
+      options.totalValue = 0;
+      options.count = 0;
+    } else if (options.summaryProcess === "calculate") {
+      options.totalValue += (options.value ?? 0);
+      options.count++;
+    } else if (options.summaryProcess === "finalize") {
+      const field = self.summaryFields.find(field => field.column === options.name);
+      if (field?.type === "avg" && options.count) options.totalValue /= options.count;
+      field.total = (field.total ?? 0) + (options.totalValue ?? 0);
     }
   }
 
