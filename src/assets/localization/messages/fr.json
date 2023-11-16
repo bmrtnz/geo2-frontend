@@ -1935,6 +1935,7 @@
     "comptesPalox-fournisseurs-numeroOrdre": "n° Ordre",
     "delete-done": "Suppression effectuée",
     "delete-error": "Erreur lors de la suppression",
+    "ordre-erreur-transporteur": "Un transporteur doit être obligatoirement renseigné",
     "choixEntrepot-id": "id",
     "choixEntrepot-assistante-id": "Assistante entrep.",
     "choixEntrepot-commercial-id": "Commercial entrep.",

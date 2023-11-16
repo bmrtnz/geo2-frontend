@@ -56,7 +56,7 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
-// eslint-disable-next-line max-len
+
 import {
   catchError,
   concatMap,
