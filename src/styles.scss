@@ -2,6 +2,7 @@
 
 // Var
 @import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 // App style
 @import "scss/font";
@@ -17,6 +18,10 @@
 :root {
   --pos-scrollbar: 0;
 }
+
+// Media print style
+@import "scss/print";
+
 
 .img-responsive {
   max-width: 100%;
@@ -469,6 +474,19 @@ body app-root.production {
   display: none;
 }
 
+// Print stuff
+.print-button {
+  background-color: $BW-turquoise-light !important;
+
+  &:hover {
+    background-color: $BW-turquoise-medium !important;
+  }
+}
+
+.print-mode {
+  display: none;
+}
+
 // Better readibility
 .dx-icon-edit-button-addrow {
   background: #8fc459;
@@ -640,6 +658,12 @@ body app-root.production {
 .min-max-imize-popup-icon {
   top: 13px;
   float: right;
+}
+
+.zoom-popup {
+  h2 {
+    font-size: initial;
+  }
 }
 
 // Excel download buttons - grids

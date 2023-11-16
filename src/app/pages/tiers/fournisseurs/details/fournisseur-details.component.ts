@@ -264,7 +264,7 @@ export class FournisseurDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private fournisseursService: FournisseursService,
     private bureauxAchatService: BureauxAchatService,
     private conditionsVenteService: ConditionsVenteService,

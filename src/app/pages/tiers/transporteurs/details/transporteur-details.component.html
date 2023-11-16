@@ -2,16 +2,21 @@
   [formGroup]="formGroup"
   (ngSubmit)="onSubmit()"
 >
-  <div
-    class="content-block"
-    *ngIf="!transporteurLigneId"
-  >
+  <div class="content-block top-info">
     <h2>
-      <span *ngIf="createMode === true">{{ "create" | localize }}</span>
-      {{ "tiers-transporteurs-details-title" | localize
-      }}<span class="red-font"> {{ preSaisie | localize }}</span>
+      <ng-container *ngIf="!transporteurLigneId; else emptyLabel">
+        <span *ngIf="createMode === true">{{ "create" | localize }}</span>
+        {{ "tiers-transporteurs-details-title" | localize }}&nbsp;
+        <span
+          *ngIf="!transporteurLigneId"
+          class="print-mode"
+          >&nbsp;{{ transporteur?.id }}</span
+        ><span class="red-font"> {{ preSaisie | localize }}</span>
+      </ng-container>
+      <ng-template #emptyLabel>&nbsp;</ng-template>
       <div class="right">
         <dx-button
+          *ngIf="!transporteurLigneId"
           class="upperButton submit"
           type="default"
           text="{{ 'btn-valider' | localize }}"
@@ -19,6 +24,7 @@
           [useSubmitBehavior]="true"
         ></dx-button>
         <dx-button
+          *ngIf="!transporteurLigneId"
           class="upperButton"
           type="default"
           text="{{ 'btn-modifier' | localize }}"
@@ -26,18 +32,30 @@
           (onClick)="readOnlyMode = !readOnlyMode"
         ></dx-button>
         <dx-button
+          *ngIf="!transporteurLigneId"
           class="upperButton"
           type="normal"
           text="{{ 'btn-annuler' | localize }}"
           [visible]="!readOnlyMode"
           (onClick)="onCancel()"
         ></dx-button>
+        <dx-button
+          class="upperButton print-button"
+          type="default"
+          text="{{ 'btn-print' | localize }}"
+          [focusStateEnabled]="false"
+          [visible]="true"
+          (onClick)="formUtils.onPrint(this)"
+        ></dx-button>
       </div>
     </h2>
   </div>
 
   <div class="content-block transporteur-page">
-    <dx-box direction="row">
+    <dx-box
+      direction="row"
+      class="col-not-printed"
+    >
       <dxi-item
         class="left-button-container-detail"
         [ratio]="1"
@@ -99,6 +117,25 @@
               }}</span>
 
               <div class="dx-form-group-content">
+                <!-- Valide (Print) -->
+                <div class="print-mode">
+                  <dx-box>
+                    <dxi-item [ratio]="4">
+                      <div class="dx-field field-large">
+                        <div class="dx-field-label checkbox-label">
+                          {{ "tiers-clients-valide" | localize }}
+                        </div>
+                        <div class="dx-field-value">
+                          <dx-check-box
+                            formControlName="valide"
+                            [readOnly]="true"
+                          ></dx-check-box>
+                        </div>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [ratio]="8"></dxi-item>
+                  </dx-box>
+                </div>
                 <!-- Code -->
                 <div class="dx-field">
                   <div class="dx-field-label">

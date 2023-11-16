@@ -344,7 +344,7 @@ export class ClientDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private basesPaiementService: BasesPaiementService,
     private clientsService: ClientsService,
     private devisesService: DevisesService,

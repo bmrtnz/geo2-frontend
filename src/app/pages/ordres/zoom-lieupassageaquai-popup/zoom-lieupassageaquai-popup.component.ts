@@ -27,7 +27,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   setTitle() {
     this.title =
       this.localizeService.localize(
-        "zoom-" + (this.lieupassageaquaiTitle ?? "transporteur")
+        "zoom-" + (this.lieupassageaquaiTitle ?? "lieupassageaquai")
       ) +
       " " +
       this.lieupassageaquaiLigneId;
@@ -36,7 +36,7 @@ export class ZoomLieupassageaquaiPopupComponent implements OnChanges {
   onShowing(e) {
     e.component
       .content()
-      .parentNode.classList.add("zoom-lieupassageaquai-popup");
+      .parentNode.classList.add("zoom-lieupassageaquai-popup", "zoom-popup");
   }
 
   hidePopup() {

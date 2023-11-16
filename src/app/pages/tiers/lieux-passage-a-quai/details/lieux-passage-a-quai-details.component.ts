@@ -96,7 +96,7 @@ export class LieuxPassageAQuaiDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private lieupassageaquaiService: LieuxPassageAQuaiService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,

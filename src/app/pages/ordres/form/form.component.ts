@@ -142,7 +142,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private ordresService: OrdresService,
     private ordreLignesService: OrdreLignesService,
     private ordresBafService: OrdresBafService,
@@ -566,6 +566,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
+
+    // this.clientId = '005527'; ///// A VIRER !!!
+    // this.zoomClientFilePopup.visible = true; ///// A VIRER !!!
   }
 
   ngOnDestroy() {

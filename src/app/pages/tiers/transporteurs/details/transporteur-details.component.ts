@@ -146,7 +146,7 @@ export class TransporteurDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private transporteursService: TransporteursService,
     private regimesTvaService: RegimesTvaService,
     private devisesService: DevisesService,
