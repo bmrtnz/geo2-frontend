@@ -35,6 +35,7 @@ import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
@@ -93,6 +94,7 @@ import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-d
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
+import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
@@ -142,6 +144,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private formBuilder: UntypedFormBuilder,
     private formUtils: FormUtilsService,
     private ordresService: OrdresService,
+    private ordreLignesService: OrdreLignesService,
     private ordresBafService: OrdresBafService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
@@ -359,6 +362,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public cancelledOrder: boolean;
   public promptPopupDateOnly: boolean;
   private savedGridCdeStandby: boolean;
+  public supprLignesBtnDisabled: boolean;
 
   public factureVisible = false;
   public currentFacture: ViewDocument;
@@ -390,6 +394,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ZoomEntrepotPopupComponent, { static: false })
   zoomEntrepotFilePopup: ZoomEntrepotPopupComponent;
   @ViewChild(GridCommandesComponent) gridCommandes: GridCommandesComponent;
+  @ViewChild(GridOrdreLigneLogistiqueComponent) gridSynthese: GridOrdreLigneLogistiqueComponent;
   @ViewChild(GridLignesDetailsComponent)
   gridLignesDetail: GridLignesDetailsComponent;
   @ViewChild(GridLignesTotauxDetailComponent)
@@ -1016,6 +1021,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "fCreeOrdreComplementaire",
       "fnMajOrdreRegroupementV2",
       "fBonAFacturer",
+      "supprLignesNonExped"
     ];
     functionNames.map(
       (fn) =>
@@ -1787,6 +1793,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         )
           return (this.comptePaloxPopup.visible = true);
         this.refreshHeader();
+      },
+    });
+  }
+
+  public suppLignesNonExp() {
+    this.supprLignesBtnDisabled = true;
+    notify(this.localization.localize("please-wait"), "info", 3500);
+    this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
+      error: ({ message }: Error) => {
+        this.supprLignesBtnDisabled = false;
+        notify(this.messageFormat(message), "error", 7000);
+      },
+      next: (res) => {
+        this.supprLignesBtnDisabled = false;
+        this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
+          .subscribe(() => {
+            this.refreshOrder();
+            notify(res.data.supprLignesNonExped.msg, "success", 7000);
+          });
       },
     });
   }

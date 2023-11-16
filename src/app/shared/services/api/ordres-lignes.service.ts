@@ -618,4 +618,13 @@ export class OrdreLignesService extends ApiService implements APIRead {
       { name: "societeID", type: "String", value: societeID },
     ]);
   }
+
+  public supprLignesNonExped(
+    ordreRef: string,
+  ) {
+    return this.functionsService.queryFunction("supprLignesNonExped", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+    ]);
+  }
+
 }

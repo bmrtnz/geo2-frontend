@@ -1240,13 +1240,23 @@
                         <dx-button
                           class="margin-btn-baf"
                           type="default"
+                          [focusStateEnabled]="false"
                           [visible]="showBAFButton"
-                          text="Bon à facturer"
+                          text="{{ 'ordres-bonAFacturer' | localize }}"
                           (onClick)="bonAFacturer()"
                         ></dx-button>
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
+                      <dx-button
+                        class="totaux-btn-supp"
+                        [focusStateEnabled]="false"
+                        [disabled]="supprLignesBtnDisabled"
+                        [visible]="!!gridCommandes?.gridRowsTotal"
+                        type="default"
+                        (onClick)="suppLignesNonExp()"
+                        text="{{ 'btn-sup-lignes-cloturees-zero' | localize }}"
+                      ></dx-button>
                       <app-grid-lignes-totaux-detail
                         [ordre]="data"
                       ></app-grid-lignes-totaux-detail>
