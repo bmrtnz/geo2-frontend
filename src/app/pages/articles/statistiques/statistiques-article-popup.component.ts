@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import { Article } from "app/shared/models";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -16,7 +16,7 @@ import { GridStatArticleFournisseursComponent } from "./grid-stat-article-fourni
   templateUrl: './statistiques-article-popup.component.html',
   styleUrls: ['./statistiques-article-popup.component.scss']
 })
-export class StatistiquesArticlePopupComponent implements OnChanges {
+export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewInit {
   @Input() public article: Partial<Article>;
 
   @Output() public articleId: string;
@@ -50,6 +50,12 @@ export class StatistiquesArticlePopupComponent implements OnChanges {
   ngOnChanges() {
     this.setTitle();
     this.articleId = this.article?.id;
+  }
+
+  ngAfterViewInit() {
+    this.authService.onUserChanged().subscribe(() =>
+      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "D1A")
+    );
   }
 
   setTitle() {
