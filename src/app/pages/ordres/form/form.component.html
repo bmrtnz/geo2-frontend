@@ -388,6 +388,16 @@
                           </dx-select-box>
                         </div>
                         <dx-button
+                          class="entrepot-change-button rightPositioned"
+                          type="default"
+                          icon="material-icons swap_horiz"
+                          [focusStateEnabled]="false"
+                          [visible]="!ordreBAFOuFacture"
+                          hint="{{ 'hint-entrep-change' | localize }}"
+                          (onClick)="openChoixEntrepotPopup()"
+                        >
+                        </dx-button>
+                        <dx-button
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
@@ -1459,3 +1469,9 @@
   (lignesChanged)="onLignesChanged($event)"
 ></app-modif-commande-edi-popup>
 <app-confirmation-result-popup></app-confirmation-result-popup>
+<app-choix-entrepot-commande-edi-popup
+  [clientId]="ordre?.client?.id"
+  [title]="'modification-entrepot' | localize"
+  (entrepotChosen)="onEntrepotChosen($event)"
+>
+</app-choix-entrepot-commande-edi-popup>

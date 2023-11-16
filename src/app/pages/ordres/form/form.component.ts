@@ -95,6 +95,7 @@ import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.c
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
+import { ChoixEntrepotCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
@@ -266,7 +267,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreRefPaloxPere",
     "factureAvoir",
     "ordreEDI.id",
-    "ordreEDI.canalCde"
+    "ordreEDI.canalCde",
+    "entrepot.client.instructionLogistique",
+    "entrepot.instructionLogistique"
   ];
 
   private destroy = new Subject<boolean>();
@@ -416,6 +419,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
   @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+  @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
 
 
 
@@ -585,6 +589,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
+
+      console.log(ordre)
 
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
@@ -1566,7 +1572,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
     this.ordreBAFOuFacture =
-      this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
+      this.ordreFacture ||
+      Statut[statut] === Statut.A_FACTURER.toString() ||
+      Statut[statut] === Statut.FACTURE_EDI.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
     this.updateTabStatusDot();
@@ -1604,16 +1612,55 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.clientId !== null) this.zoomClientFilePopup.visible = true;
   }
 
-  openEntrepotFilePopup() {
-    this.entrepotId = this.ordre?.entrepot?.id;
-    this.entrepotCode = this.ordre?.entrepot?.code;
-    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
+  openChoixEntrepotPopup() {
+    const dataSourceEnt = this.entrepotsService.getDataSource_v2(["id"]);
+    dataSourceEnt.filter([
+      ["valide", "=", true],
+      "and",
+      ["client.id", "=", this.ordre?.client?.id],
+    ]);
+    // Checks if we can really change the entrepot
+    dataSourceEnt.load().then((ent) => {
+      if (ent?.length === 1) return notify(this.localization.localize("warning-no-other-entrepot"), "warning", 4000);
+      this.choixEntPopup.visible = true;
+    });
+  }
+
+  onEntrepotChosen(entrepot) {
+    const instLogClt = this.ordre.entrepot.client.instructionLogistique ?? "";
+    const instLogEnt = entrepot.instructionLogistique ?? "";
+    let instLog = instLogClt + (instLogEnt ? " " : "") + instLogEnt;
+    instLog = instLog.substring(0, 280);
+
+    const ordre = {
+      id: this.ordre.id,
+      instructionsLogistiques: instLog,
+      entrepot: entrepot
+    };
+
+    this.ordresService.save({ ordre }).subscribe({
+      next: () => {
+        this.ordre = { ...this.ordre, ...ordre };
+        notify(this.localization.localize("success-entrepot-modified"), "success");
+        this.refreshHeader();
+      },
+      error: (err) => {
+        console.log(err);
+        notify(this.localization.localize("warning-entrepot-modification-error"), "error", 3000);
+      },
+    });
   }
 
   openTransporteurFilePopup() {
     this.transporteurLigneId = this.formGroup.get("transporteur").value?.id;
     if (this.transporteurLigneId !== null)
       this.zoomTransporteurFilePopup.visible = true;
+  }
+
+  openEntrepotFilePopup() {
+    this.entrepotId = this.ordre?.entrepot?.id;
+    this.entrepotCode = this.ordre?.entrepot?.code;
+    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
   }
 
   private refetchOrder(period = 5000) {

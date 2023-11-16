@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   [hideOnOutsideClick]="true"
   [(visible)]="visible"
-  title="{{ 'ordre-edi-creation' | localize }}"
+  [title]="title"
   [width]="500"
   height="auto"
   (onShowing)="onShowing($event)"
@@ -25,7 +25,7 @@
           #clientSB
           [readOnly]="true"
           [dataSource]="clientDS"
-          [value]="commandeEdi.client?.id"
+          [value]="clientId"
           [displayExpr]="displayCodeBefore"
         >
         </dx-select-box>
@@ -40,6 +40,7 @@
         <dx-select-box
           #entrepotSB
           [dataSource]="entrepotDS"
+          [searchExpr]="['code']"
           [displayExpr]="displayCodeBefore"
         >
         </dx-select-box>
