@@ -5,10 +5,9 @@
     <dx-button
       class="report-btn"
       type="default"
-      icon="arrowdown"
       [text]="'report' | localize"
       [visible]="data.component.getVisibleRows()?.length > 1"
-      [hint]="'duplicate-first-column-value-to-all-rows' | localize"
+      [hint]="'report-text' | localize"
       (onClick)="onReportClick($event, data)"
     ></dx-button>
   </div>

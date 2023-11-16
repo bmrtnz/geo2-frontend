@@ -18,6 +18,7 @@ import {
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridColumn } from "basic";
 import {
   DxDataGridComponent,
@@ -29,6 +30,8 @@ import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { EMPTY, from, iif, Observable } from "rxjs";
 import { concatMap, map } from "rxjs/operators";
+
+let self;
 
 @Component({
   selector: "app-selection-lignes-litige-popup",
@@ -62,9 +65,11 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     private ordreLignesService: OrdreLignesService,
     private litigesService: LitigesService,
     private litigesLignesService: LitigesLignesService,
+    public gridUtils: GridUtilsService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.SelectionLignesCdeLitige
     );
@@ -81,16 +86,37 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       if (e.column.dataField === "ordreLigne.nombrePalettesCommandees") {
         e.cellElement.textContent =
           e.cellElement.textContent +
-            "/" +
-            e.data.ordreLigne.nombrePalettesExpediees ?? 0;
+          "/" +
+          e.data.ordreLigne.nombrePalettesExpediees ?? 0;
       }
       if (e.column.dataField === "ordreLigne.nombreColisCommandes") {
         e.cellElement.textContent =
           e.cellElement.textContent +
-            "/" +
-            e.data.ordreLigne.nombreColisExpedies ?? 0;
+          "/" +
+          e.data.ordreLigne.nombreColisExpedies ?? 0;
       }
     }
+  }
+
+  calculatePoidsNetExpedie(data) {
+    // Ajout type colis
+    if (data?.ordreLigne?.poidsNetExpedie)
+      return self.gridUtils.numberWithSpaces(data.ordreLigne.poidsNetExpedie) + " " + self.localizeService.localize("kilos");
+  }
+
+  calculateVentePrixUnitaire(data) {
+    // Ajout type colis
+    //+ data.ordre.devise
+    if (data?.ordreLigne?.ventePrixUnitaire)
+      return self.gridUtils.numberWithSpaces(data.ordreLigne.ventePrixUnitaire) +
+        " " + data.ordreLigne.ordre.devise.id + "/" + data.ordreLigne.venteUnite.id;
+  }
+
+  calculateAchatDevisePrixUnitaire(data) {
+    // Ajout type colis
+    if (data?.ordreLigne?.achatDevisePrixUnitaire)
+      return self.gridUtils.numberWithSpaces(data.ordreLigne.achatDevisePrixUnitaire) +
+        " " + data.ordreLigne.achatDevise + "/" + data.ordreLigne.achatUnite.id;
   }
 
   onSelectionChanged() {
@@ -137,7 +163,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   onShowing(e) {
     e.component
       .content()
-      .parentNode.classList.add("selection-clignes-cde-litige-popup");
+      .parentNode.classList.add("selection-lignes-cde-litige-popup");
     // Clear temps litige lignes
     if (this.tempRowsCleaning)
       this.litigesLignesService
