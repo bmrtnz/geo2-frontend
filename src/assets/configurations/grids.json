@@ -6795,9 +6795,7 @@
         "visibleIndex": 1,
         "dataField": "frais.id",
         "calculateSortValue": "frais.id",
-        "calculateDisplayValue": [
-          "frais.description"
-        ],
+        "calculateDisplayValue": "calculateFraisValue",
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -6835,9 +6833,7 @@
         "visibleIndex": 9,
         "dataField": "devise.id",
         "calculateSortValue": "devise.id",
-        "calculateDisplayValue": [
-          "devise.description"
-        ],
+        "calculateDisplayValue": "calculateDeviseValue",
         "editorOptions": {
           "searchTimeout": "0"
         },
@@ -6887,9 +6883,7 @@
         "visibleIndex": 18,
         "dataField": "codePlus",
         "editorOptions": {
-          "searchTimeout": "0",
-          "valueExpr": "codePlus",
-          "displayExpr": "codePlus"
+          "searchTimeout": "0"
         },
         "visible": true
       },

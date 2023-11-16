@@ -82,4 +82,8 @@ export class FormUtilsService {
     return str === str.toUpperCase() && str !== str.toLowerCase();
   }
 
+  capitalizeFirst(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
 }
