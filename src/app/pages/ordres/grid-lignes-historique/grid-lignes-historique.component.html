@@ -210,6 +210,17 @@
   ></dx-button>
 </form>
 
+<!-- Litige dot indicator Legend -->
+<div
+  *ngIf="hasLitigeDots"
+  class="litige-dot-legend-container"
+>
+  <div class="litige-dot-legend">L</div>
+  <div class="litige-dot-legend-text">
+    {{ "hint-previous-litige" | localize }}
+  </div>
+</div>
+
 <div class="grid-lignes-historique-container">
   <dx-button
     style="margin-right: 17px"
@@ -242,6 +253,7 @@
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
     (onRowDblClick)="onRowDblClick($event)"
+    (onCellClick)="onCellClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',

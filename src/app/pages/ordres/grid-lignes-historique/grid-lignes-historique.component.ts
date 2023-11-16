@@ -5,6 +5,7 @@ import { Statut } from "app/shared/models/ordre.model";
 import { AuthService, ClientsService, EntrepotsService, } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -90,6 +91,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   } as Inputs<UntypedFormControl>);
 
   public summaryFields = ["nombreColisCommandes"];
+  public hasLitigeDots: boolean;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -97,6 +99,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public bureauxAchatService: BureauxAchatService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
+    public litigesLignesService: LitigesLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
     public currentCompanyService: CurrentCompanyService,
@@ -171,6 +174,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   async enableFilters() {
+    this.hasLitigeDots = false;
     let dateType = "dateDepartPrevue";
 
     const fields = this.columns.pipe(
@@ -303,6 +307,18 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         // Bio en vert
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
+        // Indicateur litige fournisseur
+        if (e.data.ordre.litige.id) {
+          let filter = `ordreLigne.id==${e.data.id} and litige.id==${e.data.ordre.litige.id}`;
+          filter += ` and responsableTypeCode=='F'`;
+          this.litigesLignesService.getList(filter, ["id"]).subscribe(res => {
+            if (res.data.allLitigeLigneList.length) {
+              this.hasLitigeDots = true;
+              e.cellElement.classList.add("litige-dot");
+              e.cellElement.title = this.localizeService.localize("hint-previous-litige");
+            }
+          })
+        }
       }
 
       // Descript. article abrégée
@@ -324,6 +340,14 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  onCellClick(e) {
+    if (e.cellElement.classList.contains("litige-dot")) {
+      sessionStorage.setItem("showAccordion", "litiges");
+      this.hidePopup.emit();
+      this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id)
+    }
+  }
+
   calculateNombrePalettesCommandees(data) {
     // Ajout type colis
     return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
@@ -337,13 +361,13 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   calculateVentePrixUnitaire(data) {
     if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
       return "";
-    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+    } else return data.ventePrixUnitaire.toFixed(2) + "/" + data.venteUnite.description;
   }
 
   calculateAchatDevisePrixUnitaire(data) {
     if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
       return "";
-    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
+    } else return data.achatDevisePrixUnitaire.toFixed(2) + "/" + data.achatUnite.description;
   }
 
   openFilePopup(cell, e) {

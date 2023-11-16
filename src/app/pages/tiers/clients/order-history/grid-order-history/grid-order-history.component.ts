@@ -22,6 +22,7 @@ import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.servic
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import {
   Grid,
   GridConfig,
@@ -108,6 +109,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   } as Inputs<UntypedFormControl>);
 
   public summaryFields = ["nombreColisCommandes"];
+  public hasLitigeDots: boolean;
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -117,6 +119,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     public bureauxAchatService: BureauxAchatService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService,
+    public litigesLignesService: LitigesLignesService,
     public dateManagementService: DateManagementService,
     public authService: AuthService,
     public gridsService: GridsService,
@@ -158,9 +161,13 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.authService.onUserChanged().subscribe(() =>
-      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC")
-    );
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
+    if (this.secteurId) {
+      this.formGroup.get("valide").patchValue(true);
+      this.formGroup.patchValue({
+        secteur: { id: this.secteurId },
+      });
+    }
   }
 
   ngOnChanges() {
@@ -182,6 +189,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   }
 
   async enableFilters() {
+    this.hasLitigeDots = false;
     let dateType = "dateDepartPrevue";
 
     const fields = this.columns.pipe(
@@ -314,6 +322,18 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
         // Bio en vert
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
+        // Indicateur litige fournisseur
+        if (e.data.ordre.litige.id) {
+          let filter = `ordreLigne.id==${e.data.id} and litige.id==${e.data.ordre.litige.id}`;
+          filter += ` and responsableTypeCode=='F'`;
+          this.litigesLignesService.getList(filter, ["id"]).subscribe(res => {
+            if (res.data.allLitigeLigneList.length) {
+              this.hasLitigeDots = true;
+              e.cellElement.classList.add("litige-dot");
+              e.cellElement.title = this.localizeService.localize("hint-previous-litige");
+            }
+          })
+        }
       }
 
       // Descript. article abrégée
@@ -335,6 +355,24 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  onCellClick(e) {
+    if (e.cellElement.classList.contains("litige-dot")) {
+      sessionStorage.setItem("showAccordion", "litiges");
+
+      if (this.comingFrom === "zoomClient") {
+        this.openOrder.emit({ campagne: { id: e.data.ordre.campagne.id }, numero: e.data.ordre.numero });
+      } else {
+        window.sessionStorage.setItem(
+          "openOrder",
+          [e.data.ordre.numero, e.data.ordre.campagne.id].join("|")
+        );
+        this.hidePopup.emit();
+        setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+      }
+
+    }
+  }
+
   calculateNombrePalettesCommandees(data) {
     // Ajout type colis
     return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
@@ -348,13 +386,13 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   calculateVentePrixUnitaire(data) {
     if (!data.ventePrixUnitaire || !data.venteUnite?.description) {
       return "";
-    } else return data.ventePrixUnitaire + " " + data.venteUnite.description;
+    } else return data.ventePrixUnitaire.toFixed(2) + "/" + data.venteUnite.description;
   }
 
   calculateAchatDevisePrixUnitaire(data) {
     if (!data.achatDevisePrixUnitaire || !data.achatUnite?.description) {
       return "";
-    } else return data.achatDevisePrixUnitaire + " " + data.achatUnite.description;;
+    } else return data.achatDevisePrixUnitaire.toFixed(2) + "/" + data.achatUnite.description;
   }
 
   openFilePopup(cell, e) {

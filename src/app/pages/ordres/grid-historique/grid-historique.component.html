@@ -7,7 +7,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
-  (onRowDblClick)="ordreSelected.emit($event.data.ordre.id)"
+  (onRowDblClick)="ordreSelected.emit($event.data.ordre)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Derniers ordres ouverts',

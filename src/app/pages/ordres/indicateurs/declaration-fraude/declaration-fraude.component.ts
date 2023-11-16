@@ -79,10 +79,16 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       "code",
       "raisonSocial"
     ]);
+    this.clients.filter(["societe.id", "=", this.currentCompanyService.getCompany().id]);
     this.entrepots = entrepotsService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial"
+    ]);
+    this.entrepots.filter([
+      ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
+      ["valide", "=", true]
     ]);
     this.transporteurs = this.transporteursService.getDataSource_v2([
       "id",
@@ -184,6 +190,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     ]);
 
     const filter: any = [["client.id", "=", e.value?.id]];
+    filter.push("and", ["client.societe.id", "=", this.currentCompanyService.getCompany().id]);
     filter.push("and", ["valide", "=", true]);
     this.entrepots.filter(filter);
 

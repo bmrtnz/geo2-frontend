@@ -395,6 +395,7 @@ export class GridCommandesComponent
                   "ordre.numero",
                   "ordre.entrepot.code",
                   "article.description",
+                  "article.articleDescription.descriptionReferenceCourte",
                   "article.matierePremiere.variete.description",
                   "article.matierePremiere.origine.description",
                   "article.cahierDesCharge.categorie.description",
@@ -409,6 +410,7 @@ export class GridCommandesComponent
                   "article.normalisation.etiquetteEvenementielle.description",
                   "article.normalisation.etiquetteColis.description",
                   "article.normalisation.etiquetteUc.description",
+                  "article.normalisation.marque.description",
                   "article.emballage.conditionSpecial.description",
                   "article.emballage.alveole.description",
                   "article.normalisation.gtinUc",
@@ -461,7 +463,7 @@ export class GridCommandesComponent
                 "article.cahierDesCharge.categorie.cahierDesChargesBlueWhale",
                 "article.matierePremiere.origine.id",
                 "article.matierePremiere.modeCulture.id",
-              ]
+              ],
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
               ["ordre.id", "=", this.ordre?.id],
@@ -727,7 +729,7 @@ export class GridCommandesComponent
           "article.articleDescription.descriptionReferenceCourte",
         ].includes(e.column?.dataField)
       ) {
-        e.cellElement.title = e.value + "\r\n" + this.hintDblClick;
+        e.cellElement.title = this.hintDblClick;
         e.cellElement.classList.add("cursor-pointer");
         // Bio en vert
         if (e.data.article.articleDescription.bio)

@@ -1,27 +1,34 @@
-::ng-deep .master-detail th,
-::ng-deep .master-detail td {
-  padding: 10px;
-}
+::ng-deep .grid-litiges-lignes {
 
-::ng-deep .table-bordered {
-  border: 1px solid #ddd !important;
-}
+  .master-detail th,
+  .master-detail td {
+    padding: 10px;
+  }
 
-::ng-deep .dx-master-detail-cell {
-  padding-top: 15px !important;
-  padding-left: 30px !important;
-}
+  .table-bordered {
+    border: 1px solid #ddd !important;
+  }
 
-::ng-deep .client-color {
-  color: #00759c;
-}
+  .dx-master-detail-cell {
+    padding-top: 15px !important;
+    padding-left: 30px !important;
+  }
 
-::ng-deep .master-detail-color {
-  color: #333;
+  .client-color {
+    color: #00759c;
+  }
 
-  td,
-  th {
-    text-align: right;
+  .bold-text {
+    font-weight: bold;
+  }
+
+  .master-detail-color {
+    color: #333;
+
+    td,
+    th {
+      text-align: right;
+    }
   }
 }
 

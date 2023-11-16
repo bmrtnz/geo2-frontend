@@ -1,38 +1,35 @@
 <dx-popup
-  [title]="'choose-entrep' | localize"
+  [title]="'choose-company-entrep' | localize"
   [width]="'auto'"
   [height]="'auto'"
-  [showCloseButton]="false"
+  [showCloseButton]="true"
   [resizeEnabled]="true"
   (onHidden)="onHidden()"
   (onShowing)="onShowing($event)"
+  (onShown)="onShown()"
 >
-  <!-- select button -->
-  <dxi-toolbar-item
-    widget="dxButton"
-    toolbar="bottom"
-    location="after"
-  >
-    <dx-button
-      [icon]="'exportselected'"
-      [text]="'select-this-entrep' | localize"
-      type="success"
-      [disabled]="!entrepotInput?.selectedItem"
-      [stylingMode]="'contained'"
-      (onClick)="onSelectClick()"
-    ></dx-button>
-  </dxi-toolbar-item>
-
   <!-- cancel button -->
   <dxi-toolbar-item
     widget="dxButton"
     toolbar="bottom"
-    location="before"
+    location="center"
   >
     <dx-button
-      [icon]="'back'"
       [text]="'btn-annuler' | localize"
       (onClick)="onCancelClick()"
+    ></dx-button>
+  </dxi-toolbar-item>
+  <!-- select button -->
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="center"
+  >
+    <dx-button
+      [text]="'btn-createReplaceOrder' | localize"
+      type="success"
+      [disabled]="!entrepotInput?.selectedItem"
+      (onClick)="onSelectClick()"
     ></dx-button>
   </dxi-toolbar-item>
 
@@ -62,11 +59,13 @@
             #clientInput
             [dataSource]="clientsSource"
             [valueExpr]="'id'"
-            [displayExpr]="'code'"
+            [displayExpr]="displayCodeBefore"
             [searchExpr]="['id', 'code', 'raisonSocial']"
             [searchMode]="'contains'"
             [disabled]="!societeInput?.selectedItem"
             (onSelectionChanged)="onClientSelectionChanged()"
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options
           ></dx-select-box>
         </div>
       </div>
@@ -79,14 +78,19 @@
             #entrepotInput
             [dataSource]="entrepotsSource"
             [valueExpr]="'id'"
-            [displayExpr]="'code'"
+            [displayExpr]="displayCodeBefore"
             [searchExpr]="['id', 'code', 'raisonSocial']"
             [searchMode]="'contains'"
             [disabled]="!clientInput?.selectedItem"
-          ></dx-select-box>
+          >
+            <dxo-drop-down-options [width]="400"> </dxo-drop-down-options>
+          </dx-select-box>
         </div>
       </div>
     </div>
   </div>
+  <br />
+  <br />
+  <br />
   <br />
 </dx-popup>

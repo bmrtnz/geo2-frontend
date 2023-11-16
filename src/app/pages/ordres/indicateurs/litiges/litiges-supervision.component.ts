@@ -206,21 +206,24 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       e.column.dataField === "numeroOrdre" &&
       e.data.numeroOrdre &&
       sameCompany
-    )
+    ) {
+      sessionStorage.setItem("showAccordion", "litiges");
       this.tabContext.openOrdre(
         e.data.numeroOrdre,
         e.data.litige.ordreOrigine.campagne.id
       );
+    }
   }
 
   onOpenNewOrder(ds) {
     const sameCompany =
       ds.data.societe.id === this.currentCompanyService.getCompany().id;
-    if (ds.data.numeroOrdre && sameCompany)
+    if (ds.data.numeroOrdreRemplacement && sameCompany) {
       this.tabContext.openOrdre(
         ds.data.numeroOrdreRemplacement,
         ds.data.litige.ordreOrigine.campagne.id
       );
+    }
   }
 
   onCellPrepared(e) {

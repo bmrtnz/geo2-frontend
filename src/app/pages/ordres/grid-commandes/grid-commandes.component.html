@@ -18,6 +18,7 @@
   (onEditorPrepared)="FEATURE.rowOrdering && onEditorPrepared($event)"
   (onEditingStart)="onEditingStart($event)"
   (onCellClick)="onCellClick()"
+  [rowAlternationEnabled]="true"
   (onEditorPreparing)="onEditorPreparing($event)"
   (onSelectionChanged)="onSelectionChanged($event)"
   (onCellDblClick)="FEATURE.zoom && openFilePopup($event)"
