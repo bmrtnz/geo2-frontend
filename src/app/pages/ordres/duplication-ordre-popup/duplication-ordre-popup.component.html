@@ -118,6 +118,7 @@
         (onClick)="hidePopup()"
       ></dx-button>
       <dx-button
+        #duplicatetButton
         type="normal"
         [disabled]="processRunning"
         text="{{ 'btn-duplication-ordre' | localize }}"

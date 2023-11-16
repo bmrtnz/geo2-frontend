@@ -198,13 +198,15 @@ export class TabContext {
   }
 
   private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
-    const previous = this.componentRef.route.snapshot.paramMap.get(
+    let previous = this.componentRef.route.snapshot.paramMap.get(
       RouteParam.TabID
     );
     const alter = (params: ParamMap) =>
       action === "OPEN"
         ? new Set([...params.getAll(tabType), id])
         : new Set([...params.getAll(tabType)].filter((v) => v !== id));
+
+    if (action === "CLOSE") previous = TAB_HOME_ID;
 
     this.route.queryParamMap
       .pipe(
@@ -215,7 +217,7 @@ export class TabContext {
               [tabType]: [...alter(params)],
             },
             queryParamsHandling: "merge",
-            state: { [PREVIOUS_STATE]: previous },
+            state: { [PREVIOUS_STATE]: (previous !== TAB_LOAD_ID) ? previous : TAB_HOME_ID },
           })
         )
       )
@@ -495,11 +497,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       .getAll(TabType.Ordre)
       .filter((param) => param !== pullID);
 
-    const selectedID = this.route.snapshot.paramMap.get(RouteParam.TabID);
-    const navID =
-      pullID === selectedID
-        ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
-        : selectedID;
+    let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
       this.router.navigate(["pages/ordres", navID], {
@@ -522,7 +521,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
 
     ordre = [];
-    const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
       this.router.navigate(["pages/ordres", navID], {

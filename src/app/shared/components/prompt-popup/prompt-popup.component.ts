@@ -62,8 +62,10 @@ export class PromptPopupComponent {
   commentRegex: RegExp;
   commentTitle: string;
   commentItemsList: string[];
+  shown: boolean;
 
   async show(texts?: any) {
+    this.shown = false;
     if (texts?.validText) this.validText = texts.validText;
     if (texts?.cancelText) this.cancelText = texts.cancelText;
     if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
@@ -115,6 +117,7 @@ export class PromptPopupComponent {
     this.commentBox?.instance.focus();
     if (this.textarea) this.textareaBox.instance.focus();
     this.setValidationRules();
+    this.shown = true;
   }
 
   quickValidate(form: NgForm) {
