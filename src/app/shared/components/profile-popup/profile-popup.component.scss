@@ -1,6 +1,25 @@
 // Var
 @import "themes/generated/variables.base";
 
+$light-grey: rgba(0, 0, 0, 0.2);
+
+.admin-type-item {
+  height: 20px;
+  width: 20px;
+}
+
+.admin-type-warning {
+  background-color: #FF325A !important;
+}
+
+.admin-type-success {
+  background-color: #8FC459 !important;
+}
+
+.admin-type-info {
+  background-color: #B2D5E1 !important;
+}
+
 ::ng-deep .profile-popup {
 
   .dx-template-wrapper.dx-popup-title {
@@ -35,6 +54,10 @@
 
   #profile-content {
     padding: 0 15px 0 2px;
+
+    .dx-invalid-message>.dx-overlay-content {
+      background-color: rgba(255, 255, 255, 0);
+    }
 
     .midLarge {
       width: 100%;
@@ -86,10 +109,12 @@
 
     }
 
-
-    .planning-depart-detail-switch {
+    .option-background {
       background: #F5F5F5;
       padding: 10px;
+    }
+
+    .small-box-format {
 
       .dx-field-value {
         width: 33px !important;
@@ -108,6 +133,10 @@
           text-align: right !important;
         }
 
+        &.dx-field-label-very-small {
+          width: 20px !important;
+        }
+
         &.dx-field-label-right {
           margin-left: 10px;
           width: 80% !important;
@@ -116,9 +145,132 @@
       }
     }
 
+    .admin-banner-date {
+      position: relative;
+      top: -14px;
+
+      .small-box-format {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
+      .date-box-format {
+        display: inline-block;
+        margin: 0 10px;
+        top: 6px;
+        width: 300px;
+
+        .dx-field-value {
+          width: 100% !important;
+        }
+      }
+    }
+
+    .banner-option {
+      .option-background {
+        padding-top: 0;
+      }
+
+      .dx-switch-on-value {
+        .dx-switch-handle::before {
+          background-color: rgb(255, 50, 90);
+        }
+
+        .dx-switch-container::before {
+          background-color: rgba(255, 50, 90, 0.5);
+        }
+      }
+
+      .admin-banner-switch {
+        position: absolute;
+        top: -36px;
+        right: 0;
+      }
+
+      .admin-banner-scroll {
+        position: absolute;
+        right: 135px;
+        margin: -27px 0 0 0;
+
+        .dx-field-label {
+          width: 70px !important;
+          text-overflow: initial;
+          padding-right: 0;
+        }
+      }
+
+      .type-message {
+        position: absolute;
+        right: 295px;
+        margin: -30px 0 0 0;
+
+        .dx-field-label {
+          width: 45px;
+        }
+
+        .dx-field-value {
+          width: 50px;
+
+          .dx-selectbox {
+            height: 26px;
+
+            .dx-textbox {
+              top: 2px;
+              left: 7px;
+              height: 20px;
+              width: 20px;
+            }
+
+            input {
+              caret-color: transparent;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              user-select: none;
+            }
+          }
+
+          .dx-placeholder {
+            display: none;
+          }
+        }
+      }
+
+      .banner-message {
+        .dx-field-label {
+          width: 14% !important;
+          overflow: visible;
+          white-space: initial;
+          text-align: right;
+          align-self: flex-end;
+        }
+      }
+
+      .disabled {
+        .dx-field-label:not(.no-disabled) {
+          color: black;
+          opacity: 0.4;
+        }
+
+        .dx-switch-container::before {
+          background-color: $light-grey !important;
+        }
+
+        .admin-type-value {
+          background: rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .dx-checkbox:not(.dx-checkbox-checked) .dx-checkbox-icon {
+          border-color: $light-grey
+        }
+
+        .dx-checkbox-checked .dx-checkbox-icon {
+          background: $light-grey !important;
+          border-color: rgba(0, 0, 0, .54);
+        }
+      }
+    }
+
     .scrollbar-side-switch {
-      background: #F5F5F5;
-      padding: 10px;
 
       .dx-field-value {
         margin-top: 9px;

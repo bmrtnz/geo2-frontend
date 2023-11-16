@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  NgModule,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { Component, NgModule, ViewChild } from "@angular/core";
 import { SharedModule } from "../../shared.module";
 import notify from "devextreme/ui/notify";
 import {
@@ -17,10 +10,14 @@ import {
   DxSwitchModule,
   DxPopupModule,
   DxScrollViewModule,
-  DxSelectBoxComponent,
+  DxTextAreaModule,
+  DxValidatorModule,
   DxSelectBoxModule,
   DxTextBoxModule,
   DxFormModule,
+  DxCheckBoxComponent,
+  DxScrollViewComponent,
+  DxValidatorComponent,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -31,13 +28,19 @@ import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.servic
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import Utilisateur from "app/shared/models/utilisateur.model";
 
+let self;
+
 @Component({
   selector: "app-profile-popup",
   templateUrl: "./profile-popup.component.html",
   styleUrls: ["./profile-popup.component.scss"]
 })
 export class ProfilePopupComponent {
+
   @ViewChild("form") NgForm: any;
+  @ViewChild("bandeauDateCB", { static: false }) bandeauDateCB: DxCheckBoxComponent;
+  @ViewChild("dateValidator", { static: false }) dateValidator: DxValidatorComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   public visible: boolean;
   public titleStart: string;
@@ -53,23 +56,42 @@ export class ProfilePopupComponent {
     "periode",
     "barreDefilementHaut",
     "barreDefilementBas",
-    "diffSurExpedition"
+    "diffSurExpedition",
+    "bandeauActif",
+    "bandeauType",
+    "bandeauTexte",
+    "bandeauScroll",
+    "bandeauDateFIn"
+  ];
+  public infoMessage = [];
+  public typeMessage = [
+    {
+      id: "info"
+    },
+    {
+      id: "warning"
+    },
+    {
+      id: "success"
+    },
   ]
 
   constructor(
-    private localizeService: LocalizationService,
     private utilisateursService: UtilisateursService,
     private ordreLignesService: OrdreLignesService,
-    private authService: AuthService,
     private formUtilsService: FormUtilsService,
-    public dateManagementService: DateManagementService
+    public localizeService: LocalizationService,
+    public dateMgt: DateManagementService,
+    public authService: AuthService,
   ) {
+    self = this;
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
     this.nomInterne = this.authService.currentUser.nomInterne;
-    this.periodes = this.dateManagementService.periods();
+    this.periodes = this.dateMgt.periods();
 
     this.reportedItems = this.ordreLignesService.reportedItems;
 
+    // Create controls
     this.simpleParams.map(param => this.formGroup.addControl(param, new UntypedFormControl()));
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
@@ -88,20 +110,31 @@ export class ProfilePopupComponent {
     e.component.content().parentNode.classList.add("profile-popup");
   }
 
-  onShown(e) {
+  onShown() {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0); // Scroll top
     // Apply all parameters to widgets
+    // Standard
     this.simpleParams.map(param =>
       this.formGroup.get(param).setValue(
         this.authService.currentUser[param])
     );
+    // Specials
     this.reportedItems.map((item) =>
       this.formGroup.get(item.name).setValue(
         item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
+    // Unuseful for the moment but in case of...
+    this.formGroup.get(this.simpleParams[2]).setValue(!this.formGroup.get(this.simpleParams[1]).value);
+
+
+    this.formGroup.get(this.simpleParams[4]).setValue(true); /// !!!! A VIRER
+    this.formGroup.get(this.simpleParams[5]).setValue(this.typeMessage[1].id); /// !!!! A VIRER
+    this.formGroup.get(this.simpleParams[7]).setValue(true); /// !!!! A VIRER
   }
 
   onHidden() {
+    // Reset fields
     this.simpleParams.map(param => this.formGroup.get(param).reset());
     this.reportedItems
       .filter((item) => !item.mandatoryValue)
@@ -117,13 +150,13 @@ export class ProfilePopupComponent {
   }
 
   setTitle() {
-    this.titleStart = this.localizeService.localize("profil");
+    this.titleStart = this.firstUpper(this.localizeService.localize("profil"));
     this.titleStart +=
       " " +
       (this.vowelTest(this.nomInterne[0])
         ? this.localizeService.localize("d")
         : this.localizeService.localize("of") + " ");
-    this.titleMid = this.formatName(this.nomInterne);
+    this.titleMid = this.firstUpper(this.nomInterne);
   }
 
   resetAllReportCheckboxes() {
@@ -135,7 +168,7 @@ export class ProfilePopupComponent {
       });
   }
 
-  formatName(name) {
+  firstUpper(name) {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
 
@@ -144,36 +177,58 @@ export class ProfilePopupComponent {
       this.formGroup.controls,
       Utilisateur.getKeyField()
     );
-    utilisateur.nomUtilisateur = this.nomUtilisateur;
-    this.authService.applySpecificParameters(utilisateur);
 
-    this.savingUserPrefs = true;
-    this.utilisateursService.save_v2(
-      Object.keys(utilisateur)
-      , { utilisateur }).subscribe({
-        next: () => {
-          this.authService.setCurrentUser(utilisateur);
-          notify(
-            this.localizeService.localize("user-profile-saved"),
-            "success",
-            2500
-          );
-          this.hidePopup();
-        },
-        error: ({ message }: Error) => {
-          this.savingUserPrefs = false;
-          notify(
-            `${this.localizeService.localize(
-              "user-profile-save-error"
-            )} : ${this.messageFormat(message)}`,
-            "error",
-            7000
-          );
-        },
-        complete: () => {
-          this.savingUserPrefs = false;
-        },
-      });
+    // Handle user & not-user specific fields
+    const bannerInfo = {};
+    this.simpleParams.map(prop => {
+      if (prop.indexOf("bandeau") === 0) {
+        delete utilisateur[prop];
+        bannerInfo[prop] = this.formGroup.get(prop).value;
+      }
+    });
+
+    // Save banner info
+    if (Object.keys(bannerInfo).length) {
+      window.localStorage.setItem("bannerInfo", JSON.stringify(bannerInfo));
+      notify(
+        this.localizeService.localize("user-profile-saved"),
+        "success",
+        2500
+      );
+    }
+
+    // Save user info
+    if (Object.keys(utilisateur).length) {
+      utilisateur.nomUtilisateur = this.nomUtilisateur;
+      this.authService.applySpecificParameters(utilisateur);
+      this.savingUserPrefs = true;
+      this.utilisateursService.save_v2(
+        Object.keys(utilisateur)
+        , { utilisateur }).subscribe({
+          next: () => {
+            this.authService.setCurrentUser(utilisateur);
+            notify(
+              this.localizeService.localize("user-profile-saved"),
+              "success",
+              2500
+            );
+            this.hidePopup();
+          },
+          error: ({ message }: Error) => {
+            this.savingUserPrefs = false;
+            notify(
+              `${this.localizeService.localize(
+                "user-profile-save-error"
+              )} : ${this.messageFormat(message)}`,
+              "error",
+              7000
+            );
+          },
+          complete: () => {
+            this.savingUserPrefs = false;
+          },
+        });
+    }
   }
 
   messageFormat(mess) {
@@ -192,6 +247,22 @@ export class ProfilePopupComponent {
   vowelTest(text) {
     return /^[AEIOUYaeiouy]$/i.test(text);
   }
+
+  ////////////////////////////////
+  // Specific option functions
+  ////////////////////////////////
+
+  async checkValidDate(e) {
+    return new Date(e?.value) > new Date();
+  }
+
+  onBannerDateClick(e) {
+    if (!e.event) return; // Only user event
+    const date = this.dateMgt.datePipe.transform(this.dateMgt.addHours(new Date(), 1).valueOf(), "yyyy-MM-ddTHH:mm:ss");
+    this.formGroup.get(this.simpleParams[8]).patchValue(e.value ? date : null);
+    this.formGroup.get(this.simpleParams[8]).markAsDirty();
+  }
+
 }
 
 @NgModule({
@@ -206,8 +277,10 @@ export class ProfilePopupComponent {
     DxCheckBoxModule,
     DxFormModule,
     DxSwitchModule,
+    DxValidatorModule,
     DxDateBoxModule,
     FormsModule,
+    DxTextAreaModule,
     DxScrollViewModule,
     ReactiveFormsModule,
     DxSelectBoxModule,

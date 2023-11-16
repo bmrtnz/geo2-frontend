@@ -10,7 +10,7 @@ let self;
 })
 export class DateManagementService {
   constructor(
-    private datePipe: DatePipe,
+    public datePipe: DatePipe,
     public localization: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService
   ) {
@@ -341,4 +341,10 @@ export class DateManagementService {
   daysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
   }
+
+  addHours(date, hours) {
+    return date.setHours(date.getHours() + hours);
+  }
+
 }
+
