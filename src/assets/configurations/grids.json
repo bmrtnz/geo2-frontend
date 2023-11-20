@@ -1130,14 +1130,19 @@
         "dataType": "string",
         "calculateCellValue": "calculateEmballage",
         "calculateFilterExpression": "calculateFilterEmballage",
-        "allowSearch": true,
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "emballage.emballage.id",
         "dataType": "string",
-        "visible": true
+        "visible": false
+      },
+      {
+        "visibleIndex": 7,
+        "dataField": "emballage.emballage.description",
+        "dataType": "string",
+        "visible": false
       },
       {
         "visibleIndex": 7,
@@ -1155,7 +1160,7 @@
         "visibleIndex": 9,
         "dataField": "matierePremiere.calibreUnifie.id",
         "dataType": "string",
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 10,
@@ -1167,7 +1172,7 @@
         "visibleIndex": 11,
         "dataField": "normalisation.calibreMarquage.id",
         "dataType": "string",
-        "visible": false
+        "visible": true
       },
       {
         "visibleIndex": 12,
@@ -1203,8 +1208,7 @@
         "visibleIndex": 22,
         "dataField": "matierePremiere.type.code",
         "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": true
+        "visible": false
       },
       {
         "visibleIndex": 50,
@@ -1281,8 +1285,8 @@
       {
         "dataField": "emballage.id",
         "dataType": "string",
-        "visible": false,
-        "showInColumnChooser": false
+        "showInColumnChooser": false,
+        "visible": false
       },
       {
         "dataField": "emballage.conditionSpecial.id",

@@ -230,9 +230,6 @@
           | localize) || column.name
       "
       [dataType]="column?.dataType"
-      [allowSearch]="
-        column?.allowSearch || ['string'].includes(column?.dataType)
-      "
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "

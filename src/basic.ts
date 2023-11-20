@@ -214,6 +214,7 @@ interface GridColumn {
 
   calculateSortValue?: string;
   calculateCellValue?: string;
+  calculateFilterExpression?: string;
   setCellValue?: string;
   customizeText?: string;
   virtual?: boolean;
