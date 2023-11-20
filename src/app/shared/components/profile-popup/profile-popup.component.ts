@@ -30,6 +30,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import Utilisateur from "app/shared/models/utilisateur.model";
 import Alerte from "app/shared/models/alerte.model";
 import { AlertesService } from "app/shared/services/api/alert.service";
+import { FunctionsService } from "app/shared/services/api/functions.service";
 
 let self;
 
@@ -98,6 +99,7 @@ export class ProfilePopupComponent {
     private ordreLignesService: OrdreLignesService,
     private formUtilsService: FormUtilsService,
     public localizeService: LocalizationService,
+    public functionsService: FunctionsService,
     public dateMgt: DateManagementService,
     public authService: AuthService,
   ) {
@@ -128,6 +130,11 @@ export class ProfilePopupComponent {
     e.component.content().parentNode.classList.add("profile-popup");
   }
 
+
+  public fetchAlerte() {
+    return this.functionsService.queryFunction("fetchAlerte", []);
+  }
+
   onShown() {
     this.infoMessage = [];
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0); // Scroll top
@@ -143,7 +150,9 @@ export class ProfilePopupComponent {
         item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
+
     const alerteInfo = window.localStorage.getItem("bannerInfo");
+    // this.fetchAlerte();
     if (alerteInfo) {
       const bandeau: Partial<Alerte> = JSON.parse(alerteInfo);
       if (bandeau.dateDebut) this.bandeauDateDebCB.value = true;
