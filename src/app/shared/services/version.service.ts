@@ -17,7 +17,7 @@ export class VersionService {
   }
 
   updateCopyrightTextDisplay() {
-    if (window.sessionStorage.getItem("HideMainDrawer") === "false") {
+    if (window.sessionStorage.getItem("HideMainDrawer") !== "true") {
       document.querySelector(".copyright-label")?.classList.add("copyright-labels-full-opacity");
       document.querySelector(".copyright-short-label")?.classList.remove("copyright-labels-full-opacity");
     } else {
