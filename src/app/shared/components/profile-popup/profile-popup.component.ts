@@ -28,6 +28,8 @@ import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import Utilisateur from "app/shared/models/utilisateur.model";
+import Alerte from "app/shared/models/alerte.model";
+import { AlertesService } from "app/shared/services/api/alert.service";
 
 let self;
 
@@ -57,32 +59,41 @@ export class ProfilePopupComponent {
   public savingUserPrefs: boolean;
   public reportedItems: any[];
   public formGroup = new UntypedFormGroup({});
-  public simpleParams = [
+  public simpleParams = [];
+
+
+  public simpleBaseParams = [
     "periode",
     "barreDefilementHaut",
     "barreDefilementBas",
     "diffSurExpedition",
-    "bandeauActif",
-    "bandeauType",
-    "bandeauTexte",
-    "bandeauScroll",
-    "bandeauDateDeb",
-    "bandeauDateFin",
+  ];
+  public bandeauParams = [
+    "valide",
+    "type",
+    "message",
+    "deroulant",
+    "dateDebut",
+    "dateFin",
   ];
   public infoMessage: string[];
   public typeMessage = [
     {
-      id: "info"
+      id: "I",
+      description: "info"
     },
     {
-      id: "warning"
+      id: "W",
+      description: "Warning"
     },
     {
-      id: "success"
+      id: "S",
+      description: "Success"
     },
   ]
 
   constructor(
+    private alertesService: AlertesService,
     private utilisateursService: UtilisateursService,
     private ordreLignesService: OrdreLignesService,
     private formUtilsService: FormUtilsService,
@@ -98,6 +109,7 @@ export class ProfilePopupComponent {
     this.reportedItems = this.ordreLignesService.reportedItems;
 
     // Create controls
+    this.simpleParams = this.simpleBaseParams.concat(this.bandeauParams);
     this.simpleParams.map(param => this.formGroup.addControl(param, new UntypedFormControl()));
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
@@ -131,19 +143,19 @@ export class ProfilePopupComponent {
         item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
-    const bannerInfo = window.localStorage.getItem("bannerInfo");
-    if (bannerInfo) {
-      const bandeau = JSON.parse(bannerInfo);
-      if (bandeau[this.simpleParams[8]]) this.bandeauDateDebCB.value = true;
-      if (bandeau[this.simpleParams[9]]) this.bandeauDateFinCB.value = true;
+    const alerteInfo = window.localStorage.getItem("bannerInfo");
+    if (alerteInfo) {
+      const bandeau: Partial<Alerte> = JSON.parse(alerteInfo);
+      if (bandeau.dateDebut) this.bandeauDateDebCB.value = true;
+      if (bandeau.dateFin) this.bandeauDateFinCB.value = true;
       this.simpleParams.map(prop => {
-        if (prop.indexOf("bandeau") === 0) this.formGroup.get(prop).patchValue(bandeau[prop]);
+        if (this.bandeauParams.includes(prop)) this.formGroup.get(prop).patchValue(bandeau[prop]);
       });
       // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
-      this.infoMessage.push(bandeau[this.simpleParams[6]])
+      this.infoMessage.push(bandeau.message)
     }
     // Unuseful for the moment but in case of...
-    this.formGroup.get(this.simpleParams[2]).setValue(!this.formGroup.get(this.simpleParams[1]).value);
+    this.formGroup.get("barreDefilementHaut").setValue(!this.formGroup.get("barreDefilementBas").value);
   }
 
   onHidden() {
@@ -187,31 +199,56 @@ export class ProfilePopupComponent {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
 
-  saveAndHidePopup() {
+  async saveAndHidePopup() {
     const utilisateur = this.formUtilsService.extractDirty(
       this.formGroup.controls,
       Utilisateur.getKeyField()
     );
 
     // Handle user & not-user specific fields
-    const bannerInfo = {};
+    const alerte = {};
     this.simpleParams.map(prop => {
-      if (prop.indexOf("bandeau") === 0) {
+      if (this.bandeauParams.includes(prop)) {
         delete utilisateur[prop];
-        bannerInfo[prop] = this.formGroup.get(prop).value;
+        alerte[prop] = this.formGroup.get(prop).value;
       }
     });
 
     // Save banner info
-    if (Object.keys(bannerInfo).length) {
-      console.log("save ", bannerInfo)
-      window.localStorage.setItem("bannerInfo", JSON.stringify(bannerInfo));
-      notify(
-        this.localizeService.localize("user-profile-saved"),
-        "success",
-        2500
-      );
-      this.hidePopup();
+    if (Object.keys(alerte).length) {
+      window.localStorage.setItem("bannerInfo", JSON.stringify(alerte));
+      // notify(
+      //   this.localizeService.localize("user-profile-saved"),
+      //   "success",
+      //   2500
+      // );
+      // this.hidePopup();
+      this.savingUserPrefs = true;
+      this.alertesService.save_v2(
+        Object.keys(alerte)
+        , { alerte }).subscribe({
+          next: () => {
+            notify(
+              this.localizeService.localize("user-profile-saved"),
+              "success",
+              2500
+            );
+            this.hidePopup();
+          },
+          error: ({ message }: Error) => {
+            this.savingUserPrefs = false;
+            notify(
+              `${this.localizeService.localize(
+                "user-profile-save-error"
+              )} : ${this.messageFormat(message)}`,
+              "error",
+              7000
+            );
+          },
+          complete: () => {
+            this.savingUserPrefs = false;
+          },
+        });
     }
 
     // Save user info
@@ -282,16 +319,16 @@ export class ProfilePopupComponent {
   onBannerDateDebClick(e) {
     if (!e.event) return; // Only user event
     const date = this.dateMgt.datePipe.transform(new Date().setSeconds(0).valueOf(), "yyyy-MM-ddTHH:mm:ss");
-    this.formGroup.get(this.simpleParams[8]).patchValue(e.value ? date : null);
-    this.formGroup.get(this.simpleParams[8]).markAsDirty();
+    this.formGroup.get("dateDebut").patchValue(e.value ? date : null);
+    this.formGroup.get("dateDebut").markAsDirty();
   }
 
   onBannerDateFinClick(e) {
     if (!e.event) return; // Only user event
     let date = this.dateMgt.datePipe.transform(this.dateMgt.addHours(new Date(), 1).valueOf(), "yyyy-MM-ddTHH:mm:ss");
     date = date.slice(0, -2) + "00";
-    this.formGroup.get(this.simpleParams[9]).patchValue(e.value ? date : null);
-    this.formGroup.get(this.simpleParams[9]).markAsDirty();
+    this.formGroup.get("dateFin").patchValue(e.value ? date : null);
+    this.formGroup.get("dateFin").markAsDirty();
   }
 
 }

@@ -23,6 +23,7 @@
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-mid">{{ titleMid }}</div>
+
     <dx-button
       class="close-popup"
       icon="close"
@@ -36,6 +37,15 @@
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       (onClick)="resizePopup()"
     ></dx-button> -->
+
+    <dx-button
+      class="btn-title float-right"
+      type="normal"
+      text="{{ 'btn-appliquer' | localize }}"
+      [focusStateEnabled]="false"
+      [disabled]="formGroup?.pristine"
+      (onClick)="saveAndHidePopup()"
+    ></dx-button>
   </div>
 
   <div *dxTemplate="let data of 'content'">
@@ -83,7 +93,7 @@
             <div
               class="dx-field type-message"
               [ngClass]="{
-                disabled: !formGroup?.get(simpleParams[4])?.value
+                readOnly: !formGroup?.get('valide')?.value
               }"
             >
               <div class="dx-field-label">
@@ -91,8 +101,8 @@
               </div>
               <div class="dx-field-value">
                 <dx-select-box
-                  [disabled]="!formGroup?.get(simpleParams[4])?.value"
-                  [formControlName]="simpleParams[5]"
+                  [readOnly]="!formGroup?.get('valide')?.value"
+                  [formControlName]="'type'"
                   [items]="typeMessage"
                   [searchEnabled]="false"
                   [valueExpr]="'id'"
@@ -101,7 +111,7 @@
                 >
                   <div *dxTemplate="let data of 'types'">
                     <div
-                      [title]="firstUpper(data.id)"
+                      [title]="firstUpper(data.description)"
                       [ngClass]="'admin-type-' + data?.id + ' admin-type-item'"
                     >
                       &nbsp;
@@ -121,7 +131,7 @@
             <div
               class="dx-field small-box-format"
               [ngClass]="{
-                disabled: !formGroup?.get(simpleParams[4])?.value
+                readOnly: !formGroup?.get('valide')?.value
               }"
             >
               <div class="admin-banner-scroll">
@@ -130,8 +140,9 @@
                 </div>
                 <div class="dx-field-value">
                   <dx-check-box
+                    [readOnly]="!formGroup?.get('valide')?.value"
                     [focusStateEnabled]="false"
-                    [formControlName]="simpleParams[7]"
+                    [formControlName]="'deroulant'"
                   ></dx-check-box>
                 </div>
               </div>
@@ -142,16 +153,16 @@
               <div
                 class="dx-field small-box-format"
                 [ngClass]="{
-                  disabled: !formGroup?.get(simpleParams[4])?.value
+                  readOnly: !formGroup?.get('valide')?.value
                 }"
               >
                 <div class="admin-banner-switch">
-                  <div class="dx-field-label dx-field-label-left no-disabled">
+                  <div class="dx-field-label dx-field-label-left no-readOnly">
                     {{ "actif" | localize }}
                   </div>
                   <div class="dx-field-value">
                     <dx-switch
-                      [formControlName]="simpleParams[4]"
+                      [formControlName]="'valide'"
                       (onValueChanged)="messageValidator?.instance?.validate()"
                     ></dx-switch>
                   </div>
@@ -163,7 +174,7 @@
                 <div
                   class="dx-field small-box-format"
                   [ngClass]="{
-                    disabled: !formGroup?.get(simpleParams[4])?.value
+                    readOnly: !formGroup?.get('valide')?.value
                   }"
                 >
                   <div class="dx-field-label dx-field-label-small">
@@ -172,6 +183,7 @@
                   <div class="dx-field-value">
                     <dx-check-box
                       #bandeauDateDebCB
+                      [readOnly]="!formGroup?.get('valide')?.value"
                       [focusStateEnabled]="false"
                       (onValueChanged)="onBannerDateDebClick($event)"
                     ></dx-check-box>
@@ -180,17 +192,17 @@
                 <div
                   class="dx-field date-box-format"
                   [ngClass]="{
-                    disabled: !formGroup?.get(simpleParams[4])?.value
+                    readOnly: !formGroup?.get('valide')?.value
                   }"
                 >
                   <div class="dx-field-value">
                     <dx-date-box
                       #dateDeb
                       [disabled]="
-                        !formGroup?.get(simpleParams[4])?.value ||
+                        !formGroup?.get('valide')?.value ||
                         !bandeauDateDebCB.value
                       "
-                      [formControlName]="simpleParams[8]"
+                      [formControlName]="'dateDebut'"
                       [displayFormat]="'dd-MM-yyyy  à  HH:mm   (EEEE)'"
                       dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                       type="datetime"
@@ -198,7 +210,7 @@
                     >
                       <dx-validator #dateDebValidator>
                         <dxi-validation-rule
-                          *ngIf="!!formGroup?.get(simpleParams[8])?.value"
+                          *ngIf="!!formGroup?.get('dateDebut')?.value"
                           type="async"
                           message="{{ 'warning-wrong-date' | localize }}"
                           [validationCallback]="checkValidDebDate"
@@ -214,7 +226,7 @@
                 <div
                   class="dx-field small-box-format"
                   [ngClass]="{
-                    disabled: !formGroup?.get(simpleParams[4])?.value
+                    readOnly: !formGroup?.get('valide')?.value
                   }"
                 >
                   <div class="dx-field-label dx-field-label-small">
@@ -223,6 +235,7 @@
                   <div class="dx-field-value">
                     <dx-check-box
                       #bandeauDateFinCB
+                      [readOnly]="!formGroup?.get('valide')?.value"
                       [focusStateEnabled]="false"
                       (onValueChanged)="onBannerDateFinClick($event)"
                     ></dx-check-box>
@@ -231,17 +244,17 @@
                 <div
                   class="dx-field date-box-format"
                   [ngClass]="{
-                    disabled: !formGroup?.get(simpleParams[4])?.value
+                    readOnly: !formGroup?.get('valide')?.value
                   }"
                 >
                   <div class="dx-field-value">
                     <dx-date-box
                       #dateFin
                       [disabled]="
-                        !formGroup?.get(simpleParams[4])?.value ||
+                        !formGroup?.get('valide')?.value ||
                         !bandeauDateFinCB.value
                       "
-                      [formControlName]="simpleParams[9]"
+                      [formControlName]="'dateFin'"
                       [displayFormat]="'dd-MM-yyyy  à  HH:mm   (EEEE)'"
                       dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                       type="datetime"
@@ -249,7 +262,7 @@
                     >
                       <dx-validator #dateFinValidator>
                         <dxi-validation-rule
-                          *ngIf="!!formGroup?.get(simpleParams[9])?.value"
+                          *ngIf="!!formGroup?.get('dateFin')?.value"
                           type="async"
                           message="{{ 'warning-out-wrong-date' | localize }}"
                           [validationCallback]="checkValidFinDate"
@@ -265,7 +278,7 @@
                 <div
                   class="dx-field field-small"
                   [ngClass]="{
-                    disabled: !formGroup?.get(simpleParams[4])?.value
+                    readOnly: !formGroup?.get('valide')?.value
                   }"
                 >
                   <div class="dx-field-label">
@@ -273,8 +286,8 @@
                   </div>
                   <div class="dx-field-value">
                     <dx-select-box
-                      [disabled]="!formGroup?.get(simpleParams[4])?.value"
-                      [formControlName]="simpleParams[6]"
+                      [readOnly]="!formGroup?.get('valide')?.value"
+                      [formControlName]="'message'"
                       [acceptCustomValue]="true"
                       [items]="infoMessage"
                       [showClearButton]="true"
@@ -288,7 +301,7 @@
                         name="{{ 'displayed-message' | localize }}"
                       >
                         <dxi-validation-rule
-                          *ngIf="formGroup?.get(simpleParams[4])?.value"
+                          *ngIf="formGroup?.get('valide')?.value"
                           type="stringLength"
                           [min]="2"
                           [max]="1024"
@@ -315,7 +328,7 @@
               {{ "top" | localize }}
             </div>
             <div class="dx-field-value">
-              <dx-switch [formControlName]="simpleParams[1]"></dx-switch>
+              <dx-switch [formControlName]="'barreDefilementHaut'"></dx-switch>
             </div>
             <div class="dx-field-label dx-field-label-right">
               {{ "bottom" | localize }}
@@ -326,7 +339,7 @@
                 {{ "top" | localize }}
               </div>
               <div class="dx-field-value">
-                <dx-switch [formControlName]="simpleParams[2]"></dx-switch>
+                <dx-switch [formControlName]="'barreDefilementBas'"></dx-switch>
               </div>
               <div class="dx-field-label dx-field-label-right">
                 {{ "bottom" | localize }}
@@ -349,7 +362,7 @@
             </div>
             <div class="dx-field-value">
               <dx-switch
-                [formControlName]="simpleParams[3]"
+                [formControlName]="'diffSurExpedition'"
                 [switchedOnText]=""
                 [switchedOffText]=""
               ></dx-switch>
@@ -403,11 +416,13 @@
             <dx-button
               type="default"
               text="{{ 'btn-annuler' | localize }}"
+              [focusStateEnabled]="false"
               (onClick)="cancelClick()"
             ></dx-button>
             <dx-button
               type="normal"
               text="{{ 'btn-appliquer' | localize }}"
+              [focusStateEnabled]="false"
               [disabled]="formGroup?.pristine"
               (onClick)="saveAndHidePopup()"
             ></dx-button>

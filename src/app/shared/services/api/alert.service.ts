@@ -9,7 +9,7 @@ import Alerte from "app/shared/models/alerte.model";
 @Injectable({
   providedIn: "root",
 })
-export class ModificationsService extends ApiService implements APIRead {
+export class AlertesService extends ApiService implements APIRead {
 
   constructor(
     apollo: Apollo,

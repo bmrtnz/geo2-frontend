@@ -38,6 +38,11 @@ $light-grey: rgba(0, 0, 0, 0.2);
       top: 13px;
       float: right;
     }
+
+    .btn-title {
+      margin: 0 15px;
+      top: 14px;
+    }
   }
 
   #profile-content {
@@ -145,11 +150,15 @@ $light-grey: rgba(0, 0, 0, 0.2);
         margin: 0 10px;
       }
 
+      .small-box-format {
+        margin-left: 0;
+      }
+
       .date-box-format {
         display: inline-block;
         margin: 0 10px;
         top: 6px;
-        width: 300px;
+        width: 290px;
 
         .dx-field-value {
           width: 100% !important;
@@ -236,8 +245,10 @@ $light-grey: rgba(0, 0, 0, 0.2);
         }
       }
 
-      .disabled {
-        .dx-field-label:not(.no-disabled) {
+      .readOnly {
+
+        .dx-field-label:not(.no-readOnly),
+        textarea {
           color: black;
           opacity: 0.4;
         }

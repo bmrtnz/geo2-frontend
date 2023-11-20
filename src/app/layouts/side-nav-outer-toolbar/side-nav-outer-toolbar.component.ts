@@ -25,6 +25,7 @@ import { Router, NavigationEnd } from "@angular/router";
 import { DxButtonModule } from "devextreme-angular";
 import { ValidationService } from "app/shared/services/api/validation.service";
 import { ChooseArticleZoomPopupComponent } from "../choose-article-zoom/choose-article-zoom-popup.component";
+import Alerte from "app/shared/models/alerte.model";
 
 
 @Component({
@@ -52,13 +53,13 @@ export class SideNavOuterToolbarComponent implements OnInit {
   mainBannerInterval: any;
   bannerVisible = false;
 
-  public bannerInfo: any;
+  public alerteInfo: Partial<Alerte>;
 
 
   constructor(
     private screen: ScreenService,
     private router: Router,
-    private validationService: ValidationService
+    private validationService: ValidationService,
   ) { }
 
   ngOnInit() {
@@ -83,13 +84,14 @@ export class SideNavOuterToolbarComponent implements OnInit {
     // Starts banner info retrieval
     clearInterval(this.mainBannerInterval);
     this.mainBannerInterval = setInterval(() => {
-      const banner = window.localStorage.getItem("bannerInfo");
-      if (banner) {
-        this.bannerInfo = JSON.parse(banner);
-        const timingOk = (!this.bannerInfo?.bandeauDateDeb || (this.bannerInfo?.bandeauDateDeb &&
-          new Date() > new Date(this.bannerInfo?.bandeauDateDeb))) &&
-          (!this.bannerInfo?.bandeauDateFin || (this.bannerInfo?.bandeauDateFin && new Date() < new Date(this.bannerInfo?.bandeauDateFin)));
-        this.bannerVisible = this.bannerInfo?.bandeauActif && timingOk;
+      const alerte = window.localStorage.getItem("bannerInfo");
+      if (alerte) {
+        this.alerteInfo = JSON.parse(alerte);
+        const timingOk = (!this.alerteInfo?.dateDebut || (this.alerteInfo?.dateDebut &&
+          new Date() > new Date(this.alerteInfo?.dateDebut))) &&
+          (!this.alerteInfo?.dateFin || (this.alerteInfo?.dateFin && new Date() < new Date(this.alerteInfo?.dateFin)));
+        this.bannerVisible = this.alerteInfo?.valide && timingOk;
+        // console.log(this.alerteInfo)
       }
     }, 1000);
 

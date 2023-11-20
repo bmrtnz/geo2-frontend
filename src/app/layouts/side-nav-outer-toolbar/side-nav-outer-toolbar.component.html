@@ -35,16 +35,16 @@
     (onScroll)="onScroll($event)"
   >
     <div
-      [class]="'info-banner admin-type-' + bannerInfo?.bandeauType"
+      [class]="'info-banner admin-type-' + alerteInfo?.type"
       [ngClass]="{ 'display-none': !bannerVisible }"
     >
       <div
         [class]="'banner-text'"
         [ngClass]="{
-          'anim-banner-text': bannerInfo?.bandeauScroll
+          'anim-banner-text': alerteInfo?.deroulant
         }"
       >
-        {{ bannerInfo?.bandeauTexte }}
+        {{ alerteInfo?.message }}
       </div>
     </div>
     <div class="content">
