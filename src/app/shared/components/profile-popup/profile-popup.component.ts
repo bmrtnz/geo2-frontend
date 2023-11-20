@@ -130,19 +130,13 @@ export class ProfilePopupComponent {
     e.component.content().parentNode.classList.add("profile-popup");
   }
 
-
-  public fetchAlerte() {
-    return this.functionsService.queryFunction("fetchAlerte", []);
-  }
-
   onShown() {
     this.infoMessage = [];
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0); // Scroll top
     // Apply all parameters to widgets
     // Standard
     this.simpleParams.map(param =>
-      this.formGroup.get(param).setValue(
-        this.authService.currentUser[param])
+      this.formGroup.get(param).setValue(this.authService.currentUser[param])
     );
     // Specials
     this.reportedItems.map((item) =>
@@ -150,21 +144,21 @@ export class ProfilePopupComponent {
         item.mandatoryValue ?? !!this.authService.currentUser[item.name]
       )
     );
-
-    const alerteInfo = window.localStorage.getItem("bannerInfo");
-    // this.fetchAlerte();
-    if (alerteInfo) {
-      const bandeau: Partial<Alerte> = JSON.parse(alerteInfo);
-      if (bandeau.dateDebut) this.bandeauDateDebCB.value = true;
-      if (bandeau.dateFin) this.bandeauDateFinCB.value = true;
-      this.simpleParams.map(prop => {
-        if (this.bandeauParams.includes(prop)) this.formGroup.get(prop).patchValue(bandeau[prop]);
-      });
-      // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
-      this.infoMessage.push(bandeau.message)
-    }
+    // Get current alert
+    this.alertesService.fetchAlerte().subscribe({
+      next: (res) => {
+        const alerte = res?.data?.fetchAlerte;
+        if (alerte) {
+          this.bandeauParams.map(prop => this.formGroup.get(prop).patchValue(alerte[prop]));
+          // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
+          this.infoMessage.push(alerte.message)
+        }
+      },
+      error: (error: Error) =>
+        notify(this.messageFormat(error.message), "error", 7000)
+    });
     // Unuseful for the moment but in case of...
-    this.formGroup.get("barreDefilementHaut").setValue(!this.formGroup.get("barreDefilementBas").value);
+    this.formGroup.get("barreDefilementBas").setValue(!this.formGroup.get("barreDefilementHaut").value);
   }
 
   onHidden() {
@@ -225,13 +219,6 @@ export class ProfilePopupComponent {
 
     // Save banner info
     if (Object.keys(alerte).length) {
-      window.localStorage.setItem("bannerInfo", JSON.stringify(alerte));
-      // notify(
-      //   this.localizeService.localize("user-profile-saved"),
-      //   "success",
-      //   2500
-      // );
-      // this.hidePopup();
       this.savingUserPrefs = true;
       this.alertesService.save_v2(
         Object.keys(alerte)
@@ -295,7 +282,7 @@ export class ProfilePopupComponent {
   }
 
   messageFormat(mess) {
-    const functionNames = ["saveUtilisateur"];
+    const functionNames = ["saveUtilisateur", "fetchAlerte"];
     functionNames.map(
       (fn) =>
         (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))

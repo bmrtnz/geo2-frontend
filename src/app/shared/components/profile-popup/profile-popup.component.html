@@ -185,6 +185,7 @@
                       #bandeauDateDebCB
                       [readOnly]="!formGroup?.get('valide')?.value"
                       [focusStateEnabled]="false"
+                      [value]="!!formGroup?.get('dateDebut')?.value"
                       (onValueChanged)="onBannerDateDebClick($event)"
                     ></dx-check-box>
                   </div>
@@ -237,6 +238,7 @@
                       #bandeauDateFinCB
                       [readOnly]="!formGroup?.get('valide')?.value"
                       [focusStateEnabled]="false"
+                      [value]="!!formGroup?.get('dateFin')?.value"
                       (onValueChanged)="onBannerDateFinClick($event)"
                     ></dx-check-box>
                   </div>

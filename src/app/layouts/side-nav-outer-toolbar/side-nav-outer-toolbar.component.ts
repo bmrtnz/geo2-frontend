@@ -27,6 +27,7 @@ import { ValidationService } from "app/shared/services/api/validation.service";
 import { ChooseArticleZoomPopupComponent } from "../choose-article-zoom/choose-article-zoom-popup.component";
 import Alerte from "app/shared/models/alerte.model";
 import { VersionService } from "app/shared/services/version.service";
+import { AlertesService } from "app/shared/services/api/alert.service";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
   constructor(
     private screen: ScreenService,
     private router: Router,
+    private alertesService: AlertesService,
     private validationService: ValidationService,
     private versionService: VersionService
   ) { }
@@ -85,16 +87,21 @@ export class SideNavOuterToolbarComponent implements OnInit {
     // Starts banner info retrieval
     clearInterval(this.mainBannerInterval);
     this.mainBannerInterval = setInterval(() => {
-      const alerte = window.localStorage.getItem("bannerInfo");
-      if (alerte) {
-        this.alerteInfo = JSON.parse(alerte);
-        const timingOk = (!this.alerteInfo?.dateDebut || (this.alerteInfo?.dateDebut &&
-          new Date() > new Date(this.alerteInfo?.dateDebut))) &&
-          (!this.alerteInfo?.dateFin || (this.alerteInfo?.dateFin && new Date() < new Date(this.alerteInfo?.dateFin)));
-        this.bannerVisible = this.alerteInfo?.valide && timingOk;
-        // console.log(this.alerteInfo)
-      }
-    }, 1000);
+      this.alertesService.fetchAlerte().subscribe({
+        next: (res) => {
+          this.alerteInfo = res?.data?.fetchAlerte;
+          if (this.alerteInfo) {
+            const sectorMatch = true;
+            const timingMatch = (!this.alerteInfo?.dateDebut || (this.alerteInfo?.dateDebut &&
+              new Date() > new Date(this.alerteInfo?.dateDebut))) &&
+              (!this.alerteInfo?.dateFin || (this.alerteInfo?.dateFin && new Date() < new Date(this.alerteInfo?.dateFin)));
+            this.bannerVisible = this.alerteInfo?.valide && timingMatch && sectorMatch;
+          }
+        },
+        error: (error: Error) =>
+          console.log(error.message)
+      });
+    }, 5000);
 
   }
 
