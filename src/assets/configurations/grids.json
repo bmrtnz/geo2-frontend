@@ -4431,18 +4431,6 @@
         "visible": false
       },
       {
-        "dataField": "clientNombrePalettes",
-        "visible": false
-      },
-      {
-        "dataField": "clientNombreColisReclamation",
-        "visible": false
-      },
-      {
-        "dataField": "clientPoidsNet",
-        "visible": false
-      },
-      {
         "dataField": "clientPrixUnitaire",
         "visible": false
       },
