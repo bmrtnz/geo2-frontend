@@ -1694,7 +1694,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const ordre = {
       id: this.ordre.id,
       instructionsLogistiques: instLog,
-      entrepot: entrepot
+      entrepot: entrepot,
+      codeAlphaEntrepot: entrepot?.code // Special required field
     };
 
     this.ordresService.save({ ordre }).subscribe({
