@@ -11,7 +11,7 @@ export class Alerte extends Model {
   @Field() public message?: string;
   @Field() public type?: string;
   @Field() public userCreation?: string;
-  @Field() public userCruserModificationeation?: string;
+  @Field() public userModification?: string;
   @Field({ model: import("./secteur.model") }) public secteur?: Partial<Secteur>;
   @Field() public deroulant?: boolean;
   @Field() public valide?: boolean;
