@@ -389,7 +389,8 @@ export class GridStockComponent implements OnInit {
         this.originesSB.value?.key,
         this.modesCultureSB.value?.key,
         this.emballagesSB.value?.key,
-        this.bureauxAchatSB.value?.key
+        this.bureauxAchatSB.value?.key,
+        this.groupesSB.value?.key,
       )
       .subscribe((res) => {
         if (this.createAdditFilter(res) !== true) this.endDSLoading(res.data.allStockArticleList);
