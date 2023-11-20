@@ -48,7 +48,7 @@
         "
       >
         <!-- Grid configuration -->
-        <dxo-export fileName="Liste clients pour compte palox"></dxo-export>
+        <dxo-export fileName="Sélection lignes ordre pour litige"></dxo-export>
         <dxo-header-filter
           [visible]="true"
           [allowSearch]="true"
@@ -94,6 +94,7 @@
           [cssClass]="column?.cssClass"
           allowSearch="false"
           [dataType]="column?.dataType"
+          [calculateCellValue]="this[column?.calculateCellValue]"
           [allowHeaderFiltering]="
             column?.allowHeaderFiltering ||
             ['string'].includes(column?.dataType)

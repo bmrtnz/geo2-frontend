@@ -191,6 +191,7 @@ export class GridStockComponent implements OnInit {
     "calibreFournisseurID",
     "statut",
     "dateStatut",
+    "stock.article.normalisation.marque.description",
   ]);
 
   constructor(
@@ -289,7 +290,8 @@ export class GridStockComponent implements OnInit {
       if (this.originesSB.value)
         sbFilters += ` and article.matierePremiere.origine.id == '${this.originesSB.value?.key}'`;
       if (this.modesCultureSB.value)
-        sbFilters += ` article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value?.key}'`;
+        sbFilters += ` and article.matierePremiere.modeCulture.id == '${this.modesCultureSB.value?.key}'`;
+
       const dataToLoad = [
         {
           var: "varietes",
@@ -388,7 +390,8 @@ export class GridStockComponent implements OnInit {
         this.originesSB.value?.key,
         this.modesCultureSB.value?.key,
         this.emballagesSB.value?.key,
-        this.bureauxAchatSB.value?.key
+        this.bureauxAchatSB.value?.key,
+        this.groupesSB.value?.key,
       )
       .subscribe((res) => {
         if (this.createAdditFilter(res) !== true) this.endDSLoading(res.data.allStockArticleList);
@@ -628,6 +631,11 @@ export class GridStockComponent implements OnInit {
     this.stocksService.refreshStockHebdo().subscribe(() => {
       this.refreshArticlesGrid();
     });
+  }
+
+  public calculateDescription(rowData) {
+    const marque = rowData.stock?.article?.normalisation?.marque?.description;
+    return rowData.articleDescription + " marq : " + marque;
   }
 
   public calculateCustomSummary(options) {

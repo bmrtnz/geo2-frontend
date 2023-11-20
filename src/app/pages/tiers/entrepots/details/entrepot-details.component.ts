@@ -47,8 +47,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
   styleUrls: ["./entrepot-details.component.scss"],
 })
 export class EntrepotDetailsComponent
-  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable
-{
+  implements OnInit, OnChanges, AfterViewInit, NestedPart, Editable {
   formGroup = this.fb.group({
     code: [""],
     client: [""],
@@ -194,7 +193,7 @@ export class EntrepotDetailsComponent
 
   constructor(
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private entrepotsService: EntrepotsService,
     private personnesService: PersonnesService,
     private clientsService: ClientsService,
@@ -488,12 +487,12 @@ export class EntrepotDetailsComponent
   displayIDBefore(data) {
     return data
       ? data.id +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 

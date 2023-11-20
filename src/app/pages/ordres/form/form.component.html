@@ -388,6 +388,16 @@
                           </dx-select-box>
                         </div>
                         <dx-button
+                          class="entrepot-change-button rightPositioned"
+                          type="default"
+                          icon="material-icons swap_horiz"
+                          [focusStateEnabled]="false"
+                          [visible]="!ordreBAFOuFacture"
+                          hint="{{ 'hint-entrep-change' | localize }}"
+                          (onClick)="openChoixEntrepotPopup()"
+                        >
+                        </dx-button>
+                        <dx-button
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
@@ -576,7 +586,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-number-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 class="alignright"
                                 formControlName="transporteurDEVPrixUnitaire"
                                 [format]="'#0.00'"
@@ -596,7 +608,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 formControlName="transporteurDEVCode"
                                 [dataSource]="deviseDS"
                                 [displayExpr]="displayIDBefore"
@@ -620,7 +634,9 @@
                             </div>
                             <div class="dx-field-value">
                               <dx-select-box
-                                [readOnly]="ordreFacture"
+                                [readOnly]="
+                                  ordreFacture || blockPUDevUniteTransp
+                                "
                                 formControlName="baseTarifTransport"
                                 [dataSource]="baseTarifTransportDS"
                                 [displayExpr]="displayIDBefore"
@@ -1230,13 +1246,23 @@
                         <dx-button
                           class="margin-btn-baf"
                           type="default"
+                          [focusStateEnabled]="false"
                           [visible]="showBAFButton"
-                          text="Bon à facturer"
+                          text="{{ 'ordres-bonAFacturer' | localize }}"
                           (onClick)="bonAFacturer()"
                         ></dx-button>
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
                       <div class="grid-separator"></div>
+                      <dx-button
+                        class="totaux-btn-supp"
+                        [focusStateEnabled]="false"
+                        [disabled]="supprLignesBtnDisabled"
+                        [visible]="!!gridCommandes?.gridRowsTotal"
+                        type="default"
+                        (onClick)="suppLignesNonExp()"
+                        text="{{ 'btn-sup-lignes-cloturees-zero' | localize }}"
+                      ></dx-button>
                       <app-grid-lignes-totaux-detail
                         [ordre]="data"
                       ></app-grid-lignes-totaux-detail>
@@ -1459,3 +1485,9 @@
   (lignesChanged)="onLignesChanged($event)"
 ></app-modif-commande-edi-popup>
 <app-confirmation-result-popup></app-confirmation-result-popup>
+<app-choix-entrepot-commande-edi-popup
+  [clientId]="ordre?.client?.id"
+  [title]="'modification-entrepot' | localize"
+  (entrepotChosen)="onEntrepotChosen($event)"
+>
+</app-choix-entrepot-commande-edi-popup>

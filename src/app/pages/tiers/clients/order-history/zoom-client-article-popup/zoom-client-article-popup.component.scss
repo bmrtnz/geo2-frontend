@@ -1,4 +1,4 @@
-::ng-deep .zoom-article-popup {
+::ng-deep .zoom-client-article-popup {
   background-color: #f2f2f2 !important;
 
   .dx-template-wrapper.dx-popup-title {
@@ -6,7 +6,8 @@
     overflow: hidden;
     padding: 0 8px 0 24px;
 
-    .title-start {
+    .title-start,
+    .title-mid {
       font-size: 20px;
       font-weight: 500;
       float: left;

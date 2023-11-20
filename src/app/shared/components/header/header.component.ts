@@ -22,6 +22,9 @@ import {
   ProfilePopupComponent,
   ProfilePopupModule,
 } from "../profile-popup/profile-popup.component";
+import { BrowserService } from "app/shared/services/browser.service";
+import { SharedModule } from "../../shared.module";
+
 
 @Component({
   selector: "app-header",
@@ -45,10 +48,11 @@ export class HeaderComponent implements OnInit {
   @ViewChild(ProfilePopupComponent) profilePopup: ProfilePopupComponent;
 
   constructor(
-    private localizeService: LocalizationService,
+    public localizeService: LocalizationService,
     private authService: AuthService,
     public societeService: SocietesService,
-    public currentCompanyService: CurrentCompanyService
+    public currentCompanyService: CurrentCompanyService,
+    public browserService: BrowserService
   ) {
     this.perimetre = this.authService.currentUser?.perimetre;
     this.userMenuItems = [
@@ -87,7 +91,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  @HostListener("scroll", ["$event"]) onScrollEvent($event) {}
+  @HostListener("scroll", ["$event"]) onScrollEvent($event) { }
 
   toggleMenu = () => {
     this.menuToggle.emit();
@@ -95,6 +99,8 @@ export class HeaderComponent implements OnInit {
 }
 
 @NgModule({
+  declarations: [HeaderComponent],
+  exports: [HeaderComponent],
   imports: [
     CommonModule,
     DxButtonModule,
@@ -103,8 +109,7 @@ export class HeaderComponent implements OnInit {
     FileManagerModule,
     DxToolbarModule,
     ProfilePopupModule,
-  ],
-  declarations: [HeaderComponent],
-  exports: [HeaderComponent],
+    SharedModule
+  ]
 })
-export class HeaderModule {}
+export class HeaderModule { }

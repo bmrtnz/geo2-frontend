@@ -17,6 +17,8 @@ import { CurrentCompanyService } from './current-company.service';
 export class GridCommandesEventsService {
 
   private context: Partial<Ordre>;
+  private copyAllProp: boolean;
+  private copyAllFour: boolean;
 
   constructor(
     private currentCompanyService: CurrentCompanyService,
@@ -300,13 +302,13 @@ export class GridCommandesEventsService {
       newData.achatDeviseTaux = ld_dev_taux;
     }
 
-    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
-      // On met un petit delai, sinon on obtient pas les nouvelles valeurs
-      setTimeout(() => dxDataGrid.getVisibleRows()
-        .forEach(row => {
-          dxDataGrid.cellValue(row.rowIndex, "proprietaireMarchandise.id", value);
-          dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", ls_fou.id);
-        }), 10);
+    // UDC & Sect comm RET => Only 1 possible on one order
+    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET") {
+      if (this.copyAllProp) return;
+      this.copyAllProp = true;
+      dxDataGrid.getVisibleRows().map((res) => dxDataGrid.cellValue(res.rowIndex, "proprietaireMarchandise.id", value));
+      setTimeout(() => dxDataGrid.saveEditData().then(() => this.copyAllProp = false));
+    }
 
     if (this.context?.secteurCode === "F")
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
@@ -345,12 +347,15 @@ export class GridCommandesEventsService {
         dxDataGrid.getVisibleRows()
           .forEach(row => this.ofRepartitionPalette(row.data)?.(dxDataGrid));
 
-    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET")
-      // On met un petit delai, sinon on obtient pas les nouvelles valeurs
-      setTimeout(() => dxDataGrid.getVisibleRows()
-        .forEach(row => {
-          dxDataGrid.cellValue(row.rowIndex, "fournisseur.id", value);
-        }), 10);
+
+    // UDC & Sect comm RET => Only 1 possible on an order
+    if (this.context.societe.id === "UDC" && this.context.secteurCode === "RET") {
+      if (this.copyAllFour) return;
+      this.copyAllFour = true;
+      dxDataGrid.getVisibleRows().map((res) => dxDataGrid.cellValue(res.rowIndex, "fournisseur.id", value));
+      setTimeout(() => dxDataGrid.saveEditData().then(() => this.copyAllFour = false));
+    }
+
   }
 
   async onVentePrixUnitaireChange(

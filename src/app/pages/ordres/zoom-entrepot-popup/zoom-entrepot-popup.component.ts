@@ -37,7 +37,7 @@ export class ZoomEntrepotPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-entrepot-popup");
+    e.component.content().parentNode.classList.add("zoom-entrepot-popup", "zoom-popup");
   }
 
   hidePopup() {

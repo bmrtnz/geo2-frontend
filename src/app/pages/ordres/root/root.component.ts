@@ -22,7 +22,7 @@ import { AuthService } from "app/shared/services/auth.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
-import { DxTabPanelComponent } from "devextreme-angular";
+import { DxLoadPanelComponent, DxTabPanelComponent } from "devextreme-angular";
 import { on } from "devextreme/events";
 import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
@@ -163,16 +163,19 @@ export class TabContext {
    */
   public openOrdre(numero: string, campagne?: string, toastInfo?: boolean, specialText?: string) {
     if (!numero) return;
-    toastInfo = toastInfo === undefined ? true : toastInfo;
-    if (toastInfo)
-      notify(
-        (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
-        "info",
-        1500
-      );
-    const campagneID =
-      campagne ?? this.currentCompanyService.getCompany().campagne.id;
-    return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+    this.openIndicator("loading"); // KEEP THIS & the timeout !!! Possible previous order display error See #22195
+    setTimeout(() => {
+      toastInfo = toastInfo === undefined ? true : toastInfo;
+      if (toastInfo)
+        notify(
+          (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
+          "info",
+          1500
+        );
+      const campagneID =
+        campagne ?? this.currentCompanyService.getCompany().campagne.id;
+      return this.mutate("OPEN", TabType.Ordre, `${campagneID}-${numero}`);
+    }, 100);
   }
 
   /**
@@ -195,13 +198,15 @@ export class TabContext {
   }
 
   private mutate(action: "OPEN" | "CLOSE", tabType: TabType, id: string) {
-    const previous = this.componentRef.route.snapshot.paramMap.get(
+    let previous = this.componentRef.route.snapshot.paramMap.get(
       RouteParam.TabID
     );
     const alter = (params: ParamMap) =>
       action === "OPEN"
         ? new Set([...params.getAll(tabType), id])
         : new Set([...params.getAll(tabType)].filter((v) => v !== id));
+
+    if (action === "CLOSE") previous = TAB_HOME_ID;
 
     this.route.queryParamMap
       .pipe(
@@ -212,7 +217,7 @@ export class TabContext {
               [tabType]: [...alter(params)],
             },
             queryParamsHandling: "merge",
-            state: { [PREVIOUS_STATE]: previous },
+            state: { [PREVIOUS_STATE]: (previous !== TAB_LOAD_ID) ? previous : TAB_HOME_ID },
           })
         )
       )
@@ -245,10 +250,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public tabsUnpined: boolean;
   public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
   public moreThanOneOpenOrder: number;
+  public atLeastOneOpenIndicator: number;
   private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
   @ViewChild(DxTabPanelComponent, { static: true }) tabPanel: DxTabPanelComponent;
+  @ViewChild("tabLoadPanel") tabLoadPanel: DxLoadPanelComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -264,6 +271,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private tabContext: TabContext
   ) {
     this.moreThanOneOpenOrder = 0;
+    this.atLeastOneOpenIndicator = 0;
   }
 
   ngOnInit() {
@@ -286,7 +294,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         filter<NavigationStart>((event) => event instanceof NavigationStart),
         debounceTime(10),
         switchMapTo(this.handleRouting()),
-        takeUntil(this.destroy)
+        takeUntil(this.destroy),
       )
       .subscribe();
     this.surveyBlockage();
@@ -406,6 +414,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
 
     if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
+      if (window.localStorage.getItem("ctrlKey") === "true") return this.closeEveryIndicator();
       this.closeEveryOrdre();
     } else {
       const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
@@ -488,11 +497,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       .getAll(TabType.Ordre)
       .filter((param) => param !== pullID);
 
-    const selectedID = this.route.snapshot.paramMap.get(RouteParam.TabID);
-    const navID =
-      pullID === selectedID
-        ? history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID
-        : selectedID;
+    let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
       this.router.navigate(["pages/ordres", navID], {
@@ -503,20 +509,20 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!ordre?.length;
     this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
+    this.atLeastOneOpenIndicator = (indicateur?.length) ? 1 : 0;
   }
 
   closeEveryOrdre() {
     this.selectTab(TAB_LOAD_ID);
-    const indicateur = this.route.snapshot.queryParamMap.getAll(
-      TabType.Indicator
-    );
+    const indicateur = this.route.snapshot.queryParamMap.getAll(TabType.Indicator);
     let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
 
     // Checking if grids have unsaved data
     ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
 
     ordre = [];
-    const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+    navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
       this.router.navigate(["pages/ordres", navID], {
@@ -530,8 +536,26 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  // Keep CTRL pressed when clicking - dev util
+  closeEveryIndicator() {
+    if (!this.atLeastOneOpenIndicator) return;
+    this.selectTab(TAB_LOAD_ID);
+    const ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
+    let indicateur = [];
+    const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
+
+    this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
+      this.router.navigate(["pages/ordres", navID], {
+        queryParams: { indicateur, ordre },
+      })
+    );
+    this.atLeastOneOpenIndicator = 0;
+    notify(this.localizationService.localize("indicators-were-closed"));
+  }
+
   private handleRouting() {
     return of(this.selectTab(TAB_LOAD_ID)).pipe(
+      tap(() => this.tabLoadPanel.visible = true),
       switchMapTo(this.route.queryParamMap.pipe(first())),
       switchMap((queries) => defer(() => this.handleQueries(queries))),
       switchMapTo(this.route.paramMap),
@@ -555,7 +579,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         const item = this.getTabItem(currentParams.get(RouteParam.TabID));
         this.tabChangeEvent.emit({ status: "in", item });
         return of("done");
-      })
+      }),
+      tap(() => this.tabLoadPanel.visible = false),
     );
   }
 
@@ -694,7 +719,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
       !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
     this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
-
+    this.atLeastOneOpenIndicator = this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length ? 1 : 0;
     return this.items.indexOf(data);
   }
 

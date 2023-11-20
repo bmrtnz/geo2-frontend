@@ -71,7 +71,7 @@ export class TransitairesService extends ApiService implements APIRead {
   getDataSource_v2(columns: Array<string>, pageSize?) {
     return new DataSource({
       sort: [{ selector: this.model.getKeyField() as string }],
-      pageSize: pageSize ? pageSize : 20,
+      pageSize: pageSize ?? 20,
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {

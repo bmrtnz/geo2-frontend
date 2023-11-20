@@ -24,6 +24,7 @@ import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { confirm } from "devextreme/ui/dialog";
+import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -70,8 +71,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
   public currCompanyId: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
-  @ViewChild(LitigeCloturePopupComponent, { static: false })
-  cloturePopup: LitigeCloturePopupComponent;
+  @ViewChild(LitigeCloturePopupComponent, { static: false }) cloturePopup: LitigeCloturePopupComponent;
 
   public formGroup = new UntypedFormGroup({
     codeSecteur: new UntypedFormControl(),
@@ -163,7 +163,8 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       ...this.formGroup.value,
     };
 
-    this.datagrid.instance.beginCustomLoading("");
+    // this.datagrid.instance.beginCustomLoading("");
+    setTimeout(() => this.datagrid.instance.beginCustomLoading(""), 100);
     this.litigesService
       .allSupervisionLitige(
         this.typeFiltrage,
@@ -195,6 +196,7 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       if (e.summaryItems[0]?.column === "id") {
         const data = e.data.items ?? e.data.collapsedItems;
         this.infosLitige = data[0];
+        if (!this.infosLitige) return notify(this.localization.localize("warning-no-data"), "warning", 4000);
         this.cloturePopup.visible = true;
       }
     }
@@ -204,22 +206,24 @@ export class LitigesSupervisionComponent implements OnInit, AfterViewInit {
       e.column.dataField === "numeroOrdre" &&
       e.data.numeroOrdre &&
       sameCompany
-    )
+    ) {
+      sessionStorage.setItem("showAccordion", "litiges");
       this.tabContext.openOrdre(
         e.data.numeroOrdre,
         e.data.litige.ordreOrigine.campagne.id
       );
+    }
   }
 
   onOpenNewOrder(ds) {
     const sameCompany =
       ds.data.societe.id === this.currentCompanyService.getCompany().id;
-    console.log(ds.data.numeroOrdre, sameCompany);
-    if (ds.data.numeroOrdre && sameCompany)
+    if (ds.data.numeroOrdreRemplacement && sameCompany) {
       this.tabContext.openOrdre(
         ds.data.numeroOrdreRemplacement,
         ds.data.litige.ordreOrigine.campagne.id
       );
+    }
   }
 
   onCellPrepared(e) {

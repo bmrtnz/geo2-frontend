@@ -10,7 +10,7 @@ import {
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
-import { DxPopupComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxButtonComponent, DxPopupComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { TabContext } from "../root/root.component";
@@ -64,8 +64,8 @@ export class DuplicationOrdrePopupComponent {
   });
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxSelectBoxComponent, { static: false })
-  entrepotSB: DxSelectBoxComponent;
+  @ViewChild(DxSelectBoxComponent, { static: false }) entrepotSB: DxSelectBoxComponent;
+  @ViewChild("duplicatetButton", { static: false }) duplicatetButton: DxButtonComponent;
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("duplication-ordre-popup");
@@ -73,6 +73,7 @@ export class DuplicationOrdrePopupComponent {
 
   onShown(e) {
     this.setDefaultValues();
+    this.duplicatetButton?.instance.focus();
     this.showModify = false;
     if (this.ordre) {
       this.entrepotDS = this.entrepotsService.getDataSource_v2([
@@ -185,7 +186,7 @@ export class DuplicationOrdrePopupComponent {
         next: (res) => {
           const numero = res.data?.wDupliqueOrdreOnDuplique?.data?.nordre;
           if (numero) {
-            this.tabContext.openIndicator("loading"); // KEEP THIS!!! See #22195
+            // NB #23103 The openIndicator("loading") has been translated to openOrdre()
             notify(
               this.localization.localize("ordre-cree").replace("&O", numero),
               "success",

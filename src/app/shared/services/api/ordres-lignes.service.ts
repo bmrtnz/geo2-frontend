@@ -374,22 +374,20 @@ export class OrdreLignesService extends ApiService implements APIRead {
       //     this.lock(e);
       //   break;
       // }
-      case "achatDevisePrixUnitaire": {
-        if (
-          data.ordre.venteACommission !== true &&
-          data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF"
-        )
-          this.lock(e);
-        break;
-      }
+      case "achatDevisePrixUnitaire":
       case "achatUnite.id": {
         if (
-          data.ordre.venteACommission !== true &&
-          data.ordre.type?.id !== "REP" &&
-          data.ordre.type?.id !== "RPF"
-        )
-          this.lock(e);
+          data.ordre.venteACommission === true ||
+          data.ordre.type?.id === "REP" ||
+          data.ordre.type?.id === "RPF" ||
+          data.ordre.type?.id === "RPO" ||
+          data.ordre.type?.id === "RPR" ||
+          data.ordre.type?.id === "REF" ||
+          data.proprietaireMarchandise?.code.substring(0, 2) === "BW"
+        ) {
+        } else {
+          if (data.logistique?.expedieStation === true || bloquer === true) this.lock(e);
+        }
         break;
       }
       case "typePalette.id": {
@@ -620,4 +618,13 @@ export class OrdreLignesService extends ApiService implements APIRead {
       { name: "societeID", type: "String", value: societeID },
     ]);
   }
+
+  public supprLignesNonExped(
+    ordreRef: string,
+  ) {
+    return this.functionsService.queryFunction("supprLignesNonExped", [
+      { name: "ordreRef", type: "String", value: ordreRef },
+    ]);
+  }
+
 }

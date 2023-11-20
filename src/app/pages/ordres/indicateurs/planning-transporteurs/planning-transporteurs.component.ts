@@ -132,7 +132,9 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+    this.authService.onUserChanged().subscribe(() =>
+      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J"
+      ));
   }
 
   setDefaultPeriod(periodId) {
@@ -229,7 +231,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       e.cellElement.classList.add("entrepot-planning-transporteurs");
     if (e.column.dataField === "numero" && e.value) {
       e.cellElement.classList.add("numero-planning-transporteurs");
-      e.cellElement.title = this.localizeService.localize("hint-access-ordre");
+      e.cellElement.title = this.localizeService.localize("hint-dblClick-ordre");
     }
   }
 

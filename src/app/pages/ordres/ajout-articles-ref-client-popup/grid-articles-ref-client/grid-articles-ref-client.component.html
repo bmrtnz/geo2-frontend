@@ -165,6 +165,7 @@
     [keyExpr]="'id'"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
     (onContentReady)="contentReadyEvent.emit($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
     (onToolbarPreparing)="
@@ -229,3 +230,7 @@
     ></dxi-column>
   </dx-data-grid>
 </div>
+
+<app-zoom-article-popup
+  [articleLigneId]="articleLigneId"
+></app-zoom-article-popup>

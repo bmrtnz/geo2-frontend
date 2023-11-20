@@ -568,14 +568,14 @@ export class OrdresService
   public fCreeOrdreReplacement(
     ordreOriginID: string,
     entrepotID: string,
-    nomUtilisateur: string,
-    societeID: string
+    societeID: string,
+    nomUtilisateur: string
   ) {
     return this.functionsService.queryFunction("fCreeOrdreReplacement", [
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "entrepotID", type: "String", value: entrepotID },
-      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
       { name: "societeID", type: "String", value: societeID },
+      { name: "nomUtilisateur", type: "String", value: nomUtilisateur },
     ]);
   }
 
@@ -588,6 +588,22 @@ export class OrdresService
       { name: "ordreOriginID", type: "String", value: ordreOriginID },
       { name: "societeID", type: "String", value: societeID },
       { name: "nomUtilisateur", type: String, value: nomUtilisateur },
+    ]);
+  }
+
+  /**
+  * retourne les infos forfait transport
+  */
+
+  public fReturnForfaitsTrp(
+    typeOrd: string,
+    cenRef: string,
+    incCode: string
+  ) {
+    return this.functionsService.queryFunction("fReturnForfaitsTrp", [
+      { name: "typeOrd", type: "String", value: typeOrd },
+      { name: "cenRef", type: "String", value: cenRef },
+      { name: "incCode", type: "String", value: incCode }
     ]);
   }
 

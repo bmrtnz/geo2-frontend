@@ -12,6 +12,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  noDataText="{{ 'aucun-frais' | localize }}"
   (onInitNewRow)="onInitNewRow($event)"
   (onSaved)="onSaved()"
   (onCellPrepared)="onCellPrepared($event)"

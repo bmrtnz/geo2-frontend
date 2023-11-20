@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class BrowserService {
-  constructor() {}
+  constructor() { }
 
   /**
    * Open wiki on tiers section with given element path.
@@ -16,4 +16,11 @@ export class BrowserService {
 
     window.open(encodeURI(`${baseUrl}${element}`), "_blank");
   }
+
+  openWikiMain() {
+    const baseUrl = "http://svr_wiki:8080/xwiki/wiki/geo/view/Main/";
+
+    window.open(encodeURI(`${baseUrl}`), "_blank");
+  }
+
 }

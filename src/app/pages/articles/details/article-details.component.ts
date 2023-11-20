@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -225,7 +224,7 @@ export class ArticleDetailsComponent
     private router: Router,
     private route: ActivatedRoute,
     private fb: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     public authService: AuthService,
     private localization: LocalizationService
   ) { }

@@ -26,7 +26,7 @@ import { GridColumn } from "basic";
   styleUrls: ["./grid-suivi.component.scss"],
 })
 export class GridSuiviComponent implements AfterViewInit {
-  @Output() public ordreSelected = new EventEmitter<Ordre["id"]>();
+  @Output() public ordreSelected = new EventEmitter();
   @Output() public uniqueOrder = new EventEmitter();
   @Input() public filter: [];
   @ViewChild(DxDataGridComponent, { static: false })

@@ -47,7 +47,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
    * @see onRowSelected
    */
   @Input() public rowSelectionEventMode: "emit" | "open" = "open";
-  @Output() public whenRowSelected = new EventEmitter<Ordre["id"]>();
+  @Output() public whenRowSelected = new EventEmitter();
 
   searchItems: any;
   filter: any;
@@ -178,22 +178,17 @@ export class OrdresSuiviComponent implements AfterViewInit {
     setTimeout(() => {
       const toSearch = this.autocomplete.value;
       if (toSearch?.length) {
-        this.enableFilters(toSearch);
+        this.enableFilters(toSearch.trim());
         this.showGridResults = true;
       }
     }, 1);
   }
 
-  public handleOrdreSelection(ordreID: Ordre["id"]) {
+  public handleOrdreSelection(ordre: Partial<Ordre>) {
     if (this.rowSelectionEventMode === "open")
-      this.ordresService
-        .getOne_v2(ordreID, new Set(["numero", "campagne.id"]))
-        .pipe(map((res) => res.data.ordre))
-        .subscribe((ordre) =>
-          this.tabContext.openOrdre(ordre.numero, ordre.campagne.id)
-        );
+      this.tabContext.openOrdre(ordre.numero, ordre.campagne.id)
     if (this.rowSelectionEventMode === "emit")
-      this.whenRowSelected.emit(ordreID);
+      this.whenRowSelected.emit(ordre.id);
   }
 
   public openUniqueOrder(ordre) {

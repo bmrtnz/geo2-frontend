@@ -53,7 +53,7 @@
     position: relative;
     margin-top: 3px;
     height: auto;
-    width: 400px;
+    width: 600px;
     white-space: initial;
     line-height: 16px;
     cursor: pointer;
@@ -113,6 +113,10 @@
     .not-france-origin {
       color: #FFC8EA !important;
     }
+
+    .comment-with-pen {
+      color: #FFF !important;
+    }
   }
 
   .comment-with-pen {
@@ -122,6 +126,7 @@
     .text {
       margin: 3px 10px 2px 0;
       max-width: 250px;
+      color: rgba(0, 0, 0, .54);
       overflow: hidden;
       white-space: normal;
       float: left;
@@ -132,6 +137,10 @@
       height: 22px;
       font-size: 20px !important;
     }
+  }
+
+  .dx-row-focused .comment-with-pen .text {
+    color: #FFF;
   }
 
   .small-horiz-padding {

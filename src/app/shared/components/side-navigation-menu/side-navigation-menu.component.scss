@@ -28,6 +28,11 @@
           width: $side-panel-min-width !important;
           margin: 0 !important;
         }
+
+        span,
+        div {
+          margin-top: 1px !important;
+        }
       }
 
       // ##
@@ -96,6 +101,30 @@
           }
         }
       }
+    }
+
+    .bottom-side-nav {
+      position: absolute;
+      bottom: 25px;
+      font-size: 13px;
+      line-height: 15px;
+      text-align: center;
+      left: 50%;
+      transform: translatex(-50%);
+      width: 250px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: opacity 0.2s;
+      opacity: 0 !important;
+
+      &.copyright-short-label {
+        color: white;
+        letter-spacing: -1px;
+      }
+    }
+
+    .copyright-labels-full-opacity {
+      transition-delay: 0.25s;
+      opacity: 1 !important;
     }
 
     :host-context(.dx-theme-generic) ::ng-deep.dx-treeview {

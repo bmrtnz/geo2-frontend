@@ -4,9 +4,14 @@
   .inputs {
     display: flex;
 
-    > .field {
+    >.field {
       margin: 20px;
     }
+
+    .dx-placeholder {
+      left: 17px;
+    }
+
   }
 
   dxi-toolbar-item {

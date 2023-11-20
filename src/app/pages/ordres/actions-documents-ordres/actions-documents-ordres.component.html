@@ -24,16 +24,18 @@
     text="+"
     (onClick)="showFluxDoxOtherBtns($event)"
   ></dx-button>
-  <dx-action-sheet
-    #actionSheet
-    width="auto"
-    [items]="plusActionsFlux"
-    [showTitle]="false"
-    [target]="actionSheetTarget"
-    [showCancelButton]="true"
-    [usePopover]="true"
-    (onItemClick)="onClickSendAction($event.itemData.id)"
-  ></dx-action-sheet>
+  <div class="toto">
+    <dx-action-sheet
+      #actionSheet
+      width="300"
+      [items]="plusActionsFlux"
+      [showTitle]="false"
+      [target]="actionSheetTarget"
+      [showCancelButton]="true"
+      [usePopover]="true"
+      (onItemClick)="onClickSendAction($event)"
+    ></dx-action-sheet>
+  </div>
   <app-documents-ordres-popup
     [ordre]="ordre"
     [flux]="flux"

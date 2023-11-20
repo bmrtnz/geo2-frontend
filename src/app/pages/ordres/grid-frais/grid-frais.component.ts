@@ -21,6 +21,7 @@ import { OrdresFraisService } from "app/shared/services/api/ordres-frais.service
 import { TransitairesService } from "app/shared/services/api/transitaires.service";
 import { TypesFraisService } from "app/shared/services/api/types-frais.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
@@ -39,6 +40,8 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
 
+let self;
+
 @Component({
   selector: "app-grid-frais",
   templateUrl: "./grid-frais.component.html",
@@ -55,10 +58,6 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   public transitaireSource: DataSource;
   public transitaireDouanierSource: DataSource;
   public lieuxPassageAQuaiSource: DataSource;
-  public codePlusList: string[];
-  public codePlusTransporteurs: string[];
-  public codePlusTransitaires: string[];
-  public codePlusEntrepots: string[];
   public itemsWithSelectBox: string[];
   public descriptionOnlyDisplaySB: string[];
   public SelectBoxPopupWidth: number;
@@ -66,6 +65,10 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   public columnChooser = environment.columnChooser;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public items;
+  private codePlusFocused: boolean;
+  private aPreciser: any;
+  public descriptionMandatory: boolean;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChildren(DxSelectBoxComponent)
   selectBoxes: QueryList<DxSelectBoxComponent>;
@@ -77,6 +80,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     public gridConfiguratorService: GridConfiguratorService,
     public codePlusService: TransporteursService,
     public gridsService: GridsService,
+    public formUtils: FormUtilsService,
     public transporteursService: TransporteursService,
     public transitairesService: TransitairesService,
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
@@ -85,13 +89,12 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     public localizeService: LocalizationService,
     public authService: AuthService
   ) {
+    self = this;
+    this.aPreciser = { id: "A", libelle: this.localizeService.localize("a-preciser") };
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreFrais);
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.itemsWithSelectBox = ["frais", "devise", "codePlus"];
     this.descriptionOnlyDisplaySB = ["frais"];
-    this.codePlusTransporteurs = [];
-    this.codePlusTransitaires = [];
-    this.codePlusEntrepots = [];
     this.fraisSource = this.fraisService.getDataSource_v2([
       "id",
       "description",
@@ -129,20 +132,20 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     this.transporteurSource = this.transporteursService.getDataSource_v2([
       "id",
       "raisonSocial",
-    ]);
+    ], 10000);
     this.transporteurSource.filter(["valide", "=", true]);
     this.lieuxPassageAQuaiSource =
-      this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"]);
+      this.lieuxPassageAQuaiService.getDataSource_v2(["id", "raisonSocial"], 10000);
     this.lieuxPassageAQuaiSource.filter(["valide", "=", true]);
     this.transitaireSource = this.transitairesService.getDataSource_v2([
       "id",
       "raisonSocial",
-    ]);
+    ], 10000);
     this.transitaireSource.filter(["valide", "=", true]);
     this.transitaireDouanierSource = this.transitairesService.getDataSource_v2([
       "id",
       "raisonSocial",
-    ]);
+    ], 10000);
     this.transitaireDouanierSource.filter([
       ["valide", "=", true],
       "and",
@@ -153,7 +156,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
         "id",
         "code",
         "raisonSocial",
-      ]);
+      ], 10000);
       const filtersEnt = [
         ["valide", "=", true],
         "and",
@@ -274,25 +277,50 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   }
 
   private configureSelectSources(e: EditorPreparingEvent) {
-    if (e.dataField === "frais.id")
+    if (e.dataField === "frais.id") {
       e.editorOptions.dataSource = this.fraisSource;
+    }
     if (e.dataField === "devise.id")
       e.editorOptions.dataSource = this.deviseSource;
     if (e.dataField === "codePlus") {
       e.editorName = "dxSelectBox";
       e.editorOptions.searchEnabled = true;
       e.editorOptions.searchExpr = ["id"];
-      // e.editorOptions.acceptCustomValue = true;
-      // Create on `Enter` https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#customItemCreateEvent
-      // e.editorOptions.customItemCreateEvent = '';
-      // e.editorOptions.onCustomItemCreating = (event: CustomItemCreatingEvent) => {
-      //   if (!event.customItem)
-      //     event.customItem = { codePlus: event.text };
-      // }
+      e.editorOptions.displayExpr = this.displayIDBefore;
+      e.editorOptions.valueExpr = this.displayIDBefore;
+      e.editorOptions.items = this.items;
       e.editorOptions.onValueChanged = args => {
         e.setValue({ codePlus: args.value });
-      };
+        // If "A préciser" is chosen, the description becomes mandatory and we focus on it
+        this.descriptionMandatory = (args.value === this.aPreciser.libelle);
+        if (this.descriptionMandatory)
+          setTimeout(() => this.datagrid.instance.editCell(e.row.rowIndex, "description"), 100);
+      }
+      e.editorOptions.onFocusIn = () => {
+        if (this.codePlusFocused) return;
+        let DS = this.fetchCodePlusDataSource(e.row?.data?.frais?.id);
+        if (DS) {
+          DS.load().then(res => {
+            this.items = res;
+            // Adding "À préciser" on top of the list
+            this.items.unshift(this.aPreciser);
+            // KEEP THIS. Trick to "reload" the freshly loaded DS from the SB
+            this.reloadCodePlusDS(e);
+          });
+        } else {
+          this.items = [this.aPreciser];
+          // KEEP THIS. Trick to "reload" the freshly loaded DS from the SB
+          this.reloadCodePlusDS(e);
+        }
+      }
     }
+  }
+
+  reloadCodePlusDS(e) {
+    this.datagrid.instance.editCell(e.row.rowIndex, "achatQuantite");
+    this.codePlusFocused = true;
+    this.datagrid.instance.editCell(e.row.rowIndex, "codePlus");
+    setTimeout(() => this.codePlusFocused = false, 100);
   }
 
   setCellValue(newData: Partial<OrdreFrais>, value, currentData: Partial<OrdreFrais>) {
@@ -315,24 +343,34 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
 
   onFocusedCellChanging(e) {
     if (e.columns[e.newColumnIndex].dataField === "codePlus") {
-      const fraisID = e.rows?.[e.newRowIndex]?.data?.frais?.id;
-      if (!fraisID)
-        notify("Veuillez préalablement saisir un type de frais", "warning", 3000);
-      else {
-        let DS = this.fetchCodePlusDataSource(fraisID);
-        // if (DS) {
-        //   const store = DS.store() as CustomStore;
-        //   store.push([
-        //     { type: "insert", data: { id: "AAAAAAA", raisonSocial: "TATTATATT" } },
-        //   ])
-        //   DS.reload();
-        // }
-        e.columns[e.newColumnIndex].editorOptions.dataSource = DS;
-      }
+      if (!e.rows?.[e.newRowIndex]?.data?.frais?.id)
+        notify(this.localizeService.localize("choose-frais"), "warning", 3000);
     }
-
-    if (e.prevColumnIndex === e.columns.length - 1)
-      if ([e.prevRowIndex, e.newRowIndex].includes(e.rows.length - 1))
-        this.datagrid.instance.addRow();
   }
+
+  displayIDBefore(data) {
+    // Special case
+    if (data?.id === self.aPreciser.id) return self.aPreciser.libelle;
+    // Other std cases
+    return data
+      ? data.id +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description
+            ? data.description
+            : data.libelle)
+      : null;
+  }
+
+  calculateFraisValue(data) {
+    return data?.frais ? self.formUtils.capitalizeFirst(data.frais.description) : null;
+  }
+
+  calculateDeviseValue(data) {
+    return data?.devise ? self.formUtils.capitalizeFirst(data.devise.description) : null;
+  }
+
 }

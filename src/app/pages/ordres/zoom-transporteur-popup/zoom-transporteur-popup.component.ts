@@ -36,7 +36,7 @@ export class ZoomTransporteurPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-transporteur-popup");
+    e.component.content().parentNode.classList.add("zoom-transporteur-popup", "zoom-popup");
   }
 
   hidePopup() {

@@ -2,10 +2,53 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
+::ng-deep .litige-dot-legend-container {
+  position: absolute;
+  right: 222px;
+  margin-top: 16px;
+  z-index: 1;
+
+  div {
+    position: relative;
+    float: left;
+  }
+
+  .litige-dot-legend {
+    margin: 1px 6px 0 0;
+    min-width: 15px;
+    padding: 0px 3px 2px 4px;
+    background: #ff325a;
+    border-radius: 100%;
+    font-size: 10px;
+    line-height: 14px;
+    color: white;
+    text-align: center;
+  }
+}
+
 ::ng-deep .grid-order-history {
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
+  }
+
+  .litige-dot {
+    cursor: pointer;
+
+    &:after {
+      display: inline-block;
+      position: absolute;
+      content: "L";
+      margin: -8px 0 0 6px;
+      min-width: 15px;
+      padding: 0px 4px 2px 4px;
+      background: #ff325a;
+      border-radius: 100%;
+      font-size: 10px;
+      line-height: 14px;
+      color: white;
+      text-align: center;
+    }
   }
 
   .dx-datagrid-group-panel {

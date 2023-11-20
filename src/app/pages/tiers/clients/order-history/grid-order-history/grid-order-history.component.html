@@ -218,6 +218,17 @@
   (onClick)="gridsService.expandCollapseGroups(this)"
 ></dx-button>
 
+<!-- Litige dot indicator Legend -->
+<div
+  *ngIf="hasLitigeDots"
+  class="litige-dot-legend-container"
+>
+  <div class="litige-dot-legend">L</div>
+  <div class="litige-dot-legend-text">
+    {{ "hint-previous-litige" | localize }}
+  </div>
+</div>
+
 <div class="grid-order-history-container">
   <dx-data-grid
     class="dx-card wide-card"
@@ -241,6 +252,7 @@
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',

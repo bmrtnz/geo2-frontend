@@ -106,16 +106,18 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
     if (!DSitems?.length) return this.noDataError();
 
-    if (this.programID === Program.PRÉORDRES) {
+    if ([Program.PRÉORDRES, Program.ORCHARD].map(p => p.toString()).includes(this.programID)) {
       const ordreNums = DSitems.filter(item => !item.erreurs.length).map(item => item.ordreNum);
       const response = await this.handleConfirmationsCommande(ordreNums);
-      response.forEach(({ ordreNum, envoisDone }) => {
-        const row = DSitems.find(item => item.ordreNum === ordreNum);
-        if (row) row.messages.push(envoisDone
-          ? "Confirmation d'ordre envoyée !!"
-          : "Confirmation d'ordre N'EST PAS envoyée !!",
-        )
-      });
+      response
+        .filter(row => !!row?.ordreNum)
+        .forEach(({ ordreNum, envoisDone }) => {
+          const row = DSitems.find(item => item.ordreNum === ordreNum);
+          if (row) row.messages.push(envoisDone
+            ? "Confirmation d'ordre envoyée !!"
+            : "Confirmation d'ordre N'EST PAS envoyée !!",
+          )
+        });
     }
 
     DSitems.map((item, index) => {
@@ -225,11 +227,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   private async handleConfirmationsCommande(ordreNums: Array<Ordre["numero"]>) {
     const response: { ordreNum: Ordre["numero"], envoisDone: boolean }[] = [];
     const flux = "ORDRE";
-    const { id, campagne } = this.currentCompanyService.getCompany();
+    const { socCode, campagne } = this.currentCompanyService.getCompany();
     for (const num of ordreNums) {
       try {
         const res = await lastValueFrom(this.ordresService
-          .getOneByNumeroAndSocieteAndCampagne(num, id, campagne.id, ["id", "numero", "type.id"]));
+          .getOneByNumeroAndSocieteAndCampagne(num, this.programID === "ORCHARD" ? socCode : "BUK", campagne.id, ["id", "numero", "type.id"]));
         const ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
         await lastValueFrom(this.functionsService
           .geoPrepareEnvois(
@@ -239,12 +241,6 @@ export class ImportProgrammesPopupComponent implements OnChanges {
             false,
             this.authService.currentUser.nomUtilisateur
           ));
-        const envois = await lastValueFrom(this.envoisService.getList(
-          `ordre.id==${ordre.id} and traite==A and flux.id==${flux}`,
-          ["id"],
-        ));
-        await lastValueFrom(this.envoisService
-          .saveAll(envois.data.allEnvoisList.map(({ id }) => ({ id, traite: 'N' })), new Set(["id"])));
         response.push({ ordreNum: num, envoisDone: true });
       } catch (error) {
         console.error(`Erreur lors de l'envoi automatique pour l'ordre numero ${num}`, error);

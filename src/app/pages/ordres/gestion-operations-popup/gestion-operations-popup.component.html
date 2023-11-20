@@ -116,12 +116,20 @@
           [focusStateEnabled]="false"
           (onClick)="reInitialize()"
         ></dx-button>
-        <dx-button
-          type="normal"
-          text="{{ 'btn-fraisAnnexes' | localize }}"
-          [focusStateEnabled]="false"
-          (onClick)="fraisAnnexes()"
-        ></dx-button>
+        <div>
+          <div
+            class="frais-ann-indicator"
+            *ngIf="infosLitige?.fraisAnnexes"
+          >
+            {{ infosLitige.fraisAnnexes.toFixed(2) }}
+          </div>
+          <dx-button
+            type="normal"
+            text="{{ 'btn-fraisAnnexes' | localize }}"
+            [focusStateEnabled]="false"
+            (onClick)="fraisAnnexes()"
+          ></dx-button>
+        </div>
       </div>
 
       <div style="clear: both"></div>
@@ -184,7 +192,7 @@
 
       <br />
       <div
-        class="bottom-buttons-container float-right"
+        class="bottom-buttons-container"
         [ngClass]="{ 'inactive-box': false }"
       >
         <!-- Annuler -->

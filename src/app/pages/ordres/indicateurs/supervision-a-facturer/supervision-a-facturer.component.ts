@@ -179,7 +179,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         .patchValue(this.authService.currentUser.secteurCommercial);
     }
 
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
+    this.authService.onUserChanged().subscribe(() =>
+      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
+    );
 
     // Fill commercial/assistante input from user role
     if (
@@ -432,6 +434,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     const ordreRefs = this.datagrid.instance
       .getSelectedRowsData()
       .map((row: Partial<OrdreBaf>) => row.ordreRef);
+    notify(this.localization.localize("invoice-running"), "info", 5000);
+    this.datagrid.instance.beginCustomLoading("");
     this.ordresBafService
       .fBonAFacturer(
         ordreRefs,
@@ -439,7 +443,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         true
       ) // true for silent mode without warnings
       .subscribe({
-        complete: () => this.enableFilters(),
+        complete: () => {
+          this.datagrid.instance.endCustomLoading();
+          notify(this.localization.localize("invoice-finished"), "success", 5000);
+          this.enableFilters();
+        }
       });
   }
 

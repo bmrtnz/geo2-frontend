@@ -3,6 +3,7 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-packing-list {
+  min-height: 200px;
   max-height: 300px;
 
   .dx-toolbar-after {

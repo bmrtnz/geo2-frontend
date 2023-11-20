@@ -17,6 +17,7 @@
     [visible]="column?.visible"
     [showInColumnChooser]="column?.showInColumnChooser"
     [cellTemplate]="column?.cellTemplate"
+    [editCellTemplate]="column.editCellTemplate"
     [headerCellTemplate]="column?.headerCellTemplate"
     [calculateCellValue]="this[column?.calculateCellValue]"
     [setCellValue]="setCellValue"
@@ -35,7 +36,7 @@
     [calculateCustomSummary]="calculateCustomSummary"
   >
     <dxi-total-item
-      displayFormat="Quantités totales"
+      displayFormat="{{ 'qte-totales' | localize }} :"
       column="ligne.ordreLigne.article.articleDescription.descriptionLongue"
       [alignment]="'right'"
     >
@@ -61,16 +62,16 @@
     <dxi-total-item
       column="clientAvoir"
       summaryType="sum"
-      displayFormat="Avoir au client: {0}"
+      displayFormat="{{ 'avoir-client' | localize }} : {0}"
       showInColumn="avoir"
-      cssClass="client-cell"
+      cssClass="client-cell sum-cell"
     >
       <dxo-value-format [formatter]="formatToClientCurrency"></dxo-value-format>
     </dxi-total-item>
     <dxi-total-item
       name="avoirRemise"
       summaryType="custom"
-      displayFormat="Avoir remisé: {0}"
+      displayFormat="{{ 'avoir-remise' | localize }} : {0}"
       showInColumn="ligne.commentaireResponsable"
       cssClass="client-cell"
     >
@@ -79,9 +80,9 @@
     <dxi-total-item
       column="responsableAvoir"
       summaryType="sum"
-      displayFormat="Dde avoir fournisseur: {0}"
+      displayFormat="{{ 'avoir-fournisseur' | localize }} : {0}"
       showInColumn="avoir"
-      cssClass="responsable-cell"
+      cssClass="responsable-cell sum-cell"
     >
       <dxo-value-format
         [formatter]="formatToResponsableCurrency"

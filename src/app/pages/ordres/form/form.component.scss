@@ -130,7 +130,8 @@ $left-panel-btn-height: 44px;
     }
   }
 
-  .margin-btn-baf {
+  .margin-btn-baf,
+  .totaux-btn-supp {
     position: absolute;
     z-index: 1;
     right: 200px;
@@ -521,7 +522,8 @@ dx-button[type="normal"] {
   width: 500px;
 }
 
-::ng-deep .form-zoom-button {
+::ng-deep .form-zoom-button,
+.entrepot-change-button {
   position: relative;
   top: 2px;
   width: 20px !important;
@@ -542,6 +544,15 @@ dx-button[type="normal"] {
       font-size: 17px !important;
       margin: 0 4px 0 -1px !important;
     }
+  }
+}
+
+::ng-deep .entrepot-change-button {
+  margin-right: 27px;
+
+  .dx-icon {
+    font-size: 20px !important;
+    padding-right: 4px !important;
   }
 }
 

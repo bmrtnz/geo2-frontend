@@ -35,6 +35,7 @@ import { LitigesService } from "app/shared/services/api/litiges.service";
 import { MruEntrepotsService } from "app/shared/services/api/mru-entrepots.service";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresBafService } from "app/shared/services/api/ordres-baf.service";
+import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logistiques.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { PersonnesService } from "app/shared/services/api/personnes.service";
@@ -47,6 +48,7 @@ import { FormUtilsService } from "app/shared/services/form-utils.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import {
   DxAccordionComponent,
+  DxButtonComponent,
   DxCheckBoxComponent,
   DxSelectBoxComponent,
 } from "devextreme-angular";
@@ -55,7 +57,7 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
-// eslint-disable-next-line max-len
+
 import {
   catchError,
   concatMap,
@@ -93,8 +95,10 @@ import { GridLignesDetailsComponent } from "../grid-lignes-details/grid-lignes-d
 import { GridLignesTotauxDetailComponent } from "../grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
 import { GridLogistiquesComponent } from "../grid-logistiques/grid-logistiques.component";
 import { GridMargeComponent } from "../grid-marge/grid-marge.component";
+import { GridOrdreLigneLogistiqueComponent } from "../grid-ordre-ligne-logistique/grid-ordre-ligne-logistique.component";
 import { GridsService } from "../grids.service";
 import { GroupageChargementsPopupComponent } from "../groupage-chargements-popup/groupage-chargements-popup.component";
+import { ChoixEntrepotCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../indicateurs/commandes-edi/modif-commande-edi-popup/modif-commande-edi-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "../motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
 import {
@@ -139,8 +143,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: UntypedFormBuilder,
-    private formUtils: FormUtilsService,
+    public formUtils: FormUtilsService,
     private ordresService: OrdresService,
+    private ordreLignesService: OrdreLignesService,
     private ordresBafService: OrdresBafService,
     private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService,
@@ -266,7 +271,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreRefPaloxPere",
     "factureAvoir",
     "ordreEDI.id",
-    "ordreEDI.canalCde"
+    "ordreEDI.canalCde",
+    "entrepot.client.instructionLogistique",
+    "entrepot.instructionLogistique"
   ];
 
   private destroy = new Subject<boolean>();
@@ -281,7 +288,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public canalOrdreEdi: any;
   public numeroFacture: string;
   public numeroAvoir: string;
-  public idOrdreAvoir: string;
+  public ordreAvoir: Partial<Ordre>;
   public refOrdre: string;
   public formGroup = this.formBuilder.group({
     id: [""],
@@ -331,6 +338,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public headerSaving: boolean;
   public headerRefresh: boolean;
   public instructionsList: string[];
+  public blockPUDevUniteTransp: boolean;
 
   public clientsDS: DataSource;
   public entrepotDS: DataSource;
@@ -356,7 +364,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public cancelledOrder: boolean;
   public promptPopupDateOnly: boolean;
   private savedGridCdeStandby: boolean;
+  public supprLignesBtnDisabled: boolean;
 
+  public accordionButtons: HTMLElement[];
   public factureVisible = false;
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
@@ -371,6 +381,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("leftAccessPanel", { static: false })
   leftAccessPanel: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: QueryList<DxAccordionComponent>;
+  @ViewChildren(DxButtonComponent) buttons: QueryList<ElementRef | DxButtonComponent>;
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
   @ViewChild(AjoutArticlesRefClientPopupComponent, { static: false })
   ajoutArtRefClt: AjoutArticlesRefClientPopupComponent;
@@ -387,6 +398,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ZoomEntrepotPopupComponent, { static: false })
   zoomEntrepotFilePopup: ZoomEntrepotPopupComponent;
   @ViewChild(GridCommandesComponent) gridCommandes: GridCommandesComponent;
+  @ViewChild(GridOrdreLigneLogistiqueComponent) gridSynthese: GridOrdreLigneLogistiqueComponent;
   @ViewChild(GridLignesDetailsComponent)
   gridLignesDetail: GridLignesDetailsComponent;
   @ViewChild(GridLignesTotauxDetailComponent)
@@ -416,6 +428,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("gridLogistiques") gridLogistiques: GridLogistiquesComponent;
   @ViewChild(GridEnvoisComponent) gridEnvois: GridEnvoisComponent;
   @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
+  @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
 
 
 
@@ -556,11 +569,19 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
+
+    // this.clientId = '005527'; ///// A VIRER !!!
+    // this.zoomClientFilePopup.visible = true; ///// A VIRER !!!
   }
 
   ngOnDestroy() {
     this.destroy.next(true);
     this.destroy.unsubscribe();
+  }
+
+  scrollOpenAccordion(fragment) {
+    this.openFormAccordions(fragment)
+    this.accordion.find(r => r.instance.$element()[0].id === fragment).instance.$element()[0].scrollIntoView();
   }
 
   onComChanged() {
@@ -585,6 +606,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ordre.societe = { id: this.currentCompanyService.getCompany().id };
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
+
+      console.log(ordre)
 
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
@@ -618,6 +641,24 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
     }
   }
+
+  checkForfaitTransp() {
+    this.ordresService
+      .fReturnForfaitsTrp(
+        this.ordre.type?.id,
+        this.ordre.entrepot?.id,
+        this.ordre.incoterm?.id
+      )
+      .subscribe({
+        next: (res) => {
+          this.blockPUDevUniteTransp = !!(res?.data?.fReturnForfaitsTrp?.data?.arg_trp_dev_pu);
+        },
+        error: (error: Error) =>
+          console.log(this.messageFormat(error.message))
+      });
+  }
+
+
 
   warnNoSelectedRows() {
     this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
@@ -1010,6 +1051,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       "fCreeOrdreComplementaire",
       "fnMajOrdreRegroupementV2",
       "fBonAFacturer",
+      "supprLignesNonExped",
+      "fReturnForfaitsTrp",
     ];
     functionNames.map(
       (fn) =>
@@ -1232,6 +1275,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initializeForm(fetchPol?) {
+    this.blockPUDevUniteTransp = true;
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
       .pipe(
@@ -1263,7 +1307,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               "or",
               ["id", "=", "EXW"],
             ])
-
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
@@ -1299,6 +1342,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.formGroup.valueChanges.subscribe((_) => {
             this.saveHeaderOnTheFly();
           });
+          this.checkForfaitTransp();
 
           this.refOrdreEdi = this.ordre.ordreEDI?.id;
           this.canalOrdreEdi = this.ordre.ordreEDI?.canalCde;
@@ -1310,6 +1354,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.histoLigneOrdreReadOnlyText = `${this.localization.localize(
             "hint-client-historique"
           )}`;
+
+          // Auto open accordion when required (E.g. litiges form supervision litiges)
+          const showAccordion = sessionStorage.getItem("showAccordion");
+          if (showAccordion) {
+            this.scrollOpenAccordion(showAccordion);
+            sessionStorage.removeItem("showAccordion");
+          }
 
           this.showBAFButton =
             this.ordre.bonAFacturer === false &&
@@ -1359,6 +1410,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       map(([item]) => item),
       takeUntil(this.destroy)
     );
+  }
+
+  private getButtonElement(
+    button: DxButtonComponent | ElementRef<any>
+  ): dxElement | HTMLElement {
+    return button instanceof DxButtonComponent
+      ? button.instance.element()
+      : button.nativeElement;
   }
 
   private getAnchorElement(
@@ -1495,16 +1554,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshAvoirIndicator() {
     this.numeroAvoir = "";
-    this.idOrdreAvoir = "";
+    this.ordreAvoir = {};
     this.ordresService
       .getOne_v2(this.ordre.id, ["id", "hasLitige"])
       .subscribe(res => {
         if (res.data.ordre.hasLitige) {
-          const litigeDs = this.litigesService.getDataSource_v2(["id", "ordreAvoirClient.id", "ordreAvoirClient.numeroFacture"]);
+          const litigeDs = this.litigesService.getDataSource_v2([
+            "id",
+            "ordreAvoirClient.numero",
+            "ordreAvoirClient.numeroFacture",
+            "ordreAvoirClient.campagne.id",
+            "ordreAvoirClient.societe.id"
+          ]);
           litigeDs.filter(["ordreOrigine.id", "=", this.ordre.id]);
           litigeDs.load().then(res => {
             this.numeroAvoir = (res[0]?.ordreAvoirClient?.numeroFacture) ?? "";
-            this.idOrdreAvoir = res[0]?.ordreAvoirClient?.id;
+            this.ordreAvoir = res[0]?.ordreAvoirClient;
           });
         }
       });
@@ -1566,7 +1631,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
     this.ordreBAFOuFacture =
-      this.ordreFacture || Statut[statut] === Statut.A_FACTURER.toString();
+      this.ordreFacture ||
+      Statut[statut] === Statut.A_FACTURER.toString() ||
+      Statut[statut] === Statut.FACTURE_EDI.toString();
     this.cancelledOrder =
       Statut[this.ordre.statut] === Statut.ANNULE.toString();
     this.updateTabStatusDot();
@@ -1604,16 +1671,55 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.clientId !== null) this.zoomClientFilePopup.visible = true;
   }
 
-  openEntrepotFilePopup() {
-    this.entrepotId = this.ordre?.entrepot?.id;
-    this.entrepotCode = this.ordre?.entrepot?.code;
-    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
+  openChoixEntrepotPopup() {
+    const dataSourceEnt = this.entrepotsService.getDataSource_v2(["id"]);
+    dataSourceEnt.filter([
+      ["valide", "=", true],
+      "and",
+      ["client.id", "=", this.ordre?.client?.id],
+    ]);
+    // Checks if we can really change the entrepot
+    dataSourceEnt.load().then((ent) => {
+      if (ent?.length === 1) return notify(this.localization.localize("warning-no-other-entrepot"), "warning", 4000);
+      this.choixEntPopup.visible = true;
+    });
+  }
+
+  onEntrepotChosen(entrepot) {
+    const instLogClt = this.ordre.entrepot.client.instructionLogistique ?? "";
+    const instLogEnt = entrepot.instructionLogistique ?? "";
+    let instLog = instLogClt + (instLogEnt ? " " : "") + instLogEnt;
+    instLog = instLog.substring(0, 280);
+
+    const ordre = {
+      id: this.ordre.id,
+      instructionsLogistiques: instLog,
+      entrepot: entrepot
+    };
+
+    this.ordresService.save({ ordre }).subscribe({
+      next: () => {
+        this.ordre = { ...this.ordre, ...ordre };
+        notify(this.localization.localize("success-entrepot-modified"), "success");
+        this.refreshHeader();
+      },
+      error: (err) => {
+        console.log(err);
+        notify(this.localization.localize("warning-entrepot-modification-error"), "error", 3000);
+      },
+    });
   }
 
   openTransporteurFilePopup() {
     this.transporteurLigneId = this.formGroup.get("transporteur").value?.id;
     if (this.transporteurLigneId !== null)
       this.zoomTransporteurFilePopup.visible = true;
+  }
+
+  openEntrepotFilePopup() {
+    this.entrepotId = this.ordre?.entrepot?.id;
+    this.entrepotCode = this.ordre?.entrepot?.code;
+    if (this.entrepotId !== null) this.zoomEntrepotFilePopup.visible = true;
   }
 
   private refetchOrder(period = 5000) {
@@ -1694,34 +1800,41 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async viewFacture(titleKey: string, document: Document) {
-    if (!document || !document.isPresent) {
-      notify(
+    console.log(document)
+    if (!document)
+      return notify(
+        this.localization.localize("doc-not-loaded",
+          this.localization.localize(titleKey).toLowerCase()),
+        "error");
+    if (!document.isPresent)
+      return notify(
         this.localization.localize("doc-not-found",
           this.localization.localize(titleKey).toLowerCase()),
         "error");
-      return;
-    }
 
     this.currentFacture = {
       title: this.localization.localize(titleKey),
       document,
     };
-
     this.factureVisible = true;
   }
 
   viewAvoir() {
-    this.ordresService.getOne_v2(this.idOrdreAvoir, [
-      "numeroFacture",
-      "documentFacture.isPresent",
-      "documentFacture.uri",
-      "documentFacture.type"
-    ]).subscribe(res => {
-      this.viewFacture(
-        'ordres-view-avoir-title',
-        res.data.ordre.documentFacture
-      )
-    });
+    this.ordresService.getOneByNumeroAndSocieteAndCampagne(
+      this.ordreAvoir.numero,
+      this.ordreAvoir.societe?.id,
+      this.ordreAvoir.campagne?.id,
+      [
+        "numeroFacture",
+        "documentFacture.isPresent",
+        "documentFacture.uri",
+        "documentFacture.type"
+      ]).subscribe(res => {
+        this.viewFacture(
+          'ordres-view-avoir-title',
+          res.data.ordreByNumeroAndSocieteAndCampagne.documentFacture
+        )
+      });
   }
 
   public async bonAFacturer() {
@@ -1740,6 +1853,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         )
           return (this.comptePaloxPopup.visible = true);
         this.refreshHeader();
+      },
+    });
+  }
+
+  public suppLignesNonExp() {
+    this.supprLignesBtnDisabled = true;
+    notify(this.localization.localize("please-wait"), "info", 3500);
+    this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
+      error: ({ message }: Error) => {
+        this.supprLignesBtnDisabled = false;
+        notify(this.messageFormat(message), "error", 7000);
+      },
+      next: (res) => {
+        this.supprLignesBtnDisabled = false;
+        this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
+          .subscribe(() => {
+            this.refreshOrder();
+            notify(res.data.supprLignesNonExped.msg, "success", 7000);
+          });
       },
     });
   }

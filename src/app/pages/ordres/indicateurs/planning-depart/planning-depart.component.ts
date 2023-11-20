@@ -95,7 +95,6 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.setDefaultPeriod("J");
 
     // Auto sector select from current user settings
@@ -178,11 +177,12 @@ export class PlanningDepartComponent implements AfterViewInit {
         if (oldOrderId === data.ordreLogistique.ordre.id) {
           data.ordreLogistique.ordre = {
             dateLivraisonPrevue: data.ordreLogistique.ordre.dateLivraisonPrevue,
-            transporteur: { id: data.ordreLogistique.ordre.transporteur.id },
+            transporteur: { id: data.ordreLogistique.transporteurGroupage?.id ?? data.ordreLogistique.ordre.transporteur.id },
             assistante: { id: data.ordreLogistique.ordre.assistante.id },
             commercial: { id: data.ordreLogistique.ordre.commercial.id },
           };
         } else {
+          data.ordreLogistique.ordre.transporteur = { id: data.ordreLogistique.transporteurGroupage?.id ?? data.ordreLogistique.ordre.transporteur?.id };
           // Concatenate (with no duplicates) palette type ids
           const palettes = [];
           data.ordreLogistique.lignes.map((pal) => {
@@ -251,12 +251,16 @@ export class PlanningDepartComponent implements AfterViewInit {
   }
 
   onRowPrepared(e) {
-    if (e.rowType === "data" && e.data.ordreLogistique.ordre.numero) {
-      e.rowElement.classList.add("cursor-pointer");
-      e.rowElement.setAttribute(
-        "title",
-        this.localizePipe.transform("hint-dblClick-ordre")
-      );
+    if (e.rowType === "data") {
+      if (e.data.ordreLogistique.ordre.numero) {
+        e.rowElement.classList.add("cursor-pointer");
+        e.rowElement.setAttribute(
+          "title",
+          this.localizePipe.transform("hint-dblClick-ordre")
+        );
+      }
+      if (e.data.ordreLogistique.groupage?.id)
+        e.rowElement.classList.add("groupage-row");
     }
   }
 

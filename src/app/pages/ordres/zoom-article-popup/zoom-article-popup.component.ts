@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnChanges,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
@@ -37,7 +31,7 @@ export class ZoomArticlePopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("zoom-article-popup");
+    e.component.content().parentNode.classList.add("zoom-article-popup", "zoom-popup");
   }
 
   hidePopup() {

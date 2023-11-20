@@ -2,6 +2,7 @@
 
 // Var
 @import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 // App style
 @import "scss/font";
@@ -17,6 +18,10 @@
 :root {
   --pos-scrollbar: 0;
 }
+
+// Media print style
+@import "scss/print";
+
 
 .img-responsive {
   max-width: 100%;
@@ -469,6 +474,19 @@ body app-root.production {
   display: none;
 }
 
+// Print stuff
+.print-button {
+  background-color: $BW-turquoise-light !important;
+
+  &:hover {
+    background-color: $BW-turquoise-medium !important;
+  }
+}
+
+.print-mode {
+  display: none;
+}
+
 // Better readibility
 .dx-icon-edit-button-addrow {
   background: #8fc459;
@@ -478,19 +496,24 @@ body app-root.production {
 
 .dx-actionsheet-popover-wrapper {
 
-  .dx-actionsheet-container {
-    .dx-actionsheet-item {
-      margin: 0 0 10px 0;
+  .dx-popup-content {
+    // Action sheet overflow management
+    overflow: auto;
+
+    .dx-actionsheet-container {
+      .dx-actionsheet-item {
+        margin: 10px 0;
+      }
     }
-  }
 
 
-  .dx-button {
-    height: 34px;
-    font-size: 13px;
+    .dx-button {
+      height: 34px;
+      font-size: 13px;
 
-    .dx-button-content {
-      padding: 6px 13px;
+      .dx-button-content {
+        padding: 6px 13px;
+      }
     }
   }
 }
@@ -635,6 +658,12 @@ body app-root.production {
 .min-max-imize-popup-icon {
   top: 13px;
   float: right;
+}
+
+.zoom-popup {
+  h2 {
+    font-size: initial;
+  }
 }
 
 // Excel download buttons - grids
@@ -902,4 +931,18 @@ body app-root.production {
   div {
     color: rgba(0, 0, 0, 0.8) !important;
   }
+
+}
+
+////////////////////////////////////////////////////////
+/// Better visibility editable / non-editable cells  ///
+////////////////////////////////////////////////////////
+
+.dx-data-row td.disabled-cell {
+  background-color: #F5F5F5;
+}
+
+.edit-cell,
+.edit-cell input {
+  cursor: pointer !important;
 }

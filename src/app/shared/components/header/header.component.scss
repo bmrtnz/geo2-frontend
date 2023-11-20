@@ -7,10 +7,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-::ng-deep
-  .dx-toolbar.header-toolbar
-  .dx-toolbar-items-container
-  .dx-toolbar-after {
+::ng-deep .dx-toolbar.header-toolbar .dx-toolbar-items-container .dx-toolbar-after {
   padding: 0 40px;
 
   :host-context(.screen-x-small) & {
@@ -34,7 +31,7 @@
     padding: 10px 0;
   }
 
-  .user-button > .dx-button-content {
+  .user-button>.dx-button-content {
     padding: 3px;
   }
 }
@@ -49,10 +46,36 @@
   display: block;
 }
 
+.user-company-box {
+  position: relative;
+  float: right;
+}
+
 ::ng-deep .main-navbar .dx-toolbar-items-container {
   height: auto !important;
 
   .dx-button .dx-button-content {
     padding: 6px !important;
+  }
+}
+
+::ng-deep .buttonWiki {
+  margin: 6px 11px 0 0;
+  border-radius: 100% !important;
+  border: 2px solid white;
+  background: transparent !important;
+  height: auto !important;
+  padding: 5px 0 !important;
+  font-size: 12px !important;
+  min-width: 0 !important;
+  transition: color 0.1s, background-color 0.1s;
+
+  &:hover {
+    background-color: white !important;
+    color: $base-accent;
+  }
+
+  .dx-button-text {
+    text-transform: none;
   }
 }

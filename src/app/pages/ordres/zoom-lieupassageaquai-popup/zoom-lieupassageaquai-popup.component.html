@@ -9,18 +9,20 @@
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ title }}&nbsp;</div>
-    <dx-button
-      class="close-article-popup"
-      icon="close"
-      (onClick)="hidePopup()"
-    ></dx-button>
-    <dx-button
-      class="min-max-imize-popup-icon"
-      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
-      (onClick)="resizePopup()"
-    ></dx-button>
+    <div class="popup-top-right-items">
+      <dx-button
+        class="close-article-popup"
+        icon="close"
+        (onClick)="hidePopup()"
+      ></dx-button>
+      <dx-button
+        class="min-max-imize-popup-icon"
+        hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
+        icon="material-icons fullscreen_exit"
+        [focusStateEnabled]="false"
+        (onClick)="resizePopup()"
+      ></dx-button>
+    </div>
   </div>
 
   <div *dxTemplate="let data of 'content'">

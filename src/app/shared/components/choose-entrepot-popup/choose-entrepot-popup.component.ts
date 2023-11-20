@@ -6,9 +6,10 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { Entrepot } from "app/shared/models";
+import { Entrepot, Societe } from "app/shared/models";
 import { ClientsService, EntrepotsService } from "app/shared/services";
 import { SocietesService } from "app/shared/services/api/societes.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { SharedModule } from "app/shared/shared.module";
 import {
   DxButtonModule,
@@ -31,7 +32,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   @ViewChild("entrepotInput") public entrepotInput: DxSelectBoxComponent;
   @ViewChild("clientInput") public clientInput: DxSelectBoxComponent;
   @ViewChild("societeInput") public societeInput: DxSelectBoxComponent;
-  private choosed = new EventEmitter<Entrepot["id"]>();
+  private choosed = new EventEmitter<{ entrepotID: Entrepot["id"], societeID: Societe["id"] }>();
   public societesSource: DataSource;
   public entrepotsSource: DataSource;
   public clientsSource: DataSource;
@@ -39,6 +40,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   constructor(
     private societesService: SocietesService,
     private entrepotsService: EntrepotsService,
+    private currentCompanyService: CurrentCompanyService,
     private clientsService: ClientsService
   ) { }
 
@@ -46,11 +48,6 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     this.societesSource = this.societesService.getDataSource();
     this.societesSource.filter(["valide", "=", true]);
     this.clientsSource = this.clientsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial",
-    ]);
-    this.entrepotsSource = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial",
@@ -68,7 +65,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
 
   public onSelectClick() {
     this.popup.visible = false;
-    this.choosed.emit(this.entrepotInput.value);
+    this.choosed.emit({ entrepotID: this.entrepotInput.value, societeID: this.societeInput.value });
   }
 
   public onCancelClick() {
@@ -114,8 +111,27 @@ export class ChooseEntrepotPopupComponent implements OnInit {
     e.component.content().parentNode.classList.add("choose-entrepot-popup");
   }
 
+  public onShown() {
+    if (this.societeInput) this.societeInput.value = this.currentCompanyService.getCompany().id;
+    if (this.clientInput) setTimeout(() => this.clientInput.instance.focus(), 500);
+  }
+
   public onHidden() {
+    this.societeInput.instance.reset();
+    this.clientInput.instance.reset();
     this.entrepotInput.instance.reset();
+  }
+
+  public displayCodeBefore(data) {
+    return data
+      ? (data.code ? data.code : data.id) +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
+      : null;
   }
 }
 

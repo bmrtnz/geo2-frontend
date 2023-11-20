@@ -8,7 +8,7 @@
 ></dx-button>
 
 <dx-data-grid
-  class="dx-card wide-card"
+  class="dx-card wide-card grid-litiges-lignes"
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
@@ -64,6 +64,8 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [visible]="false"
+    [width]="column?.width"
+    [cssClass]="column?.cssClass + ' small-side-padding'"
     [caption]="
       ('ordreLitigesLignes-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -80,7 +82,7 @@
   <dxo-master-detail
     [enabled]="true"
     template="detail"
-    [autoExpandAll]="false"
+    [autoExpandAll]="true"
   ></dxo-master-detail>
   <div *dxTemplate="let ds of 'detail'">
     <div class="master-detail">

@@ -3,6 +3,7 @@
 }
 
 ::ng-deep .gestion-operations-popup {
+  max-width: 100% !important;
 
   .dx-template-wrapper.dx-popup-title {
     background-color: #fff;
@@ -38,6 +39,23 @@
       margin: 0 0 0 0;
       width: 170px;
       overflow: hidden;
+
+      .frais-ann-indicator {
+        display: inline;
+        position: absolute;
+        min-width: 15px;
+        height: 15px;
+        margin: -1px 0 0 1px;
+        border-radius: 13px;
+        font-size: 10px;
+        font-weight: normal;
+        padding: 2px 5px 3px 3px;
+        line-height: 7px;
+        background-color: #FE3B2F;
+        border: 1px solid #FF8888;
+        color: #fff !important;
+        z-index: 1;
+      }
 
       .dx-button {
         width: calc(100% - 10px);
@@ -87,6 +105,23 @@
       background: rgb(245, 245, 245);
       z-index: 1000;
 
+      .dx-scrollbar-vertical {
+        width: 3px !important;
+        margin-right: 5px;
+        background-color: rgba(175, 198, 206, 1) !important;
+
+        .dx-scrollable-scroll {
+          width: 15px !important;
+          overflow: visible;
+
+          .dx-scrollable-scroll-content {
+            margin-left: 5px !important;
+            background-color: rgba(175, 198, 206, 1) !important;
+          }
+
+        }
+      }
+
       .dx-list-item {
         margin: 0;
 
@@ -105,6 +140,8 @@
     .bottom-buttons-container {
       display: inline-block;
       position: relative;
+      left: 50%;
+      transform: translateX(-50%);
 
       .dx-button {
         margin: 5px;
