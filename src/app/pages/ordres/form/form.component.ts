@@ -56,6 +56,7 @@ import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
 
 import {
@@ -1860,20 +1861,23 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public suppLignesNonExp() {
     this.supprLignesBtnDisabled = true;
-    notify(this.localization.localize("please-wait"), "info", 3500);
+    notify(this.localization.localize("please-wait"), "info", 9999999);
     this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
       error: ({ message }: Error) => {
+        hideToasts()
         this.supprLignesBtnDisabled = false;
         notify(this.messageFormat(message), "error", 7000);
       },
       next: (res) => {
         this.supprLignesBtnDisabled = false;
+        hideToasts();
         this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
           .subscribe(() => {
             this.refreshOrder();
             notify(res.data.supprLignesNonExped.msg, "success", 7000);
           });
       },
+      complete: () => hideToasts()
     });
   }
 

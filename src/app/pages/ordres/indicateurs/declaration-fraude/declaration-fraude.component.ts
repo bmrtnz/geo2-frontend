@@ -435,8 +435,9 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     if (rowType === "group") {
       if (!data.items && !data.collapsedItems) return;
       let dataItems = data.items ? data.items[0] : data.collapsedItems[0];
-      if (!dataItems?.numero) return;
-      this.tabContext.openOrdre(dataItems.numero, dataItems.campagne.id);
+      dataItems = dataItems.items ? dataItems.items[0] : dataItems;
+      if (!dataItems?.numeroOrdre) return;
+      this.tabContext.openOrdre(dataItems.numeroOrdre, dataItems.campagne);
     } else {
       this.tabContext.openOrdre(data.numeroOrdre, data.campagne);
     }

@@ -105,7 +105,7 @@
 
     .bottom-side-nav {
       position: absolute;
-      bottom: 25px;
+      bottom: 15px;
       font-size: 13px;
       line-height: 15px;
       text-align: center;
@@ -117,7 +117,7 @@
       opacity: 0 !important;
 
       &.copyright-short-label {
-        color: white;
+        color: rgba(255, 255, 255, 0.5);
         letter-spacing: -1px;
       }
     }
