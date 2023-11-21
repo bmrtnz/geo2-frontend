@@ -413,11 +413,13 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
 
+    const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
+    if (event.itemData.id === previous) return;
+
     if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
       if (window.localStorage.getItem("ctrlKey") === "true") return this.closeEveryIndicator();
       this.closeEveryOrdre();
     } else {
-      const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
       const numeroOrdre = isNaN(parseInt(event.itemData.id, 10))
         ? null
         : event.itemData.id;
