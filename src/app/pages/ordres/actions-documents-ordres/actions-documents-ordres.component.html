@@ -33,7 +33,7 @@
       [target]="actionSheetTarget"
       [showCancelButton]="true"
       [usePopover]="true"
-      (onItemClick)="onClickSendAction($event)"
+      (onItemClick)="onClickSendAction($event.itemData.id)"
     ></dx-action-sheet>
   </div>
   <app-documents-ordres-popup
