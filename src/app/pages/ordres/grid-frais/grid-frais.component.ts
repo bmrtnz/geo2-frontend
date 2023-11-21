@@ -90,7 +90,7 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
     public authService: AuthService
   ) {
     self = this;
-    this.aPreciser = { id: "A", libelle: this.localizeService.localize("a-preciser") };
+    this.aPreciser = { id: "A", libelle: this.formUtils.noDiacritics(this.localizeService.localize("a-preciser")).toUpperCase() };
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(Grid.OrdreFrais);
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
     this.itemsWithSelectBox = ["frais", "devise", "codePlus"];
