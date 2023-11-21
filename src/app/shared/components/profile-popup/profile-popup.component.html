@@ -40,10 +40,10 @@
 
     <dx-button
       class="btn-title float-right"
-      type="normal"
+      type="success"
       text="{{ 'btn-appliquer' | localize }}"
       [focusStateEnabled]="false"
-      [visible]="!formGroup?.pristine"
+      [disabled]="formGroup?.pristine"
       (onClick)="saveAndHidePopup()"
     ></dx-button>
   </div>
@@ -221,7 +221,6 @@
                   </div>
                 </div>
               </div>
-
               <!-- Date de fin -->
               <div class="admin-banner-date">
                 <div
@@ -274,7 +273,33 @@
                   </div>
                 </div>
               </div>
-
+              <!-- Secteurs -->
+              <div class="secteur-box">
+                <div
+                  class="dx-field"
+                  [ngClass]="{
+                    readOnly: !formGroup?.get('valide')?.value
+                  }"
+                >
+                  <div class="dx-field-label">
+                    {{ "secteur-abrev" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-tag-box
+                      #secteursList
+                      formControlName="secteur"
+                      [readOnly]="!formGroup?.get('valide')?.value"
+                      [dataSource]="secteurs"
+                      displayExpr="id"
+                      valueExpr="id"
+                      searchExpr="['id', 'description']"
+                      (onValueChanged)="onSecteurChanged($event)"
+                    >
+                    </dx-tag-box>
+                  </div>
+                </div>
+              </div>
+              <div style="clear: both"></div>
               <!-- Message -->
               <div class="banner-message">
                 <div
@@ -416,13 +441,13 @@
           <br />
           <div class="popup-buttons-container">
             <dx-button
-              type="default"
+              type="normal"
               text="{{ 'btn-annuler' | localize }}"
               [focusStateEnabled]="false"
               (onClick)="cancelClick()"
             ></dx-button>
             <dx-button
-              type="normal"
+              type="success"
               text="{{ 'btn-appliquer' | localize }}"
               [focusStateEnabled]="false"
               [disabled]="formGroup?.pristine"

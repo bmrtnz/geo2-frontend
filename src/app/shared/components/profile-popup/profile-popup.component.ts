@@ -16,9 +16,11 @@ import {
   DxTextBoxModule,
   DxFormModule,
   DxCheckBoxComponent,
+  DxTagBoxComponent,
   DxScrollViewComponent,
   DxValidatorComponent,
   DxDateBoxComponent,
+  DxTagBoxModule,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -31,6 +33,8 @@ import Utilisateur from "app/shared/models/utilisateur.model";
 import Alerte from "app/shared/models/alerte.model";
 import { AlertesService } from "app/shared/services/api/alert.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
+import { SecteursService } from "app/shared/services/api/secteurs.service";
+import DataSource from "devextreme/data/data_source";
 
 let self;
 
@@ -48,8 +52,10 @@ export class ProfilePopupComponent {
   @ViewChild("dateDebValidator", { static: false }) dateDebValidator: DxValidatorComponent;
   @ViewChild("dateFinValidator", { static: false }) dateFinValidator: DxValidatorComponent;
   @ViewChild("messageValidator", { static: false }) messageValidator: DxValidatorComponent;
+  @ViewChild("secteursList", { static: false }) secteursList: DxTagBoxComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
+  public secteurs: DataSource;
   public visible: boolean;
   public titleStart: string;
   public titleMid: string;
@@ -70,18 +76,22 @@ export class ProfilePopupComponent {
   public alerteParams: string[] = this.alertesService.alerteParams();
   public alerteTypes: any[] = this.alertesService.alerteTypes();
   public infoMessage: string[];
+  public limitTags: boolean;
 
   constructor(
     private alertesService: AlertesService,
     private utilisateursService: UtilisateursService,
     private ordreLignesService: OrdreLignesService,
     private formUtilsService: FormUtilsService,
+    public secteursService: SecteursService,
     public localizeService: LocalizationService,
     public functionsService: FunctionsService,
     public dateMgt: DateManagementService,
     public authService: AuthService,
   ) {
     self = this;
+    this.secteurs = secteursService.getDataSource();
+    this.secteurs.filter(["valide", "=", true]);
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateMgt.periods();
@@ -127,9 +137,11 @@ export class ProfilePopupComponent {
       next: (res) => {
         const alerte = res?.data?.fetchAlerte;
         if (alerte) {
-          this.alerteParams.map(prop => this.formGroup.get(prop).patchValue(alerte[prop]));
+          this.alerteParams.map(prop =>
+            this.formGroup.get(prop).patchValue((prop === "secteur" && alerte[prop]) ? [alerte[prop]?.id] : alerte[prop])
+          );
           // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
-          this.infoMessage.push(alerte.message)
+          this.infoMessage.push(alerte.message);
         }
         else {
           this.formGroup.get("type").setValue(this.alerteTypes[0].id);
@@ -190,21 +202,27 @@ export class ProfilePopupComponent {
       Utilisateur.getKeyField()
     );
 
+    // Alert changed?
+    let alerteTouched;
+    Object.keys(utilisateur).map(prop =>
+      alerteTouched = alerteTouched || this.alerteParams.includes(prop)
+    );
+
     // Split user & not-user specific fields
     const alerte: Partial<Alerte> = {};
-    const user = utilisateur;
-    Object.keys(user).map(prop => {
+    this.simpleParams.map(prop => {
       if (this.alerteParams.includes(prop)) {
         delete utilisateur[prop];
         alerte[prop] = this.formGroup.get(prop).value;
+        if (prop === "secteur") alerte[prop] = { id: this.formGroup.get(prop).value?.length ? alerte[prop][0] : null };
       }
     });
 
     // Save banner info
-    if (this.authService.isAdmin && Object.keys(alerte).length) {
+    if (this.authService.isAdmin && alerteTouched) {
       this.savingUserPrefs = true;
       this.alertesService.save_v2(
-        Object.keys(alerte)
+        this.formUtilsService.extractPaths(alerte)
         , { alerte }).subscribe({
           next: () => {
             notify({
@@ -317,6 +335,12 @@ export class ProfilePopupComponent {
     this.formGroup.get("dateFin").markAsDirty();
   }
 
+  onSecteurChanged(e) {
+    if (!e.event) return; // Only user event
+    // Limit to 1 sector for the moment
+    if (e.value?.length > 1) e.component.option('value', [e.value[1]]);
+  }
+
 }
 
 @NgModule({
@@ -335,6 +359,7 @@ export class ProfilePopupComponent {
     DxDateBoxModule,
     FormsModule,
     DxTextAreaModule,
+    DxTagBoxModule,
     DxScrollViewModule,
     ReactiveFormsModule,
     DxSelectBoxModule,

@@ -48,6 +48,19 @@ $light-grey: rgba(0, 0, 0, 0.2);
   #profile-content {
     padding: 0 15px 0 2px;
 
+    .dx-tag-container {
+      padding: 0;
+      min-height: 32px;
+
+      .dx-tag {
+        margin: 0 5px 4px 0;
+      }
+
+      .dx-texteditor-input {
+        margin-top: 0;
+      }
+    }
+
     .dx-invalid-message>.dx-overlay-content {
       background-color: rgba(255, 255, 255, 0);
       font-size: 12px;
@@ -144,13 +157,12 @@ $light-grey: rgba(0, 0, 0, 0.2);
     .admin-banner-date {
       position: relative;
       top: -14px;
+      width: 70% !important;
+      float: left;
 
       .small-box-format {
         display: inline-block;
         margin: 0 10px;
-      }
-
-      .small-box-format {
         margin-left: 0;
       }
 
@@ -158,12 +170,19 @@ $light-grey: rgba(0, 0, 0, 0.2);
         display: inline-block;
         margin: 0 10px;
         top: 6px;
-        width: 290px;
+        width: 280px;
 
         .dx-field-value {
           width: 100% !important;
         }
       }
+    }
+
+    .secteur-box {
+      position: relative !important;
+      width: 28% !important;
+      top: -45px;
+      float: left;
     }
 
     .banner-option {

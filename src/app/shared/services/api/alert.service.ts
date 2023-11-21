@@ -18,6 +18,7 @@ export class AlertesService extends ApiService {
       "deroulant",
       "dateDebut",
       "dateFin",
+      "secteur"
     ];
   }
 
