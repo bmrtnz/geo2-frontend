@@ -97,10 +97,7 @@ export class AuthService {
       name.charAt(0).toUpperCase() +
       name.slice(1).toLowerCase() +
       " !";
-    notify(
-      { message: mess, elementAttr: { class: "welcome-message" } },
-      "info"
-    );
+    notify(mess);
   }
 
   loginError() {

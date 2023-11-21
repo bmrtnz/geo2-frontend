@@ -84,7 +84,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
     // Show red badges (unvalidated forms)
     this.validationService.showToValidateBadges();
 
-    // Starts banner info retrieval
+    // Periodic banner info retrieval
     clearInterval(this.mainBannerInterval);
     this.mainBannerInterval = setInterval(() => {
       this.alertesService.fetchAlerte().subscribe({

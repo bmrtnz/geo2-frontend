@@ -10,6 +10,25 @@ import Alerte from "app/shared/models/alerte.model";
 })
 export class AlertesService extends ApiService {
 
+  public alerteParams() {
+    return [
+      "valide",
+      "type",
+      "message",
+      "deroulant",
+      "dateDebut",
+      "dateFin",
+    ];
+  }
+
+  public alerteTypes() {
+    return [
+      { id: "I", description: "info" },
+      { id: "W", description: "Warning" },
+      { id: "S", description: "Success" },
+    ];
+  }
+
   constructor(
     apollo: Apollo,
   ) {

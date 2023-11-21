@@ -60,38 +60,16 @@ export class ProfilePopupComponent {
   public savingUserPrefs: boolean;
   public reportedItems: any[];
   public formGroup = new UntypedFormGroup({});
-  public simpleParams = [];
-
-
-  public simpleBaseParams = [
+  public simpleParams: string[] = [];
+  public simpleBaseParams: string[] = [
     "periode",
     "barreDefilementHaut",
     "barreDefilementBas",
     "diffSurExpedition",
   ];
-  public bandeauParams = [
-    "valide",
-    "type",
-    "message",
-    "deroulant",
-    "dateDebut",
-    "dateFin",
-  ];
+  public alerteParams: string[] = this.alertesService.alerteParams();
+  public alerteTypes: any[] = this.alertesService.alerteTypes();
   public infoMessage: string[];
-  public typeMessage = [
-    {
-      id: "I",
-      description: "info"
-    },
-    {
-      id: "W",
-      description: "Warning"
-    },
-    {
-      id: "S",
-      description: "Success"
-    },
-  ]
 
   constructor(
     private alertesService: AlertesService,
@@ -111,7 +89,7 @@ export class ProfilePopupComponent {
     this.reportedItems = this.ordreLignesService.reportedItems;
 
     // Create controls
-    this.simpleParams = this.simpleBaseParams.concat(this.bandeauParams);
+    this.simpleParams = this.simpleBaseParams.concat(this.alerteParams);
     this.simpleParams.map(param => this.formGroup.addControl(param, new UntypedFormControl()));
     this.reportedItems.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl({
@@ -149,9 +127,13 @@ export class ProfilePopupComponent {
       next: (res) => {
         const alerte = res?.data?.fetchAlerte;
         if (alerte) {
-          this.bandeauParams.map(prop => this.formGroup.get(prop).patchValue(alerte[prop]));
+          this.alerteParams.map(prop => this.formGroup.get(prop).patchValue(alerte[prop]));
           // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
           this.infoMessage.push(alerte.message)
+        }
+        else {
+          this.formGroup.get("type").setValue(this.alerteTypes[0].id);
+          this.formGroup.get("deroulant").setValue(false);
         }
       },
       error: (error: Error) =>
@@ -208,37 +190,41 @@ export class ProfilePopupComponent {
       Utilisateur.getKeyField()
     );
 
-    // Handle user & not-user specific fields
-    const alerte = {};
-    this.simpleParams.map(prop => {
-      if (this.bandeauParams.includes(prop)) {
+    // Split user & not-user specific fields
+    const alerte: Partial<Alerte> = {};
+    const user = utilisateur;
+    Object.keys(user).map(prop => {
+      if (this.alerteParams.includes(prop)) {
         delete utilisateur[prop];
         alerte[prop] = this.formGroup.get(prop).value;
       }
     });
 
     // Save banner info
-    if (Object.keys(alerte).length) {
+    if (this.authService.isAdmin && Object.keys(alerte).length) {
       this.savingUserPrefs = true;
       this.alertesService.save_v2(
         Object.keys(alerte)
         , { alerte }).subscribe({
           next: () => {
-            notify(
-              this.localizeService.localize("user-profile-saved"),
-              "success",
-              2500
+            notify({
+              message: this.localizeService.localize("user-alert-saved"),
+              type: "success"
+            },
+              { position: 'bottom center', direction: 'up-stack' }
             );
             this.hidePopup();
           },
           error: ({ message }: Error) => {
             this.savingUserPrefs = false;
-            notify(
-              `${this.localizeService.localize(
-                "user-profile-save-error"
+            notify({
+              message: `${this.localizeService.localize(
+                "user-alert-save-error"
               )} : ${this.messageFormat(message)}`,
-              "error",
-              7000
+              type: "error",
+              displayTime: 7000
+            },
+              { position: 'bottom center', direction: 'up-stack' }
             );
           },
           complete: () => {
@@ -257,21 +243,24 @@ export class ProfilePopupComponent {
         , { utilisateur }).subscribe({
           next: () => {
             this.authService.setCurrentUser(utilisateur);
-            notify(
-              this.localizeService.localize("user-profile-saved"),
-              "success",
-              2500
+            notify({
+              message: this.localizeService.localize("user-profile-saved"),
+              type: "success"
+            },
+              { position: 'bottom center', direction: 'up-stack' }
             );
             this.hidePopup();
           },
           error: ({ message }: Error) => {
             this.savingUserPrefs = false;
-            notify(
-              `${this.localizeService.localize(
+            notify({
+              message: `${this.localizeService.localize(
                 "user-profile-save-error"
               )} : ${this.messageFormat(message)}`,
-              "error",
-              7000
+              type: "error",
+              displayTime: 7000
+            },
+              { position: 'bottom center', direction: 'up-stack' }
             );
           },
           complete: () => {
@@ -302,14 +291,15 @@ export class ProfilePopupComponent {
   // Specific option functions
   ////////////////////////////////
 
-  async checkValidFinDate(e) {
-    const isDeltaValid = (!self.bandeauDateDebCB?.value || (new Date(e?.value) > new Date(self.formGroup.get(self.simpleParams[8])?.value)));
-    return isDeltaValid && new Date(e?.value) > new Date();
+  async checkValidDebDate(e) {
+    return !self.bandeauDateDebCB?.value ||
+      !self.bandeauDateFinCB?.value ||
+      (new Date(e?.value) < new Date(self.formGroup.get(self.simpleParams[9])?.value));
   }
 
-  async checkValidDebDate(e) {
-    const isDeltaValid = (!self.bandeauDateFinCB?.value || (new Date(e?.value) < new Date(self.formGroup.get(self.simpleParams[9])?.value)));
-    return isDeltaValid;
+  async checkValidFinDate(e) {
+    return !self.bandeauDateFinCB?.value ||
+      ((new Date(e?.value) > new Date()) && (new Date(e?.value) > new Date(self.formGroup.get(self.simpleParams[8])?.value)));
   }
 
   onBannerDateDebClick(e) {

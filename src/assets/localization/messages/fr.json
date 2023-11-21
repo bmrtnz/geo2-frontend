@@ -964,6 +964,8 @@
     "articles-save-origin-error": "Échec de la sauvegarde de l'origine",
     "user-profile-save-error": "Échec sauvegarde des paramètres",
     "user-profile-saved": "Paramètres sauvegardés",
+    "user-alert-save-error": "Échec sauvegarde de l'alerte",
+    "user-alert-saved": "Alerte sauvegardée",
     "no-period-set": "Période préférée non sélectionnée",
     "articles-save-certification": "Certification sauvegardée",
     "articles-save-certification-error": "Échec sauvegarde certification",

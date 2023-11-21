@@ -221,11 +221,14 @@ $light-grey: rgba(0, 0, 0, 0.2);
               width: 20px;
             }
 
+            // Hiding cursor
             input {
               caret-color: transparent;
-              -webkit-user-select: none;
-              -moz-user-select: none;
-              user-select: none;
+
+              &::-moz-selection {
+                color: transparent;
+                background: transparent;
+              }
             }
           }
 
@@ -242,6 +245,10 @@ $light-grey: rgba(0, 0, 0, 0.2);
           white-space: initial;
           text-align: right;
           align-self: flex-end;
+        }
+
+        .dx-field-value {
+          width: 100% !important;
         }
       }
 

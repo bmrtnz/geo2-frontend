@@ -43,7 +43,7 @@
       type="normal"
       text="{{ 'btn-appliquer' | localize }}"
       [focusStateEnabled]="false"
-      [disabled]="formGroup?.pristine"
+      [visible]="!formGroup?.pristine"
       (onClick)="saveAndHidePopup()"
     ></dx-button>
   </div>
@@ -103,7 +103,7 @@
                 <dx-select-box
                   [readOnly]="!formGroup?.get('valide')?.value"
                   [formControlName]="'type'"
-                  [items]="typeMessage"
+                  [items]="alerteTypes"
                   [searchEnabled]="false"
                   [valueExpr]="'id'"
                   itemTemplate="types"
