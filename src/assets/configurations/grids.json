@@ -8125,7 +8125,7 @@
         "dataField": "uniteFactureCode",
         "visible": true,
         "allowEditing": false,
-        "cssClass": "small-side-padding disabled-cell",
+        "cssClass": "text-align-center small-side-padding disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8149,11 +8149,12 @@
       {
         "dataField": "prixUnitaire",
         "visible": true,
-        "cssClass": "text-align-right no-padding-left",
+        "cssClass": "text-align-center no-padding",
         "allowEditing": true,
         "cellTemplate": "mergeCellsTemplate",
         "editCellTemplate": "mergeEditCellsTemplate",
         "formatter": "formatToResponsableCurrency",
+        "width": 95,
         "virtual": true
       },
       {
