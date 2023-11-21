@@ -895,6 +895,7 @@ body app-root.production {
   font-size: 15px;
   overflow: hidden;
   z-index: 1000;
+  transition: opacity 1s, background-color 1s;
 
   .banner-text {
     color: #FFF;

@@ -148,27 +148,32 @@
               </div>
             </div>
 
-            <div class="option-background">
-              <!-- Actif -->
-              <div
-                class="dx-field small-box-format"
-                [ngClass]="{
-                  readOnly: !formGroup?.get('valide')?.value
-                }"
-              >
-                <div class="admin-banner-switch">
-                  <div class="dx-field-label dx-field-label-left no-readOnly">
-                    {{ "actif" | localize }}
-                  </div>
-                  <div class="dx-field-value">
-                    <dx-switch
-                      [formControlName]="'valide'"
-                      (onValueChanged)="messageValidator?.instance?.validate()"
-                    ></dx-switch>
-                  </div>
+            <!-- Actif -->
+            <div
+              class="dx-field small-box-format"
+              [ngClass]="{
+                readOnly: !formGroup?.get('valide')?.value
+              }"
+            >
+              <div class="admin-banner-switch">
+                <div class="dx-field-label dx-field-label-left no-readOnly">
+                  {{ "actif" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-switch
+                    [formControlName]="'valide'"
+                    (onValueChanged)="messageValidator?.instance?.validate()"
+                  ></dx-switch>
                 </div>
               </div>
+            </div>
 
+            <div
+              class="option-background"
+              [ngClass]="{
+                collapsed: !formGroup?.get('valide')?.value
+              }"
+            >
               <!-- Date de début -->
               <div class="admin-banner-date">
                 <div

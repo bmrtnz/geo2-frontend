@@ -10,7 +10,7 @@ import {
   SideNavigationMenuModule,
   HeaderModule,
 } from "../../shared/components";
-import { ScreenService } from "../../shared/services";
+import { AuthService, ScreenService } from "../../shared/services";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { ChooseArticleZoomPopupModule } from "../choose-article-zoom/choose-article-zoom-popup.component";
 import {
@@ -60,6 +60,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
   constructor(
     private screen: ScreenService,
     private router: Router,
+    private authService: AuthService,
     private alertesService: AlertesService,
     private validationService: ValidationService,
     private versionService: VersionService
@@ -91,7 +92,12 @@ export class SideNavOuterToolbarComponent implements OnInit {
         next: (res) => {
           this.alerteInfo = res?.data?.fetchAlerte;
           if (this.alerteInfo) {
-            const sectorMatch = true;
+            // Is that our commercial area?
+            const sectorMatch = this.authService.isAdmin ||
+              (!!this.alerteInfo.secteur?.id && !!this.authService.currentUser.secteurCommercial.id
+                && this.alerteInfo.secteur?.id === this.authService.currentUser.secteurCommercial.id
+              );
+            // Is it the right timing?
             const timingMatch = (!this.alerteInfo?.dateDebut || (this.alerteInfo?.dateDebut &&
               new Date() > new Date(this.alerteInfo?.dateDebut))) &&
               (!this.alerteInfo?.dateFin || (this.alerteInfo?.dateFin && new Date() < new Date(this.alerteInfo?.dateFin)));

@@ -156,7 +156,7 @@ $light-grey: rgba(0, 0, 0, 0.2);
 
     .admin-banner-date {
       position: relative;
-      top: -14px;
+      top: -3px;
       width: 70% !important;
       float: left;
 
@@ -181,13 +181,28 @@ $light-grey: rgba(0, 0, 0, 0.2);
     .secteur-box {
       position: relative !important;
       width: 28% !important;
-      top: -45px;
+      top: -34px;
       float: left;
     }
 
     .banner-option {
+
       .option-background {
+        position: relative;
+        top: 5px;
         padding-top: 0;
+        padding-bottom: 0;
+        transition: max-height 0.5s;
+        max-height: 180px;
+        overflow: hidden;
+
+        &.collapsed {
+          max-height: 0;
+        }
+      }
+
+      .small-box-format {
+        margin-bottom: 0;
       }
 
       .dx-switch-on-value {
@@ -202,7 +217,7 @@ $light-grey: rgba(0, 0, 0, 0.2);
 
       .admin-banner-switch {
         position: absolute;
-        top: -36px;
+        top: -27px;
         right: 0;
       }
 
