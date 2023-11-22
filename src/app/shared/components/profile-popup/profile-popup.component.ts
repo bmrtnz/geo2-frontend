@@ -203,9 +203,22 @@ export class ProfilePopupComponent {
 
   async saveAndHidePopup() {
 
-    const valid = (await this.messageValidator?.instance?.validate()?.complete)?.isValid &&
-      (await this.dateDebValidator?.instance?.validate()?.complete)?.isValid &&
-      (await this.dateFinValidator?.instance?.validate()?.complete)?.isValid;
+    let messageValidation = (await this.messageValidator.instance.validate()?.complete)?.isValid;
+    let dateDebValidation = (await this.dateDebValidator.instance.validate()?.complete)?.isValid;
+    let dateFinValidation = (await this.dateFinValidator.instance.validate()?.complete)?.isValid;
+
+    messageValidation = messageValidation || (messageValidation === undefined);
+    dateDebValidation = dateDebValidation || (dateDebValidation === undefined);
+    dateFinValidation = dateFinValidation || (dateFinValidation === undefined);
+
+    const valid = messageValidation && dateDebValidation && dateFinValidation;
+
+    if (!valid) return notify({
+      message: this.localizeService.localize("warning-invalid-fields"),
+      type: "warning"
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
 
     if (this.formGroup.get("valide").value === true && !this.currentAlert.valide) {
       const sector = this.formGroup.get("secteur").value;
@@ -217,13 +230,6 @@ export class ProfilePopupComponent {
       );
       if (!await confirm(warn, this.localizeService.localize("text-general-banner"))) return;
     }
-
-    if (!valid) return notify({
-      message: this.localizeService.localize("warning-invalid-fields"),
-      type: "warning"
-    },
-      { position: 'bottom center', direction: 'up-stack' }
-    );
 
     const utilisateur = this.formUtilsService.extractDirty(
       this.formGroup.controls,
