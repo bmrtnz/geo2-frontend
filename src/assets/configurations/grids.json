@@ -2910,6 +2910,12 @@
         "visible": false
       },
       {
+        "dataField": "article.normalisation.marque.id",
+        "allowEditing": false,
+        "cssClass": "small-left-padding",
+        "visible": false
+      },
+      {
         "dataField": "article.normalisation.marque.description",
         "allowEditing": false,
         "cssClass": "small-left-padding",
@@ -3691,47 +3697,47 @@
       },
       {
         "dataField": "nombreColisExpedies",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "nombrePalettesExpediees",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.entrepot.code",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.referenceClient",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.transporteur.id",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.campagne.id",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.flagAnnule",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.litige.id",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       },
       {
         "dataField": "ordre.litige.dateCreation",
-        "showInColumnChooser": false,
+        "showInColumnChooser": true,
         "visible": false
       }
     ]
@@ -8127,6 +8133,7 @@
         "allowEditing": false,
         "cssClass": "text-align-center small-side-padding disabled-cell",
         "cellTemplate": "mergeCellsTemplate",
+        "width": 70,
         "virtual": true
       },
       {

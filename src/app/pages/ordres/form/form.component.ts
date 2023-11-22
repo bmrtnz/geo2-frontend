@@ -644,6 +644,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   checkForfaitTransp() {
+    // Vu avec Léa/Bruno 22-11-2023 : trop risqué au final de bloquer ces champs CDT:360
+    this.blockPUDevUniteTransp = false;
+    return;
     this.ordresService
       .fReturnForfaitsTrp(
         this.ordre.type?.id,
