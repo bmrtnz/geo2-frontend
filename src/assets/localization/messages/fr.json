@@ -505,6 +505,7 @@
     "date-depassee": "Date dépassée",
     "profil": "profil",
     "secteur-abrev": "Sect.",
+    "warning-invalid-fields": "1 ou plusieurs champs sont incorrects...",
     "text-palox-popup-title-ajuster": "Ajuster le nombre de palox",
     "text-palox-popup-title-decompte": "Inventaire palox",
     "text-palox-popup-nombre-palox": "Nombre de palox",

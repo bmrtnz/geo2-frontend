@@ -216,7 +216,10 @@
                     >
                       <dx-validator #dateDebValidator>
                         <dxi-validation-rule
-                          *ngIf="!!formGroup?.get('dateDebut')?.value"
+                          *ngIf="
+                            !!formGroup?.get('dateDebut')?.value &&
+                            formGroup?.get('valide')?.value
+                          "
                           type="async"
                           message="{{ 'warning-wrong-date' | localize }}"
                           [validationCallback]="checkValidDebDate"
@@ -268,7 +271,10 @@
                     >
                       <dx-validator #dateFinValidator>
                         <dxi-validation-rule
-                          *ngIf="!!formGroup?.get('dateFin')?.value"
+                          *ngIf="
+                            !!formGroup?.get('dateFin')?.value &&
+                            formGroup?.get('valide')?.value
+                          "
                           type="async"
                           message="{{ 'warning-out-wrong-date' | localize }}"
                           [validationCallback]="checkValidFinDate"
