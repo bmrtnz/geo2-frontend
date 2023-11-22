@@ -1,7 +1,7 @@
 import { Component, NgModule, ViewChild } from "@angular/core";
 import { SharedModule } from "../../shared.module";
 import notify from "devextreme/ui/notify";
-import validationEngine from "devextreme/ui/validation_engine";
+import { confirm } from "devextreme/ui/dialog";
 import {
   DxButtonModule,
   DxDateBoxModule,
@@ -78,6 +78,9 @@ export class ProfilePopupComponent {
   public alerteTypes: any[] = this.alertesService.alerteTypes();
   public infoMessage: string[];
   public limitTags: boolean;
+  public messageText: string;
+  public messageRange = { min: 2, max: 1024 };
+  private currentAlert: Partial<Alerte>;
 
   constructor(
     private alertesService: AlertesService,
@@ -91,6 +94,7 @@ export class ProfilePopupComponent {
     public authService: AuthService,
   ) {
     self = this;
+    this.messageText = this.localizeService.localize("warning-out-wrong-message", this.messageRange.min, this.messageRange.max);
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter(["valide", "=", true]);
     this.nomUtilisateur = this.authService.currentUser.nomUtilisateur;
@@ -136,13 +140,13 @@ export class ProfilePopupComponent {
     // Get current alert
     this.alertesService.fetchAlerte().subscribe({
       next: (res) => {
-        const alerte = res?.data?.fetchAlerte;
-        if (alerte) {
+        this.currentAlert = res?.data?.fetchAlerte;
+        if (this.currentAlert) {
           this.alerteParams.map(prop =>
-            this.formGroup.get(prop).patchValue((prop === "secteur" && alerte[prop]) ? [alerte[prop]?.id] : alerte[prop])
+            this.formGroup.get(prop).patchValue((prop === "secteur" && this.currentAlert[prop]) ? [this.currentAlert[prop]?.id] : this.currentAlert[prop])
           );
           // Dx bug with fieldTemplate in selectbox. Customvalue doesn't work well
-          this.infoMessage.push(alerte.message);
+          this.infoMessage.push(this.currentAlert.message);
         }
         else {
           this.formGroup.get("type").setValue(this.alerteTypes[0].id);
@@ -199,8 +203,27 @@ export class ProfilePopupComponent {
 
   async saveAndHidePopup() {
 
-    const valid = (await validationEngine.validateGroup().complete).status;
-    if (valid !== "valid") return notify(this.localizeService.localize("warning-invalid-fields"), "warning");
+    const valid = (await this.messageValidator?.instance?.validate()?.complete)?.isValid &&
+      (await this.dateDebValidator?.instance?.validate()?.complete)?.isValid &&
+      (await this.dateFinValidator?.instance?.validate()?.complete)?.isValid;
+
+    if (this.formGroup.get("valide").value === true && !this.currentAlert.valide) {
+      const sector = this.formGroup.get("secteur").value;
+      const type = this.alerteTypes.find(a => a.id === this.formGroup.get("type").value).description.toUpperCase();
+      let warn = this.localizeService.localize(
+        "warn-turn-on-alert",
+        this.localizeService.localize((sector?.length ? "on-sector" : "generale"), sector),
+        type
+      );
+      if (!await confirm(warn, this.localizeService.localize("text-general-banner"))) return;
+    }
+
+    if (!valid) return notify({
+      message: this.localizeService.localize("warning-invalid-fields"),
+      type: "warning"
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
 
     const utilisateur = this.formUtilsService.extractDirty(
       this.formGroup.controls,
@@ -323,6 +346,10 @@ export class ProfilePopupComponent {
   async checkValidFinDate(e) {
     return !self.bandeauDateFinCB?.value ||
       ((new Date(e?.value) > new Date()) && (new Date(e?.value) > new Date(self.formGroup.get(self.simpleParams[8])?.value)));
+  }
+
+  async checkMessageLength(e) {
+    return e?.value?.length >= self.messageRange.min && e?.value?.length <= self.messageRange.max;
   }
 
   onBannerDateDebClick(e) {

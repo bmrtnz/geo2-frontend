@@ -61,6 +61,12 @@ $light-grey: rgba(0, 0, 0, 0.2);
       }
     }
 
+    .dx-valid.dx-texteditor .dx-texteditor-input-container::after {
+      background: white;
+      border-radius: 100%;
+      right: 3px !important;
+    }
+
     .dx-invalid-message>.dx-overlay-content {
       background-color: rgba(255, 255, 255, 0);
       font-size: 12px;
