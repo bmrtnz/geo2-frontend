@@ -1,6 +1,7 @@
 import { Component, NgModule, ViewChild } from "@angular/core";
 import { SharedModule } from "../../shared.module";
 import notify from "devextreme/ui/notify";
+import validationEngine from "devextreme/ui/validation_engine";
 import {
   DxButtonModule,
   DxDateBoxModule,
@@ -197,6 +198,10 @@ export class ProfilePopupComponent {
   }
 
   async saveAndHidePopup() {
+
+    const valid = (await validationEngine.validateGroup().complete).status;
+    if (valid !== "valid") return notify(this.localizeService.localize("warning-invalid-fields"), "warning");
+
     const utilisateur = this.formUtilsService.extractDirty(
       this.formGroup.controls,
       Utilisateur.getKeyField()
