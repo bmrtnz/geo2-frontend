@@ -2910,6 +2910,12 @@
         "visible": false
       },
       {
+        "dataField": "article.normalisation.marque.id",
+        "allowEditing": false,
+        "cssClass": "small-left-padding",
+        "visible": false
+      },
+      {
         "dataField": "article.normalisation.marque.description",
         "allowEditing": false,
         "cssClass": "small-left-padding",

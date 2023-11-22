@@ -410,6 +410,7 @@ export class GridCommandesComponent
                   "article.normalisation.etiquetteEvenementielle.description",
                   "article.normalisation.etiquetteColis.description",
                   "article.normalisation.etiquetteUc.description",
+                  "article.normalisation.marque.id",
                   "article.normalisation.marque.description",
                   "article.emballage.conditionSpecial.description",
                   "article.emballage.alveole.description",
