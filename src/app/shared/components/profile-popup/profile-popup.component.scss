@@ -284,11 +284,18 @@ $light-grey: rgba(0, 0, 0, 0.2);
           overflow: visible;
           white-space: initial;
           text-align: right;
-          align-self: flex-end;
         }
 
         .dx-field-value {
           width: 100% !important;
+        }
+
+        textarea {
+          padding-right: 48px !important;
+        }
+
+        .dx-valid.dx-texteditor .dx-texteditor-input-container::after {
+          right: 24px !important;
         }
       }
 

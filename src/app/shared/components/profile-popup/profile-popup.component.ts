@@ -1,4 +1,4 @@
-import { Component, NgModule, ViewChild } from "@angular/core";
+import { Component, NgModule, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { SharedModule } from "../../shared.module";
 import notify from "devextreme/ui/notify";
 import { confirm } from "devextreme/ui/dialog";
@@ -53,6 +53,7 @@ export class ProfilePopupComponent {
   @ViewChild("dateDebValidator", { static: false }) dateDebValidator: DxValidatorComponent;
   @ViewChild("dateFinValidator", { static: false }) dateFinValidator: DxValidatorComponent;
   @ViewChild("messageValidator", { static: false }) messageValidator: DxValidatorComponent;
+  @ViewChildren(DxValidatorComponent) validators: QueryList<DxValidatorComponent>;
   @ViewChild("secteursList", { static: false }) secteursList: DxTagBoxComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
@@ -201,26 +202,31 @@ export class ProfilePopupComponent {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
 
+  async checkValidators() {
+    const validates = [];
+    await this.validators.map(async (validator) => {
+      let v = (await validator.instance.validate()?.complete)?.isValid;
+      v = v || (v === undefined);
+      validates.push(v);
+    });
+    return validates;
+  }
+
   async saveAndHidePopup() {
 
-    let messageValidation = (await this.messageValidator.instance.validate()?.complete)?.isValid;
-    let dateDebValidation = (await this.dateDebValidator.instance.validate()?.complete)?.isValid;
-    let dateFinValidation = (await this.dateFinValidator.instance.validate()?.complete)?.isValid;
+    const validates = await (await this.checkValidators());
+    const invalids = validates.filter(v => !v);
 
-    messageValidation = messageValidation || (messageValidation === undefined);
-    dateDebValidation = dateDebValidation || (dateDebValidation === undefined);
-    dateFinValidation = dateFinValidation || (dateFinValidation === undefined);
-
-    const valid = messageValidation && dateDebValidation && dateFinValidation;
-
-    if (!valid) return notify({
-      message: this.localizeService.localize("warning-invalid-fields"),
+    if (invalids.length) return notify({
+      message: this.localizeService.localize("warning-invalid-fields", invalids.length),
       type: "warning"
     },
       { position: 'bottom center', direction: 'up-stack' }
     );
+    const startAlert = this.formGroup.get("valide").value === true && !this.currentAlert.valide;
+    const stopAlert = this.formGroup.get("valide").value !== true && this.currentAlert.valide;
 
-    if (this.formGroup.get("valide").value === true && !this.currentAlert.valide) {
+    if (startAlert) {
       const sector = this.formGroup.get("secteur").value;
       const type = this.alerteTypes.find(a => a.id === this.formGroup.get("type").value).description.toUpperCase();
       let warn = this.localizeService.localize(
@@ -259,8 +265,9 @@ export class ProfilePopupComponent {
         this.formUtilsService.extractPaths(alerte)
         , { alerte }).subscribe({
           next: () => {
+            const action = startAlert ? "start" : stopAlert ? "stop" : "saved";
             notify({
-              message: this.localizeService.localize("user-alert-saved"),
+              message: this.localizeService.localize("user-alert-" + action),
               type: "success"
             },
               { position: 'bottom center', direction: 'up-stack' }

@@ -6,6 +6,7 @@ import {
   isDevMode,
   ViewChild,
 } from "@angular/core";
+import { ONE_MINUTE } from "basic";
 import {
   SideNavigationMenuModule,
   HeaderModule,
@@ -107,7 +108,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
         error: (error: Error) =>
           console.log(error.message)
       });
-    }, 5000);
+    }, ONE_MINUTE);
 
   }
 
