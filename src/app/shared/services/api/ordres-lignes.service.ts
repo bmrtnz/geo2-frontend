@@ -12,11 +12,10 @@ import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { lastValueFrom } from "rxjs";
-import { concatMap, map, takeWhile } from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
-import { CurrentCompanyService } from "../current-company.service";
 import { FormUtilsService } from "../form-utils.service";
 
 export enum SummaryOperation {
@@ -51,24 +50,25 @@ export class OrdreLignesService extends ApiService implements APIRead {
     apollo: Apollo,
     public functionsService: FunctionsService,
     public authService: AuthService,
-    private currentCompanyService: CurrentCompanyService
   ) {
     super(apollo, OrdreLigne);
     self = this;
   }
 
   // Used for "REPORTER" buttons on grid commandes
-  reportedItems = [
-    { name: "reportProprietaire", caption: "proprietaireMarchandise.id", fields: ["proprietaireMarchandise.id"] },
-    { name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
-    { name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
-    { name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
-    { name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
-    { name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
-  ];
+  public reportedItems() {
+    return [
+      { name: "reportProprietaire", caption: "proprietaireMarchandise.id", fields: ["proprietaireMarchandise.id"] },
+      { name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
+      { name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
+      { name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
+      { name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
+      { name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
+    ];
+  }
 
   updateReportBtns(grid) {
-    this.reportedItems.map((item) => {
+    this.reportedItems().map((item) => {
       item.fields.map(field => {
         const currClass = grid.instance.columnOption(field, "cssClass") ?? "";
         if (this.authService.currentUser[item.name] || item.mandatoryValue === true) {

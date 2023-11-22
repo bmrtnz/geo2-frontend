@@ -67,7 +67,7 @@ export class ProfilePopupComponent {
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateManagementService.periods();
 
-    this.reportedItems = this.ordreLignesService.reportedItems;
+    this.reportedItems = this.ordreLignesService.reportedItems();
 
     this.simpleParams.map(param => this.formGroup.addControl(param, new UntypedFormControl()));
     this.reportedItems.map((item) =>
