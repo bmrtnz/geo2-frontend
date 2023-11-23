@@ -6,6 +6,7 @@ import {
   isDevMode,
   ViewChild,
 } from "@angular/core";
+import { ONE_SECOND } from "basic";
 import {
   SideNavigationMenuModule,
   HeaderModule,
@@ -102,13 +103,14 @@ export class SideNavOuterToolbarComponent implements OnInit {
               new Date() > new Date(this.alerteInfo?.dateDebut))) &&
               (!this.alerteInfo?.dateFin || (this.alerteInfo?.dateFin && new Date() < new Date(this.alerteInfo?.dateFin)));
             this.bannerVisible = this.alerteInfo?.valide && timingMatch && sectorMatch;
+          } else {
+            this.bannerVisible = false;
           }
         },
         error: (error: Error) =>
           console.log(error.message)
       });
-    }, 5000);
-
+    }, 3 * ONE_SECOND);
   }
 
   onScroll(e) {

@@ -884,13 +884,14 @@ body app-root.production {
 /// Banner
 ////////////////////////////
 
-// Used for banner background
-
 .info-banner {
   position: fixed !important;
   width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
   height: 20px;
-  background-color: #FE3B2F;
+  background-color: transparent;
   line-height: 18px !important;
   font-size: 15px;
   overflow: hidden;

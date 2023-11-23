@@ -161,6 +161,7 @@
                 </div>
                 <div class="dx-field-value">
                   <dx-switch
+                    [focusStateEnabled]="false"
                     [formControlName]="'valide'"
                     (onValueChanged)="messageValidator?.instance?.validate()"
                   ></dx-switch>
@@ -334,15 +335,14 @@
                       <div *dxTemplate="let data of 'field'">
                         <dx-text-area [value]="data"></dx-text-area>
                       </div>
-                      <dx-validator
-                        #messageValidator
-                        name="{{ 'displayed-message' | localize }}"
-                      >
+                      <dxo-drop-down-options [width]="0">
+                      </dxo-drop-down-options>
+                      <dx-validator #messageValidator>
                         <dxi-validation-rule
                           *ngIf="formGroup?.get('valide')?.value"
-                          type="stringLength"
-                          [min]="2"
-                          [max]="1024"
+                          type="async"
+                          [message]="messageText"
+                          [validationCallback]="checkMessageLength"
                         ></dxi-validation-rule>
                       </dx-validator>
                     </dx-select-box>
@@ -366,7 +366,10 @@
               {{ "top" | localize }}
             </div>
             <div class="dx-field-value">
-              <dx-switch [formControlName]="'barreDefilementHaut'"></dx-switch>
+              <dx-switch
+                [formControlName]="'barreDefilementHaut'"
+                [focusStateEnabled]="false"
+              ></dx-switch>
             </div>
             <div class="dx-field-label dx-field-label-right">
               {{ "bottom" | localize }}
@@ -377,7 +380,10 @@
                 {{ "top" | localize }}
               </div>
               <div class="dx-field-value">
-                <dx-switch [formControlName]="'barreDefilementBas'"></dx-switch>
+                <dx-switch
+                  [formControlName]="'barreDefilementBas'"
+                  [focusStateEnabled]="false"
+                ></dx-switch>
               </div>
               <div class="dx-field-label dx-field-label-right">
                 {{ "bottom" | localize }}
@@ -401,6 +407,7 @@
             <div class="dx-field-value">
               <dx-switch
                 [formControlName]="'diffSurExpedition'"
+                [focusStateEnabled]="false"
                 [switchedOnText]=""
                 [switchedOffText]=""
               ></dx-switch>
