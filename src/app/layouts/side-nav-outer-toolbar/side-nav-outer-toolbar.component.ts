@@ -110,7 +110,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
         error: (error: Error) =>
           console.log(error.message)
       });
-    }, 3 * ONE_SECOND);
+    }, 30 * ONE_SECOND);
   }
 
   onScroll(e) {
