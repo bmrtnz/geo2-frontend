@@ -151,7 +151,7 @@ export class ProfilePopupComponent {
         }
         else {
           this.formGroup.get("type").setValue(this.alerteTypes[0].id);
-          this.formGroup.get("deroulant").setValue(false);
+          this.formGroup.get("deroulant").setValue(true);
         }
       },
       error: (error: Error) =>

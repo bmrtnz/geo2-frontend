@@ -34,20 +34,20 @@
     [useNative]="true"
     (onScroll)="onScroll($event)"
   >
-    <div
-      [class]="'info-banner admin-type-' + alerteInfo?.type"
-      [ngClass]="{ noOpacity: !bannerVisible }"
-    >
-      <div
-        [class]="'banner-text'"
-        [ngClass]="{
-          'anim-banner-text text-align-left': alerteInfo?.deroulant
-        }"
-      >
-        {{ alerteInfo?.message }}
-      </div>
-    </div>
     <div class="content">
+      <div
+        [class]="'info-banner admin-type-' + alerteInfo?.type"
+        [ngClass]="{ noOpacity: !bannerVisible }"
+      >
+        <div
+          [class]="'banner-text'"
+          [ngClass]="{
+            'anim-banner-text text-align-left': alerteInfo?.deroulant
+          }"
+        >
+          {{ alerteInfo?.message }}
+        </div>
+      </div>
       <ng-content></ng-content>
     </div>
 

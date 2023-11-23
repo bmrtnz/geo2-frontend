@@ -887,6 +887,9 @@ body app-root.production {
 .info-banner {
   position: fixed !important;
   width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
   height: 20px;
   background-color: transparent;
   line-height: 18px !important;
