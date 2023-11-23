@@ -161,6 +161,7 @@
                 </div>
                 <div class="dx-field-value">
                   <dx-switch
+                    [focusStateEnabled]="false"
                     [formControlName]="'valide'"
                     (onValueChanged)="messageValidator?.instance?.validate()"
                   ></dx-switch>
@@ -365,7 +366,10 @@
               {{ "top" | localize }}
             </div>
             <div class="dx-field-value">
-              <dx-switch [formControlName]="'barreDefilementHaut'"></dx-switch>
+              <dx-switch
+                [formControlName]="'barreDefilementHaut'"
+                [focusStateEnabled]="false"
+              ></dx-switch>
             </div>
             <div class="dx-field-label dx-field-label-right">
               {{ "bottom" | localize }}
@@ -376,7 +380,10 @@
                 {{ "top" | localize }}
               </div>
               <div class="dx-field-value">
-                <dx-switch [formControlName]="'barreDefilementBas'"></dx-switch>
+                <dx-switch
+                  [formControlName]="'barreDefilementBas'"
+                  [focusStateEnabled]="false"
+                ></dx-switch>
               </div>
               <div class="dx-field-label dx-field-label-right">
                 {{ "bottom" | localize }}
@@ -400,6 +407,7 @@
             <div class="dx-field-value">
               <dx-switch
                 [formControlName]="'diffSurExpedition'"
+                [focusStateEnabled]="false"
                 [switchedOnText]=""
                 [switchedOffText]=""
               ></dx-switch>

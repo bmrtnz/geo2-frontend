@@ -223,8 +223,8 @@ export class ProfilePopupComponent {
     },
       { position: 'bottom center', direction: 'up-stack' }
     );
-    const startAlert = this.formGroup.get("valide").value === true && !this.currentAlert.valide;
-    const stopAlert = this.formGroup.get("valide").value !== true && this.currentAlert.valide;
+    const startAlert = this.formGroup.get("valide").value === true && !this.currentAlert?.valide;
+    const stopAlert = this.formGroup.get("valide").value !== true && this.currentAlert?.valide;
 
     if (startAlert) {
       const sector = this.formGroup.get("secteur").value;
