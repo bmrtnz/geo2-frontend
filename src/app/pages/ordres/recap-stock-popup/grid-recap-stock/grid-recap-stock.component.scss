@@ -5,6 +5,10 @@
 ::ng-deep .grid-recap-stock {
   min-height: 200px;
 
+  .dx-header-row {
+    pointer-events: none;
+  }
+
   .dx-row.dx-footer-row {
     background-color: $BW-khaki-dark;
 
