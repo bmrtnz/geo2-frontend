@@ -292,7 +292,7 @@
     "telechargement-fichier-retour": "Téléchargement du fichier de retour",
     "aucune-donnee-recuperee": "Aucune donnée récupérée",
     "aucun-frais": "Aucun frais",
-    "no-client-ref-article": "il n'y a pas de client référençant cet article",
+    "no-client-ref-article": "il n'y a pas de client référençant l'article {0}",
     "ajout-code": "Code...",
     "en-cours": "en cours...",
     "total": "Total",

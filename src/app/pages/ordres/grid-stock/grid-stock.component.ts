@@ -463,10 +463,12 @@ export class GridStockComponent implements OnInit {
       .subscribe((res) => {
         this.article = res.data.article;
         if (!res.data.article.referencesClient?.length) {
-          notify(
-            this.localizeService.localize("no-client-ref-article"),
-            "warning",
-            4500
+          notify({
+            message: this.localizeService.localize("no-client-ref-article", this.articleLigneId),
+            type: "warning",
+            displayTime: 4500,
+          },
+            { position: 'bottom center', direction: 'up-stack' }
           );
         } else {
           this.clientsRefPopup.visible = true;
