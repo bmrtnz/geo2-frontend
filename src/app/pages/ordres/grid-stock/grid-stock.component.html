@@ -220,6 +220,12 @@
       ></dx-button>
     </div>
 
+    <dx-check-box
+      class="sort-comment"
+      #sortByCommentCheckBox
+      text="{{ 'tri-comment' | localize }}"
+    ></dx-check-box>
+
     <dx-data-grid
       class="dx-card wide-card grid-ordre-ligne-stock"
       [remoteOperations]="false"
@@ -362,21 +368,11 @@
           hint="{{ 'hint-clients-ref' | localize }}"
           icon="material-icons person"
         ></dx-button>
-        <!-- Récapitulatif -->
-        <dx-button
-          *ngIf="recap"
-          class="small-article-button recapitulatif"
-          type="success"
-          [focusStateEnabled]="false"
-          [text]="'Récap'"
-          (onClick)="openRecapPopup(cell.data)"
-        >
-        </dx-button>
         <!-- Commentaire -->
         <div class="comment-with-pen float-right">
-          <div class="text text-align-right">
+          <!-- <div class="text text-align-right">
             {{ getDataFromGroup(cell)?.commentaire }}
-          </div>
+          </div> -->
           <dx-button
             class="grid-pen-button"
             type="default"
@@ -388,6 +384,16 @@
           >
           </dx-button>
         </div>
+        <!-- Récapitulatif -->
+        <dx-button
+          *ngIf="recap"
+          class="small-article-button recapitulatif"
+          type="success"
+          [focusStateEnabled]="false"
+          [text]="'Récap'"
+          (onClick)="openRecapPopup(cell.data)"
+        >
+        </dx-button>
       </div>
 
       <dxi-column
@@ -404,6 +410,8 @@
         [cssClass]="column?.cssClass"
         [groupCellTemplate]="column.groupCellTemplate"
         [cellTemplate]="column.cellTemplate"
+        [calculateSortValue]="column.calculateSortValue"
+        [calculateGroupValue]="column.calculateGroupValue"
         [allowSearch]="
           column?.allowSearch || ['string'].includes(column?.dataType)
         "
@@ -412,6 +420,11 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
+      <!-- Allow to sort groups by commentaire -->
+      <dxi-sort-by-group-summary-info
+        [summaryItem]="sortByCommentCheckBox?.value ? 'commentaire' : ''"
+      >
+      </dxi-sort-by-group-summary-info>
     </dx-data-grid>
   </div>
 </div>

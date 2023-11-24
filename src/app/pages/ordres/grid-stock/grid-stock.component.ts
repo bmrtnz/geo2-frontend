@@ -24,7 +24,7 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
@@ -79,6 +79,8 @@ export class GridStockComponent implements OnInit {
   @ViewChild("bureauAchatSB", { static: false }) bureauxAchatSB: DxSelectBoxComponent;
   @ViewChild("secteursSB", { static: false }) secteursSB: DxSelectBoxComponent;
   @ViewChild("clientsSB", { static: false }) clientsSB: DxSelectBoxComponent;
+  @ViewChild("sortByCommentCheckBox", { static: false }) sortByCommentCheckBox: DxCheckBoxComponent;
+
   @ViewChild(ZoomArticlePopupComponent, { static: false })
   zoomArticlePopup: ZoomArticlePopupComponent;
   @ViewChild(ReservationPopupComponent)
@@ -121,7 +123,7 @@ export class GridStockComponent implements OnInit {
     "prevision7j",
     "stock.quantiteTotale"
   ];
-  public customSummaryFields = ["quantiteHebdomadaire"];
+  public customSummaryFields = ["quantiteHebdomadaire", "commentaire"];
 
   readonly decriptionFields = new Set([
     "id",
@@ -550,6 +552,10 @@ export class GridStockComponent implements OnInit {
       if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
         e.cellElement.textContent = "";
 
+    }
+
+    if (e.rowType === "data") {
+      if (e.column.dataField === "commentaire") e.cellElement.innerText = "";
     }
 
     if (["data", "group"].includes(e.rowType) && e.column.dataField) {

@@ -1444,6 +1444,14 @@
         "visible": true
       },
       {
+        "visibleIndex": 14,
+        "dataField": "commentaire",
+        "dataType": "string",
+        "cssClass": "no-sort",
+        "showInColumnChooser": true,
+        "visible": true
+      },
+      {
         "visibleIndex": 16,
         "dataField": "quantiteCalculee1",
         "cssClass": "small-side-padding",
@@ -1503,10 +1511,6 @@
         "visibleIndex": 32,
         "dataField": "descriptionAbregee",
         "visible": true
-      },
-      {
-        "dataField": "commentaire",
-        "showInColumnChooser": false
       },
       {
         "dataField": "origineID",
