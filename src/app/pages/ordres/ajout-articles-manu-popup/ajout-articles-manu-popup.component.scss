@@ -2,6 +2,7 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .ajout-articles-manu-popup {
+
   .max-tags {
     input {
       display: none !important;
@@ -39,6 +40,8 @@
   }
 
   .dx-popup-content {
+    height: 100% !important;
+
     .ajout-art-manu-content-container {
       background: #fff !important;
       padding: 0 15px 0 2px;

@@ -259,6 +259,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.catalogue.especeSB.value = ["POMME"];
     this.catalogue.varieteSB.instance.reset();
     this.catalogue.modesCultureSB.instance.reset();
+    this.catalogue.groupeEmballageSB.instance.reset();
     this.catalogue.emballageSB.instance.reset();
     this.catalogue.origineSB.instance.reset();
     this.codeChangeProcess = false;
@@ -273,9 +274,9 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   clearAndHidePopup() {
-    this.hidePopup();
     this.lignesChanged.emit(this.nbARticles);
     this.clearAll();
+    this.hidePopup();
   }
 
   insertReplaceArticles() {
