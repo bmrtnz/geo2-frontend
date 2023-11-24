@@ -945,7 +945,9 @@ export class GridCommandesComponent
     let field = data.column.dataField;
     this.grid.instance
       .getVisibleRows()
-      .map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
+      .map((res, index) => {
+        if (index) this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex))
+      });
     setTimeout(() => this.grid.instance.saveEditData());
     field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
     field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
