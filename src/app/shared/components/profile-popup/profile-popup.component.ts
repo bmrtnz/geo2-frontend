@@ -164,8 +164,8 @@ export class ProfilePopupComponent {
   onHidden() {
     // Reset fields
     this.simpleParams.map(param => this.formGroup.get(param).reset());
-    this.bandeauDateDebCB.value = false;
-    this.bandeauDateFinCB.value = false;
+    if (this.bandeauDateDebCB) this.bandeauDateDebCB.value = false;
+    if (this.bandeauDateFinCB) this.bandeauDateFinCB.value = false;
     this.reportedItems
       .filter((item) => !item.mandatoryValue)
       .map((item) => {
