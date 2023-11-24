@@ -61,6 +61,12 @@ $light-grey: rgba(0, 0, 0, 0.2);
       }
     }
 
+    .dx-valid.dx-texteditor .dx-texteditor-input-container::after {
+      background: #F5F5F5;
+      border-radius: 100%;
+      right: 3px !important;
+    }
+
     .dx-invalid-message>.dx-overlay-content {
       background-color: rgba(255, 255, 255, 0);
       font-size: 12px;
@@ -278,11 +284,18 @@ $light-grey: rgba(0, 0, 0, 0.2);
           overflow: visible;
           white-space: initial;
           text-align: right;
-          align-self: flex-end;
         }
 
         .dx-field-value {
           width: 100% !important;
+        }
+
+        textarea {
+          padding-right: 48px !important;
+        }
+
+        .dx-valid.dx-texteditor .dx-texteditor-input-container::after {
+          right: 24px !important;
         }
       }
 
