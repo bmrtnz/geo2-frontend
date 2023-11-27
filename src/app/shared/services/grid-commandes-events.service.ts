@@ -279,7 +279,7 @@ export class GridCommandesEventsService {
             ld_prix_mini = resFrais.data.attribFrais.perequation
               ? resFrais.data.attribFrais.accompte : 0;
         } catch (error) {
-          console.warn("Echec de recuperation des frais -> ", error);
+          console.warn("Echec de recuperation des frais -> ", error.message);
         }
 
         let ld_ach_pu, ld_ach_dev_pu;
