@@ -29,7 +29,7 @@ export class PackingListPopupComponent implements OnChanges {
     private localizeService: LocalizationService,
     private authService: AuthService,
     private packlistsService: PacklistsService
-  ) {}
+  ) { }
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridPackingListComponent, { static: false })
@@ -119,9 +119,7 @@ export class PackingListPopupComponent implements OnChanges {
   validateFields() {
     if (
       this.dateDepInput.value &&
-      this.dateArrInput.value &&
-      this.POInput.value !== "" &&
-      this.POInput.value !== null
+      this.dateArrInput.value
     )
       return true;
   }
@@ -172,7 +170,7 @@ export class PackingListPopupComponent implements OnChanges {
           depart: new Date(this.dateDepInput.value).toISOString(),
           livraison: new Date(this.dateArrInput.value).toISOString(),
           impression: new Date(this.dateImpInput.value).toISOString(),
-          numeroPo: this.POInput.value,
+          numeroPo: this.POInput.value || "",
           typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
           mail: this.authService.currentUser.email ?? "",
           ordres: myOrders,
