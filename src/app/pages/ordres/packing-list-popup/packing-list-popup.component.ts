@@ -170,7 +170,7 @@ export class PackingListPopupComponent implements OnChanges {
           depart: new Date(this.dateDepInput.value).toISOString(),
           livraison: new Date(this.dateArrInput.value).toISOString(),
           impression: new Date(this.dateImpInput.value).toISOString(),
-          numeroPo: this.POInput.value || "",
+          numeroPo: this.POInput.value || "-",
           typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
           mail: this.authService.currentUser.email ?? "",
           ordres: myOrders,
