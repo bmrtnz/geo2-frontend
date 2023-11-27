@@ -169,7 +169,7 @@
                   <span
                     *ngIf="linkedOrdersSearch"
                     class="search-linkedOrders"
-                    >Recherche ordres liés...</span
+                    >{{ "search-linked-orders" | localize }}...</span
                   >
                   <dx-button
                     *ngFor="let linkedOrder of linkedOrders"
@@ -461,6 +461,7 @@
                             [displayFormat]="'dd-MM-yy HH:mm (EEEE)'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                             type="datetime"
+                            (onValueChanged)="onDateLivChanged($event)"
                           >
                             <dx-validator
                               name="{{

@@ -590,6 +590,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.comInt?.instance.option("hint", this.comInt.value);
   }
 
+  onDateLivChanged(e) {
+    if (!e.event) return; // Only user event
+    this.changeDateEta(e.value, "ordre-eta-changed");
+    this.headerSaving = false; // To unlock heading save
+    this.saveHeaderOnTheFly();
+  }
+
   saveHeaderOnTheFly(message?) {
     if (this.headerSaving) return;
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -608,8 +615,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
 
-      console.log(ordre)
-
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
           this.refreshStatus(res.data.saveOrdre.statut);
@@ -617,13 +622,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
           this.addLinkedOrders();
-          if (message) notify(this.localization.localize(message), "success");
+          if (message) {
+            notify({
+              message: this.localization.localize(message),
+              type: "success"
+            },
+              { position: 'bottom center', direction: 'up-stack' }
+            );
+          }
 
           // Ordre date depart has been mutated
           if (ordre.dateDepartPrevue) this.changeDateDepart(ordre.dateDepartPrevue);
         },
         error: (err) => {
-          notify("Erreur sauvegarde entête", "error", 3000);
+          notify({
+            message: this.localization.localize("header-loading-error"),
+            type: "error"
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          );
           console.log(err);
           this.headerSaving = false;
         },
@@ -640,6 +657,28 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       // Check date and change if needed with info toast
       if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
         this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
+    }
+  }
+
+  changeDateLiv(e, message?) {
+    this.formGroup.get("dateLivraisonPrevue").patchValue(e);
+    this.formGroup.get("dateLivraisonPrevue").markAsDirty();
+    this.changeDateEta(e, "ordre-eta-changed");
+    this.headerSaving = false; // To unlock heading save
+    this.saveHeaderOnTheFly(message ?? "modification-done");
+  }
+
+  changeDateEta(e, message?) {
+    if (this.ordre?.secteurCommercial?.id !== "MAR") return;
+    this.formGroup.get("etaDate").setValue(e.split("T")[0]);
+    this.formGroup.get("etaDate").markAsDirty();
+    if (message) {
+      notify({
+        message: this.localization.localize(message),
+        type: "success"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
     }
   }
 
@@ -1663,11 +1702,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  changeDateLiv(e, message?) {
-    this.formGroup.get("dateLivraisonPrevue").patchValue(e);
-    this.formGroup.get("dateLivraisonPrevue").markAsDirty();
-    this.saveHeaderOnTheFly(message ?? "modification-done");
-  }
 
   openClientFilePopup() {
     this.clientId = this.ordre?.client?.id;
