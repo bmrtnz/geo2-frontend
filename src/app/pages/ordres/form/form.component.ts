@@ -1360,6 +1360,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
           }
           this.allowMutations = !Ordre.isCloture(this.ordre);
+          this.ordresLignesViewExp = !this.allowMutations;
           this.initVACMutation();
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
@@ -1898,9 +1899,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public suppLignesNonExp() {
     this.supprLignesBtnDisabled = true;
-    notify(this.localization.localize("please-wait"), "info", 9999999);
+    notify(this.localization.localize("please-wait"), "info", 9999999); // We hide it right after
     this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
       error: ({ message }: Error) => {
+        console.log(message);
         hideToasts()
         this.supprLignesBtnDisabled = false;
         notify(this.messageFormat(message), "error", 7000);
@@ -1911,7 +1913,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
           .subscribe(() => {
             this.refreshOrder();
-            notify(res.data.supprLignesNonExped.msg, "success", 7000);
+            notify(res.data.supprLignesNonExped.msg, "success");
           });
       },
       complete: () => hideToasts()
