@@ -150,7 +150,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       concatMap(res => this.ordresEdiService.fCreeOrdresEdi(
         this.currentCompanyService.getCompany().id,
         res.data.ediOrdre.entrepot.id,
-        this.datePipe.transform(res.data.ediOrdre.dateLivraison, "dd/MM/yyyy"),
+        this.datePipe.transform(res.data.ediOrdre.dateLivraison, "yyyy-MM-dd"),
         this.currentCompanyService.getCompany().campagne.id,
         res.data.ediOrdre.referenceCommandeClient,
         res.data.ediOrdre.client.id,
