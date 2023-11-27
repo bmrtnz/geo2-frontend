@@ -184,6 +184,7 @@ export class ArticleDetailsComponent
   validateCommentPromptVisible = false;
   readOnlyMode = true;
   cloneMode = false;
+  userCloneMode = false;
   preSaisie: string;
   UC = false;
   CNUFCode: string;
@@ -314,6 +315,7 @@ export class ArticleDetailsComponent
   onClone() {
     this.readOnlyMode = false;
     this.cloneMode = true;
+    this.userCloneMode = !this.authService.currentUser.accessGeoProduct;
     this.editing = true;
     Object.keys(this.formGroup.controls).forEach((key) => {
       this.formGroup.get(key).markAsDirty();

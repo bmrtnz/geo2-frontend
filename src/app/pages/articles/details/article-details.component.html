@@ -4,14 +4,14 @@
 >
   <div class="content-block">
     <h2>
-      <span *ngIf="cloneMode && !articleLigneId">{{
-        "create" | localize
-      }}</span>
+      <span *ngIf="cloneMode && !articleLigneId"
+        >{{ "create" | localize }}&nbsp;</span
+      >
       <span *ngIf="!articleLigneId">{{
         "articles-details-title" | localize
       }}</span>
       <span
-        *ngIf="!articleLigneId"
+        *ngIf="!articleLigneId && !cloneMode"
         class="print-mode"
         >&nbsp;N°&nbsp;{{ article?.id }}</span
       >
