@@ -175,7 +175,7 @@
       dataField="dateModification"
       editorType="dxDateBox"
       [editorOptions]="{
-        displayFormat: 'dd/MM/yyyy HH:mm',
+        displayFormat: 'dd/MM/yyyy',
         showClearButton: true,
         type: 'datetime'
       }"
@@ -242,6 +242,13 @@
     [width]="'auto'"
   ></dxi-column>
   <dxi-column
+    [dataField]="'varieteCode'"
+    [caption]="'fraude-column-varieteCode' | localize"
+    [cssClass]="'small-side-padding'"
+    [groupIndex]="3"
+    [width]="'auto'"
+  ></dxi-column>
+  <dxi-column
     [dataField]="'dateDepartPrevue'"
     [caption]="'fraude-column-dateDepartPrevue' | localize"
     [dataType]="'date'"
@@ -301,26 +308,29 @@
     [caption]="'fraude-column-typeTransportDescription' | localize"
     [cssClass]="'small-side-padding'"
     [width]="'auto'"
+    [visible]="false"
   ></dxi-column>
   <dxi-column
     [dataField]="'baseTarifTransportCode'"
     [caption]="'fraude-column-baseTarifTransportCode' | localize"
     [cssClass]="'small-side-padding'"
     [width]="'auto'"
+    [visible]="false"
   ></dxi-column>
   <dxi-column
     [dataField]="'campagne'"
     [caption]="'fraude-column-campagne' | localize"
     [cssClass]="'small-side-padding'"
     [width]="'auto'"
+    [visible]="false"
   ></dxi-column>
 
-  <!-- <dxo-summary [recalculateWhileEditing]="true">
-    <dxi-group-item
+  <dxo-summary [recalculateWhileEditing]="true">
+    <!-- <dxi-group-item
       [showInColumn]="'nombrePalettesCommandees'"
       [displayFormat]="'fraude-total-variete-station' | localize"
       [showInGroupFooter]="true"
-    ></dxi-group-item>
+    ></dxi-group-item> -->
     <dxi-group-item
       column="nombreColisCommandes"
       summaryType="sum"
@@ -335,5 +345,5 @@
       [displayFormat]="'{0}'"
     >
     </dxi-group-item>
-  </dxo-summary> -->
+  </dxo-summary>
 </dx-data-grid>
