@@ -405,6 +405,7 @@
     "acces-ordre": "Accès ordre n° &NO",
     "ouverture-ordre": "Ouverture ordre n° &NO",
     "ouverture-ordres": "Ouverture ordres n° &NO",
+    "article-cree": "L'article n°{0} a bien été créé",
     "ordre-cree": "L'ordre n°&O a bien été créé",
     "ordre-cree-edi": "L'ordre n°{0} a bien été créé",
     "ordre-crees-edi": "Ordre(s) n°{0} créé(s)",

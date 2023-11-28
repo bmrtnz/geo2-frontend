@@ -413,7 +413,13 @@ export class ArticleDetailsComponent
         )
         .subscribe({
           next: (event) => {
-            notify("Sauvegardé", "success", 3000);
+            notify({
+              message: this.localization.localize("saveOK"),
+              type: "success",
+              displayTime: 3000
+            },
+              { position: 'bottom center', direction: 'up-stack' }
+            );
             this.refreshGrid.emit();
             // Show red badges (unvalidated forms)
             this.validationService.showToValidateBadges();
@@ -422,6 +428,14 @@ export class ArticleDetailsComponent
               ...this.formGroup.getRawValue(),
             };
             if (this.cloneMode) {
+              notify({
+                message: this.localization.localize("article-cree", event.data.saveArticle.id),
+                type: "success",
+                displayTime: 7000
+              },
+                { position: 'bottom center', direction: 'up-stack' }
+              );
+              this.onCancel();
               this.router.navigate([
                 `/pages/articles/${event.data.saveArticle.id}`,
               ]);
