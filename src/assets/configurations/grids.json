@@ -1145,12 +1145,6 @@
         "visible": false
       },
       {
-        "visibleIndex": 7,
-        "dataField": "emballage.emballage.description",
-        "dataType": "string",
-        "visible": true
-      },
-      {
         "visibleIndex": 8,
         "dataField": "cahierDesCharge.categorie.description",
         "dataType": "string",

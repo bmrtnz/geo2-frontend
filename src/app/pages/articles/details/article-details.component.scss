@@ -1,124 +1,13 @@
 // Var
 @import "themes/generated/variables.base";
 
-
-::ng-deep .tabpanel-item {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  padding: 10px 0 0 10px;
-}
-
-::ng-deep .mobile .tabpanel-item {
-  padding-top: 10px;
-}
-
-::ng-deep .tabpanel-item>div {
-  float: left;
-  padding: 0 85px 10px 10px;
-}
-
-::ng-deep .tabpanel-item p {
-  font-size: 16px;
-  margin: 0;
-}
-
-::ng-deep .item-box {
-  font-size: 16px;
-  margin: 15px 0 45px 10px;
-}
-
-::ng-deep .options {
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  margin-top: 20px;
-}
-
-::ng-deep .caption {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-::ng-deep .option {
-  margin-top: 10px;
-}
-
-::ng-deep .articles-page {
-  .dx-tabpanel {
-    overflow: hidden;
+::ng-deep .user-cloning {
+  .dx-form-group-content .dx-field {
+    input:not(:disabled):not(:read-only) {
+      background-color: rgba(255, 196, 77, 0.5);
+      padding-left: 10px !important;
+    }
   }
-
-  .dx-tab {
-    display: block;
-    border-radius: 70px;
-    border: 1px solid #ddd;
-    width: 70px;
-    height: 70px;
-    float: left;
-    margin: 0 100px 25px 10px;
-  }
-
-  .dx-tab span {
-    display: block;
-    font-size: 23px;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 10px;
-    text-transform: none;
-  }
-
-  .dx-tab .subtitle {
-    position: absolute;
-    display: block;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 11px;
-    margin-top: 22px;
-    text-transform: none;
-  }
-
-  .dx-tabs-wrapper .dx-item:after {
-    position: absolute;
-    left: 80px;
-    margin-top: 10px;
-    content: "_____________";
-    color: $base-accent;
-  }
-
-  .dx-tabs-wrapper .dx-item:last-child:after {
-    content: "";
-  }
-
-  .dx-tab:before {
-    display: none;
-  }
-
-  .dx-tab-selected {
-    background: $base-accent;
-  }
-
-  .dx-tab-selected:hover {
-    background: $base-accent;
-  }
-
-  .dx-tab-selected .dx-item-content :not(.subtitle) {
-    color: #fff;
-  }
-
-  .dx-tabpanel-container {
-    margin-top: 50px;
-  }
-}
-
-::ng-deep #gridContainer {
-  height: 340px;
-}
-
-.cat-name {
-  font-size: 25px;
 }
 
 .upperButton {

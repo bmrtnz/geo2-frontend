@@ -17,6 +17,14 @@
     background-color: $base-accent !important;
   }
 
+  .dx-accordion-item-opened {
+    margin-bottom: -20px !important;
+
+    .dx-accordion-item-body {
+      padding-bottom: 0;
+    }
+  }
+
   .dx-popup-wrapper {
     position: static !important;
     width: 100% !important;

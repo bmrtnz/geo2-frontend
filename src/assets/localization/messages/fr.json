@@ -951,6 +951,7 @@
     "articles-normalisation-articleClient": "Code article client",
     "articles-normalisation-calibreMarquage": "Calibre marquage",
     "articles-normalisation-produitMdd": "Marque distributeur",
+    "articles-normalisation-descriptionCalibreClient": "Description spéciale calibre client",
     "articles-descrSpecialeCalClt": "Description spéciale calibre client",
     "articles-etiquetteColis": "Étiquette Colis",
     "articles-valide": "Valide",

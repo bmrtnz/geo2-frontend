@@ -45,7 +45,7 @@
         *ngIf="!articleLigneId"
         class="upperButton"
         type="default"
-        [visible]="readOnlyMode && authService.currentUser.accessGeoProduct"
+        [visible]="readOnlyMode"
         text="{{ 'btn-cloner' | localize }}"
         (onClick)="onClone()"
       >
@@ -69,7 +69,12 @@
       <div style="clear: both"></div>
     </h2>
   </div>
-  <div class="content-block article-page">
+  <div
+    class="content-block article-page"
+    [ngClass]="{
+      'user-cloning': userCloneMode
+    }"
+  >
     <dx-box
       direction="row"
       class="col-not-printed"
@@ -190,8 +195,7 @@
               >
                 <dx-select-box
                   formControlName="espece"
-                  [readOnly]="readOnlyMode"
-                  [disabled]="true"
+                  [readOnly]="true"
                   [dataSource]="especes"
                   [displayExpr]="displayIDBefore"
                   [searchExpr]="['id']"
@@ -902,7 +906,7 @@
                     <dxi-item [ratio]="4">
                       <!-- PU €/kg mat. première -->
                       <div class="dx-field field-large">
-                        <div class="dx-field-label">
+                        <div class="dx-field-label multiline-field-label">
                           {{
                             "articles-emballage-prixUnitaireMatierePremiere"
                               | localize
@@ -923,7 +927,7 @@
                     <dxi-item [ratio]="4">
                       <!-- PU €/kg MO -->
                       <div class="dx-field field-large">
-                        <div class="dx-field-label">
+                        <div class="dx-field-label multiline-field-label">
                           {{
                             "articles-emballage-prixUnitaireMainOeuvre"
                               | localize
@@ -945,7 +949,7 @@
                     <dxi-item [ratio]="4">
                       <!-- Dimensions -->
                       <div class="dx-field field-large">
-                        <div class="dx-field-label">
+                        <div class="dx-field-label multiline-field-label">
                           {{ "articles-emballage-dimension" | localize }}
                         </div>
                         <div
@@ -963,7 +967,7 @@
                     <dxi-item [ratio]="4">
                       <!-- Hauteur maxi palette -->
                       <div class="dx-field field-large">
-                        <div class="dx-field-label">
+                        <div class="dx-field-label multiline-field-label">
                           {{
                             "articles-emballage-hauteurMaximumPalette"
                               | localize
@@ -1128,7 +1132,24 @@
                 </dx-select-box>
               </div>
             </div>
-
+            <!-- Description spéciale calibre client -->
+            <div class="dx-field">
+              <div class="dx-field-label multiline-field-label">
+                {{
+                  "articles-normalisation-descriptionCalibreClient" | localize
+                }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="descriptionCalibreClient"
+                  [readOnly]="readOnlyMode"
+                >
+                </dx-text-box>
+              </div>
+            </div>
             <!-- Etiquette client -->
             <div class="dx-field">
               <div class="dx-field-label">

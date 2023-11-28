@@ -65,6 +65,18 @@ export class ArticleDetailsComponent
   implements OnInit, NestedPart, Editable, OnChanges {
   @Input() public articleLigneId: string;
 
+  public userCloneControls = [
+    "matierePremiere.type",
+    "matierePremiere.modeCulture",
+    "cahierDesCharge.sucre",
+    "cahierDesCharge.penetro",
+    "cahierDesCharge.cirage",
+    "cahierDesCharge.rangement",
+    "articleAssocie",
+    "normalisation.etiquetteColis",
+    "normalisation.etiquetteEvenementielle",
+  ]
+
   formGroup = this.fb.group({
     id: [""],
     description: [""],
@@ -105,6 +117,7 @@ export class ArticleDetailsComponent
       articleClient: [""],
       calibreMarquage: [""],
       identificationSymbolique: [""],
+      descriptionCalibreClient: [""]
     }),
     emballage: this.fb.group({
       emballage: this.fb.group({
@@ -141,8 +154,6 @@ export class ArticleDetailsComponent
       poidsNetClient: [""],
       poidsNetGaranti: [""],
     }),
-    // poidsNetUC: [''],
-    // descrSpecialeCalClt: [''],
   });
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
@@ -300,6 +311,7 @@ export class ArticleDetailsComponent
 
   onCancel() {
     this.cloneMode = false;
+    this.formGroup.enable();
     this.readOnlyMode = true;
     this.editing = false;
     this.formGroup.reset(this.article);
@@ -317,6 +329,12 @@ export class ArticleDetailsComponent
     this.cloneMode = true;
     this.userCloneMode = !this.authService.currentUser.accessGeoProduct;
     this.editing = true;
+
+    if (this.userCloneMode) {
+      this.formGroup.disable();
+      this.userCloneControls.map(ctrl => this.formGroup.get(ctrl).enable())
+    }
+
     Object.keys(this.formGroup.controls).forEach((key) => {
       this.formGroup.get(key).markAsDirty();
     });
