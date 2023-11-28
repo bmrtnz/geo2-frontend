@@ -63,6 +63,14 @@ export class FormUtilsService {
     );
   }
 
+  /**
+  *  Get last item of nested object
+  */
+  public getLastNested(object) {
+    if (typeof object !== 'object') return object;
+    for (const prop in object) return this.getLastNested(object[prop])
+  }
+
   public setIdToNull(formGroup, field) {
     formGroup.get(field).patchValue({ id: null });
   }

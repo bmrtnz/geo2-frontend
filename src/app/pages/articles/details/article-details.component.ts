@@ -381,7 +381,7 @@ export class ArticleDetailsComponent
 
       // Special field: need to adjust data
       article.emballage.emballage = {
-        id: article.emballage.emballage.id.id,
+        id: this.formUtils.getLastNested(article.emballage.emballage.id.id),
         espece: { id: this.article.matierePremiere.espece.id },
       };
 
@@ -394,6 +394,8 @@ export class ArticleDetailsComponent
           this.preSaisie = "";
         }
       }
+
+      // console.log(article);
 
       (article.valide !== undefined &&
         this.article.valide !== article.valide &&
