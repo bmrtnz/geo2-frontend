@@ -32,7 +32,7 @@ export class SupervisionPaloxsService extends ApiService {
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            const operation = `all${model.name.ucFirst()}`;
+            const operation = `all${model.name}`;
             const query = await this.buildList(columns, operation);
             type Response = { [operation: string]: M[] };
 
