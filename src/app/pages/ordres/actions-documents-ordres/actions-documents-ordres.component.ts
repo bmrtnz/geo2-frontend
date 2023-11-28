@@ -162,9 +162,6 @@ export class ActionsDocumentsOrdresComponent {
   }
 
   async onClickSendAction(e, annulation?) {
-    if (e === "ORDRE" && (this.ordre.transporteur.id === "-" || !this.ordre.transporteur.id))
-      return notify(this.localization.localize("ordre-erreur-transporteur"), "error", 3000);
-
     if (this.gridCommandes) {
       await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
       this.sendAction(e, annulation);
