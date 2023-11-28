@@ -3,6 +3,13 @@
 
 ::ng-deep .user-cloning {
   .dx-form-group-content .dx-field {
+
+    .dx-textbox input {
+      &:read-only:not(:disabled) {
+        opacity: 0.38 !important;
+      }
+    }
+
     input:not(:disabled):not(:read-only) {
       background-color: rgba(255, 196, 77, 0.5);
       padding-left: 10px !important;

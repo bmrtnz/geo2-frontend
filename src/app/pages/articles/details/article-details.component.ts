@@ -75,6 +75,7 @@ export class ArticleDetailsComponent
     "articleAssocie",
     "normalisation.etiquetteColis",
     "normalisation.etiquetteEvenementielle",
+    "normalisation.descriptionCalibreClient"
   ]
 
   formGroup = this.fb.group({
