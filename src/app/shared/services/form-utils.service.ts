@@ -94,7 +94,7 @@ export class FormUtilsService {
       }
       window.print()
       if (appRoot) appRoot.style.display = display;
-    }, 100); // Thanx Dx - otherwide accordions aren't opened
+    }, 500); // Thanx Dx - otherwise accordions aren't opened
   }
 
 
