@@ -3150,7 +3150,7 @@
         "dataField": "libelleDLV",
         "visible": true,
         "allowSorting": false,
-        "cssClass": "headerCellBtnTemplate multi-line-header",
+        "cssClass": "headerCellBtnTemplate text-align-center libelleDLV",
         "headerCellTemplate": "headerCellBtnTemplate"
       },
       {

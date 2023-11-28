@@ -71,13 +71,15 @@
   }
 
   .headerCellBtnTemplate {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-
     .small-article-button {
       display: none;
       margin-top: 3px;
     }
+  }
+
+  .headerCellBtnTemplate:not(.libelleDLV) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .headerCellBtnTemplate-show {
