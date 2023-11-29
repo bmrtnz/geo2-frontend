@@ -25,6 +25,7 @@
     dateSerializationFormat="yyyy-MM-dd"
     (onRowClick)="onRowClick($event)"
     (onContentReady)="onContentReady($event)"
+    (onKeyDown)="onKeyDown($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         'Veuillez indiquer le motif des annule et remplace...',
@@ -95,6 +96,8 @@
         [showClearButton]="true"
         [displayExpr]="displayCapitalize"
         (onValueChanged)="onValueChanged($event, cell)"
+        (onInitialized)="onSelectBoxInitialized($event)"
+        [openOnFieldClick]="false"
       >
         <dxo-drop-down-options [width]="500"> </dxo-drop-down-options>
       </dx-select-box>

@@ -129,6 +129,37 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     this.dataGrid.instance.refresh();
   }
 
+  // Used to override std arrows behaviour
+  onSelectBoxInitialized(e) {
+    const selectBox = e.component;
+    selectBox.registerKeyHandler('downArrow', () => this.moveRows(selectBox, 1));
+    selectBox.registerKeyHandler('upArrow', () => this.moveRows(selectBox, -1));
+  }
+
+  moveRows(selectBox, dir) {
+    if (!selectBox.option('opened')) {
+      this.dataGrid.instance.closeEditCell();
+      const nextCell = {
+        row: this.dataGrid.focusedRowIndex + dir,
+        col: this.dataGrid.focusedColumnIndex
+      };
+      if (this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col) && nextCell.row >= 0)
+        this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
+    } else return true;
+  }
+
+  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
+    const keyCode = event.originalEvent?.code;
+    const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex - 1);
+    if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
+    const nextCell = {
+      row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
+      col: this.dataGrid.focusedColumnIndex
+    };
+    if (this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col) && nextCell.row >= 0)
+      this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
+  }
+
   reload() {
     this.canBeSent = false;
     this.functionsService
