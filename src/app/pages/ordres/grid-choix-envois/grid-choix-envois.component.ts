@@ -50,6 +50,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
+    public formUtilsService: FormUtilsService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
     private ar: FluxArService,
@@ -170,7 +171,6 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   onSelectBoxKeyUp(event, cell) {
-    // console.log(event, cell);
     if (cell.column.dataField === "numeroAcces1" && this.USER_MAIL) {
       const myInput = event.element?.querySelector("input.dx-texteditor-input");
       if (myInput.value === "@") myInput.value = this.USER_MAIL
@@ -242,6 +242,23 @@ export class GridChoixEnvoisComponent implements OnInit {
         const temps = res.data.allEnvoisList.map(({ id }) => ({ id }));
         this.envoisService.deleteTempEnvois(temps).toPromise()
       });
+  }
+
+  // Used to override std arrows behaviour
+  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
+    const keyCode = event.originalEvent?.code;
+    const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex);
+    if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
+    const nextCell = {
+      row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
+      col: this.dataGrid.focusedColumnIndex
+    };
+    const cell = this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col);
+    if (cell && nextCell.row >= 0) {
+      this.dataGrid.instance.closeEditCell();
+      this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
+      this.formUtilsService.selectTextOnFocusIn({ element: cell })
+    }
   }
 
   reload(annuleOrdre?) {

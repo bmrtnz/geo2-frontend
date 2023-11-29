@@ -6,6 +6,7 @@ import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { RaisonsAnnuleRemplaceService } from "app/shared/services/api/raisons-annule-remplace.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
@@ -61,6 +62,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
+    public formUtilsService: FormUtilsService,
     private envoisService: EnvoisService,
     private ar: FluxArService
   ) {
@@ -85,13 +87,6 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   onContentReady(event) {
-    // Workaround for select all rows after loading data (without timeout do always select all)
-    // if (!this.canSelectAll) return;
-    // setTimeout(() => {
-    //   event.component.selectAll();
-    //   this.canSelectAll = false;
-    //   this.canBeSent = true;
-    // }, 500);
   }
 
   onRowClick({ rowIndex }) {
@@ -156,7 +151,8 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
       col: this.dataGrid.focusedColumnIndex
     };
-    if (this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col) && nextCell.row >= 0)
+    const cell = this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col);
+    if (cell && nextCell.row >= 0)
       this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
   }
 
