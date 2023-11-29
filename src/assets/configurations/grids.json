@@ -5312,6 +5312,8 @@
       },
       {
         "dataField": "dateDepartPrevueGroupage",
+        "dataType": "datetime",
+        "format": "dd-MM-yyyy HH:mm",
         "cssClass": "no-padding",
         "visible": false
       },
