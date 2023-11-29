@@ -3,7 +3,11 @@
   (ngSubmit)="onSubmit()"
 >
   <div class="content-block">
-    <h2>
+    <h2
+      [ngClass]="{
+        'green-font': cloneMode
+      }"
+    >
       <span *ngIf="cloneMode && !articleLigneId"
         >{{ "create" | localize }}&nbsp;</span
       >

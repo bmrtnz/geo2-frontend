@@ -281,6 +281,13 @@ export class ArticleDetailsComponent
     this.article = new Article(res.data.article);
     this.formGroup.reset();
     this.formGroup.patchValue(this.article);
+    this.formGroup.get("emballage.emballage.id").reset(
+      {
+        id: this.article.emballage.emballage.id,
+        especeId: this.article.matierePremiere.espece.id
+      }
+    );
+
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
@@ -300,10 +307,7 @@ export class ArticleDetailsComponent
   }
 
   coucheColis(couche, colis) {
-    return this.localization
-      .localize("articles-emballage-couchesColis")
-      .replace("&h", couche)
-      .replace("&b", colis);
+    return this.localization.localize("articles-emballage-couchesColis", couche, colis);
   }
 
   viewStats() {
@@ -312,6 +316,7 @@ export class ArticleDetailsComponent
 
   onCancel() {
     this.cloneMode = false;
+    this.userCloneMode = false;
     this.formGroup.enable();
     this.readOnlyMode = true;
     this.editing = false;
@@ -380,10 +385,12 @@ export class ArticleDetailsComponent
       );
 
       // Special field: need to adjust data
-      article.emballage.emballage = {
-        id: this.formUtils.getLastNested(article.emballage.emballage.id.id),
-        espece: { id: this.article.matierePremiere.espece.id },
-      };
+      if (article.emballage) {
+        article.emballage.emballage = {
+          id: this.formUtils.getLastNested(article.emballage.emballage.id.id),
+          espece: { id: this.article.matierePremiere.espece.id },
+        };
+      }
 
       if (this.cloneMode) {
         article.preSaisie = true;
@@ -394,8 +401,6 @@ export class ArticleDetailsComponent
           this.preSaisie = "";
         }
       }
-
-      // console.log(article);
 
       (article.valide !== undefined &&
         this.article.valide !== article.valide &&
@@ -434,7 +439,7 @@ export class ArticleDetailsComponent
               notify({
                 message: this.localization.localize("article-cree", event.data.saveArticle.id),
                 type: "success",
-                displayTime: 7000
+                displayTime: 10000
               },
                 { position: 'bottom center', direction: 'up-stack' }
               );
@@ -445,6 +450,7 @@ export class ArticleDetailsComponent
             }
             this.readOnlyMode = true;
             this.editing = false;
+            this.userCloneMode = false;
             this.article.historique = event.data.saveArticle.historique;
             this.formGroup
               .get("gtinColisBlueWhale")

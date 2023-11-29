@@ -932,7 +932,7 @@
     "articles-emballage-palette60x80": "Palette 60 x 80",
     "articles-emballage-codeEmbadif": "Code embadif",
     "articles-emballage-emballage-groupe": "Groupe emballage",
-    "articles-emballage-couchesColis": "&h couches de &b colis",
+    "articles-emballage-couchesColis": "{0} couches de {1} colis",
     "articles-emballage-emballage-groupe-valide": "Valide",
     "articles-emballage-UC": "UC",
     "articles-cahierDesCharge-coloration": "Coloration",

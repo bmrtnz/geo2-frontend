@@ -1,6 +1,7 @@
 // Var
 @import "themes/generated/variables.base";
 
+
 ::ng-deep .user-cloning {
   .dx-form-group-content .dx-field {
 
@@ -11,7 +12,7 @@
     }
 
     input:not(:disabled):not(:read-only) {
-      background-color: rgba(255, 196, 77, 0.5);
+      background-color: rgba(57, 151, 14, 0.2);
       padding-left: 10px !important;
     }
   }
