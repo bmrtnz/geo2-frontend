@@ -1700,7 +1700,7 @@
     "ordreLitigesLignes-clientPoidsNet": "Poids net litige",
     "ordreLitigesLignes-cause-description": "Cause",
     "ordreLitigesLignes-consequence-description": "Action",
-    "ordreLitigesLignes-responsableTypeCode": "Responsable",
+    "ordreLitigesLignes-responsableTypeCode": "Resp.",
     "ordreLitigesLignes-tiersCode": "Code",
     "ordreLitigesLignes-commentaireResponsable": "Comm. au resp.",
     "ordreLitigesLignes-numeroOrdreReplacement": "Ordre généré (n°)",

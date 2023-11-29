@@ -4328,14 +4328,14 @@
       {
         "visibleIndex": 4,
         "dataField": "ordreLigne.proprietaireMarchandise.code",
-        "cssClass": "text-align-center",
+        "cssClass": "text-align-center small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "ordreLigne.fournisseur.code",
-        "cssClass": "text-align-center",
+        "cssClass": "text-align-center no-padding",
         "dataType": "string",
         "visible": true
       },
@@ -4371,7 +4371,7 @@
         "visibleIndex": 12,
         "dataField": "clientPoidsNet",
         "cssClass": "multi-line-header bold-text",
-        "width": 80,
+        "width": 70,
         "visible": true
       },
       {
@@ -4385,6 +4385,7 @@
         "visibleIndex": 14,
         "dataField": "cause.description",
         "dataType": "string",
+        "width": 200,
         "visible": true
       },
       {
@@ -4396,7 +4397,7 @@
       {
         "visibleIndex": 18,
         "dataField": "responsableTypeCode",
-        "cssClass": "bold-text text-align-center",
+        "cssClass": "bold-text text-align-center no-padding",
         "visible": true
       },
       {
@@ -4415,6 +4416,7 @@
         "visibleIndex": 24,
         "dataField": "commentaireResponsable",
         "dataType": "string",
+        "width": 200,
         "visible": true
       },
       {
