@@ -393,8 +393,8 @@ export class ArticleDetailsComponent
       }
 
       if (this.cloneMode) {
-        article.preSaisie = true;
-        article.valide = false;
+        // article.preSaisie = true;
+        article.valide = true;
       } else {
         if (article.valide === true) {
           article.preSaisie = false;
