@@ -227,11 +227,11 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   private async handleConfirmationsCommande(ordreNums: Array<Ordre["numero"]>) {
     const response: { ordreNum: Ordre["numero"], envoisDone: boolean }[] = [];
     const flux = "ORDRE";
-    const { socCode, campagne } = this.currentCompanyService.getCompany();
+    const { id: socCode, campagne } = this.currentCompanyService.getCompany();
     for (const num of ordreNums) {
       try {
         const res = await lastValueFrom(this.ordresService
-          .getOneByNumeroAndSocieteAndCampagne(num, this.programID === "ORCHARD" ? socCode : "BUK", campagne.id, ["id", "numero", "type.id"]));
+          .getOneByNumeroAndSocieteAndCampagne(num, this.programID === Program.ORCHARD ? "BUK" : socCode, campagne.id, ["id", "numero", "type.id"]));
         const ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
         await lastValueFrom(this.functionsService
           .geoPrepareEnvois(
