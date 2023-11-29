@@ -60,6 +60,12 @@
   opacity: 0;
 }
 
+.noHeightOpacity {
+  opacity: 0.5;
+  background: red;
+  height: 0 !important;
+}
+
 .fullOpacity {
   opacity: 1;
 }
@@ -891,6 +897,7 @@ body app-root.production {
 
 .info-banner {
   position: fixed !important;
+  margin-top: -3px;
   width: 100%;
   width: -moz-available;
   width: -webkit-fill-available;
@@ -901,7 +908,7 @@ body app-root.production {
   font-size: 15px;
   overflow: hidden;
   z-index: 1000;
-  transition: opacity 1s, background-color 1s;
+  transition: opacity 1s, background-color 1s, height 0.5s;
 
   .banner-text {
     color: #FFF;
