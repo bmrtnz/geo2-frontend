@@ -112,7 +112,7 @@
     "btn-cancelorder": "Annuler ordre",
     "btn-completeOrderEdi": "EDI traité",
     "btn-deleterows": "Supprimer lignes sélectionnées",
-    "btn-copy-paste-firstrow": "Reporter le texte de la première ligne sur les autres",
+    "btn-copy-paste-firstrow": "Reporter le texte de la première ligne",
     "btn-transfer": "Transférer",
     "btn-cloneorder": "Dupliquer",
     "btn-stock": "Stock",

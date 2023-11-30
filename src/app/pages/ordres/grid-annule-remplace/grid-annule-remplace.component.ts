@@ -98,11 +98,10 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   handleRaisonAR() {
-    this.firstReason = (
-      this.dataGrid?.dataSource as DataSource
-    ).items()[0].numeroAcces2;
+    const items = (this.dataGrid?.dataSource as DataSource).items()
+    this.firstReason = items?.length ? items[0].numeroAcces2 : "";
     let sameText = true;
-    (this.dataGrid?.dataSource as DataSource).items().map((ds) => {
+    items.map((ds) => {
       if (ds.numeroAcces2 !== this.firstReason) sameText = false;
     });
     this.copyPasteVisible =
@@ -120,7 +119,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   copyPasteFirstRow() {
     (this.dataGrid.dataSource as DataSource)
       .items()
-      .map((ds) => (ds.numeroAcces2 = this.firstReason));
+      .map((ds, idx) => { if (idx) ds.numeroAcces2 = this.firstReason; });
     this.dataGrid.instance.refresh();
   }
 

@@ -3,7 +3,7 @@
     class="copy-paste-firstrow-button"
     type="default"
     text="{{ 'btn-copy-paste-firstrow' | localize }}"
-    [visible]="copyPasteVisible"
+    [visible]="!!copyPasteVisible"
     (onClick)="copyPasteFirstRow()"
   ></dx-button>
 
@@ -97,6 +97,7 @@
         [displayExpr]="displayCapitalize"
         (onValueChanged)="onValueChanged($event, cell)"
         (onInitialized)="onSelectBoxInitialized($event)"
+        [searchTimeout]="0"
         [openOnFieldClick]="false"
       >
         <dxo-drop-down-options [width]="500"> </dxo-drop-down-options>
