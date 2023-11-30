@@ -206,7 +206,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
                 e.data.fournisseur.indicateurModificationDetail != true &&
                 e.data.ordre.client.modificationDetail != true &&
                 e.data.ordre.secteurCommercial.id !== "PAL" &&
-                !["RPO", "RPR", "RDF"].includes(e.data.ordre.type.id) &&
+                !["RPO", "RPR", "RPF", "REP"].includes(e.data.ordre.type.id) &&
                 articleModifDetail.data.countOrdreLogistique === 0
               ) return notify(this.localizeService.localize("warn-not-allowed"), "warning", 3000);
               this.choixRaisonPopup.visible = true;

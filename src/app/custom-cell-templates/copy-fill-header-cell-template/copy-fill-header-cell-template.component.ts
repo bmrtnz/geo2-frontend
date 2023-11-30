@@ -17,7 +17,7 @@ export class CopyFillHeaderCellTemplateComponent {
     event.stopImmediatePropagation();
     const value = columnData.component.cellValue(0, columnData.columnIndex);
     columnData.component.getVisibleRows().forEach((_, index) => {
-      columnData.component.cellValue(index, columnData.columnIndex, value);
+      if (index) columnData.component.cellValue(index, columnData.columnIndex, value);
     });
   }
 }

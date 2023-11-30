@@ -608,8 +608,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       ordre.etaLocation = ordre.portTypeA?.name;
       ordre.etdLocation = ordre.portTypeD?.name;
 
-      console.log(ordre)
-
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
           this.refreshStatus(res.data.saveOrdre.statut);
@@ -1805,7 +1803,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async viewFacture(titleKey: string, document: Document) {
-    console.log(document)
     if (!document)
       return notify(
         this.localization.localize("doc-not-loaded",

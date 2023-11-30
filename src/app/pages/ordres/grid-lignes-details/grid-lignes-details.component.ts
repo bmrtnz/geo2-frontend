@@ -412,12 +412,15 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
       data.ordre.secteurCommercial.id === "IND" ||
       data.ordre.secteurCommercial.id === "PAL" ||
       data.ordre.societe.id === "IMP" ||
+      data.ordre.societe.id === "UDC" ||
+      data.article.cahierDesCharge.espece.id.substring(0, 5) === "EMBAL" ||
       this.authService.currentUser.geoClient === "2" ||
       data.ordre.type.id === "REF" ||
       data.ordre.type.id === "RPO" ||
       data.ordre.type.id === "RPR" ||
-      data.ordre.type.id === "RDF" ||
-      data.article.matierePremiere.variete.modificationDetail ||
+      data.ordre.type.id === "RPF" ||
+      data.ordre.type.id === "REP" ||
+      data.article.matierePremiere.variete.modificationDetail === true ||
       data.ordre.societe.id === "IUK";
     return show;
   }
@@ -440,7 +443,7 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
         data.ordre.type.id === "REF" ||
         data.ordre.type.id === "RPO" ||
         data.ordre.type.id === "RPR" ||
-        data.ordre.type.id === "RDF" ||
+        data.ordre.type.id === "RPF" ||
         data.article.matierePremiere.variete.modificationDetail ||
         data.ordre.societe.id === "IUK";
     }
