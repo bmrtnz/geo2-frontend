@@ -6,6 +6,7 @@ import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { RaisonsAnnuleRemplaceService } from "app/shared/services/api/raisons-annule-remplace.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 import {
   Grid,
   GridConfig,
@@ -61,6 +62,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
+    public formUtilsService: FormUtilsService,
     private envoisService: EnvoisService,
     private ar: FluxArService
   ) {
@@ -85,13 +87,6 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   onContentReady(event) {
-    // Workaround for select all rows after loading data (without timeout do always select all)
-    // if (!this.canSelectAll) return;
-    // setTimeout(() => {
-    //   event.component.selectAll();
-    //   this.canSelectAll = false;
-    //   this.canBeSent = true;
-    // }, 500);
   }
 
   onRowClick({ rowIndex }) {
@@ -103,11 +98,10 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   }
 
   handleRaisonAR() {
-    this.firstReason = (
-      this.dataGrid?.dataSource as DataSource
-    ).items()[0].numeroAcces2;
+    const items = (this.dataGrid?.dataSource as DataSource).items()
+    this.firstReason = items?.length ? items[0].numeroAcces2 : "";
     let sameText = true;
-    (this.dataGrid?.dataSource as DataSource).items().map((ds) => {
+    items.map((ds) => {
       if (ds.numeroAcces2 !== this.firstReason) sameText = false;
     });
     this.copyPasteVisible =
@@ -125,8 +119,40 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   copyPasteFirstRow() {
     (this.dataGrid.dataSource as DataSource)
       .items()
-      .map((ds) => (ds.numeroAcces2 = this.firstReason));
+      .map((ds, idx) => { if (idx) ds.numeroAcces2 = this.firstReason; });
     this.dataGrid.instance.refresh();
+  }
+
+  // Used to override std arrows behaviour
+  onSelectBoxInitialized(e) {
+    const selectBox = e.component;
+    selectBox.registerKeyHandler('downArrow', () => this.moveRows(selectBox, 1));
+    selectBox.registerKeyHandler('upArrow', () => this.moveRows(selectBox, -1));
+  }
+
+  moveRows(selectBox, dir) {
+    if (!selectBox.option('opened')) {
+      this.dataGrid.instance.closeEditCell();
+      const nextCell = {
+        row: this.dataGrid.focusedRowIndex + dir,
+        col: this.dataGrid.focusedColumnIndex
+      };
+      if (this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col) && nextCell.row >= 0)
+        this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
+    } else return true;
+  }
+
+  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
+    const keyCode = event.originalEvent?.code;
+    const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex - 1);
+    if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
+    const nextCell = {
+      row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
+      col: this.dataGrid.focusedColumnIndex
+    };
+    const cell = this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col);
+    if (cell && nextCell.row >= 0)
+      this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
   }
 
   reload() {

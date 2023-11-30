@@ -8,8 +8,15 @@
 
 ::ng-deep .copy-paste-firstrow-button {
   position: absolute;
-  right: 147px;
-  margin-top: 7px;
+  right: 190px;
+  margin-top: 15px;
   font-size: 13px;
+  border-radius: 10px !important;
+  height: 23px;
+  font-size: 11px;
   z-index: 1;
+
+  .dx-button-content {
+    padding: 1px 13px;
+  }
 }

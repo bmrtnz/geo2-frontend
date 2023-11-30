@@ -104,6 +104,10 @@ export class GridLignesTotauxDetailComponent
   }
 
   onCellPrepared(e) {
+    if (e.rowType === "header") {
+      if (e.column.dataField === "fournisseur.code")
+        e.cellElement.textContent = this.localizeService.localize("ordreLignesTotauxDetail-fournisseur-code");
+    }
     if (e.rowType === "group") {
       if (
         e.column.dataField === "fournisseur.code" &&
@@ -118,6 +122,7 @@ export class GridLignesTotauxDetailComponent
     if (e.rowType === "totalFooter" && e.cellElement.textContent.includes(" ")) {
       const summaryField = this.summaryFields.find(field => field.column === e.column.dataField);
       e.cellElement.textContent += summaryField?.total;
+      summaryField.total = 0;
     }
 
   }
