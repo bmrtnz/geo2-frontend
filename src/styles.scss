@@ -155,6 +155,11 @@ body app-root.production {
   float: left !important;
 }
 
+.multiline-field-label {
+  text-overflow: initial;
+  white-space: initial;
+}
+
 .fournisseur-page,
 .article-page,
 .client-page,

@@ -63,6 +63,14 @@ export class FormUtilsService {
     );
   }
 
+  /**
+  *  Get last item of nested object
+  */
+  public getLastNested(object) {
+    if (typeof object !== 'object') return object;
+    for (const prop in object) return this.getLastNested(object[prop])
+  }
+
   public setIdToNull(formGroup, field) {
     formGroup.get(field).patchValue({ id: null });
   }
@@ -97,8 +105,7 @@ export class FormUtilsService {
       }
       window.print();
       if (appRoot) appRoot.style.display = display;
-      if (component?.accordion) component.setAccordionDuration(300);
-    }, 10); // Thanx Dx - otherwise accordions aren't opened
+    }, 500); // Thanx Dx - otherwise accordions aren't opened
   }
 
 

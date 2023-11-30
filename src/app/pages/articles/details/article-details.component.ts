@@ -65,6 +65,19 @@ export class ArticleDetailsComponent
   implements OnInit, NestedPart, Editable, OnChanges {
   @Input() public articleLigneId: string;
 
+  public userCloneControls = [
+    "matierePremiere.type",
+    "matierePremiere.modeCulture",
+    "cahierDesCharge.sucre",
+    "cahierDesCharge.penetro",
+    "cahierDesCharge.cirage",
+    "cahierDesCharge.rangement",
+    "articleAssocie",
+    "normalisation.etiquetteColis",
+    "normalisation.etiquetteEvenementielle",
+    "normalisation.descriptionCalibreClient"
+  ]
+
   formGroup = this.fb.group({
     id: [""],
     description: [""],
@@ -105,6 +118,7 @@ export class ArticleDetailsComponent
       articleClient: [""],
       calibreMarquage: [""],
       identificationSymbolique: [""],
+      descriptionCalibreClient: [""]
     }),
     emballage: this.fb.group({
       emballage: this.fb.group({
@@ -141,8 +155,6 @@ export class ArticleDetailsComponent
       poidsNetClient: [""],
       poidsNetGaranti: [""],
     }),
-    // poidsNetUC: [''],
-    // descrSpecialeCalClt: [''],
   });
   contentReadyEvent = new EventEmitter<any>();
   refreshGrid = new EventEmitter();
@@ -184,6 +196,7 @@ export class ArticleDetailsComponent
   validateCommentPromptVisible = false;
   readOnlyMode = true;
   cloneMode = false;
+  userCloneMode = false;
   preSaisie: string;
   UC = false;
   CNUFCode: string;
@@ -274,6 +287,13 @@ export class ArticleDetailsComponent
     this.article = new Article(res.data.article);
     this.formGroup.reset();
     this.formGroup.patchValue(this.article);
+    this.formGroup.get("emballage.emballage.id").reset(
+      {
+        id: this.article.emballage.emballage.id,
+        especeId: this.article.matierePremiere.espece.id
+      }
+    );
+
     this.contentReadyEvent.emit();
     this.ucBW = this.article.emballage.uniteParColis > 0;
     this.preSaisie = this.article.preSaisie === true ? "preSaisie" : "";
@@ -293,10 +313,7 @@ export class ArticleDetailsComponent
   }
 
   coucheColis(couche, colis) {
-    return this.localization
-      .localize("articles-emballage-couchesColis")
-      .replace("&h", couche)
-      .replace("&b", colis);
+    return this.localization.localize("articles-emballage-couchesColis", couche, colis);
   }
 
   viewStats() {
@@ -305,6 +322,8 @@ export class ArticleDetailsComponent
 
   onCancel() {
     this.cloneMode = false;
+    this.userCloneMode = false;
+    this.formGroup.enable();
     this.readOnlyMode = true;
     this.editing = false;
     this.formGroup.reset(this.article);
@@ -320,7 +339,14 @@ export class ArticleDetailsComponent
   onClone() {
     this.readOnlyMode = false;
     this.cloneMode = true;
+    this.userCloneMode = !this.authService.currentUser.accessGeoProduct;
     this.editing = true;
+
+    if (this.userCloneMode) {
+      this.formGroup.disable();
+      this.userCloneControls.map(ctrl => this.formGroup.get(ctrl).enable())
+    }
+
     Object.keys(this.formGroup.controls).forEach((key) => {
       this.formGroup.get(key).markAsDirty();
     });
@@ -365,14 +391,16 @@ export class ArticleDetailsComponent
       );
 
       // Special field: need to adjust data
-      article.emballage.emballage = {
-        id: article.emballage.emballage.id.id,
-        espece: { id: this.article.matierePremiere.espece.id },
-      };
+      if (article.emballage) {
+        article.emballage.emballage = {
+          id: this.formUtils.getLastNested(article.emballage.emballage.id.id),
+          espece: { id: this.article.matierePremiere.espece.id },
+        };
+      }
 
       if (this.cloneMode) {
-        article.preSaisie = true;
-        article.valide = false;
+        // article.preSaisie = true;
+        article.valide = true;
       } else {
         if (article.valide === true) {
           article.preSaisie = false;
@@ -399,7 +427,13 @@ export class ArticleDetailsComponent
         )
         .subscribe({
           next: (event) => {
-            notify("Sauvegardé", "success", 3000);
+            notify({
+              message: this.localization.localize("saveOK"),
+              type: "success",
+              displayTime: 3000
+            },
+              { position: 'bottom center', direction: 'up-stack' }
+            );
             this.refreshGrid.emit();
             // Show red badges (unvalidated forms)
             this.validationService.showToValidateBadges();
@@ -408,12 +442,21 @@ export class ArticleDetailsComponent
               ...this.formGroup.getRawValue(),
             };
             if (this.cloneMode) {
+              notify({
+                message: this.localization.localize("article-cree", event.data.saveArticle.id),
+                type: "success",
+                displayTime: 10000
+              },
+                { position: 'bottom center', direction: 'up-stack' }
+              );
+              this.onCancel();
               this.router.navigate([
                 `/pages/articles/${event.data.saveArticle.id}`,
               ]);
             }
             this.readOnlyMode = true;
             this.editing = false;
+            this.userCloneMode = false;
             this.article.historique = event.data.saveArticle.historique;
             this.formGroup
               .get("gtinColisBlueWhale")

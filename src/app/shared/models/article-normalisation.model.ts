@@ -28,6 +28,7 @@ export class ArticleNormalisation extends Model {
   @Field() public gtinColis: string;
   @Field() public articleClient: string;
   @Field() public produitMdd: boolean;
+  @Field() public descriptionCalibreClient: string;
 }
 
 export default ArticleNormalisation;
