@@ -8219,7 +8219,7 @@
         "dataField": "ligne.commentaireResponsable",
         "visible": true,
         "allowEditing": true,
-        "cssClass": "edit-cell",
+        "cssClass": "edit-cell comment",
         "headerCellTemplate": "copyFillHeaderCellTemplate"
       },
       {
