@@ -71,7 +71,10 @@ export class FormUtilsService {
   * Prints Zoom/fiches articles/tiers
   */
   public onPrint(component) {
-    if (component?.accordion) component.openCloseAccordions(true);
+    if (component?.accordion) {
+      component.setAccordionDuration(0);
+      component.openCloseAccordions(true);
+    }
     const zoomMode = document.querySelector('.dx-popup-wrapper');
     let appRoot;
     let display;
@@ -92,9 +95,10 @@ export class FormUtilsService {
         display = style.display;
         if (appRoot) appRoot.style.display = 'none';
       }
-      window.print()
+      window.print();
       if (appRoot) appRoot.style.display = display;
-    }, 100); // Thanx Dx - otherwide accordions aren't opened
+      if (component?.accordion) component.setAccordionDuration(300);
+    }, 10); // Thanx Dx - otherwise accordions aren't opened
   }
 
 

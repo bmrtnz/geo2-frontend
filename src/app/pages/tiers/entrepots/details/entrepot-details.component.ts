@@ -383,6 +383,12 @@ export class EntrepotDetailsComponent
     });
   }
 
+  setAccordionDuration(duration) {
+    this.accordion.toArray().forEach((element) =>
+      element.instance.option("animationDuration", duration)
+    );
+  }
+
   checkCode(params) {
     const code = params.value.toUpperCase();
     const entrepotsSource = this.entrepotsService.getDataSource_v2(["code"]);

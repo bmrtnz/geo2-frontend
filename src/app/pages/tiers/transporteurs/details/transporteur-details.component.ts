@@ -287,6 +287,12 @@ export class TransporteurDetailsComponent
     });
   }
 
+  setAccordionDuration(duration) {
+    this.accordion.toArray().forEach((element) =>
+      element.instance.option("animationDuration", duration)
+    );
+  }
+
   onCodeChange(e) {
     if (!e.value) return;
     const code = e.value.toUpperCase();
