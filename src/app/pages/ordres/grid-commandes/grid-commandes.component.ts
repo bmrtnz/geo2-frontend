@@ -117,7 +117,7 @@ export class GridCommandesComponent
     "flux",
     "litiges"
   ]
-  reportedItems = this.ordreLignesService.reportedItems;
+  reportedItems = this.ordreLignesService.reportedItems();
 
   private readonly lookupDisplayFields = [
     "proprietaireMarchandise.id",
@@ -942,12 +942,18 @@ export class GridCommandesComponent
 
   copyFirstPasteAllRows(e, data) {
     e.event.stopImmediatePropagation();
+    const rows = this.grid.instance?.getVisibleRows();
+    if (!rows || !rows?.length) return;
     let field = data.column.dataField;
-    this.grid.instance
-      .getVisibleRows()
-      .map((res, index) => {
-        if (index) this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex))
-      });
+
+    // Checking if first cell is locked => cancel paste
+    const firstRowData = rows[0].data;
+    const cell = { data: firstRowData, column: { dataField: field }, cancel: false };
+    this.ordreLignesService.lockFields(cell, this.allowMutations);
+    if (cell.cancel === true) return;
+
+    // Paste first cell on the others
+    rows.map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
     setTimeout(() => this.grid.instance.saveEditData());
     field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
     field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
