@@ -3626,6 +3626,11 @@
         "visible": false
       },
       {
+        "dataField": "numero",
+        "sortOrder": "asc",
+        "visible": false
+      },
+      {
         "dataField": "logistique.numeroContainer",
         "showInColumnChooser": false,
         "visible": false
