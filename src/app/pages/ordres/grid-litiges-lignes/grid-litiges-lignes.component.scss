@@ -1,8 +1,14 @@
+@import "themes/generated/variables.base";
+
 ::ng-deep .grid-litiges-lignes {
 
   .master-detail th,
   .master-detail td {
     padding: 10px;
+  }
+
+  .master-detail th {
+    font-weight: normal;
   }
 
   .table-bordered {
@@ -15,7 +21,13 @@
   }
 
   .client-color {
-    color: #00759c;
+    font-weight: bold;
+    color: darken($base-danger, 10%);
+  }
+
+  .fournisseur-color {
+    font-weight: bold;
+    color: darken($base-success, 20%);
   }
 
   .bold-text {
@@ -30,6 +42,17 @@
       text-align: right;
     }
   }
+
+  .dx-data-row {
+    .lineHeight16 {
+      line-height: 16px !important;
+    }
+
+    .no-wrap {
+      white-space: nowrap !important;
+    }
+  }
+
 }
 
 ::ng-deep .grid-grouping-button {

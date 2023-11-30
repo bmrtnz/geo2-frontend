@@ -1703,7 +1703,7 @@
     "ordreLitigesLignes-responsableTypeCode": "Resp.",
     "ordreLitigesLignes-tiersCode": "Code",
     "ordreLitigesLignes-commentaireResponsable": "Comm. au resp.",
-    "ordreLitigesLignes-numeroOrdreReplacement": "Ordre généré (n°)",
+    "ordreLitigesLignes-numeroOrdreReplacement": "N° Ordre généré",
     "ordreLitigesLignes-ordreReferenceRemplacement": "Ordre généré (ref)",
     "ordreLitigesLignes-ordreLigne-libelleDLV": "Date Before",
     "ordreLitigesLignes-id": "ID LitigeLigne",

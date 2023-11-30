@@ -15,6 +15,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  [wordWrapEnabled]="true"
   [focusedRowEnabled]="true"
   (onContentReady)="sortGrid()"
   (onRowPrepared)="onRowPrepared($event)"
@@ -29,7 +30,6 @@
   "
 >
   <!-- Grid configuration -->
-  <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="{{ 'search' | localize}}"></dxo-search-panel> -->
   <dxo-export fileName="Litiges"></dxo-export>
   <dxo-header-filter
     [visible]="true"
@@ -49,7 +49,7 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <!-- <dxo-filter-row [visible]="true"></dxo-filter-row> -->
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -142,7 +142,7 @@
                   </td>
                 </tr>
                 <!-- Demande avoir fournisseur -->
-                <tr>
+                <tr class="fournisseur-color">
                   <td>
                     {{ "ordreLitigesLignes-ddeAvoirFournisseur" | localize }}
                   </td>
