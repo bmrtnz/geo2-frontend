@@ -6254,41 +6254,49 @@
       {
         "visibleIndex": 1,
         "dataField": "nombrePalettesExpediees",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "nombreColisExpedies",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 3,
         "dataField": "poidsBrutExpedie",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "poidsNetExpedie",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "logistique.nombrePalettesAuSol",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "logistique.nombrePalettes100x120",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 7,
         "dataField": "logistique.nombrePalettes80x120",
+        "dataType": "number",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "logistique.nombrePalettes60x80",
+        "dataType": "number",
         "visible": true
       },
       {
