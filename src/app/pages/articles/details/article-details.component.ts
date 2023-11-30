@@ -264,6 +264,12 @@ export class ArticleDetailsComponent
     });
   }
 
+  setAccordionDuration(duration) {
+    this.accordion.toArray().forEach((element) =>
+      element.instance.option("animationDuration", duration)
+    );
+  }
+
   afterLoadInitForm(res) {
     this.article = new Article(res.data.article);
     this.formGroup.reset();

@@ -662,6 +662,12 @@ export class ClientDetailsComponent
     });
   }
 
+  setAccordionDuration(duration) {
+    this.accordion.toArray().forEach((element) =>
+      element.instance.option("animationDuration", duration)
+    );
+  }
+
   saveAfterModification(info) {
     this.userModifsInfo = info.info;
     if (this.authService.currentUser.adminClient) {

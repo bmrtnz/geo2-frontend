@@ -512,6 +512,12 @@ export class FournisseurDetailsComponent
     });
   }
 
+  setAccordionDuration(duration) {
+    this.accordion.toArray().forEach((element) =>
+      element.instance.option("animationDuration", duration)
+    );
+  }
+
   onSubmit() {
     // When an user only needs to change certification date(s)
     if (this.changeCertifDates.value)
