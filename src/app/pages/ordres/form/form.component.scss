@@ -304,7 +304,8 @@ $left-panel-btn-height: 44px;
       }
 
       .search-linkedOrders {
-        top: 2px;
+        position: relative;
+        top: 6px;
         font-size: 13px;
         color: #00759c;
       }
@@ -386,6 +387,13 @@ $left-panel-btn-height: 44px;
 
 .info-supp-tva {
   top: 3px;
+}
+
+::ng-deep .btn-detailExp {
+  .dx-icon {
+    margin-right: 12px !important;
+    font-size: 20px !important;
+  }
 }
 
 .shiftedRight {

@@ -189,11 +189,14 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
     console.log(errorInfo);
     this.infoComponent.visible = true;
     errorInfo = errorInfo.split("\\r\\n").join(" ");
-    this.errorText = errorInfo.includes("Error:")
-      ? errorInfo.split(":")[2]
-        ? errorInfo.split(":")[2]
-        : errorInfo
-      : errorInfo;
+    this.errorText = this.messageFormat(errorInfo);
+  }
+
+  private messageFormat(mess) {
+    mess = mess
+      .replace(`Exception while fetching data (/ofValideEntrepotForOrdre) : `, "")
+      .replace(`ApolloError: `, "");
+    return mess.charAt(0).toUpperCase() + mess.slice(1);
   }
 
   pulseButton(e) {
@@ -222,6 +225,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   }
 
   private buildOrdre(numero: string, entrepot: Entrepot) {
+    const delivery = this.dateManagementService.findDateTimeZero(1); // Day + 1
     const assistante = entrepot.assistante
       ? { id: entrepot.assistante.id }
       : entrepot.client.assistante
@@ -252,7 +256,8 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
             instructionsLogistiques: instLog,
             campagne: { id: this.societe.campagne.id },
             dateDepartPrevue: this.dateManagementService.findDateTimeZero(0),
-            dateLivraisonPrevue: this.dateManagementService.findDateTimeZero(1),
+            dateLivraisonPrevue: delivery,
+            etaDate: entrepot?.client?.secteur?.id === "MAR" ? this.dateManagementService.formatDate(delivery) : null,
             societe: { id: this.societe.id },
             entrepot: { id: entrepot.id },
             pays: entrepot.pays ? { id: entrepot.pays.id } : null,

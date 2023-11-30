@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
+import { Role } from "app/shared/models";
 import {
   FournisseursService,
   LocalizationService,
@@ -74,15 +75,6 @@ export class RepartitionOrdresRegroupementComponent implements OnInit {
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
-  async ngOnInit() {
-    const fields = this.columns.pipe(
-      map((columns) => columns.map((column) => column.dataField))
-    );
-
-    this.ordresRegroupementDataSource = this.repartitionOrdresRegroupement.getDataSource_v2(
-      await lastValueFrom(fields)
-    );
-  }
 
   public transporteursDataSource = this.transporteursService.getDataSource_v2([
     "id",
@@ -92,13 +84,34 @@ export class RepartitionOrdresRegroupementComponent implements OnInit {
 
   public stationsDataSource = this.stationsService.getDataSource_v2([
     "id",
-    "code"
+    "code",
+    "raisonSocial"
   ]);
 
   public commerciauxDataSource = this.personnesService.getDataSource_v2([
     "id",
     "nomUtilisateur",
   ]);
+
+  async ngOnInit() {
+    this.transporteursDataSource.filter(["valide", "=", true]);
+    this.stationsDataSource.filter(["valide", "=", "true"]);
+    this.commerciauxDataSource.filter([
+      ["valide", "=", true],
+      "and",
+      ["role", "=", Role.COMMERCIAL],
+      "and",
+      ["nomUtilisateur", "<>", "null"],
+    ]);
+
+    const fields = this.columns.pipe(
+      map((columns) => columns.map((column) => column.dataField))
+    );
+
+    this.ordresRegroupementDataSource = this.repartitionOrdresRegroupement.getDataSource_v2(
+      await lastValueFrom(fields)
+    );
+  }
 
   async enableFilters() {
 
@@ -156,18 +169,25 @@ export class RepartitionOrdresRegroupementComponent implements OnInit {
       : null;
   }
 
-
-  calculateGroupeOrdreLibelle(data) {
+  calculateGroupeRegroupOrdreLibelle(data) {
     const dateDepart = new Date(data.dateDepartPrevue);
     const dateLivraison = new Date(data.dateLivraisonPrevue);
 
     // Showing Transporteur and Dates in group header
-    return data.ordreOrigine +
+    return data.ordreRegroupement +
       (data.transporteurCode ? " - " + " Transporteur : " + data.transporteurCode + " " : "") +
       (data.dateDepartPrevue ? " - " + " Date départ : " + dateDepart.toLocaleString() + " " : "") +
-      (data.dateLivraisonPrevue ? " - " + " Date livraison : " + dateLivraison.toLocaleString() + " " : "") +
-      "<br>" +
-      (data.codeChargement ? "Chargement : " + data.codeChargement + " " : "") +
+      (data.dateLivraisonPrevue ? " - " + " Date livraison : " + dateLivraison.toLocaleString() + " " : "")
+  }
+
+  calculateGroupeOrdreLibelle(data) {
+    // Showing Transporteur and Dates in group header
+    return data.ordreOrigine +
+      // (data.transporteurCode ? " - " + " Transporteur : " + data.transporteurCode + " " : "") +
+      // (data.dateDepartPrevue ? " - " + " Date départ : " + dateDepart.toLocaleString() + " " : "") +
+      // (data.dateLivraisonPrevue ? " - " + " Date livraison : " + dateLivraison.toLocaleString() + " " : "") +
+      // "<br>" +
+      // (data.codeChargement ? "Chargement : " + data.codeChargement + " " : "") +
       (data.raisonSociale ? " - Entrepôt : " + data.raisonSociale + " (" + data.ville + ")" : "")
   }
 

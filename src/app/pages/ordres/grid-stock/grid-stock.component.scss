@@ -65,7 +65,7 @@
     min-width: 0 !important;
     height: 20px !important;
 
-    .dx-button-content {
+    float:left .dx-button-content {
       padding: 0;
     }
 
@@ -119,8 +119,34 @@
     }
   }
 
+  td.no-sort {
+    pointer-events: none;
+
+    &.dx-editor-cell,
+    .dx-header-filter {
+      pointer-events: auto;
+    }
+  }
+
+  .sort-comment {
+    position: absolute;
+    right: 492px;
+    margin-top: 12px;
+    background-color: $BW-turquoise-light !important;
+    color: white;
+    padding: 5px 12px 5px 8px;
+    z-index: 1;
+
+    .dx-checkbox-icon {
+      margin-right: 2px;
+      color: rgba(0, 0, 0, 0.7);
+      border: 0;
+      background: white;
+    }
+  }
+
   .comment-with-pen {
-    margin: -2px 15px 0 15px;
+    margin: -2px 0 0 5px;
     line-height: initial;
 
     .text {
@@ -172,7 +198,8 @@
     }
 
     &.recapitulatif {
-      float: right;
+      margin: 0 15px;
+      float: left;
       background-color: $BW-khaki-dark !important;
 
       &:hover {

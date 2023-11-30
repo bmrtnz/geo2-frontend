@@ -130,6 +130,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
     // this.secteurSB.value = { id: "GB" }; // A VIRER !!!!!!!!!!!!!!!!
     // this.clientSB.value = { id: "001234" }; // A VIRER !!!!!!!!!!!!!!!!
+    // this.dxForm.instance.updateData({// A VIRER !!!!!!!!!!!!!!!!
+    //   dateDepartMin: new Date("2023-06-24"),// A VIRER !!!!!!!!!!!!!!!!
+    //   dateDepartMax: new Date("2023-08-24"),// A VIRER !!!!!!!!!!!!!!!!
+    // });// A VIRER !!!!!!!!!!!!!!!!
+    // this.applyPrefilter("e");// A VIRER !!!!!!!!!!!!!!!!
   }
 
   setDefaultPeriod(periodId) {
@@ -391,18 +396,18 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   onRowPrepared(e) {
     // hide `groupFooter` rows values with `groupIndex=0`
     // see https://supportcenter.devexpress.com/ticket/details/t400328/how-to-hide-summary-values-in-a-certain-group-row
-    if (e.rowType === "groupFooter" && e.groupIndex !== 2)
+    if (e.rowType === "groupFooter" && e.groupIndex !== 3)
       e.rowElement.classList.add("hide-row");
 
     // add custom style to main group row
     if (e.rowType === "group") {
       if (e.groupIndex === 0) e.rowElement.classList.add("justified-row");
-      // Canceled orders
+      if (e.groupIndex === 3) e.rowElement.classList.add("hide-row");
 
-      let isCanceled;
+      // Canceled orders
       let data = e.data.items ?? e.data.collapsedItems;
       data = data[0];
-      isCanceled = data?.ordreAnnule === true || (data.items ? data.items[0]?.ordreAnnule : false);
+      const isCanceled = data?.ordreAnnule === true || (data.items ? data.items[0]?.ordreAnnule : false);
 
       if (isCanceled) {
         e.rowElement.classList.add("canceled-orders");
@@ -435,6 +440,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     if (rowType === "group") {
       if (!data.items && !data.collapsedItems) return;
       let dataItems = data.items ? data.items[0] : data.collapsedItems[0];
+      dataItems = dataItems.items ? dataItems.items[0] : dataItems;
       dataItems = dataItems.items ? dataItems.items[0] : dataItems;
       if (!dataItems?.numeroOrdre) return;
       this.tabContext.openOrdre(dataItems.numeroOrdre, dataItems.campagne);
@@ -482,7 +488,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     const worksheet = workbook.addWorksheet();
     const redundantRows = event.component
       .getVisibleRows()
-      .filter((r) => r.rowType === "groupFooter" && r.groupIndex !== 2)
+      .filter((r) => (r.rowType === "groupFooter" && r.groupIndex !== 3) || (r.rowType === "group" && r.groupIndex === 3))
       .map((r) => r.rowIndex);
     exportDataGrid({
       component: event.component,

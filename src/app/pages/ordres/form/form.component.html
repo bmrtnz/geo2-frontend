@@ -169,7 +169,7 @@
                   <span
                     *ngIf="linkedOrdersSearch"
                     class="search-linkedOrders"
-                    >Recherche ordres liés...</span
+                    >{{ "search-linked-orders" | localize }}...</span
                   >
                   <dx-button
                     *ngFor="let linkedOrder of linkedOrders"
@@ -461,6 +461,7 @@
                             [displayFormat]="'dd-MM-yy HH:mm (EEEE)'"
                             dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
                             type="datetime"
+                            (onValueChanged)="onDateLivChanged($event)"
                           >
                             <dx-validator
                               name="{{
@@ -1036,16 +1037,16 @@
                 </div>
 
                 <dx-button
-                  class="upperButton subButton shiftedRight"
+                  class="upperButton subButton shiftedRight btn-detailExp"
                   [disabled]="!fullOrderNumber"
                   type="default"
                   height="36"
                   [focusStateEnabled]="false"
-                  icon="material-icons info"
-                  text="{{
-                    (ordresLignesViewExp ? 'btn-ordreLignes' : 'btn-detailExp')
-                      | localize
-                  }}"
+                  [icon]="
+                    'material-icons visibility' +
+                    (ordresLignesViewExp ? '_off' : '')
+                  "
+                  text="{{ 'btn-detailExp' | localize }}"
                   (onClick)="detailExp()"
                 ></dx-button>
                 <div style="clear: both"></div>
@@ -1124,6 +1125,19 @@
                       [ordre]="ordre"
                       (refreshGridsSynthese)="refreshGridsSynthese()"
                     ></app-grid-lignes-details>
+                    <div class="grid-separator"></div>
+                    <dx-button
+                      class="totaux-btn-supp"
+                      [focusStateEnabled]="false"
+                      [disabled]="supprLignesBtnDisabled"
+                      [visible]="!!gridCommandes?.gridRowsTotal"
+                      type="default"
+                      (onClick)="suppLignesNonExp()"
+                      text="{{ 'btn-sup-lignes-cloturees-zero' | localize }}"
+                    ></dx-button>
+                    <app-grid-lignes-totaux-detail
+                      [ordre]="ordre"
+                    ></app-grid-lignes-totaux-detail>
                   </div>
                 </div>
               </div>
@@ -1253,19 +1267,6 @@
                         ></dx-button>
                         <app-grid-marge [ordre]="data"></app-grid-marge>
                       </div>
-                      <div class="grid-separator"></div>
-                      <dx-button
-                        class="totaux-btn-supp"
-                        [focusStateEnabled]="false"
-                        [disabled]="supprLignesBtnDisabled"
-                        [visible]="!!gridCommandes?.gridRowsTotal"
-                        type="default"
-                        (onClick)="suppLignesNonExp()"
-                        text="{{ 'btn-sup-lignes-cloturees-zero' | localize }}"
-                      ></dx-button>
-                      <app-grid-lignes-totaux-detail
-                        [ordre]="data"
-                      ></app-grid-lignes-totaux-detail>
                       <div class="grid-separator"></div>
                       <app-grid-detail-palettes
                         [ordre]="data"

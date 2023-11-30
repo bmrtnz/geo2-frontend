@@ -590,6 +590,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.comInt?.instance.option("hint", this.comInt.value);
   }
 
+  onDateLivChanged(e) {
+    if (!e.event) return; // Only user event
+    this.changeDateEta(e.value, "ordre-eta-changed");
+    this.headerSaving = false; // To unlock heading save
+    this.saveHeaderOnTheFly();
+  }
+
   saveHeaderOnTheFly(message?) {
     if (this.headerSaving) return;
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -615,13 +622,25 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
           this.addLinkedOrders();
-          if (message) notify(this.localization.localize(message), "success");
+          if (message) {
+            notify({
+              message: this.localization.localize(message),
+              type: "success"
+            },
+              { position: 'bottom center', direction: 'up-stack' }
+            );
+          }
 
           // Ordre date depart has been mutated
           if (ordre.dateDepartPrevue) this.changeDateDepart(ordre.dateDepartPrevue);
         },
         error: (err) => {
-          notify("Erreur sauvegarde entête", "error", 3000);
+          notify({
+            message: this.localization.localize("header-loading-error"),
+            type: "error"
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          );
           console.log(err);
           this.headerSaving = false;
         },
@@ -638,6 +657,28 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       // Check date and change if needed with info toast
       if (this.ordre.dateLivraisonPrevue < this.ordre.dateDepartPrevue)
         this.changeDateLiv(this.ordre.dateDepartPrevue, "ordre-liv-changed");
+    }
+  }
+
+  changeDateLiv(e, message?) {
+    this.formGroup.get("dateLivraisonPrevue").patchValue(e);
+    this.formGroup.get("dateLivraisonPrevue").markAsDirty();
+    this.changeDateEta(e, "ordre-eta-changed");
+    this.headerSaving = false; // To unlock heading save
+    this.saveHeaderOnTheFly(message ?? "modification-done");
+  }
+
+  changeDateEta(e, message?) {
+    if (this.ordre?.secteurCommercial?.id !== "MAR") return;
+    this.formGroup.get("etaDate").setValue(e.split("T")[0]);
+    this.formGroup.get("etaDate").markAsDirty();
+    if (message) {
+      notify({
+        message: this.localization.localize(message),
+        type: "success"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
     }
   }
 
@@ -1319,6 +1360,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
           }
           this.allowMutations = !Ordre.isCloture(this.ordre);
+          this.ordresLignesViewExp = !this.allowMutations;
           this.initVACMutation();
           this.fraisClient = this.getFraisClient();
           this.gestEntrepot = this.getGestEntrepot();
@@ -1661,11 +1703,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  changeDateLiv(e, message?) {
-    this.formGroup.get("dateLivraisonPrevue").patchValue(e);
-    this.formGroup.get("dateLivraisonPrevue").markAsDirty();
-    this.saveHeaderOnTheFly(message ?? "modification-done");
-  }
 
   openClientFilePopup() {
     this.clientId = this.ordre?.client?.id;
@@ -1861,9 +1898,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public suppLignesNonExp() {
     this.supprLignesBtnDisabled = true;
-    notify(this.localization.localize("please-wait"), "info", 9999999);
+    notify(this.localization.localize("please-wait"), "info", 9999999); // We hide it right after
     this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
       error: ({ message }: Error) => {
+        console.log(message);
         hideToasts()
         this.supprLignesBtnDisabled = false;
         notify(this.messageFormat(message), "error", 7000);
@@ -1874,7 +1912,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
           .subscribe(() => {
             this.refreshOrder();
-            notify(res.data.supprLignesNonExped.msg, "success", 7000);
+            notify(res.data.supprLignesNonExped.msg, "success");
           });
       },
       complete: () => hideToasts()

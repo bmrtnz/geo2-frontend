@@ -54,18 +54,9 @@
             [dataSource]="transporteursDataSource"
             valueExpr="id"
             [displayExpr]="displayIDBefore"
-            [searchExpr]="['id']"
-            itemTemplate="items"
+            [searchExpr]="['id', 'raisonSocial']"
           >
-            <div *dxTemplate="let data of 'items'">
-              <div
-                [title]="!data.valide ? 'non valide' : ''"
-                [ngClass]="{ 'not-valid': !data.valide }"
-              >
-                {{ displayCodeBefore(data) }}
-              </div>
-              <dxo-drop-down-options [width]="350"></dxo-drop-down-options>
-            </div>
+            <dxo-drop-down-options [width]="350"></dxo-drop-down-options>
           </dx-select-box>
         </div>
       </dxi-item>
@@ -80,18 +71,10 @@
             formControlName="stationCode"
             [dataSource]="stationsDataSource"
             valueExpr="code"
-            displayExpr="code"
-            [searchExpr]="['code']"
-            itemTemplate="items"
+            [displayExpr]="displayCodeBefore"
+            [searchExpr]="['code', 'raisonSocial']"
           >
-            <div *dxTemplate="let data of 'items'">
-              <div
-                [title]="!data.valide ? 'non valide' : ''"
-                [ngClass]="{ 'not-valid': !data.valide }"
-              >
-                {{ data.code }}
-              </div>
-            </div>
+            <dxo-drop-down-options [width]="350"></dxo-drop-down-options>
           </dx-select-box>
         </div>
       </dxi-item>
@@ -107,17 +90,8 @@
               [dataSource]="commerciauxDataSource"
               valueExpr="id"
               [displayExpr]="displayCodeBefore"
-              [searchExpr]="['id']"
-              itemTemplate="items"
+              [searchExpr]="['id', 'nomUtilisateur']"
             >
-              <div *dxTemplate="let data of 'items'">
-                <div
-                  [title]="!data.valide ? 'non valide' : ''"
-                  [ngClass]="{ 'not-valid': !data.valide }"
-                >
-                  {{ displayCodeBefore(data) }}
-                </div>
-              </div>
             </dx-select-box>
           </div>
         </div>
@@ -227,7 +201,9 @@
     <dxi-group-item
       column="poidsNetCommande"
       summaryType="sum"
-      displayFormat="poids net total : {0}"
+      displayFormat="{{
+        'repartition-ordres-regroupement-poidsNetCommande' | localize
+      }} : {0}"
       [showInGroupFooter]="true"
       [alignByColumn]="true"
     ></dxi-group-item>
