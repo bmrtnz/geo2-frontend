@@ -143,6 +143,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
     this.authService.onUserChanged().subscribe(() =>
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC")
     );
