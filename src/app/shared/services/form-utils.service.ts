@@ -105,7 +105,8 @@ export class FormUtilsService {
       }
       window.print();
       if (appRoot) appRoot.style.display = display;
-    }, 500); // Thanx Dx - otherwise accordions aren't opened
+      if (component?.accordion) component.setAccordionDuration(300);
+    }, 10); // Thanx Dx - otherwise accordions aren't opened
   }
 
 
