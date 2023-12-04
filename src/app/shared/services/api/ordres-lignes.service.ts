@@ -58,12 +58,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
   // Used for "REPORTER" buttons on grid commandes
   public reportedItems() {
     return [
-      { name: "reportProprietaire", caption: "proprietaireMarchandise.id", fields: ["proprietaireMarchandise.id"] },
-      { name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
-      { name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
-      { name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
-      { name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
-      { name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
+      { dataField: "proprietaireMarchandise.id", name: "reportProprietaire", caption: "proprietaireMarchandise.id", fields: ["proprietaireMarchandise.id", "fournisseur.id"] },
+      { dataField: "fournisseur.id", name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
+      { dataField: "ventePrixUnitaire", name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
+      { dataField: "achatDevisePrixUnitaire", name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
+      { dataField: "typePalette.id", name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
+      { dataField: "libelleDLV", name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
     ];
   }
 

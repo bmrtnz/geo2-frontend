@@ -52,13 +52,16 @@ import dxDataGrid from "devextreme/ui/data_grid";
 import { confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import dxSelectBox from "devextreme/ui/select_box";
-import { from, iif, lastValueFrom, Observable, of } from "rxjs";
+import { defer, from, iif, interval, lastValueFrom, Observable, of } from "rxjs";
 import {
   concatMap,
-  concatMapTo, filter,
+  concatMapTo, delay, filter,
   finalize, last,
   map,
-  takeWhile
+  mergeMap,
+  takeUntil,
+  takeWhile,
+  tap
 } from "rxjs/operators";
 import { ArticleCertificationPopupComponent } from "../article-certification-popup/article-certification-popup.component";
 import { ArticleOriginePopupComponent } from "../article-origine-popup/article-origine-popup.component";
@@ -953,8 +956,23 @@ export class GridCommandesComponent
     if (cell.cancel === true) return;
 
     // Paste first cell on the others
-    rows.map((res) => this.grid.instance.cellValue(res.rowIndex, field, data.component.cellValue(0, data.columnIndex)));
-    setTimeout(() => this.grid.instance.saveEditData());
+    const reportItem = this.reportedItems
+      .find(item => item.dataField === field);
+    from(rows).pipe(
+      filter(row => row.rowIndex > 0),
+      mergeMap(row => interval(100)
+        .pipe(
+          takeWhile(index => index < reportItem.fields.length),
+          concatMap(index => {
+            const dataField = reportItem.fields[index];
+            const value = data.component.cellValue(0, dataField);
+            return of([row.rowIndex, dataField, value] as [number, string, any]);
+          }),
+        )),
+    ).subscribe({
+      next: args => this.grid.instance.cellValue(...args),
+      complete: () => this.grid.instance.saveEditData(),
+    });
     field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
     field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
     notify(this.localizeService.localize("cell-report", field), "success", 3000);
