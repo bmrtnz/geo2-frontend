@@ -25,7 +25,7 @@ import { exportDataGrid } from "devextreme/excel_exporter";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { Workbook } from "exceljs";
 import { saveAs } from "file-saver";
-import { of } from "rxjs";
+import { defer, of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 
@@ -271,71 +271,72 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     this.dataSource = null;
 
     this.setGridTitle();
-    setTimeout(() => this.grid.instance.beginCustomLoading(""), 50);
+    this.grid.instance.beginCustomLoading("");
 
     this.etatLabel = `${this.localizer.localize(
       "state-from"
     )} ${new Date().toLocaleString()}`;
 
-    this.ordresService
-      .allDeclarationFraude(
-        new Set([
-          "id",
-          "numeroOrdre",
-          "dateDepartPrevueFournisseur",
-          "clientCode",
-          "fournisseurCode",
-          "dateDepartPrevue",
-          "nombrePalettesCommandees",
-          "nombreColisCommandes",
-          "origineDescription",
-          "paysCode",
-          "paysDescription",
-          "incotermCode",
-          "varieteCode",
-          "colisCode",
-          "poidsNetClient",
-          "origineDescription",
-          "transporteurCode",
-          "dateModification",
-          "referenceClient",
-          "codeChargement",
-          "etdLocation",
-          "etdDate",
-          "etaLocation",
-          "etaDate",
-          "commentaireInterne",
-          "entrepotCode",
-          "typeTransportDescription",
-          "baseTarifTransportCode",
-          "gtinColis",
-          "campagne",
-          "ordreAnnule"
-        ]),
-        this.secteurSB?.value?.id,
-        this.currentCompanyService.getCompany().id,
-        this.datePipe.transform(
-          this.preFilterData?.dateDepartMin,
-          "yyyy-MM-dd"
-        ),
-        this.datePipe.transform(
-          this.preFilterData?.dateDepartMax,
-          "yyyy-MM-dd"
-        ),
-        this.datePipe.transform(
-          this.preFilterData?.dateModification,
-          "yyyy-MM-ddTHH:mm:ss"
-        ),
-        this.clientSB?.value?.id,
-        this.transporteurSB?.value?.id,
-        this.fournisseurSB?.value?.code,
-        this.bureauAchatSB?.value?.id,
-        this.entrepotSB?.value?.id,
-      )
-      .pipe(
-        concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
-        finalize(() => this.grid.instance.endCustomLoading())
-      )
+    of(this.grid.instance.beginCustomLoading("")).pipe(
+      concatMap(() =>
+        this.ordresService
+          .allDeclarationFraude(
+            new Set([
+              "id",
+              "numeroOrdre",
+              "dateDepartPrevueFournisseur",
+              "clientCode",
+              "fournisseurCode",
+              "dateDepartPrevue",
+              "nombrePalettesCommandees",
+              "nombreColisCommandes",
+              "origineDescription",
+              "paysCode",
+              "paysDescription",
+              "incotermCode",
+              "varieteCode",
+              "colisCode",
+              "poidsNetClient",
+              "origineDescription",
+              "transporteurCode",
+              "dateModification",
+              "referenceClient",
+              "codeChargement",
+              "etdLocation",
+              "etdDate",
+              "etaLocation",
+              "etaDate",
+              "commentaireInterne",
+              "entrepotCode",
+              "typeTransportDescription",
+              "baseTarifTransportCode",
+              "gtinColis",
+              "campagne",
+              "ordreAnnule"
+            ]),
+            this.secteurSB?.value?.id,
+            this.currentCompanyService.getCompany().id,
+            this.datePipe.transform(
+              this.preFilterData?.dateDepartMin,
+              "yyyy-MM-dd"
+            ),
+            this.datePipe.transform(
+              this.preFilterData?.dateDepartMax,
+              "yyyy-MM-dd"
+            ),
+            this.datePipe.transform(
+              this.preFilterData?.dateModification,
+              "yyyy-MM-ddTHH:mm:ss"
+            ),
+            this.clientSB?.value?.id,
+            this.transporteurSB?.value?.id,
+            this.fournisseurSB?.value?.code,
+            this.bureauAchatSB?.value?.id,
+            this.entrepotSB?.value?.id,
+          )),
+      concatMap((res) => of(DeclarationFraudeComponent.handleCalibres(res))),
+      finalize(() => this.grid.instance.endCustomLoading())
+    )
       .subscribe((res) => {
         this.dataSource = new DataSource({
           store: new ArrayStore({
