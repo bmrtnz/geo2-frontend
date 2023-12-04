@@ -327,108 +327,118 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   createReplaceOrder() {
     let ordreReplaceID: Ordre["id"];
-    this.chooseEntrepotPopup
-      .prompt()
-      .pipe(
-        concatMap((selected) =>
-          this.ordresService.fCreeOrdreReplacement(
-            this.ordre.id,
-            selected.entrepotID,
-            selected.societeID,
-            this.authService.currentUser.nomUtilisateur
+    this.fetchLot().pipe(
+      concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
+      tap(lot => this.lot[1] = lot),
+      concatMap(() => this.chooseEntrepotPopup.prompt()),
+      concatMap((selected) =>
+        this.ordresService.fCreeOrdreReplacement(
+          this.ordre.id,
+          selected.entrepotID,
+          selected.societeID,
+          this.authService.currentUser.nomUtilisateur
+        )
+      ),
+      map(
+        (replacementResponse) =>
+          replacementResponse.data.fCreeOrdreReplacement.data
+            .ls_ord_ref_replace
+      ),
+      tap((refReplace) => {
+        ordreReplaceID = refReplace;
+      }),
+      concatMap(() => {
+        const [litigeID, lotNum] = this.lot;
+        return this.litigesLignesService.getList(
+          `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
+          }${lotNum}`,
+          ["id", "ordreLigne.id"]
+        );
+      }),
+      map((res) => res.data.allLitigeLigneList),
+      concatMap((lignes) => {
+        return Promise.all(
+          lignes.map((ligne) =>
+            this.ordreLignesService
+              .fCreeOrdreReplacementLigne(
+                ligne.id,
+                ordreReplaceID,
+                this.ordre.id,
+                ligne.ordreLigne.id,
+                this.currentCompanyService.getCompany().id
+              )
+              .toPromise()
           )
-        ),
-        map(
-          (replacementResponse) =>
-            replacementResponse.data.fCreeOrdreReplacement.data
-              .ls_ord_ref_replace
-        ),
-        tap((refReplace) => {
-          ordreReplaceID = refReplace;
-        }),
-        concatMap(() => {
-          const [litigeID, lotNum] = this.lot;
-          return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
-            }${lotNum}`,
-            ["id", "ordreLigne.id"]
-          );
-        }),
-        map((res) => res.data.allLitigeLigneList),
-        concatMap((lignes) => {
-          return Promise.all(
-            lignes.map((ligne) =>
-              this.ordreLignesService
-                .fCreeOrdreReplacementLigne(
-                  ligne.id,
-                  ordreReplaceID,
-                  this.ordre.id,
-                  ligne.ordreLigne.id,
-                  this.currentCompanyService.getCompany().id
-                )
-                .toPromise()
-            )
-          );
-        }),
-        // Fetch numero of newly created ordre for view
-        concatMap(() => this.registerOrdreRep(ordreReplaceID))
-      )
+        );
+      }),
+      // Fetch numero of newly created ordre for view
+      concatMap(() => this.registerOrdreRep(ordreReplaceID)),
+      finalize(() => this.gridLot.refresh()),
+    )
       .subscribe({
-        error: (error: Error) => notify(error.message, "ERROR", 7000),
+        error: (error: Error) => {
+          if (error?.message) notify(error.message, "ERROR", 7000);
+          console.error(error);
+        },
       });
   }
 
   addToReplaceOrder() {
     let ordreReplace: Partial<Ordre>;
-    this.chooseOrdrePopup
-      .prompt()
-      .pipe(
-        concatMap((ordreID) =>
-          this.ordresService.getOne_v2(
-            ordreID,
-            new Set(["id", "bonAFacturer", "aBloquer", "numero"])
+    this.fetchLot().pipe(
+      concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
+      tap(lot => this.lot[1] = lot),
+      concatMap(() => this.chooseOrdrePopup.prompt()),
+      concatMap((ordreID) =>
+        this.ordresService.getOne_v2(
+          ordreID,
+          new Set(["id", "bonAFacturer", "aBloquer", "numero"])
+        )
+      ),
+      map((res) => res.data.ordre),
+      concatMap((ordre) => {
+        ordreReplace = ordre;
+        if (ordre.aBloquer || ordre.bonAFacturer) {
+          if (ordre.bonAFacturer)
+            return throwError(
+              new Error(this.localizeService.localize("replace-order-denied"))
+            );
+          return EMPTY;
+        }
+        return of(ordre);
+      }),
+      concatMap(() => {
+        const [litigeID, lotNum] = this.lot;
+        return this.litigesLignesService.getList(
+          `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
+          }${lotNum}`,
+          ["id", "ordreLigne.id"]
+        );
+      }),
+      map((res) => res.data.allLitigeLigneList),
+      concatMap((lignes) => {
+        return Promise.all(
+          lignes.map((ligne) =>
+            this.ordreLignesService
+              .fCreeOrdreReplacementLigne(
+                ligne.id,
+                ordreReplace.id,
+                this.ordre.id,
+                ligne.ordreLigne.id,
+                this.currentCompanyService.getCompany().id
+              )
+              .toPromise()
           )
-        ),
-        map((res) => res.data.ordre),
-        concatMap((ordre) => {
-          ordreReplace = ordre;
-          if (ordre.aBloquer || ordre.bonAFacturer) {
-            if (ordre.bonAFacturer)
-              return throwError(
-                new Error(this.localizeService.localize("replace-order-denied"))
-              );
-            return EMPTY;
-          }
-          return of(ordre);
-        }),
-        concatMap(() => {
-          const [litigeID, lotNum] = this.lot;
-          return this.litigesLignesService.getList(
-            `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
-            }${lotNum}`,
-            ["id", "ordreLigne.id"]
-          );
-        }),
-        map((res) => res.data.allLitigeLigneList),
-        concatMap((lignes) => {
-          return Promise.all(
-            lignes.map((ligne) =>
-              this.ordreLignesService
-                .fCreeOrdreReplacementLigne(
-                  ligne.id,
-                  ordreReplace.id,
-                  this.ordre.id,
-                  ligne.ordreLigne.id,
-                  this.currentCompanyService.getCompany().id
-                )
-                .toPromise()
-            )
-          );
-        }),
-        concatMap(() => this.registerOrdreRep(ordreReplace.id, "add"))
-      )
+        );
+      }),
+      concatMap(() => this.registerOrdreRep(ordreReplace.id, "add")),
+      finalize(() => this.gridLot.refresh()),
+    )
       .subscribe({
-        error: (error: Error) => notify(error.message, "ERROR", 7000),
+        error: (error: Error) => {
+          if (error?.message) notify(error.message, "ERROR", 7000);
+          console.error(error);
+        },
       });
   }
 
@@ -751,7 +761,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
         map((res) => res.data.ordre),
-        concatMap((data) => {
+        tap((data) => {
           this.ordreGenNumero = data.numero;
           if (this.ordreGenNumero) {
             notify(
