@@ -4392,6 +4392,7 @@
       {
         "visibleIndex": 16,
         "dataField": "consequence.description",
+        "cssClass": "lineHeight16",
         "visible": true
       },
       {
