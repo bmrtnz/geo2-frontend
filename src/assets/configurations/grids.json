@@ -8729,14 +8729,13 @@
       {
         "visibleIndex": 0,
         "dataField": "codeChargement",
+        "groupIndex": 1,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "ordreOrigine",
-        "visible": true,
-        "calculateCellValue": "calculateGroupeOrdreLibelle",
-        "groupIndex": 1
+        "visible": true
       },
       {
         "visibleIndex": 4,
