@@ -10,7 +10,7 @@ import {
   Output,
   QueryList,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
@@ -24,7 +24,7 @@ import {
   ClientsService,
   EntrepotsService,
   LocalizationService,
-  TransporteursService,
+  TransporteursService
 } from "app/shared/services";
 import { BasesTarifService } from "app/shared/services/api/bases-tarif.service";
 import { DevisesService } from "app/shared/services/api/devises.service";
@@ -50,7 +50,7 @@ import {
   DxAccordionComponent,
   DxButtonComponent,
   DxCheckBoxComponent,
-  DxSelectBoxComponent,
+  DxSelectBoxComponent
 } from "devextreme-angular";
 import { dxElement } from "devextreme/core/element";
 import DataSource from "devextreme/data/data_source";
@@ -63,21 +63,14 @@ import {
   catchError,
   concatMap,
   concatMapTo,
-  debounceTime,
-  exhaustMap,
-  filter,
-  first,
-  map,
-  mapTo,
-  refCount,
-  share,
-  startWith,
+  debounceTime, filter, first,
+  map, startWith,
   switchMap,
   takeUntil,
   takeWhile,
   tap,
+  throttleTime
 } from "rxjs/operators";
-import { ONE_SECOND } from "../../../../basic";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
 import { ActionsDocumentsOrdresComponent } from "../actions-documents-ordres/actions-documents-ordres.component";
@@ -106,7 +99,7 @@ import {
   RouteParam,
   TabChangeData,
   TabContext,
-  TAB_ORDRE_CREATE_ID,
+  TAB_ORDRE_CREATE_ID
 } from "../root/root.component";
 import { SelectionComptePaloxPopupComponent } from "../selection-compte-palox-popup/selection-compte-palox-popup.component";
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
@@ -431,11 +424,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ModifCommandeEdiPopupComponent) modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
   @ViewChild(ChoixEntrepotCommandeEdiPopupComponent, { static: false }) choixEntPopup: ChoixEntrepotCommandeEdiPopupComponent;
 
-
-
   public mentionRegimeTva: Observable<string>;
   public descriptifRegroupement: string;
-
+  public bafButtonEnabled = true;
 
   ngOnInit() {
     this.initializeForm();
@@ -1877,13 +1868,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async bonAFacturer() {
+    this.bafButtonEnabled = false;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
 
     const societe: Societe = this.currentCompanyService.getCompany();
 
-    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).subscribe({
+    this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).pipe(
+      throttleTime(2000),
+    ).subscribe({
       error: ({ message }: Error) => {
         notify(this.messageFormat(message), "error", 7000);
+        this.bafButtonEnabled = true;
       },
       next: (result) => {
         if (

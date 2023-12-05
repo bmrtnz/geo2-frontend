@@ -296,6 +296,7 @@
                   class="header-btn-baf float-right"
                   type="default"
                   [visible]="showBAFButton && !!fullOrderNumber"
+                  [disabled]="!bafButtonEnabled"
                   text="Bon à facturer"
                   (onClick)="bonAFacturer()"
                 ></dx-button>
