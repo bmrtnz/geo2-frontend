@@ -63,7 +63,7 @@ import {
   catchError,
   concatMap,
   concatMapTo,
-  debounceTime, filter, first,
+  debounceTime, filter, finalize, first,
   map, startWith,
   switchMap,
   takeUntil,
@@ -1874,18 +1874,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     const societe: Societe = this.currentCompanyService.getCompany();
 
     this.ordresBafService.fBonAFacturer([this.ordre.id], societe.id).pipe(
-      throttleTime(2000),
+      finalize(() => setTimeout(() => this.bafButtonEnabled = true, 2000)),
     ).subscribe({
       error: ({ message }: Error) => {
         notify(this.messageFormat(message), "error", 7000);
-        this.bafButtonEnabled = true;
+        // this.bafButtonEnabled = true;
       },
+      complete: () => console.log("complete"),
       next: (result) => {
         if (
           result.res === 2 &&
           result.msg.includes("il n'y a pas de client pallox")
         )
           return (this.comptePaloxPopup.visible = true);
+        // if ([FunctionResult.OK, FunctionResult.Warning].includes(result.res))
+        //   this.bafButtonEnabled = true;
+        // console.log("next", result.res);
         this.refreshHeader();
       },
     });
