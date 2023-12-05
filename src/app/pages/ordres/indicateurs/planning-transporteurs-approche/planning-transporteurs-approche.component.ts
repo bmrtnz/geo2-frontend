@@ -52,8 +52,7 @@ type Inputs<T = any> = { [key in keyof typeof InputField]: T };
   styleUrls: ["./planning-transporteurs-approche.component.scss"],
 })
 export class PlanningTransporteursApprocheComponent
-  implements OnInit, AfterViewInit
-{
+  implements OnInit, AfterViewInit {
   readonly INDICATOR_NAME = "PlanningTransporteursApproche";
 
   private indicator = this.ordresIndicatorsService.getIndicatorByName(
@@ -135,7 +134,7 @@ export class PlanningTransporteursApprocheComponent
       this.periodes
     );
     if (!myPeriod) return;
-    this.periodeSB.instance.option("value", myPeriod);
+    this.periodeSB?.instance.option("value", myPeriod);
     const datePeriod = this.dateManagementService.getDates({
       value: myPeriod,
     });
@@ -168,12 +167,12 @@ export class PlanningTransporteursApprocheComponent
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
-          " - " +
-          (data.nomUtilisateur
-            ? data.nomUtilisateur
-            : data.raisonSocial
-            ? data.raisonSocial
-            : data.description)
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
       : null;
   }
 
