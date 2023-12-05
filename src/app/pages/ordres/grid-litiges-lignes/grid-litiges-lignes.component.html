@@ -18,6 +18,7 @@
   [wordWrapEnabled]="true"
   [focusedRowEnabled]="true"
   (onContentReady)="sortGrid()"
+  (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="litigeLigneSelected.emit()"
   (onToolbarPreparing)="

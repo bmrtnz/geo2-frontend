@@ -4386,14 +4386,13 @@
       {
         "visibleIndex": 14,
         "dataField": "cause.description",
-        "cssClass": "lineHeight16",
         "width": 180,
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "consequence.description",
-        "cssClass": "lineHeight16",
+        "width": 180,
         "visible": true
       },
       {

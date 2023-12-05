@@ -44,13 +44,19 @@
   }
 
   .dx-data-row {
-    .lineHeight16 {
+
+    td,
+    th {
       line-height: 16px !important;
     }
 
     .no-wrap {
       white-space: nowrap !important;
     }
+  }
+
+  .dx-master-detail-row th {
+    line-height: 16px !important;
   }
 
 }
