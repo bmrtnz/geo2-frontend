@@ -7,7 +7,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import { alert, confirm } from "devextreme/ui/dialog";
 import { EMPTY, from, of, zip } from "rxjs";
-import { catchError, concatMap, filter, first, map } from "rxjs/operators";
+import { catchError, concatMap, filter, first, map, throttleTime } from "rxjs/operators";
 import { APICount, APIRead, ApiService } from "../api.service";
 import { LocalizationService } from "../localization.service";
 import {
@@ -212,7 +212,7 @@ export class OrdresBafService
       map(([ordre, res]) => ({
         ...res.data.fBonAFacturer,
         data: { ...res.data.fBonAFacturer.data, ordre },
-      }))
+      })),
     );
   }
 
