@@ -3716,6 +3716,7 @@
       {
         "dataField": "ordre.referenceClient",
         "showInColumnChooser": true,
+        "dataType": "string",
         "visible": false
       },
       {
