@@ -143,7 +143,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
       this.periodes
     );
     if (!myPeriod) return;
-    this.periodeSB.instance.option("value", myPeriod);
+    this.periodeSB?.instance.option("value", myPeriod);
     const datePeriod = this.dateManagementService.getDates({
       value: myPeriod,
     });

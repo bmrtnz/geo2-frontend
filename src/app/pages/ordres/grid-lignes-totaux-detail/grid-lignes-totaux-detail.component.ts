@@ -139,6 +139,8 @@ export class GridLignesTotauxDetailComponent
       const field = self.summaryFields.find(field => field.column === options.name);
       if (field?.type === "avg" && options.count) options.totalValue /= options.count;
       field.total = (field.total ?? 0) + (options.totalValue ?? 0);
+      options.totalValue = Math.round(options.totalValue * 100) / 100;
+      field.total = Math.round(field.total * 100) / 100;
     }
   }
 

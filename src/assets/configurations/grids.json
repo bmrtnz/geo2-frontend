@@ -3716,6 +3716,7 @@
       {
         "dataField": "ordre.referenceClient",
         "showInColumnChooser": true,
+        "dataType": "string",
         "visible": false
       },
       {
@@ -4385,14 +4386,13 @@
       {
         "visibleIndex": 14,
         "dataField": "cause.description",
-        "cssClass": "lineHeight16",
         "width": 180,
         "visible": true
       },
       {
         "visibleIndex": 16,
         "dataField": "consequence.description",
-        "cssClass": "lineHeight16",
+        "width": 180,
         "visible": true
       },
       {
@@ -8728,14 +8728,13 @@
       {
         "visibleIndex": 0,
         "dataField": "codeChargement",
+        "groupIndex": 1,
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "ordreOrigine",
-        "visible": true,
-        "calculateCellValue": "calculateGroupeOrdreLibelle",
-        "groupIndex": 1
+        "visible": true
       },
       {
         "visibleIndex": 4,

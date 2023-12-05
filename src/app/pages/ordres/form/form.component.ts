@@ -640,6 +640,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async changeDateDepart(dateDepartPrevue) {
+    if (!this.gridCommandes?.gridRowsTotal) return;
     if (await confirm(
       this.localization.localize("ordre-date-depart-mutate"),
       this.localization.localize("ordre-date-depart-mutate-title")

@@ -57,6 +57,16 @@ export class GridLitigesLignesComponent implements OnInit {
     this.enableFilters();
   }
 
+  onCellPrepared(e) {
+    if (["cause.description",
+      "consequence.description",
+      "responsableTypeCode",
+      "ordreLigne.libelleDLV",
+      "commentaireResponsable"]
+      .includes(e.column.dataField))
+      e.cellElement.title = e.value;
+  }
+
   onRowPrepared(e) {
     if (e.rowType === "data") {
       e.rowElement.classList.add("cursor-pointer");
