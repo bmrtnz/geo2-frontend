@@ -7,6 +7,7 @@ import { FunctionsService } from "app/shared/services/api/functions.service";
 import { RaisonsAnnuleRemplaceService } from "app/shared/services/api/raisons-annule-remplace.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { GridsService } from "./../grids.service";
 import {
   Grid,
   GridConfig,
@@ -51,6 +52,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public canBeSent: boolean;
+  public currVal: string;
   columnChooser = environment.columnChooser;
   @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
   @Input() ordre: { id: string } & Partial<Ordre>;
@@ -62,6 +64,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
+    public gridsService: GridsService,
     public formUtilsService: FormUtilsService,
     private envoisService: EnvoisService,
     private ar: FluxArService
@@ -69,10 +72,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     this.raisonsList = [];
     this.raisonsAnnuleRemplaceService
       .getDataSource_v2(["description"])
-      .load()
-      .then((res) => {
-        res.map((inst) => this.raisonsList.push(inst.description));
-      });
+      .load().then((res) => res.map((inst) => this.raisonsList.push(inst.description)));
   }
 
   ngOnInit() {
@@ -126,33 +126,35 @@ export class GridAnnuleRemplaceComponent implements OnInit {
   // Used to override std arrows behaviour
   onSelectBoxInitialized(e) {
     const selectBox = e.component;
-    selectBox.registerKeyHandler('downArrow', () => this.moveRows(selectBox, 1));
-    selectBox.registerKeyHandler('upArrow', () => this.moveRows(selectBox, -1));
+    ["upArrow", "downArrow"].map((key, index) =>
+      selectBox.registerKeyHandler(key, () => {
+        const myVal = selectBox.$element()[0].querySelector(".dx-focused .dx-texteditor-input")?.value;
+        if (!this.currVal?.length) this.currVal = myVal;
+        if (this.raisonsList.some(r => r.startsWith(this.currVal)) && this.currVal?.length && selectBox.option('opened')) return true;
+        this.saveCurrentCell(-1 + 2 * index);
+        this.currVal = undefined;
+      }));
   }
 
-  moveRows(selectBox, dir) {
-    if (!selectBox.option('opened')) {
-      this.dataGrid.instance.closeEditCell();
-      const nextCell = {
-        row: this.dataGrid.focusedRowIndex + dir,
-        col: this.dataGrid.focusedColumnIndex
-      };
-      if (this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col) && nextCell.row >= 0)
-        this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
-    } else return true;
+  async saveCurrentCell(dir) {
+    this.dataGrid.instance.cellValue(
+      this.dataGrid.focusedRowIndex,
+      "numeroAcces2",
+      this.dataGrid.instance.$element()[0].querySelector(".dx-focused .dx-texteditor-input")?.value
+    );
+    await this.gridsService.waitUntilAllGridDataSaved(this.dataGrid)
+    this.moveRows(dir);
   }
 
-  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
-    const keyCode = event.originalEvent?.code;
-    const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex - 1);
-    if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
-    const nextCell = {
-      row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
-      col: this.dataGrid.focusedColumnIndex
-    };
-    const cell = this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col);
-    if (cell && nextCell.row >= 0)
-      this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
+  moveRows(dir) {
+    this.dataGrid.instance.closeEditCell();
+    // switch focus
+    this.dataGrid.instance.focus(
+      this.dataGrid.instance.getCellElement(
+        this.dataGrid.focusedRowIndex + dir,
+        this.dataGrid.focusedColumnIndex
+      )
+    );
   }
 
   reload() {
