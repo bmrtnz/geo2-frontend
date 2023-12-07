@@ -191,7 +191,7 @@ export class GridCommandesEventsService {
   ) {
     newData.nombreColisCommandes = value;
     if (this.context?.secteurCode === "F") {
-      if (value && currentData.nombreColisPalette === 0) {
+      if (value && !currentData.nombreColisPalette) {
         newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
       }
 
@@ -461,7 +461,7 @@ export class GridCommandesEventsService {
             row.data.fournisseur?.id === selectedFournisseurID;
         })
         .forEach(row => {
-          ld_pal_nb_col = row.data.nombreColisPalette;
+          ld_pal_nb_col = row.data.nombreColisPalette || 0;
 
           if (row.data.indicateurPalette === 1)
             // On charge des demi palettes gerbable, donc autant de palettes au sol mais on declare ensuite la moitié au trp
@@ -492,7 +492,7 @@ export class GridCommandesEventsService {
           nb_pal_dispo = nb_pal_th;
 
           const nombrePalettes = Math.ceil(nb_pal);
-          if (nombrePalettes && nombrePalettes !== row.data?.nombrePalettesCommandees)
+          if (nombrePalettes !== row.data?.nombrePalettesCommandees)
             dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nombrePalettes);
         }), 10);
 
