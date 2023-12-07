@@ -40,7 +40,7 @@
               [readOnly]="codeChangeProcess"
               (onValueChanged)="onValueChanged($event)"
               [ngClass]="{
-                'max-tags': chosenArticles?.length && single
+                'max-tags': !!chosenArticles?.length && single
               }"
               [disabled]="!!getGridSelectedArticles()?.length && single"
             >
