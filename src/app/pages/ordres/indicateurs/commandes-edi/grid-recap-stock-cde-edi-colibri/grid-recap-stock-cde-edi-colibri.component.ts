@@ -92,7 +92,7 @@ export class GridRecapStockCdeEdiColibriComponent {
   }
 
   refreshGrid() {
-    this.datagrid.instance.refresh();
+    this.enableFilters();
   }
 
   onEditorPreparing(e) {
