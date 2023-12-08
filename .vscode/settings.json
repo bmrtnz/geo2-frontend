@@ -19,7 +19,7 @@
     "files.insertFinalNewline": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": true
+    "source.fixAll.tslint": "explicit"
   },
   "editor.foldingMaximumRegions": 10000
 }
