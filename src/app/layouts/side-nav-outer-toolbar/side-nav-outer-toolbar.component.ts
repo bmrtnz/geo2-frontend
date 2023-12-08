@@ -95,9 +95,9 @@ export class SideNavOuterToolbarComponent implements OnInit {
           if (this.alerteInfo) {
             // Is that our commercial area?
             const sectorMatch = this.authService.isAdmin ||
-              (!!this.alerteInfo.secteur?.id && !!this.authService.currentUser.secteurCommercial.id
-                && this.alerteInfo.secteur?.id === this.authService.currentUser.secteurCommercial.id
-              );
+              !this.alerteInfo.secteur?.id ||
+              !this.authService.currentUser.secteurCommercial?.id ||
+              (this.alerteInfo.secteur?.id && (this.alerteInfo.secteur?.id === this.authService.currentUser.secteurCommercial?.id));
             // Is it the right timing?
             const timingMatch = (!this.alerteInfo?.dateDebut || (this.alerteInfo?.dateDebut &&
               new Date() > new Date(this.alerteInfo?.dateDebut))) &&
