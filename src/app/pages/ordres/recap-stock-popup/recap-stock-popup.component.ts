@@ -50,6 +50,7 @@ export class RecapStockPopupComponent implements OnChanges {
 
   onShowing(e) {
     e.component.content().parentNode.classList.add("recap-stock-popup");
+    this.popupFullscreen = true;
   }
 
   onShown(e) {
