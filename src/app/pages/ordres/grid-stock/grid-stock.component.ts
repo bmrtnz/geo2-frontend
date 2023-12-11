@@ -547,11 +547,8 @@ export class GridStockComponent implements OnInit {
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
     } else if (e.rowType === "data") {
-      if (e.column.dataField === "stock.quantiteTotale")
-        e.cellElement.classList.add("grey-light");
       if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
         e.cellElement.textContent = "";
-
     }
 
     if (e.rowType === "data") {
@@ -598,8 +595,6 @@ export class GridStockComponent implements OnInit {
           }
           if (neg) e.cellElement.classList.add("highlight-negativeStock-cell");
         }
-        if (e.column.dataField === "stock.quantiteTotale")
-          e.cellElement.classList.add("grey-light");
       }
     }
   }

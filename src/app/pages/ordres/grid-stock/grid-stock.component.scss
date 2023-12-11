@@ -35,9 +35,18 @@
     }
   }
 
-  .grey-light {
-    background-color: #eee !important;
-    color: rgba(0, 0, 0, 0.7) !important;
+  td.total-column,
+  .dx-header-row td.total-column {
+    background-color: $base-accent !important;
+    color: #FFF !important;
+
+    div {
+      color: #FFF !important;
+    }
+  }
+
+  .dx-data-row td.total-column {
+    text-align: right !important;
   }
 
   .dx-group-row td {
