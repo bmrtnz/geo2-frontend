@@ -25,7 +25,7 @@ export class RecapStockPopupComponent implements OnChanges {
   public visible: boolean;
   public title: string;
   public okDisabled = false;
-  public popupFullscreen = false;
+  public popupFullscreen = true;
   public detailedArticleDescription: string;
   private separator = " ● ";
 
