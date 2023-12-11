@@ -14,11 +14,6 @@
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}</div>
     <dx-button
-      class="close-popup"
-      icon="close"
-      (onClick)="quitPopup()"
-    ></dx-button>
-    <dx-button
       class="min-max-imize-popup-icon"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       icon="material-icons fullscreen_exit"
