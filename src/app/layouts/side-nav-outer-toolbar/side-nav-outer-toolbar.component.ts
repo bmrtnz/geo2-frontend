@@ -186,8 +186,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
     }
   }
 
-  menuToggle() {
-    this.menuOpened = !this.menuOpened;
+  menuToggle(menuOpened?) {
+    this.menuOpened = menuOpened || !this.menuOpened;
     window.sessionStorage.setItem(
       "HideMainDrawer",
       !this.menuOpened ? "true" : "false"
@@ -199,6 +199,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
     if (this.showMenuAfterClick) {
       this.temporaryMenuOpened = true;
       this.menuOpened = true;
+      this.menuToggle(true);
     }
   }
 
