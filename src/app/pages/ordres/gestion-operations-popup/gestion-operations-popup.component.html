@@ -166,16 +166,11 @@
           {{ "generated-order-number" | localize }}
         </div>
         <dx-button
-          class="order-number-button"
-          [ngClass]="{ 'inactive-item': !ordreGenNumero }"
+          class="order-number-button inactive-item"
           type="normal"
           [visible]="['G', 'B'].includes(selectedConsequence)"
           stylingMode="outlined"
-          [hint]="
-            ordreGenNumero ? localizeService.localize('hint-click-ordre') : ''
-          "
           [text]="ordreGenNumero"
-          (onClick)="openOrder()"
         ></dx-button>
       </div>
 

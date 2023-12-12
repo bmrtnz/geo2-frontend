@@ -231,11 +231,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.headerData.consequence = this.selectedConsequence;
   }
 
-  openOrder() {
-    this.tabContext.openOrdre(this.ordreGenNumero, this.ordre.campagne.id);
-    this.hidePopup();
-  }
-
   validate() {
     this.mutateLot()
       .pipe(
