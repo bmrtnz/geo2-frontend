@@ -105,6 +105,7 @@ import { SelectionComptePaloxPopupComponent } from "../selection-compte-palox-po
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
+import { ONE_MINUTE } from "basic";
 
 enum Fragments {
   Head = "head",
@@ -588,6 +589,26 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.saveHeaderOnTheFly();
   }
 
+  public waitUntilHeaderSaved() {
+    if (!this.headerSaving) return Promise.resolve();
+
+    return new Promise<void>((resolve, reject) => {
+      // Wait until header has been totally saved
+      const saveTimeout = setTimeout(() => {
+        notify(this.localization.localize("header-loading-error"), "error");
+        clearInterval(saveInterval);
+        reject();
+      }, 2 * ONE_MINUTE)
+      const saveInterval = setInterval(() => {
+        if (!this.headerSaving) {
+          clearInterval(saveInterval);
+          clearTimeout(saveTimeout);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+
   saveHeaderOnTheFly(message?) {
     if (this.headerSaving) return;
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -776,6 +797,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onRegulOrderClick() {
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
@@ -871,6 +893,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async onComplOrderClick() {
     if (!this.ordre?.id) return;
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
 
     // As LIST_NORDRE_COMP is a VARCHAR(50)
@@ -1125,17 +1148,20 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async detailExp() {
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresLignesViewExp = !this.ordresLignesViewExp;
   }
 
   async openGroupageChargementsPopup() {
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.groupagePopup.visible = true;
   }
 
   async onDuplicateOrderClick() {
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    await this.waitUntilHeaderSaved();
     this.duplicationPopup.visible = true;
   }
 
@@ -1870,6 +1896,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public async bonAFacturer() {
     this.bafButtonEnabled = false;
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
 
     const societe: Societe = this.currentCompanyService.getCompany();
@@ -1879,18 +1906,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe({
       error: ({ message }: Error) => {
         notify(this.messageFormat(message), "error", 7000);
-        // this.bafButtonEnabled = true;
       },
-      complete: () => console.log("complete"),
       next: (result) => {
         if (
           result.res === 2 &&
           result.msg.includes("il n'y a pas de client pallox")
         )
           return (this.comptePaloxPopup.visible = true);
-        // if ([FunctionResult.OK, FunctionResult.Warning].includes(result.res))
-        //   this.bafButtonEnabled = true;
-        // console.log("next", result.res);
         this.refreshHeader();
       },
     });
@@ -1946,6 +1968,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async onDuplicationBukSaClick() {
+    await this.waitUntilHeaderSaved();
     if (this.gridCommandes) {
       await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
       this.onDuplicationBukSa();
@@ -2020,6 +2043,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async onDelRegroupementClick() {
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.ordresService.fDelRegroupement(this.refOrdre).subscribe({
       error: ({ message }: Error) => notify(message, "error"),
@@ -2038,6 +2062,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onClickCreateLitige() {
+    await this.waitUntilHeaderSaved();
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.litigesBtn.nativeElement.click();
     setTimeout(() => this.formLitiges.createLitige());
