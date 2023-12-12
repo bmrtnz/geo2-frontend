@@ -10,7 +10,7 @@ import {
 import { ClientsService, EntrepotsService } from "app/shared/services";
 import { DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
-import notify from "devextreme/ui/notify";
+
 
 @Component({
   selector: "app-choix-entrepot-commande-edi-popup",
@@ -19,6 +19,7 @@ import notify from "devextreme/ui/notify";
 })
 export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
   @Input() public clientId: string;
+  @Input() public currentEntrepotId: string;
   @Input() public title: string;
   @Output() public entrepotChosen = new EventEmitter();
 
@@ -65,6 +66,15 @@ export class ChoixEntrepotCommandeEdiPopupComponent implements OnChanges {
       "and",
       ["client.id", "=", this.clientId],
     ]);
+
+    // Autofill
+    this.entrepotDS.load().then((res) => {
+      if (res?.length === 1 + (this.currentEntrepotId ? 1 : 0)) {
+        res = res.filter(r => r.id !== this.currentEntrepotId)
+        this.entrepotSB.value = { id: res[0].id };
+      }
+    });
+
   }
 
   displayCodeBefore(data) {

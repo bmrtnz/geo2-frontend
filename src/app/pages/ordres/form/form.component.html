@@ -1489,6 +1489,7 @@
 <app-confirmation-result-popup></app-confirmation-result-popup>
 <app-choix-entrepot-commande-edi-popup
   [clientId]="ordre?.client?.id"
+  [currentEntrepotId]="ordre?.entrepot?.id"
   [title]="'modification-entrepot' | localize"
   (entrepotChosen)="onEntrepotChosen($event)"
 >
