@@ -530,6 +530,10 @@ dx-button[type="normal"] {
   width: 500px;
 }
 
+::ng-deep .entrepot-livre .dx-invalid.dx-texteditor.dx-show-invalid-badge .dx-texteditor-input-container::after {
+  right: 53px;
+}
+
 ::ng-deep .form-zoom-button,
 .entrepot-change-button {
   position: relative;

@@ -102,8 +102,12 @@
       }
     }
 
+    .std-content {
+      padding-right: 10px !important;
+    }
+
     .dx-template-wrapper.dx-tab-content {
-      padding: 12px 15px 11px 11px;
+      padding: 12px 5px 11px 11px;
       margin: 0 1px;
 
       &:hover {
@@ -271,8 +275,10 @@
     }
 
     .std-order-width {
-      width: 74px;
+      width: 84px;
       text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
