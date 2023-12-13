@@ -48,6 +48,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
+
 @Component({
   selector: "app-gestion-operations-popup",
   templateUrl: "./gestion-operations-popup.component.html",
@@ -275,8 +276,21 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
+  warnZeroQuantities() {
+    if (this.gridLot?.hasZeroQuantities) {
+      notify({
+        message: this.localizeService.localize("warn-quantities"),
+        type: "error"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+      return true;
+    }
+  }
+
   async createRefactTranspOrder() {
-    await this.gridLot.persist();
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     const ordre = await this.ordresService
       .getOne_v2(
         this.ordre.id,
@@ -320,7 +334,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
     await this.registerOrdreRep(ordreRefactRef).toPromise();
   }
 
-  createReplaceOrder() {
+  async createReplaceOrder() {
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     let ordreReplaceID: Ordre["id"];
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
@@ -378,7 +394,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
-  addToReplaceOrder() {
+  async addToReplaceOrder() {
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     let ordreReplace: Partial<Ordre>;
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),

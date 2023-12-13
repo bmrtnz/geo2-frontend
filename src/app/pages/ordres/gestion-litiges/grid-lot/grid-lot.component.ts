@@ -38,12 +38,16 @@ import {
 import { GridsService } from "../../grids.service";
 
 let self: GridLotComponent;
+
 @Component({
   selector: "app-grid-lot",
   templateUrl: "./grid-lot.component.html",
   styleUrls: ["./grid-lot.component.scss"],
 })
 export class GridLotComponent implements OnInit, OnChanges {
+
+  public hasZeroQuantities: boolean;
+
   constructor(
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
@@ -275,11 +279,18 @@ export class GridLotComponent implements OnInit, OnChanges {
     );
   }
 
+  public onCellPrepared(e) {
+    if (e.rowType === "data" && e.column.dataField === "ligne.clientQuantite") {
+      if (!e.value) this.hasZeroQuantities = true;
+    }
+  }
+
   /**
    * Met a jour l'ensemble des lignes de la grille (le lot) avec les données en parametre
    * Si une seule ligne est fournie, les données seront clonées dans toutes les lignes du lot
    */
   public updateLot(data: Partial<LitigeLigne> | Partial<LitigeLigne>[]) {
+    this.hasZeroQuantities = false;
     return interval(100).pipe(
       concatMapTo(defer(() => of(this.grid?.dataSource as DataSource))),
       takeWhile((datasource) => !datasource?.items()?.length, true),
@@ -454,6 +465,7 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     const context: any = this;
     context.defaultSetCellValue(newData, value, rowData);
+    self.hasZeroQuantities = false;
     if (newData.hasOwnProperty("prixUnitaire")) return;
     if (newData.ligne?.hasOwnProperty("clientPrixUnitaire")) return self.setPrixUnitaires(newData, value, rowData);
     self.setQuantite(newData, value, rowData);
