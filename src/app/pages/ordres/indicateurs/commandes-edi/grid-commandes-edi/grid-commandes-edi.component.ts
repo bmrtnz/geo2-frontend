@@ -48,6 +48,7 @@ import { GridsService } from "app/pages/ordres/grids.service";
 import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-colibri-popup/recap-stock-cde-edi-colibri-popup.component";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 
 enum InputField {
   clientCode = "client",
@@ -429,8 +430,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
+    hideToasts();
     this.showHideLoader.emit(true);
-    notify(this.localization.localize("please-wait-order-creation"), "info", 5000);
+    notify(this.localization.localize("please-wait-order-creation"), "info", 500);
 
     const genericGen = this.functionsService.ofReadOrdEdiColibri(
       parseInt(commandeEdi.refEdiOrdre),
@@ -459,14 +461,19 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         concatMap(res => res.data.ediOrdre.secteur?.id === "ESP" ? espagneGen : genericGen),
       ).subscribe({
         error: (err: Error) => {
+          hideToasts();
           this.showHideLoader.emit(false);
-          notify(
-            this.messageFormat(err.message).replace("%%%", this.localization.localize("blocking"))
-            , "error",
-            10000
-          )
+          const mess = this.messageFormat(err.message);
+          notify({
+            message: mess,
+            type: "error",
+            displayTime: 5000 + 40 * mess.length
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          );
         },
         next: res => {
+          hideToasts();
           this.showHideLoader.emit(false);
           if ("ofReadOrdEdiColibri" in res.data) {
             this.recapStockPopup.visible = true;
@@ -690,6 +697,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
         ""
       );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    mess = mess.split("%%%").join(this.localization.localize("blocking"));
+    mess = mess.split("~r~n").join("\r\n");
     return mess;
   }
 
