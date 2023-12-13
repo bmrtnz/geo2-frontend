@@ -10,7 +10,7 @@
   [noDataText]="'aucun-ordre' | localize"
   (onContentReady)="onContentReady($event)"
   (onCellPrepared)="onCellPrepared($event)"
-  (onRowDblClick)="ordreSelected.emit($event.data.id)"
+  (onRowDblClick)="ordreSelected.emit($event.data)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Résultat(s) de recherche',
