@@ -1581,7 +1581,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshLitigeIndicator() {
     this.ordresService
-      .getOne_v2(this.ordre.id, ["id", "hasLitige"])
+      .getOne_v2(this.ordre.id, ["id", "hasLitige"], "no-cache")
       .subscribe(res => {
         this.dotLitiges = this.getLitigeBadgeIndicator(res.data.ordre.hasLitige);
         if (this.ordre.hasLitige) this.refreshAvoirIndicator();
