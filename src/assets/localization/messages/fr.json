@@ -217,6 +217,7 @@
     "searchFor": "Rechercher",
     "saveOK": "Sauvegardé",
     "saveKO": "Échec de la sauvegarde",
+    "save-MRU-KO": "Échec de la sauvegarde MRU",
     "create": "Création",
     "clone": "Clone",
     "ajuster": "Ajuster",
