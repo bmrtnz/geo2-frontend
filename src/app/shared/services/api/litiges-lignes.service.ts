@@ -254,6 +254,39 @@ export class LitigesLignesService extends ApiService implements APIRead {
     });
   }
 
+  saveLot(body: Set<string>, lot: [Litige["id"], LitigeLigne["numeroGroupementLitige"]], litigeLigne: Partial<LitigeLigne>) {
+    return this.apollo.mutate<{
+      saveLot: Array<Partial<LitigeLigne>>;
+    }>({
+      mutation: gql(ApiService.buildGraph(
+        "mutation",
+        [
+          {
+            name: `saveLot`,
+            body,
+            params: [
+              { name: `lot`, value: `lot`, isVariable: true, },
+              { name: `litigeLigne`, value: `litigeLigne`, isVariable: true, },
+            ],
+          },
+        ],
+        [
+          {
+            name: `lot`,
+            type: `[String]`,
+            isOptionnal: false,
+          },
+          {
+            name: `litigeLigne`,
+            type: `Geo${this.model.name}Input`,
+            isOptionnal: false,
+          },
+        ]
+      )),
+      variables: { lot, litigeLigne },
+    });
+  }
+
   allLitigeLigneFaitDatasource(
     litigeID: string,
     numeroLigne: string,
