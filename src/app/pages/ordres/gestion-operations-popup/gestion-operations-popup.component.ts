@@ -308,21 +308,26 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     if (ordre.devise.id !== "EUR") totalAvoirClient *= ordre.tauxDevise;
 
-    const refacturationResponse = await this.litigesService
-      .fCreeOrdreRefacturationTransporteur(
-        ordre.id,
-        totalAvoirClient,
-        this.currentCompanyService.getCompany().id,
-        this.authService.currentUser.nomUtilisateur
-      )
-      .toPromise();
+    try {
+      const refacturationResponse = await this.litigesService
+        .fCreeOrdreRefacturationTransporteur(
+          ordre.id,
+          totalAvoirClient,
+          this.currentCompanyService.getCompany().id,
+          this.authService.currentUser.nomUtilisateur
+        )
+        .toPromise();
 
-    const ordreRefactRef =
-      refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data
-        .ls_ord_ref_refacturer;
+      const ordreRefactRef =
+        refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data
+          .ls_ord_ref_refacturer;
 
-    // Fetch numero of newly created ordre for view
-    await this.registerOrdreRep(ordreRefactRef).toPromise();
+      // Fetch numero of newly created ordre for view
+      await this.registerOrdreRep(ordreRefactRef).toPromise();
+    } catch (error) {
+      notify(error.message, "ERROR", 7000);
+    }
+
   }
 
   createReplaceOrder() {
