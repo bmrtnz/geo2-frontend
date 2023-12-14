@@ -530,10 +530,6 @@ dx-button[type="normal"] {
   width: 500px;
 }
 
-::ng-deep .entrepot-livre .dx-invalid.dx-texteditor.dx-show-invalid-badge .dx-texteditor-input-container::after {
-  right: 53px;
-}
-
 ::ng-deep .form-zoom-button,
 .entrepot-change-button {
   position: relative;
@@ -593,6 +589,19 @@ dx-button[type="normal"] {
 ::ng-deep .order-header {
   margin-top: 0 !important;
   padding: 2px 0 0 0 !important;
+
+  .entrepot-livre .dx-invalid.dx-texteditor.dx-show-invalid-badge .dx-texteditor-input-container::after {
+    right: 53px;
+  }
+
+  .entrepot-livre input {
+    width: calc(100% - 50px);
+  }
+
+  .client-livre input {
+    width: calc(100% - 23px);
+  }
+
 
   .dx-selectbox-container .dx-clear-button-area {
     margin-right: -10px;
