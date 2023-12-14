@@ -122,7 +122,11 @@ export class ArticlesListComponent
       "description",
     ]);
     this.modesCulture.filter(["valide", "=", true]);
-    this.trueFalse = ["Tous", "Oui", "Non"];
+    this.trueFalse = [
+      this.localizeService.localize("all"),
+      this.localizeService.localize("trueText"),
+      this.localizeService.localize("falseText")
+    ];
   }
 
   async ngOnInit() {
@@ -198,21 +202,13 @@ export class ArticlesListComponent
 
     // No value cases
     if (event !== null) {
-      if (!event.length) {
-        event = ["null"];
-      }
+      if (!event.length) event = ["null"];
     }
 
     // Changing values for Oui/Non select-box
-    if (event.toString() === "Oui") {
-      event = ["true"];
-    }
-    if (event.toString() === "Non") {
-      event = ["false"];
-    }
-    if (event.toString() === "Tous") {
-      event = ["null"];
-    }
+    if (event.toString() === this.trueFalse[0]) event = ["null"];
+    if (event.toString() === this.trueFalse[1]) event = ["true"];
+    if (event.toString() === this.trueFalse[2]) event = ["false"];
     this.tagFilters[dataField] = event;
 
     try {
