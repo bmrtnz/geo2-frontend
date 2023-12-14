@@ -277,7 +277,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   modifierLot() {
-    if (this.litigeClosed) return;
+    if (this.litigeClosed || !this.selectedLitigeLigneKey) return;
     iif(
       () => !!this.selectedLitigeLigneKey,
       this.litigesLignesService
