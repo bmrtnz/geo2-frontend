@@ -319,7 +319,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
         map(res => res.data.fCreeOrdreRefacturationTransporteur.data.ls_ord_ref_refacturer),
         // Fetch numero of newly created ordre for view
         concatMap(ordreReplaceID => this.registerOrdreRep(ordreReplaceID)),
-        finalize(() => this.gridLot.refresh()),
+        finalize(() => {
+          this.gridLot.refresh();
+          this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+        }),
       )
       .subscribe({
         error: (error: Error) => {
@@ -378,7 +381,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
       }),
       // Fetch numero of newly created ordre for view
       concatMap(() => this.registerOrdreRep(ordreReplaceID)),
-      finalize(() => this.gridLot.refresh()),
+      finalize(() => {
+        this.gridLot.refresh();
+        this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+      }),
     )
       .subscribe({
         error: (error: Error) => {
@@ -644,8 +650,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.responsibles.value = this.responsibleList.find(
             (r) => r.typeTiers === res.responsableTypeCode
           );
-        if (res?.numeroOrdreReplacement)
-          this.ordreGenNumero = res?.numeroOrdreReplacement;
+        this.ordreGenNumero = res?.numeroOrdreReplacement ?? "";
       });
     }
 
@@ -779,7 +784,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           }
           return this.litigesLignesService.saveLot(new Set(["id"]), this.lot, {
             ordreReferenceRemplacement: data.id,
-            numeroOrdreReplacement: data.numero,
+            numeroOrdreReplacement: data.numero
           })
         })
       );
