@@ -1385,7 +1385,8 @@
         "visibleIndex": 0,
         "dataField": "articleID",
         "dataType": "string",
-        "width": 100,
+        "width": 70,
+        "cssClass": "small-side-padding multi-line-header",
         "visible": true
       },
       {
@@ -1406,13 +1407,14 @@
       {
         "visibleIndex": 4,
         "dataField": "age",
+        "cssClass": "small-side-padding",
         "dataType": "string",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "fournisseurCode",
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding multi-line-header",
         "dataType": "string",
         "visible": true
       },
@@ -1434,7 +1436,7 @@
       {
         "visibleIndex": 10,
         "dataField": "typePaletteID",
-        "cssClass": "small-side-padding",
+        "cssClass": "small-side-padding multi-line-header",
         "visible": true
       },
       {
@@ -1444,73 +1446,67 @@
         "visible": true
       },
       {
-        "visibleIndex": 14,
-        "dataField": "commentaire",
-        "dataType": "string",
-        "cssClass": "no-sort",
-        "showInColumnChooser": true,
-        "visible": true
-      },
-      {
         "visibleIndex": 16,
         "dataField": "quantiteCalculee1",
         "cssClass": "small-side-padding",
-        "width": 60,
         "visible": true
       },
       {
         "visibleIndex": 18,
         "dataField": "quantiteCalculee2",
         "cssClass": "small-side-padding",
-        "width": 60,
         "visible": true
       },
       {
         "visibleIndex": 20,
         "dataField": "quantiteCalculee3",
         "cssClass": "small-side-padding",
-        "width": 70,
         "visible": true
       },
       {
         "visibleIndex": 22,
         "dataField": "quantiteCalculee4",
         "cssClass": "small-side-padding",
-        "width": 60,
-        "visible": true
-      },
-      {
-        "visibleIndex": 24,
-        "dataField": "stock.quantiteTotale",
-        "cssClass": "small-side-padding total-column text-align-center",
-        "width": 60,
-        "visible": true
-      },
-      {
-        "visibleIndex": 26,
-        "dataField": "quantiteHebdomadaire",
-        "width": 40,
-        "cssClass": "no-padding multi-line-header",
-        "visible": true
-      },
-      {
-        "visibleIndex": 28,
-        "dataField": "prevision3j",
-        "width": 45,
-        "cssClass": "no-padding multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 30,
-        "dataField": "prevision7j",
-        "width": 45,
-        "cssClass": "no-padding multi-line-header",
+        "dataField": "stock.quantiteTotale",
+        "cssClass": "small-side-padding total-column text-align-center",
         "visible": true
       },
       {
         "visibleIndex": 32,
-        "dataField": "descriptionAbregee",
+        "dataField": "quantiteHebdomadaire",
+        "cssClass": "no-padding multi-line-header",
         "visible": true
+      },
+      {
+        "visibleIndex": 34,
+        "dataField": "prevision3j",
+        "cssClass": "no-padding multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 36,
+        "dataField": "prevision7j",
+        "cssClass": "no-padding multi-line-header",
+        "visible": true
+      },
+      {
+        "visibleIndex": 38,
+        "dataField": "commentaire",
+        "dataType": "string",
+        "cssClass": "no-sort comment-with-pen",
+        "showInColumnChooser": true,
+        "minWidth": 450,
+        "groupCellTemplate": "groupCellButtonsTemplate",
+        "visible": true
+      },
+      {
+        "visibleIndex": 40,
+        "dataField": "descriptionAbregee",
+        "visible": false
       },
       {
         "dataField": "origineID",

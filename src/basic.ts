@@ -164,6 +164,11 @@ interface GridColumn {
   width?: number | string;
 
   /**
+   * Specifies the column's minimum width in pixels or as a percentage.
+   */
+  minWidth?: number | string;
+
+  /**
    * Specifies the column cell template when required
    */
   cellTemplate?: string;
