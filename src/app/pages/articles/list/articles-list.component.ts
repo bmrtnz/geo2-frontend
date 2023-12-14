@@ -140,8 +140,9 @@ export class ArticlesListComponent
   }
 
   ngAfterViewInit() {
-    // POMME as default
+    // POMME and Valid articles as default
     this.especeSB.value = ["POMME"];
+    this.valideSB.value = this.trueFalse[1];
   }
 
   onSelectionChanged(e) {
