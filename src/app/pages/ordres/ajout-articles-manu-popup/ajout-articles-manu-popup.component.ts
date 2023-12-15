@@ -63,6 +63,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   popupFullscreen = true;
   multipleItems: number;
   maxRowNumber: number;
+  public running: boolean;
 
   @ViewChild(ArticlesListComponent, { static: false })
   catalogue: ArticlesListComponent;
@@ -188,6 +189,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   async onShown(e) {
+    this.running = false;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
 
     // if (this.remplacementArticle) this.clearAll();
@@ -285,6 +287,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
 
   insertReplaceArticles() {
 
+    this.running = true;
     let info =
       this.localizeService.localize(
         "ajout-article" + (this.nbARticles > 1 ? "s" : "")
@@ -328,8 +331,10 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
       )
       .subscribe({
         next: () => this.nbARticles = 0,
-        error: ({ message }: Error) =>
-          notify(this.messageFormat(message), "error", 7000),
+        error: ({ message }: Error) => {
+          this.running = false;
+          notify(this.messageFormat(message), "error", 7000);
+        },
         complete: () => this.clearAndHidePopup(),
       });
 

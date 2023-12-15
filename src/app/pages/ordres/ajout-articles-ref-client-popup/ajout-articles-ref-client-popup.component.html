@@ -50,7 +50,7 @@
           [ngClass]="{ pulse: pulseBtnOn }"
           class="articles-valid-button"
           type="success"
-          [disabled]="articlesKO"
+          [disabled]="articlesKO || running"
           [visible]="nbARticles > 0 && !(single && nbARticles > 1)"
           [text]="validBtnText"
           (onClick)="insertArticles()"

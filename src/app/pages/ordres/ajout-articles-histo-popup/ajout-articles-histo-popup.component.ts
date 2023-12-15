@@ -54,6 +54,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   titleEnd: string;
   pulseBtnOn: boolean;
   popupFullscreen = true;
+  public running: boolean;
 
   @ViewChild(GridLignesHistoriqueComponent, { static: false })
   gridLignesHisto: GridLignesHistoriqueComponent;
@@ -71,6 +72,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     private gridUtilsService: GridUtilsService,
     private localizeService: LocalizationService
   ) {
+    this.running = false;
   }
 
   ngOnChanges() {
@@ -140,6 +142,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
 
   onShown(e) {
     this.popupShown = true;
+    this.running = false;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
   }
 
@@ -168,6 +171,8 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   }
 
   insertArticles() {
+
+    this.running = true;
     const info =
       this.localizeService.localize(
         "ajout-article" + (this.nbARticles > 1 ? "s" : "")
@@ -206,8 +211,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
         )
       )
       .subscribe({
-        error: ({ message }: Error) =>
-          notify(this.messageFormat(message), "error", 7000),
+        error: ({ message }: Error) => {
+          this.running = false;
+          notify(this.messageFormat(message), "error", 7000);
+        },
         complete: () => this.clearAndHidePopup(),
       });
   }
