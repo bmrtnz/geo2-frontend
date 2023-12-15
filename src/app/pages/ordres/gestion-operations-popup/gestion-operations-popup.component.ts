@@ -77,6 +77,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public title: string;
   public popupFullscreen = false;
   public ordreGenNumero: string;
+  public running: any;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
@@ -112,6 +113,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     private tabContext: TabContext,
     private ordreLignesService: OrdreLignesService
   ) {
+    this.resetRunning();
     this.responsibleList = [
       {
         id: "station",
@@ -155,6 +157,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.title = this.localizeService.localize(
       "title-gestion-operations-popup"
     );
+  }
+
+  onHidden() {
+    this.resetRunning();
+  }
+
+  resetRunning() {
+    this.running = {
+      createRefactTranspOrder: false,
+      createReplaceOrder: false,
+      addToReplaceOrder: false,
+      validate: false
+    }
   }
 
   updateCauseConseq(tiers) {
@@ -237,6 +252,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   validate() {
+    this.running.validate = true;
     this.mutateLot()
       .pipe(
         concatMap((data) => this.gridLot.updateLot(data)),
@@ -276,11 +292,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.whenUpdated.emit(dataMutated);
           this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
         },
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        error: (err: Error) => {
+          this.running.validate = false;
+          notify(err.message, "ERROR", 7000);
+        },
       });
   }
 
   async createRefactTranspOrder() {
+    this.running.createRefactTranspOrder = true;
     await this.gridLot.persist();
     const ordre = await this.ordresService
       .getOne_v2(
@@ -295,7 +315,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .pipe(map((res) => res.data.ordre))
       .toPromise();
 
-    if (!ordre.transporteur.clientRaisonSocial?.id)
+    if (!ordre.transporteur.clientRaisonSocial?.id) {
+      this.running.createRefactTranspOrder = false;
       return notify(
         this.localizeService.localize(
           "no-associated-client-to-transporteur-contact"
@@ -303,6 +324,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         "ERROR",
         7000
       );
+    }
 
     let totalAvoirClient = this.gridLot.getTotalSummaries("clientAvoir");
 
@@ -320,12 +342,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
         // Fetch numero of newly created ordre for view
         concatMap(ordreReplaceID => this.registerOrdreRep(ordreReplaceID)),
         finalize(() => {
+          this.running.createRefactTranspOrder = false;
           this.gridLot.refresh();
           this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
         }),
       )
       .subscribe({
         error: (error: Error) => {
+          this.running.createRefactTranspOrder = false;
           if (error?.message) notify(error.message, "ERROR", 7000);
           console.error(error);
         },
@@ -334,6 +358,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   createReplaceOrder() {
+    this.running.createReplaceOrder = true;
     let ordreReplaceID: Ordre["id"];
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
@@ -382,12 +407,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
       // Fetch numero of newly created ordre for view
       concatMap(() => this.registerOrdreRep(ordreReplaceID)),
       finalize(() => {
+        this.running.createReplaceOrder = false;
         this.gridLot.refresh();
         this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
       }),
     )
       .subscribe({
         error: (error: Error) => {
+          this.running.createReplaceOrder = false;
           if (error?.message) notify(error.message, "ERROR", 7000);
           console.error(error);
         },
@@ -395,6 +422,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   addToReplaceOrder() {
+    this.running.addToReplaceOrder = true;
     let ordreReplace: Partial<Ordre>;
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
@@ -443,10 +471,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
         );
       }),
       concatMap(() => this.registerOrdreRep(ordreReplace.id, "add")),
-      finalize(() => this.gridLot.refresh()),
+      finalize(() => {
+        this.running.addToReplaceOrder = false;
+        this.gridLot.refresh();
+      }),
     )
       .subscribe({
         error: (error: Error) => {
+          this.running.addToReplaceOrder = false;
           if (error?.message) notify(error.message, "ERROR", 7000);
           console.error(error);
         },

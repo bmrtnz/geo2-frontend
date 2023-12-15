@@ -10,6 +10,7 @@
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
+  (onHidden)="onHidden()"
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}</div>
@@ -137,6 +138,7 @@
         <dx-button
           class="big-button createRefactTranspOrder"
           type="default"
+          [disabled]="running?.createRefactTranspOrder"
           [visible]="selectedConsequence === 'G'"
           text="{{ 'btn-createRefactTranspOrder' | localize }}"
           (onClick)="createRefactTranspOrder()"
@@ -144,6 +146,7 @@
         <dx-button
           class="big-button"
           type="default"
+          [disabled]="running?.createReplaceOrder"
           [visible]="selectedConsequence === 'B'"
           text="{{ 'btn-createReplaceOrder' | localize }}"
           (onClick)="createReplaceOrder()"
@@ -151,6 +154,7 @@
         <dx-button
           class="big-button addToReplaceOrder"
           type="default"
+          [disabled]="running?.addToReplaceOrder"
           [visible]="selectedConsequence === 'B'"
           text="{{ 'btn-addToReplaceOrder' | localize }}"
           (onClick)="addToReplaceOrder()"
@@ -203,6 +207,7 @@
         <!-- Valider -->
         <dx-button
           type="default"
+          [disabled]="running?.validate"
           text="{{ 'btn-valider' | localize }}"
           (onClick)="validate()"
         ></dx-button>
@@ -231,8 +236,12 @@
   (selectedLignes)="pushLitigeLignes($event)"
 ></app-selection-lignes-litige-popup>
 
-<app-choose-entrepot-popup></app-choose-entrepot-popup>
-<app-choose-ordre-popup></app-choose-ordre-popup>
+<app-choose-entrepot-popup
+  (choosed)="this.running.createReplaceOrder = $event ? true : false"
+></app-choose-entrepot-popup>
+<app-choose-ordre-popup
+  (cancel)="this.running.addToReplaceOrder = false"
+></app-choose-ordre-popup>
 <app-confirmation-result-popup
   [continuTextKey]="'trueText'"
   [backTextKey]="'falseText'"
