@@ -44,6 +44,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   @Input() public ediLigneID: EdiLigne["id"];
   @Input() gridCommandes: GridCommandesComponent;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
   @Output() public articleLigneId: string;
 
   visible: boolean;
@@ -262,6 +263,10 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     // this.catalogue.emballageSB.instance.reset();
     // this.catalogue.origineSB.instance.reset();
     this.codeChangeProcess = false;
+  }
+
+  onHidden() {
+    this.whenClosed.emit();
   }
 
   hidePopup() {

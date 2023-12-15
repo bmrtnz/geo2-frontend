@@ -6,6 +6,7 @@
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
+  (onHidden)="onHidden()"
   [resizeEnabled]="true"
 >
   <div *dxTemplate="let data of 'title'">

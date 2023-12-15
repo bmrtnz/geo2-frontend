@@ -37,6 +37,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   @Output() public singleSelection: boolean;
   @Output() public gridSelectionEnabled: boolean;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
   @Output() public clientId: string;
   @Output() public entrepotId: string;
   @Output() public secteurId: string;
@@ -145,6 +146,10 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   clearAll() {
     this.gridLignesHisto.datagrid.dataSource = null;
     this.updateChosenArticles();
+  }
+
+  onHidden() {
+    this.whenClosed.emit();
   }
 
   hidePopup() {

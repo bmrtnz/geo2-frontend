@@ -34,7 +34,7 @@
     ></dx-button>
     <dx-button
       #validButton
-      [disabled]="!gridAnnuleRemplaceComponent?.canBeSent"
+      [disabled]="!gridAnnuleRemplaceComponent?.canBeSent || running"
       class="documents-valid-button"
       type="success"
       text="OK"

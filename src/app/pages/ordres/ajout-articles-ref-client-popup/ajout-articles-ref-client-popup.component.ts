@@ -43,6 +43,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @Input() public ediLigneID: EdiLigne["id"];
   @Output() public additionnalFilter: any;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -218,6 +219,10 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     this.catalogueRefsClt.emballagesSB.instance.reset();
     this.catalogueRefsClt.originesSB.instance.reset();
     this.codeChangeProcess = false;
+  }
+
+  onHidden() {
+    this.whenClosed.emit();
   }
 
   hidePopup() {
