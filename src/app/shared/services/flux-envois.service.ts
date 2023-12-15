@@ -4,7 +4,7 @@ import { GridsService } from "app/pages/ordres/grids.service";
 import notify from "devextreme/ui/notify";
 import { defer, of } from "rxjs";
 import { catchError, concatMap, map } from "rxjs/operators";
-import { AuthService } from ".";
+import { AuthService, LocalizationService } from ".";
 import { ConfirmationResultPopupComponent } from "../components/confirmation-result-popup/confirmation-result-popup.component";
 import { Flux, Societe } from "../models";
 import { Ordre } from "../models/ordre.model";
@@ -20,6 +20,7 @@ export class FluxEnvoisService {
   constructor(
     private currentCompanyService: CurrentCompanyService,
     private authService: AuthService,
+    private localizationService: LocalizationService,
     private depotEnvoisService: DepotEnvoisService,
     private envoisService: EnvoisService,
     private functionsService: FunctionsService
@@ -112,10 +113,23 @@ export class FluxEnvoisService {
         ["id"]
       )
       .subscribe({
-        error: (err) =>
-          notify(`Erreur de demande de dépôt pour le flux ${fluxID}`, "error"),
+        error: (err) => {
+          console.log(err);
+          notify({
+            message: this.localizationService.localize("erreur-demande", fluxID),
+            type: "error",
+            displayTime: 7000
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          )
+        },
         next: (res) =>
-          notify(`Demande de dépôt pour le flux ${fluxID} déposée`, "success"),
+          notify({
+            message: this.localizationService.localize("demande-depot", fluxID),
+            type: "success"
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          )
       });
   }
 }

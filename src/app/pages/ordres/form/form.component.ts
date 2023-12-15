@@ -358,7 +358,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public cancelledOrder: boolean;
   public promptPopupDateOnly: boolean;
   private savedGridCdeStandby: boolean;
-  public supprLignesBtnDisabled: boolean;
 
   public accordionButtons: HTMLElement[];
   public factureVisible = false;
@@ -367,6 +366,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public refreshRegimeTva = new EventEmitter();
   public hideDuplicationBUK =
     this.currentCompanyService.getCompany().id !== "BUK";
+
+  public running = {
+    destockAuto: false,
+    regulOrder: false,
+    addRefsClient: false,
+    suppLignesNonExp: false,
+    createLitige: false,
+  }
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;
@@ -709,10 +716,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onAddRefsClient() {
+    this.running.addRefsClient = true;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     let artIds = [];
     const rowsData = this.warnNoSelectedRows();
-    if (!rowsData) return;
+    if (!rowsData) return this.running.addRefsClient = false;
     rowsData.map((data) => artIds.push(data.article.id));
     artIds = [...new Set(artIds)]; // Removing duplicates
     const allReferenceClient = [];
@@ -764,18 +772,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             );
             notify(message, "warning", 5000);
           }
+          this.running.addRefsClient = false;
           this.gridCommandes.grid.instance.clearSelection();
         },
-        error: () =>
+        error: () => {
+          this.running.addRefsClient = false;
           notify(
             "Erreur lors de la sauvegarde dans les références client",
             "error",
             5000
-          ),
+          )
+        },
       });
   }
 
   async onRegulOrderClick() {
+    this.running.regulOrder = true;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     // As LIST_NORDRE_REGUL is a VARCHAR(50)
     if (this.ordre.listeOrdresRegularisations?.split(";").length >= 8) {
@@ -785,10 +797,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         5000
       );
       this.clearSelectionForRegul();
+      this.running.regulOrder = false;
       return;
     }
 
-    if (!this.warnNoSelectedRows()) return;
+    if (!this.warnNoSelectedRows()) return this.running.regulOrder = false;
 
     this.motifRegulPopup.visible = true;
   }
@@ -797,6 +810,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     // Quitting without creating a regul order
     if (!data) {
       this.clearSelectionForRegul();
+      this.running.regulOrder = false;
       return;
     }
 
@@ -828,6 +842,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               .getOne_v2(refOrdreRegul, ["id", "numero"])
               .subscribe({
                 next: (result) => {
+                  this.running.regulOrder = false;
                   const numOrdreRegul = result.data.ordre.numero;
                   this.refreshHeader();
                   notify(
@@ -841,6 +856,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.tabContext.openOrdre(numOrdreRegul);
                 },
                 error: (error: Error) => {
+                  this.running.regulOrder = false;
                   console.log(error);
                   this.clearSelectionForRegul();
                   alert(
@@ -854,6 +870,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
         error: (error: Error) => {
+          this.running.regulOrder = false;
           console.log(error);
           this.clearSelectionForRegul();
           alert(
@@ -1112,6 +1129,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onDestockAutoClick() {
+    this.running.destockAuto = true;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.destockageAutoPopup.visible = true;
   }
@@ -1581,8 +1599,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshLitigeIndicator() {
     this.ordresService
-      .getOne_v2(this.ordre.id, ["id", "hasLitige"])
+      .getOne_v2(this.ordre.id, ["id", "hasLitige"], "no-cache")
       .subscribe(res => {
+        this.running.createLitige = false;
         this.dotLitiges = this.getLitigeBadgeIndicator(res.data.ordre.hasLitige);
         if (this.ordre.hasLitige) this.refreshAvoirIndicator();
       });
@@ -1897,17 +1916,17 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public suppLignesNonExp() {
-    this.supprLignesBtnDisabled = true;
+    this.running.suppLignesNonExp = true;
     notify(this.localization.localize("please-wait"), "info", 9999999); // We hide it right after
     this.ordreLignesService.supprLignesNonExped(this.ordre.id).subscribe({
       error: ({ message }: Error) => {
         console.log(message);
         hideToasts()
-        this.supprLignesBtnDisabled = false;
+        this.running.suppLignesNonExp = false;
         notify(this.messageFormat(message), "error", 7000);
       },
       next: (res) => {
-        this.supprLignesBtnDisabled = false;
+        this.running.suppLignesNonExp = false;
         hideToasts();
         this.functionsService.fVerifLogistiqueOrdre(this.ordre?.id)
           .subscribe(() => {
@@ -2038,6 +2057,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async onClickCreateLitige() {
+    this.running.createLitige = true;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
     this.litigesBtn.nativeElement.click();
     setTimeout(() => this.formLitiges.createLitige());
