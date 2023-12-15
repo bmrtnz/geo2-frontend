@@ -8,6 +8,7 @@
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
   (onHiding)="onHiding()"
+  (onHidden)="onHidden()"
 >
   <!-- Subtitle -->
   <div class="blue-text">
@@ -65,7 +66,7 @@
     <dx-button
       type="normal"
       text="{{ 'btn-creation-ordre-regul' | localize }}"
-      [disabled]="!typeRegul.value || !motif"
+      [disabled]="!typeRegul.value || !motif || running"
       (onClick)="applyClick()"
     ></dx-button>
   </div>

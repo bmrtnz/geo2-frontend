@@ -21,6 +21,7 @@ export class MotifRegularisationOrdrePopupComponent {
   visible: boolean;
   motif: string;
   typesRegul: string[];
+  running: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxListComponent, { static: false }) motiflist: DxListComponent;
@@ -60,6 +61,10 @@ export class MotifRegularisationOrdrePopupComponent {
     this.conserverDetail.value = false;
   }
 
+  onHidden() {
+    this.running = false;
+  }
+
   onSelectionChanged(e) {
     // Only one item can be selected at once
     if (this.motiflist.selectedItems.length)
@@ -72,14 +77,13 @@ export class MotifRegularisationOrdrePopupComponent {
   }
 
   applyClick() {
+    this.running = true;
     const infosMotif = {
       lcaCode: this.motif,
       typeReg: this.typeRegul.value === this.typesRegul[0] ? "RPR" : "RPO",
       indDetail: this.conserverDetail.value,
     };
-
     this.whenQuitRegulPopup.emit(infosMotif);
-
     this.hidePopup();
   }
 
