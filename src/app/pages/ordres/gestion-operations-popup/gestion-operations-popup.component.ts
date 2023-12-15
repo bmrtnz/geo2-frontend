@@ -308,21 +308,29 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     if (ordre.devise.id !== "EUR") totalAvoirClient *= ordre.tauxDevise;
 
-    const refacturationResponse = await this.litigesService
+    this.litigesService
       .fCreeOrdreRefacturationTransporteur(
         ordre.id,
         totalAvoirClient,
         this.currentCompanyService.getCompany().id,
         this.authService.currentUser.nomUtilisateur
       )
-      .toPromise();
+      .pipe(
+        map(res => res.data.fCreeOrdreRefacturationTransporteur.data.ls_ord_ref_refacturer),
+        // Fetch numero of newly created ordre for view
+        concatMap(ordreReplaceID => this.registerOrdreRep(ordreReplaceID)),
+        finalize(() => {
+          this.gridLot.refresh();
+          this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+        }),
+      )
+      .subscribe({
+        error: (error: Error) => {
+          if (error?.message) notify(error.message, "ERROR", 7000);
+          console.error(error);
+        },
+      });
 
-    const ordreRefactRef =
-      refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data
-        .ls_ord_ref_refacturer;
-
-    // Fetch numero of newly created ordre for view
-    await this.registerOrdreRep(ordreRefactRef).toPromise();
   }
 
   createReplaceOrder() {
@@ -373,7 +381,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
       }),
       // Fetch numero of newly created ordre for view
       concatMap(() => this.registerOrdreRep(ordreReplaceID)),
-      finalize(() => this.gridLot.refresh()),
+      finalize(() => {
+        this.gridLot.refresh();
+        this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+      }),
     )
       .subscribe({
         error: (error: Error) => {
@@ -639,8 +650,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.responsibles.value = this.responsibleList.find(
             (r) => r.typeTiers === res.responsableTypeCode
           );
-        if (res?.numeroOrdreReplacement)
-          this.ordreGenNumero = res?.numeroOrdreReplacement;
+        this.ordreGenNumero = res?.numeroOrdreReplacement ?? "";
       });
     }
 
@@ -761,7 +771,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
         map((res) => res.data.ordre),
-        tap((data) => {
+        concatMap((data) => {
           this.ordreGenNumero = data.numero;
           if (this.ordreGenNumero) {
             notify(
@@ -772,10 +782,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
               9000
             );
           }
-          return this.gridLot.updateLot({
+          return this.litigesLignesService.saveLot(new Set(["id"]), this.lot, {
             ordreReferenceRemplacement: data.id,
-            numeroOrdreReplacement: data.numero,
-          });
+            numeroOrdreReplacement: data.numero
+          })
         })
       );
   }
