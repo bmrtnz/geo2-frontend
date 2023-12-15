@@ -4448,6 +4448,10 @@
         "visible": false
       },
       {
+        "dataField": "ordreLigne.ordre.devise.id",
+        "visible": false
+      },
+      {
         "dataField": "clientQuantite",
         "visible": false
       },
