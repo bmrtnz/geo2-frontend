@@ -83,7 +83,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
 
   ordres: DataSource;
   noLitiges = null;
-  devise = "EUR";
+  public devise: string;
   ddeAvoirFournisseur: any;
   totalMontantRistourne: any;
   columns: any;
@@ -148,6 +148,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
 
   loadForm() {
     if (this.ordre?.id) {
+      this.devise = this.currentCompanyService.getCompany().devise?.id;
       const ds = this.litigesService.getDataSource_v2(this.columns);
       ds.filter(["ordreOrigine.id", "=", this.ordre.id]);
       ds.load().then((res) => {
@@ -171,10 +172,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
               } = result.data.litigeLigneTotaux;
               if (totaux) {
                 totaux.resultat =
-                  totaux.avoirFournisseur -
-                  totaux.avoirClient -
+                  totaux.avoirFournisseurTaux -
+                  totaux.avoirClientTaux -
                   totaux.fraisAnnexes;
-                this.devise = totaux.devise.id;
                 this.resultat.value = totaux.resultat;
                 if (totaux.totalMontantRistourne)
                   this.totalMontantRistourne = true;
