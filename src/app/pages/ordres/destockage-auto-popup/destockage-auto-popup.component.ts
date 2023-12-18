@@ -39,6 +39,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
   @Input() gridCommandes: GridCommandesComponent;
   @Output() updateGridDestockAuto = new EventEmitter();
   @Output() updateGridCde = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -188,6 +189,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
   onHidden() {
     this.switchErrors.value = true;
     this.datagrid.dataSource = null;
+    this.whenClosed.emit();
   }
 
   resizePopup() {

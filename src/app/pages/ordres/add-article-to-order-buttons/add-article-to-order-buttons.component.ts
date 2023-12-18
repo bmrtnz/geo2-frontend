@@ -44,6 +44,13 @@ export class AddArticleToOrderButtonsComponent implements OnChanges {
   @ViewChild(AjoutArticlesHistoPopupComponent, { static: false }) ajoutArtHisto: AjoutArticlesHistoPopupComponent;
   @ViewChild(AjoutArticlesStockPopupComponent, { static: false }) ajoutArtStock: AjoutArticlesStockPopupComponent;
 
+  public running = {
+    ajoutArtManu: false,
+    ajoutArtHisto: false,
+    ajoutArtStock: false,
+    ajoutArtRefClt: false
+  }
+
   constructor(
     private gridsService: GridsService
   ) { }
@@ -60,26 +67,11 @@ export class AddArticleToOrderButtonsComponent implements OnChanges {
     this.readOnlyMode = this.readOnlyModeAlias;
   }
 
-  async onArticleManClick(e?) {
+  async addArticleClick(popup) {
+    this.running[popup] = true;
     await this.saveGridCde();
-    this.articleRowKey = e;
-    this.ajoutArtManu.visible = true;
-  }
-
-  async onArticleHistoClick() {
-    await this.saveGridCde();
-    this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
-    this.ajoutArtHisto.visible = true;
-  }
-
-  async onArticleStockClick() {
-    await this.saveGridCde();
-    this.ajoutArtStock.visible = true;
-  }
-
-  async onRefClientClick() {
-    await this.saveGridCde();
-    this.ajoutArtRefClt.visible = true;
+    if (popup === "ajoutArtHisto") this.readOnlyMode = !this.fullOrderNumber || !this.allowMutations;
+    this[popup].visible = true;
   }
 
   saveGridCde() {

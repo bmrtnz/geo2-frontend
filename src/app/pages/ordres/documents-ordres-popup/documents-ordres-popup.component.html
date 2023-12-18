@@ -3,7 +3,7 @@
   [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
   [dragEnabled]="true"
-  [hideOnOutsideClick]="true"
+  [hideOnOutsideClick]="false"
   [(visible)]="visible"
   [resizeEnabled]="true"
   (onShowing)="onShowing($event)"
@@ -37,7 +37,7 @@
     ></dx-button>
     <dx-button
       #validButton
-      [disabled]="!gridChoixEnvoisComponent?.canBeSent"
+      [disabled]="!gridChoixEnvoisComponent?.canBeSent || running"
       class="documents-valid-button"
       type="success"
       text="OK"

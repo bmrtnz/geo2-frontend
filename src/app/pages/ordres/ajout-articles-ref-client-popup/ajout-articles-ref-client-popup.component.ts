@@ -43,6 +43,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   @Input() public ediLigneID: EdiLigne["id"];
   @Output() public additionnalFilter: any;
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -59,6 +60,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   pulseBtnOn: boolean;
   remplacementArticle: boolean;
   popupFullscreen = true;
+  public running: boolean;
 
   @ViewChild(GridArticlesRefClientComponent, { static: false })
   catalogueRefsClt: GridArticlesRefClientComponent;
@@ -188,6 +190,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   }
 
   async onShown(e) {
+    this.running = false;
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
 
     this.catalogueRefsClt.dataGrid.selection = {
@@ -220,6 +223,10 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     this.codeChangeProcess = false;
   }
 
+  onHidden() {
+    this.whenClosed.emit();
+  }
+
   hidePopup() {
     this.popup.visible = false;
   }
@@ -235,6 +242,8 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   }
 
   insertArticles() {
+
+    this.running = true;
     const info =
       this.localizeService.localize(
         "ajout-article" + (this.nbARticles > 1 ? "s" : "")
@@ -272,8 +281,10 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
         )
       )
       .subscribe({
-        error: ({ message }: Error) =>
-          notify(this.messageFormat(message), "error", 7000),
+        error: ({ message }: Error) => {
+          this.running = false;
+          notify(this.messageFormat(message), "error", 7000);
+        },
         complete: () => this.clearAndHidePopup(),
       });
   }

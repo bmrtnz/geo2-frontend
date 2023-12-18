@@ -32,6 +32,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   public titleStart: string;
   public titleEnd: string;
   public popupFullscreen: boolean;
+  public running: boolean;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridChoixEnvoisComponent)
   gridChoixEnvoisComponent: GridChoixEnvoisComponent;
@@ -66,6 +67,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
   onShowing(e) {
     this.closeConfirm = false;
+    this.running = false;
     e.component.content().parentNode.classList.add("documents-ordres-popup");
   }
 
@@ -91,6 +93,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   }
 
   goDocuments() {
+    this.running = true;
     this.gridChoixEnvoisComponent.done().subscribe({
       complete: () => {
         this.closeConfirm = true; // Force close popup without confirmation

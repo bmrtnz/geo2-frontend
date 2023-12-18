@@ -4,6 +4,7 @@ import {
   Input,
   NgModule,
   OnInit,
+  Output,
   ViewChild,
 } from "@angular/core";
 import { Entrepot, Societe } from "app/shared/models";
@@ -32,7 +33,7 @@ export class ChooseEntrepotPopupComponent implements OnInit {
   @ViewChild("entrepotInput") public entrepotInput: DxSelectBoxComponent;
   @ViewChild("clientInput") public clientInput: DxSelectBoxComponent;
   @ViewChild("societeInput") public societeInput: DxSelectBoxComponent;
-  private choosed = new EventEmitter<{ entrepotID: Entrepot["id"], societeID: Societe["id"] }>();
+  @Output() public choosed = new EventEmitter<{ entrepotID: Entrepot["id"], societeID: Societe["id"] }>();
   public societesSource: DataSource;
   public entrepotsSource: DataSource;
   public clientsSource: DataSource;

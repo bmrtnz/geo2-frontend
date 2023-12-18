@@ -60,6 +60,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   public selectedLignesIds: string[];
   public popupFullscreen = false;
   public buttonText: string;
+  public running: boolean;
 
   constructor(
     private ordreLignesService: OrdreLignesService,
@@ -185,6 +186,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   onHidden() {
     this.datagrid.dataSource = null;
+    this.running = false;
   }
 
   quitPopup() {
@@ -204,6 +206,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       return;
     }
 
+    this.running = true;
     this.litigesService
       .getOne_v2(this.litigeID, new Set(["numeroVersion"]))
       .pipe(

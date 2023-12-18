@@ -108,7 +108,7 @@
         <dx-button
           type="success"
           icon="arrowright"
-          [disabled]="!selectedLignesIds?.length"
+          [disabled]="!selectedLignesIds?.length || running"
           [text]="buttonText"
           (onClick)="assignLitige()"
         ></dx-button>

@@ -5,6 +5,7 @@
   [maxWidth]="'80vw'"
   [showCloseButton]="true"
   (onShowing)="onShowing($event)"
+  [resizeEnabled]="true"
   (onShown)="onShown()"
 >
   <div *dxTemplate="let data of 'title'">
@@ -12,7 +13,7 @@
     <dx-button
       class="close-article-popup"
       icon="close"
-      (onClick)="hidePopup()"
+      (onClick)="quitPopup()"
     ></dx-button>
     <dx-button
       class="min-max-imize-popup-icon"
