@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { GridsService } from "app/pages/ordres/grids.service";
 import notify from "devextreme/ui/notify";
 import { defer, of } from "rxjs";
-import { catchError, concatMap, map } from "rxjs/operators";
+import { catchError, concatMap, filter, map } from "rxjs/operators";
 import { AuthService } from ".";
 import { ConfirmationResultPopupComponent } from "../components/confirmation-result-popup/confirmation-result-popup.component";
 import { Flux, Societe } from "../models";
@@ -86,6 +86,7 @@ export class FluxEnvoisService {
           return of({ data: { res: 1 } });
       }
     }).pipe(
+      filter(result => !!result),
       map((result) => Object.values(result.data)[0]),
       concatMap((response: any) => {
         if (response.res === FunctionResult.Warning)
