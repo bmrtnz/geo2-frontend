@@ -217,7 +217,11 @@ export class GridStockComponent implements OnInit {
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
     );
-    this.trueFalse = ["Tous", "Oui", "Non"];
+    this.trueFalse = [
+      this.localizeService.localize("all"),
+      this.localizeService.localize("trueText"),
+      this.localizeService.localize("falseText")
+    ];
 
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([

@@ -58,23 +58,19 @@ export class GridLitigesLignesComponent implements OnInit {
   }
 
   onCellPrepared(e) {
-    if (["cause.description",
-      "consequence.description",
-      "responsableTypeCode",
-      "ordreLigne.libelleDLV",
-      "commentaireResponsable"]
-      .includes(e.column.dataField))
-      e.cellElement.title = e.value;
-  }
-
-  onRowPrepared(e) {
     if (e.rowType === "data") {
-      e.rowElement.classList.add("cursor-pointer");
+      if (["cause.description",
+        "consequence.description",
+        "responsableTypeCode",
+        "ordreLigne.libelleDLV",
+        "commentaireResponsable"]
+        .includes(e.column.dataField))
+        e.cellElement.title = e.value;
     }
   }
 
-  sortGrid() {
-    // this.datagrid.instance.columnOption("dateModification", {​​​​​​​​ sortOrder: "desc"}​​​​​​​​);
+  onRowPrepared(e) {
+    if (["data", "detail"].includes(e.rowType)) e.rowElement.classList.add("cursor-pointer");
   }
 
   async enableFilters() {
@@ -106,5 +102,15 @@ export class GridLitigesLignesComponent implements OnInit {
 
   public getSelectedRowData(): Partial<LitigeLigne> {
     return this.datagrid.instance.getVisibleRows()[this.datagrid.focusedRowIndex]?.data;
+  }
+
+  public onRowClick(e) {
+    if (e.rowType !== "detail") return;
+    this.datagrid.instance.option("focusedRowKey", e.key)
+  }
+
+  public onRowDblClick(e) {
+    if (!["data", "detail"].includes(e.rowType)) return;
+    this.litigeLigneSelected.emit();
   }
 }

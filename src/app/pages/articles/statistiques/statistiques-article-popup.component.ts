@@ -193,11 +193,9 @@ export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewIn
     );
     if (!myPeriod) return;
     this.periodeSB?.instance.option("value", myPeriod);
-    const datePeriod = this.dateManagementService.getDates({
-      value: myPeriod,
-    });
-    this.fromSB.value = this.dateManagementService.formatDate(datePeriod.dateDebut);
-    this.toSB.value = this.dateManagementService.formatDate(datePeriod.dateFin);
+    const datePeriod = this.dateManagementService.getDates({ value: myPeriod });
+    if (this.fromSB) this.fromSB.value = this.dateManagementService.formatDate(datePeriod.dateDebut);
+    if (this.toSB) this.toSB.value = this.dateManagementService.formatDate(datePeriod.dateFin);
   }
 
 }

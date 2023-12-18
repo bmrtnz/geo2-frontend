@@ -1,4 +1,5 @@
 @import "themes/generated/variables.base";
+@import "scss/variables.scss";
 
 ::ng-deep .grid-litiges-lignes {
 
@@ -18,6 +19,15 @@
   .dx-master-detail-cell {
     padding-top: 15px !important;
     padding-left: 30px !important;
+  }
+
+  .dx-master-detail-cell {
+    border-bottom: 2px solid #999 !important;
+  }
+
+  tr.dx-row-focused+tr .dx-master-detail-cell {
+    background-color: #Eff3Ff !important;
+    border-bottom: 2px solid $base-accent !important;
   }
 
   .client-color {

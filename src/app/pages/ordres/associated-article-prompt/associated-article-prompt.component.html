@@ -13,12 +13,12 @@
     <br />
     <dx-button
       type="normal"
-      text="non"
+      [text]="'falseText' | localize"
       (onClick)="cancelClick()"
     ></dx-button>
     <dx-button
       type="default"
-      text="oui"
+      [text]="'trueText' | localize"
       (onClick)="continueClick()"
     ></dx-button>
   </div>

@@ -48,6 +48,7 @@ import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 
+
 @Component({
   selector: "app-gestion-operations-popup",
   templateUrl: "./gestion-operations-popup.component.html",
@@ -246,11 +247,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.headerData.consequence = this.selectedConsequence;
   }
 
-  openOrder() {
-    this.tabContext.openOrdre(this.ordreGenNumero, this.ordre.campagne.id);
-    this.hidePopup();
-  }
-
   validate() {
     this.running.validate = true;
     this.mutateLot()
@@ -299,9 +295,21 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
+  warnZeroQuantities() {
+    if (this.gridLot?.hasZeroQuantities) {
+      notify({
+        message: this.localizeService.localize("warn-quantities"),
+        type: "error"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+      return true;
+    }
+  }
+
   async createRefactTranspOrder() {
-    this.running.createRefactTranspOrder = true;
-    await this.gridLot.persist();
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     const ordre = await this.ordresService
       .getOne_v2(
         this.ordre.id,
@@ -357,8 +365,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   }
 
-  createReplaceOrder() {
-    this.running.createReplaceOrder = true;
+  async createReplaceOrder() {
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     let ordreReplaceID: Ordre["id"];
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
@@ -421,8 +430,9 @@ export class GestionOperationsPopupComponent implements OnChanges {
       });
   }
 
-  addToReplaceOrder() {
-    this.running.addToReplaceOrder = true;
+  async addToReplaceOrder() {
+    await this.gridLot.grid.instance.saveEditData();
+    if (this.warnZeroQuantities()) return;
     let ordreReplace: Partial<Ordre>;
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),

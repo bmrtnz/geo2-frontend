@@ -24,7 +24,8 @@
             #searchCriteria
             [items]="searchItems"
             [displayExpr]="searchDisplayExpr"
-            (valueChange)="changeSearchCriteria()"
+            [showClearButton]="searchCriteria.value !== 'numero'"
+            (valueChange)="changeSearchCriteria($event)"
           >
           </dx-select-box>
         </div>

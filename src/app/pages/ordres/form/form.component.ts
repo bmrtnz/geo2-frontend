@@ -568,9 +568,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       window.localStorage.getItem("HideOrderleftPanelView") === "true"
         ? false
         : true;
-
-    // this.clientId = '005527'; ///// A VIRER !!!
-    // this.zoomClientFilePopup.visible = true; ///// A VIRER !!!
   }
 
   ngOnDestroy() {
@@ -579,8 +576,13 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollOpenAccordion(fragment) {
-    this.openFormAccordions(fragment)
-    this.accordion.find(r => r.instance.$element()[0].id === fragment).instance.$element()[0].scrollIntoView();
+    const accordion: DxAccordionComponent = this.accordion.find(r => r.instance.$element()[0].id === fragment);
+    accordion.instance.option("animationDuration", 0);
+    this.openFormAccordions(fragment);
+    setTimeout(() => {
+      accordion.instance.element().scrollIntoView();
+      accordion.instance.option("animationDuration", 300);
+    }, 10);
   }
 
   onComChanged() {
@@ -1518,6 +1520,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((item) => {
         if (item instanceof DxAccordionComponent) {
+          item.instance.option("animationDuration", 0);
           item.instance.expandItem(0);
           // @ts-ignore
           (item.onItemTitleClick as EventEmitter<>).emit(
@@ -1529,7 +1532,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             },
             [item]
           );
-          scrollTo(item.instance.element());
+          setTimeout(() => {
+            scrollTo(item.instance.element());
+            item.instance.option("animationDuration", 300);
+          }, 10);
         } else scrollTo(item.nativeElement);
       });
   }

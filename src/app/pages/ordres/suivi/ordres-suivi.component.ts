@@ -94,7 +94,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
       "logistiques.numeroContainer",
       "logistiques.certificatControle",
       "logistiques.billOfLanding",
-      "id",
+      "id", // Always keep this one at the end of the list
     ];
     // Léa CDT221021 Le critère de recherche "Réf. Ordre" n'a pas d'intérêt pour les utilisateurs et doit être masqué
     if (!this.authService.isAdmin) this.searchItems.pop();
@@ -126,10 +126,11 @@ export class OrdresSuiviComponent implements AfterViewInit {
   }
 
   resetCriteria() {
-    this.searchCriteria.instance.option("value", this.searchItems[0]);
+    this.searchCriteria.value = this.searchItems[0];
   }
 
-  changeSearchCriteria() {
+  changeSearchCriteria(e) {
+    if (!e) return this.resetCriteria(); // Reset on order number
     const toSearch = this.autocomplete.value;
     this.showGridResults = false;
     if (toSearch) {
@@ -151,7 +152,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   enableFilters(value) {
     if (!value?.length) return;
-    const criteria = this.searchCriteria.instance.option("value");
+    const criteria = this.searchCriteria.value;
     const operator = ["numero", "numeroFacture", "id"].includes(criteria)
       ? "="
       : "contains";
@@ -168,7 +169,7 @@ export class OrdresSuiviComponent implements AfterViewInit {
     ];
 
     // Current + prev campains filtering
-    if (this.currCampaign.instance.option("value")) {
+    if (this.currCampaign.value) {
       this.filter.push("and", [["campagne.id", "=", this.campagneEnCours.id], "or", ["campagne.id", "=", this.prevCampagneEnCours.id]]);
     }
   }

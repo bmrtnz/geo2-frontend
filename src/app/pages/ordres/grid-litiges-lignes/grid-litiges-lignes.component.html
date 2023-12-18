@@ -17,10 +17,10 @@
   [allowColumnReordering]="true"
   [wordWrapEnabled]="true"
   [focusedRowEnabled]="true"
-  (onContentReady)="sortGrid()"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
-  (onRowDblClick)="litigeLigneSelected.emit()"
+  (onRowClick)="onRowClick($event)"
+  (onRowDblClick)="onRowDblClick($event)"
   (onToolbarPreparing)="
     gridConfiguratorService.onToolbarPreparing(
       'Litiges',
