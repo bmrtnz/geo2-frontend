@@ -237,7 +237,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   progressFormat(ratio) {
-    return `${self.localization.localize("loading")} : ${ratio * 100}%`;
+    return `${self.localization.localize("loading")} : ${Math.round(ratio * 100)}%`;
   }
 
   progressComplete() {
