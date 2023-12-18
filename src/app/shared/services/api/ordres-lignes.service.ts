@@ -8,9 +8,9 @@ import {
   FunctionResponse,
   FunctionsService
 } from "app/shared/services/api/functions.service";
+import { LoadOptions } from "devextreme/data";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
-import { LoadOptions } from "devextreme/data/load_options";
 import { lastValueFrom } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
@@ -500,6 +500,12 @@ export class OrdreLignesService extends ApiService implements APIRead {
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
+
             const { search } = this.mapLoadOptionsToVariables(options);
             const res = await this.getList(search, columns).toPromise();
             const data = JSON.parse(JSON.stringify(res.data.allOrdreLigneList));
