@@ -308,21 +308,26 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     if (ordre.devise.id !== "EUR") totalAvoirClient *= ordre.tauxDevise;
 
-    const refacturationResponse = await this.litigesService
+    this.litigesService
       .fCreeOrdreRefacturationTransporteur(
         ordre.id,
         totalAvoirClient,
         this.currentCompanyService.getCompany().id,
         this.authService.currentUser.nomUtilisateur
       )
-      .toPromise();
+      .pipe(
+        map(res => res.data.fCreeOrdreRefacturationTransporteur.data.ls_ord_ref_refacturer),
+        // Fetch numero of newly created ordre for view
+        concatMap(ordreReplaceID => this.registerOrdreRep(ordreReplaceID)),
+        finalize(() => this.gridLot.refresh()),
+      )
+      .subscribe({
+        error: (error: Error) => {
+          if (error?.message) notify(error.message, "ERROR", 7000);
+          console.error(error);
+        },
+      });
 
-    const ordreRefactRef =
-      refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data
-        .ls_ord_ref_refacturer;
-
-    // Fetch numero of newly created ordre for view
-    await this.registerOrdreRep(ordreRefactRef).toPromise();
   }
 
   createReplaceOrder() {
@@ -761,7 +766,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
         map((res) => res.data.ordre),
-        tap((data) => {
+        concatMap((data) => {
           this.ordreGenNumero = data.numero;
           if (this.ordreGenNumero) {
             notify(
@@ -772,10 +777,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
               9000
             );
           }
-          return this.gridLot.updateLot({
+          return this.litigesLignesService.saveLot(new Set(["id"]), this.lot, {
             ordreReferenceRemplacement: data.id,
             numeroOrdreReplacement: data.numero,
-          });
+          })
         })
       );
   }
