@@ -24,7 +24,7 @@ import {
   GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxProgressBarComponent, DxSelectBoxComponent } from "devextreme-angular";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { ClickEvent } from "devextreme/ui/button";
@@ -33,6 +33,8 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { concatMap, filter, map, toArray } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+
+let self;
 
 enum InputField {
   secteurCode = "secteur",
@@ -77,10 +79,13 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public gridItemsSelected: boolean;
   public launchEnabled: boolean;
   public clotureEnabled: boolean;
+  public progressEl: HTMLElement;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
+  @ViewChild("progressBar", { static: false }) progress: DxProgressBarComponent;
+
 
   public formGroup = new UntypedFormGroup({
     secteurCode: new UntypedFormControl(),
@@ -108,6 +113,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     private tabContext: TabContext,
     private functionsService: FunctionsService,
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdresAFacturer
     );
@@ -169,6 +175,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
+    // Get progress bar element
+    this.progressEl = this.progress.instance.$element()[0].parentNode;
+
     // Only way found to validate and show Warning icon
     this.formGroup.get("secteurCode").setValue("");
     this.formGroup.get("secteurCode").reset();
@@ -221,6 +231,24 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     });
   }
 
+  progressInit() {
+    this.progressEl.classList.remove("progressFade");
+    this.progressEl.classList.remove("display-none");
+  }
+
+  progressFormat(ratio) {
+    return `${self.localization.localize("loading")} : ${ratio * 100}%`;
+  }
+
+  progressComplete() {
+    this.progressEl.classList.add("progressFade");
+    setTimeout(() => this.progressSet(), 1500);
+  }
+
+  progressSet(ratio?) {
+    this.progress.value = ratio ?? 0;
+  }
+
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
@@ -235,8 +263,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   enableFilters() {
     if (!this.formGroup.get("secteurCode").value) {
-      notify("Veuillez spécifier un secteur", "error");
+      notify(this.localization.localize("please-select-sector"), "error");
     } else {
+
+      this.progressInit(); // Initialize progress bar
       this.datagrid.instance.clearSelection();
       this.launchEnabled = true;
       this.datagrid.dataSource = null;
@@ -257,6 +287,13 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       } as Inputs);
 
       this.datagrid.dataSource = this.ordresDataSource;
+
+      let ratio = 0;
+      const toto = setInterval(() => {
+        ratio += 10;
+        this.progressSet(ratio);
+        if (ratio === 100) clearInterval(toto);
+      }, 350);
     }
   }
 
