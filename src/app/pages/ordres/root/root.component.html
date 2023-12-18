@@ -29,6 +29,7 @@
       <div
         [hidden]="tab.hideTab"
         class="dx-item-content dx-tab-content"
+        [ngClass]="{ 'std-content': tab.type !== typeTab.Ordre }"
         [attr.data-item-id]="tab.id"
       >
         <i
@@ -43,12 +44,12 @@
           *ngIf="tab.title"
           class="dx-tab-text"
         >
-          <small>{{ tab.title }}</small>
+          <small
+            [ngClass]="{ 'std-order-width': tab.type === typeTab.Ordre }"
+            >{{ tab.title }}</small
+          >
           <ng-container *ngIf="tab.details">
-            <span
-              [ngClass]="{ 'std-order-width': tab.type === typeTab.Ordre }"
-              >{{ tab.details }}</span
-            >
+            <span>{{ tab.details }}</span>
           </ng-container>
         </span>
         <div

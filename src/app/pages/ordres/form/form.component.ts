@@ -618,6 +618,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  resetTabTitleAndInfo() {
+    const tab = this.ordresService.orderTabItems
+      .find(tab => tab.itemData.id === this.gridsService.orderIdentifier(this.ordre));
+    if (!tab) return;
+    tab.itemElement.title = ""; // Reset so that title info will be automatically reloaded
+    tab.itemData.title = this.ordre.entrepot?.code ?? this.localization.localize("order");
+  }
+
   saveHeaderOnTheFly(message?) {
     if (this.headerSaving) return;
     if (!this.formGroup.pristine && this.formGroup.valid) {
@@ -626,6 +634,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.formGroup.controls,
         Ordre.getKeyField()
       );
+
+      // Reset tab title/info shown
+      this.resetTabTitleAndInfo();
 
       // copy value of "transporteurDEVPrixUnitaire"
       // might be overrided by "forfaits transporteurs" afterward
@@ -722,8 +733,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log(this.messageFormat(error.message))
       });
   }
-
-
 
   warnNoSelectedRows() {
     this.selectedLignes = this.gridCommandes.grid.instance.getSelectedRowKeys();
@@ -1396,6 +1405,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             );
             return;
           }
+          this.resetTabTitleAndInfo();
           this.allowMutations = !Ordre.isCloture(this.ordre);
           this.ordresLignesViewExp = !this.allowMutations;
           this.initVACMutation();
