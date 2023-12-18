@@ -3,7 +3,19 @@
 @import "scss/variables.scss";
 
 ::ng-deep .grid-recap-stock {
+  margin-top: 8px;
+  margin-bottom: 8px;
   min-height: 200px;
+
+  .dx-data-row,
+  .dx-footer-row {
+    height: 25px !important;
+  }
+
+  .dx-footer-row td {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 
   .dx-header-row {
     pointer-events: none;

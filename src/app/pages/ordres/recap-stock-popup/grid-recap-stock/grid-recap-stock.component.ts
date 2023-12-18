@@ -96,9 +96,10 @@ export class GridRecapStockComponent {
     ).subscribe((res) => {
 
       let DsItems = JSON.parse(JSON.stringify(res.data.allDetailStockResa));
+      DsItems.sort((a, b) => a.stock?.age > b.stock?.age);
       DsItems.sort((a, b) => a.stock.fournisseur.code > b.stock.fournisseur.code);
-      DsItems.sort((a, b) => a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age);
-      DsItems.sort((a, b) => (a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age) || a.stock.quantiteInitiale > b.stock.quantiteInitiale);
+      // DsItems.sort((a, b) => a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age);
+      // DsItems.sort((a, b) => (a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age) || a.stock.quantiteInitiale > b.stock.quantiteInitiale);
 
       let oldFour, oldDate, oldDesc;
       let id = 1;

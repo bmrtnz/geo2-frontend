@@ -368,22 +368,6 @@
           hint="{{ 'hint-clients-ref' | localize }}"
           icon="material-icons person"
         ></dx-button>
-        <!-- Commentaire -->
-        <div class="comment-with-pen float-right">
-          <!-- <div class="text text-align-right">
-            {{ getDataFromGroup(cell)?.commentaire }}
-          </div> -->
-          <dx-button
-            class="grid-pen-button"
-            type="default"
-            icon="material-icons edit"
-            [focusStateEnabled]="false"
-            hint="{{ 'hint-click-modif-comment' | localize }}"
-            [visible]="this.authService.currentUser.commentaireStock"
-            (onClick)="editComment(cell)"
-          >
-          </dx-button>
-        </div>
         <!-- Récapitulatif -->
         <dx-button
           *ngIf="recap"
@@ -406,6 +390,7 @@
         "
         [dataType]="column?.dataType"
         [width]="column?.width"
+        [minWidth]="column?.minWidth"
         [calculateCellValue]="this[column?.calculateCellValue]"
         [cssClass]="column?.cssClass"
         [groupCellTemplate]="column.groupCellTemplate"
