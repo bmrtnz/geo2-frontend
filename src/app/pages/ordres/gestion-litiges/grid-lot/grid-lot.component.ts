@@ -36,6 +36,7 @@ import {
   toArray
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 
 let self: GridLotComponent;
 @Component({
@@ -47,6 +48,7 @@ export class GridLotComponent implements OnInit, OnChanges {
   constructor(
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
+    public formUtilsService: FormUtilsService,
     private gridsService: GridsService,
     private localize: LocalizePipe
   ) {
@@ -457,6 +459,12 @@ export class GridLotComponent implements OnInit, OnChanges {
     if (newData.hasOwnProperty("prixUnitaire")) return;
     if (newData.ligne?.hasOwnProperty("clientPrixUnitaire")) return self.setPrixUnitaires(newData, value, rowData);
     self.setQuantite(newData, value, rowData);
+  }
+
+  onEditorPreparing(e) {
+    // Positionnement curseur tout à gauche - CDT 527
+    if (e.parentType == "dataRow" && e.dataField == "ligne.commentaireResponsable")
+      e.editorOptions.onFocusIn = (elem) => this.formUtilsService.scrollLeftInputText(elem);
   }
 
   onToolbarPreparing(e) {
