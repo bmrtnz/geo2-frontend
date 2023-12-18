@@ -3,7 +3,7 @@
   [dragEnabled]="true"
   width="400"
   height="auto"
-  [hideOnOutsideClick]="true"
+  [hideOnOutsideClick]="false"
   [(visible)]="visible"
   [focusStateEnabled]="false"
   (onShowing)="onShowing($event)"
@@ -39,7 +39,7 @@
     <dx-button
       type="default"
       text="{{ 'btn-close' | localize }}"
-      [disabled]="!enableCloture"
+      [disabled]="!enableCloture || running"
       (onClick)="doCloture()"
     ></dx-button>
     <dx-button

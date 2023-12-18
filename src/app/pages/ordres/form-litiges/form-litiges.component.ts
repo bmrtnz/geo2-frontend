@@ -89,7 +89,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   columns: any;
   public litigeClosed: boolean;
   public noFraisAnnexes: boolean;
-  public running;
+  public running = {
+    createLitige: false,
+    recapInterne: false,
+  };
 
   @ViewChild("resultat", { static: false }) resultat: DxNumberBoxComponent;
   @ViewChild(LitigeCloturePopupComponent, { static: false })
@@ -190,7 +193,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   createLitige() {
-    this.running = true;
+    this.running.createLitige = true;
     if (Statut[this.ordre.statut] !== Statut.ANNULE.toString()) {
       if (this.ordre.factureAvoir.toString() === "FACTURE") {
         this.litigesService
@@ -206,13 +209,13 @@ export class FormLitigesComponent implements OnInit, OnChanges {
           )
           .subscribe({
             next: (res) => {
-              this.running = false;
+              this.running.createLitige = false;
               this.loadForm();
               this.selectLignesPopup.visible = true;
               this.litigeCreated.emit();
             },
             error: (err) => {
-              this.running = false;
+              this.running.createLitige = false;
               notify({
                 message: err.message,
                 type: "error",
@@ -292,8 +295,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   recapInterne() {
+    this.running.recapInterne = true;
     this.saveLitige();
     this.fluxEnvoisService.pushDepotEnvoi("RECINT", this.ordre.id);
+    setTimeout(() => this.running.recapInterne = false, 3000);
   }
 
   creerLot() {
