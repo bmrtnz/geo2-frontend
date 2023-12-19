@@ -1125,6 +1125,7 @@
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
+                    (marginsUpdate)="marginsUpdate()"
                     [ordre]="ordre"
                     [ordreBAFOuFacture]="ordreBAFOuFacture"
                     [gridCommandes]="gridCommandes"

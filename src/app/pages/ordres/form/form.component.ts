@@ -1885,6 +1885,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.gridLignesDetail?.refresh(e);
   }
 
+  public marginsUpdate() {
+    this.gridMarge?.updateGrid();
+  }
+
   public refreshGridsSynthese() {
     this.gridLTD?.refresh();
     this.gridDetailPalettes?.refresh();

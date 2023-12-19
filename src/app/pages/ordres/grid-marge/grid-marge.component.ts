@@ -52,21 +52,23 @@ export class GridMargeComponent implements AfterViewInit, OnInit {
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
   ngOnInit(): void {
-    if (this?.ordre?.id) {
-      this.functionsService
-        .fCalculMargePrevi(
-          this.ordre.id,
-          this.currentCompanyService.getCompany().id
-        )
-        .subscribe({
-          error: ({ message }: Error) => console.log(message),
-          complete: () => this.enableFilters(),
-        });
-    }
+    if (this?.ordre?.id) this.updateGrid();
   }
 
   ngAfterViewInit() {
     this.gridsService.register("OrdreMarge", this.dataGrid, this.gridsService.orderIdentifier(this.ordre));
+  }
+
+  updateGrid() {
+    this.functionsService
+      .fCalculMargePrevi(
+        this.ordre.id,
+        this.currentCompanyService.getCompany().id
+      )
+      .subscribe({
+        error: ({ message }: Error) => console.log(message),
+        complete: () => this.enableFilters(),
+      });
   }
 
   async enableFilters() {

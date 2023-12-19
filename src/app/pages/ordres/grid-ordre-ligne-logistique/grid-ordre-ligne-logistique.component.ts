@@ -62,6 +62,7 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
   @Input() public ordreBAFOuFacture;
   @Input() public gridCommandes;
   @Output() refreshGridLigneDetail = new EventEmitter();
+  @Output() marginsUpdate = new EventEmitter();
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild(ChoixRaisonDecloturePopupComponent, { static: false })
@@ -184,7 +185,14 @@ export class GridOrdreLigneLogistiqueComponent implements OnChanges {
 
   saveGridField(rowIndex, field, state) {
     this.datagrid.instance.cellValue(rowIndex, field, state);
-    this.datagrid.instance.saveEditData();
+    this.datagrid.instance.saveEditData().then(() => {
+      this.marginsUpdate.emit();
+      this.gridsService.reload([
+        "DetailExpeditions",
+        "Logistique",
+        "DetailPalettes",
+      ], this.gridsService.orderIdentifier(this.ordre));
+    });
   }
 
   onCellClick(e) {
