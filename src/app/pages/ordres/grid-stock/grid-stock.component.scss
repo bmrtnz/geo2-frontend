@@ -27,6 +27,15 @@
     }
   }
 
+  .dx-data-row {
+    height: 26px;
+
+    td {
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+    }
+  }
+
   .dx-datagrid {
     min-height: 270px;
   }
@@ -100,10 +109,6 @@
       color: #FFF !important;
     }
   }
-
-  // .dx-data-row td.total-column {
-  //   text-align: right !important;
-  // }
 
   .dx-group-row td {
     padding-right: 5px;
