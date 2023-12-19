@@ -8,25 +8,6 @@
 
 ::ng-deep .grid-stock {
 
-  .dx-group-row,
-  .dx-group-row div {
-    font-weight: 400 !important;
-
-    td {
-      padding-top: 1px;
-      padding-bottom: 1px;
-    }
-
-    .text-align-center div {
-      text-align: center !important;
-    }
-
-    .small-action-button,
-    .small-article-button {
-      top: 2px !important;
-    }
-  }
-
   .dx-datagrid {
     min-height: 270px;
   }
@@ -54,32 +35,18 @@
     }
   }
 
-  .dx-row:not(.dx-row-focused) {
-    .comment-with-pen {
-      color: rgba(0, 0, 0, 0.87);
-    }
-  }
-
-  .commentaireStock {
-    .comment-with-pen {
-      &:after {
-        display: inline-block !important;
-      }
-    }
-  }
-
   .dx-group-row {
     .comment-with-pen {
       pointer-events: none;
 
       &:after {
-        display: none;
+        display: inline-block;
         position: absolute;
         font-family: 'Material Icons';
         content: "edit";
-        margin: -7px 0 0 6px;
+        margin: -8px 0 0 6px;
         min-width: 15px;
-        padding: 0px 3px 2px 3px;
+        padding: 0px 4px 2px 4px;
         background: $base-accent;
         border-radius: 100%;
         font-size: 10px;
@@ -101,9 +68,9 @@
     }
   }
 
-  // .dx-data-row td.total-column {
-  //   text-align: right !important;
-  // }
+  .dx-data-row td.total-column {
+    text-align: right !important;
+  }
 
   .dx-group-row td {
     padding-right: 5px;
@@ -116,12 +83,11 @@
 
   .group-text-1 {
     position: relative;
-    margin-top: 1px;
+    margin-top: 3px;
     height: auto;
     width: 500px;
-    padding-bottom: 2px;
     white-space: initial;
-    line-height: 15px;
+    line-height: 16px;
     cursor: pointer;
     float: left;
   }
@@ -159,34 +125,27 @@
     }
   }
 
-  .bio-article .group-text-1 {
+  .bio-article {
     color: #39970e !important;
   }
 
   .not-france-origin .group-text-1 {
-    color: #DF88AA !important;
-  }
-
-  .group-text-1 {
-    color: rgba(0, 0, 0, 0.87);
+    color: #FFA8CA !important;
   }
 
   .dx-row-focused {
-
-    td:not(.highlight-stockJ21-cell):not(.bio-article):not(.grey-light) .dx-datagrid-summary-item,
-    .group-text-1 {
+    td:not(.highlight-stockJ21-cell):not(.bio-article):not(.grey-light) .dx-datagrid-summary-item {
       color: #fff !important;
     }
 
-    .bio-article .group-text-1 {
+    .bio-article {
       color: #a9f77e !important;
     }
 
-    .not-france-origin .group-text-1 {
+    .not-france-origin {
       color: #FFC8EA !important;
     }
   }
-
 
   .dx-datagrid-headers td.no-sort {
     pointer-events: none;

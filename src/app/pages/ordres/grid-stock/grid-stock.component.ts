@@ -578,12 +578,7 @@ export class GridStockComponent implements OnInit {
         } else {
           if (data["quantiteReservee" + index] > 0) underline = true;
         }
-        if (underline) {
-          e.cellElement.classList.add("underlined-text");
-        } else {
-          // Masquage des autres valeurs nulles
-          e.cellElement.textContent = "";
-        }
+        if (underline) e.cellElement.classList.add("underlined-text");
       }
 
       // Fond jaune pour les stocks J21
