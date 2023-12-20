@@ -1237,6 +1237,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               criteria: LinkedCriterias.Client,
               class: "RefClt",
             });
+            this.removeLinkedDuplicates();
           });
         this.findComplRegulLinkedOrders(refClt);
         this.findPaloxLinkedOrders();
@@ -1257,22 +1258,26 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         .join(",")
         .split(",")
         .map((res) => {
-          if (res)
+          if (res) {
             this.linkedOrders.push({
               ordre: { numero: res },
               criteria: LinkedCriterias.Compl,
               class: "Compl",
             });
+            this.removeLinkedDuplicates();
+          }
         });
     }
     if (hasRegul) {
       hasRegul.split(";").map((res) => {
-        if (res)
+        if (res) {
           this.linkedOrders.push({
             ordre: { numero: res },
             criteria: LinkedCriterias.Regul,
             class: "Regul",
           });
+          this.removeLinkedDuplicates();
+        }
       });
     }
     if (!refClt) this.linkedOrdersSearch = false;
@@ -1286,27 +1291,37 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (res) {
           this.ordresService
             .getOne_v2(res, ["numero"], "no-cache")
-            .subscribe((num) =>
+            .subscribe((num) => {
               this.linkedOrders.push({
                 ordre: { numero: num.data.ordre.numero },
                 criteria: LinkedCriterias.Palox,
                 class: "Palox",
-              })
-            );
+              });
+              this.removeLinkedDuplicates();
+            });
         }
       });
     }
     if (hasPaloxFather) {
       this.ordresService
         .getOne_v2(hasPaloxFather, ["numero"], "no-cache")
-        .subscribe((num) =>
+        .subscribe((num) => {
           this.linkedOrders.push({
             ordre: { numero: num.data.ordre.numero },
             criteria: LinkedCriterias.Palox,
             class: "Palox",
           })
-        );
+          this.removeLinkedDuplicates();
+        });
     }
+  }
+
+  removeLinkedDuplicates() {
+    this.linkedOrders = this.linkedOrders.filter((value, index, self) =>
+      index === self.findIndex((t) =>
+        t.ordre.numero === value.ordre.numero && t.criteria === value.criteria
+      )
+    );
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {
