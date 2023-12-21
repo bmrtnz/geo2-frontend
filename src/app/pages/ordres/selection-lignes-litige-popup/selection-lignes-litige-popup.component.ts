@@ -99,6 +99,17 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     }
   }
 
+  onRowPrepared(e) {
+    if (e.component.totalCount() === 1 && e.rowType === "data")
+      e.rowElement.classList.add("cursor-pointer");
+  }
+
+  onRowDblClick(e) {
+    if (e.component.totalCount() !== 1) return;
+    this.selectedLignesIds = [e.key];
+    this.assignLitige();
+  }
+
   calculatePoidsNetExpedie(data) {
     // Ajout type colis
     if (data?.ordreLigne?.poidsNetExpedie)
@@ -146,6 +157,10 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
         next: (res) => {
           this.dataSource = res.data.wLitigePickOrdreOrdligV2;
           this.datagrid.dataSource = this.dataSource;
+          setTimeout(() => {
+            if (this.datagrid.instance.totalCount() === 1)
+              this.datagrid.instance.selectAll();
+          }, 100); // Small waiting time for Dx
         },
         error: (error: Error) => {
           console.log(error);
@@ -181,6 +196,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   onShown() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.selectedLignesIds = [];
     this.enableFilters();
   }
 

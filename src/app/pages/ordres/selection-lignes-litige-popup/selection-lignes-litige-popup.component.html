@@ -34,6 +34,8 @@
         [remoteOperations]="true"
         [keyExpr]="'ordreLigne.id'"
         (onCellPrepared)="onCellPrepared($event)"
+        (onRowPrepared)="onRowPrepared($event)"
+        (onRowDblClick)="onRowDblClick($event)"
         (onSelectionChanged)="onSelectionChanged()"
         [columnAutoWidth]="true"
         [columnHidingEnabled]="false"

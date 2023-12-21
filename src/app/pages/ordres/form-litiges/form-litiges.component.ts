@@ -332,7 +332,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       this.grid.getSelectedRowData().numeroGroupementLitige,
     ).subscribe({
       error: (err: Error) => notify({
-        message: err.message,
+        message: this.messageFormat(err.message),
         type: "error",
         displayTime: 7000
       },
