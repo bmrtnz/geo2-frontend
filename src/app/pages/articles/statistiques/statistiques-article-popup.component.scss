@@ -16,10 +16,6 @@
       &.grid-container-right {
         float: right;
       }
-
-      .dx-datagrid {
-        max-height: 400px;
-      }
     }
 
     .grid-spacer {
@@ -52,6 +48,7 @@
     padding-top: 10px;
     font-size: 15px;
     background: #fff;
+    height: calc(100% - 110px) !important;
 
     .stats-article-content-container {
       padding: 0 15px 0 2px;

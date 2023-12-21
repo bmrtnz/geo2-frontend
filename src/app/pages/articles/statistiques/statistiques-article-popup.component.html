@@ -2,11 +2,11 @@
   [width]="1400"
   height="auto"
   [showTitle]="true"
-  [dragEnabled]="true"
-  [resizeEnabled]="true"
+  [dragEnabled]="false"
+  [resizeEnabled]="false"
   [fullScreen]="popupFullscreen"
   [(visible)]="visible"
-  [closeOnOutsideClick]="true"
+  [closeOnOutsideClick]="false"
   (onShowing)="onShowing($event)"
   (onShown)="onShown()"
   (onHidden)="onHidden()"
@@ -19,7 +19,7 @@
       (onClick)="hidePopup()"
     ></dx-button>
     <dx-button
-      class="min-max-imize-popup-icon"
+      class="min-max-imize-popup-icon display-none"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       icon="material-icons fullscreen_exit"
       [focusStateEnabled]="false"
