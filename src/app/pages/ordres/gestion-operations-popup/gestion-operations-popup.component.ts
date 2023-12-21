@@ -301,16 +301,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.whenUpdated.emit(dataMutated);
           this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
         },
-        error: (err: Error) => {
-          this.running.validate = false;
-          notify({
-            message: err.message,
-            type: "error",
-            displayTime: 7000
-          },
-            { position: 'bottom center', direction: 'up-stack' }
-          );
-        },
+        error: (err: Error) => this.showErrorMessage(err),
       });
   }
 
@@ -377,17 +368,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
         }),
       )
       .subscribe({
-        error: (error: Error) => {
+        error: (err: Error) => {
           this.running.createRefactTranspOrder = false;
           this.running.validate = false;
-          if (error?.message) notify({
-            message: error.message,
-            type: "error",
-            displayTime: 7000
-          },
-            { position: 'bottom center', direction: 'up-stack' }
-          );
-          console.error(error);
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
         },
       });
 
@@ -449,17 +434,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
       }),
     )
       .subscribe({
-        error: (error: Error) => {
+        error: (err: Error) => {
           this.running.createReplaceOrder = false;
           this.running.validate = false;
-          if (error?.message) notify({
-            message: error.message,
-            type: "error",
-            displayTime: 7000
-          },
-            { position: 'bottom center', direction: 'up-stack' }
-          );
-          console.error(error);
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
         },
       });
   }
@@ -520,17 +499,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
       }),
     )
       .subscribe({
-        error: (error: Error) => {
+        error: (err: Error) => {
           this.running.addToReplaceOrder = false;
           this.running.validate = false;
-          if (error?.message) notify({
-            message: error.message,
-            type: "error",
-            displayTime: 7000
-          },
-            { position: 'bottom center', direction: 'up-stack' }
-          );
-          console.error(error);
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
         },
       });
   }
@@ -548,13 +521,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify({
-          message: err.message,
-          type: "error",
-          displayTime: 7000
-        },
-          { position: 'bottom center', direction: 'up-stack' }
-        ),
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -594,13 +561,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify({
-          message: err.message,
-          type: "error",
-          displayTime: 7000
-        },
-          { position: 'bottom center', direction: 'up-stack' }
-        )
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -659,13 +620,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify({
-          message: err.message,
-          type: "error",
-          displayTime: 7000
-        },
-          { position: 'bottom center', direction: 'up-stack' }
-        )
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -777,13 +732,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.consequences.instance.scrollToItem(itemIndex);
           }
         },
-        error: (err: Error) => notify({
-          message: err.message,
-          type: "error",
-          displayTime: 7000
-        },
-          { position: 'bottom center', direction: 'up-stack' }
-        )
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -856,13 +805,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   forfaitChanged(event) {
     this.gridLot.updateLot(event).subscribe({
-      error: (err: Error) => notify({
-        message: err.message,
-        type: "error",
-        displayTime: 7000
-      },
-        { position: 'bottom center', direction: 'up-stack' }
-      )
+      error: (err: Error) => this.showErrorMessage(err)
     });
   }
 
@@ -915,4 +858,25 @@ export class GestionOperationsPopupComponent implements OnChanges {
         .pipe(map((genLot) => genLot.data.genNumLot))
     );
   }
+
+  private showErrorMessage(err) {
+    notify({
+      message: this.messageFormat(err.message),
+      type: "error",
+      displayTime: 7000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["fCreeOrdreRefacturationTransporteur"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
+  }
+
 }
