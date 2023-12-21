@@ -1600,7 +1600,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onAccordionToggleBtnClick(e) {
     const accordionId = e?.element?.id;
-    if (!accordionId || !this.gridCommandes?.closure_accordions.includes(accordionId)) return;
+    if (!accordionId) return;
+    if (accordionId === "synthese" && e.itemElement?.classList?.contains("dx-accordion-item-opened"))
+      this.marginsUpdate();
+    if (!this.gridCommandes?.closure_accordions.includes(accordionId)) return;
     if (this.gridCommandes?.dataToBesaved) {
       e.event.preventDefault(); // Delay opening until grid commande is saved
       this.savedGridCdeStandby = true;
@@ -1883,6 +1886,10 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public refreshGridLigneDetail(e) {
     this.gridLignesDetail?.refresh(e);
+  }
+
+  public marginsUpdate() {
+    this.gridMarge?.updateGrid();
   }
 
   public refreshGridsSynthese() {

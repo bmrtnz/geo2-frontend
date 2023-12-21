@@ -825,6 +825,7 @@ export class GridCommandesComponent
             self.grid.instance.columnOption("numero", "sortOrder", "desc");
             self.grid.instance.columnOption("numero", "sortOrder", "asc");
             self.grid.instance.endCustomLoading();
+            self.gridsService.reload(["DetailExpeditions"], self.gridsService.orderIdentifier(self.ordre));
           }, 2000);
         })
       )

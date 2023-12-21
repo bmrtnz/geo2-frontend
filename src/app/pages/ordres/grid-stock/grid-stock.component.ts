@@ -570,15 +570,21 @@ export class GridStockComponent implements OnInit {
         const index = e.column.dataField[e.column.dataField.length - 1];
         let data = e.data;
         let underline = false;
+        let zero = true;
         if (e.rowType === "group") {
           data = data.items ?? data.collapsedItems;
           data.map(d => {
             if (d["quantiteReservee" + index] > 0) underline = true;
+            if (d["quantiteCalculee" + index] > 0) zero = false;
           });
         } else {
           if (data["quantiteReservee" + index] > 0) underline = true;
+          if (data["quantiteCalculee" + index] > 0) zero = false;
         }
-        if (underline) e.cellElement.classList.add("underlined-text");
+        if (underline) {
+          e.cellElement.classList.add("underlined-text");
+          // Masquage des autres valeurs nulles
+        } else if (zero) e.cellElement.textContent = "";
       }
 
       // Fond jaune pour les stocks J21
