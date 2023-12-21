@@ -76,7 +76,7 @@ export class FluxEnvoisService {
             .geoPrepareEnvois(
               ordreID,
               "DETAIM",
-              true,
+              false,
               false,
               this.authService.currentUser.nomUtilisateur
             );
