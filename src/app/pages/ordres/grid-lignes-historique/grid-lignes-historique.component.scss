@@ -63,8 +63,12 @@
     }
   }
 
-  .first-group+.colisCommandes div {
-    color: transparent;
+  .first-group {
+    color: #20C0B0;
+
+    &+.colisCommandes div {
+      color: transparent;
+    }
   }
 
   // Highlight canceled orders
@@ -154,6 +158,11 @@
 }
 
 ::ng-deep .dx-row-focused {
+
+  .first-group {
+    color: aquamarine;
+  }
+
   .bio-article {
     color: #a9f77e !important;
   }
