@@ -24,6 +24,7 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 import {
   DxListComponent,
   DxPopupComponent,
@@ -248,6 +249,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   validate(doAfter?) {
+    if (doAfter && !this.gridLot?.grid?.instance.hasEditData() && this.warnZeroQuantities()) return;
     this.running.validate = true;
     this.fetchLot().subscribe(lot => {
       this.lot = [this.lot[0], lot];
@@ -309,7 +311,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.gridLot?.hasZeroQuantities) {
       notify({
         message: this.localizeService.localize("warn-quantities"),
-        type: "error"
+        type: "warning"
       },
         { position: 'bottom center', direction: 'up-stack' }
       );
@@ -345,6 +347,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     }
 
+    this.showCreationMessage();
+
     let totalAvoirClient = this.gridLot.getTotalSummaries("clientAvoir");
 
     if (ordre.devise.id !== "EUR") totalAvoirClient *= ordre.tauxDevise;
@@ -371,6 +375,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         error: (err: Error) => {
           this.running.createRefactTranspOrder = false;
           this.running.validate = false;
+          hideToasts();
           if (err?.message) this.showErrorMessage(err);
           console.error(err);
         },
@@ -384,6 +389,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.fetchLot().pipe(
       tap(lot => this.lot = [this.lot[0], lot]),
       concatMap(() => this.chooseEntrepotPopup.prompt()),
+      tap(() => this.showCreationMessage()),
       concatMap((selected) =>
         this.ordresService.fCreeOrdreReplacement(
           this.ordre.id,
@@ -437,6 +443,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         error: (err: Error) => {
           this.running.createReplaceOrder = false;
           this.running.validate = false;
+          hideToasts();
           if (err?.message) this.showErrorMessage(err);
           console.error(err);
         },
@@ -449,6 +456,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.fetchLot().pipe(
       tap(lot => this.lot = [this.lot[0], lot]),
       concatMap(() => this.chooseOrdrePopup.prompt()),
+      tap(() => this.showCreationMessage()),
       concatMap((ordreID) =>
         this.ordresService.getOne_v2(
           ordreID,
@@ -824,6 +832,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   private registerOrdreRep(ordreID: Ordre["id"], type?) {
+    hideToasts();
     return this.ordresService
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
@@ -860,10 +869,22 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   private showErrorMessage(err) {
+    hideToasts();
+    this.resetRunning();
     notify({
       message: this.messageFormat(err.message),
       type: "error",
       displayTime: 7000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
+  private showCreationMessage(mess?) {
+    notify({
+      message: this.localizeService.localize(mess ?? "create-order"),
+      type: "info",
+      displayTime: 999999
     },
       { position: 'bottom center', direction: 'up-stack' }
     );
