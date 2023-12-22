@@ -292,12 +292,16 @@ export class GridLotComponent implements OnInit, OnChanges {
    * Si une seule ligne est fournie, les données seront clonées dans toutes les lignes du lot
    */
   public updateLot(data: Partial<LitigeLigne> | Partial<LitigeLigne>[]) {
+
+    console.log("avant", (this.grid?.dataSource as DataSource).items());
+
     this.hasZeroQuantities = false;
     return interval(100).pipe(
       concatMapTo(defer(() => of(this.grid?.dataSource as DataSource))),
       takeWhile((datasource) => !datasource?.items()?.length, true),
       filter((datasource) => !!datasource?.items()?.length),
       concatMap((datasource) => {
+        console.log("après", this.getItems(datasource));
         this.getItems(datasource).forEach((item, rowIndex) => {
           if (Array.isArray(data)) {
             const index = data.findIndex((row) => row.id === item.ligne.id);
