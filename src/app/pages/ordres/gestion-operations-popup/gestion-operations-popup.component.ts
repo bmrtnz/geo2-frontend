@@ -261,7 +261,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (doAfter && !this.gridLot?.grid?.instance.hasEditData() && this.warnZeroQuantities()) return;
     this.running.validate = true;
     this.fetchLot().subscribe(lot => {
-      this.lot = [this.lot[0], lot];
+      this.lot[1] = lot;
       this.doValidate(doAfter);
     });
   }
@@ -303,6 +303,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .subscribe({
         next: (dataMutated) => {
           if (doAfter) {
+            this.lot = [this.lot[0], this.lot[1]];
             if (doAfter === "addToReplaceOrder") this.addToReplaceOrder();
             if (doAfter === "createReplaceOrder") this.createReplaceOrder();
             if (doAfter === "createRefactTranspOrder") this.createRefactTranspOrder();
