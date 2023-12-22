@@ -398,7 +398,7 @@
                           type="default"
                           icon="material-icons swap_horiz"
                           [focusStateEnabled]="false"
-                          [visible]="!ordreBAFOuFacture"
+                          [visible]="!ordreBAFOuFacture && !!fullOrderNumber"
                           hint="{{ 'hint-entrep-change' | localize }}"
                           (onClick)="openChoixEntrepotPopup()"
                         >

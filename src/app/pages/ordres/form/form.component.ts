@@ -1380,6 +1380,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initializeForm(fetchPol?) {
     this.blockPUDevUniteTransp = true;
+    this.canChangeDateLiv = false;
+    this.showBAFButton = false;
     const currentCompany: Societe = this.currentCompanyService.getCompany();
     this.route.paramMap
       .pipe(
