@@ -518,8 +518,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
     // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
-      !!ordre?.length;
+    if (!ordre?.length) document.querySelector('.close-all-orders-tab')?.classList.add("hideTab");
     this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
     this.atLeastOneOpenIndicator = (indicateur?.length) ? 1 : 0;
   }
@@ -542,7 +541,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
     // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
+    document.querySelector('.close-all-orders-tab')?.classList.add("hideTab");
     notify(this.localizationService.localize(
       this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
     );
@@ -627,12 +626,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
-        class: "close-all-orders-tab multiline-tab",
+        class: "close-all-orders-tab multiline-tab hideTab",
         multiLineTitle: [
           this.localizationService.localize("close-open-order"),
           this.localizationService.localize("close-all-orders")
         ],
-        visible: false,
+        visible: true,
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -728,8 +727,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.sort((a, b) => a.position - b.position);
 
     // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
-      !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
+    if (!!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length)
+      document.querySelector('.close-all-orders-tab')?.classList.remove("hideTab");
     this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
     this.atLeastOneOpenIndicator = this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length ? 1 : 0;
     return this.items.indexOf(data);

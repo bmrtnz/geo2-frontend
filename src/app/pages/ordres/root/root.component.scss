@@ -2,6 +2,11 @@
 
 ::ng-deep .tabs-ordres-page {
 
+  .hideTab {
+    padding: 0 !important;
+    width: 0 !important;
+  }
+
   .dx-tabpanel-tabs {
     padding-bottom: 5px;
     width: calc(100% - 40px);
@@ -164,6 +169,8 @@
 
       &.close-all-orders-tab {
         height: 55px;
+        transition: width 0.2s, padding 0.2s;
+        overflow: hidden;
 
         .dx-tab-content {
           position: relative;
@@ -294,6 +301,8 @@
     .std-order-width {
       width: 74px;
       text-align: left;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }
