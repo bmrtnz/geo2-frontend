@@ -1653,7 +1653,7 @@
     "ordres-litiges-fournisseurValideAdmin": "OK Admin",
     "ordres-litiges-commentairesInternes": "Commentaires",
     "ordres-litiges-fraisAnnexes": "Frais annexes",
-    "ordres-litiges-noLitiges": "Aucun litige pour cet ordre de commande",
+    "ordres-litiges-noLitiges": "Il n'y a actuellement aucun litige associé à cet ordre",
     "ordres-litiges-create": "Créer un litige",
     "ordres-litiges-creation": "Création d'un litige",
     "ordres-litiges-warn-no-facture": "Création d'un litige impossible : cet ordre n'est pas une facture",
