@@ -209,11 +209,6 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
     this.formGroup.get("filtreStock").valueChanges
       .pipe(concatMap(filtreRechercheStockEdi => this.authService.persist({ filtreRechercheStockEdi })))
       .subscribe();
-
-    // const d = new Date("2023-03-14-T00:00:00"); // A VIRER !!
-    // this.formGroup.get("dateMin").setValue(d); // A VIRER !!
-    // const f = new Date("2022-03-14T23:59:59"); // A VIRER !!
-    // this.formGroup.get("dateMax").setValue(f); // A VIRER !!
   }
 
   ngAfterViewInit() {
@@ -464,13 +459,8 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           hideToasts();
           this.showHideLoader.emit(false);
           const mess = this.messageFormat(err.message);
-          notify({
-            message: mess,
-            type: "error",
-            displayTime: 5000 + 40 * mess.length
-          },
-            { position: 'bottom center', direction: 'up-stack' }
-          );
+          console.log(err.message);
+          notify(mess, "error", 5000 + 40 * mess.length);
         },
         next: res => {
           hideToasts();
@@ -692,12 +682,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       .replace("Exception while fetching data (/fCreeOrdresEdi) : ", "")
       .replace("Exception while fetching data (/ofReadOrdEdiColibri) : ", "")
       .replace("Exception while fetching data (/ofSauveOrdre) : ", "")
-      .replace(
-        "Exception while fetching data (/fCreeOrdreComplementaire) : ",
-        ""
-      );
+      .replace("Exception while fetching data (/fCreeOrdreComplementaire) : ", "");
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     mess = mess.split("%%%").join(this.localization.localize("blocking"));
+    if (mess.slice(-4) === "~r~n") mess = mess.slice(0, -4); // Unuseful CR at the end
     mess = mess.split("~r~n").join("\r\n");
     return mess;
   }
