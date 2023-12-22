@@ -637,7 +637,10 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        next: () => this.resetRunning(),
+        next: () => {
+          this.resetRunning();
+          setTimeout(() => this.gridLot.grid.instance.cancelEditData(), 100); // Dx needs some delay
+        },
         error: (err: Error) => this.showErrorMessage(err)
       });
   }
