@@ -174,6 +174,15 @@ export class GestionOperationsPopupComponent implements OnChanges {
     }
   }
 
+  setRunningAll() {
+    this.running = {
+      createRefactTranspOrder: true,
+      createReplaceOrder: true,
+      addToReplaceOrder: true,
+      validate: true
+    }
+  }
+
   updateCauseConseq(tiers) {
     this.causeItems = [];
     this.consequenceItems = [];
@@ -386,9 +395,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   createReplaceOrder() {
     if (this.warnZeroQuantities()) return;
     let ordreReplaceID: Ordre["id"];
-    this.fetchLot().pipe(
-      tap(lot => this.lot = [this.lot[0], lot]),
-      concatMap(() => this.chooseEntrepotPopup.prompt()),
+    this.chooseEntrepotPopup.prompt().pipe(
       tap(() => this.showCreationMessage()),
       concatMap((selected) =>
         this.ordresService.fCreeOrdreReplacement(
@@ -453,9 +460,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   addToReplaceOrder() {
     if (this.warnZeroQuantities()) return;
     let ordreReplace: Partial<Ordre>;
-    this.fetchLot().pipe(
-      tap(lot => this.lot = [this.lot[0], lot]),
-      concatMap(() => this.chooseOrdrePopup.prompt()),
+    this.chooseOrdrePopup.prompt().pipe(
       tap(() => this.showCreationMessage()),
       concatMap((ordreID) =>
         this.ordresService.getOne_v2(
@@ -536,6 +541,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   autoFill() {
     if (this.checkEmptyCauseConseq()) return;
 
+    this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
@@ -569,6 +575,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
+        next: () => this.resetRunning(),
         error: (err: Error) => this.showErrorMessage(err)
       });
   }
@@ -596,6 +603,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   reInitialize() {
+    this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
@@ -628,6 +636,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
+        next: () => this.resetRunning(),
         error: (err: Error) => this.showErrorMessage(err)
       });
   }
