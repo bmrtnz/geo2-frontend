@@ -8583,14 +8583,14 @@
     "pageSize": 100000,
     "columns": [
       {
-        "visibleIndex": 0,
+        "visibleIndex": 1,
         "dataField": "numeroOrdreEDI",
-        "width": 60,
-        "cssClass": "small-side-padding",
+        "width": 55,
+        "cssClass": "no-side-padding",
         "visible": true
       },
       {
-        "visibleIndex": 0,
+        "visibleIndex": 2,
         "dataField": "numeroLigneEDI",
         "width": 75,
         "sortIndex": 0,

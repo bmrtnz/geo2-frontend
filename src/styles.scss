@@ -642,6 +642,17 @@ body app-root.production {
   }
 }
 
+// Flash
+.blink-me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
 // Better selection rows readibility
 .dx-selection.dx-row:not(.dx-row-focused)>td {
   background-color: rgba(0, 117, 156, 0.3) !important;

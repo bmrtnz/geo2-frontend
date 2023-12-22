@@ -28,6 +28,7 @@ import { map } from "rxjs/operators";
 import { GridsService } from "../../../grids.service";
 import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component";
 
+let self;
 
 @Component({
   selector: 'app-grid-recap-stock-cde-edi-colibri',
@@ -36,6 +37,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
+  @Input() selectedRows: any[];
   @Input() public ordreEdiId: EdiOrdre["id"];
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
@@ -72,6 +74,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.RecapStockCdeEdi
     );
@@ -114,8 +117,16 @@ export class GridRecapStockCdeEdiColibriComponent {
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
 
       // Pre select row when "choix" value is true
-      if (e.data.choix) this.datagrid.instance.selectRows([e.data.id], true);
+      if (e.data.choix) {
+        this.datagrid.instance.selectRows([e.data.id], true);
+        e.rowElement.classList.add("dx-selection");
+      }
     }
+  }
+
+  showWarning(data) {
+    return !!self.selectedRows
+      ?.find(r => r.gtin === data.gtin && r.warning && self.selectedRows.find(r => r.id === data.id));
   }
 
   onCellPrepared(e) {
