@@ -21,12 +21,12 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../../grids.service";
 import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component";
+import DataSource from "devextreme/data/data_source";
 
 let self;
 
@@ -54,6 +54,7 @@ export class GridRecapStockCdeEdiColibriComponent {
   public env = environment;
   private oldgtin: string;
   private alternateOrder: boolean;
+  public dataSource: DataSource;
 
   readonly specialFields = [
     "fournisseur.id",
@@ -82,16 +83,14 @@ export class GridRecapStockCdeEdiColibriComponent {
   }
 
   async enableFilters() {
-
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
+    this.dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
       new Set([...this.specialFields, ...await fields.toPromise()])
     );
-    dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
-    this.datagrid.dataSource = dataSource;
+    this.dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
   }
 
   refreshGrid() {

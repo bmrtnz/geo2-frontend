@@ -147,7 +147,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridRecap?.enableFilters();
-    this.gridRecap?.datagrid.instance.repaint();
   }
 
   clearAll() {
