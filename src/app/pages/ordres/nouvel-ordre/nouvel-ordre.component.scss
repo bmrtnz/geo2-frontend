@@ -1,3 +1,7 @@
+// Var
+@import "scss/variables.scss";
+@import "themes/generated/variables.base";
+
 ::ng-deep .button-create-order {
   position: relative;
   top: 8px;
@@ -36,8 +40,16 @@ h2.nouvelOrdre-title {
   float: right;
   overflow: hidden;
 
-  .program-button,
   .order-home-up-button {
+
+    &.edi-order-button {
+      background: $BW-violet-light !important;
+
+      &:hover {
+        background: $BW-violet-medium !important;
+      }
+    }
+
     margin: 0 5px;
     float: right;
 
