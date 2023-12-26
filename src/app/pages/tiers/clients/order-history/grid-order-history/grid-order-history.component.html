@@ -323,7 +323,7 @@
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
-      [calculateGroupValue]="column.calculateGroupValue"
+      [calculateGroupValue]="this[column?.calculateGroupValue]"
       [calculateCellValue]="this[column?.calculateCellValue]"
       allowSearch="false"
       [allowHeaderFiltering]="
