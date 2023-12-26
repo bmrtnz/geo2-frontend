@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import OrdreLigneLitigePick from "app/shared/models/ordre-ligne-litige-pick.model";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
+import Ordre, { Statut, StatutKeys } from "app/shared/models/ordre.model";
 import {
   functionBody,
   FunctionResponse,
@@ -15,7 +15,7 @@ import { lastValueFrom } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
 import { AuthService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
-import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
+import { APIRead, ApiService, DistinctInfo, RelayPage, SummaryInput } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
 
 export enum SummaryOperation {
@@ -500,11 +500,24 @@ export class OrdreLignesService extends ApiService implements APIRead {
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            if (options.group)
-              return this.loadDistinctQuery(options, (res) => {
-                if (res.data && res.data.distinct)
-                  resolve(this.asListCount(res.data.distinct));
-              });
+            if (options.group) {
+              // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
+              if (
+                (options.group as Array<any>).find(
+                  ({ selector }) => selector === "ordre.statut"
+                )
+              ) {
+                return resolve({
+                  data: StatutKeys.map((key) => ({ key })) as DistinctInfo[],
+                  totalCount: 0,
+                });
+              } else {
+                return this.loadDistinctQuery(options, (res) => {
+                  if (res.data && res.data.distinct)
+                    resolve(this.asListCount(res.data.distinct));
+                });
+              }
+            }
 
             const { search } = this.mapLoadOptionsToVariables(options);
             const res = await this.getList(search, columns).toPromise();

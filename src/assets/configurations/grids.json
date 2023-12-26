@@ -3490,7 +3490,15 @@
         "width": 80,
         "visible": true,
         "groupIndex": 1,
-        "calculateCellValue": "calculateGroupeOrdreLibelle"
+        "calculateGroupValue": "calculateGroupeOrdreLibelle"
+      },
+      {
+        "visibleIndex": 1,
+        "dataField": "ordre.statut",
+        "dataType": "string",
+        "allowHeaderFiltering": false,
+        "allowSearch": false,
+        "visible": true
       },
       {
         "visibleIndex": 2,

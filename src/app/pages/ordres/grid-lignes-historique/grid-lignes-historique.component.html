@@ -324,13 +324,19 @@
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
-      [calculateGroupValue]="column.calculateGroupValue"
-      allowSearch="false"
+      [calculateCellValue]="this[column?.calculateCellValue]"
+      [calculateGroupValue]="this[column?.calculateGroupValue]"
+      [allowSearch]="
+        column.allowSearch !== undefined
+          ? column.allowSearch
+          : ['string'].includes(column.dataType)
+      "
       [allowHeaderFiltering]="
-        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+        column.allowHeaderFiltering !== undefined
+          ? column.allowHeaderFiltering
+          : ['string'].includes(column.dataType)
       "
       [showInColumnChooser]="column?.showInColumnChooser"
-      [calculateCellValue]="this[column?.calculateCellValue]"
     >
     </dxi-column>
 

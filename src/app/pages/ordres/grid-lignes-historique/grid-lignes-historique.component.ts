@@ -301,6 +301,9 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
+      // Affichage statut
+      if (e.column.dataField === "ordre.statut")
+        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
       // Descript. article
       if (
         e.column.dataField ===
