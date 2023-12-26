@@ -1,7 +1,7 @@
 <br />
 <div class="encours-filter-area">
   <dx-box>
-    <dxi-item [ratio]="1.5">
+    <dxi-item [ratio]="3">
       <div class="dx-field encours-switch">
         <div class="dx-field-label dx-field-label-left">
           {{ "tous-encours" | localize }}
@@ -18,18 +18,34 @@
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="3">
+    <dxi-item [ratio]="2">
       <!-- Valides/non valides -->
-      <div class="dx-field valideCheckboxField">
+      <div class="dx-field checkboxField">
         <div class="dx-field-label text-align-right">
           {{ "clients-valides" | localize }}
         </div>
-        <div class="dx-field-value">
+        <div class="dx-field-value checkbox">
           <dx-check-box
             #validClients
             class="float-left"
             [value]="true"
             (onValueChanged)="enableFilters()"
+          >
+          </dx-check-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="3">
+      <!-- Sub header -->
+      <div class="dx-field checkboxField">
+        <div class="dx-field-label text-align-right">
+          {{ "header-client-grid" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-check-box
+            #subHeadersStatus
+            class="float-left"
+            (onValueChanged)="showHideHeaders($event)"
           >
           </dx-check-box>
         </div>
@@ -94,98 +110,104 @@
 </div>
 <br />
 
-<dx-button
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this)"
-></dx-button>
-
-<dx-data-grid
-  class="dx-card wide-card grid-depass-encours"
-  [remoteOperations]="false"
-  [showBorders]="false"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  [noDataText]="'aucun-depassement-encours' | localize"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onToolbarPreparing)="
-    gridConfiguratorService.onToolbarPreparing(
-      title,
-      $event,
-      gridConfiguratorService.Grid.DepassementEncoursPays,
-      enableFilters.bind(this)
-    )
-  "
->
-  <!-- Grid configuration -->
-  <dxo-export fileName="Encours clients"></dxo-export>
-  <dxo-header-filter
-    [visible]="true"
-    [allowSearch]="true"
-  ></dxo-header-filter>
-  <dxo-paging></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
-  ></dxo-pager>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.DepassementEncoursPays"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
+<div class="grid-depass-encours-container">
+  <dx-data-grid
+    class="dx-card wide-card grid-depass-encours"
+    [remoteOperations]="false"
+    [showBorders]="false"
+    [columnAutoWidth]="false"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    [noDataText]="'aucun-depassement-encours' | localize"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        title,
+        $event,
+        gridConfiguratorService.Grid.DepassementEncoursPays,
+        enableFilters.bind(this)
+      )
+    "
   >
-  </dxo-column-chooser>
+    <!-- Grid configuration -->
+    <dxo-export fileName="Encours clients par pays"></dxo-export>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.DepassementEncoursPays"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
 
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [visible]="false"
-    [caption]="
-      ('pays-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
-    "
-    [dataType]="column?.dataType"
-    [allowSearch]="
-      column.allowSearch !== undefined
-        ? column.allowSearch
-        : ['string'].includes(column.dataType)
-    "
-    [allowHeaderFiltering]="
-      column.allowHeaderFiltering !== undefined
-        ? column.allowHeaderFiltering
-        : ['string'].includes(column.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
+    <dxo-toolbar>
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="grid-grouping-button"
+            type="default"
+            icon="material-icons menu_open"
+            hint="{{ 'btn-grouping' | localize }}"
+            (onClick)="gridsService.expandCollapseGroups(this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
 
-  <dxo-master-detail
-    [enabled]="true"
-    template="details"
-  ></dxo-master-detail>
-  <div *dxTemplate="let masterRow of 'details'">
-    <app-grid-clients-dep-encours-detail
-      [masterRow]="masterRow"
-      [commercialId]="commercialId"
-      [showAllClients]="!switchType.value"
-      [onlyValidClients]="validClients.value"
-      [secteurId]="secteurId"
-      (openEncoursOrder)="openOrder($event)"
-    ></app-grid-clients-dep-encours-detail>
-  </div>
-</dx-data-grid>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [width]="column.width"
+      [caption]="
+        ('pays-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [dataType]="column?.dataType"
+      [allowHeaderFiltering]="false"
+      [showInColumnChooser]="column.showInColumnChooser"
+      [calculateCellValue]="this[column?.calculateCellValue]"
+      [cssClass]="
+        (column.cssClass ? column.cssClass + ' ' : '') + 'small-side-padding'
+      "
+    ></dxi-column>
+
+    <dxo-master-detail
+      [enabled]="true"
+      template="details"
+    ></dxo-master-detail>
+    <div *dxTemplate="let masterRow of 'details'">
+      <app-grid-clients-dep-encours-detail
+        [masterRow]="masterRow"
+        [commercialId]="commercialId"
+        [showAllClients]="!switchType.value"
+        [onlyValidClients]="validClients.value"
+        [secteurId]="secteurId"
+        [subHeaders]="subHeaders"
+        (openEncoursOrder)="openOrder($event)"
+      ></app-grid-clients-dep-encours-detail>
+    </div>
+  </dx-data-grid>
+</div>

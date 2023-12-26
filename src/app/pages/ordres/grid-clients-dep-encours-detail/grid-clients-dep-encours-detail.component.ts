@@ -19,7 +19,7 @@ import {
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxCheckBoxComponent } from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { dxDataGridRowObject } from "devextreme/ui/data_grid";
 import { environment } from "environments/environment";
@@ -38,6 +38,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
   @Input() showAllClients: boolean;
   @Input() onlyValidClients: boolean;
   @Input() secteurId: any;
+  @Input() public subHeaders: boolean;
   @Output() openEncoursOrder = new EventEmitter<any>();
 
   public dataSource: DataSource;
@@ -48,6 +49,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
 
   @ViewChild(EncoursClientPopupComponent, { static: false }) encoursPopup: EncoursClientPopupComponent;
   @ViewChild("validClients", { static: false }) valideSB: DxCheckBoxComponent;
+  @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   constructor(
     private localizePipe: LocalizePipe,
@@ -73,6 +75,12 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
       await fields.toPromise()
     );
     if (this.dataSource) this.enableFilters();
+    this.showHideHeaderPanel();
+  }
+
+  showHideHeaderPanel() {
+    const dxDetailGridHeaderPanel = this.datagrid.instance.$element()[0].querySelector('.dx-datagrid-header-panel');
+    this.subHeaders ? dxDetailGridHeaderPanel?.classList.remove('display-none') : dxDetailGridHeaderPanel?.classList.add('display-none');
   }
 
   enableFilters() {

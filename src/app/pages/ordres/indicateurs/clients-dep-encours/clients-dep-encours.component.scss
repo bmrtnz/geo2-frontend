@@ -22,19 +22,71 @@
     }
   }
 
-  .valideCheckboxField {
+  .checkboxField {
+    .dx-field-label {
+      width: 69% !important;
+    }
+
     top: -3px;
+  }
+
+  .dx-field-value.checkbox {
+    width: 5% !important;
   }
 
 }
 
-::ng-deep {
-  td.highlight-err {
-    background-color: #ffcbce !important;
+::ng-deep .grid-depass-encours {
+  max-height: calc(100vh - 285px) !important;
+  min-width: 1450px !important;
+
+  .grid-grouping-button {
+    position: relative !important;
+    margin-top: 0px !important;
+    right: 0px;
   }
 
-  .grid-depass-encours {
-    max-height: calc(100vh - 285px) !important;
+  .dx-header-row {
+
+    .text-align-center-header {
+      text-align: center !important;
+    }
+  }
+
+  td.multi-line-header {
+    text-align: right !important;
+  }
+
+  .dx-data-row.expanded td {
+    font-weight: 700;
+    color: darken($base-accent, 5%) !important;
+  }
+
+  .dx-master-detail-cell {
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .emptyCell {
+    background-image:
+      repeating-linear-gradient(-45deg,
+        transparent 0 1px,
+        #CCC 1px 4px) !important;
+  }
+
+  .dx-datagrid-filter-row,
+  .dx-header-row {
+    td.disabled {
+      pointer-events: none;
+
+      .dx-editor-with-menu {
+        visibility: hidden;
+      }
+    }
+  }
+
+  td.highlight-err {
+    background-color: #ffcbce !important;
   }
 
   .dx-datagrid .dx-row.dx-header-row {
@@ -44,6 +96,7 @@
     .orange-encours {
       color: rgba(0, 0, 0, 0.87) !important;
     }
+
 
     .green-encours {
       border-right: 1px solid #fff;

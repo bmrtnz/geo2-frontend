@@ -1,3 +1,5 @@
+@import "themes/generated/variables.base";
+
 ::ng-deep {
   .underline-bold {
     text-decoration: underline;
@@ -16,41 +18,105 @@
     cursor: pointer !important;
   }
 
-  .dx-datagrid .dx-row.dx-header-row {
+  .grid-clients-dep-encours-detail {
+    box-shadow: 0 1px 0px rgba(0, 0, 0, .12), 0 1px 1px rgba(0, 0, 0, .24) !important;
 
-    .green-encours,
-    .yellow-encours,
-    .orange-encours {
-      color: rgba(0, 0, 0, 0.87) !important;
+    .lineHeight14 {
+      line-height: 14px !important;
     }
 
-    .green-encours {
-      border-right: 1px solid #fff;
-      text-align: center !important;
-      background: #c6e0b4 !important;
+    .dx-toolbar-items-container {
+      height: 32px !important;
+
+      .dx-toolbar-before {
+        input {
+          font-size: 14px !important;
+          font-weight: bold;
+          left: 4px;
+          padding-left: 10px;
+          margin-top: 2px;
+          color: darken($base-accent, 5%) !important;
+        }
+      }
+
+      .dx-toolbar-after {
+        top: -3px;
+        right: -12px;
+
+        .dx-item-content {
+          width: 24px;
+        }
+
+        .dx-icon {
+          color: #666;
+          font-size: 22px !important;
+        }
+      }
     }
 
-    .yellow-encours {
-      border-right: 1px solid #fff;
-      text-align: center !important;
-      background: #ffe699 !important;
+    .dx-datagrid-pager {
+      padding: 3px 16px !important;
+      // background-color: #F2F2F2 !important;
+
+      .dx-page-size.dx-selection,
+      .dx-page.dx-selection {
+        padding: 7px;
+        // background-color: #666;
+      }
+
+      .dx-page.dx-selection {
+        min-width: 24px;
+        text-align: center;
+      }
     }
 
-    .orange-encours {
-      border-right: 1px solid #fff;
-      text-align: center !important;
-      background: #f4b084 !important;
+    .dx-data-row td {
+      color: darken($base-accent, 5%) !important;
     }
 
-    .red-encours {
-      border-right: 1px solid #fff;
-      text-align: center !important;
-      background: #ff0000 !important;
-    }
+    .dx-row.dx-header-row {
 
-    .dark-red-encours {
-      text-align: center !important;
-      background: #c00000 !important;
+      height: 28px !important;
+
+      td {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+      }
+
+      .green-encours,
+      .yellow-encours,
+      .orange-encours {
+        color: rgba(0, 0, 0, 0.87) !important;
+      }
+
+      .green-encours {
+        border-right: 1px solid #fff;
+        text-align: center !important;
+        background: #c6e0b4 !important;
+      }
+
+      .yellow-encours {
+        border-right: 1px solid #fff;
+        text-align: center !important;
+        background: #ffe699 !important;
+      }
+
+      .orange-encours {
+        border-right: 1px solid #fff;
+        text-align: center !important;
+        background: #f4b084 !important;
+      }
+
+      .red-encours {
+        border-right: 1px solid #fff;
+        text-align: center !important;
+        background: #ff0000 !important;
+      }
+
+      .dark-red-encours {
+        text-align: center !important;
+        background: #c00000 !important;
+      }
     }
   }
 }
