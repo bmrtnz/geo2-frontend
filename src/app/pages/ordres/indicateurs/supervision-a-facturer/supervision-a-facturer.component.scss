@@ -33,6 +33,7 @@
       left: 50%;
       transform: translateX(-50%);
       padding-top: 0;
+      width: 105px;
     }
 
     .complete {
@@ -74,6 +75,15 @@
     // Souhait Léa de rendre le plus de lignes possibles - 03/11/2023
     tr {
       height: 28px !important;
+    }
+
+    .statut {
+      padding-right: 15px !important;
+    }
+
+    .clientReference {
+      max-width: 160px !important;
+      line-height: 14px;
     }
 
     .blocked-color {

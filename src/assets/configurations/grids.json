@@ -4085,6 +4085,7 @@
         "dataField": "numeroOrdre",
         "sortOrder": "asc",
         "sortIndex": 2,
+        "width": 75,
         "fixed": true,
         "visible": true
       },
@@ -4098,6 +4099,8 @@
       {
         "visibleIndex": 4,
         "dataField": "dateFr",
+        "width": 80,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -4114,11 +4117,14 @@
       {
         "visibleIndex": 10,
         "dataField": "clientReference",
+        "cssClass": "clientReference",
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "pourcentageMargeBrut",
+        "width": 65,
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
@@ -4154,6 +4160,7 @@
       {
         "visibleIndex": 26,
         "dataField": "ordre.statut",
+        "cssClass": "statut",
         "visible": true
       },
       {

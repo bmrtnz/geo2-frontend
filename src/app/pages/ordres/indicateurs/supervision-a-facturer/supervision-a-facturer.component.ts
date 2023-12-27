@@ -214,10 +214,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           .get("codeAssistante")
           .setValue(this.authService.currentUser.commercial); // API Inverted, don't worry
     }
-
-    this.formGroup.get("clientCode").patchValue({ id: "000098", code: "CASINO" }); // A VIRER !!!!!!!!!!!!!!!!!
-    // setTimeout(() => this.enableFilters(), 1000); // A VIRER !!!!!!!!!!!!!!!!!
-
   }
 
   setDefaultPeriod(periodId) {
@@ -548,7 +544,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add("refClient-BAF");
         e.cellElement.setAttribute(
           "title",
-          this.localization.localize("hint-click-change-refClt")
+          (e.value ? e.value + "\r\n\r\n" : "") +
+          this.localization.localize(`hint-click-${e.value ? "change" : "create"}-refClt`)
         );
       }
 

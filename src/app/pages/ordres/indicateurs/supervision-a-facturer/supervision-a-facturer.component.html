@@ -268,7 +268,10 @@
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
-      [cssClass]="column.cssClass"
+      [cssClass]="
+        'small-side-padding' + (column.cssClass ? ' ' + column.cssClass : '')
+      "
+      [width]="column.width"
       [caption]="
         ('ordresBAF-' + column.dataField?.split('.').join('-') | localize) ||
         column.name
