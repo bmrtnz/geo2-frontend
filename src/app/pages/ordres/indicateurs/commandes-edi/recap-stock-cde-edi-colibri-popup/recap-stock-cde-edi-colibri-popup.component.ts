@@ -10,7 +10,7 @@ import {
 import { TabContext } from "app/pages/ordres/root/root.component";
 import { EdiOrdre } from "app/shared/models";
 import { AuthService, LocalizationService } from "app/shared/services";
-import { FunctionsService } from "app/shared/services/api/functions.service";
+import { FunctionResult, FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresEdiService } from "app/shared/services/api/ordres-edi.service";
 import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -165,7 +165,10 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
           noOrdres = noOrdres.split(",");
           noOrdres.pop();
           const text = this.localization.localize("ordre-crees-edi", this.gridUtilsService.friendlyFormatList(noOrdres));
-          notify(text, "success", 5000);
+          if (res.data.fCreeOrdresEdi.res === FunctionResult.Warning)
+            notify(`${text} -> ${res.data.fCreeOrdresEdi.msg}`, "warning", 5000);
+          else
+            notify(text, "success", 5000);
           this.clearAndHidePopup();
           noOrdres.map(numero => {
             setTimeout(() =>
