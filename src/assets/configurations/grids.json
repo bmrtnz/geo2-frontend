@@ -3493,14 +3493,6 @@
         "calculateGroupValue": "calculateGroupeOrdreLibelle"
       },
       {
-        "visibleIndex": 1,
-        "dataField": "ordre.statut",
-        "dataType": "string",
-        "allowHeaderFiltering": false,
-        "allowSearch": false,
-        "visible": true
-      },
-      {
         "visibleIndex": 2,
         "dataField": "ordre.dateDepartPrevue",
         "dataType": "date",
@@ -3621,6 +3613,14 @@
         "visibleIndex": 30,
         "dataField": "ordre.portTypeA.name",
         "dataType": "string",
+        "visible": true
+      },
+      {
+        "visibleIndex": 32,
+        "dataField": "ordre.statut",
+        "dataType": "string",
+        "allowHeaderFiltering": false,
+        "allowSearch": false,
         "visible": true
       },
       {
