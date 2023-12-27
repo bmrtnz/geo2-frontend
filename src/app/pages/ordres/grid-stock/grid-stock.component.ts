@@ -217,7 +217,11 @@ export class GridStockComponent implements OnInit {
     this.especes = this.stocksService.getDistinctEntityDatasource(
       "article.cahierDesCharge.espece.id"
     );
-    this.trueFalse = ["Tous", "Oui", "Non"];
+    this.trueFalse = [
+      this.localizeService.localize("all"),
+      this.localizeService.localize("trueText"),
+      this.localizeService.localize("falseText")
+    ];
 
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
@@ -515,9 +519,8 @@ export class GridStockComponent implements OnInit {
   }
 
   onCellClick(e) {
-    if (e.rowType === "group" && e.column.dataField === "commentaire") {
-      this.datagrid.instance.expandRow(e.key);
-    }
+    if (e.rowType === "group" && e.column.dataField === "commentaire")
+      this.editComment(e);
   }
 
   onCellDblClick(e) {
@@ -546,12 +549,14 @@ export class GridStockComponent implements OnInit {
           e.cellElement.classList.add("not-france-origin");
         } else if (data[0].bio) e.cellElement.classList.add("bio-article");
       }
+
+      if (e.column.dataField === "commentaire") {
+        e.cellElement.classList.add("cursor-pointer");
+        e.cellElement.title = this.localizeService.localize("hint-click-modif-comment");
+      }
     } else if (e.rowType === "data") {
-      if (e.column.dataField === "stock.quantiteTotale")
-        e.cellElement.classList.add("grey-light");
       if (["quantiteHebdomadaire", "prevision3j", "prevision7j"].includes(e.column.dataField))
         e.cellElement.textContent = "";
-
     }
 
     if (e.rowType === "data") {
@@ -565,15 +570,21 @@ export class GridStockComponent implements OnInit {
         const index = e.column.dataField[e.column.dataField.length - 1];
         let data = e.data;
         let underline = false;
+        let zero = true;
         if (e.rowType === "group") {
           data = data.items ?? data.collapsedItems;
           data.map(d => {
             if (d["quantiteReservee" + index] > 0) underline = true;
+            if (d["quantiteCalculee" + index] > 0) zero = false;
           });
         } else {
           if (data["quantiteReservee" + index] > 0) underline = true;
+          if (data["quantiteCalculee" + index] > 0) zero = false;
         }
-        if (underline) e.cellElement.classList.add("underlined-text");
+        if (underline) {
+          e.cellElement.classList.add("underlined-text");
+          // Masquage des autres valeurs nulles
+        } else if (zero) e.cellElement.textContent = "";
       }
 
       // Fond jaune pour les stocks J21
@@ -598,8 +609,6 @@ export class GridStockComponent implements OnInit {
           }
           if (neg) e.cellElement.classList.add("highlight-negativeStock-cell");
         }
-        if (e.column.dataField === "stock.quantiteTotale")
-          e.cellElement.classList.add("grey-light");
       }
     }
   }
@@ -613,7 +622,7 @@ export class GridStockComponent implements OnInit {
   }
 
   editComment(cell) {
-    const data = this.getDataFromGroup(cell);
+    let data = cell.data?.collapsedItems[0];
     this.articleLigneId = data.articleID;
     this.promptPopupComponent.show({ comment: data.commentaire });
   }

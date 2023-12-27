@@ -31,6 +31,7 @@ import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
 import { concatMapTo, finalize, map } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
+import { GridsService } from "../grids.service";
 
 let self;
 
@@ -50,6 +51,7 @@ export class GridChoixEnvoisComponent implements OnInit {
     public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
+    public gridsService: GridsService,
     public formUtilsService: FormUtilsService,
     private functionsService: FunctionsService,
     private envoisService: EnvoisService,
@@ -249,16 +251,28 @@ export class GridChoixEnvoisComponent implements OnInit {
     const keyCode = event.originalEvent?.code;
     const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex);
     if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
-    const nextCell = {
-      row: this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
-      col: this.dataGrid.focusedColumnIndex
-    };
-    const cell = this.dataGrid.instance.getCellElement(nextCell.row, nextCell.col);
-    if (cell && nextCell.row >= 0) {
-      this.dataGrid.instance.closeEditCell();
-      this.dataGrid.instance.editCell(nextCell.row, nextCell.col);
-      this.formUtilsService.selectTextOnFocusIn({ element: cell })
-    }
+    this.saveCurrentCell((keyCode === "ArrowDown" ? 1 : -1));
+  }
+
+  async saveCurrentCell(dir) {
+    this.dataGrid.instance.cellValue(
+      this.dataGrid.focusedRowIndex,
+      "numeroAcces2",
+      this.dataGrid.instance.$element()[0].querySelector(".dx-focused .dx-texteditor-input")?.value
+    );
+    await this.gridsService.waitUntilAllGridDataSaved(this.dataGrid)
+    this.moveRows(dir);
+  }
+
+  moveRows(dir) {
+    this.dataGrid.instance.closeEditCell();
+    // switch focus
+    this.dataGrid.instance.focus(
+      this.dataGrid.instance.getCellElement(
+        this.dataGrid.focusedRowIndex + dir,
+        this.dataGrid.focusedColumnIndex
+      )
+    );
   }
 
   reload(annuleOrdre?) {

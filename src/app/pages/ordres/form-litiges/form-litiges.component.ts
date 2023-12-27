@@ -83,12 +83,16 @@ export class FormLitigesComponent implements OnInit, OnChanges {
 
   ordres: DataSource;
   noLitiges = null;
-  devise = "EUR";
+  public devise: string;
   ddeAvoirFournisseur: any;
   totalMontantRistourne: any;
   columns: any;
   public litigeClosed: boolean;
   public noFraisAnnexes: boolean;
+  public running = {
+    createLitige: false,
+    recapInterne: false,
+  };
 
   @ViewChild("resultat", { static: false }) resultat: DxNumberBoxComponent;
   @ViewChild(LitigeCloturePopupComponent, { static: false })
@@ -148,6 +152,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
 
   loadForm() {
     if (this.ordre?.id) {
+      this.devise = this.currentCompanyService.getCompany().devise?.id;
       const ds = this.litigesService.getDataSource_v2(this.columns);
       ds.filter(["ordreOrigine.id", "=", this.ordre.id]);
       ds.load().then((res) => {
@@ -171,10 +176,9 @@ export class FormLitigesComponent implements OnInit, OnChanges {
               } = result.data.litigeLigneTotaux;
               if (totaux) {
                 totaux.resultat =
-                  totaux.avoirFournisseur -
-                  totaux.avoirClient -
+                  totaux.avoirFournisseurTaux -
+                  totaux.avoirClientTaux -
                   totaux.fraisAnnexes;
-                this.devise = totaux.devise.id;
                 this.resultat.value = totaux.resultat;
                 if (totaux.totalMontantRistourne)
                   this.totalMontantRistourne = true;
@@ -189,6 +193,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   createLitige() {
+    this.running.createLitige = true;
     if (Statut[this.ordre.statut] !== Statut.ANNULE.toString()) {
       if (this.ordre.factureAvoir.toString() === "FACTURE") {
         this.litigesService
@@ -204,24 +209,38 @@ export class FormLitigesComponent implements OnInit, OnChanges {
           )
           .subscribe({
             next: (res) => {
+              this.running.createLitige = false;
               this.loadForm();
               this.selectLignesPopup.visible = true;
               this.litigeCreated.emit();
             },
-            error: (err) => notify(err.message, "error", 3000),
+            error: (err) => {
+              this.running.createLitige = false;
+              notify({
+                message: err.message,
+                type: "error",
+                displayTime: 7000
+              },
+                { position: 'bottom center', direction: 'up-stack' }
+              );
+            },
           });
       } else {
-        notify(
-          this.localization.localize("ordres-litiges-warn-no-facture"),
-          "warning",
-          3500
+        notify({
+          message: this.localization.localize("ordres-litiges-warn-no-facture"),
+          type: "warning",
+          displayTime: 3500
+        },
+          { position: 'bottom center', direction: 'up-stack' }
         );
       }
     } else {
-      notify(
-        this.localization.localize("ordres-litiges-warn-cancelled-order"),
-        "warning",
-        3500
+      notify({
+        message: this.localization.localize("ordres-litiges-warn-cancelled-order"),
+        type: "warning",
+        displayTime: 3500
+      },
+        { position: 'bottom center', direction: 'up-stack' }
       );
     }
   }
@@ -248,12 +267,20 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       .subscribe({
         next: () => this.loadForm(),
         complete: () =>
-          notify(
-            this.localization.localize("litige-save-success"),
-            "success",
-            3500
+          notify({
+            message: this.localization.localize("litige-save-success"),
+            type: "success",
+            displayTime: 3500
+          },
+            { position: 'bottom center', direction: 'up-stack' }
           ),
-        error: (err) => notify(err.message, "error", 7000),
+        error: (err) => notify({
+          message: err.message,
+          type: "error",
+          displayTime: 7000
+        },
+          { position: 'bottom center', direction: 'up-stack' }
+        ),
       });
   }
 
@@ -268,8 +295,10 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   recapInterne() {
+    this.running.recapInterne = true;
     this.saveLitige();
     this.fluxEnvoisService.pushDepotEnvoi("RECINT", this.ordre.id);
+    setTimeout(() => this.running.recapInterne = false, 3000);
   }
 
   creerLot() {
@@ -277,7 +306,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   }
 
   modifierLot() {
-    if (this.litigeClosed) return;
+    if (this.litigeClosed || !this.selectedLitigeLigneKey) return;
     iif(
       () => !!this.selectedLitigeLigneKey,
       this.litigesLignesService
@@ -302,7 +331,13 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       this.infosLitige.litige.id,
       this.grid.getSelectedRowData().numeroGroupementLitige,
     ).subscribe({
-      error: (err: Error) => notify(this.messageFormat(err.message), "warning", 7000),
+      error: (err: Error) => notify({
+        message: this.messageFormat(err.message),
+        type: "error",
+        displayTime: 7000
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      ),
       complete: () => this.grid.reload(),
     });
   }

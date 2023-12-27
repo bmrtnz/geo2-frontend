@@ -35,7 +35,12 @@
           {{ dotLitiges }}
         </div>
         <div
-          *ngIf="!dotLitiges && ordre && !!gridCommandes?.gridRowsTotal"
+          *ngIf="
+            !dotLitiges &&
+            ordre &&
+            !!gridCommandes?.gridRowsTotal &&
+            !running?.createLitige
+          "
           (click)="onClickCreateLitige()"
           class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
           title="{{ 'ordres-litiges-create' | localize }}"
@@ -336,7 +341,7 @@
                   <dx-box>
                     <dxi-item [ratio]="4">
                       <!-- Client -->
-                      <div class="dx-field">
+                      <div class="dx-field client-livre">
                         <div class="dx-field-label">
                           {{ "ordres-client" | localize }}
                         </div>
@@ -368,7 +373,7 @@
                         </dx-button>
                       </div>
                       <!-- Entrepôt livré -->
-                      <div class="dx-field">
+                      <div class="dx-field entrepot-livre">
                         <div class="dx-field-label">
                           {{ "ordres-entrepotLivre" | localize }}
                         </div>
@@ -393,7 +398,7 @@
                           type="default"
                           icon="material-icons swap_horiz"
                           [focusStateEnabled]="false"
-                          [visible]="!ordreBAFOuFacture"
+                          [visible]="!ordreBAFOuFacture && !!fullOrderNumber"
                           hint="{{ 'hint-entrep-change' | localize }}"
                           (onClick)="openChoixEntrepotPopup()"
                         >
@@ -1067,6 +1072,7 @@
                     <dx-button
                       class="order-regul-button"
                       type="default"
+                      [disabled]="running?.regulOrder"
                       [focusStateEnabled]="false"
                       text="{{ 'btn-regulorder' | localize }}"
                       hint="{{ 'hint-regulorder' | localize }} "
@@ -1076,6 +1082,7 @@
                     <dx-button
                       class="stock-auto-button"
                       type="success"
+                      [disabled]="running?.destockAuto"
                       [focusStateEnabled]="false"
                       text="{{ 'btn-stockauto' | localize }}"
                       hint="{{ 'hint-stockauto' | localize }} "
@@ -1086,7 +1093,9 @@
                       class="add-ref-client-button"
                       type="default"
                       [focusStateEnabled]="false"
-                      [disabled]="!selectedGridCdesRows"
+                      [disabled]="
+                        !selectedGridCdesRows || running?.addRefsClient
+                      "
                       text="{{ 'btn-addrefclt' | localize }}"
                       [hint]="
                         ((vowelTest(ordre?.client?.code)
@@ -1116,6 +1125,7 @@
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
+                    (marginsUpdate)="marginsUpdate()"
                     [ordre]="ordre"
                     [ordreBAFOuFacture]="ordreBAFOuFacture"
                     [gridCommandes]="gridCommandes"
@@ -1130,7 +1140,7 @@
                     <dx-button
                       class="totaux-btn-supp"
                       [focusStateEnabled]="false"
-                      [disabled]="supprLignesBtnDisabled"
+                      [disabled]="running?.suppLignesNonExp"
                       [visible]="!!gridCommandes?.gridRowsTotal"
                       type="default"
                       (onClick)="suppLignesNonExp()"
@@ -1416,6 +1426,7 @@
     [ordreId]="ordre?.id"
     [gridCommandes]="gridCommandes"
     (updateGridCde)="gridCommandes.update()"
+    (whenClosed)="running.destockAuto = false"
   ></app-destockage-auto-popup>
 
   <app-editing-alert></app-editing-alert>
@@ -1489,6 +1500,7 @@
 <app-confirmation-result-popup></app-confirmation-result-popup>
 <app-choix-entrepot-commande-edi-popup
   [clientId]="ordre?.client?.id"
+  [currentEntrepotId]="ordre?.entrepot?.id"
   [title]="'modification-entrepot' | localize"
   (entrepotChosen)="onEntrepotChosen($event)"
 >

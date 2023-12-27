@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   NgModule,
+  Output,
   ViewChild,
 } from "@angular/core";
 import OrdresSuiviComponent, {
@@ -27,6 +28,8 @@ export class ChooseOrdrePopupComponent {
   @ViewChild(DxPopupComponent) private popup: DxPopupComponent;
   @ViewChild(OrdresSuiviComponent) private suiviComponent: OrdresSuiviComponent;
 
+  @Output() public cancel = new EventEmitter();
+
   public popupFullscreen: boolean;
   public choosed = new EventEmitter<Ordre["id"]>();
   public title: string;
@@ -41,7 +44,7 @@ export class ChooseOrdrePopupComponent {
     this.popup.visible = true;
     return this.choosed.pipe(
       first(),
-      finalize(() => (this.popup.visible = false))
+      finalize(() => this.hidePopup())
     );
   }
 
@@ -52,6 +55,11 @@ export class ChooseOrdrePopupComponent {
 
   public onShown() {
     this.suiviComponent.histoGrid.reload();
+  }
+
+  public quitPopup() {
+    this.cancel.emit();
+    this.hidePopup();
   }
 
   hidePopup() {

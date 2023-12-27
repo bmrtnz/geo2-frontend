@@ -24,6 +24,7 @@ import { OrdresLogistiquesService } from "app/shared/services/api/ordres-logisti
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 import {
   DxListComponent,
   DxPopupComponent,
@@ -47,6 +48,7 @@ import { GridLotComponent } from "../gestion-litiges/grid-lot/grid-lot.component
 import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
+
 
 @Component({
   selector: "app-gestion-operations-popup",
@@ -77,6 +79,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public title: string;
   public popupFullscreen = false;
   public ordreGenNumero: string;
+  public running: any;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
@@ -112,6 +115,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
     private tabContext: TabContext,
     private ordreLignesService: OrdreLignesService
   ) {
+    this.resetRunning();
     this.responsibleList = [
       {
         id: "station",
@@ -155,6 +159,28 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.title = this.localizeService.localize(
       "title-gestion-operations-popup"
     );
+  }
+
+  onHidden() {
+    this.resetRunning();
+  }
+
+  resetRunning() {
+    this.running = {
+      createRefactTranspOrder: false,
+      createReplaceOrder: false,
+      addToReplaceOrder: false,
+      validate: false
+    }
+  }
+
+  setRunningAll() {
+    this.running = {
+      createRefactTranspOrder: true,
+      createReplaceOrder: true,
+      addToReplaceOrder: true,
+      validate: true
+    }
   }
 
   updateCauseConseq(tiers) {
@@ -231,12 +257,16 @@ export class GestionOperationsPopupComponent implements OnChanges {
     this.headerData.consequence = this.selectedConsequence;
   }
 
-  openOrder() {
-    this.tabContext.openOrdre(this.ordreGenNumero, this.ordre.campagne.id);
-    this.hidePopup();
+  validate(doAfter?) {
+    if (doAfter && !this.gridLot?.grid?.instance.hasEditData() && this.warnZeroQuantities()) return;
+    this.running.validate = true;
+    this.fetchLot().subscribe(lot => {
+      this.lot[1] = lot;
+      this.doValidate(doAfter);
+    });
   }
 
-  validate() {
+  doValidate(doAfter) {
     this.mutateLot()
       .pipe(
         concatMap((data) => this.gridLot.updateLot(data)),
@@ -272,16 +302,36 @@ export class GestionOperationsPopupComponent implements OnChanges {
       )
       .subscribe({
         next: (dataMutated) => {
+          if (doAfter) {
+            this.lot = [this.lot[0], this.lot[1]];
+            if (doAfter === "addToReplaceOrder") this.addToReplaceOrder();
+            if (doAfter === "createReplaceOrder") this.createReplaceOrder();
+            if (doAfter === "createRefactTranspOrder") this.createRefactTranspOrder();
+            return;
+          }
           this.quitPopup();
           this.whenUpdated.emit(dataMutated);
           this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
         },
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        error: (err: Error) => this.showErrorMessage(err),
       });
   }
 
+  warnZeroQuantities() {
+    if (this.gridLot?.hasZeroQuantities) {
+      notify({
+        message: this.localizeService.localize("warn-quantities"),
+        type: "warning"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+      this.running.validate = false;
+      return true;
+    }
+  }
+
   async createRefactTranspOrder() {
-    await this.gridLot.persist();
+    if (this.warnZeroQuantities()) return;
     const ordre = await this.ordresService
       .getOne_v2(
         this.ordre.id,
@@ -295,42 +345,59 @@ export class GestionOperationsPopupComponent implements OnChanges {
       .pipe(map((res) => res.data.ordre))
       .toPromise();
 
-    if (!ordre.transporteur.clientRaisonSocial?.id)
-      return notify(
-        this.localizeService.localize(
-          "no-associated-client-to-transporteur-contact"
-        ),
-        "ERROR",
-        7000
+    if (!ordre.transporteur.clientRaisonSocial?.id) {
+      this.running.createRefactTranspOrder = false;
+      return notify({
+        message: this.localizeService.localize("no-associated-client-to-transporteur-contact"),
+        type: "error",
+        displayTime: 7000
+      },
+        { position: 'bottom center', direction: 'up-stack' }
       );
+
+    }
+
+    this.showCreationMessage();
 
     let totalAvoirClient = this.gridLot.getTotalSummaries("clientAvoir");
 
     if (ordre.devise.id !== "EUR") totalAvoirClient *= ordre.tauxDevise;
 
-    const refacturationResponse = await this.litigesService
+    this.litigesService
       .fCreeOrdreRefacturationTransporteur(
         ordre.id,
         totalAvoirClient,
         this.currentCompanyService.getCompany().id,
         this.authService.currentUser.nomUtilisateur
       )
-      .toPromise();
+      .pipe(
+        map(res => res.data.fCreeOrdreRefacturationTransporteur.data.ls_ord_ref_refacturer),
+        // Fetch numero of newly created ordre for view
+        concatMap(ordreReplaceID => this.registerOrdreRep(ordreReplaceID)),
+        finalize(() => {
+          this.running.createRefactTranspOrder = false;
+          this.running.validate = false;
+          this.gridLot.refresh();
+          this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+        }),
+      )
+      .subscribe({
+        error: (err: Error) => {
+          this.running.createRefactTranspOrder = false;
+          this.running.validate = false;
+          hideToasts();
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
+        },
+      });
 
-    const ordreRefactRef =
-      refacturationResponse.data.fCreeOrdreRefacturationTransporteur.data
-        .ls_ord_ref_refacturer;
-
-    // Fetch numero of newly created ordre for view
-    await this.registerOrdreRep(ordreRefactRef).toPromise();
   }
 
   createReplaceOrder() {
+    if (this.warnZeroQuantities()) return;
     let ordreReplaceID: Ordre["id"];
-    this.fetchLot().pipe(
-      concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
-      tap(lot => this.lot[1] = lot),
-      concatMap(() => this.chooseEntrepotPopup.prompt()),
+    this.chooseEntrepotPopup.prompt().pipe(
+      tap(() => this.showCreationMessage()),
       concatMap((selected) =>
         this.ordresService.fCreeOrdreReplacement(
           this.ordre.id,
@@ -373,22 +440,29 @@ export class GestionOperationsPopupComponent implements OnChanges {
       }),
       // Fetch numero of newly created ordre for view
       concatMap(() => this.registerOrdreRep(ordreReplaceID)),
-      finalize(() => this.gridLot.refresh()),
+      finalize(() => {
+        this.running.createReplaceOrder = false;
+        this.running.validate = false;
+        this.gridLot.refresh();
+        this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
+      }),
     )
       .subscribe({
-        error: (error: Error) => {
-          if (error?.message) notify(error.message, "ERROR", 7000);
-          console.error(error);
+        error: (err: Error) => {
+          this.running.createReplaceOrder = false;
+          this.running.validate = false;
+          hideToasts();
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
         },
       });
   }
 
   addToReplaceOrder() {
+    if (this.warnZeroQuantities()) return;
     let ordreReplace: Partial<Ordre>;
-    this.fetchLot().pipe(
-      concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
-      tap(lot => this.lot[1] = lot),
-      concatMap(() => this.chooseOrdrePopup.prompt()),
+    this.chooseOrdrePopup.prompt().pipe(
+      tap(() => this.showCreationMessage()),
       concatMap((ordreID) =>
         this.ordresService.getOne_v2(
           ordreID,
@@ -432,12 +506,18 @@ export class GestionOperationsPopupComponent implements OnChanges {
         );
       }),
       concatMap(() => this.registerOrdreRep(ordreReplace.id, "add")),
-      finalize(() => this.gridLot.refresh()),
+      finalize(() => {
+        this.running.addToReplaceOrder = false;
+        this.running.validate = false;
+        this.gridLot.refresh();
+      }),
     )
       .subscribe({
-        error: (error: Error) => {
-          if (error?.message) notify(error.message, "ERROR", 7000);
-          console.error(error);
+        error: (err: Error) => {
+          this.running.addToReplaceOrder = false;
+          this.running.validate = false;
+          if (err?.message) this.showErrorMessage(err);
+          console.error(err);
         },
       });
   }
@@ -455,13 +535,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
   autoFill() {
     if (this.checkEmptyCauseConseq()) return;
 
+    this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
@@ -495,7 +576,8 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        next: () => this.resetRunning(),
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -516,12 +598,13 @@ export class GestionOperationsPopupComponent implements OnChanges {
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
       finalize(() => this.gridLot.refresh()),
     ).subscribe(lot => {
-      this.lot[1] = lot;
+      this.lot = [this.lot[0], lot];
       this.forfaitPopup.visible = true;
     });
   }
 
   reInitialize() {
+    this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
     this.litigesLignesService
       .getList(
@@ -554,7 +637,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
         concatMap((data) => this.gridLot.updateLot(data))
       )
       .subscribe({
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        next: () => {
+          this.resetRunning();
+          setTimeout(() => this.gridLot.grid.instance.cancelEditData(), 100); // Dx needs some delay
+        },
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -617,6 +704,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   onShown(e) {
     e.component.content().parentNode.classList.remove("no-opacity"); // To avoid flash effect (Dx bug)
+    this.ordreGenNumero = "";
     if (!this.lot[1]) {
       // lot creation
       this.responsibles.value = this.responsibleList[0];
@@ -639,8 +727,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           this.responsibles.value = this.responsibleList.find(
             (r) => r.typeTiers === res.responsableTypeCode
           );
-        if (res?.numeroOrdreReplacement)
-          this.ordreGenNumero = res?.numeroOrdreReplacement;
+        this.ordreGenNumero = res?.numeroOrdreReplacement ?? "";
       });
     }
 
@@ -666,7 +753,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.consequences.instance.scrollToItem(itemIndex);
           }
         },
-        error: (err: Error) => notify(err.message, "ERROR", 7000),
+        error: (err: Error) => this.showErrorMessage(err)
       });
   }
 
@@ -719,6 +806,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   quitPopup() {
     this.lot = null;
+    this.gridsService.reload(["LitigeLigne"], this.gridsService.orderIdentifier(this.ordre));
     this.hidePopup();
   }
 
@@ -738,7 +826,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
   forfaitChanged(event) {
     this.gridLot.updateLot(event).subscribe({
-      error: (err: Error) => notify(err.message, "ERROR", 7000),
+      error: (err: Error) => this.showErrorMessage(err)
     });
   }
 
@@ -757,25 +845,28 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   private registerOrdreRep(ordreID: Ordre["id"], type?) {
+    hideToasts();
     return this.ordresService
       .getOne_v2(ordreID, new Set(["id", "numero"]))
       .pipe(
         map((res) => res.data.ordre),
-        tap((data) => {
+        concatMap((data) => {
           this.ordreGenNumero = data.numero;
           if (this.ordreGenNumero) {
-            notify(
-              this.localizeService
+            notify({
+              message: this.localizeService
                 .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
                 .replace("&O", this.ordreGenNumero),
-              "success",
-              9000
+              type: "success",
+              displayTime: 9000
+            },
+              { position: 'bottom center', direction: 'up-stack' }
             );
           }
-          return this.gridLot.updateLot({
+          return this.litigesLignesService.saveLot(new Set(["id"]), this.lot, {
             ordreReferenceRemplacement: data.id,
-            numeroOrdreReplacement: data.numero,
-          });
+            numeroOrdreReplacement: data.numero
+          })
         })
       );
   }
@@ -789,4 +880,37 @@ export class GestionOperationsPopupComponent implements OnChanges {
         .pipe(map((genLot) => genLot.data.genNumLot))
     );
   }
+
+  private showErrorMessage(err) {
+    hideToasts();
+    this.resetRunning();
+    notify({
+      message: this.messageFormat(err.message),
+      type: "error",
+      displayTime: 7000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
+  private showCreationMessage(mess?) {
+    notify({
+      message: this.localizeService.localize(mess ?? "create-order"),
+      type: "info",
+      displayTime: 999999
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["fCreeOrdreRefacturationTransporteur"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
+  }
+
 }

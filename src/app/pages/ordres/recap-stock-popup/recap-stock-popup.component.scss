@@ -50,7 +50,14 @@
       }
 
       .article-detail-container {
-        margin: 0 25px;
+        position: absolute;
+        z-index: 1;
+        margin-top: 4px !important;
+        width: calc(100% - 184px);
+        margin: 0 15px;
+        max-height: 35px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       .blue-style {
@@ -58,9 +65,8 @@
       }
 
       .article-resa-description {
-        margin-top: 2px;
         color: #444;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 17px;
         text-align: justify;
         text-justify: distribute;

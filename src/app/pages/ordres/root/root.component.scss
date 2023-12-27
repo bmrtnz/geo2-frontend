@@ -84,6 +84,16 @@
     padding: 0;
     min-width: 0 !important;
 
+    &:hover,
+    &.dx-tab-selected {
+      .create-order-tab {
+        .dx-tab-text {
+          max-width: 60px !important;
+          padding: 0 4px 0 5px !important;
+        }
+      }
+    }
+
     .infinite-rotate {
       animation-name: spin;
       animation-duration: 1s;
@@ -125,6 +135,7 @@
       }
 
       &.create-order-tab {
+        padding-right: 11px;
         color: #FFF;
         background: #8FC459;
 
@@ -138,6 +149,16 @@
 
         &:hover {
           background: #79B23F;
+        }
+
+        .tab-separator {
+          width: 0;
+        }
+
+        .dx-tab-text {
+          padding: 0;
+          max-width: 0;
+          transition: max-width 0.2s, padding 0.2s;
         }
       }
 

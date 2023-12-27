@@ -60,6 +60,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   public selectedLignesIds: string[];
   public popupFullscreen = false;
   public buttonText: string;
+  public running: boolean;
 
   constructor(
     private ordreLignesService: OrdreLignesService,
@@ -96,6 +97,17 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
           e.data.ordreLigne.nombreColisExpedies ?? 0;
       }
     }
+  }
+
+  onRowPrepared(e) {
+    if (e.component.totalCount() === 1 && e.rowType === "data")
+      e.rowElement.classList.add("cursor-pointer");
+  }
+
+  onRowDblClick(e) {
+    if (e.component.totalCount() !== 1) return;
+    this.selectedLignesIds = [e.key];
+    this.assignLitige();
   }
 
   calculatePoidsNetExpedie(data) {
@@ -145,6 +157,10 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
         next: (res) => {
           this.dataSource = res.data.wLitigePickOrdreOrdligV2;
           this.datagrid.dataSource = this.dataSource;
+          setTimeout(() => {
+            if (this.datagrid.instance.totalCount() === 1)
+              this.datagrid.instance.selectAll();
+          }, 100); // Small waiting time for Dx
         },
         error: (error: Error) => {
           console.log(error);
@@ -180,11 +196,13 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
 
   onShown() {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    this.selectedLignesIds = [];
     this.enableFilters();
   }
 
   onHidden() {
     this.datagrid.dataSource = null;
+    this.running = false;
   }
 
   quitPopup() {
@@ -204,6 +222,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
       return;
     }
 
+    this.running = true;
     this.litigesService
       .getOne_v2(this.litigeID, new Set(["numeroVersion"]))
       .pipe(

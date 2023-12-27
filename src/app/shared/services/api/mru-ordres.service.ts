@@ -5,9 +5,10 @@ import { MRUOrdre } from "app/shared/models/mru-ordre.model";
 import { StatutKeys } from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { AuthService } from "..";
+import { AuthService, LocalizationService } from "..";
 import { APIRead, ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
+import notify from "devextreme/ui/notify";
 
 @Injectable({
   providedIn: "root",
@@ -16,6 +17,7 @@ export class MruOrdresService extends ApiService implements APIRead {
   constructor(
     apollo: Apollo,
     private currentCompanyService: CurrentCompanyService,
+    private localizationService: LocalizationService,
     private authService: AuthService
   ) {
     super(apollo, MRUOrdre);
@@ -142,7 +144,11 @@ export class MruOrdresService extends ApiService implements APIRead {
         mruOrdre,
       }
     ).subscribe({
-      error: (err) => console.log("Échec de la sauvegarde MRU", err),
+      error: (err) => {
+        console.log(this.localizationService.localize("save-MRU-KO"), err);
+        // Seen with BA - 13/12/2023 : for testing purposes as sometimes the order is not properly recorded
+        notify(this.localizationService.localize("save-MRU-KO"), "error");
+      }
     });
   }
 

@@ -47,6 +47,7 @@ export class LitigeCloturePopupComponent implements OnChanges {
   oneIsCloture: boolean;
   choices: string[];
   selected: string;
+  public running;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxListComponent, { static: false }) list: DxListComponent;
@@ -109,11 +110,13 @@ export class LitigeCloturePopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.running = false;
     this.resetList();
     e.component.content().parentNode.classList.add("litige-cloture-popup");
   }
 
   doCloture() {
+    this.running = true;
     return this.validateCloture().subscribe({
       error: (err: Error) =>
         notify(this.messageFormat(err.message), "ERROR", 7000),

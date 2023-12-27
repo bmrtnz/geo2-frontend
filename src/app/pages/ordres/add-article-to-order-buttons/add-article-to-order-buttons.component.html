@@ -1,43 +1,43 @@
 <dx-button
   class="upperButton subButton"
-  [disabled]="!fullOrderNumber || !allowMutations"
+  [disabled]="!fullOrderNumber || !allowMutations || running.ajoutArtRefClt"
   type="success"
   hint="{{ 'hint-ajout-ordre' | localize }} {{
     'hint-source-refClt' | localize
   }}"
   text="{{ 'btn-referenceClt' | localize }}"
-  (onClick)="onRefClientClick()"
+  (onClick)="addArticleClick('ajoutArtRefClt')"
 ></dx-button>
 <dx-button
   class="upperButton subButton"
-  [disabled]="!fullOrderNumber || !allowMutations"
+  [disabled]="!fullOrderNumber || !allowMutations || running.ajoutArtStock"
   type="success"
   hint="{{ 'hint-ajout-ordre' | localize }} {{
     'hint-source-stock' | localize
   }}"
   text="{{ 'btn-stock' | localize }}"
-  (onClick)="onArticleStockClick()"
+  (onClick)="addArticleClick('ajoutArtStock')"
 ></dx-button>
 <dx-button
   class="upperButton subButton"
-  [disabled]="!fullOrderNumber || !allowMutations"
+  [disabled]="!fullOrderNumber || !allowMutations || running.ajoutArtManu"
   type="success"
   hint="{{ 'hint-ajout-ordre' | localize }} {{
     'hint-source-manuel' | localize
   }}"
-  (onClick)="onArticleManClick()"
+  (onClick)="addArticleClick('ajoutArtManu')"
   text="{{ 'btn-manuel' | localize }}"
 ></dx-button>
 <dx-button
   class="upperButton subButton"
-  [disabled]="false"
+  [disabled]="running.ajoutArtHisto"
   type="success"
   [hint]="
     !fullOrderNumber || !allowMutations
       ? histoLigneOrdreReadOnlyText
       : histoLigneOrdreText
   "
-  (onClick)="onArticleHistoClick()"
+  (onClick)="addArticleClick('ajoutArtHisto')"
   text="{{ 'btn-historique' | localize }}"
 ></dx-button>
 
@@ -46,15 +46,17 @@
   [single]="single"
   [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
+  (whenClosed)="running.ajoutArtRefClt = false"
 >
 </app-ajout-articles-ref-client-popup>
 <app-ajout-articles-manu-popup
   [ordre]="ordre"
   [gridCommandes]="gridCommandes"
-  [articleRowKey]="articleRowKey"
-  [single]="single || !!articleRowKey"
+  [articleRowKey]="null"
+  [single]="single"
   [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
+  (whenClosed)="running.ajoutArtManu = false"
 >
 </app-ajout-articles-manu-popup>
 <app-ajout-articles-histo-popup
@@ -63,11 +65,13 @@
   [single]="single"
   [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
+  (whenClosed)="running.ajoutArtHisto = false"
 >
 </app-ajout-articles-histo-popup>
 <app-ajout-articles-stock-popup
   [ordre]="ordre"
   [ediLigneID]="ediLigneID"
   (lignesChanged)="onLignesChanged($event)"
+  (whenClosed)="running.ajoutArtStock = false"
 >
 </app-ajout-articles-stock-popup>

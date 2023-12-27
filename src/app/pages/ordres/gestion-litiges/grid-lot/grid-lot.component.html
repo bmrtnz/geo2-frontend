@@ -1,7 +1,9 @@
 <dx-data-grid
   class="dx-card wide-card grid-litige-lots"
   [dataSource]="dataSource"
+  (onEditorPreparing)="onEditorPreparing($event)"
   (onToolbarPreparing)="onToolbarPreparing($event); gridConfigHandler($event)"
+  (onCellPrepared)="onCellPrepared($event)"
 >
   <dxo-editing
     [allowUpdating]="true"

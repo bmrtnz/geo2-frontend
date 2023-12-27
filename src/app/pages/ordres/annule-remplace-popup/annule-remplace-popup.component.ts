@@ -20,6 +20,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   public visible: boolean;
   public title: string;
   public popupFullscreen: boolean;
+  public running: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridAnnuleRemplaceComponent)
@@ -40,6 +41,7 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.running = false;
     e.component.content().parentNode.classList.add("annule-remplace-popup");
   }
 
@@ -56,13 +58,16 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   }
 
   goDocuments() {
+    this.running = true;
     this.gridAnnuleRemplaceComponent.done().subscribe({
       next: async (arData) => {
         this.popup.instance.hide();
         await this.docsPopup.open();
       },
-      error: (error: Error) =>
-        notify(error.message.replace("Error :", ""), "error", 7000),
+      error: (error: Error) => {
+        this.running = false;
+        notify(error.message.replace("Error :", ""), "error", 7000);
+      },
     });
   }
 }

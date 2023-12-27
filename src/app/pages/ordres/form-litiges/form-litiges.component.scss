@@ -10,6 +10,19 @@
     width: 200px;
   }
 
+  .montants-litiges {
+
+    .dx-field-label {
+      width: 100% !important;
+    }
+
+    .dx-field-value {
+      input {
+        text-align: right !important;
+      }
+    }
+  }
+
   .dx-field-label.shortLabel {
     width: 20px !important;
   }
@@ -95,10 +108,6 @@
   margin-top: 15px;
 
   .dx-button-content {
-    padding: 5px 16px 8px 16px !important;
-  }
-
-  .dx-button-content {
-    padding: 5px 22px !important;
+    padding: 0 22px 4px 22px !important;
   }
 }

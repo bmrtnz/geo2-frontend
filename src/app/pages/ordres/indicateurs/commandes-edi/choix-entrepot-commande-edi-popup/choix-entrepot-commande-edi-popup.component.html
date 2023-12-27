@@ -42,7 +42,13 @@
           [dataSource]="entrepotDS"
           [searchExpr]="['code']"
           [displayExpr]="displayCodeBefore"
+          itemTemplate="items"
         >
+          <div *dxTemplate="let data of 'items'">
+            <div [ngClass]="{ 'not-valid': data.id === currentEntrepotId }">
+              {{ displayCodeBefore(data) }}
+            </div>
+          </div>
         </dx-select-box>
       </div>
     </div>

@@ -27,6 +27,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   @Input() public ordre: Ordre;
   @Input() public ediLigneID: EdiLigne["id"];
   @Output() public lignesChanged = new EventEmitter();
+  @Output() public whenClosed = new EventEmitter();
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -84,6 +85,10 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+  }
+
+  onHidden() {
+    this.whenClosed.emit();
   }
 
   clearAll() { }

@@ -86,11 +86,16 @@ export class GridCommandesEventsService {
         if (nombreColisPalette !== 0)
           newData.nombreColisPalette = nombreColisPalette;
 
+        // Léa 20-12-2023 : si pas de pal au sol, reset pal intermédiaires + colis/pal
+        if (!newData.nombrePalettesCommandees) {
+          newData.nombrePalettesIntermediaires = 0;
+          newData.nombreColisPalette = 0;
+        }
+
         // BAM le 24/08/16
-        // Pour tout les secteurs sauf france on recalcule le nombre de colis
+        // Pour tous les secteurs sauf France on recalcule le nombre de colis
         if (nombreColisPalette !== 0)
           newData.nombreColisCommandes = value * nombreColisPalette * nombreColisPaletteIntermediaire;
-
       }
 
       if (!value) newData.indicateurPalette = 0;
@@ -191,12 +196,15 @@ export class GridCommandesEventsService {
   ) {
     newData.nombreColisCommandes = value;
     if (this.context?.secteurCode === "F") {
-      if (value && currentData.nombreColisPalette === 0) {
+      if (value && !currentData.nombreColisPalette) {
         newData.nombreColisPalette = currentData?.nombreColisPaletteByDimensions;
       }
 
       if (!value && currentData.nombreColisPalette !== 0)
         newData.nombreColisPalette = 0;
+
+      // Léa 20-12-2023 : si pas de colis, reset pal intermédiaires
+      if (!newData.nombreColisPalette) newData.nombrePalettesIntermediaires = 0;
 
       if (!["RPO", "RPR"].includes(this.context.type.id) || (currentData.venteUnite.id !== "UNITE" && currentData.achatUnite.id !== "UNITE"))
         this.ofRepartitionPalette({ ...currentData, ...newData })?.(dxDataGrid);
@@ -461,7 +469,7 @@ export class GridCommandesEventsService {
             row.data.fournisseur?.id === selectedFournisseurID;
         })
         .forEach(row => {
-          ld_pal_nb_col = row.data.nombreColisPalette;
+          ld_pal_nb_col = row.data.nombreColisPalette || 0;
 
           if (row.data.indicateurPalette === 1)
             // On charge des demi palettes gerbable, donc autant de palettes au sol mais on declare ensuite la moitié au trp
@@ -492,7 +500,7 @@ export class GridCommandesEventsService {
           nb_pal_dispo = nb_pal_th;
 
           const nombrePalettes = Math.ceil(nb_pal);
-          if (nombrePalettes && nombrePalettes !== row.data?.nombrePalettesCommandees)
+          if (nombrePalettes !== row.data?.nombrePalettesCommandees)
             dxDataGrid.cellValue(row.rowIndex, "nombrePalettesCommandees", nombrePalettes);
         }), 10);
 

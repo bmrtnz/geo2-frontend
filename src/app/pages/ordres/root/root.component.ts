@@ -450,12 +450,21 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     on(event.itemElement, "dxpointerdown", (e) => e.stopPropagation());
     on(event.itemElement, "dxclick", replaceEvent);
     on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
+    this.setTabTooltip(event);
   }
 
   setTabTooltip(item) {
+    // Display summary info in tab title
     const data = item.itemData;
-    // Display client code in tab title
     if (!item.itemElement.title && data.type === TabType.Ordre) {
+
+      // Registering tab items & removing duplicates to further use them within the form
+      this.ordresService.orderTabItems.push(item);
+      this.ordresService.orderTabItems = this.ordresService.orderTabItems.reduce((res, row) => {
+        if (!res.find(el => el.itemData.id === row.itemData.id)) res.push({ ...row });
+        return res;
+      }, []);
+
       this.ordresService
         .getOneByNumeroAndSocieteAndCampagne(
           data.id.split("-")[1],
@@ -466,15 +475,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe((res) => {
           const result = res.data.ordreByNumeroAndSocieteAndCampagne;
           if (!result) return;
+          item.itemData.title = result.entrepot.code;
           let dateDep = result.dateDepartPrevue ?? "-";
           if (result.dateDepartPrevue !== "-")
             dateDep = this.dateManagementService.friendlyDate(
               result.dateDepartPrevue,
               true
             );
-          item.itemElement.title = `Client : ${result.client.code}\r\n`;
-          item.itemElement.title += `Entrepôt : ${result.entrepot.code}\r\n`;
-          item.itemElement.title += `Départ : ${dateDep}`;
+          item.itemElement.title = `${this.localizationService.localize("tiers-client")} : ${result.client.code}\r\n`;
+          item.itemElement.title += `${this.localizationService.localize("tiers-entrepot")} : ${result.entrepot.code}\r\n`;
+          item.itemElement.title += `${this.localizationService.localize("rechOrdres-dateDepartPrevue")} : ${dateDep}`;
         });
     }
   }
