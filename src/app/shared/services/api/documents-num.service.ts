@@ -6,7 +6,7 @@ import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
 import FileSystemItem from "devextreme/file_management/file_system_item";
 import { from, iif } from "rxjs";
-import { filter, map, mergeMap, toArray } from "rxjs/operators";
+import { concatMap, filter, map, mergeMap, tap, toArray } from "rxjs/operators";
 import { ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { FileManagerService } from "../file-manager.service";
 
@@ -47,7 +47,7 @@ export class DocumentsNumService extends ApiService {
           )
         ),
         variables: { id },
-        fetchPolicy: "cache-first",
+        fetchPolicy: "no-cache",
       })
       .pipe(map((res) => res.data.documentNum));
   }
@@ -57,7 +57,7 @@ export class DocumentsNumService extends ApiService {
       .query<{ allDocumentNumList: DocumentNum[] }>({
         query: gql(this.buildGetListGraph(body)),
         variables: { search },
-        fetchPolicy: "cache-first",
+        fetchPolicy: "no-cache",
       })
       .pipe(map((res) => res.data.allDocumentNumList));
   }
@@ -67,7 +67,7 @@ export class DocumentsNumService extends ApiService {
       .query<{ countDocumentNum: number }>({
         query: gql(this.buildCountGraph()),
         variables: { search },
-        fetchPolicy: "cache-first",
+        fetchPolicy: "no-cache",
       })
       .pipe(map((res) => res.data.countDocumentNum));
   }
