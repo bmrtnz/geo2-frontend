@@ -24,19 +24,15 @@
     position: absolute;
     left: 20px;
     z-index: 10;
-    width: calc(100% - 40px);
+    width: calc(100% - 568px);
     background: #FFF;
     padding-top: 23px;
-
-    &.progressFade {
-      animation: progressFade 2.5s normal forwards;
-    }
 
     .dx-progressbar-status {
       position: relative;
       left: 50%;
       transform: translateX(-50%);
-      padding-top: 0px;
+      padding-top: 0;
     }
 
     .complete {
@@ -47,26 +43,6 @@
       .dx-progressbar-status {
         color: #8fc459;
       }
-    }
-  }
-
-
-  @keyframes progressFade {
-    0% {
-      opacity: 1;
-    }
-
-    20% {
-      opacity: 1;
-    }
-
-    40% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 0;
-      top: -9999px;
     }
   }
 
@@ -92,7 +68,7 @@
     }
   }
 
-  ::ng-deep .ordresBAF-grid {
+  .ordresBAF-grid {
     max-height: calc(100vh - 280px) !important;
 
     // Souhait Léa de rendre le plus de lignes possibles - 03/11/2023
@@ -110,6 +86,10 @@
 
     .OK-color {
       background-color: #8fc459 !important;
+    }
+
+    .unknown-color {
+      background-color: #CCC !important;
     }
 
     .BAFstatus-cell {

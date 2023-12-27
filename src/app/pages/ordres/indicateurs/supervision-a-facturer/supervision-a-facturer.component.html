@@ -172,7 +172,7 @@
   </form>
 
   <!-- Barre de progression ordres -->
-  <div class="baf-progress-container display-none">
+  <div class="baf-progress-container">
     <dx-progress-bar
       #progressBar
       [min]="0"
@@ -180,7 +180,6 @@
       [value]="0"
       [class.complete]="progressBar.value === 100"
       [statusFormat]="progressFormat"
-      (onComplete)="progressComplete()"
     >
     </dx-progress-bar>
   </div>
@@ -214,6 +213,7 @@
     [focusedRowEnabled]="false"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
+    [paging]=""
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
@@ -224,7 +224,7 @@
     (onContentReady)="onGridContentReady($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        'Supervision ordres à facturer',
+        '',
         $event,
         gridConfiguratorService.Grid.OrdresAFacturer,
         enableFilters.bind(this)
@@ -245,7 +245,7 @@
       [visible]="true"
       [showInfo]="true"
       [showPageSizeSelector]="false"
-      infoText="{2} {{ 'elements' | localize }}"
+      infoText="{2} {{ 'orders' | localize }}"
     ></dxo-pager>
     <dxo-export fileName="Vérification BAF"></dxo-export>
     <dxo-state-storing

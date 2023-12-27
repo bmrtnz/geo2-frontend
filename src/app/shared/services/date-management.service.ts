@@ -98,6 +98,10 @@ export class DateManagementService {
         code: "since3months",
       },
       {
+        id: "D6M",
+        code: "since6months",
+      },
+      {
         id: "D1A",
         code: "since12months",
       },
@@ -204,6 +208,10 @@ export class DateManagementService {
         break;
       case "D3M":
         deb = dateNow.setMonth(dateNow.getMonth() - 3);
+        fin = now;
+        break;
+      case "D6M":
+        deb = dateNow.setMonth(dateNow.getMonth() - 6);
         fin = now;
         break;
       case "D1A":
