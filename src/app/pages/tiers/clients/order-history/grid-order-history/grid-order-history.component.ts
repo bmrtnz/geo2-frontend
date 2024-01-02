@@ -203,11 +203,11 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       )
     );
     const gridFields = await fields.toPromise();
-    const dataSource = this.ordreLignesService.getListDataSource([
+    const dataSource = this.ordreLignesService.getListDataSource([...new Set([
       ...gridFields,
       "ordre.id",
       "ordre.statut",
-    ]);
+    ])]);
 
     const values: Inputs = {
       ...this.formGroup.value,
