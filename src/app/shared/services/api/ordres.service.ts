@@ -14,23 +14,23 @@ import {
   map,
   mergeMap,
   take,
-  takeUntil,
+  takeUntil
 } from "rxjs/operators";
-import { Ordre } from "../../models/ordre.model";
+import { Ordre, Statut, StatutLocale } from "../../models/ordre.model";
 import {
   APICount,
   APIPersist,
   APIRead,
   ApiService,
-  RelayPage,
+  RelayPage
 } from "../api.service";
-import { CurrentCompanyService } from "../current-company.service";
+import { LocalizationService } from "../localization.service";
 import { DevisesRefsService } from "./devises-refs.service";
 import {
   functionBody,
   FunctionResponse,
   FunctionResult,
-  FunctionsService,
+  FunctionsService
 } from "./functions.service";
 
 export enum Operation {
@@ -55,7 +55,7 @@ export class OrdresService
     apollo: Apollo,
     public functionsService: FunctionsService,
     private devisesRefsService: DevisesRefsService,
-    private currentCompanyService: CurrentCompanyService
+    private localize: LocalizationService,
   ) {
     super(apollo, Ordre);
   }
@@ -799,5 +799,14 @@ export class OrdresService
         fetchPolicy: "network-only",
       })
       .pipe(map((res) => res.data.allDeclarationFraude));
+  }
+
+  public getStatutsSource() {
+    return Object
+      .entries(Statut)
+      .map(([key, value]) => ({
+        text: this.localize.localize(StatutLocale[key]),
+        value,
+      }))
   }
 }

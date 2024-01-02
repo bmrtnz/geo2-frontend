@@ -2194,6 +2194,14 @@
     "repartition-ordres-regroupement-dateLivraisonPrevue": "Date de livraison",
     "repartition-ordres-regroupement-poidsNetCommande": "Poids net total",
     "please-select-station": "Veuillez spécifier une station",
-    "please-select-commercial": "Veuillez spécifier un commercial"
+    "please-select-commercial": "Veuillez spécifier un commercial",
+    "ordre-statut-anl": "annulé",
+    "ordre-statut-afc": "à facturer",
+    "ordre-statut-cfm": "confirmé",
+    "ordre-statut-epp": "en préparation",
+    "ordre-statut-exp": "expédié",
+    "ordre-statut-fct": "facturé",
+    "ordre-statut-fct_edi": "facturé en EDI",
+    "ordre-statut-ncf": "non confirmé"
   }
 }

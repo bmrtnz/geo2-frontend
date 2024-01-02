@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild, } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import OrdreLigne from "app/shared/models/ordre-ligne.model";
-import { Statut } from "app/shared/models/ordre.model";
+import Ordre, { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import { AuthService, ClientsService, EntrepotsService, } from "app/shared/services";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -95,6 +96,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   constructor(
     public ordreLignesService: OrdreLignesService,
+    public ordresService: OrdresService,
     public entrepotsService: EntrepotsService,
     public bureauxAchatService: BureauxAchatService,
     public clientsService: ClientsService,
@@ -292,7 +294,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       (data.transporteur?.id
         ? " (Transporteur : " + data.transporteur.id + ")"
         : "") +
-      ` - ${Statut[data.statut]}`;
+      ` - ${self.localizeService.localize(StatutLocale[data.statut])}`;
   }
 
   onCellPrepared(e) {
@@ -303,7 +305,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       // Affichage statut
       if (e.column.dataField === "ordre.statut")
-        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
       // Descript. article
       if (
         e.column.dataField ===
