@@ -8,8 +8,14 @@
   }
 
   .dx-tabpanel-tabs {
-    padding-bottom: 5px;
+    height: 54px;
     width: calc(100% - 40px);
+  }
+
+  .dx-tabpanel-container {
+    .dx-multiview-item-container {
+      top: 6px;
+    }
   }
 
   .fixed-tabs {
@@ -31,7 +37,7 @@
   .dx-pin-tabs-btn {
     top: 20px;
     width: 28px !important;
-    height: 55px;
+    height: 54px;
     min-width: 0 !important;
     min-height: 0 !important;
   }
@@ -132,7 +138,7 @@
       }
 
       &.home-tab {
-        height: 55px;
+        height: 54px;
 
         .dx-icon {
           margin: 4px -2px 0px 4px;
@@ -168,7 +174,7 @@
       }
 
       &.close-all-orders-tab {
-        height: 55px;
+        height: 54px;
         transition: width 0.2s, padding 0.2s;
         overflow: hidden;
 
