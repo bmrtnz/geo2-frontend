@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { MRUOrdre } from "app/shared/models/mru-ordre.model";
-import { StatutKeys } from "app/shared/models/ordre.model";
+import { Statut } from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import notify from "devextreme/ui/notify";
 import { AuthService, LocalizationService } from "..";
 import { APIRead, ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
-import notify from "devextreme/ui/notify";
 
 @Injectable({
   providedIn: "root",
@@ -166,7 +166,7 @@ export class MruOrdresService extends ApiService implements APIRead {
                 )
               )
                 return resolve({
-                  data: StatutKeys.map((key) => ({ key })) as DistinctInfo[],
+                  data: Object.keys(Statut).map((key) => ({ key })) as DistinctInfo[],
                   totalCount: 0,
                 });
 

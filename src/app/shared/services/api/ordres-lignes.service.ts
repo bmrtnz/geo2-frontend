@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import OrdreLigneLitigePick from "app/shared/models/ordre-ligne-litige-pick.model";
-import Ordre, { Statut, StatutKeys } from "app/shared/models/ordre.model";
+import Ordre, { Statut } from "app/shared/models/ordre.model";
 import {
   functionBody,
   FunctionResponse,
@@ -508,7 +508,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
                 )
               ) {
                 return resolve({
-                  data: StatutKeys.map((key) => ({ key })) as DistinctInfo[],
+                  data: Object.keys(Statut).map((key) => ({ key })) as DistinctInfo[],
                   totalCount: 0,
                 });
               } else {
