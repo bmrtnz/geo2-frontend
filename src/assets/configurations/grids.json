@@ -3619,8 +3619,6 @@
         "visibleIndex": 32,
         "dataField": "ordre.statut",
         "dataType": "string",
-        "allowHeaderFiltering": false,
-        "allowSearch": false,
         "visible": true
       },
       {
