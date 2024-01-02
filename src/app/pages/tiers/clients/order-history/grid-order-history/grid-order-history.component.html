@@ -330,6 +330,10 @@
       "
       [showInColumnChooser]="column?.showInColumnChooser"
     >
+      <dxo-header-filter
+        *ngIf="column.dataField === 'ordre.statut'"
+        [dataSource]="ordresService.getStatutsSource()"
+      ></dxo-header-filter>
     </dxi-column>
 
     <div *dxTemplate="let cell of 'zoomButtonTemplate'">
