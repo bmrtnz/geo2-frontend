@@ -77,8 +77,8 @@ export class GridRecapStockComponent {
     if (e.rowType === "data") {
       // Colorize date fab
       if (e.column.dataField === "stock.dateFabrication") {
-        if (e.data.stock.age > 2 && e.data.stock.quantiteDisponible !== 0)
-          e.cellElement.classList.add(e.data.stock.quantiteDisponible < 0 ? "red-font" : "green-font");
+        if (e.data.stock.ageCopy > 2 && e.data.stock.quantiteDisponibleCopy !== 0)
+          e.cellElement.classList.add(e.data.stock.quantiteDisponibleCopy < 0 ? "red-font" : "green-font");
       }
     }
   }
@@ -94,39 +94,52 @@ export class GridRecapStockComponent {
       "%",
       this.requiredFields
     ).subscribe((res) => {
-
       let DsItems = JSON.parse(JSON.stringify(res.data.allDetailStockResa));
-      DsItems.sort((a, b) => a.stock?.age > b.stock?.age);
-      DsItems.sort((a, b) => a.stock.fournisseur.code > b.stock.fournisseur.code);
-      // DsItems.sort((a, b) => a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age);
-      // DsItems.sort((a, b) => (a.stock.fournisseur.code !== b.stock.fournisseur.code || a.stock?.age > b.stock?.age) || a.stock.quantiteInitiale > b.stock.quantiteInitiale);
 
-      let oldFour, oldDate, oldDesc;
-      let id = 1;
+      // Build description abrégée
       DsItems.map((data) => {
-        // Handle description abrégée
         if (data.stock.statutStock === "O") {
           let time = data.stock.dateInfo.split("T")[1].split(":");
           time.splice(-1);
-          time = time.join(":");
-          data.stock.userModification = `--> Option ${data.stock.utilisateurInfo} à ${time}`;
-        } else {
-          if (data.mouvement?.quantite >= 0) {
-            data.stock.userModification = `Initial : ${data.stock.quantiteInitiale} - Déstocké : ${data.stock.quantiteReservee}`;
-          } else {
-            data.stock.userModification = `Réappro = ${Math.abs(data.stock.totalMouvements)}`;
-          }
-        }
-        // Clear repeated fields, a kind of group structure wanted by BW
-        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.userModification && data.mouvement?.quantite) {
+          data.stock.userModification = `--> Option ${data.stock.utilisateurInfo} à ${time.join(":")}`;
+        } else if (data.mouvement?.quantite >= 0)
+          data.stock.userModification = `Initial : ${data.stock.quantiteInitiale} - Déstocké : ${data.stock.quantiteReservee}`;
+      });
+
+      // Sort depending on these properties
+      DsItems.sort((a, b) => {
+        if (a.stock?.age < b.stock?.age) return -1;
+        if (a.stock?.age > b.stock?.age) return 1;
+        if (a.stock.fournisseur.code < b.stock.fournisseur.code) return -1;
+        if (a.stock.fournisseur.code > b.stock.fournisseur.code) return 1;
+        if (a.stock.typePalette.id < b.stock.typePalette.id) return -1;
+        if (a.stock.typePalette.id > b.stock.typePalette.id) return 1;
+        if (a.stock.userModification < b.stock.userModification) return -1;
+        if (a.stock.userModification > b.stock.userModification) return 1;
+        return 0;
+      });
+
+      // Handle removal of repeated fields, a kind of group structure wanted by BW
+      let oldFour, oldDate, oldDesc, oldAge, oldQteD;
+      let id = 1;
+      DsItems.map((data) => {
+        // Copy age & qté dispo as we can clear them
+        data.stock.ageCopy = data.stock.age;
+        data.stock.quantiteDisponibleCopy = data.stock.quantiteDisponible;
+
+        if (oldFour === data.stock.fournisseur.code && oldDesc === data.stock.userModification && oldAge === data.stock.age) {
           data.stock.fournisseur.code = "";
-          data.stock.quantiteDisponible = null;
+          if (oldQteD === data.stock.quantiteDisponible) {
+            data.stock.quantiteDisponible = null;
+          } else oldQteD = data.stock.quantiteDisponible;
           data.stock.age = null;
           data.stock.userModification = "";
         } else {
           oldFour = data.stock.fournisseur.code;
           oldDate = data.stock.dateFabrication;
           oldDesc = data.stock.userModification;
+          oldAge = data.stock.age;
+          oldQteD = data.stock.quantiteDisponible;
         }
         data.id = id;
         id++
