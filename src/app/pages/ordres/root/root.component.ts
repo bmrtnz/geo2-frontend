@@ -23,6 +23,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxLoadPanelComponent, DxTabPanelComponent } from "devextreme-angular";
+import { confirm } from "devextreme/ui/dialog";
 import { on } from "devextreme/events";
 import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
@@ -253,7 +254,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
   public TAB_CLOSE_ALL_INDICATORS = TAB_CLOSE_ALL_INDICATORS;
   public moreThanOneOpenOrder: number;
-  public moreThanOneIndicOrder: number;
+  public moreThanOneOpenIndic: number;
+  public openTabs: { ordres: number, indicateurs: number };
   private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
@@ -274,7 +276,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private tabContext: TabContext
   ) {
     this.moreThanOneOpenOrder = 0;
-    this.moreThanOneIndicOrder = 0;
+    this.moreThanOneOpenIndic = 0;
   }
 
   ngOnInit() {
@@ -501,6 +503,25 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async onTabCloseAllClick() {
+    let unsavedOrders;
+    // Checks if some orders haven't been saved
+    this.tabContext.getAllItems().subscribe((tabs) => { unsavedOrders = tabs.filter(tab => tab.unsaved).length });
+    if (unsavedOrders &&
+      !await confirm(
+        this.localizationService.localize("warn-unsaved-order" + (unsavedOrders > 1 ? "s" : ""), unsavedOrders),
+        this.localizationService.localize("close-tabs")))
+      return;
+
+    if (this.openTabs.ordres) this.closeEveryOrdre(true);
+    if (this.openTabs.indicateurs) setTimeout(() => this.closeEveryIndicator(true), 100);
+    notify({
+      message: this.localizationService.localize("all-tabs-were-closed"),
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
   async onTabCloseClick(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -529,15 +550,20 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    // Update delete all orders/indicators tabs
+    // Show/hide all orders/indicators tabs - Handle close btn
     if (!ordre?.length) document.querySelector('.tab-close-all-orders')?.classList.add("hideTab");
     indicateur = indicateur.filter((id) => id !== TAB_LOAD_ID);
     if (!indicateur?.length) document.querySelector('.tab-close-all-indics')?.classList.add("hideTab");
-    this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
-    this.moreThanOneIndicOrder = (indicateur?.length > 1) ? 1 : 0;
+    this.updateTabsSharing(ordre?.length, indicateur?.length);
   }
 
-  closeEveryOrdre() {
+  updateTabsSharing(ordres, indicateurs) {
+    this.openTabs = { ordres: ordres, indicateurs: indicateurs };
+    this.moreThanOneOpenOrder = (ordres > 1) ? 1 : 0;
+    this.moreThanOneOpenIndic = (indicateurs > 1) ? 1 : 0;
+  }
+
+  closeEveryOrdre(silent?: boolean) {
     this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(TabType.Indicator);
     let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
@@ -554,9 +580,10 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    // Update delete all orders tab
+    // Hide all orders tabs - Handle close btn
     document.querySelector('.tab-close-all-orders')?.classList.add("hideTab");
-    notify({
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
+    if (!silent) notify({
       message: this.localizationService
         .localize(this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed"),
     },
@@ -565,7 +592,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Keep CTRL pressed when clicking - dev util
-  closeEveryIndicator() {
+  closeEveryIndicator(silent?: boolean) {
     this.selectTab(TAB_LOAD_ID);
     const ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
     let indicateur = [];
@@ -576,11 +603,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    // Update delete all indicators tab
+    // Hide all indicators tabs - Handle close btn
     document.querySelector('.tab-close-all-indics')?.classList.add("hideTab");
-    notify({
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
+    if (!silent) notify({
       message: this.localizationService
-        .localize(this.moreThanOneOpenOrder ? "all-indicators-were-closed" : "open-indicator-was-closed"),
+        .localize(this.moreThanOneOpenIndic ? "all-indicators-were-closed" : "open-indicator-was-closed"),
     },
       { position: 'bottom center', direction: 'up-stack' }
     );
@@ -759,14 +787,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.push(data);
     this.items.sort((a, b) => a.position - b.position);
 
-    // Update remove all orders/indicators tabs
+    // Show/hide all orders/indicators tabs - Handle close btn
     setTimeout(() => {
       if (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length)
         document.querySelector('.tab-close-all-orders')?.classList.remove("hideTab");
       if (this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length)
         document.querySelector('.tab-close-all-indics')?.classList.remove("hideTab");
-      this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
-      this.moreThanOneIndicOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Indicator).filter((id) => id !== TAB_LOAD_ID)?.length > 1) ? 1 : 0;
+      this.updateTabsSharing(
+        this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length,
+        this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.filter((id) => id !== TAB_LOAD_ID)?.length
+      );
     });
     return this.items.indexOf(data);
   }

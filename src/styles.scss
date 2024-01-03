@@ -623,6 +623,12 @@ body app-root.production {
   pointer-events: none !important;
 }
 
+// Inactive low opacity icon
+.inactive-icon {
+  background-color: #DDD !important;
+  pointer-events: none !important;
+}
+
 // Inactive box => low opacity button(s)
 .inactive-box {
   .dx-button {

@@ -49,6 +49,29 @@
     min-height: 0 !important;
   }
 
+  .dx-pin-tabs-btn {
+    top: 49px;
+    height: 27px;
+  }
+
+  .dx-close-all-tabs {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    width: 20px;
+    height: 19px;
+    font-size: large;
+    text-align: center;
+    color: #FFF;
+    background: $base-accent;
+    cursor: pointer;
+
+    &:hover {
+      background: #fe3d2c;
+      color: #FFF;
+    }
+  }
+
   .dx-fast-prev-btn {
     left: 12px;
   }
