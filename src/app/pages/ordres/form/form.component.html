@@ -398,7 +398,7 @@
                           type="default"
                           icon="material-icons swap_horiz"
                           [focusStateEnabled]="false"
-                          [visible]="!ordreBAFOuFacture"
+                          [visible]="!ordreBAFOuFacture && !!fullOrderNumber"
                           hint="{{ 'hint-entrep-change' | localize }}"
                           (onClick)="openChoixEntrepotPopup()"
                         >
@@ -1125,6 +1125,7 @@
                   <app-grid-ordre-ligne-logistique
                     #gridLignesLogistique
                     (refreshGridLigneDetail)="refreshGridLigneDetail($event)"
+                    (marginsUpdate)="marginsUpdate()"
                     [ordre]="ordre"
                     [ordreBAFOuFacture]="ordreBAFOuFacture"
                     [gridCommandes]="gridCommandes"

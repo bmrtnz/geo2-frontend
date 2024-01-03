@@ -136,7 +136,7 @@
           [disabled]="running?.createRefactTranspOrder"
           [visible]="selectedConsequence === 'G'"
           text="{{ 'btn-createRefactTranspOrder' | localize }}"
-          (onClick)="createRefactTranspOrder()"
+          (onClick)="validate('createRefactTranspOrder')"
         ></dx-button>
         <dx-button
           class="big-button"
@@ -144,7 +144,7 @@
           [disabled]="running?.createReplaceOrder"
           [visible]="selectedConsequence === 'B'"
           text="{{ 'btn-createReplaceOrder' | localize }}"
-          (onClick)="createReplaceOrder()"
+          (onClick)="validate('createReplaceOrder')"
         ></dx-button>
         <dx-button
           class="big-button addToReplaceOrder"
@@ -152,7 +152,7 @@
           [disabled]="running?.addToReplaceOrder"
           [visible]="selectedConsequence === 'B'"
           text="{{ 'btn-addToReplaceOrder' | localize }}"
-          (onClick)="addToReplaceOrder()"
+          (onClick)="validate('addToReplaceOrder')"
         ></dx-button>
         <!-- Bouton plus d'actualité - Vu avec Bruno 17-02-2023 -->
         <!-- <dx-button
