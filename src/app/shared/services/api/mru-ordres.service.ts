@@ -158,26 +158,13 @@ export class MruOrdresService extends ApiService implements APIRead {
         key: ["utilisateur", "ordreRef"],
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            if (options.group) {
-              // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
-              if (
-                (options.group as Array<any>).find(
-                  ({ selector }) => selector === "ordre.statut"
-                )
-              )
-                return resolve({
-                  data: Object.keys(Statut).map((key) => ({ key })) as DistinctInfo[],
-                  totalCount: 0,
-                });
-
+            if (options.group)
               return this.loadDistinctQuery(options, (res) => {
-                console.log(this.asListCount(res.data.distinct));
                 if (res.data && res.data.distinct)
                   resolve(this.asListCount(res.data.distinct));
               });
-            }
 
-            type Response = { allMRUOrdreHeadList: RelayPage<MRUOrdre> };
+            type Response = { allMRUOrdreHeadList: Array<MRUOrdre> };
             const query = this.buildHeadList(columns);
             const variables = {
               societe: this.currentCompanyService.getCompany().id,

@@ -500,24 +500,11 @@ export class OrdreLignesService extends ApiService implements APIRead {
       store: this.createCustomStore({
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            if (options.group) {
-              // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
-              if (
-                (options.group as Array<any>).find(
-                  ({ selector }) => selector === "ordre.statut"
-                )
-              ) {
-                return resolve({
-                  data: Object.keys(Statut).map((key) => ({ key })) as DistinctInfo[],
-                  totalCount: 0,
-                });
-              } else {
-                return this.loadDistinctQuery(options, (res) => {
-                  if (res.data && res.data.distinct)
-                    resolve(this.asListCount(res.data.distinct));
-                });
-              }
-            }
+            if (options.group)
+              return this.loadDistinctQuery(options, (res) => {
+                if (res.data && res.data.distinct)
+                  resolve(this.asListCount(res.data.distinct));
+              });
 
             const { search } = this.mapLoadOptionsToVariables(options);
             const res = await this.getList(search, columns).toPromise();
