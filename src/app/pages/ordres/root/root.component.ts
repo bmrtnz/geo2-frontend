@@ -57,6 +57,7 @@ import {
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
 import { GridsService } from "../grids.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 let self;
 
@@ -272,6 +273,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private functionsService: FunctionsService,
     private gridsService: GridsService,
     private dateManagementService: DateManagementService,
+    public gridUtilsService: GridUtilsService,
     private authService: AuthService,
     private tabContext: TabContext
   ) {
@@ -506,10 +508,19 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   async onTabCloseAllClick() {
     let unsavedOrders;
     // Checks if some orders haven't been saved
-    this.tabContext.getAllItems().subscribe((tabs) => { unsavedOrders = tabs.filter(tab => tab.unsaved).length });
-    if (unsavedOrders &&
+    this.tabContext.getAllItems().subscribe((tabs) =>
+      unsavedOrders = tabs.filter(tab => tab.unsaved).map(tab => tab.id)
+    );
+    if (unsavedOrders.length &&
       !await confirm(
-        this.localizationService.localize("warn-unsaved-order" + (unsavedOrders > 1 ? "s" : ""), unsavedOrders),
+        this.localizationService.localize(
+          "warn-unsaved-order" + (unsavedOrders.length > 1 ? "s" : ""),
+          unsavedOrders.length,
+          this.gridUtilsService.friendlyFormatList(
+            unsavedOrders,
+            this.localizationService.localize("et")
+          )
+        ),
         this.localizationService.localize("close-tabs")))
       return;
 
@@ -791,7 +802,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       if (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length)
         document.querySelector('.tab-close-all-orders')?.classList.remove("hideTab");
-      if (this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length)
+      if (this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.filter((id) => id !== TAB_LOAD_ID)?.length)
         document.querySelector('.tab-close-all-indics')?.classList.remove("hideTab");
       this.updateTabsSharing(
         this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length,

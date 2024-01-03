@@ -5,8 +5,17 @@
 ::ng-deep .stock-page {
   margin-top: 0;
 
+  .grid-stock {
+    min-width: 1220px;
+  }
+
+  .dx-tabpanel-container {
+    max-height: calc(100vh - 130px) !important;
+    overflow: hidden;
+  }
+
   .grid-ordre-ligne-stock {
-    max-height: 550px;
+    max-height: calc(100vh - 350px) !important;
   }
 
   .tabpanel-item {
@@ -75,9 +84,5 @@
   .search-criteria-container {
     float: left;
     width: 100%;
-  }
-
-  .grid-grouping-button {
-    margin: 13px 21px 0 0 !important;
   }
 }
