@@ -56,9 +56,11 @@
           class="dx-tab-text-multiLine"
         >
           {{
-            tab.id !== TAB_CLOSE_ALL_ORDRES
-              ? tab.multiLineTitle
-              : tab.multiLineTitle[moreThanOneOpenOrder]
+            tab.id === TAB_CLOSE_ALL_ORDRES
+              ? tab.multiLineTitle[moreThanOneOpenOrder]
+              : tab.id === TAB_CLOSE_ALL_INDICATORS
+              ? tab.multiLineTitle[moreThanOneIndicOrder]
+              : tab.multiLineTitle
           }}
         </div>
         <i

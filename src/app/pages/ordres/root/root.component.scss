@@ -2,8 +2,15 @@
 
 ::ng-deep .tabs-ordres-page {
 
+  .dx-tab-close-all-orders:hover {
+    &+.dx-tab-close-all-indics .tab-close-all-indics:not(.hideTab) {
+      width: 98px !important;
+      padding: 12px 15px 11px 11px !important;
+    }
+  }
+
   .hideTab {
-    padding: 0 !important;
+    padding: 12px 0 11px 0 !important;
     width: 0 !important;
   }
 
@@ -97,7 +104,7 @@
 
     &:hover,
     &.dx-tab-selected {
-      .create-order-tab {
+      .tab-create-order {
         .dx-tab-text {
           max-width: 60px !important;
           padding: 0 4px 0 5px !important;
@@ -137,7 +144,7 @@
         }
       }
 
-      &.home-tab {
+      &.tab-home {
         height: 54px;
 
         .dx-icon {
@@ -145,7 +152,7 @@
         }
       }
 
-      &.create-order-tab {
+      &.tab-create-order {
         padding-right: 11px;
         color: #FFF;
         background: #8FC459;
@@ -173,9 +180,11 @@
         }
       }
 
-      &.close-all-orders-tab {
+      &.tab-close-all-orders,
+      &.tab-close-all-indics {
         height: 54px;
         transition: width 0.2s, padding 0.2s;
+        background: #F7F7F7;
         overflow: hidden;
 
         .dx-tab-content {
@@ -192,6 +201,16 @@
           .dx-icon {
             color: #fe3d2c;
           }
+        }
+      }
+
+      &.tab-close-all-indics {
+        padding: 12px 0 11px 0 !important;
+        width: 0 !important;
+
+        &:not(.hideTab):hover {
+          width: 98px !important;
+          padding: 12px 15px 11px 11px !important;
         }
       }
 
@@ -257,6 +276,7 @@
 
     .dx-tab-text-multiLine {
       width: 43px;
+      max-height: 36px;
       overflow: hidden;
       white-space: normal;
       text-transform: none;
