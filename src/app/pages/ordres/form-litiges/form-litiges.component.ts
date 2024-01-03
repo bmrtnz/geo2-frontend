@@ -93,6 +93,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     createLitige: false,
     recapInterne: false,
   };
+  public litigeDeletable = false;
 
   @ViewChild("resultat", { static: false }) resultat: DxNumberBoxComponent;
   @ViewChild(LitigeCloturePopupComponent, { static: false })
@@ -185,6 +186,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
                 this.formGroup.patchValue(totaux);
               }
             });
+          this.updateAllowDeletion();
         } else {
           this.noLitiges = true;
         }
@@ -387,6 +389,18 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     );
     mess = mess.charAt(0).toUpperCase() + mess.slice(1);
     return mess;
+  }
+
+  public deleteLitige() {
+    this.litigesService
+      .delete(this.infosLitige.litige.id)
+      .subscribe(() => this.loadForm());
+  }
+
+  private updateAllowDeletion() {
+    this.envoisService
+      .countReals(this.ordre.id, "RESLIT", "INCLIT")
+      .subscribe(res => this.litigeDeletable = !res);
   }
 
 }

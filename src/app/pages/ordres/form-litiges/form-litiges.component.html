@@ -434,6 +434,13 @@
       (onClick)="supprimerLot()"
     ></dx-button>
     <dx-button
+      type="danger"
+      text="{{ 'btn-deleteLitige' | localize }}"
+      [focusStateEnabled]="false"
+      [disabled]="!litigeDeletable"
+      (onClick)="deleteLitige()"
+    ></dx-button>
+    <dx-button
       type="success"
       text="{{ 'btn-close' | localize }}"
       [focusStateEnabled]="false"
