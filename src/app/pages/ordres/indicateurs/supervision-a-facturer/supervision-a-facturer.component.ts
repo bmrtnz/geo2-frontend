@@ -317,7 +317,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
           this.datagrid.instance.repaintRows([this.datagrid.instance.getRowIndexByKey(ordreRef)]);
-          if (this.processedOrders >= this.countOrders) {
+          if (this.processedOrders === this.countOrders) {
             this.progressSet(100);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
@@ -464,7 +464,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onValidatePromptPopup(ref: string) {
     const ordre = { ...this.currOrder, referenceClient: ref };
-    // this.currCell.cellElement.innerHTML = ref; // Quick visual change
+    this.currCell.cellElement.innerHTML = ref; // Quick visual change
 
     // Saving comment and refresh grid
     this.datagrid.instance.beginCustomLoading("");
@@ -503,6 +503,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       error: (err) => {
         this.toast("ordreBAF-save-error-refClient", "error");
         console.log(err);
+        this.datagrid.instance.repaintRows([this.currCell.row.rowIndex]);
         this.datagrid.instance.endCustomLoading();
       },
     });

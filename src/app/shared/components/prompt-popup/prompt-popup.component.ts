@@ -66,13 +66,13 @@ export class PromptPopupComponent {
 
   async show(texts?: any) {
     this.shown = false;
-    if (texts?.validText) this.validText = texts.validText;
-    if (texts?.cancelText) this.cancelText = texts.cancelText;
-    if (texts?.commentMaxLength) this.commentMaxLength = texts.commentMaxLength;
-    if (texts?.commentMinLength) this.commentMinLength = texts.commentMinLength;
-    if (texts?.commentRegex) this.commentRegex = texts.commentRegex;
-    if (texts?.commentTitle) this.commentTitle = texts.commentTitle;
-    if (texts?.commentItemsList) this.commentItemsList = texts.commentItemsList;
+    this.validText = texts.validText;
+    this.cancelText = texts.cancelText;
+    this.commentMaxLength = texts.commentMaxLength;
+    this.commentMinLength = texts.commentMinLength;
+    this.commentRegex = texts.commentRegex;
+    this.commentTitle = texts.commentTitle;
+    this.commentItemsList = texts.commentItemsList;
     await this.popupComponent.instance.show();
     if (texts?.comment) this.setText(texts.comment);
     if (texts?.currentDate) this.setDate(texts.currentDate);
