@@ -108,14 +108,18 @@ export class GridRecapStockComponent {
 
       // Sort depending on these properties
       DsItems.sort((a, b) => {
-        if (a.stock?.age < b.stock?.age) return -1;
-        if (a.stock?.age > b.stock?.age) return 1;
         if (a.stock.fournisseur.code < b.stock.fournisseur.code) return -1;
         if (a.stock.fournisseur.code > b.stock.fournisseur.code) return 1;
+        if (a.stock?.age < b.stock?.age) return -1;
+        if (a.stock?.age > b.stock?.age) return 1;
         if (a.stock.typePalette.id < b.stock.typePalette.id) return -1;
         if (a.stock.typePalette.id > b.stock.typePalette.id) return 1;
-        if (a.stock.userModification < b.stock.userModification) return -1;
-        if (a.stock.userModification > b.stock.userModification) return 1;
+        if (a.stock.mouvement?.quantite < b.stock.mouvement?.quantite) return -1;
+        if (a.stock.mouvement?.quantite > b.stock.mouvement?.quantite) return 1;
+        if (a.stock.userModification > b.stock.userModification) return -1;
+        if (a.stock.userModification < b.stock.userModification) return 1;
+        if (a.stock?.dateFabrication < b.stock?.dateFabrication) return -1;
+        if (a.stock?.dateFabrication > b.stock?.dateFabrication) return 1;
         return 0;
       });
 
