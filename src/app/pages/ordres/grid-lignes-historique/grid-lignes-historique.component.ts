@@ -54,6 +54,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() contentReadyEvent = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
@@ -300,6 +301,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         ? " (Transporteur : " + data.transporteur.id + ")"
         : "") +
       ` - ${Statut[data.statut]}`;
+  }
+
+  onContentReady(e) {
+    this.contentReadyEvent.emit();
   }
 
   onCellPrepared(e) {

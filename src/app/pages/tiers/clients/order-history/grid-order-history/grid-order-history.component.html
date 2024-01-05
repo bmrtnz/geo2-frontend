@@ -209,15 +209,6 @@
   ></dx-button>
 </form>
 
-<dx-button
-  style="margin-right: 17px"
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this)"
-></dx-button>
-
 <!-- Litige dot indicator Legend -->
 <div
   *ngIf="hasLitigeDots"
@@ -249,11 +240,11 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [noDataText]="'aucun-ordre' | localize"
+    (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onCellClick)="onCellClick($event)"
-    (onExporting)="ordreLignesService.onExporting($event, this)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -354,6 +345,34 @@
       [showInColumnChooser]="column?.showInColumnChooser"
     >
     </dxi-column>
+
+    <dxo-toolbar>
+      <!-- Export functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="export-button"
+            type="normal"
+            icon="xlsxfile"
+            hint="{{ 'btn-export-xlsx' | localize }}"
+            (onClick)="ordreLignesService.onExporting(datagrid?.instance, this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <!-- Grouping functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="grid-grouping-button"
+            type="default"
+            icon="material-icons menu_open"
+            hint="{{ 'btn-grouping' | localize }}"
+            (onClick)="gridsService.expandCollapseGroups(this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
 
     <!-- Allow to sort groups by date -->
     <dxi-sort-by-group-summary-info

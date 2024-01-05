@@ -222,14 +222,6 @@
 </div>
 
 <div class="grid-lignes-historique-container">
-  <dx-button
-    style="margin-right: 17px"
-    class="grid-grouping-button"
-    type="default"
-    icon="material-icons menu_open"
-    hint="{{ 'btn-grouping' | localize }}"
-    (onClick)="gridsService.expandCollapseGroups(this)"
-  ></dx-button>
   <dx-data-grid
     class="dx-card wide-card"
     [width]="'100%'"
@@ -249,12 +241,12 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onCellClick)="onCellClick($event)"
-    (onExporting)="ordreLignesService.onExporting($event, this)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -356,6 +348,34 @@
       [calculateGroupValue]="this[column?.calculateGroupValue]"
     >
     </dxi-column>
+
+    <dxo-toolbar>
+      <!-- Export functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="export-button"
+            type="normal"
+            icon="xlsxfile"
+            hint="{{ 'btn-export-xlsx' | localize }}"
+            (onClick)="ordreLignesService.onExporting(datagrid?.instance, this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <!-- Grouping functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="grid-grouping-button"
+            type="default"
+            icon="material-icons menu_open"
+            hint="{{ 'btn-grouping' | localize }}"
+            (onClick)="gridsService.expandCollapseGroups(this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
 
     <!-- Allow to sort groups by date -->
     <dxi-sort-by-group-summary-info

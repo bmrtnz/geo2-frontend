@@ -72,6 +72,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
   @Output() openOrder = new EventEmitter<any>();
+  @Output() contentReadyEvent = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomClientArticlePopupComponent, { static: false })
@@ -316,6 +317,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
         ? " (Transporteur : " + data.transporteur.id + ")"
         : "") +
       ` - ${Statut[data.statut]}`;
+  }
+
+  onContentReady(e) {
+    this.contentReadyEvent.emit();
   }
 
   onCellPrepared(e) {
