@@ -159,9 +159,6 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         secteur: { id: this.secteurId },
       });
     }
-    this.formGroup.get("client").patchValue({ id: "000140" }); // A VIRER !!!!
-    setTimeout(() => this.enableFilters(), 500); // A VIRER !!!!
-
   }
 
   ngOnChanges() {
