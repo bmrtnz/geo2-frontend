@@ -30,7 +30,7 @@
             #switchDepartLivraison
             [switchedOnText]=""
             [switchedOffText]=""
-            (onValueChanged)="switchDateType()"
+            (onValueChanged)="changeGrouping($event?.value)"
           ></dx-switch>
         </div>
         <div class="dx-field-label dx-field-label-right">
@@ -254,6 +254,7 @@
     (onSelectionChanged)="onSelectionChanged($event)"
     (onRowDblClick)="onRowDblClick($event)"
     (onCellClick)="onCellClick($event)"
+    (onExporting)="ordreLignesService.onExporting($event, this)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
         '',
@@ -301,6 +302,7 @@
     >
     </dxo-column-chooser>
     <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+      <!-- Colis summary in header -->
       <dxi-group-item
         *ngFor="let field of summaryFields"
         [name]="field"
@@ -310,7 +312,28 @@
         [displayFormat]="'{0}'"
       >
       </dxi-group-item>
+      <!-- Colis summary in groupFooter (for xlsx) -->
+      <dxi-group-item
+        column="nombreColisExpedies"
+        summaryType="sum"
+        showInColumn="nombreColisCommandes"
+        [displayFormat]="'{0}'"
+        [showInGroupFooter]="true"
+      >
+      </dxi-group-item>
+      <!-- Date depart in groupFooter (for sorting purposes) -->
+      <dxi-group-item
+        *ngFor="let field of customSummaryFields"
+        [name]="field"
+        [column]="field"
+        summaryType="custom"
+        [alignByColumn]="true"
+        [displayFormat]="'{0}'"
+        [showInGroupFooter]="true"
+      >
+      </dxi-group-item>
     </dxo-summary>
+
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
@@ -324,15 +347,25 @@
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
-      [calculateGroupValue]="column.calculateGroupValue"
       allowSearch="false"
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column?.showInColumnChooser"
       [calculateCellValue]="this[column?.calculateCellValue]"
+      [calculateGroupValue]="this[column?.calculateGroupValue]"
     >
     </dxi-column>
+
+    <!-- Allow to sort groups by date -->
+    <dxi-sort-by-group-summary-info
+      [summaryItem]="
+        switchDepartLivraison?.value
+          ? 'ordre.dateLivraisonPrevue'
+          : 'ordre.dateDepartPrevue'
+      "
+    >
+    </dxi-sort-by-group-summary-info>
 
     <div *dxTemplate="let cell of 'zoomButtonTemplate'">
       <dx-button

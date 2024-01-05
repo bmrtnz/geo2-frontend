@@ -13,10 +13,15 @@ import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { lastValueFrom } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
-import { AuthService } from "..";
+import { AuthService, LocalizationService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
 import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
+import dxDataGrid from "devextreme/ui/data_grid";
+import { Workbook } from "exceljs";
+import { exportDataGrid } from "devextreme/excel_exporter";
+import { saveAs } from "file-saver";
+import { DateManagementService } from "../date-management.service";
 
 export enum SummaryOperation {
   Marge = "allOrdreLigneMarge",
@@ -50,6 +55,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
     apollo: Apollo,
     public functionsService: FunctionsService,
     public authService: AuthService,
+    public localizeService: LocalizationService,
+    public dateManagementService: DateManagementService,
   ) {
     super(apollo, OrdreLigne);
     self = this;
@@ -631,6 +638,54 @@ export class OrdreLignesService extends ApiService implements APIRead {
     return this.functionsService.queryFunction("supprLignesNonExped", [
       { name: "ordreRef", type: "String", value: ordreRef },
     ]);
+  }
+
+  /**
+   * Génère un fichier xlsx ajusté #23673
+   */
+  onExporting(event: { component: dxDataGrid; cancel: boolean }, component) {
+    setTimeout(() => component.changeGrouping()); // Remove date grouping
+    setTimeout(() => {
+      const workbook = new Workbook();
+      const worksheet = workbook.addWorksheet();
+      const orderRows = event.component.getVisibleRows()
+        .filter((r) => (r.rowType === "group" && r.groupIndex === 0))
+        .map((r) => r.rowIndex);
+      exportDataGrid({
+        component: event.component,
+        worksheet,
+        customizeCell: ({ gridCell, excelCell }) => {
+          // Cleaning top header summary && groupFooter
+          if ((gridCell.rowType === "group" && component.summaryFields.includes(gridCell.column.dataField)) ||
+            (gridCell.rowType === "groupFooter" && component.customSummaryFields.includes(gridCell.column.dataField)))
+            excelCell.value = "";
+          // Center aligning everything except article & ordre group
+          if (!["article.articleDescription.descriptionReferenceLongue",
+            "article.articleDescription.descriptionReferenceCourte",
+            "ordre.numero"]
+            .includes(gridCell.column.dataField)) {
+            excelCell.alignment = { horizontal: 'center' };
+          }
+          if (gridCell.rowType === "data") {
+            // Canceled orders rows in red
+            if (gridCell.data?.ordre.flagAnnule) excelCell.font = { color: { argb: 'FF325A' } };
+          }
+        }
+      }).then(() => {
+        const offset = 2;
+        orderRows.forEach((r, i) =>
+          workbook.getWorksheet(1).insertRow(r + i + offset, [])
+        );
+        workbook.xlsx.writeBuffer().then((buffer: BlobPart) => {
+          const name = `${this.localizeService.localize(
+            "order-history"
+          )} - ${this.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
+          saveAs(new Blob([buffer], { type: "application/octet-stream" }), `${name}.xlsx`);
+        });
+        component.changeGrouping(component.switchLivraison?.value); // Back to initial state
+      });
+    }, 500);
+    event.cancel = true;
   }
 
 }
