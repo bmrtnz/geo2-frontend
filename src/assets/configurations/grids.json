@@ -1544,6 +1544,11 @@
       {
         "dataField": "dateStatut",
         "visible": false
+      },
+      {
+        "dataField": "id",
+        "showInColumnChooser": false,
+        "visible": false
       }
     ]
   },
