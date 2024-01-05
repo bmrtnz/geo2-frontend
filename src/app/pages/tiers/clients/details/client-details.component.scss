@@ -4,17 +4,21 @@
 }
 
 // Vertical alignement of tagboxes (certifications)
-::ng-deep .dx-tag-container {
-  &.dx-texteditor-input-container {
-    display: grid;
+::ng-deep .client-page {
+  .groupe-certification {
+    .dx-tag-container {
+      &.dx-texteditor-input-container {
+        display: grid;
+      }
+
+      .dx-tag~.dx-texteditor-input {
+        display: none;
+      }
+    }
   }
 
-  .dx-tag~.dx-texteditor-input {
-    display: none;
+  .special-checkbox-label {
+    white-space: inherit;
+    width: auto !important;
   }
-}
-
-.special-checkbox-label {
-  white-space: inherit;
-  width: auto !important;
 }
