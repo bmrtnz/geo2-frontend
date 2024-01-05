@@ -30,6 +30,7 @@ import { ImportProgrammesPopupComponent } from "../import-programmes-popup/impor
 import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
 import { RouteParam, TabContext } from "../root/root.component";
 import { ActivatedRoute } from "@angular/router";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-nouvel-ordre",
@@ -103,6 +104,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   @ViewChild(GridHistoriqueEntrepotsComponent, { static: false })
   historiqueEntrepotGrid: GridHistoriqueEntrepotsComponent;
   @ViewChild("grid") private grid: SingleSelection<Entrepot | MRUEntrepot>;
+  @ViewChild("gridHisto") private gridHisto: SingleSelection<Entrepot | MRUEntrepot>;
   @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
   @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
   @ViewChild(ImportProgrammesPopupComponent, { static: false })
@@ -117,6 +119,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
     private entrepotsService: EntrepotsService,
     private societesService: SocietesService,
     private devisesRefsService: DevisesRefsService,
+    private gridsService: GridsService,
     private route: ActivatedRoute,
     public authService: AuthService
   ) { }
@@ -168,9 +171,10 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
       catchError(
         (err: Error) => (this.showError(`${err.name}: ${err.message}`), EMPTY)
       ),
-      tap(({ numero }) =>
+      tap(({ numero }) => {
+        this.clearGridsFilters(); // Clearing filters on BOTH grids
         this.tabContext.openOrdre(numero, this.societe.campagne.id)
-      ),
+      }),
       debounceTime(2000),
       first()
     );
@@ -192,6 +196,17 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
     this.errorText = this.messageFormat(errorInfo);
   }
 
+  clearGridsFilters() {
+    this.gridsService.clearFilters(
+      this.EntrepotGrid.grid.instance,
+      this.EntrepotGrid.columns
+    );
+    this.gridsService.clearFilters(
+      this.historiqueEntrepotGrid.grid.instance,
+      this.historiqueEntrepotGrid.columns
+    );
+  }
+
   private messageFormat(mess) {
     mess = mess
       .replace(`Exception while fetching data (/ofValideEntrepotForOrdre) : `, "")
@@ -209,7 +224,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedEntrepot() {
-    const item = this?.grid?.getSelectedItem();
+    const item = this?.grid?.getSelectedItem() || this?.gridHisto?.getSelectedItem();
     if (item instanceof MRUEntrepot) {
       this.codeEnt = item.codeEntrepot;
       return item.entrepot;
@@ -221,6 +236,13 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   }
 
   onTypeChange(e) {
+    if (this.EntrepotGrid?.grid) {
+      this.EntrepotGrid.grid.instance.option("focusedRowIndex", -1);
+    }
+    if (this.historiqueEntrepotGrid?.grid) {
+      this.historiqueEntrepotGrid.grid.instance.clearSelection();
+      this.historiqueEntrepotGrid.grid.instance.option("focusedRowIndex", -1);
+    }
     this.favorites = e.value === this.typeEntrepots[0];
   }
 
