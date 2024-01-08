@@ -24,8 +24,8 @@ import {
   GridConfiguratorService
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
-import CustomStore from "devextreme/data/custom_store";
+import { DxDataGridComponent, DxProgressBarComponent, DxSelectBoxComponent } from "devextreme-angular";
+import CustomStore, { LoadResult } from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { ClickEvent } from "devextreme/ui/button";
 import notify from "devextreme/ui/notify";
@@ -33,6 +33,8 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { concatMap, filter, map, toArray } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+
+let self;
 
 enum InputField {
   secteurCode = "secteur",
@@ -77,10 +79,16 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public gridItemsSelected: boolean;
   public launchEnabled: boolean;
   public clotureEnabled: boolean;
+  public countOrders: number;
+  public processedOrders: number;
+  public store: CustomStore;
+  public company: string;
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild(PromptPopupComponent) promptPopup: PromptPopupComponent;
+  @ViewChild("progressBar", { static: false }) progress: DxProgressBarComponent;
+
 
   public formGroup = new UntypedFormGroup({
     secteurCode: new UntypedFormControl(),
@@ -108,6 +116,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     private tabContext: TabContext,
     private functionsService: FunctionsService,
   ) {
+    self = this;
+    this.company = this.currentCompanyService.getCompany().id;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.OrdresAFacturer
     );
@@ -117,7 +127,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.secteurs.filter([
       ["valide", "=", true],
       "and",
-      ["societes", "contains", this.currentCompanyService.getCompany().id],
+      ["societes", "contains", this.company],
     ]);
     this.clients = this.clientsService.getDataSource_v2([
       "id",
@@ -169,6 +179,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
     // Only way found to validate and show Warning icon
     this.formGroup.get("secteurCode").setValue("");
     this.formGroup.get("secteurCode").reset();
@@ -221,6 +232,14 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     });
   }
 
+  progressFormat(ratio) {
+    return `${self.localization.localize("loading")} : ${Math.round(ratio * 100)}%`;
+  }
+
+  progressSet(ratio?) {
+    this.progress.value = ratio ?? 0;
+  }
+
   displayIDBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
@@ -235,29 +254,94 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   enableFilters() {
     if (!this.formGroup.get("secteurCode").value) {
-      notify("Veuillez spécifier un secteur", "error");
+      this.toast("please-select-sector", "error");
     } else {
+
+      this.progressSet(); // Initialize progress bar
       this.datagrid.instance.clearSelection();
       this.launchEnabled = true;
       this.datagrid.dataSource = null;
 
-      const values: Inputs = {
-        ...this.formGroup.value,
-      };
+      const values: Inputs = { ...this.formGroup.value };
 
       this.ordresBafService.setPersisantVariables({
         secteurCode: values.secteurCode.id,
         dateMin: this.dateManagementService.formatDate(values.dateMin),
         dateMax: this.dateManagementService.formatDate(values.dateMax),
         clientCode: values.clientCode?.id,
-        societeCode: this.currentCompanyService.getCompany().id,
+        societeCode: this.company,
         entrepotCode: values.entrepotCode?.id,
         codeCommercial: values.codeAssistante?.id, // Inverted as inverted in orders table
         codeAssistante: values.codeCommercial?.id, // Inverted as inverted in orders table
       } as Inputs);
 
-      this.datagrid.dataSource = this.ordresDataSource;
+      setTimeout(() => { // Dx needs some time for updating data
+        this.datagrid.dataSource = this.ordresDataSource;
+        const ds = this.datagrid.dataSource as DataSource;
+        this.store = ds.store() as CustomStore;
+        this.progressSet(5);
+        this.datagrid.instance.beginCustomLoading("");
+        this.store.load().then((res: LoadResult<any>) => {
+          this.countOrders = res.length;
+          this.processedOrders = 0;
+          this.progressSet(20);
+          setTimeout(() => res.map(data => this.controlBaf(data.ordreRef)));
+        });
+      });
     }
+  }
+
+  controlBaf(ordreRef) {
+    this.ordresBafService
+      .fControlBaf(ordreRef, this.company)
+      .subscribe({
+        next: (res: any) => {
+          this.store.push([
+            {
+              key: ordreRef,
+              type: "update",
+              data: {
+                indicateurBaf: res.data.fControlBaf.data.ind_baf,
+                description: res.data.fControlBaf.data.desc_ctl,
+                pourcentageMargeBrut: res.data.fControlBaf.data.pc_marge_brute,
+                indicateurTransporteur: res.data.fControlBaf.data.ind_trp,
+                indicateurDate: res.data.fControlBaf.data.ind_date,
+                indicateurPrix: res.data.fControlBaf.data.ind_prix,
+                indicateurStation: res.data.fControlBaf.data.ind_station,
+                indicateurQte: res.data.fControlBaf.data.ind_qte,
+                indicateurAutre: res.data.fControlBaf.data.ind_autre
+              },
+            },
+          ]);
+          this.processedOrders++;
+          const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
+          this.progressSet(ratio);
+          this.datagrid.instance.repaintRows([this.datagrid.instance.getRowIndexByKey(ordreRef)]);
+          if (this.processedOrders === this.countOrders) {
+            this.progressSet(100);
+            this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
+            this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
+            this.datagrid.instance.columnOption("numeroOrdre", "sortOrder", "asc");
+            this.datagrid.instance.endCustomLoading();
+            this.toast("data-loading-ended");
+          }
+        },
+        error: (err) => {
+          this.processedOrders++;
+          this.toast("error-updating-values", "error", 7000);
+          console.log(err);
+        },
+      });
+  }
+
+  toast(message, type?, displayTime?) {
+    notify({
+      message: this.localization.localize(message),
+      type: type ?? "success",
+      displayTime: displayTime ?? 3000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
   }
 
   onSecteurChange(e) {
@@ -271,7 +355,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       this.clients.filter([
         ["secteur.id", "=", e.value.id],
         "and",
-        ["societe.id", "=", this.currentCompanyService.getCompany().id],
+        ["societe.id", "=", this.company],
       ]);
   }
 
@@ -380,7 +464,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onValidatePromptPopup(ref: string) {
     const ordre = { ...this.currOrder, referenceClient: ref };
-    // this.currCell.cellElement.innerHTML = ref; // Quick visual change
+    this.currCell.cellElement.innerHTML = ref; // Quick visual change
 
     // Saving comment and refresh grid
     this.datagrid.instance.beginCustomLoading("");
@@ -391,16 +475,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         store.push([
           { key: ordre.id, type: "update", data: { clientReference: ref } },
         ]);
-        notify(
-          this.localizeService.localize("ordreBAF-save-refClient"),
-          "success",
-          2000
-        );
+        this.toast("ordreBAF-save-refClient");
         this.ordresBafService
-          .fControlBaf(ordre.id, this.currentCompanyService.getCompany().id)
+          .fControlBaf(ordre.id, this.company)
           .subscribe({
             next: (res: any) => {
-              console.log(res);
               store.push([
                 {
                   key: ordre.id,
@@ -415,15 +494,16 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
               this.datagrid.instance.endCustomLoading();
             },
             error: (err) => {
-              notify("Erreur update valeurs", "error", 3000);
+              this.toast("error-updating-values", "error");
               console.log(err);
               this.datagrid.instance.endCustomLoading();
             },
           });
       },
       error: (err) => {
-        notify("Erreur sauvegarde réf. client", "error", 3000);
+        this.toast("ordreBAF-save-error-refClient", "error");
         console.log(err);
+        this.datagrid.instance.repaintRows([this.currCell.row.rowIndex]);
         this.datagrid.instance.endCustomLoading();
       },
     });
@@ -434,18 +514,18 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     const ordreRefs = this.datagrid.instance
       .getSelectedRowsData()
       .map((row: Partial<OrdreBaf>) => row.ordreRef);
-    notify(this.localization.localize("invoice-running"), "info", 5000);
+    this.toast("invoice-running", "info", 5000);
     this.datagrid.instance.beginCustomLoading("");
     this.ordresBafService
       .fBonAFacturer(
         ordreRefs,
-        this.currentCompanyService.getCompany().id,
+        this.company,
         true
       ) // true for silent mode without warnings
       .subscribe({
         complete: () => {
           this.datagrid.instance.endCustomLoading();
-          notify(this.localization.localize("invoice-finished"), "success", 5000);
+          this.toast("invoice-finished");
           this.enableFilters();
         }
       });
@@ -465,7 +545,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.classList.add("refClient-BAF");
         e.cellElement.setAttribute(
           "title",
-          this.localization.localize("hint-click-change-refClt")
+          (e.value ? e.value + "\r\n\r\n" : "") +
+          this.localization.localize(`hint-click-${e.value ? "change" : "create"}-refClt`)
         );
       }
 
@@ -507,7 +588,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         e.cellElement.innerText =
           Object.keys(status)[
           (Object.values(status) as string[]).indexOf(e.value)
-          ];
+          ] ?? "----";
         if (e.data.description) {
           e.cellElement.setAttribute(
             "title",
@@ -548,8 +629,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       case status.ALERTE:
         cellClassColor = "alert";
         break;
+      case status.OK:
+        cellClassColor = "OK";
+        break;
     }
-    return (cellClassColor ? cellClassColor : "OK") + "-color";
+    return (cellClassColor ? cellClassColor : "unknown") + "-color";
   }
 
   clotureSP(event: ClickEvent) {

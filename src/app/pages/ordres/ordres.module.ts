@@ -19,6 +19,7 @@ import { LocalizePipe } from "app/shared/pipes";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { SharedModule } from "app/shared/shared.module";
 import {
+  DxProgressBarModule,
   DxAccordionModule,
   DxActionSheetModule,
   DxAutocompleteModule,
@@ -277,6 +278,7 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     GridsService,
   ],
   imports: [
+    DxProgressBarModule,
     OrdresRoutingModule,
     SharedModule,
     FormsModule,

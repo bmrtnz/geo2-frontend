@@ -1,280 +1,292 @@
-<form
-  class="dx-fieldset supervision-BAF"
-  [formGroup]="formGroup"
->
-  <!-- <div class="title-container">
-    <h6>{{ "preFilter-title" | localize }}</h6>
+<div class="supervision-BAF">
+  <form
+    class="dx-fieldset supervision-BAF-form"
+    [formGroup]="formGroup"
+  >
+    <div style="clear: both"></div>
+    <div class="BAFFilterArea">
+      <dx-box>
+        <dxi-item [ratio]="3">
+          <!-- Secteurs -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "tiers-clients-secteur" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="secteurCode"
+                [dataSource]="secteurs"
+                displayExpr="description"
+                searchExpr="description"
+                (onValueChanged)="onSecteurChange($event)"
+              >
+                <dx-validator>
+                  <dxi-validation-rule
+                    type="required"
+                    message=""
+                  ></dxi-validation-rule>
+                </dx-validator>
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Client -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "tiers-contacts-clients" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="clientCode"
+                [dataSource]="clients"
+                [showClearButton]="true"
+                displayExpr="raisonSocial"
+                [searchExpr]="['code']"
+                (onValueChanged)="onClientChange($event)"
+                [displayExpr]="displayIDBefore"
+              >
+                <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Entrepôt -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "ordres-entrepôt" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="entrepotCode"
+                [dataSource]="entrepots"
+                [showClearButton]="true"
+                displayExpr="raisonSocial"
+                [searchExpr]="['code']"
+                [displayExpr]="displayIDBefore"
+                >">
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Commercial -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "ordres-commercial" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="codeCommercial"
+                [dataSource]="commerciaux"
+                [showClearButton]="true"
+                [displayExpr]="displayIDBefore"
+                [searchExpr]="['id', 'nomUtilisateur']"
+              >
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+      </dx-box>
+      <dx-box>
+        <dxi-item [ratio]="3">
+          <!-- Assistante -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "ordres-assistante" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                formControlName="codeAssistante"
+                [dataSource]="assistantes"
+                [showClearButton]="true"
+                [displayExpr]="displayIDBefore"
+                [searchExpr]="['id', 'nomUtilisateur']"
+              >
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Période -->
+          <div class="dx-field">
+            <div class="dx-field-label noEllipsis">
+              {{ "ordres-periode" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                #periodeSB
+                [items]="periodes"
+                [displayExpr]="dateManagementService.displayPeriodText"
+                (onValueChanged)="setDates($event)"
+              >
+                <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Date de début -->
+          <div class="dx-field field">
+            <div class="dx-field-label">
+              {{ "ordres-Du" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-date-box
+                formControlName="dateMin"
+                class="dateStart"
+                type="date"
+                [displayFormat]="'dd-MM-yy'"
+                (onValueChanged)="manualDate($event)"
+              ></dx-date-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="3">
+          <!-- Date de fin -->
+          <div class="dx-field field">
+            <div class="dx-field-label">
+              {{ "ordres-au" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-date-box
+                formControlName="dateMax"
+                class="dateEnd"
+                type="date"
+                [displayFormat]="'dd-MM-yy'"
+                (onValueChanged)="manualDate($event)"
+              ></dx-date-box>
+            </div>
+          </div>
+        </dxi-item>
+      </dx-box>
+    </div>
+    <br />
+  </form>
+
+  <!-- Barre de progression ordres -->
+  <div class="baf-progress-container">
+    <dx-progress-bar
+      #progressBar
+      [min]="0"
+      [max]="100"
+      [value]="0"
+      [class.complete]="progressBar.value === 100"
+      [statusFormat]="progressFormat"
+    >
+    </dx-progress-bar>
+  </div>
+
+  <div class="launch-container">
     <dx-button
       class="refresh"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
     ></dx-button>
-  </div> -->
-  <div style="clear: both"></div>
-  <div class="BAFFilterArea">
-    <dx-box>
-      <dxi-item [ratio]="3">
-        <!-- Secteurs -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "tiers-clients-secteur" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="secteurCode"
-              [dataSource]="secteurs"
-              displayExpr="description"
-              searchExpr="description"
-              (onValueChanged)="onSecteurChange($event)"
-            >
-              <dx-validator>
-                <dxi-validation-rule
-                  type="required"
-                  message=""
-                ></dxi-validation-rule>
-              </dx-validator>
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Client -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "tiers-contacts-clients" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="clientCode"
-              [dataSource]="clients"
-              [showClearButton]="true"
-              displayExpr="raisonSocial"
-              [searchExpr]="['code']"
-              (onValueChanged)="onClientChange($event)"
-              [displayExpr]="displayIDBefore"
-            >
-              <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Entrepôt -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-entrepôt" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="entrepotCode"
-              [dataSource]="entrepots"
-              [showClearButton]="true"
-              displayExpr="raisonSocial"
-              [searchExpr]="['code']"
-              [displayExpr]="displayIDBefore"
-              >">
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Commercial -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-commercial" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="codeCommercial"
-              [dataSource]="commerciaux"
-              [showClearButton]="true"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id', 'nomUtilisateur']"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-    </dx-box>
-    <dx-box>
-      <dxi-item [ratio]="3">
-        <!-- Assistante -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-assistante" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              formControlName="codeAssistante"
-              [dataSource]="assistantes"
-              [showClearButton]="true"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id', 'nomUtilisateur']"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Période -->
-        <div class="dx-field">
-          <div class="dx-field-label noEllipsis">
-            {{ "ordres-periode" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              #periodeSB
-              [items]="periodes"
-              [displayExpr]="dateManagementService.displayPeriodText"
-              (onValueChanged)="setDates($event)"
-            >
-              <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Date de début -->
-        <div class="dx-field field">
-          <div class="dx-field-label">
-            {{ "ordres-Du" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-date-box
-              formControlName="dateMin"
-              class="dateStart"
-              type="date"
-              [displayFormat]="'dd-MM-yy'"
-              (onValueChanged)="manualDate($event)"
-            ></dx-date-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.5"></dxi-item>
-      <dxi-item [ratio]="3">
-        <!-- Date de fin -->
-        <div class="dx-field field">
-          <div class="dx-field-label">
-            {{ "ordres-au" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-date-box
-              formControlName="dateMax"
-              class="dateEnd"
-              type="date"
-              [displayFormat]="'dd-MM-yy'"
-              (onValueChanged)="manualDate($event)"
-            ></dx-date-box>
-          </div>
-        </div>
-      </dxi-item>
-    </dx-box>
+    <dx-button
+      class="launchSP"
+      type="normal"
+      [disabled]="!clotureEnabled"
+      text="{{ 'btn-cloture-sp' | localize }}"
+      (onClick)="clotureSP($event)"
+    ></dx-button>
+    <dx-button
+      class="launch"
+      type="success"
+      [disabled]="!launchEnabled || !gridItemsSelected"
+      text="{{ 'btn-launch' | localize }}"
+      (onClick)="launch($event)"
+    ></dx-button>
   </div>
-  <br />
-</form>
 
-<div class="launch-container">
-  <dx-button
-    class="refresh"
-    type="default"
-    text="{{ 'btn-refresh' | localize }}"
-    (onClick)="enableFilters()"
-  ></dx-button>
-  <dx-button
-    class="launchSP"
-    type="normal"
-    [disabled]="!clotureEnabled"
-    text="{{ 'btn-cloture-sp' | localize }}"
-    (onClick)="clotureSP($event)"
-  ></dx-button>
-  <dx-button
-    class="launch"
-    type="success"
-    [disabled]="!launchEnabled || !gridItemsSelected"
-    text="{{ 'btn-launch' | localize }}"
-    (onClick)="launch($event)"
-  ></dx-button>
-</div>
-
-<dx-data-grid
-  class="ordresBAF-grid"
-  [showBorders]="false"
-  [focusedRowEnabled]="false"
-  [focusedRowIndex]="0"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="true"
-  (onRowPrepared)="onRowPrepared($event)"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onCellClick)="onCellClick($event)"
-  (onSelectionChanged)="onSelectionChanged($event)"
-  (onContentReady)="onGridContentReady($event)"
-  (onToolbarPreparing)="
-    gridConfiguratorService.onToolbarPreparing(
-      'Supervision ordres à facturer',
-      $event,
-      gridConfiguratorService.Grid.OrdresAFacturer,
-      enableFilters.bind(this)
-    )
-  "
->
-  <!-- Grid configuration -->
-  <dxo-selection
-    mode="multiple"
-    [showCheckBoxesMode]="'always'"
-    [selectAllMode]="'page'"
-  ></dxo-selection>
-  <dxo-header-filter
-    [visible]="true"
-    [allowSearch]="true"
-  ></dxo-header-filter>
-  <dxo-pager
-    [visible]="true"
-    [showInfo]="true"
-    [showPageSizeSelector]="false"
-    infoText="{2} {{ 'elements' | localize }}"
-  ></dxo-pager>
-  <dxo-export fileName="Vérification BAF"></dxo-export>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.OrdresAFacturer"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
+  <dx-data-grid
+    class="ordresBAF-grid"
+    [showBorders]="false"
+    [focusedRowEnabled]="false"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [paging]=""
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
+    (onSelectionChanged)="onSelectionChanged($event)"
+    (onContentReady)="onGridContentReady($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdresAFacturer,
+        enableFilters.bind(this)
+      )
+    "
   >
-  </dxo-column-chooser>
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [cssClass]="column.cssClass"
-    [caption]="
-      ('ordresBAF-' + column.dataField?.split('.').join('-') | localize) ||
-      column.name
-    "
-    [dataType]="column?.dataType"
-    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [allowHeaderFiltering]="
-      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
-</dx-data-grid>
+    <!-- Grid configuration -->
+    <dxo-selection
+      mode="multiple"
+      [showCheckBoxesMode]="'always'"
+      [selectAllMode]="'page'"
+    ></dxo-selection>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-pager
+      [visible]="true"
+      [showInfo]="true"
+      [showPageSizeSelector]="false"
+      infoText="{2} {{ 'orders' | localize }}"
+    ></dxo-pager>
+    <dxo-export fileName="Vérification BAF"></dxo-export>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.OrdresAFacturer"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [cssClass]="
+        'small-side-padding' + (column.cssClass ? ' ' + column.cssClass : '')
+      "
+      [width]="column.width"
+      [caption]="
+        ('ordresBAF-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [dataType]="column?.dataType"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+  </dx-data-grid>
+</div>
 
 <app-prompt-popup
   [title]="promptPopupTitle"

@@ -2,75 +2,119 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-.supervision-BAF {
-  margin: 15px 20px 0 20px;
+::ng-deep .supervision-BAF {
 
-  .title-container {
-    h6 {
-      margin: 0;
-      float: left;
-    }
+  .supervision-BAF-form {
+    margin: 15px 20px 0 20px;
 
-    .refresh {
-      top: -8px;
-      float: right;
+    .title-container {
+      h6 {
+        margin: 0;
+        float: left;
+      }
+
+      .refresh {
+        top: -8px;
+        float: right;
+      }
     }
   }
-}
 
-.launch-container {
-  position: absolute;
-  right: 150px;
-  margin-top: 6px;
-  z-index: 1;
+  .baf-progress-container {
+    position: absolute;
+    left: 20px;
+    z-index: 10;
+    width: calc(100% - 568px);
+    background: #FFF;
+    padding-top: 23px;
 
-  dx-button {
-    position: relative;
-    margin: 0 10px;
+    .dx-progressbar-status {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-top: 0;
+      width: 105px;
+    }
 
-    &.launchSP {
-      background-color: $BW-turquoise-light !important;
+    .complete {
+      .dx-progressbar-range {
+        background-color: #8fc459;
+      }
+
+      .dx-progressbar-status {
+        color: #8fc459;
+      }
+    }
+  }
+
+  .launch-container {
+    position: absolute;
+    right: 150px;
+    margin-top: 6px;
+    z-index: 1;
+
+    dx-button {
+      position: relative;
+      margin: 0 10px;
+
+      &.launchSP {
+        color: #FFF !important;
+        background-color: $BW-turquoise-light !important;
+
+        &:hover {
+          background-color: $BW-turquoise-medium !important;
+        }
+      }
+
+    }
+  }
+
+  .ordresBAF-grid {
+    max-height: calc(100vh - 280px) !important;
+
+    // Souhait Léa de rendre le plus de lignes possibles - 03/11/2023
+    tr {
+      height: 28px !important;
+    }
+
+    .statut {
+      padding-right: 15px !important;
+    }
+
+    .clientReference {
+      max-width: 160px !important;
+      line-height: 14px;
+    }
+
+    .blocked-color {
+      background-color: #ff325a !important;
+    }
+
+    .alert-color {
+      background-color: #ffa100 !important;
+    }
+
+    .OK-color {
+      background-color: #8fc459 !important;
+    }
+
+    .unknown-color {
+      background-color: #CCC !important;
+    }
+
+    .BAFstatus-cell {
+      cursor: help !important;
+      color: #fff !important;
+      transition: 0.1s;
 
       &:hover {
-        background-color: $BW-turquoise-medium !important;
+        opacity: 0.65;
       }
     }
 
-  }
-}
-
-::ng-deep .ordresBAF-grid {
-  max-height: calc(100vh - 280px) !important;
-
-  // Souhait Léa de rendre le plus de lignes possibles - 03/11/2023
-  tr {
-    height: 28px !important;
-  }
-
-  .blocked-color {
-    background-color: #ff325a !important;
-  }
-
-  .alert-color {
-    background-color: #ffa100 !important;
-  }
-
-  .OK-color {
-    background-color: #8fc459 !important;
-  }
-
-  .BAFstatus-cell {
-    cursor: help !important;
-    color: #fff !important;
-    transition: 0.1s;
-
-    &:hover {
-      opacity: 0.65;
+    .refClient-BAF {
+      cursor: pointer !important;
+      background-color: #e2f5f1 !important;
     }
-  }
-
-  .refClient-BAF {
-    cursor: pointer !important;
-    background-color: #e2f5f1 !important;
   }
 }
