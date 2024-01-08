@@ -181,9 +181,12 @@ export class EnvoisService extends ApiService implements APIRead {
   }
 
   /** Count envois that are not temporary */
-  public countReals(ordreID: Ordre["id"], fluxID: Flux["id"]) {
+  public countReals(ordreID: Ordre["id"], ...fluxsID: Array<Flux["id"]>) {
+    const fluxs = fluxsID
+      .map(id => `flux.id==${id}`)
+      .join(' or ');
     return this.countBy(
-      `ordre.id==${ordreID} and flux.id==${fluxID} and (traite==N or traite==O or traite=isnull=null)`
+      `ordre.id==${ordreID} and (${fluxs}) and (traite==N or traite==O or traite=isnull=null)`
     ).pipe(
       map(res => res.data.countBy),
     )

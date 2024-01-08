@@ -176,6 +176,13 @@ export class LitigesService extends ApiService implements APIRead {
     });
   }
 
+  delete(id: Litige["id"]) {
+    return this.apollo.mutate<{ deleteLitige }>({
+      mutation: gql(this.buildDeleteGraph()),
+      variables: { id },
+    });
+  }
+
   ofClotureLitigeClient(
     litigeRef: string,
     societeCode: string,
