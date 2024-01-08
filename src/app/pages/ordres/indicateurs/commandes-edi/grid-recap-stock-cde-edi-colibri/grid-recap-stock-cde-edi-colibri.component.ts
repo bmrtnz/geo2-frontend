@@ -42,6 +42,7 @@ export class GridRecapStockCdeEdiColibriComponent {
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
   @Output() selectChange = new EventEmitter<any>();
+  @Output() valueChange = new EventEmitter<any>();
   @Output() hidePopup = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
@@ -52,9 +53,10 @@ export class GridRecapStockCdeEdiColibriComponent {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public env = environment;
-  private oldgtin: string;
-  private alternateOrder: boolean;
+  private oldgtin: string = "";
+  private alternateOrder: boolean = false;
   public dataSource: DataSource;
+
 
   readonly specialFields = [
     "fournisseur.id",
@@ -95,6 +97,12 @@ export class GridRecapStockCdeEdiColibriComponent {
 
   refreshGrid() {
     this.enableFilters();
+  }
+
+  setCellValue(newData, value, currentData) {
+    const context: any = this;
+    context.defaultSetCellValue(newData, value);
+    setTimeout(() => self.valueChange.emit(), 10);
   }
 
   onEditorPreparing(e) {

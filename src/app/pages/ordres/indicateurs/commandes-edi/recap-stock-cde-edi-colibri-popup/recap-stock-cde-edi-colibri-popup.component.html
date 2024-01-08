@@ -31,14 +31,14 @@
         <div style="clear: both"></div>
         <dx-button
           #addButton
-          [ngClass]="{ pulse: pulseBtnOn }"
+          [ngClass]="{ pulse: pulseBtnOn && !addButton?.disabled }"
           class="create-order-button"
           type="success"
-          [disabled]="creatingOrder"
-          [visible]="
-            selectedGTIN?.length > 0 &&
-            selectedGTIN?.length === resultsGTIN?.length &&
-            noWarningShown()
+          [disabled]="
+            creatingOrder ||
+            !selectedGTIN?.length ||
+            selectedGTIN?.length !== resultsGTIN?.length ||
+            !noWarningShown()
           "
           text="{{ 'creer-ordre(s)' | localize }}"
           (onClick)="createOrder()"
@@ -47,6 +47,7 @@
           [ordreEdiId]="refOrdreEDI"
           [selectedRows]="selectedRows"
           (selectChange)="selectFromGrid($event)"
+          (valueChange)="checkValidQties()"
           (hidePopup)="clearAndHidePopup()"
         ></app-grid-recap-stock-cde-edi-colibri>
         <br />

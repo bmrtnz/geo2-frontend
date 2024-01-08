@@ -21,8 +21,9 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { concatMap, finalize, forkJoin } from "rxjs";
+import { concatMap, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
+import { GridsService } from "app/pages/ordres/grids.service";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     private stockArticleEdiBassinService: StockArticleEdiBassinService,
     private ordresEdiService: OrdresEdiService,
     private gridUtilsService: GridUtilsService,
+    private gridsService: GridsService,
     private datePipe: DatePipe,
     private tabContext: TabContext,
     private authService: AuthService,
@@ -83,7 +85,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.nbLignesOld = this.nbLignes;
     this.checkValidQties();
   }
-
 
   getGridSelectedArticles() {
     // We ensure that all GTIN are selected
@@ -111,15 +112,19 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     }));
     this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows)
       .subscribe({
-        next: (res) => console.log(res),
         error: (error: Error) => notify(this.messageFormat(error.message), "error", 7000)
       });
   }
 
   checkValidQties() {
-    this.selectedRows = this.gridRecap.datagrid.instance.getSelectedRowsData().slice();
-    this.selectedRows.sort((a, b) => a.gtin.localeCompare(b.gtin));
-    this.selectedRows.push({ gtin: "fake" })
+    const selectedIds = this.getGridSelectedArticles().map(row => row.id);
+    this.selectedRows = this.gridRecap.datagrid.instance
+      .getVisibleRows()
+      .map(row => row?.data)
+      .filter(row => selectedIds.includes(row.id));
+    this.selectedRows
+      .sort((a, b) => a.gtin.localeCompare(b.gtin))
+      .push({ gtin: "fake" });
     let sumQuantiteValidee = 0, oldGtin, oldQuantiteColis, oldRow;
     this.selectedRows.map(row => {
       if (row.gtin !== oldGtin && oldGtin) {
@@ -128,8 +133,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       }
       oldGtin = row.gtin;
       oldRow = row;
-      oldQuantiteColis = row.ligneEdi?.quantiteColis ?? 0;
-      sumQuantiteValidee += row.quantiteValidee ?? 0;
+      oldQuantiteColis = row.ligneEdi?.quantiteColis;
+      sumQuantiteValidee += (row.quantiteValidee ? row.quantiteValidee : oldQuantiteColis);
     });
     this.selectedRows.pop(); // Remove fake item
   }
@@ -168,7 +173,10 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.clearAll();
   }
 
-  createOrder() {
+  async createOrder() {
+
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridRecap.datagrid);
+
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     if (!rows.length) return;
     this.creatingOrder = true;
