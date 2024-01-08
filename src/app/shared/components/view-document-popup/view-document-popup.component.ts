@@ -6,9 +6,11 @@ import {
   OnChanges,
   OnInit,
   Output,
+  ViewChild
 } from "@angular/core";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { DxPopupModule } from "devextreme-angular";
+import { DxiToolbarItemComponent } from "devextreme-angular/ui/nested";
 import { environment } from "environments/environment";
 import Document from "../../models/document.model";
 import { ScreenService } from "../../services";
@@ -29,7 +31,9 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
   public document: ViewDocument;
 
   @Input() visible = false;
+  @Input() whenDownload: () => void;
   @Output() visibleChange = new EventEmitter<boolean>();
+  @ViewChild("downloadButton") downloadButton: DxiToolbarItemComponent;
 
   public popupFullscreen: boolean;
   public safeUrl: SafeUrl;
@@ -45,6 +49,7 @@ export class ViewDocumentPopupComponent implements OnInit, OnChanges {
       const document = changes.document.currentValue;
 
       this.safeUrl = this.sanitize(document);
+      this.downloadButton.options.onClick = this.whenDownload;
     }
   }
 
