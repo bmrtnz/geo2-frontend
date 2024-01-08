@@ -314,9 +314,18 @@
           [column]="field"
           summaryType="custom"
           [alignByColumn]="true"
+          [showInColumn]="field !== 'varieteID' ? field : 'id'"
         >
         </dxi-group-item>
       </dxo-summary>
+
+      <!-- Allow to sort groups by commentaire -->
+      <dxi-sort-by-group-summary-info
+        [summaryItem]="
+          sortByCommentCheckBox?.value ? 'commentaire' : 'varieteID'
+        "
+      >
+      </dxi-sort-by-group-summary-info>
 
       <!-- Déstocker -->
       <dxi-column
@@ -413,12 +422,6 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
-
-      <!-- Allow to sort groups by commentaire -->
-      <dxi-sort-by-group-summary-info
-        [summaryItem]="sortByCommentCheckBox?.value ? 'commentaire' : ''"
-      >
-      </dxi-sort-by-group-summary-info>
     </dx-data-grid>
   </div>
 </div>

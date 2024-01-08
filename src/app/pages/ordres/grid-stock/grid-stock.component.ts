@@ -123,7 +123,7 @@ export class GridStockComponent implements OnInit {
     "prevision7j",
     "stock.quantiteTotale"
   ];
-  public customSummaryFields = ["quantiteHebdomadaire", "commentaire"];
+  public customSummaryFields = ["quantiteHebdomadaire", "commentaire", "varieteID"];
 
   readonly decriptionFields = new Set([
     "id",

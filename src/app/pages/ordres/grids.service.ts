@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
-import { ONE_MINUTE } from "basic";
+import { GridColumn, ONE_MINUTE } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
+import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
+import { Observable } from "rxjs";
 
 type OrdreGridId =
   | "Commande"
@@ -82,6 +84,9 @@ export class GridsService {
       });
   }
 
+  /**
+   * Wait until grid data has been saved
+   */
   public waitUntilAllGridDataSaved(grid) {
     if (!grid?.instance.hasEditData()) return Promise.resolve();
 
@@ -101,6 +106,16 @@ export class GridsService {
         }
       }, 100);
     });
+  }
+
+  /**
+   * Clear all columns' filter value displayed in the filter row.
+   */
+  public clearFilters(datagrid: dxDataGrid, columns: Observable<GridColumn[]>) {
+    if (!datagrid) return;
+    columns.subscribe((columns) => columns.map(column => {
+      datagrid.columnOption(column.dataField, "filterValue", null);
+    }));
   }
 
 }

@@ -60,17 +60,17 @@
 
 <div style="clear: both"></div>
 <app-grid-historique-entrepots
-  #grid
+  #gridHisto
+  [ngClass]="{ 'display-none': !favorites }"
   (pulseButton)="pulseButton($event)"
   (hideCreateButton)="hideCreateButton($event)"
   (createOrder)="onButtonLoaderClick()"
-  *ngIf="favorites"
 ></app-grid-historique-entrepots>
 <app-grid-entrepots
   #grid
+  [ngClass]="{ 'display-none': favorites }"
   (pulseButton)="pulseButton($event)"
   (createOrder)="onButtonLoaderClick()"
-  *ngIf="!favorites"
 ></app-grid-entrepots>
 
 <app-info-popup [customText]="errorText"></app-info-popup>
