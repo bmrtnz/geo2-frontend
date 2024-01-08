@@ -1762,7 +1762,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .find(([k, v]) => k === statut)
       ?.[1]);
     this.ordreFacture = Statut[statut] === Statut.FACTURE;
-    console.log(Statut[statut], Statut.FACTURE)
     this.canChangeDateLiv =
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
