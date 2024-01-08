@@ -193,7 +193,11 @@
                 <dx-button
                   class="upperButton"
                   type="danger"
-                  [disabled]="ordreBAFOuFacture || !fullOrderNumber"
+                  [disabled]="
+                    ordreBAFOuFacture ||
+                    !fullOrderNumber ||
+                    running?.deleteOrder
+                  "
                   text="{{ 'btn-deleteorder' | localize }}"
                   (onClick)="onDeleteOrderClick()"
                 ></dx-button>
@@ -201,7 +205,10 @@
                   class="upperButton"
                   type="danger"
                   [disabled]="
-                    ordreFacture || !fullOrderNumber || cancelledOrder
+                    ordreFacture ||
+                    !fullOrderNumber ||
+                    cancelledOrder ||
+                    running?.cancelOrder
                   "
                   hint="{{ 'hint-cancelorder' | localize }}"
                   text="{{ 'btn-cancelorder' | localize }}"

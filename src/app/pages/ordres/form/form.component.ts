@@ -374,6 +374,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     addRefsClient: false,
     suppLignesNonExp: false,
     createLitige: false,
+    deleteOrder: false,
+    cancelOrder: false
   }
 
   @ViewChild(FileManagerComponent, { static: false })
@@ -1046,12 +1048,15 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   validateCancelOrder(motif) {
+    this.running.cancelOrder = true;
     this.ordresService.fAnnulationOrdre(motif, this.ordre.id).subscribe({
       next: (res) => {
+        this.running.cancelOrder = false;
         this.refreshHeader();
         this.actionDocs.onClickSendAction("ORDRE", true);
       },
       error: (error: Error) => {
+        this.running.cancelOrder = false;
         console.log(error);
         alert(
           this.messageFormat(error.message),
@@ -1077,6 +1082,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   validateDeleteOrder(comment) {
+    this.running.deleteOrder = true;
     const numero = this.ordre.numero;
 
     confirm(
@@ -1092,6 +1098,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           )
           .subscribe({
             next: () => {
+              this.running.deleteOrder = false;
               this.tabContext.closeOrdre(
                 this.ordre.numero,
                 this.ordre.campagne.id
@@ -1105,6 +1112,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
               );
             },
             error: (error: Error) => {
+              this.running.deleteOrder = false;
               alert(
                 this.messageFormat(error.message),
                 this.localization.localize("suppression-ordre")
@@ -1112,6 +1120,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             },
           });
       } else {
+        this.running.deleteOrder = false;
         notify(
           this.localization.localize("text-popup-abandon-suppression"),
           "warning",
