@@ -3621,6 +3621,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 32,
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
         "visible": false
@@ -3672,11 +3678,6 @@
       },
       {
         "dataField": "article.matierePremiere.modeCulture.id",
-        "showInColumnChooser": false,
-        "visible": false
-      },
-      {
-        "dataField": "article.matierePremiere.modeCulture.description",
         "showInColumnChooser": false,
         "visible": false
       },
