@@ -22,3 +22,7 @@
   margin-left: 10px;
   float: right;
 }
+
+::ng-deep .icon-btn .dx-button-content {
+  padding: 8px 0 0 7px !important;
+}

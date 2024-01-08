@@ -623,6 +623,12 @@ body app-root.production {
   pointer-events: none !important;
 }
 
+// Inactive low opacity icon
+.inactive-icon {
+  background-color: #DDD !important;
+  pointer-events: none !important;
+}
+
 // Inactive box => low opacity button(s)
 .inactive-box {
   .dx-button {
@@ -639,6 +645,17 @@ body app-root.production {
 .inactive-choose-file {
   .dx-fileuploader-input-wrapper {
     pointer-events: none !important;
+  }
+}
+
+// Flash
+.blink-me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }
 

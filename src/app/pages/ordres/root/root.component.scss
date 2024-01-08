@@ -2,9 +2,27 @@
 
 ::ng-deep .tabs-ordres-page {
 
+  .dx-tab-close-all-orders:hover {
+    &+.dx-tab-close-all-indics .tab-close-all-indics:not(.hideTab) {
+      width: 98px !important;
+      padding: 12px 15px 11px 11px !important;
+    }
+  }
+
+  .hideTab {
+    padding: 12px 0 11px 0 !important;
+    width: 0 !important;
+  }
+
   .dx-tabpanel-tabs {
-    padding-bottom: 5px;
+    height: 54px;
     width: calc(100% - 40px);
+  }
+
+  .dx-tabpanel-container {
+    .dx-multiview-item-container {
+      top: 6px;
+    }
   }
 
   .fixed-tabs {
@@ -26,9 +44,32 @@
   .dx-pin-tabs-btn {
     top: 20px;
     width: 28px !important;
-    height: 55px;
+    height: 54px;
     min-width: 0 !important;
     min-height: 0 !important;
+  }
+
+  .dx-pin-tabs-btn {
+    top: 49px;
+    height: 27px;
+  }
+
+  .dx-close-all-tabs {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    width: 20px;
+    height: 19px;
+    font-size: large;
+    text-align: center;
+    color: #FFF;
+    background: $base-accent;
+    cursor: pointer;
+
+    &:hover {
+      background: #fe3d2c;
+      color: #FFF;
+    }
   }
 
   .dx-fast-prev-btn {
@@ -86,7 +127,7 @@
 
     &:hover,
     &.dx-tab-selected {
-      .create-order-tab {
+      .tab-create-order {
         .dx-tab-text {
           max-width: 60px !important;
           padding: 0 4px 0 5px !important;
@@ -126,15 +167,15 @@
         }
       }
 
-      &.home-tab {
-        height: 55px;
+      &.tab-home {
+        height: 54px;
 
         .dx-icon {
           margin: 4px -2px 0px 4px;
         }
       }
 
-      &.create-order-tab {
+      &.tab-create-order {
         padding-right: 11px;
         color: #FFF;
         background: #8FC459;
@@ -162,8 +203,12 @@
         }
       }
 
-      &.close-all-orders-tab {
-        height: 55px;
+      &.tab-close-all-orders,
+      &.tab-close-all-indics {
+        height: 54px;
+        transition: width 0.2s, padding 0.2s;
+        background: #F7F7F7;
+        overflow: hidden;
 
         .dx-tab-content {
           position: relative;
@@ -179,6 +224,16 @@
           .dx-icon {
             color: #fe3d2c;
           }
+        }
+      }
+
+      &.tab-close-all-indics {
+        padding: 12px 0 11px 0 !important;
+        width: 0 !important;
+
+        &:not(.hideTab):hover {
+          width: 98px !important;
+          padding: 12px 15px 11px 11px !important;
         }
       }
 
@@ -244,6 +299,7 @@
 
     .dx-tab-text-multiLine {
       width: 43px;
+      max-height: 36px;
       overflow: hidden;
       white-space: normal;
       text-transform: none;
@@ -294,6 +350,8 @@
     .std-order-width {
       width: 74px;
       text-align: left;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }

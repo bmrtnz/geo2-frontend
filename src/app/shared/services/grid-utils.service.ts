@@ -61,10 +61,10 @@ export class GridUtilsService {
 
   // Converts a string array to "item1 & item2" or "item1, item2, item3 & item4"
   // If all the same => e.g. : 41010 (x3)
-  public friendlyFormatList(items: Array<string>) {
+  public friendlyFormatList(items: Array<string>, separator?: string) {
     if (items.length > 1 && items.every((val, i, arr) => val === arr[0]))
       return `${items[0]} (x${items.length})`;
-    return items.join(", ").replace(/,(?![\s\S]*,)/, " &");
+    return items.join(", ").replace(/,(?![\s\S]*,)/, ` ${separator ?? "&"}`);
   }
 
   // Customizing grid title with period/date

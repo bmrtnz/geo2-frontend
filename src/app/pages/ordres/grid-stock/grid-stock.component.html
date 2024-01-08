@@ -201,14 +201,6 @@
       (onClick)="refreshArticlesGrid()"
     ></dx-button>
     <div style="clear: both"></div>
-    <dx-button
-      style="margin-right: 20px"
-      class="grid-grouping-button"
-      type="default"
-      icon="material-icons menu_open"
-      hint="{{ 'btn-grouping' | localize }}"
-      (onClick)="gridsService.expandCollapseGroups(this, false)"
-    ></dx-button>
 
     <div class="refresh-prev-stock-btn">
       <dx-button
@@ -288,6 +280,22 @@
         [allowSearch]="true"
       >
       </dxo-column-chooser>
+
+      <!-- Grouping functionnality -->
+      <dxo-toolbar>
+        <dxi-item location="after">
+          <div *dxTemplate>
+            <dx-button
+              class="grid-grouping-button"
+              type="default"
+              icon="material-icons menu_open"
+              hint="{{ 'btn-grouping' | localize }}"
+              (onClick)="gridsService.expandCollapseGroups(this)"
+            ></dx-button>
+          </div>
+        </dxi-item>
+      </dxo-toolbar>
+
       <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
 
       <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
@@ -380,7 +388,6 @@
         >
         </dx-button>
       </div>
-
       <dxi-column
         *ngFor="let column of this.columns | async"
         [dataField]="column.dataField"
@@ -406,6 +413,7 @@
         "
         [showInColumnChooser]="column.showInColumnChooser"
       ></dxi-column>
+
       <!-- Allow to sort groups by commentaire -->
       <dxi-sort-by-group-summary-info
         [summaryItem]="sortByCommentCheckBox?.value ? 'commentaire' : ''"

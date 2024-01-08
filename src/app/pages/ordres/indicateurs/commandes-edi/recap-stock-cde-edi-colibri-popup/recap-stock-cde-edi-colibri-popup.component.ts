@@ -34,6 +34,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   @Input() public refOrdreEDI: EdiOrdre["id"];
   @Output() public gridSelectionEnabled: boolean;
   @Output() refreshGridCdeEdi = new EventEmitter<any>();
+  @Output() public selectedRows: any[];
 
   visible: boolean;
   nbLignes: number;
@@ -46,6 +47,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   creatingOrder = false;
   selectedGTIN: string[];
   resultsGTIN: string[];
+
 
   @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false }) gridRecap: GridRecapStockCdeEdiColibriComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -79,6 +81,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       setTimeout(() => (this.pulseBtnOn = true), 1);
     }
     this.nbLignesOld = this.nbLignes;
+    this.checkValidQties();
   }
 
 
@@ -97,6 +100,42 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   selectFromGrid(e) {
     if (!this.gridRecap.datagrid.dataSource) return;
     this.updateChosenArticles();
+    this.saveChoices();
+  }
+
+  saveChoices() {
+    const rows = this.gridRecap.datagrid.instance.getVisibleRows();
+    const updatedRows = rows.map(row => ({
+      id: row.data.id,
+      choix: row.isSelected,
+    }));
+    this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows)
+      .subscribe({
+        next: (res) => console.log(res),
+        error: (error: Error) => notify(this.messageFormat(error.message), "error", 7000)
+      });
+  }
+
+  checkValidQties() {
+    this.selectedRows = this.gridRecap.datagrid.instance.getSelectedRowsData().slice();
+    this.selectedRows.sort((a, b) => a.gtin.localeCompare(b.gtin));
+    this.selectedRows.push({ gtin: "fake" })
+    let sumQuantiteValidee = 0, oldGtin, oldQuantiteColis, oldRow;
+    this.selectedRows.map(row => {
+      if (row.gtin !== oldGtin && oldGtin) {
+        oldRow.warning = (sumQuantiteValidee > oldQuantiteColis);
+        sumQuantiteValidee = 0;
+      }
+      oldGtin = row.gtin;
+      oldRow = row;
+      oldQuantiteColis = row.ligneEdi?.quantiteColis ?? 0;
+      sumQuantiteValidee += row.quantiteValidee ?? 0;
+    });
+    this.selectedRows.pop(); // Remove fake item
+  }
+
+  noWarningShown() {
+    return !this.selectedRows.filter(r => r.warning)?.length;
   }
 
   onShowing(e) {
@@ -108,7 +147,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridRecap?.enableFilters();
-    this.gridRecap?.datagrid.instance.repaint();
   }
 
   clearAll() {
@@ -178,7 +216,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
           });
           this.refreshGridCdeEdi.emit();
         },
-        error: (err: Error) => notify(err.message, "error", 3000),
+        error: (err: Error) => notify(err.message, "error", 7000),
       });
   }
 

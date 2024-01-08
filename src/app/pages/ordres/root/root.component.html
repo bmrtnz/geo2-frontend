@@ -56,9 +56,11 @@
           class="dx-tab-text-multiLine"
         >
           {{
-            tab.id !== TAB_CLOSE_ALL_ORDRES
-              ? tab.multiLineTitle
-              : tab.multiLineTitle[moreThanOneOpenOrder]
+            tab.id === TAB_CLOSE_ALL_ORDRES
+              ? tab.multiLineTitle[moreThanOneOpenOrder]
+              : tab.id === TAB_CLOSE_ALL_INDICATORS
+              ? tab.multiLineTitle[moreThanOneOpenIndic]
+              : tab.multiLineTitle
           }}
         </div>
         <i
@@ -121,4 +123,19 @@
     (onClick)="onTabsPinClick()"
   >
   </dx-button>
+
+  <!-- Fermer tous les onglets -->
+  <i
+    class="dx-icon dx-icon-close dx-close-all-tabs"
+    [ngClass]="{
+      'inactive-icon': !(openTabs?.ordres || openTabs?.indicateurs)
+    }"
+    title="{{
+      (moreThanOneOpenOrder || moreThanOneOpenIndic
+        ? 'close-all-tabs'
+        : 'close-tab'
+      ) | localize
+    }}"
+    (click)="onTabCloseAllClick()"
+  ></i>
 </div>

@@ -13,11 +13,11 @@
   }
 
   .table-bordered {
-    border: 1px solid #ddd !important;
+    // border: 1px solid #ddd !important;
   }
 
   .dx-master-detail-cell {
-    padding-top: 15px !important;
+    padding-top: 0 !important;
     padding-left: 30px !important;
   }
 
@@ -26,7 +26,7 @@
   }
 
   tr.dx-row-focused+tr .dx-master-detail-cell {
-    background-color: #Eff3Ff !important;
+    background-color: #DFE3EF !important;
     border-bottom: 2px solid $base-accent !important;
   }
 
@@ -65,8 +65,14 @@
     }
   }
 
-  .dx-master-detail-row th {
-    line-height: 16px !important;
+  .dx-master-detail-row {
+    th {
+      line-height: 0px !important;
+    }
+
+    td:not(.first-col) {
+      text-align: center;
+    }
   }
 
 }

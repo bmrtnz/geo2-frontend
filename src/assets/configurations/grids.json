@@ -6455,6 +6455,7 @@
         "visibleIndex": 0,
         "dataField": "pays.description",
         "visible": true,
+        "width": 200,
         "sortIndex": 1,
         "sortOrder": "asc",
         "fixed": true,
@@ -6463,11 +6464,13 @@
       {
         "visibleIndex": 1,
         "dataField": "clientsSommeAgrement",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 2,
         "dataField": "clientsSommeEnCoursTemporaire",
+        "cssClass": "multi-line-header",
         "visible": true,
         "format": {
           "type": "largeNumber"
@@ -6476,21 +6479,25 @@
       {
         "visibleIndex": 3,
         "dataField": "clientsSommeEnCoursBlueWhale",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "clientsSommeAutorise",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 5,
         "dataField": "clientsSommeDepassement",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "clientsSommeEnCoursActuel",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
@@ -6521,11 +6528,16 @@
       {
         "visibleIndex": 12,
         "dataField": "clientsSommeAlerteCoface",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
+        "visibleIndex": 14,
         "dataField": "id",
-        "visible": false
+        "calculateCellValue": "calculateRefCoface",
+        "cssClass": "disabled text-align-center",
+        "showInColumnChooser": false,
+        "visible": true
       }
     ]
   },
@@ -6537,8 +6549,10 @@
         "visible": true,
         "sortIndex": 1,
         "sortOrder": "asc",
+        "width": 214,
         "fixed": true,
         "dataType": "string",
+        "cssClass": "lineHeight14",
         "fixedPosition": "left"
       },
       {
@@ -6550,31 +6564,37 @@
       {
         "visibleIndex": 2,
         "dataField": "agrement",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 4,
         "dataField": "enCoursTemporaire",
+        "cssClass": "multi-line-header",
         "visible": true
       },
       {
         "visibleIndex": 6,
         "dataField": "enCoursBlueWhale",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 8,
         "dataField": "autorise",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 10,
         "dataField": "depassement",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
         "visibleIndex": 12,
         "dataField": "enCoursActuel",
+        "cssClass": "text-align-center-header",
         "visible": true
       },
       {
@@ -6610,6 +6630,7 @@
       {
         "visibleIndex": 24,
         "dataField": "referenceCoface",
+        "cssClass": "text-align-center",
         "visible": true
       },
       {
@@ -8584,14 +8605,14 @@
     "pageSize": 100000,
     "columns": [
       {
-        "visibleIndex": 0,
+        "visibleIndex": 1,
         "dataField": "numeroOrdreEDI",
-        "width": 60,
-        "cssClass": "small-side-padding",
+        "width": 55,
+        "cssClass": "no-side-padding",
         "visible": true
       },
       {
-        "visibleIndex": 0,
+        "visibleIndex": 2,
         "dataField": "numeroLigneEDI",
         "width": 75,
         "sortIndex": 0,

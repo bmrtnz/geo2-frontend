@@ -66,6 +66,7 @@ export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewIn
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component.content().parentNode.classList.add("statistiques-article-popup");
   }
 

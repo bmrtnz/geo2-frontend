@@ -8,6 +8,12 @@
 
 ::ng-deep .grid-stock {
 
+  .grid-grouping-button {
+    position: relative !important;
+    margin-top: 0 !important;
+    right: 0;
+  }
+
   .dx-group-row,
   .dx-group-row div {
     font-weight: 400 !important;

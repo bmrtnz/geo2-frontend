@@ -48,6 +48,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
 
   @Output() public commercialId: string;
   @Output() public secteurId: string;
+  @Output() public subHeaders: boolean;
 
   public secteurs: DataSource;
   public pays: DataSource;
@@ -63,6 +64,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   commercialSB: DxSelectBoxComponent;
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild("validClients", { static: false }) validClients: DxCheckBoxComponent;
+  @ViewChild("subHeadersStatus", { static: false }) subHeadersStatus: DxCheckBoxComponent;
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
 
   public title: string;
@@ -118,11 +120,19 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     if (!this.authService.isAdmin)
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
     // Retrieves last user configuration
+    // Dep or not dep
     const depConfig = window.localStorage.getItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`);
     if (["true", "false"].includes(depConfig)) {
       this.switchType.value = depConfig === "true" ? true : false;
     } else {
       this.switchType.value = false;
+    }
+    // Show/hide sub headers
+    const subHeadersConfig = window.localStorage.getItem(`Encours-sub-headers_${this.authService.currentUser.nomUtilisateur}`);
+    if (["true", "false"].includes(subHeadersConfig)) {
+      this.subHeadersStatus.value = subHeadersConfig === "true" ? true : false;
+    } else {
+      this.subHeadersStatus.value = false;
     }
     this.enableFilters();
   }
@@ -130,8 +140,15 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   switchAllDepChange(e) {
     // Save user configuration
     window.localStorage
-      .setItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`, e.value.toString());
+      .setItem(`Encours-dep_${this.authService.currentUser.nomUtilisateur}`, e?.value.toString());
     this.enableFilters();
+  }
+
+  showHideHeaders(e) {
+    this.subHeaders = e?.value;
+    // Save user configuration
+    window.localStorage
+      .setItem(`Encours-sub-headers_${this.authService.currentUser.nomUtilisateur}`, e?.value.toString());
   }
 
   enableFilters() {
@@ -197,6 +214,10 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
+  calculateRefCoface(data) {
+    return ""; // Clear COFACE Réf in pays rows
+  }
+
   onCellPrepared(e) {
     if (e.rowType === "header") {
       let classPrefix;
@@ -231,8 +252,10 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     )
       if (e.value > 0) e.cellElement.classList.add("highlight-err");
 
-    // Formating figures: 1000000 becomes 1 000 000 €
     if (e.rowType === "data") {
+      if (e.column.dataField === "id") e.cellElement.classList.add("emptyCell");
+
+      // Formating figures: 1000000 becomes 1 000 000 €
       if (
         e.column.dataType === "number" &&
         !e.cellElement.innerText.includes("€")
@@ -252,6 +275,10 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         }
       }
     }
+  }
+
+  onRowPrepared(e) {
+    if (e.isExpanded) e.rowElement.classList.add("expanded");
   }
 
   displayIDBefore(data) {

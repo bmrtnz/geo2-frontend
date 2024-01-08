@@ -4,7 +4,41 @@
 
 ::ng-deep .grid-recap-stock-cde-edi-colibri {
 
-  max-height: 750px;
+  max-height: calc(100vh - 120px);
+
+  .dx-data-row .warning-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    opacity: 1 !important;
+    background: none !important;
+    opacity: 0 !important;
+    transition: opacity .25s;
+    z-index: 1;
+
+    .dx-icon {
+      color: #ff325a;
+    }
+
+    &.visible {
+      opacity: 1 !important;
+
+      &+.button-bkg {
+        opacity: 1 !important;
+      }
+    }
+
+    &+.button-bkg {
+      position: absolute;
+      width: 4px;
+      height: 12px;
+      background-color: white;
+      margin: -16px 0px 0 14px;
+      opacity: 0 !important;
+      transition: opacity .25s;
+    }
+
+  }
 
   .dx-command-select {
     padding: 0 !important;

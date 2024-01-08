@@ -30,7 +30,7 @@
     </div>
   </dx-button>
   <dx-button
-    class="order-home-up-button"
+    class="order-home-up-button edi-order-button"
     type="default"
     text="{{ 'ordres-commandes-edi' | localize }}"
     [disabled]="!authService.currentUser.accessCommandeEdi"
@@ -38,7 +38,6 @@
   >
   </dx-button>
 </div>
-
 <app-button-loader
   [text]="
     ('create' | localize) +
@@ -50,7 +49,11 @@
   [icon]="'material-icons add'"
   class="button-create-order"
   [ngClass]="{ pulse: pulseBtnOn }"
-  [hidden]="!getSelectedEntrepot() || hideButton"
+  [hidden]="
+    !getSelectedEntrepot() ||
+    hideButton ||
+    codeEnt === undefined || codeEnt === null
+  "
   [resolver]="resolver"
   (deferedOnClick)="onButtonLoaderClick()"
 ></app-button-loader>

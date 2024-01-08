@@ -21,13 +21,14 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
-import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../../../grids.service";
 import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component";
+import DataSource from "devextreme/data/data_source";
 
+let self;
 
 @Component({
   selector: 'app-grid-recap-stock-cde-edi-colibri',
@@ -36,6 +37,7 @@ import { AjoutArticleEdiColibriPopupComponent } from "../ajout-article-edi-colib
 })
 export class GridRecapStockCdeEdiColibriComponent {
   @Input() popupShown: boolean;
+  @Input() selectedRows: any[];
   @Input() public ordreEdiId: EdiOrdre["id"];
   @Output() public articleLigneId: string;
   @Output() public ligneEdi: any;
@@ -52,6 +54,7 @@ export class GridRecapStockCdeEdiColibriComponent {
   public env = environment;
   private oldgtin: string;
   private alternateOrder: boolean;
+  public dataSource: DataSource;
 
   readonly specialFields = [
     "fournisseur.id",
@@ -72,6 +75,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
   ) {
+    self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.RecapStockCdeEdi
     );
@@ -79,16 +83,14 @@ export class GridRecapStockCdeEdiColibriComponent {
   }
 
   async enableFilters() {
-
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
 
-    const dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
+    this.dataSource = this.stockArticleEdiBassinService.getDataSource_v2(
       new Set([...this.specialFields, ...await fields.toPromise()])
     );
-    dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
-    this.datagrid.dataSource = dataSource;
+    this.dataSource.filter(["ordreEdi.id", "=", this.ordreEdiId]);
   }
 
   refreshGrid() {
@@ -114,8 +116,16 @@ export class GridRecapStockCdeEdiColibriComponent {
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
 
       // Pre select row when "choix" value is true
-      if (e.data.choix) this.datagrid.instance.selectRows([e.data.id], true);
+      if (e.data.choix) {
+        this.datagrid.instance.selectRows([e.data.id], true);
+        e.rowElement.classList.add("dx-selection");
+      }
     }
+  }
+
+  showWarning(data) {
+    return !!self.selectedRows
+      ?.find(r => r.gtin === data.gtin && r.warning && self.selectedRows.find(r => r.id === data.id));
   }
 
   onCellPrepared(e) {

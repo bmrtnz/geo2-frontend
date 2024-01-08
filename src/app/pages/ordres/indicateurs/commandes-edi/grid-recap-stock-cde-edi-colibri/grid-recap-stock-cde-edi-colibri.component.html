@@ -2,6 +2,7 @@
   <dx-data-grid
     class="dx-card wide-card"
     [width]="'100%'"
+    [dataSource]="dataSource"
     [focusedRowEnabled]="false"
     [remoteOperations]="true"
     [showBorders]="false"
@@ -91,6 +92,26 @@
       [showInColumnChooser]="column?.showInColumnChooser"
     >
     </dxi-column>
+
+    <!-- Warning icon -->
+    <dxi-column
+      *ngIf="true"
+      cssClass="no-side-padding text-align-right"
+      visibleIndex="0"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'warningTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'warningTemplate'">
+      <dx-button
+        [class.visible]="showWarning(cell.data)"
+        class="warning-icon"
+        icon="material-icons warning"
+        [disabled]="true"
+      >
+      </dx-button>
+      <div class="button-bkg"></div>
+    </div>
 
     <div *dxTemplate="let cell of 'addArticleBtnTemplate'">
       <div class="textArticleTemplate">{{ cell.value }}</div>

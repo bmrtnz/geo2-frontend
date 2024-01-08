@@ -75,7 +75,10 @@
           {{ "quantite-validee" | localize }}
         </div>
         <div class="dx-field-value quantite">
-          <dx-number-box #quantiteSB> </dx-number-box>
+          <dx-number-box
+            #quantiteSB
+            (onEnterKey)="saveBtn.disabled ? null : save()"
+          ></dx-number-box>
         </div>
       </div>
       <br />
@@ -87,6 +90,7 @@
           (onClick)="visible = false"
         ></dx-button>
         <dx-button
+          #saveBtn
           type="default"
           text="{{ 'btn-enregistrer' | localize }}"
           [disabled]="

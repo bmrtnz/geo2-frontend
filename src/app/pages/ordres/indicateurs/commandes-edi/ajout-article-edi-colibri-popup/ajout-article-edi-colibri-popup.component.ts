@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core
 import { ArticlesService, FournisseursService, LocalizationService } from "app/shared/services";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxButtonComponent, DxNumberBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import DataSource from "devextreme/data/data_source";
 
@@ -26,6 +26,7 @@ export class AjoutArticleEdiColibriPopupComponent {
   @ViewChild("proprietaireSB", { static: false }) proprietaireSB: DxSelectBoxComponent;
   @ViewChild("fournisseurSB", { static: false }) fournisseurSB: DxSelectBoxComponent;
   @ViewChild("quantiteSB", { static: false }) quantiteSB: DxNumberBoxComponent;
+  @ViewChild("saveBtn", { static: false }) saveBtn: DxButtonComponent;
 
   constructor(
     private fournisseurService: FournisseursService,
@@ -80,7 +81,8 @@ export class AjoutArticleEdiColibriPopupComponent {
 
   onProprietaireChanged(e) {
     if (!e.event) return; // Only user event
-    this.fournisseurSB.value = this.updateFilterFournisseurDS(e.value);
+    const fourn = this.updateFilterFournisseurDS(e.value);
+    this.fournisseurSB.value = fourn;
   }
 
   save() {

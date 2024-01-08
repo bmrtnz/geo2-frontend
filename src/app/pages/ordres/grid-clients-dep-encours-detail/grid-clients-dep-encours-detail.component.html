@@ -1,12 +1,14 @@
 <dx-data-grid
-  class="dx-card wide-card"
+  class="dx-card wide-card grid-clients-dep-encours-detail"
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [showBorders]="false"
-  [columnAutoWidth]="true"
+  [columnAutoWidth]="false"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
   [rowAlternationEnabled]="true"
+  [filterRow]="{ visible: subHeaders }"
+  [showColumnHeaders]="subHeaders"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
@@ -38,7 +40,6 @@
     [customLoad]="gridConfiguratorService.load"
     [customSave]="gridConfiguratorService.save"
   ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-column-chooser
     [enabled]="true"
     mode="select"
@@ -52,8 +53,8 @@
     *ngFor="let column of this.columns | async"
     [dataField]="column.dataField"
     [visible]="false"
-    [cssClass]="column.cssClass"
     [width]="column.width"
+    [cssClass]="column.cssClass"
     [caption]="
       ('encours-clients-' + column.dataField?.split('.').join('-')
         | localize) || column.name
@@ -70,6 +71,9 @@
         : ['string'].includes(column.dataType)
     "
     [showInColumnChooser]="column.showInColumnChooser"
+    [cssClass]="
+      (column.cssClass ? column.cssClass + ' ' : '') + 'small-side-padding'
+    "
   ></dxi-column>
 </dx-data-grid>
 

@@ -23,6 +23,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { OrdresIndicatorsService } from "app/shared/services/ordres-indicators.service";
 import { DxLoadPanelComponent, DxTabPanelComponent } from "devextreme-angular";
+import { confirm } from "devextreme/ui/dialog";
 import { on } from "devextreme/events";
 import { Statut } from "app/shared/models/ordre.model";
 import notify from "devextreme/ui/notify";
@@ -56,6 +57,7 @@ import {
 } from "rxjs/operators";
 import { FormComponent } from "../form/form.component";
 import { GridsService } from "../grids.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 let self;
 
@@ -63,6 +65,7 @@ const TAB_HOME_ID = "home";
 const TAB_LOAD_ID = "loading";
 const PREVIOUS_STATE = "previous_tab_id";
 const TAB_CLOSE_ALL_ORDRES = "close_all_orders";
+const TAB_CLOSE_ALL_INDICATORS = "close_all_indicators"
 export const TAB_ORDRE_CREATE_ID = "create";
 export enum TabType {
   Indicator = "indicateur",
@@ -167,10 +170,11 @@ export class TabContext {
     setTimeout(() => {
       toastInfo = toastInfo === undefined ? true : toastInfo;
       if (toastInfo)
-        notify(
-          (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
-          "info",
-          1500
+        notify({
+          message: (specialText ?? this.localization.localize("ouverture-ordre")).replace("&NO", numero),
+          displayTime: 1500
+        },
+          { position: 'bottom center', direction: 'up-stack' }
         );
       const campagneID =
         campagne ?? this.currentCompanyService.getCompany().campagne.id;
@@ -249,8 +253,10 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   public typeTab = TabType;
   public tabsUnpined: boolean;
   public TAB_CLOSE_ALL_ORDRES = TAB_CLOSE_ALL_ORDRES;
+  public TAB_CLOSE_ALL_INDICATORS = TAB_CLOSE_ALL_INDICATORS;
   public moreThanOneOpenOrder: number;
-  public atLeastOneOpenIndicator: number;
+  public moreThanOneOpenIndic: number;
+  public openTabs: { ordres: number, indicateurs: number };
   private gridUnsavedInterval: any;
 
   public items: TabPanelItem[] = [];
@@ -267,11 +273,12 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private functionsService: FunctionsService,
     private gridsService: GridsService,
     private dateManagementService: DateManagementService,
+    public gridUtilsService: GridUtilsService,
     private authService: AuthService,
     private tabContext: TabContext
   ) {
     this.moreThanOneOpenOrder = 0;
-    this.atLeastOneOpenIndicator = 0;
+    this.moreThanOneOpenIndic = 0;
   }
 
   ngOnInit() {
@@ -416,8 +423,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     const previous = this.route.snapshot.paramMap.get(RouteParam.TabID);
     if (event.itemData.id === previous) return;
 
-    if (event.itemData?.id === TAB_CLOSE_ALL_ORDRES) {
-      if (window.localStorage.getItem("ctrlKey") === "true") return this.closeEveryIndicator();
+    if ([TAB_CLOSE_ALL_ORDRES, TAB_CLOSE_ALL_INDICATORS].includes(event.itemData?.id)) {
+      if (event.itemData.id === TAB_CLOSE_ALL_INDICATORS) return this.closeEveryIndicator();
       this.closeEveryOrdre();
     } else {
       const numeroOrdre = isNaN(parseInt(event.itemData.id, 10))
@@ -450,7 +457,16 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     on(event.itemElement, "dxpointerdown", (e) => e.stopPropagation());
     on(event.itemElement, "dxclick", replaceEvent);
     on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
+
     this.setTabTooltip(event);
+
+    // Add classname to current tab main container
+    let className = event.itemData.class?.split(" ")[0];
+    if (!className) return;
+    const element = event.component._$element[0].querySelectorAll(`.${className}`);
+    className = `dx-${className}`;
+    if (element[0] && !element[0].parentNode.classList.contains(className))
+      element[0].parentNode.classList.add(className);
   }
 
   setTabTooltip(item) {
@@ -489,6 +505,34 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async onTabCloseAllClick() {
+    let unsavedOrders;
+    // Checks if some orders haven't been saved
+    this.tabContext.getAllItems().subscribe((tabs) =>
+      unsavedOrders = tabs.filter(tab => tab.unsaved).map(tab => tab.id)
+    );
+    if (unsavedOrders.length &&
+      !await confirm(
+        this.localizationService.localize(
+          "warn-unsaved-order" + (unsavedOrders.length > 1 ? "s" : ""),
+          unsavedOrders.length,
+          this.gridUtilsService.friendlyFormatList(
+            unsavedOrders,
+            this.localizationService.localize("et")
+          )
+        ),
+        this.localizationService.localize("close-tabs")))
+      return;
+
+    if (this.openTabs.ordres) this.closeEveryOrdre(true);
+    if (this.openTabs.indicateurs) setTimeout(() => this.closeEveryIndicator(true), 100);
+    notify({
+      message: this.localizationService.localize("all-tabs-were-closed"),
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
+  }
+
   async onTabCloseClick(event: MouseEvent) {
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -502,7 +546,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     await this.gridsService.waitUntilAllGridDataSaved(grid);
 
     this.selectTab(TAB_LOAD_ID);
-    const indicateur = this.route.snapshot.queryParamMap
+    let indicateur = this.route.snapshot.queryParamMap
       .getAll(TabType.Indicator)
       .filter((param) => param !== pullID);
     const ordre = this.route.snapshot.queryParamMap
@@ -517,14 +561,20 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
-      !!ordre?.length;
-    this.moreThanOneOpenOrder = (ordre?.length > 1) ? 1 : 0;
-    this.atLeastOneOpenIndicator = (indicateur?.length) ? 1 : 0;
+    // Show/hide all orders/indicators tabs - Handle close btn
+    if (!ordre?.length) document.querySelector('.tab-close-all-orders')?.classList.add("hideTab");
+    indicateur = indicateur.filter((id) => id !== TAB_LOAD_ID);
+    if (!indicateur?.length) document.querySelector('.tab-close-all-indics')?.classList.add("hideTab");
+    this.updateTabsSharing(ordre?.length, indicateur?.length);
   }
 
-  closeEveryOrdre() {
+  updateTabsSharing(ordres, indicateurs) {
+    this.openTabs = { ordres: ordres, indicateurs: indicateurs };
+    this.moreThanOneOpenOrder = (ordres > 1) ? 1 : 0;
+    this.moreThanOneOpenIndic = (indicateurs > 1) ? 1 : 0;
+  }
+
+  closeEveryOrdre(silent?: boolean) {
     this.selectTab(TAB_LOAD_ID);
     const indicateur = this.route.snapshot.queryParamMap.getAll(TabType.Indicator);
     let ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
@@ -541,16 +591,19 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible = false;
-    notify(this.localizationService.localize(
-      this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed")
+    // Hide all orders tabs - Handle close btn
+    document.querySelector('.tab-close-all-orders')?.classList.add("hideTab");
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
+    if (!silent) notify({
+      message: this.localizationService
+        .localize(this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed"),
+    },
+      { position: 'bottom center', direction: 'up-stack' }
     );
   }
 
   // Keep CTRL pressed when clicking - dev util
-  closeEveryIndicator() {
-    if (!this.atLeastOneOpenIndicator) return;
+  closeEveryIndicator(silent?: boolean) {
     this.selectTab(TAB_LOAD_ID);
     const ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
     let indicateur = [];
@@ -561,8 +614,15 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         queryParams: { indicateur, ordre },
       })
     );
-    this.atLeastOneOpenIndicator = 0;
-    notify(this.localizationService.localize("indicators-were-closed"));
+    // Hide all indicators tabs - Handle close btn
+    document.querySelector('.tab-close-all-indics')?.classList.add("hideTab");
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
+    if (!silent) notify({
+      message: this.localizationService
+        .localize(this.moreThanOneOpenIndic ? "all-indicators-were-closed" : "open-indicator-was-closed"),
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
   }
 
   private handleRouting() {
@@ -610,7 +670,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       {
         id: TAB_HOME_ID,
         icon: "material-icons home",
-        class: "home-tab",
+        class: "tab-home",
         component: (await import("../accueil/ordres-accueil.component"))
           .OrdresAccueilComponent,
         position: Position.Front,
@@ -619,7 +679,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         id: TAB_ORDRE_CREATE_ID,
         title: "nouvel",
         details: "ordre",
-        class: "create-order-tab",
+        class: "tab-create-order",
         icon: "material-icons note_add",
         component: (await import("../nouvel-ordre/nouvel-ordre.component"))
           .NouvelOrdreComponent,
@@ -627,12 +687,23 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         id: TAB_CLOSE_ALL_ORDRES,
-        class: "close-all-orders-tab multiline-tab",
+        class: "tab-close-all-orders multiline-tab hideTab",
         multiLineTitle: [
           this.localizationService.localize("close-open-order"),
           this.localizationService.localize("close-all-orders")
         ],
-        visible: false,
+        visible: true,
+        icon: "material-icons disabled_by_default",
+        position: Position.Front,
+      },
+      {
+        id: TAB_CLOSE_ALL_INDICATORS,
+        class: "tab-close-all-indics multiline-tab hideTab",
+        multiLineTitle: [
+          this.localizationService.localize("close-open-indicator"),
+          this.localizationService.localize("close-all-indicators")
+        ],
+        visible: true,
         icon: "material-icons disabled_by_default",
         position: Position.Front,
       },
@@ -727,11 +798,17 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     this.items.push(data);
     this.items.sort((a, b) => a.position - b.position);
 
-    // Update delete all orders tab
-    this.items.find((item) => item.id === TAB_CLOSE_ALL_ORDRES).visible =
-      !!this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length;
-    this.moreThanOneOpenOrder = (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length > 1) ? 1 : 0;
-    this.atLeastOneOpenIndicator = this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.length ? 1 : 0;
+    // Show/hide all orders/indicators tabs - Handle close btn
+    setTimeout(() => {
+      if (this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length)
+        document.querySelector('.tab-close-all-orders')?.classList.remove("hideTab");
+      if (this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.filter((id) => id !== TAB_LOAD_ID)?.length)
+        document.querySelector('.tab-close-all-indics')?.classList.remove("hideTab");
+      this.updateTabsSharing(
+        this.route.snapshot.queryParamMap.getAll(TabType.Ordre)?.length,
+        this.route.snapshot.queryParamMap.getAll(TabType.Indicator)?.filter((id) => id !== TAB_LOAD_ID)?.length
+      );
+    });
     return this.items.indexOf(data);
   }
 
