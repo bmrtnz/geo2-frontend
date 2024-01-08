@@ -3495,7 +3495,7 @@
         "width": 80,
         "visible": true,
         "groupIndex": 1,
-        "calculateCellValue": "calculateGroupeOrdreLibelle"
+        "calculateGroupValue": "calculateGroupeOrdreLibelle"
       },
       {
         "visibleIndex": 2,
