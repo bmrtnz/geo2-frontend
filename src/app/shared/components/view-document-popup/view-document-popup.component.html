@@ -7,6 +7,17 @@
   [shading]="false"
   [fullScreen]="this.popupFullscreen"
 >
+  <dxi-toolbar-item
+    #downloadButton
+    *ngIf="whenDownload"
+    widget="dxButton"
+    location="after"
+    [options]="{
+      icon: 'download',
+      stylingMode: 'outlined',
+      hint: 'telecharger' | localize
+    }"
+  ></dxi-toolbar-item>
   <div *dxTemplate="let data of 'content'">
     <img
       [src]="this.safeUrl"

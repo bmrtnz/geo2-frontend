@@ -59,6 +59,9 @@ import notify from "devextreme/ui/notify";
 import hideToasts from "devextreme/ui/toast/hide_toasts";
 import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
 
+import { FileManagerService } from "app/shared/services/file-manager.service";
+import { ONE_MINUTE } from "basic";
+import FileSystemItem from "devextreme/file_management/file_system_item";
 import {
   catchError,
   concatMap,
@@ -68,8 +71,7 @@ import {
   switchMap,
   takeUntil,
   takeWhile,
-  tap,
-  throttleTime
+  tap
 } from "rxjs/operators";
 import { ViewDocument } from "../../../shared/components/view-document-popup/view-document-popup.component";
 import Document from "../../../shared/models/document.model";
@@ -105,7 +107,6 @@ import { SelectionComptePaloxPopupComponent } from "../selection-compte-palox-po
 import { ZoomClientPopupComponent } from "../zoom-client-popup/zoom-client-popup.component";
 import { ZoomEntrepotPopupComponent } from "../zoom-entrepot-popup/zoom-entrepot-popup.component";
 import { ZoomTransporteurPopupComponent } from "../zoom-transporteur-popup/zoom-transporteur-popup.component";
-import { ONE_MINUTE } from "basic";
 
 enum Fragments {
   Head = "head",
@@ -166,6 +167,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     public regimesTvaService: RegimesTvaService,
     public ordresLogistiquesService: OrdresLogistiquesService,
     private functionsService: FunctionsService,
+    private fileManager: FileManagerService,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.handleTabChange().subscribe((event) => {
@@ -377,6 +379,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     deleteOrder: false,
     cancelOrder: false
   }
+
+  public doFactureDownload = () =>
+    this.fileManager.downloadItems.call({ baseArgs: { key: "GEO_FACTURE" } }, [
+      new FileSystemItem(`${this.currentCompanyService.getCompany().id}_F${this.ordre.numeroFacture}.pdf`, false),
+    ])
 
   @ViewChild(FileManagerComponent, { static: false })
   fileManagerComponent: FileManagerComponent;

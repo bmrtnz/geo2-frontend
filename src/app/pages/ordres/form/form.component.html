@@ -1466,6 +1466,7 @@
 <app-view-document-popup
   [(visible)]="this.factureVisible"
   [document]="this.currentFacture"
+  [whenDownload]="doFactureDownload"
 ></app-view-document-popup>
 <app-prompt-popup
   [purpose]="promptPopupPurpose"
