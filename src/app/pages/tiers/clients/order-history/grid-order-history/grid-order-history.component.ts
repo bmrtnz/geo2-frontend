@@ -10,7 +10,7 @@ import {
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { GridsService } from "app/pages/ordres/grids.service";
-import { Statut } from "app/shared/models/ordre.model";
+import { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import {
   AuthService,
   ClientsService,
@@ -41,6 +41,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { ZoomClientArticlePopupComponent } from "../zoom-client-article-popup/zoom-client-article-popup.component";
+import { OrdresService } from "app/shared/services/api/ordres.service";
 
 let self;
 
@@ -118,6 +119,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
 
   constructor(
     public ordreLignesService: OrdreLignesService,
+    public ordresService: OrdresService,
     public entrepotsService: EntrepotsService,
     public clientsService: ClientsService,
     public secteursService: SecteursService,
@@ -208,11 +210,11 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       )
     );
     const gridFields = await fields.toPromise();
-    const dataSource = this.ordreLignesService.getListDataSource([
+    const dataSource = this.ordreLignesService.getListDataSource([...new Set([
       ...gridFields,
       "ordre.id",
       "ordre.statut",
-    ]);
+    ])]);
 
     const values: Inputs = {
       ...this.formGroup.value,
@@ -314,7 +316,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       (data.transporteur?.id
         ? " (Transporteur : " + data.transporteur.id + ")"
         : "") +
-      ` - ${Statut[data.statut]}`;
+      ` - ${self.localizeService.localize(StatutLocale[data.statut])}`;
   }
 
   onContentReady(e) {
@@ -328,6 +330,9 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
         e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
+      // Affichage statut
+      if (e.column.dataField === "ordre.statut")
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
       // Descript. article
       if (
         e.column.dataField ===

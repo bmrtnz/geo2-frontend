@@ -2064,7 +2064,6 @@
         "visibleIndex": 50,
         "dataField": "statut",
         "allowHeaderFiltering": true,
-        "allowSearch": false,
         "visible": true
       }
     ]
@@ -2200,7 +2199,6 @@
         "visibleIndex": 50,
         "dataField": "ordre.statut",
         "allowHeaderFiltering": true,
-        "allowSearch": false,
         "visible": true
       },
       {
@@ -3622,9 +3620,9 @@
       },
       {
         "visibleIndex": 32,
-        "dataField": "article.matierePremiere.modeCulture.description",
+        "dataField": "ordre.statut",
         "dataType": "string",
-        "visible": false
+        "visible": true
       },
       {
         "dataField": "ordre.client.id",

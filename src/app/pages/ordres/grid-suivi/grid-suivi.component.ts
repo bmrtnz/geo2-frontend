@@ -1,23 +1,21 @@
 import {
-  Component,
+  AfterViewInit, Component,
   EventEmitter,
   Input,
   Output,
-  ViewChild,
-  AfterViewInit,
+  ViewChild
 } from "@angular/core";
-import Ordre from "app/shared/models/ordre.model";
-import { Statut } from "app/shared/models/ordre.model";
+import { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
+import gridsConfig from "assets/configurations/grids.json";
+import { GridColumn } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import gridsConfig from "assets/configurations/grids.json";
 import { TabContext } from "../root/root.component";
-import { GridColumn } from "basic";
 
 
 @Component({
@@ -80,7 +78,7 @@ export class GridSuiviComponent implements AfterViewInit {
   onCellPrepared(e) {
     // Best expression for order status display
     if (e.rowType === "data" && e.column.dataField === "statut") {
-      if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+      if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
     }
     // Palettes & Colis
     if (e.column.dataField === "totalNombrePalettesCommandees") {

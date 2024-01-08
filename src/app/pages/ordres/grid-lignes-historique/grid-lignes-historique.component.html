@@ -223,7 +223,7 @@
 
 <div class="grid-lignes-historique-container">
   <dx-data-grid
-    class="dx-card wide-card"
+    class="dx-card wide-card grid-ordre-ligne-historique"
     [width]="'100%'"
     [focusedRowEnabled]="true"
     [remoteOperations]="{
@@ -236,7 +236,6 @@
     }"
     [noDataText]="'aucun-ordre' | localize"
     [showBorders]="false"
-    [elementAttr]="{ class: 'grid-ordre-ligne-historique' }"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
@@ -339,14 +338,24 @@
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
-      allowSearch="false"
-      [allowHeaderFiltering]="
-        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-      "
-      [showInColumnChooser]="column?.showInColumnChooser"
       [calculateCellValue]="this[column?.calculateCellValue]"
       [calculateGroupValue]="this[column?.calculateGroupValue]"
+      [allowSearch]="
+        column.allowSearch !== undefined
+          ? column.allowSearch
+          : ['string'].includes(column.dataType)
+      "
+      [allowHeaderFiltering]="
+        column.allowHeaderFiltering !== undefined
+          ? column.allowHeaderFiltering
+          : ['string'].includes(column.dataType)
+      "
+      [showInColumnChooser]="column?.showInColumnChooser"
     >
+      <dxo-header-filter
+        *ngIf="column.dataField === 'ordre.statut'"
+        [dataSource]="ordresService.getStatutsSource()"
+      ></dxo-header-filter>
     </dxi-column>
 
     <dxo-toolbar>

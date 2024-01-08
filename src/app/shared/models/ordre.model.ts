@@ -5,7 +5,6 @@ import { Client } from "./client.model";
 import Courtier from "./courtier.model";
 import { Devise } from "./devise.model";
 import Document from "./document.model";
-import EdiOrdre from "./edi-ordre.model";
 import Entrepot from "./entrepot.model";
 import Incoterm from "./incoterm.model";
 import { Field, Model, ModelName } from "./model";
@@ -29,25 +28,25 @@ export enum FactureAvoir {
   AVOIR = "A",
 }
 
-export const StatutKeys = [
-  "ANNULE",
-  "A_FACTURER",
-  "CONFIRME",
-  "EN_PREPARATION",
-  "EXPEDIE",
-  "FACTURE",
-  "FACTURE_EDI",
-  "NON_CONFIRME",
-];
 export enum Statut {
-  ANNULE = "Annulé" as any,
-  A_FACTURER = "À facturer" as any,
-  CONFIRME = "Confirmé" as any,
-  EN_PREPARATION = "En préparation" as any,
-  EXPEDIE = "Expédié" as any,
-  FACTURE = "Facturé" as any,
-  FACTURE_EDI = "Facturé en EDI" as any,
-  NON_CONFIRME = "Non confirmé" as any,
+  ANNULE = "ANL",
+  A_FACTURER = "AFC",
+  CONFIRME = "CFM",
+  EN_PREPARATION = "EPP",
+  EXPEDIE = "EXP",
+  FACTURE = "FCT",
+  FACTURE_EDI = "FCT_EDI",
+  NON_CONFIRME = "NCF",
+}
+export enum StatutLocale {
+  ANNULE = "ordre-statut-anl",
+  A_FACTURER = "ordre-statut-afc",
+  CONFIRME = "ordre-statut-cfm",
+  EN_PREPARATION = "ordre-statut-epp",
+  EXPEDIE = "ordre-statut-exp",
+  FACTURE = "ordre-statut-fct",
+  FACTURE_EDI = "ordre-statut-fct_edi",
+  NON_CONFIRME = "ordre-statut-ncf",
 }
 
 @ModelName("Ordre")

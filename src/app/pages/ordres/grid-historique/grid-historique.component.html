@@ -68,5 +68,10 @@
         ? field.allowHeaderFiltering
         : ['string'].includes(field.dataType)
     "
-  ></dxi-column>
+  >
+    <dxo-header-filter
+      *ngIf="field.dataField === 'ordre.statut'"
+      [dataSource]="statutsSource"
+    ></dxo-header-filter>
+  </dxi-column>
 </dx-data-grid>

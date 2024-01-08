@@ -15,7 +15,7 @@ import { firstValueFrom, lastValueFrom } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
 import { AuthService, LocalizationService } from "..";
 import { OrdreLigne } from "../../models/ordre-ligne.model";
-import { APIRead, ApiService, RelayPage, SummaryInput } from "../api.service";
+import { APIRead, ApiService, DistinctInfo, RelayPage, SummaryInput } from "../api.service";
 import { FormUtilsService } from "../form-utils.service";
 import dxDataGrid from "devextreme/ui/data_grid";
 import { Workbook } from "exceljs";

@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { OperationVariables } from "@apollo/client/core";
 import { Apollo, gql } from "apollo-angular";
 import { MRUOrdre } from "app/shared/models/mru-ordre.model";
-import { StatutKeys } from "app/shared/models/ordre.model";
+import { Statut } from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
+import notify from "devextreme/ui/notify";
 import { AuthService, LocalizationService } from "..";
 import { APIRead, ApiService, DistinctInfo, RelayPage } from "../api.service";
 import { CurrentCompanyService } from "../current-company.service";
-import notify from "devextreme/ui/notify";
 
 @Injectable({
   providedIn: "root",
@@ -158,26 +158,13 @@ export class MruOrdresService extends ApiService implements APIRead {
         key: ["utilisateur", "ordreRef"],
         load: (options: LoadOptions) =>
           new Promise(async (resolve) => {
-            if (options.group) {
-              // Intercepting; GQL; fields, because; they; canno"t be filtered by backend
-              if (
-                (options.group as Array<any>).find(
-                  ({ selector }) => selector === "ordre.statut"
-                )
-              )
-                return resolve({
-                  data: StatutKeys.map((key) => ({ key })) as DistinctInfo[],
-                  totalCount: 0,
-                });
-
+            if (options.group)
               return this.loadDistinctQuery(options, (res) => {
-                console.log(this.asListCount(res.data.distinct));
                 if (res.data && res.data.distinct)
                   resolve(this.asListCount(res.data.distinct));
               });
-            }
 
-            type Response = { allMRUOrdreHeadList: RelayPage<MRUOrdre> };
+            type Response = { allMRUOrdreHeadList: Array<MRUOrdre> };
             const query = this.buildHeadList(columns);
             const variables = {
               societe: this.currentCompanyService.getCompany().id,
