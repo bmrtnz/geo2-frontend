@@ -647,7 +647,7 @@ export class OrdreLignesService extends ApiService implements APIRead {
    */
   public async onExporting(datagrid: dxDataGrid, component) {
     notify(this.localizeService.localize("export-running"), "info", 9999999);
-    setTimeout(() => component.changeGrouping());
+    component.changeGrouping(); // Special grouping needed
     // Waiting for the grid to be fully ready
     await firstValueFrom(component.contentReadyEvent).then(() => {
       const workbook = new Workbook();
