@@ -27,6 +27,17 @@
 }
 
 ::ng-deep .grid-order-history {
+
+  .dx-toolbar-after .dx-toolbar-menu-container {
+    display: none;
+  }
+
+  .grid-grouping-button {
+    position: relative !important;
+    margin: 0 0 0 6px !important;
+    right: 0;
+  }
+
   .bio-article {
     color: #39970e !important;
     cursor: pointer;

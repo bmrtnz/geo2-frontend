@@ -54,6 +54,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Output() public ordreLigne: OrdreLigne;
   @Output() selectChange = new EventEmitter<any>();
   @Output() hidePopup = new EventEmitter<any>();
+  @Output() contentReadyEvent = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
@@ -91,6 +92,10 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   } as Inputs<UntypedFormControl>);
 
   public summaryFields = ["nombreColisCommandes"];
+  public customSummaryFields = [
+    "ordre.dateDepartPrevue",
+    "ordre.dateLivraisonPrevue"
+  ];
   public hasLitigeDots: boolean;
 
   constructor(
@@ -228,30 +233,28 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     this.datagrid.dataSource = dataSource;
   }
 
-  switchDateType() {
+  changeGrouping(pos?) {
     // Change grouping + sorting depending on #switchDepartLivraison
-    const liv = this.switchLivraison.value;
     this.datagrid.instance.columnOption(
       "ordre.dateDepartPrevue",
       "groupIndex",
-      liv ? null : 0
+      (pos === undefined) ? null : pos ? null : 0
     );
     this.datagrid.instance.columnOption(
       "ordre.dateDepartPrevue",
       "sortIndex",
-      liv ? null : 0
+      pos ? null : 0
     );
     this.datagrid.instance.columnOption(
       "ordre.dateLivraisonPrevue",
       "groupIndex",
-      liv ? 0 : null
+      (pos === undefined) ? null : pos ? 0 : null
     );
     this.datagrid.instance.columnOption(
       "ordre.dateLivraisonPrevue",
       "sortIndex",
-      liv ? 0 : null
+      pos ? 0 : null
     );
-    this.enableFilters();
   }
 
   onRowPrepared(e) {
@@ -271,6 +274,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         e.rowElement.title = this.localizeService.localize("ordre-annule");
       }
     }
+    // Hide total that is only seen on xlsx file
+    if (e.rowType === "groupFooter") e.rowElement.classList.add("display-none");
   }
 
   calculateGroupeOrdreLibelle(data) {
@@ -295,9 +300,14 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       ` - ${Statut[data.statut]}`;
   }
 
+  onContentReady(e) {
+    this.contentReadyEvent.emit();
+  }
+
   onCellPrepared(e) {
     if (e.rowType === "group") {
-      if (e.column.dataField === "ordre.dateDepartPrevue")
+      // Hide colis summary on first grouping
+      if (this.customSummaryFields.includes(e.column.dataField))
         e.cellElement.classList.add("first-group");
     }
     if (e.rowType === "data") {
@@ -543,6 +553,11 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
         options.totalValue = 0;
       } else if (options.summaryProcess === "calculate") {
         options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+      }
+    } else {
+      if (self.customSummaryFields.includes(options.name)) {
+        if (options.summaryProcess === "calculate")
+          options.totalValue = options.value;
       }
     }
   }

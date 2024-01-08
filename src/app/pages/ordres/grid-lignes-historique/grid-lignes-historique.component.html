@@ -30,7 +30,7 @@
             #switchDepartLivraison
             [switchedOnText]=""
             [switchedOffText]=""
-            (onValueChanged)="switchDateType()"
+            (onValueChanged)="changeGrouping($event?.value)"
           ></dx-switch>
         </div>
         <div class="dx-field-label dx-field-label-right">
@@ -222,14 +222,6 @@
 </div>
 
 <div class="grid-lignes-historique-container">
-  <dx-button
-    style="margin-right: 17px"
-    class="grid-grouping-button"
-    type="default"
-    icon="material-icons menu_open"
-    hint="{{ 'btn-grouping' | localize }}"
-    (onClick)="gridsService.expandCollapseGroups(this)"
-  ></dx-button>
   <dx-data-grid
     class="dx-card wide-card"
     [width]="'100%'"
@@ -249,6 +241,7 @@
     [columnAutoWidth]="true"
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
+    (onContentReady)="onContentReady($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="onSelectionChanged($event)"
@@ -301,6 +294,7 @@
     >
     </dxo-column-chooser>
     <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+      <!-- Colis summary in header -->
       <dxi-group-item
         *ngFor="let field of summaryFields"
         [name]="field"
@@ -310,7 +304,28 @@
         [displayFormat]="'{0}'"
       >
       </dxi-group-item>
+      <!-- Colis summary in groupFooter (for xlsx) -->
+      <dxi-group-item
+        column="nombreColisExpedies"
+        summaryType="sum"
+        showInColumn="nombreColisCommandes"
+        [displayFormat]="'{0}'"
+        [showInGroupFooter]="true"
+      >
+      </dxi-group-item>
+      <!-- Date depart in groupFooter (for sorting purposes) -->
+      <dxi-group-item
+        *ngFor="let field of customSummaryFields"
+        [name]="field"
+        [column]="field"
+        summaryType="custom"
+        [alignByColumn]="true"
+        [displayFormat]="'{0}'"
+        [showInGroupFooter]="true"
+      >
+      </dxi-group-item>
     </dxo-summary>
+
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
@@ -324,15 +339,53 @@
       [fixed]="column.fixed"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
-      [calculateGroupValue]="this[column?.calculateGroupValue]"
       allowSearch="false"
       [allowHeaderFiltering]="
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column?.showInColumnChooser"
       [calculateCellValue]="this[column?.calculateCellValue]"
+      [calculateGroupValue]="this[column?.calculateGroupValue]"
     >
     </dxi-column>
+
+    <dxo-toolbar>
+      <!-- Export functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="export-button"
+            type="normal"
+            icon="xlsxfile"
+            hint="{{ 'btn-export-xlsx' | localize }}"
+            (onClick)="ordreLignesService.onExporting(datagrid?.instance, this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <!-- Grouping functionnality -->
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="grid-grouping-button"
+            type="default"
+            icon="material-icons menu_open"
+            hint="{{ 'btn-grouping' | localize }}"
+            (onClick)="gridsService.expandCollapseGroups(this)"
+          ></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <!-- Allow to sort groups by date -->
+    <dxi-sort-by-group-summary-info
+      [summaryItem]="
+        switchDepartLivraison?.value
+          ? 'ordre.dateLivraisonPrevue'
+          : 'ordre.dateDepartPrevue'
+      "
+    >
+    </dxi-sort-by-group-summary-info>
 
     <div *dxTemplate="let cell of 'zoomButtonTemplate'">
       <dx-button
