@@ -204,7 +204,7 @@ export class GridControleQualiteComponent implements OnInit, AfterViewInit {
   openCQClientReport(cell) {
     this.documentsNumService
       .getList(
-        new Set(["statut", "cqDoc.isPresent", "cqDoc.uri", "cqDoc.type"]),
+        new Set(["statut", "cqDocPath", "cqDoc.isPresent", "cqDoc.uri", "cqDoc.type"]),
         `ordreLigne.id==${cell.data.ordreLigne.id} and typeDocument=='CQXSL' and id==${cell.data.referenceCQC}`
       )
       .subscribe({

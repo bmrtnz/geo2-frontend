@@ -81,7 +81,7 @@ export class GridCqPhotosComponent implements OnChanges {
       );
       this.gridFields = await fields.toPromise();
       const dataSource = this.documentsNumService.getDataSource(
-        new Set(this.gridFields)
+        new Set(["cqDocPath", ...this.gridFields])
       );
       dataSource.filter([
         ["ordreLigne.id", "=", this.ordreLigneId],
@@ -103,6 +103,7 @@ export class GridCqPhotosComponent implements OnChanges {
 
   onFocusedRowChanged(e) {
     if (!e.row?.data) return;
+    console.log(e.row.data)
     if (e.row.data.cqDoc.isPresent) {
       const targetURL = Location.joinWithSlash(environment.apiEndpoint, e.row.data.cqDoc.uri)
       this.currentImgPath = targetURL;
