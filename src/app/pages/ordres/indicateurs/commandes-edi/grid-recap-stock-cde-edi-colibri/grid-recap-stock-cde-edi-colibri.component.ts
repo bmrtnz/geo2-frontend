@@ -99,7 +99,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     this.enableFilters();
   }
 
-  setCellValue(newData, value, currentData) {
+  setCellValue(newData, value) {
     const context: any = this;
     context.defaultSetCellValue(newData, value);
     setTimeout(() => self.valueChange.emit(), 10);
