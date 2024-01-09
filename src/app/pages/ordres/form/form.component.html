@@ -1075,6 +1075,7 @@
                       [gridEnvois]="gridEnvois"
                       [gridCommandes]="gridCommandes"
                       [orderConfirmationOnly]="true"
+                      (whenDone)="formLitiges?.updateAllowDeletion()"
                     ></app-actions-documents-ordres>
                     <!-- Ordre de régularisation -->
                     <dx-button
@@ -1322,6 +1323,7 @@
                         [gridEnvois]="gridEnvois"
                         [gridCommandes]="gridCommandes"
                         [orderConfirmationOnly]="false"
+                        (whenDone)="formLitiges?.updateAllowDeletion()"
                       ></app-actions-documents-ordres>
                     </div>
                     <div class="dx-form-group-content">
@@ -1487,6 +1489,7 @@
   [gridEnvois]="gridEnvois"
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"
+  (whenDone)="formLitiges?.updateAllowDeletion()"
 ></app-groupage-chargements-popup>
 <app-selection-compte-palox-popup
   [ordre]="ordre"

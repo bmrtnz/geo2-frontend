@@ -49,6 +49,8 @@ export class GridLignesGroupageChargementsComponent
   @Output() closePopup = new EventEmitter();
   @Output() updateGridCde = new EventEmitter();
   @Output() updateOrder = new EventEmitter();
+  @Output() public whenDone = new EventEmitter();
+
 
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;

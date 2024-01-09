@@ -124,6 +124,7 @@
       [gridEnvois]="gridEnvois"
       [gridCommandes]="gridCommandes"
       [orderConfirmationOnly]="true"
+      (whenDone)="whenDone.emit()"
     ></app-actions-documents-ordres>
   </div>
   <div

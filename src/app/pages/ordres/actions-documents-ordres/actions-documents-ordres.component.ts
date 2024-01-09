@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { ConfirmationResultPopupComponent } from "app/shared/components/confirmation-result-popup/confirmation-result-popup.component";
 import Ordre from "app/shared/models/ordre.model";
 import { EnvoisService } from "app/shared/services/api/envois.service";
@@ -18,7 +18,7 @@ import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documen
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 import { GridsService } from "../grids.service";
-import notify from "devextreme/ui/notify";
+
 
 @Component({
   selector: "app-actions-documents-ordres",
@@ -32,6 +32,7 @@ export class ActionsDocumentsOrdresComponent {
   @Input() public orderConfirmationOnly: boolean;
   @Output() public flux: string;
   @Output() public myOrdre: Ordre;
+  @Output() public whenDone = new EventEmitter();
 
   public actionsFlux: any[];
   public plusActionsFlux: any[];

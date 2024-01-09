@@ -400,7 +400,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
       .subscribe(() => this.loadForm());
   }
 
-  private updateAllowDeletion() {
+  public updateAllowDeletion() {
     this.envoisService
       .countReals(this.ordre.id, "RESLIT", "INCLIT")
       .subscribe(res => this.litigeDeletable = !res);

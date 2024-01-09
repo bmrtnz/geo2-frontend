@@ -29,6 +29,8 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   @Output() public gridEnv: any;
   @Output() lignesChanged = new EventEmitter();
   @Output() ordreChanged = new EventEmitter();
+  @Output() public whenDone = new EventEmitter();
+
 
   visible: boolean;
   idArticlesDS: DataSource;
@@ -53,7 +55,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   constructor(
     public OrdreLigneService: OrdreLignesService,
     private localizeService: LocalizationService
-  ) {}
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
