@@ -41,7 +41,7 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CampagnesService } from "app/shared/services/api/campagnes.service";
-import { LoadResult } from "devextreme/data/custom_store";
+import { LoadResult } from "devextreme/common/data/custom-store";
 
 let self;
 
@@ -441,7 +441,8 @@ export class GridStockComponent implements OnInit {
           rawFilter
         ).subscribe(res => res.store().load().then((data: LoadResult<any>) => {
           // Compare with stock results and keep the ones the sector/client sold
-          this.endDSLoading(rawResults.data.allStockArticleList.filter(r => data.map(d => d.node.key).includes(r.articleID)));
+          if (Array.isArray(data))
+            this.endDSLoading(rawResults.data.allStockArticleList.filter(r => data.map(d => d.node.key).includes(r.articleID)));
         }));
       });
 
