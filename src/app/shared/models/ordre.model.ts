@@ -154,6 +154,9 @@ export class Ordre extends Model {
   @Field({ dataType: "datetime" }) public dateCreation?: string;
   @Field({ model: import("./type-ordre.model") })
   public type?: TypeOrdre;
+  public typeId?: TypeOrdre["id"];
+  public secteurCommercialId?: Secteur["id"];
+  public campagneId?: Campagne["id"];
   @Field({
     allowSorting: false,
     allowHeaderFiltering: false,
