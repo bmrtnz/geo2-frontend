@@ -1097,6 +1097,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       `${this.localization.localize("suppression-ordre")} n°${numero}`
     ).then((res) => {
       if (res) {
+        notify(
+          this.localization
+            .localize("text-popup-suppression", numero),
+          "info",
+          99999999
+        );
         this.ordresService
           .fSuppressionOrdre(
             this.ordre.id,
@@ -1110,15 +1116,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.ordre.numero,
                 this.ordre.campagne.id
               );
+              hideToasts();
               notify(
                 this.localization
-                  .localize("text-popup-suppression-ok")
-                  .replace("&O", numero),
+                  .localize("text-popup-suppression-ok", numero),
                 "success",
                 7000
               );
             },
             error: (error: Error) => {
+              hideToasts();
               this.running.deleteOrder = false;
               alert(
                 this.messageFormat(error.message),
