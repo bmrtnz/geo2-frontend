@@ -1764,14 +1764,11 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private refreshStatus(statut: Statut) {
     if (!this.ordre) return;
-    // this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
-    // this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
     this.status = this.localization.localize(Object
       .entries(StatutLocale)
       .find(([k, v]) => k === statut)
       ?.[1]);
     this.ordreFacture = Statut[statut] === Statut.FACTURE;
-    console.log(Statut[statut], Statut.FACTURE)
     this.canChangeDateLiv =
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
@@ -2177,3 +2174,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => this.gridLogistiques?.refresh());
   }
 }
+
+String.prototype.ucFirst = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};

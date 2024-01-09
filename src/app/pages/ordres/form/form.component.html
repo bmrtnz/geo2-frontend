@@ -248,7 +248,7 @@
                 <span
                   *ngIf="ordre"
                   class="dx-form-group-caption red-font-imp"
-                  >{{ status }}</span
+                  >{{ status?.ucFirst() }}</span
                 >
 
                 <span *ngIf="ordreFacture && numeroFacture?.length"
