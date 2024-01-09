@@ -11,6 +11,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { TabContext } from "../root/root.component";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-historique",
@@ -34,6 +35,7 @@ export class GridHistoriqueComponent implements OnInit {
     public mruOrdresService: MruOrdresService,
     public ordresService: OrdresService,
     public localize: LocalizationService,
+    public authService: AuthService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public gridConfiguratorService: GridConfiguratorService,

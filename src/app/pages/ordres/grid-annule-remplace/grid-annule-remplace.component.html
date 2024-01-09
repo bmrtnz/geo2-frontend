@@ -9,6 +9,7 @@
 
   <dx-data-grid
     class="grid-choix-envois"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="{
       filtering: true,
       grouping: true,

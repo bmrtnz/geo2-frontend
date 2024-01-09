@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { CQLignesService } from "app/shared/services/api/cq-lignes.service";
 import { DocumentsNumService } from "app/shared/services/api/documents-num.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -40,6 +40,7 @@ export class GridControleQualiteComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cqLignesService: CQLignesService,
+    public authService: AuthService,
     public localization: LocalizationService,
     public gridsService: GridsService,
     public documentsNumService: DocumentsNumService,

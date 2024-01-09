@@ -1,5 +1,6 @@
 <dx-data-grid
   class="dx-card wide-card grid-mru-ordre"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [showBorders]="false"
   [focusedRowEnabled]="true"
   [focusedRowIndex]="0"

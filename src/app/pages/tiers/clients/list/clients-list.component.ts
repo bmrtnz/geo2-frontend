@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NestedMain, NestedPart } from "app/pages/nested/nested.component";
 import { Client } from "app/shared/models";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
@@ -43,6 +43,7 @@ export class ClientsListComponent implements OnInit, NestedMain, NestedPart {
     private router: Router,
     private gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
+    public authService: AuthService,
     public browserService: BrowserService
   ) {
     this.apiService = this.clientsService;

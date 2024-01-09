@@ -13,7 +13,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import notify from "devextreme/ui/notify";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 @Component({
@@ -41,6 +41,7 @@ export class VisualiserOrdresPopupComponent {
     private currentCompanyService: CurrentCompanyService,
     private localization: LocalizationService,
     public tabContext: TabContext,
+    public authService: AuthService,
     public ordreLignesService: OrdreLignesService
   ) {
     this.gridTitle = "";

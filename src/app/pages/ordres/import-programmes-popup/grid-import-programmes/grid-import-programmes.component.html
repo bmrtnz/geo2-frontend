@@ -1,6 +1,7 @@
 <dx-data-grid
   [ngClass]="{ fullOpacity: shown }"
   class="dx-card wide-card grid-import-programs noOpacity"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [showBorders]="false"
   [focusedRowEnabled]="true"
   [keyExpr]="'id'"

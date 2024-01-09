@@ -61,7 +61,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
     private localizePipe: LocalizePipe,
-    private authService: AuthService,
+    public authService: AuthService,
     public tabContext: TabContext
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

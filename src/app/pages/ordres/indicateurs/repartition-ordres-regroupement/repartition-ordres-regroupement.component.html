@@ -116,7 +116,8 @@
   ></dx-button>
 </div>
 <dx-data-grid
-  class="dx-card wide-card grid-ordres-regroupement"
+  class="grid-ordres-regroupement"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [focusedRowEnabled]="false"

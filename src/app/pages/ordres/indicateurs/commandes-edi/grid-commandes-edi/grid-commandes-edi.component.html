@@ -208,7 +208,8 @@
   (onClick)="gridsService.expandCollapseGroups(this, false)"
 ></dx-button>
 <dx-data-grid
-  class="dx-card wide-card grid-cdes-edi"
+  class="grid-cdes-edi"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="false"
   [keyExpr]="'id'"
   [showBorders]="false"

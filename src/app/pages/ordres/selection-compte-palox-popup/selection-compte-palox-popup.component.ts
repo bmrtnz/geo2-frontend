@@ -6,7 +6,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import {
   DxPopupComponent,
   DxScrollViewComponent,
@@ -55,6 +55,7 @@ export class SelectionComptePaloxPopupComponent implements OnChanges {
     private clientsService: ClientsService,
     private currentCompanyService: CurrentCompanyService,
     public gridConfiguratorService: GridConfiguratorService,
+    public authService: AuthService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

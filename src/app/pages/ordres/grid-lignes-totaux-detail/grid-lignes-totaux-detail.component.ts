@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { SummaryInput, SummaryType } from "app/shared/services/api.service";
 import {
   OrdreLignesService,
@@ -44,6 +44,7 @@ export class GridLignesTotauxDetailComponent
     private ordreLignesService: OrdreLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     private gridsService: GridsService,
+    public authService: AuthService,
     public localizeService: LocalizationService
   ) {
     self = this;

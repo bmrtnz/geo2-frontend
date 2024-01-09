@@ -84,7 +84,8 @@
 </form>
 
 <dx-data-grid
-  class="dx-card wide-card grid-planning-maritime"
+  class="grid-planning-maritime"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"

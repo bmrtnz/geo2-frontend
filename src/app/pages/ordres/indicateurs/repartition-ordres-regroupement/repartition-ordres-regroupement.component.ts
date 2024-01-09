@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
 import { Role } from "app/shared/models";
 import {
+  AuthService,
   FournisseursService,
   LocalizationService,
   TransporteursService
@@ -63,6 +64,7 @@ export class RepartitionOrdresRegroupementComponent implements OnInit {
     public dateManagementService: DateManagementService,
     public gridsService: GridsService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     private repartitionOrdresRegroupement: RepartitionOrdresRegroupementService,
     private transporteursService: TransporteursService,
     private personnesService: PersonnesService,

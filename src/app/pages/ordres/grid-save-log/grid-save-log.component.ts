@@ -9,6 +9,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { GridsService } from "../grids.service";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-save-log",
@@ -27,6 +28,7 @@ export class GridSaveLogComponent implements OnInit, AfterViewInit {
   constructor(
     private dateManagementService: DateManagementService,
     private ordresSaveLogsService: OrdresSaveLogsService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService
   ) {

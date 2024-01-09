@@ -59,7 +59,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     private ordresService: OrdresService,
     private currentCompanyService: CurrentCompanyService,
     private functionsService: FunctionsService,
-    private authService: AuthService,
+    public authService: AuthService,
   ) { }
 
   ngOnChanges() {

@@ -9,7 +9,8 @@
 ></dx-button>
 
 <dx-data-grid
-  class="dx-card wide-card grid-controle-qualite"
+  class="dx-card wide-card"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"

@@ -38,7 +38,7 @@ export class Utilisateur extends Model {
   @Field() public reportProprietaire?: boolean;
   @Field() public reportTypePalette?: boolean;
   @Field() public barreDefilementHaut?: boolean;
-  @Field() public barreDefilementBas?: boolean;
+  @Field() public barreDefilementVisible?: boolean;
   @Field() public diffSurExpedition?: boolean;
 
   public getSUP?() {

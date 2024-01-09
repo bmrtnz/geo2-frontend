@@ -29,7 +29,8 @@
   <br />
 
   <dx-data-grid
-    class="dx-card wide-card ordres-non-clotures"
+    class="dx-card wide-card"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

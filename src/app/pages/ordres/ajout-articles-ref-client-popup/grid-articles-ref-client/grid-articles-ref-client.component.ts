@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { NestedMain } from "app/pages/nested/nested.component";
 import Ordre from "app/shared/models/ordre.model";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { EmballagesService } from "app/shared/services/api/emballages.service";
@@ -74,6 +74,7 @@ export class GridArticlesRefClientComponent
   constructor(
     public articlesService: ArticlesService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridRowStyleService: GridRowStyleService,
     public clientsService: ClientsService,

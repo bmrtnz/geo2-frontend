@@ -12,7 +12,7 @@ import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
 import { DxDataGridComponent } from "devextreme-angular";
-import { LocalizationService, TransporteursService } from "app/shared/services";
+import { AuthService, LocalizationService, TransporteursService } from "app/shared/services";
 import { GridColumn } from "basic";
 import { Observable, of } from "rxjs";
 import {
@@ -48,6 +48,7 @@ export class TransporteursListComponent implements OnInit, NestedMain {
     public localizeService: LocalizationService,
     private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
+    public authService: AuthService,
     public gridRowStyleService: GridRowStyleService,
     public browserService: BrowserService
   ) {

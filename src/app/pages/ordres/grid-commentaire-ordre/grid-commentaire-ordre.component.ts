@@ -36,7 +36,7 @@ export class GridCommentaireOrdreComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dateManagementService: DateManagementService,
-    private authService: AuthService,
+    public authService: AuthService,
     public gridsService: GridsService,
     private commentairesOrdresService: CommentairesOrdresService,
     public gridConfiguratorService: GridConfiguratorService

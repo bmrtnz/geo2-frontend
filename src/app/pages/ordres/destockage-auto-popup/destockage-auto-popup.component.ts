@@ -63,7 +63,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
 
   constructor(
     private stockMouvementsService: StockMouvementsService,
-    private authService: AuthService,
+    public authService: AuthService,
     private stocksService: StocksService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService

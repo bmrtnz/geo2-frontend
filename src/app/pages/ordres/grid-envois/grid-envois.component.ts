@@ -25,6 +25,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-envois",
@@ -52,6 +53,7 @@ export class GridEnvoisComponent implements OnInit, AfterViewInit {
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
     public gridsService: GridsService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

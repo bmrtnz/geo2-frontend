@@ -1,5 +1,6 @@
 <dx-data-grid
-  class="dx-card wide-card grid-detail-palettes"
+  class="dx-card wide-card"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"

@@ -25,7 +25,8 @@
   <br />
 
   <dx-data-grid
-    class="dx-card wide-card grid-commandes-transit"
+    class="dx-card wide-card"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     #gridCOMMANDESTRANSIT
     [remoteOperations]="true"
     [showBorders]="false"

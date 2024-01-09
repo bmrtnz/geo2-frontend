@@ -188,7 +188,8 @@
   (onClick)="gridsService.expandCollapseGroups(this)"
 ></dx-button>
 <dx-data-grid
-  class="dx-card wide-card grid-planning-transporteurs"
+  class="grid-planning-transporteurs"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="true"

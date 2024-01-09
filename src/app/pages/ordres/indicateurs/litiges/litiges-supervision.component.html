@@ -94,7 +94,8 @@
 ></dx-button>
 
 <dx-data-grid
-  class="dx-card wide-card ordres-litiges-grid"
+  class="ordres-litiges-grid"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [showBorders]="false"
   [focusedRowEnabled]="false"
   [focusedRowIndex]="0"

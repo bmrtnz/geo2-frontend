@@ -9,7 +9,7 @@ import {
 import LitigeLigne from "app/shared/models/litige-ligne.model";
 import Litige from "app/shared/models/litige.model";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { LitigesLignesService } from "app/shared/services/api/litiges-lignes.service";
 import { LitigesService } from "app/shared/services/api/litiges.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
@@ -67,6 +67,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
     private litigesService: LitigesService,
     private litigesLignesService: LitigesLignesService,
     public gridUtils: GridUtilsService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService
   ) {

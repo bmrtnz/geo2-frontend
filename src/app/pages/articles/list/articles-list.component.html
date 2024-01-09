@@ -164,7 +164,8 @@
   </div>
   <div style="clear: both"></div>
   <dx-data-grid
-    class="dx-card wide-card grid-articles"
+    class="dx-card wide-card"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

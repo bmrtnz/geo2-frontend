@@ -12,6 +12,7 @@
           <div class="dx-field-value">
             <dx-switch
               #switchType
+              class="symetrical-switch"
               data-name="recapitulatif"
               [value]="true"
               [switchedOnText]=""
@@ -31,6 +32,7 @@
           <div class="dx-field-value">
             <dx-switch
               #switchEntity
+              class="symetrical-switch"
               data-name="fournisseurs"
               [switchedOnText]=""
               [switchedOffText]=""
@@ -143,6 +145,7 @@
 <dx-data-grid
   #MouvClientsComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="false"
@@ -248,6 +251,7 @@
 <dx-data-grid
   #RecapClientsComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -339,6 +343,7 @@
 <dx-data-grid
   #MouvFournisseursComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -430,6 +435,7 @@
 <dx-data-grid
   #RecapFournisseursComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
