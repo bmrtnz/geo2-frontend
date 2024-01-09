@@ -25,7 +25,8 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
 import { DxDataGridComponent, DxProgressBarComponent, DxSelectBoxComponent } from "devextreme-angular";
-import CustomStore, { LoadResult } from "devextreme/data/custom_store";
+import { LoadResult } from "devextreme/common/data/custom-store";
+import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 import { ClickEvent } from "devextreme/ui/button";
 import notify from "devextreme/ui/notify";
@@ -282,10 +283,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         this.progressSet(5);
         this.datagrid.instance.beginCustomLoading("");
         this.store.load().then((res: LoadResult<any>) => {
-          this.countOrders = res.length;
-          this.processedOrders = 0;
-          this.progressSet(20);
-          setTimeout(() => res.map(data => this.controlBaf(data.ordreRef)));
+          if (Array.isArray(res)) {
+            this.countOrders = res.length;
+            this.processedOrders = 0;
+            this.progressSet(20);
+            setTimeout(() => res.map(data => this.controlBaf(data.ordreRef)));
+          }
         });
       });
     }
