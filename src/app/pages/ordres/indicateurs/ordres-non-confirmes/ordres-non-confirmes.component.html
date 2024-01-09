@@ -1,43 +1,100 @@
 <br />
-<div>
-  <dx-box>
-    <dxi-item [ratio]="4">
-      <!-- Secteurs -->
-      <div class="dx-field">
-        <div class="dx-field-label">
-          {{ "tiers-clients-secteur" | localize }}
-        </div>
-        <div class="dx-field-value">
-          <dx-check-box
-            #withSector
-            (valueChange)="enableFilters()"
-          ></dx-check-box>
-          <dx-select-box
-            #secteurValue
-            [dataSource]="secteurs"
-            [disabled]="!withSector.value"
-            displayExpr="description"
-            searchExpr="description"
-            (valueChange)="enableFilters()"
-          ></dx-select-box>
-        </div>
-      </div>
-    </dxi-item>
-    <dxi-item [ratio]="10.5">
-      <div>
-        <dx-button
-          class="upperButton"
-          type="default"
-          [visible]="false"
-          text="{{ 'btn-confirm' | localize }}"
-        >
-        </dx-button>
-      </div>
-    </dxi-item>
-  </dx-box>
+<div class="ordres-non-confirmes">
+  <div class="filterArea-container">
+    <form [formGroup]="formGroup">
+      <dx-box>
+        <dxi-item [ratio]="4">
+          <!-- Secteurs -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "tiers-clients-secteur" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-check-box #withSector></dx-check-box>
+              <dx-select-box
+                #secteurValue
+                formControlName="secteur"
+                [dataSource]="secteurs"
+                [disabled]="!withSector?.value"
+                displayExpr="description"
+                searchExpr="description"
+              ></dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
+        <dxi-item [ratio]="11">
+          <dx-box>
+            <dxi-item [ratio]="1.5">
+              <!-- Période -->
+              <div class="dx-field">
+                <div class="dx-field-label text-align-right">
+                  {{ "ordres-periode" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-select-box
+                    #periodeSB
+                    [items]="periodes"
+                    [displayExpr]="dateManagementService.displayPeriodText"
+                    (onValueChanged)="setDates($event)"
+                  >
+                    <dxo-drop-down-options [width]="300">
+                    </dxo-drop-down-options>
+                  </dx-select-box>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item [ratio]="1">
+              <!-- Date de début -->
+              <div class="dx-field field-small">
+                <div class="dx-field-label text-align-right">
+                  {{ "ordres-Du" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-date-box
+                    formControlName="dateMin"
+                    class="dateStart"
+                    type="date"
+                    dateSerializationFormat="yyyy-MM-dd"
+                    [displayFormat]="'dd-MM-yy'"
+                    (onValueChanged)="manualDate($event)"
+                  ></dx-date-box>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item [ratio]="1">
+              <!-- Date de fin -->
+              <div class="dx-field field-small">
+                <div class="dx-field-label text-align-right">
+                  {{ "ordres-au" | localize }}
+                </div>
+                <div class="dx-field-value">
+                  <dx-date-box
+                    formControlName="dateMax"
+                    class="dateEnd"
+                    type="date"
+                    dateSerializationFormat="yyyy-MM-dd"
+                    [displayFormat]="'dd-MM-yy'"
+                    (onValueChanged)="manualDate($event)"
+                  ></dx-date-box>
+                </div>
+              </div>
+            </dxi-item>
+          </dx-box>
+        </dxi-item>
+      </dx-box>
+    </form>
+  </div>
+
+  <dx-button
+    class="refresh-btn"
+    type="default"
+    text="{{ 'btn-refresh' | localize }}"
+    (onClick)="enableFilters()"
+  ></dx-button>
 
   <br />
-
+  <br />
   <dx-data-grid
     class="dx-card wide-card"
     [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
@@ -98,6 +155,9 @@
       "
       [visible]="false"
       [dataType]="column?.dataType"
+      [cssClass]="
+        'small-side-padding' + (column.cssClass ? ' ' + column.cssClass : '')
+      "
       [allowSearch]="
         column?.allowSearch || ['string'].includes(column?.dataType)
       "
