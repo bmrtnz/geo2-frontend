@@ -71,6 +71,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
       { dataField: "fournisseur.id", name: "reportExpediteur", caption: "fournisseur.id", fields: ["fournisseur.id"] },
       { dataField: "ventePrixUnitaire", name: "reportPrixVente", caption: "ventePUEtUnite", fields: ["ventePrixUnitaire", "venteUnite.id"] },
       { dataField: "achatDevisePrixUnitaire", name: "reportPrixAchat", caption: "achatDevisePUEtUnite", fields: ["achatDevisePrixUnitaire", "achatUnite.id"] },
+      { dataField: "venteUnite.id", name: "reportPrixVente", caption: "venteUnite.id", fields: ["venteUnite.id"], hidden: true },
+      { dataField: "achatUnite.id", name: "reportPrixAchat", caption: "achatUnite.id", fields: ["achatUnite.id"], hidden: true },
       { dataField: "typePalette.id", name: "reportTypePalette", caption: "typePalette.id", fields: ["typePalette.id"] },
       { dataField: "libelleDLV", name: "reportLibelleDLV", caption: "libelleDLV", fields: ["libelleDLV"], mandatoryValue: true },
     ];
@@ -285,7 +287,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
         }
       } else {
         // Special case: unlock every cell except some when !allowmutations
-        if (!["ventePrixUnitaire", "venteUnite.id", "gratuit"].includes(e.column.dataField)) {
+        // Added "achatDevisePrixUnitaire", "achatUnite.id" 10-01-2023 CDT:569
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
           return this.lock(e);
         } else {
           return;

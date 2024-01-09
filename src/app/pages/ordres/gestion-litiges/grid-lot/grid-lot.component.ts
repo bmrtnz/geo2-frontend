@@ -287,6 +287,11 @@ export class GridLotComponent implements OnInit, OnChanges {
     }
   }
 
+  onEditingStart(cell) {
+    if (cell.column.dataField === "ligne.clientPoidsNet" && this.headerData?.consequence === "F")
+      cell.cancel = true;
+  }
+
   /**
    * Met a jour l'ensemble des lignes de la grille (le lot) avec les données en parametre
    * Si une seule ligne est fournie, les données seront clonées dans toutes les lignes du lot

@@ -80,6 +80,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public popupFullscreen = false;
   public ordreGenNumero: string;
   public running: any;
+  public loading: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;
@@ -254,7 +255,14 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.consequences.selectedItems.length)
       this.consequences.selectedItemKeys.shift();
     this.selectedConsequence = e.addedItems[0]?.id;
+    if (!this.loading && this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
     this.headerData.consequence = this.selectedConsequence;
+  }
+
+  resetWeights() {
+    this.gridLot.grid.instance.getVisibleRows().map(row =>
+      this.gridLot.grid.instance.cellValue(row.rowIndex, "ligne.clientPoidsNet", 0)
+    )
   }
 
   validate(doAfter?) {
@@ -267,6 +275,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   doValidate(doAfter) {
+    if (this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
     this.mutateLot()
       .pipe(
         concatMap((data) => this.gridLot.updateLot(data)),
@@ -738,6 +747,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
       )
       .subscribe({
         next: (res) => {
+          this.loading = true;
           if (res?.cause?.id) {
             const itemIndex = this.causeItems.findIndex(
               (r) => r.id === res.cause.id
@@ -752,6 +762,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
             this.consequences.instance.selectItem(itemIndex);
             this.consequences.instance.scrollToItem(itemIndex);
           }
+          this.loading = false;
         },
         error: (err: Error) => this.showErrorMessage(err)
       });

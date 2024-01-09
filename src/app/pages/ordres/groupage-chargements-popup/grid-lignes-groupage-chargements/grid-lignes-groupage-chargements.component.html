@@ -1,6 +1,6 @@
 <div class="grid-ordre-lignes-groupage-chargements-container">
   <dx-data-grid
-    class="dx-card wide-card"
+    class="dx-card wide-card grid-ordre-lignes-groupage-chargements"
     [remoteOperations]="{
       filtering: true,
       grouping: false,
@@ -10,7 +10,6 @@
       summary: false
     }"
     [showBorders]="false"
-    [elementAttr]="{ class: 'grid-ordre-lignes-groupage-chargements' }"
     [focusedRowEnabled]="true"
     [focusedRowIndex]="0"
     [columnAutoWidth]="true"
@@ -124,6 +123,7 @@
       [gridEnvois]="gridEnvois"
       [gridCommandes]="gridCommandes"
       [orderConfirmationOnly]="true"
+      (whenDone)="whenDone.emit()"
     ></app-actions-documents-ordres>
   </div>
   <div

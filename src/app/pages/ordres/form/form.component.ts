@@ -18,7 +18,7 @@ import { ConfirmationResultPopupComponent } from "app/shared/components/confirma
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
-import { Ordre, Statut } from "app/shared/models/ordre.model";
+import { Ordre, Statut, StatutLocale } from "app/shared/models/ordre.model";
 import {
   AuthService,
   ClientsService,
@@ -199,6 +199,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public transporteurTitle: string;
   @Output() public readOnlyMode: boolean;
   @Output() public ordreBAFOuFacture: boolean;
+  @Output() public allowMutations: boolean = false;
 
   private readonly headerFields = [
     "id",
@@ -280,6 +281,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public fragments = Fragments;
   public status: string;
   public ordreFacture: boolean;
+  public ordreAnnule: boolean;
   public canChangeDateLiv: boolean;
   public refOrdreEdi: any;
   public canalOrdreEdi: any;
@@ -331,7 +333,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public dotCQ: number;
   public orderNumber: string;
   public fullOrderNumber: string;
-  public allowMutations = false;
   public headerSaving: boolean;
   public headerRefresh: boolean;
   public instructionsList: string[];
@@ -1097,6 +1098,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       `${this.localization.localize("suppression-ordre")} n°${numero}`
     ).then((res) => {
       if (res) {
+        notify(
+          this.localization
+            .localize("text-popup-suppression", numero),
+          "info",
+          99999999
+        );
         this.ordresService
           .fSuppressionOrdre(
             this.ordre.id,
@@ -1110,15 +1117,16 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.ordre.numero,
                 this.ordre.campagne.id
               );
+              hideToasts();
               notify(
                 this.localization
-                  .localize("text-popup-suppression-ok")
-                  .replace("&O", numero),
+                  .localize("text-popup-suppression-ok", numero),
                 "success",
                 7000
               );
             },
             error: (error: Error) => {
+              hideToasts();
               this.running.deleteOrder = false;
               alert(
                 this.messageFormat(error.message),
@@ -1757,8 +1765,12 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private refreshStatus(statut: Statut) {
     if (!this.ordre) return;
-    this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
-    this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
+    this.status = this.localization.localize(Object
+      .entries(StatutLocale)
+      .find(([k, v]) => k === statut)
+      ?.[1]);
+    this.ordreAnnule = [Statut.ANNULE].includes(Statut[statut]);
+    this.ordreFacture = [Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[statut]);
     this.canChangeDateLiv =
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;
@@ -2164,3 +2176,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => this.gridLogistiques?.refresh());
   }
 }
+
+String.prototype.ucFirst = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};

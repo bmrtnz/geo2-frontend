@@ -34,8 +34,8 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
-import { from, iif, Observable } from "rxjs";
-import { concatMap, finalize, map } from "rxjs/operators";
+import { from, lastValueFrom, Observable } from "rxjs";
+import { concatMap, map } from "rxjs/operators";
 import { TabContext } from "../../../root/root.component";
 import { ChoixEntrepotCommandeEdiPopupComponent } from "../choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
 import { ModifCommandeEdiPopupComponent } from "../modif-commande-edi-popup/modif-commande-edi-popup.component";
@@ -459,21 +459,26 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
           hideToasts();
           this.showHideLoader.emit(false);
           const mess = this.messageFormat(err.message);
-          console.log(err.message);
           notify(mess, "error", 5000 + 40 * mess.length);
         },
-        next: res => {
+        next: async res => {
           hideToasts();
           this.showHideLoader.emit(false);
           if ("ofReadOrdEdiColibri" in res.data) {
             this.recapStockPopup.visible = true;
             this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
           }
+          // MERCADONA (Espagne)
           if ("fCreateEdiEsp" in res.data) {
-            const text = this.localization.localize("ordre-cree-edi", res.data.fCreateEdiEsp.data?.tab_ordre_cree);
+            const result = await lastValueFrom(
+              this.ordresService.getOne_v2(res.data.fCreateEdiEsp.data?.tab_ordre_cree[0], ["id", "numero", "campagne.id"])
+            );
+            const numero = result.data?.ordre?.numero;
+            const text = this.localization.localize("ordre-cree-edi", numero);
+            this.tabContext.openOrdre(numero, result.data?.ordre?.campagne?.id, false);
             //Refresh datagrid with filters
             this.enableFilters();
-            notify(text, "success", 3000);
+            notify(text, "success", 10000);
           }
         }
       });

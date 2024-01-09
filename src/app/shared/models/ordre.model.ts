@@ -179,9 +179,7 @@ export class Ordre extends Model {
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
-    return [Statut[Statut.EXPEDIE], Statut[Statut.FACTURE]].includes(
-      ordre?.statut?.toString()
-    );
+    return [Statut.EXPEDIE, Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[ordre?.statut]);
   }
 }
 

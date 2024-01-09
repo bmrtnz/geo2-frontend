@@ -9,7 +9,7 @@
   <dx-button
     type="default"
     class="create-litige-btn"
-    [disabled]="!gridCdeHasRows || running?.createLitige"
+    [disabled]="!gridCdeHasRows || running?.createLitige || allowMutations"
     [focusStateEnabled]="false"
     text="{{ 'ordres-litiges-create' | localize }}"
     (onClick)="createLitige()"
@@ -478,7 +478,9 @@
 ></app-gestion-operations-popup>
 
 <app-confirmation-result-popup></app-confirmation-result-popup>
-<app-documents-ordres-popup></app-documents-ordres-popup>
+<app-documents-ordres-popup
+  (whenDone)="updateAllowDeletion()"
+></app-documents-ordres-popup>
 <app-file-manager-popup
   key="litiges"
   [subTitle]="('litige' | localize) + ' ' + infosLitige?.litige.id"

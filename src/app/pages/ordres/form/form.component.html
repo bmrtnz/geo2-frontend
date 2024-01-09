@@ -42,6 +42,7 @@
             !running?.createLitige
           "
           (click)="onClickCreateLitige()"
+          [ngClass]="{ 'inactive-button': allowMutations }"
           class="add-litige-button dx-datagrid-addrow-button dx-button dx-button-mode-text dx-button-has-icon dx-button-has-text"
           title="{{ 'ordres-litiges-create' | localize }}"
         >
@@ -194,6 +195,7 @@
                   class="upperButton"
                   type="danger"
                   [disabled]="
+                    ordreAnnule ||
                     ordreBAFOuFacture ||
                     !fullOrderNumber ||
                     running?.deleteOrder
@@ -247,7 +249,7 @@
                 <span
                   *ngIf="ordre"
                   class="dx-form-group-caption red-font-imp"
-                  >{{ status }}</span
+                  >{{ status?.ucFirst() }}</span
                 >
 
                 <span *ngIf="ordreFacture && numeroFacture?.length"
@@ -1074,6 +1076,7 @@
                       [gridEnvois]="gridEnvois"
                       [gridCommandes]="gridCommandes"
                       [orderConfirmationOnly]="true"
+                      (whenDone)="formLitiges?.updateAllowDeletion()"
                     ></app-actions-documents-ordres>
                     <!-- Ordre de régularisation -->
                     <dx-button
@@ -1237,6 +1240,7 @@
                       [ordre]="data"
                       [gridCdeHasRows]="!!gridCommandes?.gridRowsTotal"
                       [grid]="gridLitigesLignes"
+                      [allowMutations]="allowMutations"
                       [selectedLitigeLigneKey]="
                         gridLitigesLignes.getFocusedRowKey()
                       "
@@ -1320,6 +1324,7 @@
                         [gridEnvois]="gridEnvois"
                         [gridCommandes]="gridCommandes"
                         [orderConfirmationOnly]="false"
+                        (whenDone)="formLitiges?.updateAllowDeletion()"
                       ></app-actions-documents-ordres>
                     </div>
                     <div class="dx-form-group-content">
@@ -1485,6 +1490,7 @@
   [gridEnvois]="gridEnvois"
   (lignesChanged)="onLignesChanged($event)"
   (ordreChanged)="refreshHeader($event)"
+  (whenDone)="formLitiges?.updateAllowDeletion()"
 ></app-groupage-chargements-popup>
 <app-selection-compte-palox-popup
   [ordre]="ordre"
