@@ -328,8 +328,7 @@ export class GridLignesGroupageChargementsComponent
           const numOrdre = data[0].ordre.numero;
           const campOrdre = this.currentCompanyService.getCompany().campagne.id;
           let message = this.localizeService
-            .localize("ordre-cree")
-            .replace("&O", numOrdre);
+            .localize("ordre-cree", numOrdre);
           message +=
             " - " + this.localizeService.localize(`ordre-${operation}-lignes`);
           message = message
