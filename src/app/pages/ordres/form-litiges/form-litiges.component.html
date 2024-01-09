@@ -9,7 +9,7 @@
   <dx-button
     type="default"
     class="create-litige-btn"
-    [disabled]="!gridCdeHasRows || running?.createLitige"
+    [disabled]="!gridCdeHasRows || running?.createLitige || allowMutations"
     [focusStateEnabled]="false"
     text="{{ 'ordres-litiges-create' | localize }}"
     (onClick)="createLitige()"

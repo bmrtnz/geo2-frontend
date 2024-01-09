@@ -18,7 +18,7 @@ import { ConfirmationResultPopupComponent } from "app/shared/components/confirma
 import { FileManagerComponent } from "app/shared/components/file-manager/file-manager-popup.component";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { Role, Societe, Type } from "app/shared/models";
-import { Ordre, Statut } from "app/shared/models/ordre.model";
+import { Ordre, Statut, StatutLocale } from "app/shared/models/ordre.model";
 import {
   AuthService,
   ClientsService,
@@ -199,6 +199,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() public transporteurTitle: string;
   @Output() public readOnlyMode: boolean;
   @Output() public ordreBAFOuFacture: boolean;
+  @Output() public allowMutations: boolean = false;
 
   private readonly headerFields = [
     "id",
@@ -331,7 +332,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public dotCQ: number;
   public orderNumber: string;
   public fullOrderNumber: string;
-  public allowMutations = false;
   public headerSaving: boolean;
   public headerRefresh: boolean;
   public instructionsList: string[];
@@ -1764,8 +1764,14 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private refreshStatus(statut: Statut) {
     if (!this.ordre) return;
-    this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
-    this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
+    // this.status = Statut[statut] + (this.ordre?.factureEDI ? " EDI" : "");
+    // this.ordreFacture = Statut[statut] === Statut.FACTURE.toString();
+    this.status = this.localization.localize(Object
+      .entries(StatutLocale)
+      .find(([k, v]) => k === statut)
+      ?.[1]);
+    this.ordreFacture = Statut[statut] === Statut.FACTURE;
+    console.log(Statut[statut], Statut.FACTURE)
     this.canChangeDateLiv =
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
     if (this.ordreFacture) this.numeroFacture = this.ordre.numeroFacture;

@@ -42,6 +42,7 @@ import { FraisAnnexesLitigePopupComponent } from "./frais-annexes-litige-popup/f
 export class FormLitigesComponent implements OnInit, OnChanges {
   @Input() public ordre: Ordre;
   @Input() public gridCdeHasRows: boolean;
+  @Input() public allowMutations: boolean;
   @Input() selectedLitigeLigneKey: LitigeLigne["id"];
   @Input() grid: GridLitigesLignesComponent;
   @Output() public ordreSelected = new EventEmitter<Litige>();
@@ -228,6 +229,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
             },
           });
       } else {
+        this.running.createLitige = false;
         notify({
           message: this.localization.localize("ordres-litiges-warn-no-facture"),
           type: "warning",
@@ -237,6 +239,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
         );
       }
     } else {
+      this.running.createLitige = false;
       notify({
         message: this.localization.localize("ordres-litiges-warn-cancelled-order"),
         type: "warning",
