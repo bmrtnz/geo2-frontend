@@ -512,9 +512,14 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  onCreateError() {
+    this.running.createOrder = false;
+    hideToasts();
+  }
+
   createDirectOrder() {
     this.running.createOrder = true;
-    notify(this.localizeService.localize("create-order"), "info");
+    notify(this.localizeService.localize("pre-process"), "info");
     this.nouvelOrdre?.onButtonLoaderClick();
   }
 

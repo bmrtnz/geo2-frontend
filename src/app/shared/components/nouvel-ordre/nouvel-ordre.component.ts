@@ -7,7 +7,6 @@ import { AuthService, EntrepotsService } from "app/shared/services";
 import { DevisesRefsService } from "app/shared/services/api/devises-refs.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
-import { Program } from "app/shared/services/program.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -101,6 +100,7 @@ export class NouvelOrdreComponent implements AfterViewInit {
   @Input() silent: boolean;
   @Input() injectedEntrepot: Partial<Entrepot>;
   @Output() public whenCreated = new EventEmitter();
+  @Output() public whenError = new EventEmitter();
 
 
   @ViewChild(GridEntrepotsComponent, { static: false })
@@ -178,9 +178,10 @@ export class NouvelOrdreComponent implements AfterViewInit {
 
   showError(errorInfo) {
     console.log(errorInfo);
-    this.infoComponent.visible = true;
     errorInfo = errorInfo.split("\\r\\n").join(" ");
     this.errorText = this.messageFormat(errorInfo);
+    this.infoComponent.visible = true;
+    this.whenError.emit();
   }
 
   clearGridsFilters() {

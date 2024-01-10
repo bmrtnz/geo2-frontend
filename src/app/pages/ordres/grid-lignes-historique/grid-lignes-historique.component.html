@@ -386,7 +386,7 @@
           "
           class="create-direct-order-button"
           type="success"
-          text="{{ 'creer-ordre(s)' | localize }}"
+          text="{{ 'creer-ordre' | localize }}"
           (onClick)="createDirectOrder()"
         ></dx-button>
       </dxi-item>
@@ -422,6 +422,7 @@
 <app-nouvel-ordre
   [silent]="true"
   [injectedEntrepot]="formGroup?.get('entrepot')?.value"
+  (whenError)="onCreateError()"
   (whenCreated)="insertArticlesOnNewOrder($event)"
 ></app-nouvel-ordre>
 
