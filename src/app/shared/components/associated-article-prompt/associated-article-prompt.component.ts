@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  NgModule,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -10,7 +11,7 @@ import { Article, OrdreLigne } from "app/shared/models";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
-import { DxPopupComponent } from "devextreme-angular";
+import { DxButtonModule, DxPopupComponent, DxPopupModule, DxTemplateModule } from "devextreme-angular";
 import { EMPTY, of } from "rxjs";
 import { concatMap, concatMapTo, filter } from "rxjs/operators";
 
@@ -33,7 +34,7 @@ export class AssociatedArticlePromptComponent {
     private functionsService: FunctionsService,
     private ordreLignesService: OrdreLignesService,
     private currentCompanyService: CurrentCompanyService
-  ) {}
+  ) { }
 
   cancelClick() {
     this.visible = false;
@@ -70,3 +71,14 @@ export class AssociatedArticlePromptComponent {
       );
   }
 }
+
+@NgModule({
+  declarations: [AssociatedArticlePromptComponent],
+  exports: [AssociatedArticlePromptComponent],
+  imports: [
+    DxPopupModule,
+    DxTemplateModule,
+    DxButtonModule,
+  ],
+})
+export class AssociatedArticlePromptModule { }

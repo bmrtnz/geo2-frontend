@@ -21,7 +21,7 @@ import {
 import notify from "devextreme/ui/notify";
 import { from, lastValueFrom } from "rxjs";
 import { concatMap, takeWhile, tap } from "rxjs/operators";
-import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-lignes-historique.component";
 
 @Component({

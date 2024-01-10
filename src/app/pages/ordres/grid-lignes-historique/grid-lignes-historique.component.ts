@@ -18,11 +18,14 @@ import { DxDataGridComponent, DxSelectBoxComponent, DxSwitchComponent, } from "d
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { from, lastValueFrom, Observable } from "rxjs";
+import { concatMap, map, takeWhile } from "rxjs/operators";
 import { GridsService } from "../grids.service";
 import { TabContext } from "../root/root.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
+import { NouvelOrdreComponent } from "../../../shared/components/nouvel-ordre/nouvel-ordre.component";
+import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 
 let self;
 
@@ -63,6 +66,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("switchDepartLivraison", { static: false })
   switchLivraison: DxSwitchComponent;
+  @ViewChild(NouvelOrdreComponent, { static: true }) nouvelOrdre: NouvelOrdreComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
 
   public secteurs: DataSource;
   public clients: DataSource;
@@ -98,6 +103,9 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     "ordre.dateLivraisonPrevue"
   ];
   public hasLitigeDots: boolean;
+  public running = {
+    createOrder: false,
+  }
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -114,7 +122,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     public authService: AuthService,
     public functionsService: FunctionsService,
     public localizeService: LocalizationService,
-    private tabContext: TabContext
+    private tabContext: TabContext,
   ) {
     self = this;
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -471,6 +479,79 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (!this.formGroup.get("client").value) {
       notify("Veuillez sélectionner un client", "warning", 3000);
     }
+  }
+
+  createDirectOrder() {
+    this.running.createOrder = true;
+    notify(this.localizeService.localize("create-order"), "info");
+    this.nouvelOrdre?.onButtonLoaderClick();
+  }
+
+  async insertArticlesOnNewOrder(ordre) {
+    const chosenArticles = this.datagrid.instance.getSelectedRowsData().map((row) => row.article.id);
+    hideToasts();
+    notify(this.localizeService.localize("create-order-numero", ordre.numero), "info", 9999999);
+
+    const res = await lastValueFrom(this.ordresService
+      .getOneByNumeroAndSocieteAndCampagne(
+        ordre.numero, this.currentCompanyService.getCompany().id, ordre.campagneId, ["id", "campagne.id", "numero"]
+      ));
+    ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
+
+    from(chosenArticles)
+      .pipe(
+        concatMap((articleID, index) =>
+          this.functionsService
+            .ofInitArticleHistory(
+              ordre.id,
+              articleID,
+              this.currentCompanyService.getCompany().id,
+              this.datagrid.instance.getSelectedRowKeys()[index]
+            )
+            .valueChanges.pipe(
+              concatMap(async res => {
+                return res;
+              }),
+              concatMap((res) => {
+                this.associatedPrompt.ordreLigneID =
+                  res.data.ofInitArticleHistory.data.new_orl_ref;
+                this.associatedPrompt.articleAssocieID =
+                  res.data.ofInitArticleHistory.data.art_ass;
+                return this.associatedPrompt.tryPrompt();
+              }),
+              takeWhile((res) => res.loading)
+            )
+        )
+      )
+      .subscribe({
+        error: ({ message }: Error) => {
+          this.running.createOrder = false;
+          hideToasts();
+          notify(this.messageFormat(message), "error", 7000);
+        },
+        complete: () => {
+          this.datagrid.instance.clearSelection();
+          this.running.createOrder = false;
+          hideToasts();
+          setTimeout(() => this.tabContext.openOrdre(ordre.numero, ordre.campagne.id));
+          notify({
+            message: this.localizeService.localize("ordre-cree", ordre.numero),
+            type: "success"
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          );
+        },
+      });
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["ofInitArticleHistory"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   manualDate(e) {
