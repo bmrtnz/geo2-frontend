@@ -285,7 +285,8 @@ export class OrdreLignesService extends ApiService implements APIRead {
         }
       } else {
         // Special case: unlock every cell except some when !allowmutations
-        if (!["ventePrixUnitaire", "venteUnite.id", "gratuit"].includes(e.column.dataField)) {
+        // Added "achatDevisePrixUnitaire", "achatUnite.id" 10-01-2023 CDT:569
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
           return this.lock(e);
         } else {
           return;
