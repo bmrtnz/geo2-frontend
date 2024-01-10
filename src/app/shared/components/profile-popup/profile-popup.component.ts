@@ -73,6 +73,7 @@ export class ProfilePopupComponent {
     "periode",
     "barreDefilementHaut",
     "barreDefilementBas",
+    "barreDefilementHorizFixed",
     "diffSurExpedition",
   ];
   public alerteParams: string[] = this.alertesService.alerteParams();

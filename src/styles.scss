@@ -267,20 +267,6 @@ body app-root.production {
   }
 }
 
-// Datagrid horizontal scrollbar on top - linked to user profile setting
-.dx-scrollbar-horizontal {
-  top: var(--pos-scrollbar);
-}
-
-.dx-scrollbar-horizontal,
-.dx-scrollbar-vertical {
-  cursor: pointer;
-
-  .dx-scrollable-scroll {
-    transition: height 0.2s, width 0.2s !important;
-  }
-}
-
 // Reducing space between form fields
 .dx-form-group-content,
 .dx-accordion-item {
@@ -873,18 +859,25 @@ body app-root.production {
   }
 }
 
-//////////////////////////////////////////
-/// Better visibility vert. scrollbar  ///
-//////////////////////////////////////////
+/////////////////////////////////////
+/// Better visibility scrollbars  ///
+/////////////////////////////////////
+
+// Datagrid horizontal scrollbar on top - linked to user profile setting
+.dx-scrollbar-horizontal {
+  top: var(--pos-scrollbar);
+}
+
+.dx-scrollbar-horizontal,
+.dx-scrollbar-vertical {
+  cursor: pointer;
+
+  .dx-scrollable-scroll {
+    transition: height 0.2s, width 0.2s !important;
+  }
+}
 
 .dx-datagrid {
-  .dx-scrollable-wrapper:hover .dx-scrollbar-horizontal {
-    .dx-scrollable-scroll-content {
-      transition: 0.5s;
-      background-color: rgba(95, 142, 158, 0.50) !important;
-    }
-  }
-
   .dx-scrollbar-vertical {
     width: 3px !important;
     margin-right: 5px;
@@ -905,6 +898,35 @@ body app-root.production {
         background-color: rgba(175, 198, 206, 1) !important;
       }
 
+    }
+  }
+
+  .dx-scrollable-wrapper:hover .dx-scrollbar-horizontal {
+    .dx-scrollable-scroll-content {
+      transition: 0.5s;
+      background-color: rgba(95, 142, 158, 0.50) !important;
+    }
+  }
+}
+
+// In case of fixed scrollbars //
+.fixed-scrollbars .dx-datagrid {
+
+  .dx-datagrid-rowsview.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+    padding-bottom: var(--padding-pos-scrollbar) !important;
+  }
+
+  .dx-scrollbar-horizontal {
+    height: 3px !important;
+
+    .dx-scrollable-scroll {
+      height: 12px !important;
+      overflow: visible;
+
+      .dx-scrollable-scroll-content {
+        margin-top: var(--margin-pos-scrollbar);
+        background-color: rgba(95, 142, 158, 0.5) !important;
+      }
     }
   }
 }

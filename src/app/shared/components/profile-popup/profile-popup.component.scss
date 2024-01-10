@@ -355,6 +355,13 @@ $light-grey: rgba(0, 0, 0, 0.2);
           width: 50px !important;
           text-align: left !important;
         }
+
+        &.dx-field-label-checkbox {
+          width: 136px !important;
+          margin-top: -2px;
+          padding-right: 0;
+          text-align: right;
+        }
       }
     }
 

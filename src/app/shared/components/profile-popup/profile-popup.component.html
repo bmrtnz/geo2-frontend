@@ -359,7 +359,7 @@
           <!-- Position Scrollbar horizontale -->
           <!-- --------------------------------->
           <div class="items-title">
-            {{ "text-scrollbar-position" | localize }} :
+            {{ "text-scrollbar-horiz" | localize }} :
           </div>
           <div class="dx-field option-background scrollbar-side-switch">
             <div class="dx-field-label dx-field-label-left">
@@ -373,6 +373,16 @@
             </div>
             <div class="dx-field-label dx-field-label-right">
               {{ "bottom" | localize }}
+            </div>
+            <!-- Toujours apparente ? -->
+            <div class="dx-field-label dx-field-label-checkbox">
+              {{ "text-always-visible" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-check-box
+                [formControlName]="'barreDefilementHorizFixed'"
+                [focusStateEnabled]="false"
+              ></dx-check-box>
             </div>
             <!-- May be used later ? -->
             <div class="display-none">
