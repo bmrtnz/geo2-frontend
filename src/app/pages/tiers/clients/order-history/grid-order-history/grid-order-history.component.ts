@@ -563,6 +563,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
         error: ({ message }: Error) => {
           this.running.createOrder = false;
           hideToasts();
+          console.log(message);
           notify(this.messageFormat(message), "error", 7000);
         },
         complete: () => {
