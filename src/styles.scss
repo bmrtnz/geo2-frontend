@@ -246,7 +246,7 @@ body app-root.production {
   margin-left: 10px;
 }
 
-// dx-switch identique en mode ON et OFF
+// dx-switch identical mode ON & OFF
 .symetrical-switch {
   .dx-switch-container {
     &:before {
@@ -255,6 +255,19 @@ body app-root.production {
 
     .dx-switch-handle::before {
       background-color: rgb(0, 117, 156);
+    }
+  }
+}
+
+// dx-switch alert mode ON
+.alert-switch {
+  .dx-switch-on-value {
+    .dx-switch-handle::before {
+      background-color: rgb(255, 50, 90) !important;
+    }
+
+    .dx-switch-container::before {
+      background-color: rgba(255, 50, 90, 0.5);
     }
   }
 }

@@ -159,7 +159,7 @@
                 <div class="dx-field-label dx-field-label-left no-readOnly">
                   {{ "actif" | localize }}
                 </div>
-                <div class="dx-field-value">
+                <div class="dx-field-value alert-switch">
                   <dx-switch
                     [focusStateEnabled]="false"
                     [formControlName]="'valide'"
@@ -365,9 +365,8 @@
             <div class="dx-field-label dx-field-label-left">
               {{ "top" | localize }}
             </div>
-            <div class="dx-field-value">
+            <div class="dx-field-value symetrical-switch">
               <dx-switch
-                class="symetrical-switch"
                 [formControlName]="'barreDefilementHaut'"
                 [focusStateEnabled]="false"
               ></dx-switch>
@@ -400,7 +399,7 @@
             <div class="dx-field-label dx-field-label-left">
               {{ "all" | localize }}
             </div>
-            <div class="dx-field-value">
+            <div class="dx-field-value alert-switch">
               <dx-switch
                 [formControlName]="'diffSurExpedition'"
                 [focusStateEnabled]="false"

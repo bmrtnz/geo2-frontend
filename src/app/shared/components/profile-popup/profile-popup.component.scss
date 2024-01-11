@@ -211,16 +211,6 @@ $light-grey: rgba(0, 0, 0, 0.2);
         margin-bottom: 0;
       }
 
-      .dx-switch-on-value {
-        .dx-switch-handle::before {
-          background-color: rgb(255, 50, 90);
-        }
-
-        .dx-switch-container::before {
-          background-color: rgba(255, 50, 90, 0.5);
-        }
-      }
-
       .admin-banner-switch {
         position: absolute;
         top: -27px;
