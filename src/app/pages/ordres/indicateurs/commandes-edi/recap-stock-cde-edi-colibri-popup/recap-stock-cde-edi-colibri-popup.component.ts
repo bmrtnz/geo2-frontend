@@ -134,7 +134,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       oldGtin = row.gtin;
       oldRow = row;
       oldQuantiteColis = row.ligneEdi?.quantiteColis;
-      sumQuantiteValidee += (row.quantiteValidee ? row.quantiteValidee : oldQuantiteColis);
+      sumQuantiteValidee += (row.quantiteValidee ?? row.quantiteValidee);
     });
     this.selectedRows.pop(); // Remove fake item
   }
