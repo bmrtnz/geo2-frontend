@@ -246,6 +246,19 @@ body app-root.production {
   margin-left: 10px;
 }
 
+// dx-switch identique en mode ON et OFF
+.symetrical-switch {
+  .dx-switch-container {
+    &:before {
+      background-color: rgb(122, 181, 200);
+    }
+
+    .dx-switch-handle::before {
+      background-color: rgb(0, 117, 156);
+    }
+  }
+}
+
 // Thinner grids
 .dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
