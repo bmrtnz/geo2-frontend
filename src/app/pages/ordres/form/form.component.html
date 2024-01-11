@@ -195,6 +195,7 @@
                   class="upperButton"
                   type="danger"
                   [disabled]="
+                    ordreAnnule ||
                     ordreBAFOuFacture ||
                     !fullOrderNumber ||
                     running?.deleteOrder

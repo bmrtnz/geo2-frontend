@@ -281,6 +281,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public fragments = Fragments;
   public status: string;
   public ordreFacture: boolean;
+  public ordreAnnule: boolean;
   public canChangeDateLiv: boolean;
   public refOrdreEdi: any;
   public canalOrdreEdi: any;
@@ -1768,6 +1769,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       .entries(StatutLocale)
       .find(([k, v]) => k === statut)
       ?.[1]);
+    this.ordreAnnule = [Statut.ANNULE].includes(Statut[statut]);
     this.ordreFacture = [Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[statut]);
     this.canChangeDateLiv =
       this.ordreFacture && !["RPO", "RPR"].includes(this.ordre.type.id);
