@@ -468,6 +468,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
             this.recapStockPopup.visible = true;
             this.recapStockPopup.refOrdreEDI = parseInt(commandeEdi.refEdiOrdre);
           }
+          // MERCADONA (Espagne)
           if ("fCreateEdiEsp" in res.data) {
             const result = await lastValueFrom(
               this.ordresService.getOne_v2(res.data.fCreateEdiEsp.data?.tab_ordre_cree[0], ["id", "numero", "campagne.id"])
