@@ -451,7 +451,6 @@ export class OrdresIndicatorsService {
       // Ordres non confirmés
       if (instance.id === Indicateur.OrdresNonConfirmes) {
         const minDate = new Date();
-        minDate.setMonth(minDate.getMonth() - 6);
 
         instance.dataSource = this.ordresService.getDataSource_v2(
           instance.explicitSelection

@@ -32,6 +32,16 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+
+enum FormInput {
+  secteur = "secteur",
+  dateMin = "dateDepartPrevueFournisseur",
+  dateMax = "dateDepartPrevueFournisseur",
+}
+
+type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
 
 @Component({
   selector: "app-ordres-non-confirmes",
@@ -50,15 +60,23 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   >;
   rowSelected: boolean;
 
-  @ViewChild("secteurValue", { static: false })
-  secteurSB: DxSelectBoxComponent;
+  @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("withSector") withSector: DxCheckBoxComponent;
+  @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild(DxDataGridComponent) grid: DxDataGridComponent;
+
 
   public dataSource: DataSource;
   initialFilterLengh: number;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public periodes: any;
+  public formGroup = new UntypedFormGroup({
+    secteur: new UntypedFormControl(),
+    dateMin: new UntypedFormControl(),
+    dateMax: new UntypedFormControl(),
+  } as Inputs<UntypedFormControl>);
+
 
   constructor(
     public transporteursService: TransporteursService,
@@ -70,8 +88,10 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     public authService: AuthService,
     public localizeService: LocalizationService,
     private ordresIndicatorsService: OrdresIndicatorsService,
+    public dateManagementService: DateManagementService,
     private tabContext: TabContext
   ) {
+    this.periodes = this.dateManagementService.periods();
     this.secteurs = secteursService.getDataSource();
     this.secteurs.filter([
       ["valide", "=", true],
@@ -88,7 +108,8 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.dataSource = this.indicator.dataSource;
+    console.log("ddd")
+    // this.dataSource = this.indicator.dataSource;
   }
 
   ngAfterViewInit() {
@@ -96,44 +117,72 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
     }
     if (!this.authService.isAdmin) this.withSector.value = true;
+    this.setDefaultPeriod("J");
     this.enableFilters();
   }
 
+  setDefaultPeriod(periodId) {
+    let myPeriod = this.dateManagementService.getPeriodFromId(
+      periodId,
+      this.periodes
+    );
+    if (!myPeriod) return;
+    this.periodeSB?.instance.option("value", myPeriod);
+    const datePeriod = this.dateManagementService.getDates({
+      value: myPeriod,
+    });
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
+  }
+
   enableFilters() {
+    this.grid.dataSource = null;
+    this.dataSource = this.indicator.dataSource;
+    const values: Inputs = {
+      ...this.formGroup.value,
+    };
     const filters = this.indicator.cloneFilter();
     if (this.secteurSB.value?.id && this.withSector.value)
       filters.push("and", ["secteurCode", "=", this.secteurSB.value.id]);
     else if (!this.authService.isAdmin)
       filters.push(
         ...(this.authService.currentUser.personne?.role.toString() ===
-        Role[Role.COMMERCIAL]
+          Role[Role.COMMERCIAL]
           ? [
-              "and",
-              [
-                "commercial.id",
-                "=",
-                this.authService.currentUser.commercial.id,
-              ],
-            ]
+            "and",
+            [
+              "commercial.id",
+              "=",
+              this.authService.currentUser.commercial.id,
+            ],
+          ]
           : []),
         ...(this.authService.currentUser.personne?.role.toString() ===
-        Role[Role.ASSISTANT]
+          Role[Role.ASSISTANT]
           ? [
-              "and",
-              [
-                "assistante.id",
-                "=",
-                this.authService.currentUser.assistante.id,
-              ],
-            ]
+            "and",
+            [
+              "assistante.id",
+              "=",
+              this.authService.currentUser.assistante.id,
+            ],
+          ]
           : [])
       );
 
+    if (values?.dateMin) filters.push(
+      "and",
+      [`dateCreation`, ">=", this.dateManagementService.formatDate(values.dateMin)],
+    );
+    if (values?.dateMax) filters.push(
+      "and",
+      [`dateCreation`, "<=", this.dateManagementService.formatDate(values.dateMax)],
+    );
     this.dataSource?.filter(filters);
-    if (!this.grid?.dataSource) this.grid.dataSource = this.dataSource;
-    else {
-      this.dataSource?.reload();
-    }
+    this.grid.dataSource = this.dataSource;
+    console.log(filters)
   }
 
   onRowClick() {
@@ -143,6 +192,41 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
   onRowDblClick({ data }: { data: Partial<Ordre> }) {
     this.tabContext.openOrdre(data.numero, data.campagne.id);
   }
+
+  manualDate(e) {
+    // We check that this change is coming from the user, not following a period change
+    if (!e.event) return;
+
+    // Checking that date period is consistent otherwise, we set the other date to the new date
+    const deb = new Date(this.formGroup.get("dateMin").value);
+    const fin = new Date(this.formGroup.get("dateMax").value);
+    const deltaDate = fin < deb;
+
+    if (deltaDate) {
+      if (e.element.classList.contains("dateStart")) {
+        this.formGroup
+          .get("dateMax")
+          .patchValue(new Date(deb));
+      } else {
+        this.formGroup
+          .get("dateMin")
+          .patchValue(new Date(fin));
+      }
+    }
+    this.periodeSB.value = null;
+  }
+
+  setDates(e) {
+    // We check that this change is coming from the user, not following a prog change
+    if (!e.event) return;
+    const datePeriod = this.dateManagementService.getDates(e);
+
+    this.formGroup.patchValue({
+      dateMin: datePeriod.dateDebut,
+      dateMax: datePeriod.dateFin,
+    });
+  }
+
 }
 
 export default OrdresNonConfirmesComponent;
