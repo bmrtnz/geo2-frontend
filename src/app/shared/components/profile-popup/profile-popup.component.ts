@@ -72,7 +72,7 @@ export class ProfilePopupComponent {
   public simpleBaseParams: string[] = [
     "periode",
     "barreDefilementHaut",
-    "barreDefilementBas",
+
     "barreDefilementHorizFixed",
     "diffSurExpedition",
   ];
@@ -158,8 +158,6 @@ export class ProfilePopupComponent {
       error: (error: Error) =>
         notify(this.messageFormat(error.message), "error", 7000)
     });
-    // Unuseful for the moment but in case of...
-    this.formGroup.get("barreDefilementBas").setValue(!this.formGroup.get("barreDefilementHaut").value);
   }
 
   onHidden() {
