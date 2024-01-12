@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NestedMain, NestedPart } from "app/pages/nested/nested.component";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { GridRowStyleService } from "app/shared/services/grid-row-style.service";
@@ -49,6 +49,7 @@ export class EntrepotsListComponent implements OnInit, NestedMain, NestedPart {
   constructor(
     public entrepotsService: EntrepotsService,
     public clientsService: ClientsService,
+    public authService: AuthService,
     public gridService: GridsConfigsService,
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,

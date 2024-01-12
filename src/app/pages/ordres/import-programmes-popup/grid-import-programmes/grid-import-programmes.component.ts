@@ -15,6 +15,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-import-programmes",
@@ -38,6 +39,7 @@ export class GridImportProgrammesComponent {
     public mruOrdresService: MruOrdresService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext
   ) {

@@ -1,5 +1,6 @@
 <dx-data-grid
   class="dx-card wide-card grid-ordre-ligne-logistique"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="{
     filtering: true,
     grouping: true,

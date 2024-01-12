@@ -23,6 +23,7 @@
 <div class="content-block">
   <dx-data-grid
     class="dx-card wide-card"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

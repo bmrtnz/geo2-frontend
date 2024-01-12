@@ -11,7 +11,7 @@ import {
 import { EncoursClientPopupComponent } from "app/pages/tiers/clients/encours-client/encours-client-popup.component";
 import { Client } from "app/shared/models";
 import { LocalizePipe } from "app/shared/pipes";
-import { ClientsService } from "app/shared/services";
+import { AuthService, ClientsService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import {
   Grid,
@@ -55,6 +55,7 @@ export class GridClientsDepEncoursDetailComponent implements OnChanges {
     private localizePipe: LocalizePipe,
     private datePipe: DatePipe,
     private clientsService: ClientsService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public currentCompanyService: CurrentCompanyService
   ) {

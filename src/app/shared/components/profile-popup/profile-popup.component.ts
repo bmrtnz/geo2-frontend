@@ -72,8 +72,7 @@ export class ProfilePopupComponent {
   public simpleBaseParams: string[] = [
     "periode",
     "barreDefilementHaut",
-
-    "barreDefilementHorizFixed",
+    "barreDefilementVisible",
     "diffSurExpedition",
   ];
   public alerteParams: string[] = this.alertesService.alerteParams();
@@ -123,6 +122,7 @@ export class ProfilePopupComponent {
   onShowing(e) {
     this.setTitle();
     e.component.content().parentNode.classList.add("profile-popup");
+    this.formGroup.get("barreDefilementVisible").patchValue(false);
   }
 
   onShown() {

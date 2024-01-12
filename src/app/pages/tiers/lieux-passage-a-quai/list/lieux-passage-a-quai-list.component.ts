@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NestedMain } from "app/pages/nested/nested.component";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { GridsConfigsService } from "app/shared/services/api/grids-configs.service";
 import { GridConfiguratorService } from "app/shared/services/grid-configurator.service";
@@ -35,6 +35,7 @@ export class LieuxPassageAQuaiListComponent implements OnInit, NestedMain {
     public lieuxPassageAQuaiService: LieuxPassageAQuaiService,
     public gridService: GridsConfigsService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
     public gridRowStyleService: GridRowStyleService

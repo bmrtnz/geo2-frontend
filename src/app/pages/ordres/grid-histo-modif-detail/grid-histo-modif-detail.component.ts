@@ -20,6 +20,7 @@ import {
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
 import Ordre from "app/shared/models/ordre.model";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-histo-modif-detail",
@@ -39,6 +40,7 @@ export class GridHistoModifDetailComponent implements OnChanges {
     public historiqueModificationsDetailService: HistoriqueModificationsDetailService,
     public gridConfiguratorService: GridConfiguratorService,
     public dateManagementService: DateManagementService,
+    public authService: AuthService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

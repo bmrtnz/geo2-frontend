@@ -224,6 +224,7 @@
 <div class="grid-lignes-historique-container">
   <dx-data-grid
     class="dx-card wide-card grid-ordre-ligne-historique"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [width]="'100%'"
     [focusedRowEnabled]="true"
     [remoteOperations]="{

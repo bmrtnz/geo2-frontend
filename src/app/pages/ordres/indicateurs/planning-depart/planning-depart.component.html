@@ -117,6 +117,7 @@
 
   <dx-data-grid
     class="dx-card wide-card grid-planning-departs"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     #gridPLANNINGDEPART
     [remoteOperations]="{ paging: true }"
     [showBorders]="false"

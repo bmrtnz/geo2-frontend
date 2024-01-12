@@ -37,6 +37,7 @@ import {
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { AuthService } from "app/shared/services";
 
 let self: GridLotComponent;
 
@@ -53,6 +54,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
     public formUtilsService: FormUtilsService,
+    public authService: AuthService,
     private gridsService: GridsService,
     private localize: LocalizePipe
   ) {

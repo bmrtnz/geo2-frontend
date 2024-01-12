@@ -50,7 +50,7 @@ export class AuthService {
     "reportPrixVente",
     "reportTypePalette",
     "barreDefilementHaut",
-    "barreDefilementBas",
+    "barreDefilementVisible",
     "diffSurExpedition",
 
     // Autres accès
@@ -142,14 +142,12 @@ export class AuthService {
     );
     document.documentElement.style.setProperty(
       '--padding-pos-scrollbar',
-      utilisateur.barreDefilementHaut ? "0" : "10px"
+      !utilisateur.barreDefilementHaut && utilisateur.barreDefilementVisible ? "10px" : "0"
     );
     // Fixed horiz scrollbar
-    const fixed = true;  // A remplacer par utilisateur.lechampcree
     dxDataGrid.defaultOptions({
       options: {
-        elementAttr: { class: fixed ? 'fixed-scrollbars' : '' },
-        scrolling: { useNative: false, showScrollbar: fixed ? 'always' : 'onHover' },
+        scrolling: { useNative: false, showScrollbar: utilisateur.barreDefilementVisible ? 'always' : 'onHover' },
       }
     });
   }

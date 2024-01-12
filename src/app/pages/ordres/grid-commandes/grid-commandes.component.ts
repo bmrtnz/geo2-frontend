@@ -97,7 +97,7 @@ export class GridCommandesComponent
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
     private gridCommandesEventsService: GridCommandesEventsService,
-    private authService: AuthService
+    public authService: AuthService,
   ) {
     self = this;
     this.constructorFeatures();

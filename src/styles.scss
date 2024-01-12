@@ -933,14 +933,15 @@ body app-root.production {
       background-color: rgba(95, 142, 158, 0.50) !important;
     }
   }
-}
-
-// In case of fixed scrollbars //
-.fixed-scrollbars .dx-datagrid {
 
   .dx-datagrid-rowsview.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
     padding-bottom: var(--padding-pos-scrollbar) !important;
   }
+
+}
+
+// In case of fixed scrollbars //
+.fixedScrollbars .dx-datagrid {
 
   .dx-scrollbar-horizontal {
     height: 3px !important;

@@ -145,6 +145,7 @@
 <dx-data-grid
   #MouvClientsComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
   [focusedRowEnabled]="false"
@@ -250,6 +251,7 @@
 <dx-data-grid
   #RecapClientsComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -341,6 +343,7 @@
 <dx-data-grid
   #MouvFournisseursComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"
@@ -432,6 +435,7 @@
 <dx-data-grid
   #RecapFournisseursComptesPalox
   class="palox-grids"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [visible]="false"
   [remoteOperations]="{ paging: true }"
   [showBorders]="false"

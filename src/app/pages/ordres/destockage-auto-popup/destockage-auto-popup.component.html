@@ -54,6 +54,9 @@
 
         <dx-data-grid
           class="dx-card wide-card grid-destockage-auto"
+          [class.fixedScrollbars]="
+            authService?.currentUser?.barreDefilementVisible
+          "
           [showBorders]="false"
           [focusedRowEnabled]="true"
           [keyExpr]="'id'"

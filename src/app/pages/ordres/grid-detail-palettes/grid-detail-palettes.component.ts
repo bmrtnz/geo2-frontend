@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { TracabiliteLignesService } from "app/shared/services/api/tracabilite-lignes.service";
 import {
   Grid,
@@ -34,6 +34,7 @@ export class GridDetailPalettesComponent implements OnInit, AfterViewInit {
     private tracabiliteLignesService: TracabiliteLignesService,
     public gridConfiguratorService: GridConfiguratorService,
     public gridsService: GridsService,
+    public authService: AuthService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

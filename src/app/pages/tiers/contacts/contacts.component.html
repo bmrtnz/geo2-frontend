@@ -9,6 +9,7 @@
 <div class="content-block contact-page">
   <dx-data-grid
     class="grid-contacts"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [allowColumnReordering]="true"
     [showBorders]="true"

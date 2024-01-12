@@ -117,6 +117,7 @@
 </div>
 <dx-data-grid
   class="grid-ordres-regroupement"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [focusedRowEnabled]="false"
