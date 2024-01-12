@@ -71,6 +71,7 @@ export class Ordre extends Model {
   @Field({ model: import("./personne.model") }) public assistante?: Personne;
   @Field({ model: import("./transporteur.model") })
   public transporteur?: Transporteur;
+  @Field() public transporteurId?: string;
   @Field({ model: import("./port.model") }) public portTypeD?: Port;
   @Field({ model: import("./port.model") }) public portTypeA?: Port;
   @Field({ model: import("./entrepot.model") }) public entrepot?: Partial<Entrepot>;
@@ -155,7 +156,6 @@ export class Ordre extends Model {
   @Field({ model: import("./type-ordre.model") })
   public type?: TypeOrdre;
   public typeId?: TypeOrdre["id"];
-  public secteurCommercialId?: Secteur["id"];
   public campagneId?: Campagne["id"];
   @Field({
     allowSorting: false,

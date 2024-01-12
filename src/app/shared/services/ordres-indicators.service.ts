@@ -163,10 +163,16 @@ const indicators: Indicator[] = [
       "dateCreation",
       "typeId",
       "client.raisonSocial",
-      "secteurCommercialId",
+      "secteurCode",
       "entrepot.raisonSocial",
       "campagneId",
       "numeroContainer",
+      "transporteurId",
+      "dateCreation",
+      "numeroContainer",
+      "codeChargement",
+      "totalNombrePalettesCommandees",
+      "sommeColisCommandes"
     ],
     /* eslint-disable-next-line  max-len */
     select:
@@ -450,7 +456,6 @@ export class OrdresIndicatorsService {
 
       // Ordres non confirmés
       if (instance.id === Indicateur.OrdresNonConfirmes) {
-        const minDate = new Date();
 
         instance.dataSource = this.ordresService.getDataSource_v2(
           instance.explicitSelection,

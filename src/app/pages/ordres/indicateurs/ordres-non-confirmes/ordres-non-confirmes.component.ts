@@ -114,7 +114,7 @@ export class OrdresNonConfirmesComponent implements AfterViewInit {
     this.secteurSB.disabled = !this.withSector.value;
 
     this.setDefaultPeriod("J");
-    this.enableFilters();
+    // this.enableFilters();
   }
 
   setDefaultPeriod(periodId) {
@@ -178,7 +178,6 @@ export class OrdresNonConfirmesComponent implements AfterViewInit {
     );
     this.dataSource?.filter(filters);
     this.grid.dataSource = this.dataSource;
-    console.log(filters)
   }
 
   onRowClick() {
@@ -186,7 +185,7 @@ export class OrdresNonConfirmesComponent implements AfterViewInit {
   }
 
   onRowDblClick({ data }: { data: Partial<Ordre> }) {
-    this.tabContext.openOrdre(data.numero, data.campagne.id);
+    this.tabContext.openOrdre(data.numero, data.campagneId);
   }
 
   manualDate(e) {

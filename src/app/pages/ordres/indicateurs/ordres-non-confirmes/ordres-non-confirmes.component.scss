@@ -9,6 +9,10 @@
     width: 900px;
     float: left;
 
+    .dx-field-value .dx-checkbox {
+      margin-left: 10px !important;
+    }
+
     .checkbox-label {
       overflow: visible;
     }
