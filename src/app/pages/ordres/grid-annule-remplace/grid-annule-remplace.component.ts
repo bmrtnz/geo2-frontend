@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { EnvoisService } from "app/shared/services/api/envois.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { RaisonsAnnuleRemplaceService } from "app/shared/services/api/raisons-annule-remplace.service";
@@ -65,6 +65,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
     public gridRowStyleService: GridRowStyleService,
     private functionsService: FunctionsService,
     public gridsService: GridsService,
+    public authService: AuthService,
     public formUtilsService: FormUtilsService,
     private envoisService: EnvoisService,
     private ar: FluxArService

@@ -21,6 +21,7 @@ import { environment } from "environments/environment";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridsService } from "../grids.service";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-grid-litiges-lignes",
@@ -43,6 +44,7 @@ export class GridLitigesLignesComponent implements OnInit {
     private litigesLignesService: LitigesLignesService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     public gridsService: GridsService,
     public gridConfiguratorService: GridConfiguratorService
   ) {

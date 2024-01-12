@@ -2,7 +2,7 @@
 @import "themes/generated/variables.base";
 
 ::ng-deep .form-litiges {
-  width: calc(100% - 170px);
+  width: calc(100% - 340px);
   margin: 0 0 20px 0;
   float: left;
 
@@ -70,10 +70,16 @@
 
 ::ng-deep .litige-btn-container {
   position: relative;
-  top: -4px;
-  margin: -10px 0 18px 0;
-  width: 170px;
+  top: 1px;
+  margin: -20px 0 18px 0;
   overflow: hidden;
+
+  .litige-btn-subcontainer {
+    position: relative;
+    width: 170px;
+    float: left;
+    overflow: hidden;
+  }
 }
 
 ::ng-deep .litige-btn-container,

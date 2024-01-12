@@ -56,7 +56,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     private bureauxAchatService: BureauxAchatService,
     private fournisseursService: FournisseursService,
     public dateManagementService: DateManagementService,
-    private authService: AuthService,
+    public authService: AuthService,
     private datePipe: DatePipe,
     private localizer: LocalizationService,
     private tabContext: TabContext

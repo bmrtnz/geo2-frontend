@@ -72,7 +72,7 @@ export class ProfilePopupComponent {
   public simpleBaseParams: string[] = [
     "periode",
     "barreDefilementHaut",
-    "barreDefilementBas",
+    "barreDefilementVisible",
     "diffSurExpedition",
   ];
   public alerteParams: string[] = this.alertesService.alerteParams();
@@ -102,7 +102,7 @@ export class ProfilePopupComponent {
     this.nomInterne = this.authService.currentUser.nomInterne;
     this.periodes = this.dateMgt.periods();
 
-    this.reportedItems = this.ordreLignesService.reportedItems();
+    this.reportedItems = this.ordreLignesService.reportedItems().filter(item => !item.hidden);
 
     // Create controls
     this.simpleParams = this.simpleBaseParams.concat(this.alerteParams);
@@ -122,6 +122,7 @@ export class ProfilePopupComponent {
   onShowing(e) {
     this.setTitle();
     e.component.content().parentNode.classList.add("profile-popup");
+    this.formGroup.get("barreDefilementVisible").patchValue(false);
   }
 
   onShown() {
@@ -157,8 +158,6 @@ export class ProfilePopupComponent {
       error: (error: Error) =>
         notify(this.messageFormat(error.message), "error", 7000)
     });
-    // Unuseful for the moment but in case of...
-    this.formGroup.get("barreDefilementBas").setValue(!this.formGroup.get("barreDefilementHaut").value);
   }
 
   onHidden() {

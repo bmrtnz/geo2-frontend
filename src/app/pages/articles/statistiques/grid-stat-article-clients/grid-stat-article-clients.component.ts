@@ -9,7 +9,7 @@ import { map } from "rxjs/operators";
 import { GridConfiguratorService, Grid, GridConfig } from "app/shared/services/grid-configurator.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { HistoriqueModificationsDetailService } from "app/shared/services/api/historique-modifs-detail.service";
-import { ArticlesService } from "app/shared/services";
+import { ArticlesService, AuthService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import ArrayStore from "devextreme/data/array_store";
 
@@ -37,6 +37,7 @@ export class GridStatArticleClientsComponent {
     private articlesService: ArticlesService,
     private currentCompanyService: CurrentCompanyService,
     public dateManagementService: DateManagementService,
+    public authService: AuthService,
     public localizeService: LocalizationService
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

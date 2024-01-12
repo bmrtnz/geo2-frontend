@@ -14,6 +14,7 @@
 
   <dx-data-grid
     class="dx-card wide-card grid-reservation-stock-en-cours"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [dataSource]="reservationsSource | async"
     [remoteOperations]="false"
     [showBorders]="false"

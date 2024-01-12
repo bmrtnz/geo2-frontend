@@ -6,7 +6,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { DxDataGridComponent } from "devextreme-angular";
 import {
   Grid,
@@ -44,6 +44,7 @@ export class GridPackingListComponent {
     private ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
+    public authService: AuthService,
     private datePipe: DatePipe
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(

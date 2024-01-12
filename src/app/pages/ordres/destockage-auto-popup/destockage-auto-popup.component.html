@@ -31,7 +31,7 @@
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <div class="destockage-auto-content-container">
-        <div class="dx-field erreurs-switch">
+        <div class="dx-field erreurs-switch alert-switch">
           <div class="dx-field-label dx-field-label-left">
             {{ "all" | localize }}
           </div>
@@ -54,6 +54,9 @@
 
         <dx-data-grid
           class="dx-card wide-card grid-destockage-auto"
+          [class.fixedScrollbars]="
+            authService?.currentUser?.barreDefilementVisible
+          "
           [showBorders]="false"
           [focusedRowEnabled]="true"
           [keyExpr]="'id'"

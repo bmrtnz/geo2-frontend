@@ -15,6 +15,7 @@
 
 <dx-data-grid
   class="dx-card wide-card grid-historique-entrepots"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="true"
   [showBorders]="false"
   [focusedRowEnabled]="true"

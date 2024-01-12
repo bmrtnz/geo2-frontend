@@ -1,5 +1,6 @@
 <dx-data-grid
   class="grid-commandes"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="false"
   [cacheEnabled]="true"
   [columnAutoWidth]="true"

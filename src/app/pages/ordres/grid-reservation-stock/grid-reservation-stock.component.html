@@ -9,6 +9,7 @@
   ></dx-button>
   <dx-data-grid
     class="grid-ordre-ligne-stock"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [dataSource]="reservationsSource | async"
     [remoteOperations]="false"
     [showBorders]="false"

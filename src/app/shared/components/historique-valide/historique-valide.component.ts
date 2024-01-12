@@ -14,6 +14,7 @@ import {
 import { SharedModule } from "../../shared.module";
 import { Historique } from "../../models";
 import dxDataGrid from "devextreme/ui/data_grid";
+import { AuthService } from "app/shared/services";
 
 @Component({
   selector: "app-historique-valide",
@@ -28,7 +29,9 @@ export class HistoriqueValideComponent implements OnChanges {
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent;
 
-  constructor() { }
+  constructor(
+    public authService: AuthService,
+  ) { }
 
   ngOnChanges() {
     if (this.historique) {

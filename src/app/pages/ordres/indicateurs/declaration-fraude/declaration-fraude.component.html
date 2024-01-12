@@ -206,6 +206,7 @@
 
 <dx-data-grid
   class="grid-fraude"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [dataSource]="dataSource"
   [width]="'100%'"
   (onCellPrepared)="onCellPrepared($event)"

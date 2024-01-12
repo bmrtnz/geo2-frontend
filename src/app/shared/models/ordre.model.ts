@@ -71,6 +71,7 @@ export class Ordre extends Model {
   @Field({ model: import("./personne.model") }) public assistante?: Personne;
   @Field({ model: import("./transporteur.model") })
   public transporteur?: Transporteur;
+  @Field() public transporteurId?: string;
   @Field({ model: import("./port.model") }) public portTypeD?: Port;
   @Field({ model: import("./port.model") }) public portTypeA?: Port;
   @Field({ model: import("./entrepot.model") }) public entrepot?: Partial<Entrepot>;
@@ -154,6 +155,8 @@ export class Ordre extends Model {
   @Field({ dataType: "datetime" }) public dateCreation?: string;
   @Field({ model: import("./type-ordre.model") })
   public type?: TypeOrdre;
+  public typeId?: TypeOrdre["id"];
+  public campagneId?: Campagne["id"];
   @Field({
     allowSorting: false,
     allowHeaderFiltering: false,
@@ -179,9 +182,7 @@ export class Ordre extends Model {
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
-    return [Statut[Statut.EXPEDIE], Statut[Statut.FACTURE]].includes(
-      ordre?.statut?.toString()
-    );
+    return [Statut.EXPEDIE, Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[ordre?.statut]);
   }
 }
 

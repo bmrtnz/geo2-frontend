@@ -40,6 +40,7 @@
     [ordre]="ordre"
     [flux]="flux"
     [gridEnvois]="gridEnvois"
+    (whenDone)="whenDone.emit()"
   ></app-documents-ordres-popup>
   <app-annule-remplace-popup
     [docsPopup]="docsPopup"

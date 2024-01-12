@@ -132,7 +132,7 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
     if (["true", "false"].includes(subHeadersConfig)) {
       this.subHeadersStatus.value = subHeadersConfig === "true" ? true : false;
     } else {
-      this.subHeadersStatus.value = false;
+      this.subHeadersStatus.value = true;
     }
     this.enableFilters();
   }

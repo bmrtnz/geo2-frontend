@@ -20,6 +20,7 @@
 >
   <div *dxTemplate="let d of 'content'">
     <dx-data-grid
+      [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
       [columnAutoWidth]="true"
       (onContentReady)="sortGrid()"
       [dataSource]="this.historique"

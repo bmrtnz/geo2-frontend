@@ -40,6 +40,7 @@ export enum Operation {
   PlanningTransporteursApproche = "allOrdrePlanningTransporteursApproche",
   PlanningFournisseurs = "allOrdrePlanningFournisseurs",
   SupervisionComptesPalox = "allOrdreSupervisionComptesPalox",
+  NonConfirmes = "allOrdreNonConfirmes",
 }
 
 export type CountResponse = { countOrdre: number };
@@ -808,5 +809,32 @@ export class OrdresService
         text: this.localize.localize(StatutLocale[key]),
         value,
       }))
+  }
+
+  public buildAllOrdreNonConfirmes(columns: Set<string>) {
+    return ApiService.buildGraph(
+      "query",
+      [
+        {
+          name: `allOrdreNonConfirmes`,
+          body: [
+            "pageInfo.startCursor",
+            "pageInfo.endCursor",
+            "pageInfo.hasPreviousPage",
+            "pageInfo.hasNextPage",
+            "totalCount",
+            ...[...columns].map((c) => `edges.node.${c}`),
+          ],
+          params: [
+            { name: "search", value: "search", isVariable: true },
+            { name: "pageable", value: "pageable", isVariable: true },
+          ],
+        },
+      ],
+      [
+        { name: "search", type: "String", isOptionnal: true },
+        { name: "pageable", type: "PaginationInput", isOptionnal: false },
+      ]
+    );
   }
 }

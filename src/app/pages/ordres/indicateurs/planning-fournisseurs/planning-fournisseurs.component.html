@@ -181,6 +181,7 @@
 
   <dx-data-grid
     class="grid-planning-fournisseurs"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="true"

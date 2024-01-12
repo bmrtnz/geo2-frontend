@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import notify from "devextreme/ui/notify";
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { concatMap, take, tap } from "rxjs/operators";
 import { Utilisateur } from "../models/utilisateur.model";
 import { UtilisateursService } from "./api/utilisateurs.service";
 import { CurrentCompanyService } from "./current-company.service";
+import dxDataGrid from "devextreme/ui/data_grid";
 
 @Injectable()
 export class AuthService {
@@ -49,7 +50,7 @@ export class AuthService {
     "reportPrixVente",
     "reportTypePalette",
     "barreDefilementHaut",
-    "barreDefilementBas",
+    "barreDefilementVisible",
     "diffSurExpedition",
 
     // Autres accès
@@ -130,11 +131,25 @@ export class AuthService {
   }
 
   applySpecificParameters(utilisateur) {
-    // Scrollbar position
+    // Horiz Scrollbar position
     document.documentElement.style.setProperty(
       '--pos-scrollbar',
       utilisateur.barreDefilementHaut ? "0" : "auto"
     );
+    document.documentElement.style.setProperty(
+      '--margin-pos-scrollbar',
+      utilisateur.barreDefilementHaut ? "-2px" : "-9px"
+    );
+    document.documentElement.style.setProperty(
+      '--padding-pos-scrollbar',
+      !utilisateur.barreDefilementHaut && utilisateur.barreDefilementVisible ? "10px" : "0"
+    );
+    // Fixed horiz scrollbar
+    dxDataGrid.defaultOptions({
+      options: {
+        scrolling: { useNative: false, showScrollbar: utilisateur.barreDefilementVisible ? 'always' : 'onHover' },
+      }
+    });
   }
 
   logOut() {

@@ -37,6 +37,7 @@ import {
 } from "rxjs/operators";
 import { GridsService } from "../../grids.service";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
+import { AuthService } from "app/shared/services";
 
 let self: GridLotComponent;
 
@@ -53,6 +54,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     private litigesLignesService: LitigesLignesService,
     private gridConfiguratorService: GridConfiguratorService,
     public formUtilsService: FormUtilsService,
+    public authService: AuthService,
     private gridsService: GridsService,
     private localize: LocalizePipe
   ) {
@@ -285,6 +287,11 @@ export class GridLotComponent implements OnInit, OnChanges {
     if (e.rowType === "data" && e.column.dataField === "ligne.clientQuantite") {
       if (!e.value) this.hasZeroQuantities = true;
     }
+  }
+
+  onEditingStart(cell) {
+    if (cell.column.dataField === "ligne.clientPoidsNet" && this.headerData?.consequence === "F")
+      cell.cancel = true;
   }
 
   /**

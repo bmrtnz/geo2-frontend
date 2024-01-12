@@ -147,6 +147,7 @@
 </form>
 
 <dx-data-grid
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="true"
   [showBorders]="false"
   [focusedRowEnabled]="true"

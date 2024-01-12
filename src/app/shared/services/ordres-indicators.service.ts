@@ -12,7 +12,7 @@ import {
   IndicateurCountResponse,
   IndicateursService,
 } from "./api/indicateurs.service";
-import { OrdresService } from "./api/ordres.service";
+import { Operation, OrdresService } from "./api/ordres.service";
 import { PaysDepassementService } from "./api/pays-depassement.service";
 import { PaysService } from "./api/pays.service";
 import { AuthService } from "./auth.service";
@@ -161,12 +161,18 @@ const indicators: Indicator[] = [
       "codeClient",
       "codeAlphaEntrepot",
       "dateCreation",
-      "type.id",
+      "typeId",
       "client.raisonSocial",
-      "secteurCommercial.id",
+      "secteurCode",
       "entrepot.raisonSocial",
-      "campagne.id",
+      "campagneId",
       "numeroContainer",
+      "transporteurId",
+      "dateCreation",
+      "numeroContainer",
+      "codeChargement",
+      "totalNombrePalettesCommandees",
+      "sommeColisCommandes"
     ],
     /* eslint-disable-next-line  max-len */
     select:
@@ -450,29 +456,13 @@ export class OrdresIndicatorsService {
 
       // Ordres non confirmés
       if (instance.id === Indicateur.OrdresNonConfirmes) {
-        const minDate = new Date();
-        minDate.setMonth(minDate.getMonth() - 6);
 
         instance.dataSource = this.ordresService.getDataSource_v2(
-          instance.explicitSelection
+          instance.explicitSelection,
+          Operation.NonConfirmes,
         );
         instance.filter = [
           ...instance.filter,
-          "and",
-          ["version", "isnull", "null"],
-          "and",
-          ["bonAFacturer", "=", false],
-          "and",
-          [
-            "dateCreation",
-            ">=",
-            this.datePipe.transform(minDate, "yyyy-MM-dd"),
-          ],
-          "and",
-          // Bien plus rapide que le filtre demandé sur l'indicateur 'avoir'
-          // Donc on laisse sur le filtre 'historique'
-          ["id", "<", "800000"],
-          // ["factureAvoir", "=", FactureAvoir.AVOIR],
         ];
         instance.fetchCount = this.indicateursService.countByIndicators(
           Indicateur.OrdresNonConfirmes

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, NgModule, ViewChild } from "@angular/core";
 import { CertificationFournisseur } from "app/shared/models";
+import { AuthService } from "app/shared/services";
 import { SharedModule } from "app/shared/shared.module";
 import {
   DxButtonModule,
@@ -28,7 +29,9 @@ export class CertificationDatePopupComponent {
   dateValidationRules: RequiredRule[] = [{ type: "required" }];
   certifications: CertificationFournisseur[];
 
-  constructor() {}
+  constructor(
+    public authService: AuthService,
+  ) { }
 
   async onSubmit() {
     await this.dataGrid.instance.saveEditData();
@@ -69,4 +72,4 @@ export class CertificationDatePopupComponent {
   imports: [SharedModule, DxDataGridModule, DxPopupModule, DxButtonModule],
   exports: [CertificationDatePopupComponent],
 })
-export class CertificationDatePopupModule {}
+export class CertificationDatePopupModule { }

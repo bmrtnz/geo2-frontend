@@ -32,6 +32,9 @@
     <dx-scroll-view>
       <dx-data-grid
         class="dx-card wide-card grid-selection-compte-palox"
+        [class.fixedScrollbars]="
+          authService?.currentUser?.barreDefilementVisible
+        "
         [showBorders]="false"
         [focusedRowIndex]="0"
         [focusedRowEnabled]="true"

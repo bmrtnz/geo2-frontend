@@ -16,6 +16,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { TabContext } from "../root/root.component";
+import { AuthService } from "app/shared/services";
 
 
 @Component({
@@ -38,6 +39,7 @@ export class GridSuiviComponent implements AfterViewInit {
     public ordresService: OrdresService,
     public localizeService: LocalizationService,
     public currentCompanyService: CurrentCompanyService,
+    public authService: AuthService,
     public gridConfiguratorService: GridConfiguratorService,
     public tabContext: TabContext
   ) {

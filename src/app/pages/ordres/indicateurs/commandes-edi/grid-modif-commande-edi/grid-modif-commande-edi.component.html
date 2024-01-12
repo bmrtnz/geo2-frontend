@@ -18,6 +18,7 @@
 
   <dx-data-grid
     class="grid-modif-commande-Edi"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="false"
     [keyExpr]="'id'"
     [showBorders]="false"

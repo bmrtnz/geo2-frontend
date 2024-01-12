@@ -117,6 +117,9 @@ export class AppComponent {
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
     dxDataGrid.defaultOptions({
       options: {
+        // default is true and it is breaking pagination
+        // cache is already handled by the Apollo/GraphQL layer
+        cacheEnabled: false,
         scrolling: { useNative: false },
         columnFixing: { enabled: true },
         commonColumnSettings: {

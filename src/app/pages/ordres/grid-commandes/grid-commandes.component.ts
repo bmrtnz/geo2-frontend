@@ -97,7 +97,7 @@ export class GridCommandesComponent
     private stocksService: StocksService,
     private stockMouvementsService: StockMouvementsService,
     private gridCommandesEventsService: GridCommandesEventsService,
-    private authService: AuthService
+    public authService: AuthService,
   ) {
     self = this;
     this.constructorFeatures();
@@ -976,7 +976,12 @@ export class GridCommandesComponent
     });
     field = this.localizeService.localize(`ordreLignes-${field.split(".").join("-")}`);
     field = this.formUtilsService.isUpperCase(field[1]) ? field : field.toLowerCase();
-    notify(this.localizeService.localize("cell-report", field), "success", 3000);
+    notify({
+      message: this.localizeService.localize("cell-report", field),
+      type: "success"
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
   }
 
   openFilePopup(e) {

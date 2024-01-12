@@ -1,5 +1,6 @@
 <dx-data-grid
   class="dx-card wide-card grid-logistiques"
+  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
   [remoteOperations]="true"
   [showBorders]="false"
   [columnAutoWidth]="true"

@@ -19,6 +19,7 @@
 
   <dx-data-grid
     class="grid-lignes-edi"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="true"
     [showBorders]="false"
     [focusedRowEnabled]="false"

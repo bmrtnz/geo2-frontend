@@ -35,16 +35,6 @@
         height: 36px !important;
         z-index: 1;
 
-        .dx-switch-on-value {
-          .dx-switch-handle::before {
-            background-color: rgb(255, 50, 90);
-          }
-
-          .dx-switch-container::before {
-            background-color: rgba(255, 50, 90, 0.5);
-          }
-        }
-
         .dx-field-value {
           margin-top: 9px;
           width: 33px !important;

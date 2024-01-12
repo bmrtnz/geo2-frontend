@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { NestedMain } from "app/pages/nested/nested.component";
 import { Fournisseur } from "app/shared/models";
-import { LocalizationService } from "app/shared/services";
+import { AuthService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { FournisseursService } from "app/shared/services/api/fournisseurs.service";
 import {
@@ -40,6 +40,7 @@ export class FournisseursListComponent implements OnInit, NestedMain {
     public localizeService: LocalizationService,
     private gridConfiguratorService: GridConfiguratorService,
     private router: Router,
+    public authService: AuthService,
     public gridRowStyleService: GridRowStyleService,
     public browserService: BrowserService
   ) {

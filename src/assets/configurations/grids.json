@@ -3625,6 +3625,12 @@
         "visible": true
       },
       {
+        "visibleIndex": 34,
+        "dataField": "article.matierePremiere.modeCulture.description",
+        "dataType": "string",
+        "visible": false
+      },
+      {
         "dataField": "ordre.client.id",
         "showInColumnChooser": false,
         "visible": false
@@ -4253,12 +4259,14 @@
     "columns": [
       {
         "visibleIndex": 0,
-        "dataField": "secteurCommercial.description",
+        "dataField": "secteurCode",
+        "cssClass": "text-align-center",
         "visible": false
       },
       {
         "visibleIndex": 2,
         "dataField": "numero",
+        "cssClass": "text-align-center",
         "visible": true
       },
       {
@@ -4292,7 +4300,7 @@
       },
       {
         "visibleIndex": 16,
-        "dataField": "transporteur.id",
+        "dataField": "transporteurId",
         "visible": true
       },
       {
@@ -4319,6 +4327,8 @@
       {
         "dataField": "dateCreation",
         "visible": false,
+        "dataType": "date",
+        "format": "dd-MM-yyyy",
         "sortOrder": "desc"
       }
     ]

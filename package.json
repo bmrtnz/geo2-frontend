@@ -1,6 +1,6 @@
 {
   "name": "geo2",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "engines": {
     "npm": ">=8",
     "node": ">=16"
@@ -43,8 +43,8 @@
     "@angular/service-worker": "^15.2.8",
     "@apollo/client": "^3.8.5",
     "apollo-angular": "^4.2.1",
-    "devextreme": "22.2.5",
-    "devextreme-angular": "22.2.5",
+    "devextreme": "^22.2.10",
+    "devextreme-angular": "^22.2.10",
     "devextreme-schematics": "^1.6.1",
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",

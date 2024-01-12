@@ -70,6 +70,7 @@
 
   <dx-data-grid
     class="dx-card wide-card"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     #gridSUPERVISION
     [dataSource]="dataSource"
     [remoteOperations]="true"

@@ -246,6 +246,32 @@ body app-root.production {
   margin-left: 10px;
 }
 
+// dx-switch identical mode ON & OFF
+.symetrical-switch {
+  .dx-switch-container {
+    &:before {
+      background-color: rgb(122, 181, 200);
+    }
+
+    .dx-switch-handle::before {
+      background-color: rgb(0, 117, 156);
+    }
+  }
+}
+
+// dx-switch alert mode ON
+.alert-switch {
+  .dx-switch-on-value {
+    .dx-switch-handle::before {
+      background-color: rgb(255, 50, 90) !important;
+    }
+
+    .dx-switch-container::before {
+      background-color: rgba(255, 50, 90, 0.5);
+    }
+  }
+}
+
 // Thinner grids
 .dx-datagrid-rowsview .dx-row>td {
   line-height: 0;
@@ -264,20 +290,6 @@ body app-root.production {
 
   .dx-texteditor-input-container {
     left: -8px;
-  }
-}
-
-// Datagrid horizontal scrollbar on top - linked to user profile setting
-.dx-scrollbar-horizontal {
-  top: var(--pos-scrollbar);
-}
-
-.dx-scrollbar-horizontal,
-.dx-scrollbar-vertical {
-  cursor: pointer;
-
-  .dx-scrollable-scroll {
-    transition: height 0.2s, width 0.2s !important;
   }
 }
 
@@ -873,18 +885,25 @@ body app-root.production {
   }
 }
 
-//////////////////////////////////////////
-/// Better visibility vert. scrollbar  ///
-//////////////////////////////////////////
+/////////////////////////////////////
+/// Better visibility scrollbars  ///
+/////////////////////////////////////
+
+// Datagrid horizontal scrollbar on top - linked to user profile setting
+.dx-scrollbar-horizontal {
+  top: var(--pos-scrollbar);
+}
+
+.dx-scrollbar-horizontal,
+.dx-scrollbar-vertical {
+  cursor: pointer;
+
+  .dx-scrollable-scroll {
+    transition: height 0.2s, width 0.2s !important;
+  }
+}
 
 .dx-datagrid {
-  .dx-scrollable-wrapper:hover .dx-scrollbar-horizontal {
-    .dx-scrollable-scroll-content {
-      transition: 0.5s;
-      background-color: rgba(95, 142, 158, 0.50) !important;
-    }
-  }
-
   .dx-scrollbar-vertical {
     width: 3px !important;
     margin-right: 5px;
@@ -905,6 +924,36 @@ body app-root.production {
         background-color: rgba(175, 198, 206, 1) !important;
       }
 
+    }
+  }
+
+  .dx-scrollable-wrapper:hover .dx-scrollbar-horizontal {
+    .dx-scrollable-scroll-content {
+      transition: 0.5s;
+      background-color: rgba(95, 142, 158, 0.50) !important;
+    }
+  }
+
+  .dx-datagrid-rowsview.dx-scrollable-scrollbars-alwaysvisible.dx-scrollable-both .dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content {
+    padding-bottom: var(--padding-pos-scrollbar) !important;
+  }
+
+}
+
+// In case of fixed scrollbars //
+.fixedScrollbars .dx-datagrid {
+
+  .dx-scrollbar-horizontal {
+    height: 3px !important;
+
+    .dx-scrollable-scroll {
+      height: 12px !important;
+      overflow: visible;
+
+      .dx-scrollable-scroll-content {
+        margin-top: var(--margin-pos-scrollbar);
+        background-color: rgba(95, 142, 158, 0.5) !important;
+      }
     }
   }
 }

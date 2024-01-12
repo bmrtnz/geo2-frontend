@@ -10,7 +10,7 @@ import {
 import { Router } from "@angular/router";
 import { NestedMain } from "app/pages/nested/nested.component";
 import Ordre from "app/shared/models/ordre.model";
-import { ClientsService, LocalizationService } from "app/shared/services";
+import { AuthService, ClientsService, LocalizationService } from "app/shared/services";
 import { ApiService } from "app/shared/services/api.service";
 import { ArticlesService } from "app/shared/services/api/articles.service";
 import { EmballagesService } from "app/shared/services/api/emballages.service";
@@ -88,7 +88,8 @@ export class ArticlesListComponent
     public groupesEmballageService: GroupesEmballageService,
     public emballagesService: EmballagesService,
     public modesCultureService: ModesCultureService,
-    public originesService: OriginesService
+    public originesService: OriginesService,
+    public authService: AuthService,
   ) {
     this.toRefresh = true;
     this.apiService = this.articlesService;

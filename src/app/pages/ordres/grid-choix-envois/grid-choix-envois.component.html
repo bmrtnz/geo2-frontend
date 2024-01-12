@@ -2,6 +2,7 @@
   <dx-data-grid
     [width]="'100%'"
     class="grid-choix-envois"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [remoteOperations]="false"
     [allowColumnReordering]="true"
     [showBorders]="true"
