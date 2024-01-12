@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ViewChild } from "@angular/core";
 import { Role } from "app/shared/models";
 import { Model, ModelFieldOptions } from "app/shared/models/model";
 import Ordre from "app/shared/models/ordre.model";
@@ -48,7 +48,7 @@ type Inputs<T = any> = { [key in keyof typeof FormInput]: T };
   templateUrl: "./ordres-non-confirmes.component.html",
   styleUrls: ["./ordres-non-confirmes.component.scss"],
 })
-export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
+export class OrdresNonConfirmesComponent implements AfterViewInit {
   readonly INDICATOR_NAME = Indicateur.OrdresNonConfirmes;
   options: {};
   secteurs: DataSource;
@@ -107,16 +107,12 @@ export class OrdresNonConfirmesComponent implements OnInit, AfterViewInit {
     this.columns = from(this.gridConfig).pipe(map((config) => config.columns));
   }
 
-  ngOnInit() {
-    console.log("ddd")
-    // this.dataSource = this.indicator.dataSource;
-  }
-
   ngAfterViewInit() {
-    if (this.authService.currentUser.secteurCommercial) {
+    if (this.authService.currentUser.secteurCommercial)
       this.secteurSB.value = this.authService.currentUser.secteurCommercial;
-    }
-    if (!this.authService.isAdmin) this.withSector.value = true;
+    this.withSector.value = !this.authService.isAdmin;
+    this.secteurSB.disabled = !this.withSector.value;
+
     this.setDefaultPeriod("J");
     this.enableFilters();
   }

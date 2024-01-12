@@ -15,7 +15,7 @@
                 #secteurValue
                 formControlName="secteur"
                 [dataSource]="secteurs"
-                [disabled]="!withSector.value"
+                [disabled]="!withSector?.value"
                 displayExpr="description"
                 searchExpr="description"
               ></dx-select-box>
