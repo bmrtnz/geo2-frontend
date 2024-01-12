@@ -56,6 +56,7 @@ export class GridRecapStockCdeEdiColibriComponent {
   private oldgtin: string = "";
   private alternateOrder: boolean = false;
   public dataSource: DataSource;
+  private colors = {};
 
 
   readonly specialFields = [
@@ -111,14 +112,16 @@ export class GridRecapStockCdeEdiColibriComponent {
       e.editorOptions.onInput = elem => this.gridUtilsService.secureTypedValueWithEditGrid(elem);
   }
 
+  onEditingStart(cell) {
+    if (cell.column.dataField === "quantiteValidee" && !cell.data.fournisseur?.id)
+      cell.cancel = true;
+  }
+
   onRowPrepared(e) {
     if (e.rowType === "data") {
       // Alternate colors vs gtin
-      if (e.data?.gtin !== this.oldgtin) {
-        this.alternateOrder = !this.alternateOrder;
-        this.oldgtin = e.data?.gtin;
-      }
-      e.rowElement.classList.add(this.alternateOrder ? "green-row" : "blue-row");
+      this.setAlternateColors();
+      e.rowElement.classList.add(this.colors[e.data.id] ? "green-row" : "blue-row");
 
       // Hiding checkboxes when there's no fournisseur assigned
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
@@ -129,6 +132,15 @@ export class GridRecapStockCdeEdiColibriComponent {
         e.rowElement.classList.add("dx-selection");
       }
     }
+  }
+
+  setAlternateColors() {
+    let prevGtin, alternate;
+    this.datagrid.instance.getVisibleRows().map(row => {
+      if (row.data.gtin !== prevGtin) alternate = !alternate;
+      this.colors[row.data.id] = alternate;
+      prevGtin = row.data.gtin;
+    });
   }
 
   showWarning(data) {

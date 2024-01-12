@@ -211,8 +211,9 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
           noOrdres = noOrdres.split(",");
           noOrdres.pop();
           const text = this.localization.localize("ordre-crees-edi", this.gridUtilsService.friendlyFormatList(noOrdres));
+          const mess = res.data.fCreeOrdresEdi.msg;
           if (res.data.fCreeOrdresEdi.res === FunctionResult.Warning)
-            notify(`${text} -> ${res.data.fCreeOrdresEdi.msg}`, "warning", 5000);
+            notify(`${text} -> ${mess}`, "warning", 5000 + 40 * mess.length);
           else
             notify(text, "success", 5000);
           this.clearAndHidePopup();

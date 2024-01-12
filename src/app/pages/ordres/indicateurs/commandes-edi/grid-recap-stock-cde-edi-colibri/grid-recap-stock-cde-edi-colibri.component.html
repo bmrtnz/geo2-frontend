@@ -12,6 +12,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onEditorPreparing)="onEditorPreparing($event)"
+    (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="selectChange.emit($event)"
