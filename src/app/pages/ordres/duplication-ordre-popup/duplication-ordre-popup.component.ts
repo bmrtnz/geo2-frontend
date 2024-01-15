@@ -43,6 +43,8 @@ export class DuplicationOrdrePopupComponent {
       { name: "portDepart", checked: false },
       { name: "portArrivee", checked: false },
       { name: "incoterm", checked: false },
+      { name: "lieuIncoterm", checked: false },
+      { name: "fraisLogistiques", checked: false },
     ];
     this.itemsToKeep.map((item) =>
       this.formGroup.addControl(item.name, new UntypedFormControl(false))

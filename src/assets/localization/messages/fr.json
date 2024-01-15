@@ -1066,6 +1066,8 @@
     "ordre-duplication-portDepart": "Port de départ",
     "ordre-duplication-portArrivee": "Port d'arrivée",
     "ordre-duplication-incoterm": "INCOTERM",
+    "ordre-duplication-lieuIncoterm": "Lieu INCOTERM",
+    "ordre-duplication-fraisLogistiques": "Frais logistiques",
     "ordre-delete-title": "Suppression de l'ordre n°",
     "ordre-cancel-title": "Annulation de l'ordre n°",
     "ordre-change-liv-title": "Modification de la date de livraison",
