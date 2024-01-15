@@ -188,7 +188,7 @@ export class DuplicationOrdrePopupComponent {
           if (numero) {
             // NB #23103 The openIndicator("loading") has been translated to openOrdre()
             notify(
-              this.localization.localize("ordre-cree").replace("&O", numero),
+              this.localization.localize("ordre-cree", numero),
               "success",
               7000
             );

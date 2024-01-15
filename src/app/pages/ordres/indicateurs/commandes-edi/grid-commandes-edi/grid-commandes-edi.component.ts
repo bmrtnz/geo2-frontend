@@ -427,7 +427,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   runCreationProcess(commandeEdi: Partial<CommandeEdi>) {
     hideToasts();
     this.showHideLoader.emit(true);
-    notify(this.localization.localize("please-wait-order-creation"), "info", 500);
+    notify(this.localization.localize("please-wait-order-creation"), "info");
 
     const genericGen = this.functionsService.ofReadOrdEdiColibri(
       parseInt(commandeEdi.refEdiOrdre),

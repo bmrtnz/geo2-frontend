@@ -255,14 +255,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.consequences.selectedItems.length)
       this.consequences.selectedItemKeys.shift();
     this.selectedConsequence = e.addedItems[0]?.id;
-    if (!this.loading && this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
     this.headerData.consequence = this.selectedConsequence;
+    if (!this.loading && this.selectedConsequence === "F") this.clearWeightPalCol(); // Client keeps product
   }
 
-  resetWeights() {
+  clearWeightPalCol() {
     this.gridLot.grid.instance.getVisibleRows().map(row =>
-      this.gridLot.grid.instance.cellValue(row.rowIndex, "ligne.clientPoidsNet", 0)
-    )
+      ["ligne.clientPoidsNet",
+        "ligne.clientNombreColisReclamation",
+        "ligne.clientNombrePalettes"
+      ].map(field =>
+        this.gridLot.grid.instance.cellValue(row.rowIndex, field, 0)
+      )
+    );
   }
 
   validate(doAfter?) {
@@ -275,7 +280,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   doValidate(doAfter) {
-    if (this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
+    if (this.selectedConsequence === "F") this.clearWeightPalCol(); // Client keeps product
     this.mutateLot()
       .pipe(
         concatMap((data) => this.gridLot.updateLot(data)),
@@ -866,8 +871,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           if (this.ordreGenNumero) {
             notify({
               message: this.localizeService
-                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
-                .replace("&O", this.ordreGenNumero),
+                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok", this.ordreGenNumero),
               type: "success",
               displayTime: 9000
             },

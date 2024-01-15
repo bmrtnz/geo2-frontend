@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  NgModule,
   OnInit,
   Output,
   ViewChild,
@@ -14,12 +15,14 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, SingleSelection } from "basic";
-import { DxDataGridComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxDataGridModule } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { Observable, of } from "rxjs";
-import { TabContext } from "../root/root.component";
+import { TabContext } from "../../../pages/ordres/root/root.component";
 import { map } from "rxjs/operators";
-import { GridsService } from "../grids.service";
+import { GridsService } from "../../../pages/ordres/grids.service";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "app/shared/shared.module";
 
 @Component({
   selector: "app-grid-entrepots",
@@ -117,3 +120,14 @@ export class GridEntrepotsComponent
     this.pulseButton.emit();
   }
 }
+
+@NgModule({
+  declarations: [GridEntrepotsComponent],
+  exports: [GridEntrepotsComponent],
+  imports: [
+    CommonModule,
+    SharedModule,
+    DxDataGridModule,
+  ],
+})
+export class GridEntrepotsModule { }

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { InfoPopupComponent } from "app/shared/components/info-popup/info-popup.component";
+import { AfterViewInit, Component, EventEmitter, Input, NgModule, Output, ViewChild } from "@angular/core";
+import { InfoPopupComponent, InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
 import { Devise, Entrepot, Societe } from "app/shared/models";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
 import Ordre from "app/shared/models/ordre.model";
@@ -7,7 +7,6 @@ import { AuthService, EntrepotsService } from "app/shared/services";
 import { DevisesRefsService } from "app/shared/services/api/devises-refs.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
-import { Program } from "app/shared/services/program.service";
 import { SocietesService } from "app/shared/services/api/societes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DateManagementService } from "app/shared/services/date-management.service";
@@ -24,20 +23,22 @@ import {
   switchMap,
   tap,
 } from "rxjs/operators";
-import { GridEntrepotsComponent } from "../grid-entrepots/grid-entrepots.component";
-import { GridHistoriqueEntrepotsComponent } from "../grid-historique-entrepots/grid-historique-entrepots.component";
-import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
-import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
-import { RouteParam, TabContext } from "../root/root.component";
+import { GridEntrepotsComponent, GridEntrepotsModule } from "../grid-entrepots/grid-entrepots.component";
+import { GridHistoriqueEntrepotsComponent, GridHistoriqueEntrepotsModule } from "../grid-historique-entrepots/grid-historique-entrepots.component";
+import { RouteParam, TabContext } from "../../../pages/ordres/root/root.component";
 import { ActivatedRoute } from "@angular/router";
-import { GridsService } from "../grids.service";
+import { GridsService } from "../../../pages/ordres/grids.service";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "app/shared/shared.module";
+import { DxButtonModule, DxRadioGroupModule } from "devextreme-angular";
+import { ButtonLoaderModule } from "../button-loader/button-loader.component";
 
 @Component({
   selector: "app-nouvel-ordre",
   templateUrl: "./nouvel-ordre.component.html",
   styleUrls: ["./nouvel-ordre.component.scss"],
 })
-export class NouvelOrdreComponent implements OnInit, AfterViewInit {
+export class NouvelOrdreComponent implements AfterViewInit {
   readonly inheritedFields = new Set([
     "transporteur.id",
     "transitaire.id",
@@ -84,7 +85,6 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   public errorText: string;
   public codeEnt: any;
   public hideButton: boolean;
-  public programs: any[];
   private societe: Societe;
   private ofValideEntrepotForOrdreRef = defer(
     () =>
@@ -97,7 +97,11 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   );
 
   @Input() pulseBtnOn: boolean;
-  @Output() public programChosen: any;
+  @Input() silent: boolean;
+  @Input() injectedEntrepot: Partial<Entrepot>;
+  @Output() public whenCreated = new EventEmitter();
+  @Output() public whenError = new EventEmitter();
+
 
   @ViewChild(GridEntrepotsComponent, { static: false })
   EntrepotGrid: GridEntrepotsComponent;
@@ -106,9 +110,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   @ViewChild("grid") private grid: SingleSelection<Entrepot | MRUEntrepot>;
   @ViewChild("gridHisto") private gridHisto: SingleSelection<Entrepot | MRUEntrepot>;
   @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
-  @ViewChild(CommandesEdiComponent, { static: false }) cdesEdiPopup: CommandesEdiComponent;
-  @ViewChild(ImportProgrammesPopupComponent, { static: false })
-  importProgPopup: ImportProgrammesPopupComponent;
+
 
   constructor(
     private functionsService: FunctionsService,
@@ -124,29 +126,19 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
     public authService: AuthService
   ) { }
 
-  ngOnInit() {
-    this.programs = [];
-    Object.keys(Program).map((prog) => {
-      this.programs.push({
-        id: Program[prog],
-        name: prog,
-        text: prog,
-      });
-    });
-  }
-
   ngAfterViewInit() {
     this.route.paramMap
       .pipe(
-        filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID),
+        // filter((param) => param.get(RouteParam.TabID) === this.INDICATOR_ID),
         concatMap(() => this.societesService
           .getOne(this.currentCompanyService.getCompany().id, ["id", "devise.id", "campagne.id"])),
       )
       .subscribe((res) => {
         this.societe = res.data.societe;
+        if (this.silent) return;
         this.favorites ?
-          this.historiqueEntrepotGrid.reload() :
-          this.EntrepotGrid.reload();
+          this.historiqueEntrepotGrid?.reload() :
+          this.EntrepotGrid?.reload();
       });
   }
 
@@ -172,28 +164,24 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
         (err: Error) => (this.showError(`${err.name}: ${err.message}`), EMPTY)
       ),
       tap(({ numero }) => {
-        this.clearGridsFilters(); // Clearing filters on BOTH grids
-        this.tabContext.openOrdre(numero, this.societe.campagne.id)
+        if (!this.silent) {
+          this.clearGridsFilters(); // Clearing filters on BOTH grids
+          this.tabContext.openOrdre(numero, this.societe.campagne.id);
+        } else {
+          this.whenCreated.emit({ numero: numero, campagneId: this.societe.campagne.id });
+        }
       }),
       debounceTime(2000),
       first()
     );
   }
 
-  openCommandesEdi() {
-    this.cdesEdiPopup.visible = true;
-  }
-
-  openProgramPopup(e) {
-    this.programChosen = e;
-    this.importProgPopup.visible = true;
-  }
-
   showError(errorInfo) {
     console.log(errorInfo);
-    this.infoComponent.visible = true;
     errorInfo = errorInfo.split("\\r\\n").join(" ");
     this.errorText = this.messageFormat(errorInfo);
+    this.infoComponent.visible = true;
+    this.whenError.emit();
   }
 
   clearGridsFilters() {
@@ -225,6 +213,12 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
 
   getSelectedEntrepot() {
     const item = this?.grid?.getSelectedItem() || this?.gridHisto?.getSelectedItem();
+
+    if (this.injectedEntrepot) {
+      this.codeEnt = this.injectedEntrepot.code;
+      return this.injectedEntrepot;
+    }
+
     if (item instanceof MRUEntrepot) {
       this.codeEnt = item.codeEntrepot;
       return item.entrepot;
@@ -236,6 +230,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
   }
 
   onTypeChange(e) {
+    if (this.silent) return;
     if (this.EntrepotGrid?.grid) {
       this.EntrepotGrid.grid.instance.option("focusedRowIndex", -1);
     }
@@ -246,7 +241,7 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
     this.favorites = e.value === this.typeEntrepots[0];
   }
 
-  private buildOrdre(numero: string, entrepot: Entrepot) {
+  public buildOrdre(numero: string, entrepot: Entrepot) {
     const delivery = this.dateManagementService.findDateTimeZero(1); // Day + 1
     const assistante = entrepot.assistante
       ? { id: entrepot.assistante.id }
@@ -424,3 +419,19 @@ export class NouvelOrdreComponent implements OnInit, AfterViewInit {
       .pipe(map((res) => res.data.allDeviseRefList?.[0]));
   }
 }
+
+@NgModule({
+  declarations: [NouvelOrdreComponent],
+  exports: [NouvelOrdreComponent],
+  imports: [
+    CommonModule,
+    SharedModule,
+    DxButtonModule,
+    DxRadioGroupModule,
+    InfoPopupModule,
+    ButtonLoaderModule,
+    GridEntrepotsModule,
+    GridHistoriqueEntrepotsModule
+  ],
+})
+export class NouvelOrdreModule { }

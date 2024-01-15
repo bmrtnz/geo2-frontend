@@ -681,8 +681,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         details: "ordre",
         class: "tab-create-order",
         icon: "material-icons note_add",
-        component: (await import("../nouvel-ordre/nouvel-ordre.component"))
-          .NouvelOrdreComponent,
+        component: (await import("../nouvel-ordre-main/nouvel-ordre-main.component"))
+          .NouvelOrdreMainComponent,
         position: Position.Front,
       },
       {

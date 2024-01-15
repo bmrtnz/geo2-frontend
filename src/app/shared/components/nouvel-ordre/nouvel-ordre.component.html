@@ -1,0 +1,58 @@
+<div [ngClass]="{ 'display-none': silent }">
+  <h2 class="nouvelOrdre-title">
+    {{ "ordres-nouvel-ordre-title" | localize }}
+  </h2>
+
+  <div class="dx-field nouvelOrdre-switch">
+    <div class="dx-field-value">
+      <dx-radio-group
+        [items]="typeEntrepots"
+        [value]="typeEntrepots[!favorites ? 1 : 0]"
+        layout="horizontal"
+        (onValueChanged)="onTypeChange($event)"
+      >
+      </dx-radio-group>
+    </div>
+  </div>
+
+  <app-button-loader
+    [text]="
+      ('create' | localize) +
+      (getSelectedEntrepot()
+        ? ' ' + ('depuis' | localize) + '   \'' + codeEnt + '\''
+        : '')
+    "
+    [type]="'success'"
+    [icon]="'material-icons add'"
+    class="button-create-order"
+    [ngClass]="{ pulse: pulseBtnOn }"
+    [hidden]="
+      !silent &&
+      (!getSelectedEntrepot() ||
+        hideButton ||
+        codeEnt === undefined ||
+        codeEnt === null)
+    "
+    [resolver]="resolver"
+    (deferedOnClick)="onButtonLoaderClick()"
+  ></app-button-loader>
+
+  <div style="clear: both"></div>
+  <app-grid-historique-entrepots
+    #gridHisto
+    *ngIf="!silent"
+    [ngClass]="{ 'display-none': !favorites }"
+    (pulseButton)="pulseButton($event)"
+    (hideCreateButton)="hideCreateButton($event)"
+    (createOrder)="onButtonLoaderClick()"
+  ></app-grid-historique-entrepots>
+  <app-grid-entrepots
+    #grid
+    *ngIf="!silent"
+    [ngClass]="{ 'display-none': favorites }"
+    (pulseButton)="pulseButton($event)"
+    (createOrder)="onButtonLoaderClick()"
+  ></app-grid-entrepots>
+</div>
+
+<app-info-popup [customText]="errorText"></app-info-popup>

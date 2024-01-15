@@ -84,6 +84,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public processedOrders: number;
   public store: CustomStore;
   public company: string;
+  public DsItems: any[];
+
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -277,49 +279,37 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       } as Inputs);
 
       setTimeout(() => { // Dx needs some time for updating data
-        this.datagrid.dataSource = this.ordresDataSource;
-        const ds = this.datagrid.dataSource as DataSource;
-        this.store = ds.store() as CustomStore;
         this.progressSet(5);
         this.datagrid.instance.beginCustomLoading("");
-        this.store.load().then((res: LoadResult<any>) => {
-          if (Array.isArray(res)) {
-            this.countOrders = res.length;
-            this.processedOrders = 0;
-            this.progressSet(20);
-            setTimeout(() => res.map(data => this.controlBaf(data.ordreRef)));
-          }
+        this.ordresDataSource.load().then(res => {
+          this.DsItems = JSON.parse(JSON.stringify(res));
+          this.datagrid.dataSource = this.DsItems;
+          this.countOrders = this.DsItems.length;
+          this.processedOrders = 0;
+          this.progressSet(20);
+          setTimeout(() => this.DsItems.map(data => this.controlBaf(data, data.ordreRef)));
         });
       });
     }
   }
 
-  controlBaf(ordreRef) {
+  controlBaf(data, ordreRef) {
     this.ordresBafService
       .fControlBaf(ordreRef, this.company)
       .subscribe({
         next: (res: any) => {
-          this.store.push([
-            {
-              key: ordreRef,
-              type: "update",
-              data: {
-                indicateurBaf: res.data.fControlBaf.data.ind_baf,
-                description: res.data.fControlBaf.data.desc_ctl,
-                pourcentageMargeBrut: res.data.fControlBaf.data.pc_marge_brute,
-                indicateurTransporteur: res.data.fControlBaf.data.ind_trp,
-                indicateurDate: res.data.fControlBaf.data.ind_date,
-                indicateurPrix: res.data.fControlBaf.data.ind_prix,
-                indicateurStation: res.data.fControlBaf.data.ind_station,
-                indicateurQte: res.data.fControlBaf.data.ind_qte,
-                indicateurAutre: res.data.fControlBaf.data.ind_autre
-              },
-            },
-          ]);
+          data.indicateurBaf = res.data.fControlBaf.data.ind_baf;
+          data.description = res.data.fControlBaf.data.desc_ctl;
+          data.pourcentageMargeBrut = res.data.fControlBaf.data.pc_marge_brute;
+          data.indicateurTransporteur = res.data.fControlBaf.data.ind_trp;
+          data.indicateurDate = res.data.fControlBaf.data.ind_date;
+          data.indicateurPrix = res.data.fControlBaf.data.ind_prix;
+          data.indicateurStation = res.data.fControlBaf.data.ind_station;
+          data.indicateurQte = res.data.fControlBaf.data.ind_qte;
+          data.indicateurAutre = res.data.fControlBaf.data.ind_autre;
           this.processedOrders++;
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
-          this.datagrid.instance.repaintRows([this.datagrid.instance.getRowIndexByKey(ordreRef)]);
           if (this.processedOrders === this.countOrders) {
             this.progressSet(100);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
@@ -607,7 +597,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   onRowPrepared(e) {
     if (e.rowType === "data") {
       // Hiding checkboxes when status is BLOCKED
-      if (e.data.indicateurBaf === status.BLOQUÉ) {
+      if (e.data.indicateurBaf === undefined || e.data.indicateurBaf === null || e.data.indicateurBaf === status.BLOQUÉ) {
         e.rowElement.classList.add("hide-select-checkbox");
       }
     }

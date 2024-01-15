@@ -290,7 +290,10 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   onEditingStart(cell) {
-    if (cell.column.dataField === "ligne.clientPoidsNet" && this.headerData?.consequence === "F")
+    if (["ligne.clientPoidsNet",
+      "ligne.clientNombreColisReclamation",
+      "ligne.clientNombrePalettes"
+    ].includes(cell.column.dataField) && this.headerData?.consequence === "F")
       cell.cancel = true;
   }
 
@@ -474,10 +477,20 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     const context: any = this;
     context.defaultSetCellValue(newData, value, rowData);
+    // Do not change anything when touching pal/col/poids if client keeps product
+    if (self.headerData?.consequence === "F" &&
+      (newData.ligne?.hasOwnProperty("clientPoidsNet") ||
+        newData.ligne?.hasOwnProperty("clientNombrePalettes") ||
+        newData.ligne?.hasOwnProperty("clientNombreColisReclamation"))) {
+      newData.ligne.responsableNombrePalettes = 0;
+      newData.ligne.responsableNombreColis = 0;
+      newData.ligne.responsablePoidsNet = 0;
+      return;
+    }
     self.hasZeroQuantities = false;
     if (newData.hasOwnProperty("prixUnitaire")) return;
     if (newData.ligne?.hasOwnProperty("clientPrixUnitaire")) return self.setPrixUnitaires(newData, value, rowData);
-    self.setQuantite(newData, value, rowData);
+    if (self.headerData?.consequence !== "F") self.setQuantite(newData, value, rowData);
   }
 
   onEditorPreparing(e) {
