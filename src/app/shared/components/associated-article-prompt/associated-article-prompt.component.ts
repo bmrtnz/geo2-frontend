@@ -11,6 +11,7 @@ import { Article, OrdreLigne } from "app/shared/models";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { SharedModule } from "app/shared/shared.module";
 import { DxButtonModule, DxPopupComponent, DxPopupModule, DxTemplateModule } from "devextreme-angular";
 import { EMPTY, of } from "rxjs";
 import { concatMap, concatMapTo, filter } from "rxjs/operators";
@@ -79,6 +80,7 @@ export class AssociatedArticlePromptComponent {
     DxPopupModule,
     DxTemplateModule,
     DxButtonModule,
+    SharedModule,
   ],
 })
 export class AssociatedArticlePromptModule { }
