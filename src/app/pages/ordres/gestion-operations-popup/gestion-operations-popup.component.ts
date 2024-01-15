@@ -866,8 +866,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           if (this.ordreGenNumero) {
             notify({
               message: this.localizeService
-                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
-                .replace("&O", this.ordreGenNumero),
+                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok", this.ordreGenNumero),
               type: "success",
               displayTime: 9000
             },

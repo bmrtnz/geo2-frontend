@@ -41,6 +41,8 @@ import { GridEncoursClientComponent } from "./encours-client/grid-encours-client
 import { ZoomClientArticlePopupComponent } from "./order-history/zoom-client-article-popup/zoom-client-article-popup.component";
 import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup.component";
 import { PromptPopupComponent, PromptPopupModule } from "app/shared/components/prompt-popup/prompt-popup.component";
+import { NouvelOrdreModule } from "app/shared/components/nouvel-ordre/nouvel-ordre.component";
+import { AssociatedArticlePromptModule } from "app/shared/components/associated-article-prompt/associated-article-prompt.component";
 
 @NgModule({
   imports: [
@@ -74,7 +76,9 @@ import { PromptPopupComponent, PromptPopupModule } from "app/shared/components/p
     ModificationListModule,
     FileManagerModule,
     ArticlesModule,
-    PromptPopupModule
+    PromptPopupModule,
+    NouvelOrdreModule,
+    AssociatedArticlePromptModule
   ],
   declarations: [
     ClientsListComponent,

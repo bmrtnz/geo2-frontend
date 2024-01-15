@@ -28,7 +28,7 @@ import { concatMap, takeWhile } from "rxjs/operators";
 import { ReferencesClientService } from "app/shared/services/api/references-client.service";
 import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
-import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { EdiLigne } from "app/shared/models";
 
 

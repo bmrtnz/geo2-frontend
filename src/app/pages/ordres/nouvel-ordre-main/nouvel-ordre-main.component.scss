@@ -1,0 +1,40 @@
+// Var
+@import "scss/variables.scss";
+@import "themes/generated/variables.base";
+
+
+::ng-deep .nouvel-ordre-main {
+
+  .buttons-right-container {
+    position: relative;
+    right: 0;
+    top: 48px;
+    overflow: hidden;
+
+    .order-home-up-button {
+
+      margin: 0 5px;
+
+      &.edi-order-button {
+        background: $BW-violet-light !important;
+
+        &:hover {
+          background: $BW-violet-medium !important;
+        }
+      }
+
+      .prog-btn {
+        padding: 0 16px;
+      }
+
+      .button-programs {
+        display: inline;
+        vertical-align: middle;
+        line-height: 13px;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
+    }
+  }
+}

@@ -75,7 +75,7 @@ import {
   ArticleReservationOrdrePopupComponent,
   ListPipe
 } from "./article-reservation-ordre-popup/article-reservation-ordre-popup.component";
-import { AssociatedArticlePromptComponent } from "./associated-article-prompt/associated-article-prompt.component";
+import { AssociatedArticlePromptModule } from "../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { ChoixRaisonDecloturePopupComponent } from "./choix-raison-decloture-popup/choix-raison-decloture-popup.component";
 import { DestockageAutoPopupComponent } from "./destockage-auto-popup/destockage-auto-popup.component";
 import { DocumentsOrdresPopupComponent } from "./documents-ordres-popup/documents-ordres-popup.component";
@@ -94,11 +94,11 @@ import { CqPhotosPopupComponent } from "./grid-controle-qualite/cq-photos-popup/
 import { GridCqPhotosComponent } from "./grid-controle-qualite/cq-photos-popup/grid-cq-photos/grid-cq-photos.component";
 import { GridControleQualiteComponent } from "./grid-controle-qualite/grid-controle-qualite.component";
 import { GridDetailPalettesComponent } from "./grid-detail-palettes/grid-detail-palettes.component";
-import { GridEntrepotsComponent } from "./grid-entrepots/grid-entrepots.component";
+import { GridEntrepotsComponent, GridEntrepotsModule } from "../../shared/components/grid-entrepots/grid-entrepots.component";
 import { GridEnvoisComponent } from "./grid-envois/grid-envois.component";
 import { GridFraisComponent } from "./grid-frais/grid-frais.component";
 import { GridHistoModifDetailComponent } from "./grid-histo-modif-detail/grid-histo-modif-detail.component";
-import { GridHistoriqueEntrepotsComponent } from "./grid-historique-entrepots/grid-historique-entrepots.component";
+import { GridHistoriqueEntrepotsComponent, GridHistoriqueEntrepotsModule } from "../../shared/components/grid-historique-entrepots/grid-historique-entrepots.component";
 import { GridLignesDetailsComponent } from "./grid-lignes-details/grid-lignes-details.component";
 import { GridLignesHistoriqueComponent } from "./grid-lignes-historique/grid-lignes-historique.component";
 import { GridLignesTotauxDetailComponent } from "./grid-lignes-totaux-detail/grid-lignes-totaux-detail.component";
@@ -143,7 +143,7 @@ import { SupervisionComptesPaloxComponent } from "./indicateurs/supervision-comp
 import { SupervisionLivraisonComponent } from "./indicateurs/supervision-livraison/supervision-livraison.component";
 import { ModifDetailLignesPopupComponent } from "./modif-detail-lignes-popup/modif-detail-lignes-popup.component";
 import { MotifRegularisationOrdrePopupComponent } from "./motif-regularisation-ordre-popup/motif-regularisation-ordre-popup.component";
-import { NouvelOrdreComponent } from "./nouvel-ordre/nouvel-ordre.component";
+import { NouvelOrdreModule } from "../../shared/components/nouvel-ordre/nouvel-ordre.component";
 import { GridOptionReservationStockComponent } from "./option-stock-popup/grid-option-reservation-stock/grid-option-reservation-stock.component";
 import { OptionStockPopupComponent } from "./option-stock-popup/option-stock-popup.component";
 import { OrdresRoutingModule } from "./ordres-routing.module";
@@ -165,6 +165,7 @@ import { ZoomFournisseurPopupComponent } from "./zoom-fournisseur-popup/zoom-fou
 import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popup/zoom-lieupassageaquai-popup.component";
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartition-ordres-regroupement/repartition-ordres-regroupement.component';
+import { NouvelOrdreMainComponent } from "./nouvel-ordre-main/nouvel-ordre-main.component";
 
 @NgModule({
   declarations: [
@@ -197,9 +198,6 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     PlanningFournisseursComponent,
     PlanningTransporteursApprocheComponent,
     SupervisionComptesPaloxComponent,
-    NouvelOrdreComponent,
-    GridEntrepotsComponent,
-    GridHistoriqueEntrepotsComponent,
     SupervisionAFacturerComponent,
     AjoutArticlesManuPopupComponent,
     ZoomArticlePopupComponent,
@@ -255,7 +253,6 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     PlanningMaritimeComponent,
     OptionStockPopupComponent,
     GridOptionReservationStockComponent,
-    AssociatedArticlePromptComponent,
     SelectionComptePaloxPopupComponent,
     FormLitigesComponent,
     DeclarationFraudeComponent,
@@ -267,6 +264,7 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     AjoutArticlesRefClientPopupComponent,
     AddArticleToOrderButtonsComponent,
     RepartitionOrdresRegroupementComponent,
+    NouvelOrdreMainComponent,
   ],
   providers: [
     OrdresIndicatorsService,
@@ -332,7 +330,11 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     OrdresSuiviModule,
     ConfirmationResultPopupModule,
     QuestionPopupModule,
-    ClientsArticleRefPopupModule
+    ClientsArticleRefPopupModule,
+    NouvelOrdreModule,
+    AssociatedArticlePromptModule,
+    GridHistoriqueEntrepotsModule,
+    GridEntrepotsModule,
   ],
   exports: [
     GridStockComponent,

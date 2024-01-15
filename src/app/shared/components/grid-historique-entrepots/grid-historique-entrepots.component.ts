@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  NgModule,
   OnInit,
   Output,
   ViewChild,
@@ -15,15 +16,17 @@ import {
 } from "app/shared/services/grid-configurator.service";
 import { LocalizationService } from "app/shared/services/localization.service";
 import { GridColumn, SingleSelection } from "basic";
-import { DxDataGridComponent } from "devextreme-angular";
+import { DxButtonModule, DxDataGridComponent, DxDataGridModule } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
 import { Observable, of } from "rxjs";
-import { TabContext } from "../root/root.component";
+import { TabContext } from "../../../pages/ordres/root/root.component";
 import { map } from "rxjs/operators";
 import MRUEntrepot from "app/shared/models/mru-entrepot.model";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import notify from "devextreme/ui/notify";
 import DataSource from "devextreme/data/data_source";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "app/shared/shared.module";
 
 @Component({
   selector: "app-grid-historique-entrepots",
@@ -184,3 +187,15 @@ export class GridHistoriqueEntrepotsComponent
     this.grid.instance.clearSelection();
   }
 }
+
+@NgModule({
+  declarations: [GridHistoriqueEntrepotsComponent],
+  exports: [GridHistoriqueEntrepotsComponent],
+  imports: [
+    CommonModule,
+    SharedModule,
+    DxDataGridModule,
+    DxButtonModule,
+  ],
+})
+export class GridHistoriqueEntrepotsModule { }
