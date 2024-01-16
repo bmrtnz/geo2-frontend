@@ -288,6 +288,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           this.DsItems = JSON.parse(JSON.stringify(res));
           this.datagrid.dataSource = this.DsItems;
           this.countOrders = this.DsItems.length;
+          if (!this.countOrders) return this.endOfProcess();
           this.processedOrders = 0;
           this.progressSet(20);
           setTimeout(() => this.DsItems.map(data => this.controlBaf(data, data.ordreRef)));
@@ -314,24 +315,29 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
           if (this.processedOrders === this.countOrders) {
-            this.running.loading = false;
-            this.progressSet(100);
+            this.endOfProcess(true);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
             this.datagrid.instance.columnOption("numeroOrdre", "sortOrder", "asc");
-            this.datagrid.instance.endCustomLoading();
-            this.toast("data-loading-ended");
           }
         },
         error: (err) => {
           this.processedOrders++;
           if (this.processedOrders === this.countOrders) {
             this.running.loading = false;
+            this.datagrid.instance.endCustomLoading();
           }
           this.toast("error-updating-values", "error", 7000);
           console.log(err);
         },
       });
+  }
+
+  endOfProcess(result?: boolean) {
+    this.running.loading = false;
+    this.progressSet(100);
+    this.toast(result ? "data-loading-ended" : "aucune-donnee-recuperee", result ? "success" : "warning");
+    this.datagrid.instance.endCustomLoading();
   }
 
   toast(message, type?, displayTime?) {

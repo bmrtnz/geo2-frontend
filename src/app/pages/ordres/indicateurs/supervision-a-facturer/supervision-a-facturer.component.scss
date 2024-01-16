@@ -45,6 +45,16 @@
         color: #8fc459;
       }
     }
+
+    .nodata {
+      .dx-progressbar-range {
+        background-color: #FF7F07;
+      }
+
+      .dx-progressbar-status {
+        color: #FF7F07;
+      }
+    }
   }
 
   .launch-container {
