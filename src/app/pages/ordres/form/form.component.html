@@ -285,6 +285,7 @@
                   class="edi-order-ref"
                   >{{ canalOrdreEdi }} : {{ refOrdreEdi }}</span
                 >
+                <!-- Coche show/hide liens rapides -->
                 <dx-check-box
                   #leftAccessPanel
                   class="float-right leftPanelCheckBox"
@@ -295,6 +296,42 @@
                   (onValueChanged)="leftPanelChange($event)"
                 >
                 </dx-check-box>
+                <!-- Bon à facturer -->
+                <dx-button
+                  class="header-btn-baf float-right"
+                  type="default"
+                  [visible]="showBAFButton && !!fullOrderNumber"
+                  [disabled]="!bafButtonEnabled"
+                  text="Bon à facturer"
+                  (onClick)="bonAFacturer()"
+                ></dx-button>
+                <!-- Duplication SA -->
+                <div
+                  class="duplication-buk-container header-btn-baf float-right"
+                  [hidden]="hideDuplicationBUK || !fullOrderNumber"
+                >
+                  <dx-button
+                    type="default"
+                    class="duplicateBUKSA-btn"
+                    [text]="'Duplication vers SA'"
+                    (onClick)="onDuplicationBukSaClick()"
+                  ></dx-button>
+                  <dx-button
+                    type="default"
+                    class="duplicateBUKSA-btn-trash"
+                    [icon]="'trash'"
+                    hint="{{ 'hint-suppression-regroupement' | localize }}"
+                    (onClick)="onDelRegroupementClick()"
+                  ></dx-button>
+                </div>
+                <!-- Duplicate order ? -->
+                <span
+                  *ngIf="!!duplicatedOrder && !!fullOrderNumber"
+                  class="order-dup"
+                  >&nbsp;{{ "ordres-duplication" | localize }}
+                  {{ duplicatedOrder }}
+                </span>
+                <!-- Order ref & type ? -->
                 <span
                   *ngIf="refOrdre"
                   class="order-id"
@@ -306,34 +343,6 @@
                 >
                   {{ ordre?.type?.id }} -
                 </span>
-                <dx-button
-                  class="header-btn-baf float-right"
-                  type="default"
-                  [visible]="showBAFButton && !!fullOrderNumber"
-                  [disabled]="!bafButtonEnabled"
-                  text="Bon à facturer"
-                  (onClick)="bonAFacturer()"
-                ></dx-button>
-                <div
-                  class="duplication-buk-container header-btn-baf float-right"
-                  [hidden]="hideDuplicationBUK"
-                >
-                  <dx-button
-                    type="default"
-                    class="duplicateBUKSA-btn"
-                    [disabled]="!fullOrderNumber"
-                    [text]="'Duplication vers SA'"
-                    (onClick)="onDuplicationBukSaClick()"
-                  ></dx-button>
-                  <dx-button
-                    type="default"
-                    class="duplicateBUKSA-btn-trash"
-                    [disabled]="!fullOrderNumber"
-                    [icon]="'trash'"
-                    hint="{{ 'hint-suppression-regroupement' | localize }}"
-                    (onClick)="onDelRegroupementClick()"
-                  ></dx-button>
-                </div>
                 <div style="clear: both"></div>
                 <div
                   class="dx-form-group-content no-padding-bottom order-header"
