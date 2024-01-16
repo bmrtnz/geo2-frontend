@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import { MruOrdresService } from "app/shared/services/api/mru-ordres.service";
 import { OrdresService } from "app/shared/services/api/ordres.service";
@@ -18,7 +18,7 @@ import { AuthService } from "app/shared/services";
   templateUrl: "./grid-historique.component.html",
   styleUrls: ["./grid-historique.component.scss"],
 })
-export class GridHistoriqueComponent implements OnInit {
+export class GridHistoriqueComponent {
   @ViewChild(DxDataGridComponent, { static: true })
   histoGrid: DxDataGridComponent;
 
@@ -29,7 +29,6 @@ export class GridHistoriqueComponent implements OnInit {
   public dataSource: DataSource;
   public columnChooser = environment.columnChooser;
   public detailedFields: GridColumn[];
-  public statutsSource;
 
   constructor(
     public mruOrdresService: MruOrdresService,
@@ -46,14 +45,6 @@ export class GridHistoriqueComponent implements OnInit {
       this.detailedFields.map((property) => property.dataField)
     );
   }
-  ngOnInit(): void {
-    this.statutsSource = Object
-      .entries(Statut)
-      .map(([key]) => ({
-        text: this.localize.localize(StatutLocale[key]),
-        value: key,
-      }));
-  }
 
   reload() {
     this.histoGrid.dataSource = this.dataSource;
@@ -62,7 +53,7 @@ export class GridHistoriqueComponent implements OnInit {
   onCellPrepared(e) {
     // Best expression for order status display
     if (e.rowType === "data" && e.column.dataField === "ordre.statut") {
-      if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
+      if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
     }
     // Palettes & Colis
     if (e.column.dataField === "ordre.totalNombrePalettesCommandees") {

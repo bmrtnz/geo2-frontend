@@ -543,10 +543,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.rowType === "data") {
       // Best expression for order status display
       if (field === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = this.localization.localize(Object
-          .entries(StatutLocale)
-          .find(([k, v]) => k === e.value)
-          ?.[1])?.ucFirst();
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
       }
 
       // Adjust clientReference display/hint

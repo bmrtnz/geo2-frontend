@@ -72,7 +72,7 @@
   >
     <dxo-header-filter
       *ngIf="field.dataField === 'ordre.statut'"
-      [dataSource]="statutsSource"
+      [dataSource]="ordresService?.getStatutsSource()"
     ></dxo-header-filter>
   </dxi-column>
 </dx-data-grid>

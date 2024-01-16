@@ -323,7 +323,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       // Affichage statut
       if (e.column.dataField === "ordre.statut")
-        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
       // Descript. article
       if (
         e.column.dataField ===

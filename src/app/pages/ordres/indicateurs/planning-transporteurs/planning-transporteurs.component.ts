@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, NgForm } from "@angular/forms";
-import { Statut } from "app/shared/models/ordre.model";
+import { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import {
   AuthService,
   LocalizationService,
@@ -269,7 +269,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   calculateStatut(data) {
     // Best expression for order status display
-    return self.statut[data.ordre.statut] ?? "";
+    return self.localizeService.localize(StatutLocale[data.ordre.statut])?.ucFirst() ?? "";
   }
 
   calculateNumero(data) {
