@@ -214,6 +214,7 @@
 <div
   *ngIf="hasLitigeDots"
   class="litige-dot-legend-container"
+  [ngClass]="{ 'shift-legend': popupShown }"
 >
   <div class="litige-dot-legend">L</div>
   <div class="litige-dot-legend-text">
