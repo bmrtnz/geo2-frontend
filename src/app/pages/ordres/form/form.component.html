@@ -325,12 +325,16 @@
                   ></dx-button>
                 </div>
                 <!-- Duplicate order ? -->
-                <span
-                  *ngIf="!!duplicatedOrder && !!fullOrderNumber"
-                  class="order-dup"
-                  >&nbsp;{{ "ordres-duplication" | localize }}
-                  {{ duplicatedOrder }}
-                </span>
+                <div class="duplicated-order">
+                  <dx-button
+                    text="{{ 'ordres-duplication' | localize }} {{
+                      duplicatedOrder
+                    }}"
+                    hint="{{ 'hint-access-ordre' | localize }}"
+                    (onClick)="openLinkedOrder(ordre?.ordreDupliq)"
+                  ></dx-button>
+                </div>
+
                 <!-- Order ref & type ? -->
                 <span
                   *ngIf="refOrdre"

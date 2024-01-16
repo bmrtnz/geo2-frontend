@@ -371,6 +371,37 @@ $left-panel-btn-height: 44px;
   float: right;
 }
 
+::ng-deep .duplicated-order {
+  border-left: 1px solid $base-accent;
+  padding: 0 4px;
+  height: 19px;
+  float: right;
+
+  .dx-button {
+    top: -5px;
+    padding: 0 3px;
+    height: 28px;
+    box-shadow: none;
+
+
+    &:hover {
+      background-color: #59709C !important;
+
+      .dx-button-text {
+        color: #FFF !important;
+      }
+    }
+
+    .dx-button-text {
+      margin-top: 0 !important;
+      color: $base-accent !important;
+      text-transform: none;
+      font-size: 15px;
+      font-weight: 400;
+    }
+  }
+}
+
 .invoice-number {
   font-weight: normal !important;
 }

@@ -271,7 +271,9 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreEDI.id",
     "ordreEDI.canalCde",
     "entrepot.client.instructionLogistique",
-    "entrepot.instructionLogistique"
+    "entrepot.instructionLogistique",
+    "ordreDupliq.campagne.id",
+    "ordreDupliq.numero",
   ];
 
   private destroy = new Subject<boolean>();
@@ -1350,7 +1352,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {
-    this.tabContext.openOrdre(ordre.numero, this.ordre.campagne.id);
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne?.id ?? this.ordre.campagne.id);
   }
 
   deviseDisplayExpr(item) {
@@ -1464,13 +1466,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.addLinkedOrders();
           this.refreshBadges();
           this.refreshStatus(this.ordre.statut);
-          // if (this.ordre?.duplicate) {
-          if (false) {
-            const result = await lastValueFrom(
-              this.ordresService.getOne_v2("2193577", ["id", "numero", "campagne.id"])
-            );
-            this.duplicatedOrder = this.gridsService.orderIdentifier(result.data.ordre)
-          }
+          if (this.ordre.ordreDupliq?.numero) // Is this order is a duplicated one?
+            this.duplicatedOrder = this.gridsService.orderIdentifier(this.ordre.ordreDupliq)
           window.sessionStorage.setItem("idOrdre", this.ordre.id);
           window.sessionStorage.setItem(
             "numeroOrdre" + this.ordre.numero,
