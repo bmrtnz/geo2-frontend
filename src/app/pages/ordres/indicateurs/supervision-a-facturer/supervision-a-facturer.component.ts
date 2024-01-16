@@ -85,6 +85,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public store: CustomStore;
   public company: string;
   public DsItems: any[];
+  public running = {
+    loading: false,
+  }
 
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
@@ -259,7 +262,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (!this.formGroup.get("secteurCode").value) {
       this.toast("please-select-sector", "error");
     } else {
-
+      this.running.loading = true;
       this.progressSet(); // Initialize progress bar
       this.datagrid.instance.clearSelection();
       this.launchEnabled = true;
@@ -311,6 +314,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
           if (this.processedOrders === this.countOrders) {
+            this.running.loading = false;
             this.progressSet(100);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
@@ -321,6 +325,9 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
         },
         error: (err) => {
           this.processedOrders++;
+          if (this.processedOrders === this.countOrders) {
+            this.running.loading = false;
+          }
           this.toast("error-updating-values", "error", 7000);
           console.log(err);
         },
@@ -608,12 +615,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onSelectionChanged(e) {
     // Disallowing selection of hidden checkboxes (Select All button) when status is BLOCKED
-    e.component.getVisibleRows().map((row) => {
-      if (row.data.indicateurBaf === status.BLOQUÉ)
-        e.component.deselectRows([row.key]);
-    });
-    this.gridItemsSelected =
-      this.datagrid.instance.getSelectedRowsData()?.length > 0;
+    e.component.getVisibleRows()
+      .filter(row => row.data.indicateurBaf === status.BLOQUÉ)
+      .map((row) => e.component.deselectRows([row.key]));
+    this.gridItemsSelected = !!e.component.getSelectedRowsData()?.length;
   }
 
   colorizeCell(theValue) {
