@@ -13,6 +13,7 @@ import { FormUtilsService } from "./shared/services/form-utils.service";
 import { DateManagementService } from "./shared/services/date-management.service";
 import { GridUtilsService } from "./shared/services/grid-utils.service";
 import dxAutocomplete from "devextreme/ui/autocomplete";
+import dxButton from "devextreme/ui/button";
 
 @Component({
   selector: "app-root",
@@ -92,6 +93,11 @@ export class AppComponent {
     dxNumberBox.defaultOptions({
       options: {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn,
+      },
+    });
+    dxButton.defaultOptions({
+      options: {
+        focusStateEnabled: false,
       },
     });
     dxTextBox.defaultOptions({

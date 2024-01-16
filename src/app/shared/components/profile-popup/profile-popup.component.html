@@ -33,7 +33,7 @@
     <!-- <dx-button
       class="minimize-popup"
       icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
+
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       (onClick)="resizePopup()"
     ></dx-button> -->
@@ -42,7 +42,6 @@
       class="btn-title float-right"
       type="success"
       text="{{ 'btn-appliquer' | localize }}"
-      [focusStateEnabled]="false"
       [disabled]="formGroup?.pristine"
       (onClick)="saveAndHidePopup()"
     ></dx-button>
@@ -85,7 +84,6 @@
             <dx-button
               class="admin-option-button small-option-button"
               type="danger"
-              [focusStateEnabled]="false"
               [text]="'btn-admin' | localize"
             ></dx-button>
 
@@ -141,7 +139,6 @@
                 <div class="dx-field-value">
                   <dx-check-box
                     [readOnly]="!formGroup?.get('valide')?.value"
-                    [focusStateEnabled]="false"
                     [formControlName]="'deroulant'"
                   ></dx-check-box>
                 </div>
@@ -161,7 +158,6 @@
                 </div>
                 <div class="dx-field-value alert-switch">
                   <dx-switch
-                    [focusStateEnabled]="false"
                     [formControlName]="'valide'"
                     (onValueChanged)="messageValidator?.instance?.validate()"
                   ></dx-switch>
@@ -190,7 +186,6 @@
                     <dx-check-box
                       #bandeauDateDebCB
                       [readOnly]="!formGroup?.get('valide')?.value"
-                      [focusStateEnabled]="false"
                       [value]="!!formGroup?.get('dateDebut')?.value"
                       (onValueChanged)="onBannerDateDebClick($event)"
                     ></dx-check-box>
@@ -245,7 +240,6 @@
                     <dx-check-box
                       #bandeauDateFinCB
                       [readOnly]="!formGroup?.get('valide')?.value"
-                      [focusStateEnabled]="false"
                       [value]="!!formGroup?.get('dateFin')?.value"
                       (onValueChanged)="onBannerDateFinClick($event)"
                     ></dx-check-box>
@@ -366,10 +360,7 @@
               {{ "top" | localize }}
             </div>
             <div class="dx-field-value symetrical-switch">
-              <dx-switch
-                [formControlName]="'barreDefilementHaut'"
-                [focusStateEnabled]="false"
-              ></dx-switch>
+              <dx-switch [formControlName]="'barreDefilementHaut'"></dx-switch>
             </div>
             <div class="dx-field-label dx-field-label-right">
               {{ "bottom" | localize }}
@@ -381,7 +372,6 @@
             <div class="dx-field-value">
               <dx-check-box
                 [formControlName]="'barreDefilementVisible'"
-                [focusStateEnabled]="false"
               ></dx-check-box>
             </div>
           </div>
@@ -402,7 +392,6 @@
             <div class="dx-field-value alert-switch">
               <dx-switch
                 [formControlName]="'diffSurExpedition'"
-                [focusStateEnabled]="false"
                 [switchedOnText]=""
                 [switchedOffText]=""
               ></dx-switch>
@@ -421,7 +410,6 @@
           <dx-button
             class="report-reset-button small-option-button"
             type="success"
-            [focusStateEnabled]="false"
             [text]="'btn-reinit' | localize"
             (onClick)="resetAllReportCheckboxes()"
           ></dx-button>
@@ -432,10 +420,7 @@
             >
               <div class="dx-field field-large midLarge">
                 <div class="dx-field-value">
-                  <dx-check-box
-                    [formControlName]="item.name"
-                    [focusStateEnabled]="false"
-                  ></dx-check-box>
+                  <dx-check-box [formControlName]="item.name"></dx-check-box>
                 </div>
                 <div class="dx-field-label">
                   {{
@@ -456,13 +441,11 @@
             <dx-button
               type="normal"
               text="{{ 'btn-annuler' | localize }}"
-              [focusStateEnabled]="false"
               (onClick)="cancelClick()"
             ></dx-button>
             <dx-button
               type="success"
               text="{{ 'btn-appliquer' | localize }}"
-              [focusStateEnabled]="false"
               [disabled]="formGroup?.pristine"
               (onClick)="saveAndHidePopup()"
             ></dx-button>

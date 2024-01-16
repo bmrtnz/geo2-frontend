@@ -164,7 +164,6 @@
                 class="order-reload-btn"
                 [visible]="!linkedOrdersSearch && !!fullOrderNumber"
                 type="default"
-                [focusStateEnabled]="false"
                 hint="{{ 'hint-click-reload-ordre' | localize }}"
                 icon="material-icons refresh"
                 (onClick)="refreshOrder()"
@@ -288,6 +287,7 @@
                 <!-- Coche show/hide liens rapides -->
                 <dx-check-box
                   #leftAccessPanel
+                  [visible]="!!fullOrderNumber"
                   class="float-right leftPanelCheckBox"
                   hint="{{
                     (leftAccessPanel.value ? 'masquer' : 'afficher') +
@@ -325,7 +325,10 @@
                   ></dx-button>
                 </div>
                 <!-- Duplicate order ? -->
-                <div class="duplicated-order">
+                <div
+                  class="duplicated-order"
+                  *ngIf="!!duplicatedOrder && !!fullOrderNumber"
+                >
                   <dx-button
                     text="{{ 'ordres-duplication' | localize }} {{
                       duplicatedOrder
@@ -388,7 +391,6 @@
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
-                          [focusStateEnabled]="false"
                           hint="{{ 'hint-click-file' | localize }}"
                           (onClick)="openClientFilePopup()"
                         >
@@ -419,7 +421,6 @@
                           class="entrepot-change-button rightPositioned"
                           type="default"
                           icon="material-icons swap_horiz"
-                          [focusStateEnabled]="false"
                           [visible]="!ordreBAFOuFacture && !!fullOrderNumber"
                           hint="{{ 'hint-entrep-change' | localize }}"
                           (onClick)="openChoixEntrepotPopup()"
@@ -429,7 +430,6 @@
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
-                          [focusStateEnabled]="false"
                           hint="{{ 'hint-click-file' | localize }}"
                           (onClick)="openEntrepotFilePopup()"
                         >
@@ -508,7 +508,6 @@
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons edit"
-                          [focusStateEnabled]="false"
                           hint="{{ 'hint-click-change-date' | localize }}"
                           (onClick)="openDateChangePopup()"
                         >
@@ -574,7 +573,6 @@
                             class="form-zoom-button"
                             type="default"
                             icon="material-icons search"
-                            [focusStateEnabled]="false"
                             hint="{{ 'hint-click-file' | localize }}"
                             (onClick)="openTransporteurFilePopup()"
                           >
@@ -778,7 +776,6 @@
                             type="default"
                             [disabled]="!ordre?.codeChargement"
                             text="{{ 'grouper-chargements' | localize }}"
-                            [focusStateEnabled]="false"
                             hint="{{ 'hint-group-order-lines' | localize }}"
                             (onClick)="openGroupageChargementsPopup()"
                           >
@@ -1069,7 +1066,6 @@
                   [disabled]="!fullOrderNumber"
                   type="default"
                   height="36"
-                  [focusStateEnabled]="false"
                   [icon]="
                     'material-icons visibility' +
                     (ordresLignesViewExp ? '_off' : '')
@@ -1096,7 +1092,6 @@
                       class="order-regul-button"
                       type="default"
                       [disabled]="running?.regulOrder"
-                      [focusStateEnabled]="false"
                       text="{{ 'btn-regulorder' | localize }}"
                       hint="{{ 'hint-regulorder' | localize }} "
                       (onClick)="onRegulOrderClick()"
@@ -1106,7 +1101,6 @@
                       class="stock-auto-button"
                       type="success"
                       [disabled]="running?.destockAuto"
-                      [focusStateEnabled]="false"
                       text="{{ 'btn-stockauto' | localize }}"
                       hint="{{ 'hint-stockauto' | localize }} "
                       (onClick)="onDestockAutoClick()"
@@ -1115,7 +1109,6 @@
                     <dx-button
                       class="add-ref-client-button"
                       type="default"
-                      [focusStateEnabled]="false"
                       [disabled]="
                         !selectedGridCdesRows || running?.addRefsClient
                       "
@@ -1162,7 +1155,6 @@
                     <div class="grid-separator"></div>
                     <dx-button
                       class="totaux-btn-supp"
-                      [focusStateEnabled]="false"
                       [disabled]="running?.suppLignesNonExp"
                       [visible]="!!gridCommandes?.gridRowsTotal"
                       type="default"
@@ -1295,7 +1287,6 @@
                         <dx-button
                           class="margin-btn-baf"
                           type="default"
-                          [focusStateEnabled]="false"
                           [visible]="showBAFButton"
                           text="{{ 'ordres-bonAFacturer' | localize }}"
                           (onClick)="bonAFacturer()"

@@ -85,7 +85,6 @@
       <dx-button
         class="small-article-button certification"
         type="default"
-        [focusStateEnabled]="false"
         [text]="showCertificationCheck(cell.data)"
         (onClick)="openCertificationPopup(cell.data)"
       ></dx-button>
@@ -105,7 +104,6 @@
         [visible]="showOriginButton(cell)"
         class="small-article-button origin"
         type="default"
-        [focusStateEnabled]="false"
         [text]="showOriginCheck(cell.data)"
         (onClick)="openOriginePopup(cell.data)"
       >
@@ -145,7 +143,6 @@
       <dx-button
         class="small-article-button"
         type="success"
-        [focusStateEnabled]="false"
         hint="{{ 'destockage' | localize }}"
         [text]="'D'"
         (onClick)="openDestockagePopup(cell.data)"
@@ -167,7 +164,6 @@
       <dx-button
         class="swap-button"
         type="default"
-        [focusStateEnabled]="false"
         icon="material-icons swap_horizontal_circle"
         hint="Remplacer"
         (onClick)="swapArticle(cell.data)"
@@ -187,7 +183,6 @@
         *ngIf="gridRowsTotal > 1"
         class="small-article-button grid-report-button"
         type="default"
-        [focusStateEnabled]="false"
         [text]="'report' | localize"
         [hint]="'report-text' | localize"
         (onClick)="copyFirstPasteAllRows($event, data)"

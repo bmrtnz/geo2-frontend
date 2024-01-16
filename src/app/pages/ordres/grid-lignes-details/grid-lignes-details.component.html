@@ -104,7 +104,6 @@
     <dx-button
       class="small-detail-exp-button modif"
       type="default"
-      [focusStateEnabled]="false"
       [visible]="showModifButton(cell)"
       text="{{ 'btn-modifier' | localize }}"
       (onClick)="modifDetailExp(cell)"
@@ -116,7 +115,6 @@
     <dx-button
       class="small-detail-exp-button auto"
       type="default"
-      [focusStateEnabled]="false"
       [visible]="showAutoButton(cell)"
       text="{{ 'btn-auto' | localize }}"
       (onClick)="autoDetailExp(cell)"
@@ -133,7 +131,6 @@
       class="small-reset-button"
       type="default"
       [visible]="gridExpFiltered"
-      [focusStateEnabled]="false"
       [text]="'VOIR TOUTES LES LIGNES'"
       (onClick)="resetFilter($event)"
     ></dx-button>

@@ -7,7 +7,6 @@
   [hideOnOutsideClick]="false"
   [(visible)]="visible"
   [resizeEnabled]="true"
-  [focusStateEnabled]="false"
   [dragOutsideBoundary]="true"
   [shading]="false"
   (onShowing)="onShowing($event)"
@@ -20,7 +19,6 @@
       class="min-max-imize-popup-icon"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
   </div>
@@ -92,25 +90,21 @@
         <dx-button
           type="success"
           text="{{ 'btn-addArticle' | localize }}"
-          [focusStateEnabled]="false"
           (onClick)="openArticleAdder()"
         ></dx-button>
         <dx-button
           type="normal"
           text="{{ 'btn-auto' | localize }}"
-          [focusStateEnabled]="false"
           (onClick)="autoFill()"
         ></dx-button>
         <dx-button
           type="normal"
           text="{{ 'btn-forfait' | localize }}"
-          [focusStateEnabled]="false"
           (onClick)="forfait()"
         ></dx-button>
         <dx-button
           type="normal"
           text="{{ 'btn-reinit' | localize }}"
-          [focusStateEnabled]="false"
           (onClick)="reInitialize()"
         ></dx-button>
         <div>
@@ -123,7 +117,6 @@
           <dx-button
             type="normal"
             text="{{ 'btn-fraisAnnexes' | localize }}"
-            [focusStateEnabled]="false"
             (onClick)="fraisAnnexes()"
           ></dx-button>
         </div>

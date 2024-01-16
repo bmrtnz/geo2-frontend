@@ -342,7 +342,6 @@
         <dx-button
           class="small-article-button"
           type="success"
-          [focusStateEnabled]="false"
           [text]="'Déstocker'"
           (onClick)="openDestockagePopup(cell.data)"
         >
@@ -363,7 +362,6 @@
         <dx-button
           class="small-article-button reservation"
           type="success"
-          [focusStateEnabled]="false"
           [text]="'Réserver'"
           (onClick)="openReservationPopup(cell.data)"
         >
@@ -392,7 +390,6 @@
           *ngIf="recap"
           class="small-article-button recapitulatif"
           type="success"
-          [focusStateEnabled]="false"
           [text]="'Récap'"
           (onClick)="openRecapPopup(cell.data)"
         >
