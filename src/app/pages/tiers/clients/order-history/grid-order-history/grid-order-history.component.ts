@@ -77,6 +77,8 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
   @Output() openOrder = new EventEmitter<any>();
+  @Output() clientChanged = new EventEmitter<any>();
+
   @Output() contentReadyEvent = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
@@ -501,6 +503,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     });
     // We check that this change is coming from the user
     if (!e.event) return;
+    this.clientChanged.emit(e.value);
     this.formGroup.patchValue({
       entrepot: null,
     });

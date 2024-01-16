@@ -234,7 +234,7 @@ const indicators: Indicator[] = [
     id: "SupervisionAFacturer",
     enabled: true,
     withCount: false,
-    parameter: "Supervision ordres",
+    parameter: "Ordres",
     subParameter: "à facturer",
     tileBkg: "#725828",
     indicatorIcon: "material-icons list_alt",

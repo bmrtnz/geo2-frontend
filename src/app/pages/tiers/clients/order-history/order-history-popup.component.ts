@@ -44,6 +44,10 @@ export class OrderHistoryPopupComponent implements OnChanges {
     }
   }
 
+  clientChanged(e) {
+    this.titleMid = e?.raisonSocial ?? "";
+  }
+
   onShowing(e) {
     e.component.content().parentNode.classList.add("order-histo-popup");
   }
