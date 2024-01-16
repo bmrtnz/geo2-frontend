@@ -3,7 +3,7 @@ import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { ModeLivraison } from "app/shared/models";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
+import Ordre, { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import { Role } from "app/shared/models/personne.model";
 import {
   AuthService,
@@ -530,7 +530,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.rowType === "data") {
       // Best expression for order status display
       if (field === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+        if (Statut[e.value]) e.cellElement.innerText = this.localization.localize(Object
+          .entries(StatutLocale)
+          .find(([k, v]) => k === e.value)
+          ?.[1])?.ucFirst();
       }
 
       // Adjust clientReference display/hint
