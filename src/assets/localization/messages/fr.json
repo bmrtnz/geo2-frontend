@@ -309,6 +309,7 @@
     "no-client-ref-article": "il n'y a pas de client référençant l'article {0}",
     "ajout-code": "Code...",
     "en-cours": "en cours...",
+    "select-all": "Tout sélectionner",
     "total": "Total",
     "totaux": "Totaux",
     "ligne": "ligne",

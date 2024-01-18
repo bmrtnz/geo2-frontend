@@ -1,14 +1,127 @@
-::ng-deep .accueilOrdres-page .dx-tileview .dx-scrollable-content {
-  left: -20px !important;
-  top: -20px !important;
+::ng-deep .accueil-header {
+
+  margin-bottom: 0 !important;
+
+  .configuration {
+    float: right;
+    right: 27px;
+
+    .dx-tag {
+      display: none;
+    }
+
+    .dx-tagbox {
+      visibility: hidden;
+    }
+
+    .dx-field-value {
+      width: 0 !important;
+    }
+
+    .dx-dropdowneditor-input-wrapper {
+      display: none;
+    }
+
+    .dx-editor-underlined::after {
+      display: none;
+    }
+  }
 }
 
-::ng-deep .dx-tile-content {
+::ng-deep .inputs-container {
+  margin-top: 8px;
+  width: 300px;
+}
+
+::ng-deep .tile-list {
+
+  .dx-popup-title {
+    border: 0;
+
+    .dx-toolbar-items-container {
+      height: 24px;
+      width: 30px;
+      float: right;
+
+      .dx-toolbar-center {
+        margin: 3px -16px 0 0 !important;
+      }
+    }
+  }
+
+  .dx-popup-content {
+    padding-bottom: 15px;
+
+    .dx-scrollable-content {
+      padding-top: 12px;
+
+      .dx-list-select-all {
+        padding: 0 0 5px 0;
+
+        .dx-list-select-all-checkbox {
+          margin-left: 20px;
+        }
+
+        .dx-list-select-all-label {
+          position: relative;
+          top: -2px;
+          margin: 0;
+          padding-left: 17px;
+        }
+      }
+
+      .dx-list-select-checkbox-container {
+        width: 55px;
+        padding-left: 5px;
+      }
+
+      .dx-item-content.dx-list-item-content {
+        padding: 6px 15px 8px 0;
+      }
+    }
+  }
+}
+
+
+::ng-deep .accueilOrdres-page .dx-tileview {
+  border: 4px dashed transparent;
+  margin: -4px 0 0 -4px;
+
+  &.dragging {
+    border-color: #AAA;
+
+    .dragging {
+      transition: background-color .1s;
+
+      &:hover {
+        background-color: #CCC !important;
+      }
+    }
+  }
+}
+
+::ng-deep .accueilOrdres-page .dx-tileview,
+::ng-deep .dx-sortable-clone {
+
+  .dx-tile {
+    cursor: pointer;
+    transition: 0.15s;
+  }
+
+  .dx-tile:hover {
+    transform: scale(102%, 102%);
+  }
+
+  .dx-scrollable-content {
+    left: -20px !important;
+    top: -20px !important;
+  }
+
   .indicator-container {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-    padding: 0 25px;
+    padding: 80px 25px;
 
     .number-container {
       line-height: 0;
@@ -18,7 +131,9 @@
     .indicator,
     .parameter,
     .subParameter {
-      color: #fff;
+
+      user-select: none !important;
+      color: #fff !important;
     }
 
     .dx-loadindicator-segment0 .dx-loadindicator-segment-inner {
@@ -67,20 +182,24 @@
 
       &.warning-button {
         position: absolute;
-        top: 19px;
-        right: 67px;
+        margin-top: -15px;
+        right: 69px;
+        height: 30px !important;
+        width: 30px !important;
+        min-width: 30px !important;
+
+        &:hover,
+        &:focus {
+          background-color: #FF325A !important;
+        }
 
         .warning {
-          font-size: 22px !important;
+          font-size: 18px !important;
           line-height: 22px !important;
 
           .dx-icon {
             padding-bottom: 3px;
           }
-        }
-
-        &:hover {
-          background-color: #ff325a !important;
         }
       }
     }
@@ -100,63 +219,8 @@
   }
 }
 
-::ng-deep .dx-tile {
-  cursor: pointer;
-  transition: 0.15s;
-}
 
-::ng-deep .dx-tile:hover {
-  transform: scale(102%, 102%);
-}
 
-::ng-deep .configuration {
-  width: 165px;
-  float: right;
-  top: 0;
-  margin: 0 35px 5px 6px !important;
-
-  .dx-tag {
-    display: none;
-  }
-
-  .dx-tagbox {
-    visibility: hidden;
-  }
-
-  .dx-field-label {
-    position: absolute;
-    left: 0;
-    margin-top: -3px;
-    width: 70% !important;
-    font-size: 1.3em;
-    padding-right: 0;
-    padding-left: 9px;
-    text-overflow: initial;
-    color: #444;
-  }
-
-  .dx-dropdowneditor-input-wrapper {
-    display: none;
-  }
-
-  .dx-editor-underlined::after {
-    display: none;
-  }
-
-  .tile-config-button {
-    left: 4px;
-  }
-}
-
-::ng-deep .dx-list-select-all {
-  display: none;
-}
-
-::ng-deep .inputs-container {
-  margin-top: 8px;
-  width: 300px;
-}
-
-h2.accueil-header {
-  margin-bottom: 0;
-}
+// ::ng-deep .dx-list-select-all {
+//   display: none;
+// }
