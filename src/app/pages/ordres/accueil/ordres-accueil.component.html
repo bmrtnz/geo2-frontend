@@ -21,10 +21,31 @@
           [showCloseButton]="true"
           [wrapperAttr]="{ class: 'tile-list' }"
           [hideOnOutsideClick]="true"
+          [animation]="{
+            show: {
+              type: 'pop',
+              duration: 200,
+              from: {
+                scale: 0.55
+              }
+            },
+            hide: {
+              type: 'pop',
+              duration: 200,
+              to: {
+                opacity: 0,
+                scale: 0.55
+              },
+              from: {
+                opacity: 1,
+                scale: 1
+              }
+            }
+          }"
           [position]="{
             my: 'right top',
             at: 'right top',
-            offset: { x: -40, y: 40 }
+            offset: { x: -50, y: 100 }
           }"
           [toolbarItems]="[
             {
