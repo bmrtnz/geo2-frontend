@@ -44,7 +44,14 @@
       float: right;
 
       .dx-toolbar-center {
+        position: relative;
         margin: 3px -16px 0 0 !important;
+        z-index: 1;
+
+        .dx-toolbar-button {
+          background-color: #FFF !important;
+          padding-right: 0;
+        }
       }
     }
   }
@@ -76,7 +83,10 @@
       }
 
       .dx-item-content.dx-list-item-content {
-        padding: 6px 15px 8px 0;
+        padding: 8px 15px 6px 0;
+        line-height: 18px;
+        text-overflow: initial;
+        white-space: break-spaces;
       }
     }
   }
@@ -89,7 +99,7 @@
   transition: border-color 0.15s;
 
   &.dragging {
-    border-color: #AAA;
+    border-color: #BBB;
 
     .dragging {
       transition: opacity .1s;

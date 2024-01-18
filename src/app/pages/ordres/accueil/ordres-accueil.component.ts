@@ -46,6 +46,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   secteurs: Array<Partial<Secteur>>;
   public selected: string[];
   public previouslySelected: string[];
+  public initialSelection: string[];
   public dragStartTile: string;
   public dragEndTile: string;
   public currentHoveredTile: string;
@@ -95,9 +96,14 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     if (self.tagBox.instance.option("opened")) self.tagBox?.instance.close();
   }
 
+  refreshConfig() {
+    if (!self.saveTileConfig({ value: self.initialSelection })) self.tileView.instance.repaint();
+    self.tagBox.value = self.selected;
+  }
+
   saveTileConfig(e) {
     this.selected = e.value;
-    if (this.formUtils.areEqual(this.selected, this.previouslySelected)) return;
+    if (this.formUtils.areEqual(this.selected, this.previouslySelected)) return true;
     if (this.selected?.length < 1) return e.component.option("value", this.previouslySelected);
 
     // Gather indicators
@@ -108,6 +114,7 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     this.authService.persist({
       configTuilesOrdres: {
         selection: this.selected,
+        initial: this.initialSelection
       },
     }).toPromise();
 
@@ -116,7 +123,6 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   }
 
   onTileClick(event) {
-    this.closeConfig();
     const indicator: Indicator = event.itemData.buttonOptions;
     this.tabContext.openIndicator(indicator.id);
   }
@@ -124,7 +130,6 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   onDragStart(e) {
     this.dragging = true;
     this.dragStartTile = "";
-    this.closeConfig();
   }
 
   onDragAndDrop(e) {
@@ -142,12 +147,14 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     // Moving the tile
     this.indicators.splice(toIndex, 0, this.indicators.splice(fromIndex, 1)[0]);
 
-    this.saveTileConfig({ value: this.indicators.map(ind => ind.id) })
-    this.tileView.instance.repaint();
+    if (!this.saveTileConfig({ value: this.indicators.map(ind => ind.id) }))
+      this.tileView.instance.repaint();
   }
 
   configureIndicator() {
-    const firstLoadIndicators = (config: { selection: string[] }) => {
+    const firstLoadIndicators = (config: { selection: string[], initial: string[] }) => {
+
+      this.initialSelection = config.selection;
 
       // We remove old (named) indicators that don't exist anymore but were saved
       this.loadedIndicators = config.selection?.filter((ind) =>

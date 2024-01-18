@@ -17,14 +17,30 @@
         [showClearButton]="true"
       >
         <dxo-drop-down-options
-          [width]="330"
+          [width]="280"
           [showCloseButton]="true"
           [wrapperAttr]="{ class: 'tile-list' }"
-          [hideOnOutsideClick]="false"
+          [hideOnOutsideClick]="true"
+          [position]="{
+            my: 'right top',
+            at: 'right top',
+            offset: { x: -40, y: 40 }
+          }"
           [toolbarItems]="[
             {
               widget: 'dxButton',
               options: {
+                disabled: !initialSelection?.length,
+                type: 'normal',
+                class: 'refresh-button',
+                icon: 'refresh',
+                onClick: refreshConfig
+              }
+            },
+            {
+              widget: 'dxButton',
+              options: {
+                type: 'normal',
                 class: 'close-button',
                 icon: 'close',
                 onClick: closeConfig
