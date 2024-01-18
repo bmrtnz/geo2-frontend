@@ -40,17 +40,16 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   indicators: (Indicator & any)[];
   allIndicators: Indicator[];
   loadedIndicators: string[];
-  tilesReady: boolean;
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
   secteurs: Array<Partial<Secteur>>;
+  public selected: string[];
   public previouslySelected: string[];
   public dragStartTile: string;
   public dragEndTile: string;
   public currentHoveredTile: string;
   public dragging: boolean;
-
 
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
   @ViewChild(DxSelectBoxComponent) secteurInput: DxSelectBoxComponent;
@@ -93,38 +92,27 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   }
 
   closeConfig() {
-    if (this.tagBox.instance.option("opened")) self.tagBox?.instance.close();
-  }
-
-  onContentReady(e) {
-    e.component.element()
-      .querySelectorAll(".sortable-tiles")
-      .forEach(el => {
-        el.removeEventListener("mouseenter", (e) => this.onTileMouseOver(e));
-        el.addEventListener("mouseenter", (e) => this.onTileMouseOver(e));
-      });
+    if (self.tagBox.instance.option("opened")) self.tagBox?.instance.close();
   }
 
   saveTileConfig(e) {
-    let selected = e.value;
-    if (this.formUtils.areEqual(selected, this.previouslySelected)) return;
-    if (selected?.length < 1) return e.component.option("value", this.previouslySelected);
+    this.selected = e.value;
+    if (this.formUtils.areEqual(this.selected, this.previouslySelected)) return;
+    if (this.selected?.length < 1) return e.component.option("value", this.previouslySelected);
 
     // Gather indicators
-    selected = selected.map((id) => this.ordresIndicatorsService.getIndicatorByName(id).id);
+    this.selected = this.selected.map((id) => this.ordresIndicatorsService.getIndicatorByName(id).id);
     // Sort when addding/removing
-    if (e.component) selected.sort((a, b) => this.previouslySelected.indexOf(a) - this.previouslySelected.indexOf(b));
+    if (e.component) this.selected.sort((a, b) => this.previouslySelected.indexOf(a) - this.previouslySelected.indexOf(b));
 
-    this.authService
-      .persist({
-        configTuilesOrdres: {
-          selection: selected,
-        },
-      })
-      .toPromise();
+    this.authService.persist({
+      configTuilesOrdres: {
+        selection: this.selected,
+      },
+    }).toPromise();
 
-    this.indicatorsChange.emit(selected);
-    this.previouslySelected = selected;
+    this.indicatorsChange.emit(this.selected);
+    this.previouslySelected = this.selected;
   }
 
   onTileClick(event) {
@@ -135,29 +123,27 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
 
   onDragStart(e) {
     this.dragging = true;
+    this.dragStartTile = "";
     this.closeConfig();
   }
 
   onDragAndDrop(e) {
+    const els = document.querySelectorAll(".dx-tile-content:not(.dx-sortable-source) .sortable-tiles");
+    this.dragEndTile = Array.from(els).find(el => el.matches(':hover'))?.id;
     this.dragging = false;
     this.dragStartTile = e.element.id;
-    this.dragEndTile = this.currentHoveredTile;
-    if (this.dragStartTile === this.dragEndTile) return;
+    if (!this.dragEndTile || this.dragStartTile === this.dragEndTile) return;
 
     const indicators = this.indicators.map(ind => ind.id);
     const fromIndex = indicators.indexOf(this.dragStartTile);
     const toIndex = indicators.indexOf(this.dragEndTile);
-    console.log(this.dragStartTile, fromIndex, "=>", this.dragEndTile, toIndex)
+    // console.log(this.dragStartTile, fromIndex, "=>", this.dragEndTile, toIndex)
 
-    const droppedItem = (this.indicators.splice(fromIndex, 1)[0])
-    this.indicators.splice(toIndex, 0, droppedItem);
+    // Moving the tile
+    this.indicators.splice(toIndex, 0, this.indicators.splice(fromIndex, 1)[0]);
 
     this.saveTileConfig({ value: this.indicators.map(ind => ind.id) })
     this.tileView.instance.repaint();
-  }
-
-  onTileMouseOver(e) {
-    this.currentHoveredTile = e.originalTarget.id;
   }
 
   configureIndicator() {

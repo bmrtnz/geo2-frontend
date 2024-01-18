@@ -86,15 +86,16 @@
 ::ng-deep .accueilOrdres-page .dx-tileview {
   border: 4px dashed transparent;
   margin: -4px 0 0 -4px;
+  transition: border-color 0.15s;
 
   &.dragging {
     border-color: #AAA;
 
     .dragging {
-      transition: background-color .1s;
+      transition: opacity .1s;
 
       &:hover {
-        background-color: #CCC !important;
+        opacity: 0.5;
       }
     }
   }
@@ -194,12 +195,9 @@
         }
 
         .warning {
-          font-size: 18px !important;
+          padding: 4px 4px 6px 5px !important;
+          font-size: 17px !important;
           line-height: 22px !important;
-
-          .dx-icon {
-            padding-bottom: 3px;
-          }
         }
       }
     }
