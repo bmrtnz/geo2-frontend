@@ -85,6 +85,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public store: CustomStore;
   public company: string;
   public DsItems: any[];
+  private clearSpinner: any;
   public running = {
     loading: false,
   }
@@ -263,6 +264,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       this.toast("please-select-sector", "error");
     } else {
       this.running.loading = true;
+      clearTimeout(this.clearSpinner);
       this.progressSet(); // Initialize progress bar
       this.datagrid.instance.clearSelection();
       this.launchEnabled = true;
@@ -315,10 +317,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
           if (this.processedOrders === this.countOrders) {
-            this.endOfProcess(true);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
             this.datagrid.instance.columnOption("numeroOrdre", "sortOrder", "asc");
+            this.endOfProcess(true);
           }
         },
         error: (err) => {
@@ -338,6 +340,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.progressSet(100);
     this.toast(result ? "data-loading-ended" : "aucune-donnee-recuperee", result ? "success" : "warning");
     this.datagrid.instance.endCustomLoading();
+    // In some cases, it can last (?)
+    this.clearSpinner = setTimeout(() => this.datagrid.instance.endCustomLoading(), 1500);
   }
 
   toast(message, type?, displayTime?) {
