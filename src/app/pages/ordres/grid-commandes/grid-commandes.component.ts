@@ -69,6 +69,7 @@ import { ArticleReservationOrdrePopupComponent } from "../article-reservation-or
 import { GridsService } from "../grids.service";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 import { ZoomFournisseurPopupComponent } from "../zoom-fournisseur-popup/zoom-fournisseur-popup.component";
+import { subscribe } from "graphql";
 
 let self: GridCommandesComponent; // thank's DX
 @Component({
@@ -492,6 +493,7 @@ export class GridCommandesComponent
     const inclusive = (index: number) => index + 1;
     const datasource = this.grid.dataSource as DataSource;
     if (!datasource) return;
+    this.grid.instance.option("loadPanel.enabled", true);
     this.grid.instance.beginCustomLoading(this.localizeService.localize("reindexing"));
     const items = datasource.items();
     const lignes = items
@@ -501,7 +503,10 @@ export class GridCommandesComponent
       .reindex(lignes, ["id", "numero"])
       .pipe(
         concatMap((res) => from(res.data.reindex)),
-        finalize(() => this.grid.instance.endCustomLoading())
+        finalize(() => {
+          this.grid.instance.option("loadPanel.enabled", false);
+          this.grid.instance.endCustomLoading();
+        })
       )
       .subscribe(({ id, numero }) =>
         datasource.store().push([
@@ -760,6 +765,10 @@ export class GridCommandesComponent
     }
   }
 
+  onRowPrepared(e) {
+    if (e.rowType === "data") e.rowElement.classList.add("grid-commandes-rows");
+  }
+
   onDataChanged(data: Partial<OrdreLigne>) {
     const ds = this.grid.dataSource as DataSource;
     const store = ds.store() as CustomStore;
@@ -814,30 +823,15 @@ export class GridCommandesComponent
     const source = self.grid.dataSource as DataSource;
     const sorted = source.items().map(({ id }) => id);
     sorted.splice(e.toIndex, 0, sorted.splice(e.fromIndex, 1)[0]);
+    self.grid.instance.option("loadPanel.enabled", true);
     self.grid.instance.beginCustomLoading(self.localizeService.localize("reindexing"));
     self.ordreLignesService
       .reindex(sorted, ["id", "numero"])
-      .pipe(
-        concatMap((res) => from(res.data.reindex)),
-        finalize(() => {
-          // estimated wait for source changed
-          setTimeout(() => {
-            self.grid.instance.columnOption("numero", "sortOrder", "desc");
-            self.grid.instance.columnOption("numero", "sortOrder", "asc");
-            self.grid.instance.endCustomLoading();
-            self.gridsService.reload(["DetailExpeditions"], self.gridsService.orderIdentifier(self.ordre));
-          }, 2000);
-        })
-      )
-      .subscribe(({ id, numero }) =>
-        source.store().push([
-          {
-            key: id,
-            type: "update",
-            data: { numero },
-          },
-        ])
-      );
+      .subscribe(() => {
+        self.grid.instance.repaint();
+        setTimeout(() => self.grid.instance.option("loadPanel.enabled", false), 500);
+        self.gridsService.reload(["DetailExpeditions"], self.gridsService.orderIdentifier(self.ordre));
+      })
   }
 
   handleNewArticles() {
