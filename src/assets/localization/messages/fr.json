@@ -264,6 +264,7 @@
     "invoice-running": "Facturation en cours...",
     "invoice-finished": "Facturation terminée !",
     "via-histo-client": "via l'historique client",
+    "histo-client": "Historique client",
     "via-stock": "via le stock",
     "via-refs-client": "à partir des références client",
     "ajout-article": "Ajout d'un article sur l'ordre",

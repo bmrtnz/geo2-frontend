@@ -59,6 +59,8 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   @Output() selectChange = new EventEmitter<any>();
   @Output() hidePopup = new EventEmitter<any>();
   @Output() contentReadyEvent = new EventEmitter<any>();
+  @Output() clientChanged = new EventEmitter<any>();
+
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(ZoomArticlePopupComponent, { static: false })
@@ -470,6 +472,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
     });
     // We check that this change is coming from the user
     if (!e.event) return;
+    this.clientChanged.emit(e.value);
     this.formGroup.patchValue({
       entrepot: null,
     });

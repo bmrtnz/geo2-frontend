@@ -51,6 +51,7 @@
           [gridSelectionEnabled]="gridSelectionEnabled"
           [popupShown]="popupShown"
           (hidePopup)="clearAndHidePopup()"
+          (clientChanged)="clientChanged($event)"
         ></app-grid-lignes-historique>
         <br />
       </div>

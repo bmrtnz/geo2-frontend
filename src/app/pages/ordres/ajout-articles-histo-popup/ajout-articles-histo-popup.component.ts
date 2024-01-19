@@ -100,10 +100,14 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
         this.titleEnd = this.localizeService.localize("via-histo-client");
       }
     } else {
-      this.titleStart = "Historique client ";
+      this.titleStart = this.localizeService.localize("histo-client") + " ";
       this.titleMid = this.ordre.client.raisonSocial;
       this.titleEnd = "";
     }
+  }
+
+  clientChanged(e) {
+    if (this.readOnlyMode) this.titleMid = e?.raisonSocial ?? "";
   }
 
   updateChosenArticles() {
