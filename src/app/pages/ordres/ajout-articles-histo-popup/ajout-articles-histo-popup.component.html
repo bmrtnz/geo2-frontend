@@ -31,7 +31,7 @@
       class="articles-valid-button"
       type="success"
       [disabled]="running"
-      [visible]="nbARticles > 0"
+      [visible]="nbARticles > 0 && !readOnlyMode"
       [text]="validBtnText"
       (onClick)="insertArticles()"
     ></dx-button>
