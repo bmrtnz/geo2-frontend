@@ -36,6 +36,7 @@
 ::ng-deep .tile-list {
 
   .dx-popup-title {
+    height: 43px;
     border: 0;
 
     .dx-toolbar-items-container {
@@ -45,12 +46,16 @@
 
       .dx-toolbar-center {
         position: relative;
-        margin: 3px -16px 0 0 !important;
+        margin: 3px -10px 0 0 !important;
         z-index: 1;
 
         .dx-toolbar-button {
           background-color: #FFF !important;
           padding-right: 0;
+
+          .dx-icon-refresh {
+            font-size: 22px !important;
+          }
         }
       }
     }
@@ -63,6 +68,7 @@
       padding-top: 12px;
 
       .dx-list-select-all {
+        margin-bottom: 10px;
         padding: 0 0 5px 0;
 
         .dx-list-select-all-checkbox {
@@ -83,7 +89,7 @@
       }
 
       .dx-item-content.dx-list-item-content {
-        padding: 8px 15px 6px 0;
+        padding: 6px 15px 7px 0;
         line-height: 18px;
         text-overflow: initial;
         white-space: break-spaces;
