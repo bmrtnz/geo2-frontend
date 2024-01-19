@@ -4,16 +4,13 @@
 
 
 ::ng-deep .nouvel-ordre-main {
-
   .buttons-right-container {
-    position: relative;
-    right: 0;
-    top: 48px;
+    margin-top: 8px;
+    width: auto;
+    float: right;
     overflow: hidden;
 
     .order-home-up-button {
-
-      margin: 0 5px;
 
       &.edi-order-button {
         background: $BW-violet-light !important;
@@ -21,7 +18,14 @@
         &:hover {
           background: $BW-violet-medium !important;
         }
+
+        &.dx-state-disabled {
+          background: rgba(0, 0, 0, .1) !important;
+        }
       }
+
+      margin: 0 5px;
+      float: right;
 
       .prog-btn {
         padding: 0 16px;

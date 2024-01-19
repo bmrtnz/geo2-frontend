@@ -71,6 +71,10 @@
         color: #FFF !important;
         background-color: $BW-turquoise-light !important;
 
+        &.dx-state-disabled {
+          background: rgba(0, 0, 0, .1) !important;
+        }
+
         &:hover {
           background-color: $BW-turquoise-medium !important;
         }
