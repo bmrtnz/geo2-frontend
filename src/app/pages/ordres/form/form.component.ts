@@ -153,7 +153,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private personnesService: PersonnesService,
     private instructionsService: InstructionsService,
     private portsService: PortsService,
-    public formUtilsService: FormUtilsService,
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private referencesClientService: ReferencesClientService,
@@ -271,7 +270,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreEDI.id",
     "ordreEDI.canalCde",
     "entrepot.client.instructionLogistique",
-    "entrepot.instructionLogistique"
+    "entrepot.instructionLogistique",
   ];
 
   private destroy = new Subject<boolean>();

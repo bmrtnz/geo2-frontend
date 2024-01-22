@@ -19,14 +19,14 @@
   }
 
   .highlight-order {
-    background-color: $BW-purple-light !important;
+    background-color: $BW-purple-ultralight !important;
 
     &.dx-row-focused td {
       background-color: $BW-purple-dark !important;
     }
 
     td {
-      background-color: $BW-purple-light !important;
+      background-color: $BW-purple-ultralight !important;
     }
   }
 }

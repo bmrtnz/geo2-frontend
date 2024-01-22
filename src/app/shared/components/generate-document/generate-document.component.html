@@ -1,0 +1,48 @@
+<img
+  class="model not-print-mode"
+  style="
+    position: absolute;
+    opacity: 0.2;
+    left: 0;
+    top: 145px;
+    width: 1200px;
+    border: 1px solid #aaa;
+  "
+  src="assets/images/packing-list-exemple.png"
+/>
+
+<div class="generate-document-container">
+  <div class="main-logo-container">
+    <img src="assets/images/BW-couleur-bleu-512.png" />
+  </div>
+
+  <div class="date">{{ date }}</div>
+  <div class="address">{{ address }}</div>
+  <div class="title">{{ title }}</div>
+
+  <div class="order-no-container">
+    <span class="order-no-title">{{ "ordre-en" | localize }} :&nbsp;</span>
+    <span class="order-no">{{ ordre?.numero }}</span>
+  </div>
+
+  <div class="etd-eta-no-container">
+    <span>ETD&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span>{{ ordre?.portTypeD?.name }}&nbsp;</span>
+    <span *ngIf="ordre?.etdDate">{{
+      dateMgtService.formatDate(ordre?.etdDate, "dd/MM/yyyy")
+    }}</span>
+    <div style="clear: both"></div>
+    <span>ETA&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span>{{ ordre?.portTypeA?.name }}&nbsp;</span>
+    <span *ngIf="ordre?.etaDate">{{
+      dateMgtService.formatDate(ordre?.etaDate, "dd/MM/yyyy")
+    }}</span>
+  </div>
+
+  <div style="clear: both"></div>
+  <div class="MV-PO-container">
+    <span class="order-no-title">M/V : {{ ordre?.codeChargement }}</span>
+    <div style="clear: both"></div>
+    <span class="po">PO : {{ numeroPo }}</span>
+  </div>
+</div>

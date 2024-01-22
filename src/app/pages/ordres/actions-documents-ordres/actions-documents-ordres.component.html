@@ -19,7 +19,9 @@
     type="default"
     hint="{{ 'hint-autres-actions' | localize }}"
     [focusStateEnabled]="false"
-    [visible]="!orderConfirmationOnly"
+    [visible]="
+      !orderConfirmationOnly && visibleActionsNumber < actionsFlux?.length
+    "
     [disabled]="!plusActionsFluxEnabled"
     text="+"
     (onClick)="showFluxDoxOtherBtns($event)"

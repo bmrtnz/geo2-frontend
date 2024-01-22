@@ -11,6 +11,7 @@ import {
   DxDateBoxComponent,
   DxTextBoxComponent,
   DxSwitchComponent,
+  DxScrollViewComponent,
 } from "devextreme-angular";
 import { alert, confirm } from "devextreme/ui/dialog";
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -18,6 +19,9 @@ import Ordre from "app/shared/models/ordre.model";
 import { GridPackingListComponent } from "./grid-packing-list/grid-packing-list.component";
 import { PacklistsService } from "app/shared/services/api/packlists.service";
 import notify from "devextreme/ui/notify";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { lastValueFrom } from "rxjs";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 
 @Component({
   selector: "app-packing-list-popup",
@@ -28,7 +32,9 @@ export class PackingListPopupComponent implements OnChanges {
   constructor(
     private localizeService: LocalizationService,
     private authService: AuthService,
-    private packlistsService: PacklistsService
+    private packlistsService: PacklistsService,
+    public formsUtils: FormUtilsService,
+    private ordresService: OrdresService
   ) { }
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -41,17 +47,21 @@ export class PackingListPopupComponent implements OnChanges {
   @ViewChild("dateImp", { static: false }) dateImpInput: DxDateBoxComponent;
   @ViewChild("PO", { static: false }) POInput: DxTextBoxComponent;
   @ViewChild("switchCltEnt", { static: false }) switchCltEnt: DxSwitchComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   @Input() ordre: Ordre;
 
   @Output() whenValidate = new EventEmitter<any>();
   @Output() ordreId: string;
+  @Output() address: string;
+  @Output() order: Ordre;
+  @Output() numeroPo: string;
 
   public title: string;
   public paloxLabel: string;
   public dateLabel: string;
   public visible: boolean;
-  public popupFullscreen = false;
+  public popupFullscreen = true;
   public labelEntrepot: string;
   public selectOk: boolean;
   public ordres: any[];
@@ -66,10 +76,11 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("packing-list-popup");
+    e.component.content().parentNode.classList.add("packing-list-popup", "document-popup");
   }
 
   onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.entrepotInput.value = `${this.ordre.entrepot.code} - ${this.ordre.entrepot.raisonSocial}`;
     this.dateDepInput.value = this.ordre.etdDate ?? new Date();
     this.dateArrInput.value = this.ordre.etaDate ?? new Date();
@@ -89,6 +100,8 @@ export class PackingListPopupComponent implements OnChanges {
         "warning",
         5000
       );
+
+    this.onPrint(); // A VIRER !!!!!!!!!!!!!!!!!!
   }
 
   onHidden() {
@@ -122,6 +135,36 @@ export class PackingListPopupComponent implements OnChanges {
       this.dateArrInput.value
     )
       return true;
+  }
+
+  async onPrint() {
+
+    const result = await lastValueFrom(
+      this.ordresService.getOne_v2(this.ordre.id, [
+        "entrepot.raisonSocial",
+        "entrepot.adresse1",
+        "entrepot.adresse2",
+        "entrepot.adresse3",
+        "entrepot.codePostal",
+        "entrepot.ville",
+        "entrepot.pays.description",
+        "portTypeD.name",
+        "portTypeA.name"
+      ])
+    );
+
+    this.order = { ...this.ordre, ...result.data.ordre };
+    const address = [
+      this.order.entrepot.raisonSocial,
+      this.order.entrepot.adresse1,
+      this.order.entrepot.adresse2,
+      this.order.entrepot.adresse3,
+      this.order.entrepot.codePostal + " " + this.order.entrepot.ville,
+      this.order.entrepot.pays.description,
+    ]
+    this.address = address.join("\n");
+    this.numeroPo = this.POInput.value;
+
   }
 
   async onSubmit() {

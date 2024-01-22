@@ -76,6 +76,7 @@ export class GridPackingListComponent {
   }
 
   async enableFilters() {
+    this.datagrid.instance.option("focusedRowIndex", -1);
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );

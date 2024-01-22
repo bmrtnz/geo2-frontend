@@ -11,7 +11,10 @@
   (onShown)="onShown($event)"
   [hideOnOutsideClick]="false"
 >
-  <div *dxTemplate="let data of 'title'">
+  <div
+    *dxTemplate="let data of 'title'"
+    [class]="'not-print-mode'"
+  >
     <div class="title">{{ title }}&nbsp;</div>
     <dx-button
       class="close-article-popup"
@@ -30,7 +33,7 @@
   <div *dxTemplate="let d of 'content'">
     <dx-scroll-view>
       <div class="packing-list-content-container">
-        <div class="dx-field entrepot-field">
+        <div class="dx-field entrepot-field not-print-mode">
           <div class="dx-field-label text-align-right">
             {{ "packing-list-ordres-entrepot" | localize }}
           </div>
@@ -42,7 +45,7 @@
           </div>
         </div>
 
-        <div class="inputs-container date-inputs">
+        <div class="inputs-container date-inputs not-print-mode">
           <!-- Date de départ prévue -->
           <div class="dx-field">
             <div class="dx-field-label text-align-right">
@@ -102,7 +105,7 @@
           </div>
         </div>
 
-        <div class="inputs-container">
+        <div class="inputs-container not-print-mode">
           <!-- PO -->
           <div class="dx-field">
             <div class="dx-field-label text-align-right">
@@ -130,6 +133,7 @@
                 <div class="dx-field-value">
                   <dx-switch
                     #switchCltEnt
+                    class="symetrical-switch"
                     [switchedOnText]=""
                     [switchedOffText]=""
                   ></dx-switch>
@@ -142,18 +146,41 @@
               </div>
             </dxi-item>
           </dx-box>
+          <dx-button
+            class="upperButton print-button float-right"
+            type="default"
+            text="{{ 'btn-print' | localize }}"
+            [focusStateEnabled]="false"
+            [visible]="true"
+            (onClick)="formsUtils.onPrint(this)"
+          ></dx-button>
         </div>
 
-        <div style="clear: both"></div>
+        <div
+          style="clear: both"
+          class="not-print-mode"
+        ></div>
+        <!-- [class]="'print-mode'" -->
+        <app-generate-document
+          [document]="'packing-list'"
+          [address]="address"
+          [numeroPo]="numeroPo"
+          [ordre]="order"
+        ></app-generate-document>
+        <div
+          style="clear: both"
+          class="not-print-mode"
+        ></div>
 
         <app-grid-packing-list
+          [class]="'not-print-mode'"
           [ordreId]="ordreId"
           [entrepotId]="ordre?.entrepot.id"
           (selectedOrders)="selectedOrderIds($event)"
         ></app-grid-packing-list>
-        <br />
-        <br />
-        <div class="popup-action">
+        <div class="popup-action not-print-mode">
+          <br />
+          <br />
           <dx-button
             text="{{ 'btn-annuler' | localize }}"
             type="normal"

@@ -76,7 +76,7 @@ export class FormUtilsService {
   }
 
   /**
-  * Prints Zoom/fiches articles/tiers
+  * Prints Zoom/fiches articles/tiers/documents
   */
   public onPrint(component) {
     if (component?.accordion) {

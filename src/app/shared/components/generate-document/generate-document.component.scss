@@ -1,0 +1,76 @@
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+::ng-deep .generate-document-container {
+  position: relative;
+  float: left;
+  padding: 0;
+  width: 1200px;
+  height: 1697px;
+
+  .main-logo-container img {
+    position: relative;
+    top: 42px;
+    left: 61px;
+    width: 187px;
+    max-height: 200px;
+    float: left;
+    overflow: hidden;
+  }
+
+  .address {
+    position: relative;
+    margin-top: 108px;
+    margin-right: 200px;
+    font-weight: bold;
+    font-size: 18px;
+    float: right;
+    white-space: pre-line;
+  }
+
+  .date {
+    position: absolute;
+    top: 77px;
+    right: 313px;
+    font-weight: bold;
+    font-size: 15px;
+    float: right;
+  }
+
+  .title {
+    position: relative;
+    margin-top: 89px;
+    right: 100px;
+    font-weight: bold;
+    font-size: 26px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .order-no-container,
+  .etd-eta-no-container,
+  .MV-PO-container {
+    position: relative;
+    font-weight: bold;
+    font-size: 17px;
+    margin-top: 15px;
+    margin-left: 57px;
+    text-transform: uppercase;
+    float: left;
+  }
+
+  .etd-eta-no-container {
+    float: right;
+    margin-right: 379px;
+  }
+
+  .MV-PO-container {
+    margin-top: 0;
+    margin-left: 85px;
+  }
+
+}

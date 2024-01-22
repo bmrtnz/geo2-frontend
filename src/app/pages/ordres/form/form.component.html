@@ -233,6 +233,12 @@
                 ></dx-button>
               </div>
             </div>
+
+            <!-- A VIRER -->
+            <app-actions-documents-ordres
+              [ordre]="ordre"
+            ></app-actions-documents-ordres>
+
             <div class="order-tabs">
               <div
                 #anchor
@@ -244,7 +250,7 @@
                 }}</span>
 
                 <!-- separator -->
-                <span> - </span>
+                <span>&nbsp;-&nbsp;</span>
 
                 <span
                   *ngIf="ordre"

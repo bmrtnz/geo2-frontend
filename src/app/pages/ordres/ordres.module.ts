@@ -13,6 +13,7 @@ import { FileManagerModule } from "app/shared/components/file-manager/file-manag
 import { InfoPopupModule } from "app/shared/components/info-popup/info-popup.component";
 import { ProgramChooserModule } from "app/shared/components/program-chooser/program-chooser.component";
 import { QuestionPopupModule } from "app/shared/components/question-popup/question-popup.component";
+import { GenerateDocumentModule } from "app/shared/components/generate-document/generate-document.component";
 import { ViewDocumentPopupModule } from "app/shared/components/view-document-popup/view-document-popup.component";
 import { OrdresTabsPersistGuard } from "app/shared/guards/ordres-tabs-persist.guard";
 import { LocalizePipe } from "app/shared/pipes";
@@ -332,7 +333,8 @@ import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartitio
     OrdresSuiviModule,
     ConfirmationResultPopupModule,
     QuestionPopupModule,
-    ClientsArticleRefPopupModule
+    ClientsArticleRefPopupModule,
+    GenerateDocumentModule
   ],
   exports: [
     GridStockComponent,
