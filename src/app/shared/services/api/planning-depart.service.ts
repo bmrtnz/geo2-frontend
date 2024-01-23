@@ -3,7 +3,7 @@ import { Apollo, gql } from "apollo-angular";
 import PlanningDepart from "app/shared/models/planning-depart.model";
 import DataSource from "devextreme/data/data_source";
 import { map, tap } from "rxjs/operators";
-import { ApiService } from "../api.service";
+import { ApiService, Pageable, RelayPage } from "../api.service";
 
 export type QueryArgs = {
   societeCode: string;
@@ -24,15 +24,18 @@ export class PlanningDepartService extends ApiService {
     return new DataSource({
       store: this.createCustomStore({
         load: (options) =>
-          this.getList(variables, columns)
+          this.getPage({
+            pageable: this.mapLoadOptionsToVariables(options).pageable,
+            ...variables,
+          }, columns)
             .pipe(map((res) => res.data.allPlanningDepart))
             .toPromise(),
       }),
     });
   }
 
-  getList(variables: QueryArgs, columns: Set<string>) {
-    return this.apollo.query<{ allPlanningDepart: Partial<PlanningDepart[]> }>({
+  getPage(variables: QueryArgs & { pageable: Pageable }, columns: Set<string>) {
+    return this.apollo.query<{ allPlanningDepart: RelayPage<Partial<PlanningDepart>> }>({
       query: gql(this.buildGraph(columns)),
       variables,
       fetchPolicy: "network-only",
@@ -45,12 +48,20 @@ export class PlanningDepartService extends ApiService {
       [
         {
           name: `allPlanningDepart`,
-          body,
+          body: [
+            "pageInfo.startCursor",
+            "pageInfo.endCursor",
+            "pageInfo.hasPreviousPage",
+            "pageInfo.hasNextPage",
+            "totalCount",
+            ...[...body].map((c) => `edges.node.${c}`),
+          ],
           params: [
             { name: "societeCode", value: "societeCode", isVariable: true },
             { name: "secteurCode", value: "secteurCode", isVariable: true },
             { name: "dateMin", value: "dateMin", isVariable: true },
             { name: "dateMax", value: "dateMax", isVariable: true },
+            { name: "pageable", value: "pageable", isVariable: true },
           ],
         },
       ],
@@ -59,6 +70,7 @@ export class PlanningDepartService extends ApiService {
         { name: "secteurCode", type: "String", isOptionnal: false },
         { name: "dateMin", type: "LocalDateTime", isOptionnal: false },
         { name: "dateMax", type: "LocalDateTime", isOptionnal: false },
+        { name: "pageable", type: "PaginationInput", isOptionnal: false },
       ]
     );
   }

@@ -150,7 +150,7 @@ export class PlanningDepartComponent implements AfterViewInit {
       new Set(await fields.toPromise())
     );
     this.dataSource.reload().then((res) => {
-      let DsItems = JSON.parse(JSON.stringify(res));
+      let DsItems = JSON.parse(JSON.stringify(res[0].edges.map(i => i.node)));
       // Sort by numero ordre
       DsItems.sort(
         (a, b) =>
