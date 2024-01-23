@@ -151,6 +151,11 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridRecap?.enableFilters();
+    // KEEP THIS !!! This resets the paging that often fails at first load
+    setTimeout(() => {
+      this.gridRecap.datagrid.instance.pageSize(100000)
+      this.gridRecap?.dataSource.reload();
+    }, 1000)
   }
 
   clearAll() {
