@@ -15,6 +15,8 @@ export class GenerateDocumentComponent implements OnChanges {
   @Input() document: string;
   @Input() address: string;
   @Input() ordre: Ordre;
+  @Input() ordres: any[];
+  @Input() ordreLignes: any[];
   @Input() numeroPo: string;
 
 
@@ -32,6 +34,10 @@ export class GenerateDocumentComponent implements OnChanges {
   ngOnChanges() {
     this.date = this.dateMgtService.formatDate(new Date(), "dd/MM/yyyy");
     this.title = this.localization.localize(`document-${this.document}`);
+  }
+
+  listOrdres() {
+    if (this.ordres) return this.ordres.map(ord => ord.numero).join(" ");
   }
 
 }

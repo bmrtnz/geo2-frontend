@@ -32,8 +32,8 @@
 
   <div *dxTemplate="let d of 'content'">
     <dx-scroll-view>
-      <div class="packing-list-content-container">
-        <div class="dx-field entrepot-field not-print-mode">
+      <div class="packing-list-content-container not-print-mode">
+        <div class="dx-field entrepot-field">
           <div class="dx-field-label text-align-right">
             {{ "packing-list-ordres-entrepot" | localize }}
           </div>
@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <div class="inputs-container date-inputs not-print-mode">
+        <div class="inputs-container date-inputs">
           <!-- Date de départ prévue -->
           <div class="dx-field">
             <div class="dx-field-label text-align-right">
@@ -105,7 +105,7 @@
           </div>
         </div>
 
-        <div class="inputs-container not-print-mode">
+        <div class="inputs-container">
           <!-- PO -->
           <div class="dx-field">
             <div class="dx-field-label text-align-right">
@@ -152,33 +152,19 @@
             text="{{ 'btn-print' | localize }}"
             [focusStateEnabled]="false"
             [visible]="true"
-            (onClick)="formsUtils.onPrint(this)"
+            (onClick)="onPrint()"
           ></dx-button>
         </div>
 
-        <div
-          style="clear: both"
-          class="not-print-mode"
-        ></div>
-        <!-- [class]="'print-mode'" -->
-        <app-generate-document
-          [document]="'packing-list'"
-          [address]="address"
-          [numeroPo]="numeroPo"
-          [ordre]="order"
-        ></app-generate-document>
-        <div
-          style="clear: both"
-          class="not-print-mode"
-        ></div>
+        <div style="clear: both"></div>
 
         <app-grid-packing-list
-          [class]="'not-print-mode'"
           [ordreId]="ordreId"
           [entrepotId]="ordre?.entrepot.id"
           (selectedOrders)="selectedOrderIds($event)"
         ></app-grid-packing-list>
-        <div class="popup-action not-print-mode">
+
+        <div class="popup-action">
           <br />
           <br />
           <dx-button
@@ -194,6 +180,14 @@
           ></dx-button>
         </div>
       </div>
+      <!-- [class]="'print-mode'" -->
+      <app-generate-document
+        [document]="'packing-list'"
+        [address]="address"
+        [numeroPo]="numeroPo"
+        [ordre]="order"
+        [ordres]="ordres"
+      ></app-generate-document>
     </dx-scroll-view>
   </div>
 </dx-popup>

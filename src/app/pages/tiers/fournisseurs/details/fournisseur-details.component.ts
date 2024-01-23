@@ -261,6 +261,8 @@ export class FournisseurDetailsComponent
   ifcoChecked = false;
   IDTracaexists = false;
   CCexists = false;
+  public printDocumentTitle: string;
+
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -406,6 +408,7 @@ export class FournisseurDetailsComponent
 
   afterLoadInitForm(res) {
     this.fournisseur = res.data.fournisseur;
+    this.printDocumentTitle = `Fiche-fournisseur-${this.fournisseur?.code}`;
     const certifications = this.mapCertificationsForDisplay(
       this.fournisseur.certifications
     );

@@ -143,6 +143,8 @@ export class TransporteurDetailsComponent
   createMode = false;
   preSaisie: string;
   CCexists = false;
+  public printDocumentTitle: string;
+
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -238,6 +240,7 @@ export class TransporteurDetailsComponent
 
   afterLoadInitForm(res) {
     this.transporteur = res.data.transporteur;
+    this.printDocumentTitle = `Fiche-transporteur-${this.transporteur?.id}`;
     this.formGroup.patchValue(this.transporteur);
     this.contentReadyEvent.emit();
     this.preSaisie = this.transporteur.preSaisie === true ? "preSaisie" : "";

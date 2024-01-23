@@ -1,48 +1,171 @@
-<img
+<!-- <img
   class="model not-print-mode"
   style="
     position: absolute;
     opacity: 0.2;
     left: 0;
-    top: 145px;
+    top: 354px;
     width: 1200px;
     border: 1px solid #aaa;
   "
-  src="assets/images/packing-list-exemple.png"
-/>
+  src="assets/images/packing-list-exemple-multiple.png"
+/> -->
 
 <div class="generate-document-container">
-  <div class="main-logo-container">
-    <img src="assets/images/BW-couleur-bleu-512.png" />
-  </div>
-
   <div class="date">{{ date }}</div>
   <div class="address">{{ address }}</div>
   <div class="title">{{ title }}</div>
 
-  <div class="order-no-container">
-    <span class="order-no-title">{{ "ordre-en" | localize }} :&nbsp;</span>
-    <span class="order-no">{{ ordre?.numero }}</span>
-  </div>
+  <!-- Packing list -->
+  <div *ngIf="document === 'packing-list'">
+    <div class="packing-list-body">
+      <div class="order-no-container">
+        <div class="order-no-title normal-font">
+          {{ "ordre-en" | localize }} :&nbsp;
+        </div>
+        <div class="order-no">{{ listOrdres() }}</div>
+      </div>
 
-  <div class="etd-eta-no-container">
-    <span>ETD&nbsp;&nbsp;&nbsp;&nbsp;</span>
-    <span>{{ ordre?.portTypeD?.name }}&nbsp;</span>
-    <span *ngIf="ordre?.etdDate">{{
-      dateMgtService.formatDate(ordre?.etdDate, "dd/MM/yyyy")
-    }}</span>
-    <div style="clear: both"></div>
-    <span>ETA&nbsp;&nbsp;&nbsp;&nbsp;</span>
-    <span>{{ ordre?.portTypeA?.name }}&nbsp;</span>
-    <span *ngIf="ordre?.etaDate">{{
-      dateMgtService.formatDate(ordre?.etaDate, "dd/MM/yyyy")
-    }}</span>
-  </div>
+      <div class="etd-eta-no-container">
+        <span class="normal-font">ETD&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+        <span>{{ ordre?.portTypeD?.name }}&nbsp;</span>
+        <span *ngIf="ordre?.etdDate">{{
+          dateMgtService.formatDate(ordre?.etdDate, "dd/MM/yyyy")
+        }}</span>
+        <div style="clear: both; height: 3px"></div>
+        <span class="normal-font">ETA&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+        <span>{{ ordre?.portTypeA?.name }}&nbsp;</span>
+        <span *ngIf="ordre?.etaDate">{{
+          dateMgtService.formatDate(ordre?.etaDate, "dd/MM/yyyy")
+        }}</span>
+      </div>
 
-  <div style="clear: both"></div>
-  <div class="MV-PO-container">
-    <span class="order-no-title">M/V : {{ ordre?.codeChargement }}</span>
-    <div style="clear: both"></div>
-    <span class="po">PO : {{ numeroPo }}</span>
+      <div style="clear: both"></div>
+      <div class="MV-PO-container">
+        <span class="order-no-title normal-font">M/V&nbsp;:&nbsp;</span
+        ><span>{{ ordre?.codeChargement }}</span>
+        <div style="clear: both"></div>
+        <span class="po normal-font">PO&nbsp;:&nbsp;</span
+        ><span>{{ numeroPo }}</span>
+      </div>
+      <div style="clear: both"></div>
+
+      <!-- Table main -->
+      <table class="table-main">
+        <thead>
+          <tr>
+            <th class="main-col-1">
+              {{ "packing-list-order-number" | localize }}
+            </th>
+            <th class="main-col-2">
+              {{
+                localization.localize("packing-list-container")?.toUpperCase()
+              }}
+            </th>
+            <th class="main-col-3">
+              {{ localization.localize("packing-list-seal")?.toUpperCase() }}
+            </th>
+            <th class="main-col-4">
+              {{ localization.localize("packing-list-temp")?.toUpperCase() }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through orders -->
+          <tr *ngFor="let ordre of ordres; index as i">
+            <td class="main-col-1">{{ ordre?.numero }}</td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-2"
+            >
+              {{ ordre?.logistiques[0].numeroContainer }}
+            </td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-3"
+            >
+              {{ ordre?.logistiques[0].numeroPlomb }}
+            </td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-4"
+            >
+              {{ ordre?.logistiques[0].detecteurTemperature }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="table-detail">
+        <thead>
+          <tr>
+            <th class="detail-col-1">
+              {{
+                localization.localize("packing-list-container")?.toUpperCase()
+              }}
+            </th>
+            <th class="detail-col-2">
+              {{
+                localization
+                  .localize("packing-list-product-variety")
+                  ?.toUpperCase()
+              }}
+            </th>
+            <th class="detail-col-3">
+              {{ localization.localize("packing-list-size") }}
+            </th>
+            <th class="detail-col-4">
+              {{ localization.localize("packing-list-quantity") }}
+            </th>
+            <th class="detail-col-5">
+              {{ localization.localize("packing-list-gross-weight") }}
+            </th>
+            <th class="detail-col-6">
+              {{ localization.localize("packing-list-net-weight") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let ordre of ordres">
+          <!-- Loop through lines -->
+          <tr *ngFor="let ligne of ordre.lignes">
+            <td
+              class="detail-col-1"
+              *ngIf="ordre?.logistiques"
+            >
+              {{ ordre?.logistiques[0].numeroContainer }}
+            </td>
+            <td class="detail-col-2 text-align-left">
+              {{ ligne?.article?.articleDescription?.descriptionLongue }}
+            </td>
+            <td class="detail-col-3">
+              {{ ligne?.article?.normalisation?.calibreMarquage?.description }}
+            </td>
+          </tr>
+          <tr class="total-row">
+            <td class="detail-col-1"></td>
+            <td class="detail-col-2 text-align-right">Total</td>
+            <td
+              class="detail-col-3 text-align-left"
+              *ngIf="ordre?.logistiques"
+            >
+              &nbsp;&nbsp;{{ ordre?.logistiques[0].numeroContainer }}&nbsp;:
+            </td>
+            <td class="detail-col-4"></td>
+            <td class="detail-col-5"></td>
+            <td class="detail-col-6"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td class="detail-col-1"></td>
+            <td class="detail-col-2"></td>
+            <td class="detail-col-3 text-align-right">Total quantity&nbsp;:</td>
+            <td class="detail-col-4"></td>
+            <td class="detail-col-5"></td>
+            <td class="detail-col-6"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
 </div>

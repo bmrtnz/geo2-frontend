@@ -341,6 +341,7 @@ export class ClientDetailsComponent
   ifcoChecked = false;
   couvTemp = false;
   initialFormState: any;
+  public printDocumentTitle: string;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -536,6 +537,7 @@ export class ClientDetailsComponent
 
   afterLoadInitForm(res) {
     this.client = res.data.client;
+    this.printDocumentTitle = `Fiche-client-${this.client?.code}`;
     // Règle changée Tina 16/09/2022
     // this.freeUEVAT(this.client.secteur, this.client.pays);
     this.mandatoryUEVAT({

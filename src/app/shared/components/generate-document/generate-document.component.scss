@@ -2,12 +2,23 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-::ng-deep .generate-document-container {
+.generate-document-container {
+
+  -webkit-print-color-adjust: exact !important;
+  /* Chrome, Safari 6 – 15.3, Edge */
+  print-color-adjust: exact !important;
+  /* Firefox 97+, Safari 15.4+ */
+
+  color: #212121;
+
   position: relative;
   float: left;
   padding: 0;
   width: 1200px;
-  height: 1697px;
+
+  .normal-font {
+    font-weight: normal;
+  }
 
   .main-logo-container img {
     position: relative;
@@ -21,56 +32,191 @@
 
   .address {
     position: relative;
-    margin-top: 108px;
-    margin-right: 200px;
+    margin-top: 85px;
+    margin-left: 599px;
     font-weight: bold;
-    font-size: 18px;
-    float: right;
+    font-size: 22px;
+    line-height: 23px;
+    float: left;
     white-space: pre-line;
+    width: 480px;
   }
 
   .date {
     position: absolute;
-    top: 77px;
-    right: 313px;
+    top: 52px;
+    left: 833px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 16px;
     float: right;
   }
 
   .title {
     position: relative;
-    margin-top: 89px;
+    margin-top: 96px;
     right: 100px;
     font-weight: bold;
+    font-family: Tahoma, "Trebuchet MS", sans-serif;
     font-size: 26px;
-    letter-spacing: 3px;
     text-transform: uppercase;
     text-align: center;
     width: 100%;
     display: inline-block;
   }
 
-  .order-no-container,
-  .etd-eta-no-container,
-  .MV-PO-container {
-    position: relative;
-    font-weight: bold;
-    font-size: 17px;
-    margin-top: 15px;
-    margin-left: 57px;
-    text-transform: uppercase;
-    float: left;
-  }
+  .packing-list-body {
+    overflow: hidden;
 
-  .etd-eta-no-container {
-    float: right;
-    margin-right: 379px;
-  }
+    .order-no-container,
+    .etd-eta-no-container,
+    .MV-PO-container {
+      position: relative;
+      font-weight: bold;
+      font-size: 17px;
+      margin-top: 15px;
+      margin-left: 45px;
+      text-transform: uppercase;
+      float: left;
+    }
 
-  .MV-PO-container {
-    margin-top: 0;
-    margin-left: 85px;
+    .order-no-title,
+    .order-no {
+      float: left;
+    }
+
+    .order-no {
+      max-width: 380px;
+    }
+
+    .etd-eta-no-container {
+      position: absolute;
+      left: 573px;
+    }
+
+    .MV-PO-container {
+      margin-top: 16px;
+      margin-left: 67px;
+      line-height: 26px;
+
+      .po {
+        margin-left: 7px;
+      }
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      font-size: 17px;
+
+      th {
+        padding: 6px;
+        line-height: 14px;
+      }
+
+      td {
+        font-size: 16px;
+        padding: 2px;
+      }
+    }
+
+    .table-main {
+      margin: 12px 0 0 242px;
+      position: relative;
+
+      .main-col-1 {
+        width: 94px;
+      }
+
+      .main-col-2 {
+        width: 156px;
+      }
+
+      .main-col-3 {
+        width: 195px;
+      }
+
+      .main-col-4 {
+        width: 393px;
+      }
+
+      &table,
+      th,
+      td {
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      thead tr {
+        background-color: #AAA;
+        color: #FFF;
+      }
+    }
+
+    .table-detail {
+      margin: 29px 0 0 37px;
+      position: relative;
+
+      .detail-col-1 {
+        width: 142px;
+      }
+
+      .detail-col-2 {
+        width: 463px;
+      }
+
+      .detail-col-3 {
+        width: 123px;
+      }
+
+      .detail-col-4 {
+        width: 95px;
+      }
+
+      .detail-col-5 {
+        width: 107px;
+      }
+
+      .detail-col-6 {
+        width: 106px;
+      }
+
+      &table,
+      th,
+      td {
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      thead tr,
+      tfoot tr {
+        background-color: #666;
+        color: #FFF;
+      }
+
+      .total-row {
+        background: #CCC;
+        font-weight: bold;
+
+        .detail-col-1 {
+          border-right: 0 !important;
+        }
+
+        .detail-col-2 {
+          border-right: 0 !important;
+          border-left: 0 !important;
+        }
+
+        .detail-col-3 {
+          border-left: 0 !important;
+          border-right: 0 !important;
+        }
+
+        .detail-col-4 {
+          border-left: 0 !important;
+        }
+      }
+
+    }
   }
 
 }

@@ -55,6 +55,7 @@ export class PackingListPopupComponent implements OnChanges {
   @Output() ordreId: string;
   @Output() address: string;
   @Output() order: Ordre;
+  @Output() ordres: any[];
   @Output() numeroPo: string;
 
   public title: string;
@@ -64,14 +65,15 @@ export class PackingListPopupComponent implements OnChanges {
   public popupFullscreen = true;
   public labelEntrepot: string;
   public selectOk: boolean;
-  public ordres: any[];
   public shown: boolean;
   public infoPopupText: string;
+  public printDocumentTitle;
 
   ngOnChanges() {
     if (this.ordre) {
       this.title = this.localizeService.localize("packing-list-popup-title");
       this.ordreId = this.ordre.id;
+      this.printDocumentTitle = `packing-list-${this.ordre?.numero}`;
     }
   }
 
@@ -101,7 +103,6 @@ export class PackingListPopupComponent implements OnChanges {
         5000
       );
 
-    this.onPrint(); // A VIRER !!!!!!!!!!!!!!!!!!
   }
 
   onHidden() {
@@ -138,7 +139,6 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   async onPrint() {
-
     const result = await lastValueFrom(
       this.ordresService.getOne_v2(this.ordre.id, [
         "entrepot.raisonSocial",
@@ -149,7 +149,7 @@ export class PackingListPopupComponent implements OnChanges {
         "entrepot.ville",
         "entrepot.pays.description",
         "portTypeD.name",
-        "portTypeA.name"
+        "portTypeA.name",
       ])
     );
 
@@ -165,6 +165,19 @@ export class PackingListPopupComponent implements OnChanges {
     this.address = address.join("\n");
     this.numeroPo = this.POInput.value;
 
+    this.ordres?.map(async (ord, idx) => {
+      const result = await lastValueFrom(
+        this.ordresService.getOne_v2(ord.id, [
+          "logistiques.numeroContainer",
+          "logistiques.numeroPlomb",
+          "logistiques.detecteurTemperature",
+          "lignes.article.articleDescription.descriptionLongue",
+          "lignes.article.normalisation.calibreMarquage.description",
+        ])
+      );
+      this.ordres[idx] = { ...ord, ...result.data.ordre };
+      if (idx === this.ordres.length - 1) this.formsUtils.onPrint(this);
+    });
   }
 
   async onSubmit() {

@@ -78,7 +78,8 @@ export class FormUtilsService {
   /**
   * Prints Zoom/fiches articles/tiers/documents
   */
-  public onPrint(component) {
+  public onPrint(component?) {
+
     if (component?.accordion) {
       component.setAccordionDuration(0);
       component.openCloseAccordions(true);
@@ -103,7 +104,10 @@ export class FormUtilsService {
         display = style.display;
         if (appRoot) appRoot.style.display = 'none';
       }
+      const tempTitle = document.title;
+      if (component?.printDocumentTitle) document.title = component.printDocumentTitle;
       window.print();
+      document.title = tempTitle;
       if (appRoot) appRoot.style.display = display;
       if (component?.accordion) component.setAccordionDuration(300);
     }, 10); // Thanx Dx - otherwise accordions aren't opened
