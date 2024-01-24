@@ -139,6 +139,7 @@
     top: 50%;
     transform: translateY(-50%);
     padding: 80px 25px;
+    pointer-events: none; // Keep this (sortable handle fix)
 
     .number-container {
       line-height: 0;
