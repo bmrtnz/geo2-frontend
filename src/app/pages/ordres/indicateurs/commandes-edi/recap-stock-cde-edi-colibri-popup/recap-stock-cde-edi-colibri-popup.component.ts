@@ -105,6 +105,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   saveChoices() {
+    if (this.creatingOrder) return;
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     const updatedRows = rows.map(row => ({
       id: row.data.id,
@@ -169,8 +170,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   clearAndHidePopup() {
-    this.hidePopup();
     this.clearAll();
+    this.hidePopup();
   }
 
   async createOrder() {
@@ -185,6 +186,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       id: row.data.id,
       choix: row.isSelected,
     }));
+
     this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows).pipe(
       concatMap(_res => forkJoin([this.functionsService.ofControleSelArt, this.functionsService.ofControleQteArt]
         .map(f => f(this.refOrdreEDI, this.currentCompanyService.getCompany().campagne.id)))),
