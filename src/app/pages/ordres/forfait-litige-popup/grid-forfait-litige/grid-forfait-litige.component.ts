@@ -153,14 +153,16 @@ export class GridForfaitLitigeComponent {
       newData.clientUniteFactureCode = "UNITE";
       // Focus on forfait responsable - Uggly but works
       setTimeout(() => {
-        self.datagrid.instance.editCell(
-          self.datagrid.instance.getRowIndexByKey(currentRowData.id),
-          "forfait"
-        );
-        setTimeout(() => {
-          const myInput = document.querySelector(".dx-state-focused");
-          myInput?.nextElementSibling.querySelector("input").focus();
-        }, 1);
+        if (self.datagrid.instance.getRowIndexByKey(currentRowData.id) >= 0) {
+          self.datagrid.instance.editCell(
+            self.datagrid.instance.getRowIndexByKey(currentRowData.id),
+            "forfait"
+          );
+          setTimeout(() => {
+            const myInput = document.querySelector(".dx-state-focused");
+            myInput?.nextElementSibling.querySelector("input").focus();
+          }, 1);
+        }
       }, 100);
     }
 
@@ -172,6 +174,21 @@ export class GridForfaitLitigeComponent {
       newData.responsableUniteFactureCode = "UNITE";
     }
 
+  }
+
+  onEditingStart(cell) {
+    // Disallow changing unit price if cloture client / fournisseur
+    if (cell.column.dataField === "forfait") {
+      setTimeout(() => {
+        const inputs = document.querySelectorAll(".grid-forfait-litige .merged input");
+        if (this.infosLitige.clientClos) {
+          (inputs[0] as HTMLInputElement).disabled = true;
+          self.calcValue(null, null, cell.data);
+        }
+        if (this.infosLitige.fournisseurClos)
+          (inputs[1] as HTMLInputElement).disabled = true;
+      }, 10);
+    }
   }
 
   public onSaving(event: {

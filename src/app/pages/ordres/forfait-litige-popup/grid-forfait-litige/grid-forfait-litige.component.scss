@@ -2,23 +2,39 @@
 
 
 ::ng-deep .grid-forfait-litige {
+
   max-width: 100% !important;
 
-  .merged div {
-    width: 100%;
-    border-bottom: 0;
-    color: darken($base-success, 20%);
+  .merged {
 
-    &:first-child {
-      border-bottom: 1px solid #CCC;
-      color: darken($base-danger, 10%);
+    input {
+      padding-right: 21px !important;
+    }
+
+    .merged-div,
+    input {
+      width: 100%;
+      border-bottom: 0;
+
+      &:first-child {
+        border-bottom: 1px solid #CCC;
+      }
+    }
+
+    > :first-child input,
+    > :first-child {
+      @extend .client-cell;
+    }
+
+    > :last-child input,
+    > :last-child {
+      @extend .responsable-cell;
     }
   }
 
   .dx-editor-cell .dx-texteditor-input {
     text-align: right;
   }
-
 
 }
 

@@ -610,7 +610,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
-      finalize(() => this.gridLot.refresh()),
+      // finalize(() => this.gridLot.refresh()),
     ).subscribe(lot => {
       this.lot = [this.lot[0], lot];
       this.forfaitPopup.visible = true;
