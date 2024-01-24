@@ -123,6 +123,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>
   ) {
+    // Returns if litige is closed on client side
     if (rowData.ligne.litige.clientCloture) return;
     const baseTarif = rowData.ligne.clientIndicateurForfait
       ? "UNITE"
@@ -139,7 +140,8 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>
   ) {
-    if (rowData.ligne.litige.ordreAvoirFournisseur?.id) return;
+    // Returns if litige is closed on fournisseur side
+    if (rowData.ligne.litige.fournisseurCloture || rowData.ligne.litige.ordreAvoirFournisseur?.id) return;
 
     const baseTarif = rowData.ligne.responsableIndicateurForfait
       ? "UNITE"
@@ -265,6 +267,9 @@ export class GridLotComponent implements OnInit, OnChanges {
         "ligne.ordreLigne.article.emballage.uniteParColis",
         "ligne.litige.ordreAvoirFournisseur.id",
         "ligne.litige.responsableTiers",
+        // mandatory for locking fields
+        "ligne.litige.clientCloture",
+        "ligne.litige.fournisseurCloture",
       ]),
       map((fields) =>
         // upgrade fields that require sub selections
@@ -297,10 +302,18 @@ export class GridLotComponent implements OnInit, OnChanges {
     ].includes(cell.column.dataField) && this.headerData?.consequence === "F")
       cell.cancel = true;
 
-    // if (cell.column.dataField === "prixUnitaire" && cell.data.ligne.litige.clientCloture) {
-    //   return self.setPrixUnitaires(null, null, cell.data);
-    // };
-
+    // Disallow changing unit price if cloture client / fournisseur
+    if (cell.column.dataField === "prixUnitaire") {
+      setTimeout(() => {
+        const inputs = document.querySelectorAll(".grid-litige-lots .merged input");
+        if (cell.data.ligne.litige.clientCloture) {
+          (inputs[0] as HTMLInputElement).disabled = true;
+          self.setPrixUnitaires(null, null, cell.data);
+        }
+        if (cell.data.ligne.litige.fournisseurCloture)
+          (inputs[1] as HTMLInputElement).disabled = true;
+      }, 10);
+    }
   }
 
   /**
