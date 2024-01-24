@@ -73,7 +73,7 @@ export class PackingListPopupComponent implements OnChanges {
     if (this.ordre) {
       this.title = this.localizeService.localize("packing-list-popup-title");
       this.ordreId = this.ordre.id;
-      this.printDocumentTitle = `packing-list-${this.ordre?.numero}`;
+      this.printDocumentTitle = `Packing-list-${this.ordre?.numero}`;
     }
   }
 
