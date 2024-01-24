@@ -123,6 +123,7 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>
   ) {
+    if (rowData.ligne.litige.clientCloture) return;
     const baseTarif = rowData.ligne.clientIndicateurForfait
       ? "UNITE"
       : rowData.ligne.clientUniteFactureCode;
@@ -295,6 +296,11 @@ export class GridLotComponent implements OnInit, OnChanges {
       "ligne.clientNombrePalettes"
     ].includes(cell.column.dataField) && this.headerData?.consequence === "F")
       cell.cancel = true;
+
+    // if (cell.column.dataField === "prixUnitaire" && cell.data.ligne.litige.clientCloture) {
+    //   return self.setPrixUnitaires(null, null, cell.data);
+    // };
+
   }
 
   /**

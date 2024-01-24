@@ -19,6 +19,11 @@
   max-width: 100% !important;
   margin: 0 2px !important;
 
+  .merged input {
+    text-align: right;
+    font-size: 15px !important;
+  }
+
   td.comment {
     white-space: normal;
     line-height: 16px;
@@ -48,10 +53,12 @@
         display: initial;
         text-align: right;
 
+        > :first-child input,
         > :first-child {
           @extend .client-cell;
         }
 
+        > :last-child input,
         > :last-child {
           @extend .responsable-cell;
         }

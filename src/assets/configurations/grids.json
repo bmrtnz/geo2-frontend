@@ -8316,6 +8316,16 @@
         "visible": false,
         "showInColumnChooser": false,
         "allowEditing": false
+      },
+      {
+        "dataField": "ligne.litige.clientCloture",
+        "visible": false,
+        "showInColumnChooser": false
+      },
+      {
+        "dataField": "ligne.litige.fournisseurCloture",
+        "visible": false,
+        "showInColumnChooser": false
       }
     ]
   },
