@@ -23,6 +23,10 @@
 
     &.dx-row-focused td {
       background-color: $BW-purple-dark !important;
+
+      &.dx-command-select .dx-checkbox-icon {
+        border-color: #FFF;
+      }
     }
 
     td {

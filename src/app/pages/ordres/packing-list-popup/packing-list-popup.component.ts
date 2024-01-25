@@ -139,6 +139,7 @@ export class PackingListPopupComponent implements OnChanges {
   selectedOrderIds(e) {
     this.running.preview = false;
     this.running.print = false;
+    this.running.sendPrinter = false;
     this.ordres = e;
     this.selectOk = !!e?.length;
   }
