@@ -20,6 +20,7 @@ import { environment } from "environments/environment";
 import { map } from "rxjs/operators";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { DatePipe } from "@angular/common";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 
 
 @Component({
@@ -44,6 +45,7 @@ export class GridPackingListComponent {
     private ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
+    public currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
     private datePipe: DatePipe
   ) {
@@ -83,9 +85,6 @@ export class GridPackingListComponent {
     this.dataSource = this.ordresService.getDataSource_v2(
       await fields.toPromise()
     );
-    // Retrieves all orders from the same entrepot
-
-
     // Retrieves orders of less than 180 days
     // and all orders from the same entrepot
     const minDate = new Date();
@@ -93,7 +92,7 @@ export class GridPackingListComponent {
     // this.dataSource.filter([
     //   ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
     //   "and",
-    //   ["entrepot.id", "=", this.entrepotId]
+    //   ["entrepot.id", "=", this.entrepotId],
     // ])
     this.dataSource.filter([
       [["id", "=", "1672202"], "or", ["id", "=", "1670066"]],

@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -24,13 +25,14 @@ import { lastValueFrom } from "rxjs";
 import { FormUtilsService } from "app/shared/services/form-utils.service";
 import hideToasts from "devextreme/ui/toast/hide_toasts";
 import { DateManagementService } from "app/shared/services/date-management.service";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-packing-list-popup",
   templateUrl: "./packing-list-popup.component.html",
   styleUrls: ["./packing-list-popup.component.scss"],
 })
-export class PackingListPopupComponent implements OnChanges {
+export class PackingListPopupComponent implements OnInit, OnChanges {
   constructor(
     private localizeService: LocalizationService,
     private authService: AuthService,
@@ -76,11 +78,23 @@ export class PackingListPopupComponent implements OnChanges {
   public infoPopupText: string;
   public printDocumentTitle;
   public running = {
+    load: false,
     preview: false,
     print: false,
     sendPrinter: false
   }
+  public formGroup = new UntypedFormGroup({
+    dateDep: new UntypedFormControl(),
+    dateArr: new UntypedFormControl(),
+    dateImp: new UntypedFormControl(),
+    PO: new UntypedFormControl(),
+    switchCltEnt: new UntypedFormControl(),
+  });
 
+
+  ngOnInit() {
+    this.formGroup.valueChanges.subscribe((_) => this.resetRunning());
+  }
 
   ngOnChanges() {
     if (this.ordre) {
@@ -126,10 +140,8 @@ export class PackingListPopupComponent implements OnChanges {
     this.dateArrInput.instance.reset();
     this.POInput.instance.reset();
     this.switchCltEnt.instance.reset();
-    this.gridComponent.datagrid.dataSource = null;
     this.gridComponent.datagrid.instance.clearSelection();
-    this.running.preview = false;
-    this.running.print = false;
+    this.gridComponent.datagrid.dataSource = null;
   }
 
   hidePopup() {
@@ -137,11 +149,13 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   selectedOrderIds(e) {
-    this.running.preview = false;
-    this.running.print = false;
-    this.running.sendPrinter = false;
+    this.resetRunning();
     this.ordres = e;
     this.selectOk = !!e?.length;
+  }
+
+  resetRunning() {
+    Object.keys(this.running).forEach(key => this.running[key] = false);
   }
 
   resizePopup() {
@@ -157,7 +171,7 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   async onPreview() {
-
+    this.running.load = true;
     notify({
       message: this.localizeService.localize("prepare-preview"),
       displayTime: 60000
@@ -169,6 +183,13 @@ export class PackingListPopupComponent implements OnChanges {
 
     const result = await lastValueFrom(
       this.ordresService.getOne_v2(this.ordre?.id, [
+        "client.raisonSocial",
+        "client.adresse1",
+        "client.adresse2",
+        "client.adresse3",
+        "client.codePostal",
+        "client.ville",
+        "client.pays.description",
         "entrepot.raisonSocial",
         "entrepot.adresse1",
         "entrepot.adresse2",
@@ -182,16 +203,17 @@ export class PackingListPopupComponent implements OnChanges {
     );
 
     this.order = { ...this.ordre, ...result.data.ordre };
+    const tiers = !this.switchCltEnt.value ? "client" : "entrepot";
     const address = [
-      this.order.entrepot.raisonSocial,
-      this.order.entrepot.adresse1,
-      this.order.entrepot.adresse2,
-      this.order.entrepot.adresse3,
-      this.order.entrepot.codePostal + " " + this.order.entrepot.ville,
-      this.order.entrepot.pays.description,
+      this.order[tiers].raisonSocial,
+      this.order[tiers].adresse1,
+      this.order[tiers].adresse2,
+      this.order[tiers].adresse3,
+      this.order[tiers].codePostal + " " + this.order[tiers].ville,
+      this.order[tiers].pays.description,
     ]
     this.address = address.join("\n");
-    this.numeroPo = this.POInput.value;
+    this.numeroPo = this.POInput.value || "-";
 
     this.ordres.map(async (ord, idx) => {
       // [{ id: '1670066', numero: '659768' }, { id: '1672202', numero: '661229' }].map(async (ord, idx) => {
@@ -236,10 +258,8 @@ export class PackingListPopupComponent implements OnChanges {
   preview() {
     this.running.preview = true;
     hideToasts();
-    setTimeout(() => {
-      const Element = document.querySelector(".preview-anchor") as HTMLElement;
-      Element?.scrollIntoView({ behavior: "smooth" });
-    }, 400);
+    const Element = document.querySelector(".preview-anchor") as HTMLElement;
+    setTimeout(() => Element?.scrollIntoView({ behavior: "smooth" }), 10);
   }
 
   async onPrint() {

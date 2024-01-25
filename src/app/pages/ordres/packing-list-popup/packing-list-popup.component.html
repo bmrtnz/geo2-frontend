@@ -30,9 +30,7 @@
     ></dx-button>
     <dx-button
       class="upperButton print-button float-right"
-      [disabled]="
-        !this.running.preview || this.running.print || !validateFields()
-      "
+      [disabled]="!running?.preview || running?.print || !validateFields()"
       type="default"
       text="{{ 'btn-print' | localize }}"
       [focusStateEnabled]="false"
@@ -55,109 +53,118 @@
             ></dx-text-box>
           </div>
         </div>
-
-        <div class="inputs-container date-inputs">
-          <!-- Date de départ prévue -->
-          <div class="dx-field">
-            <div class="dx-field-label text-align-right">
-              {{ "packing-list-date-depart-prevue" | localize }}
-            </div>
-            <div class="dx-field-value">
-              <dx-date-box
-                #dateDep
-                [displayFormat]="'dd-MM-yy'"
-                dateSerializationFormat="yyyy-MM-dd"
-                type="date"
-                valueChangeEvent="keyup"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required"></dxi-validation-rule>
-                </dx-validator>
-              </dx-date-box>
-            </div>
-          </div>
-          <!-- Date de livraison prévue -->
-          <div class="dx-field">
-            <div class="dx-field-label text-align-right">
-              {{ "packing-list-date-arrivee-prevue" | localize }}
-            </div>
-            <div class="dx-field-value">
-              <dx-date-box
-                #dateArr
-                [displayFormat]="'dd-MM-yy'"
-                dateSerializationFormat="yyyy-MM-dd"
-                type="date"
-                valueChangeEvent="keyup"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required"></dxi-validation-rule>
-                </dx-validator>
-              </dx-date-box>
-            </div>
-          </div>
-          <!-- Date d'impressione -->
-          <div class="dx-field">
-            <div class="dx-field-label text-align-right">
-              {{ "packing-list-date-impression" | localize }}
-            </div>
-            <div class="dx-field-value">
-              <dx-date-box
-                #dateImp
-                [displayFormat]="'dd-MM-yy'"
-                dateSerializationFormat="yyyy-MM-dd"
-                type="date"
-                valueChangeEvent="keyup"
-              >
-                <dx-validator>
-                  <dxi-validation-rule type="required"></dxi-validation-rule>
-                </dx-validator>
-              </dx-date-box>
-            </div>
-          </div>
-        </div>
-
-        <div class="inputs-container">
-          <!-- PO -->
-          <div class="dx-field">
-            <div class="dx-field-label text-align-right">
-              {{ "packing-list-PO" | localize }}
-            </div>
-            <div class="dx-field-value">
-              <dx-text-box #PO></dx-text-box>
-            </div>
-          </div>
-
-          <!-- Switch Client / Entrepôt -->
-          <dx-box>
-            <dxi-item ratio="0.29">
-              <div class="switch-label text-align-right">
-                {{ "packing-list-facture" | localize }}
+        <form [formGroup]="formGroup">
+          <div class="inputs-container date-inputs">
+            <!-- Date de départ prévue -->
+            <div class="dx-field">
+              <div class="dx-field-label text-align-right">
+                {{ "packing-list-date-depart-prevue" | localize }}
               </div>
-            </dxi-item>
-            <dxi-item ratio="0.7">
-              <div class="dx-field departLivraison-switch">
-                <div
-                  class="dx-field-label dx-field-label-left text-align-right"
+              <div class="dx-field-value">
+                <dx-date-box
+                  #dateDep
+                  formControlName="dateDep"
+                  [displayFormat]="'dd-MM-yy'"
+                  dateSerializationFormat="yyyy-MM-dd"
+                  type="date"
+                  valueChangeEvent="keyup"
                 >
-                  {{ "tiers-client" | localize }}
-                </div>
-                <div class="dx-field-value">
-                  <dx-switch
-                    #switchCltEnt
-                    class="symetrical-switch"
-                    [switchedOnText]=""
-                    [switchedOffText]=""
-                  ></dx-switch>
-                </div>
-                <div
-                  class="dx-field-label dx-field-label-right text-align-left"
-                >
-                  {{ "tiers-entrepot" | localize }}
-                </div>
+                  <dx-validator>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-date-box>
               </div>
-            </dxi-item>
-          </dx-box>
-        </div>
+            </div>
+            <!-- Date de livraison prévue -->
+            <div class="dx-field">
+              <div class="dx-field-label text-align-right">
+                {{ "packing-list-date-arrivee-prevue" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-date-box
+                  #dateArr
+                  formControlName="dateArr"
+                  [displayFormat]="'dd-MM-yy'"
+                  dateSerializationFormat="yyyy-MM-dd"
+                  type="date"
+                  valueChangeEvent="keyup"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-date-box>
+              </div>
+            </div>
+            <!-- Date d'impressione -->
+            <div class="dx-field">
+              <div class="dx-field-label text-align-right">
+                {{ "packing-list-date-impression" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-date-box
+                  #dateImp
+                  formControlName="dateImp"
+                  [displayFormat]="'dd-MM-yy'"
+                  dateSerializationFormat="yyyy-MM-dd"
+                  type="date"
+                  valueChangeEvent="keyup"
+                >
+                  <dx-validator>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-date-box>
+              </div>
+            </div>
+          </div>
+
+          <div class="inputs-container">
+            <!-- PO -->
+            <div class="dx-field">
+              <div class="dx-field-label text-align-right">
+                {{ "packing-list-PO" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  #PO
+                  formControlName="PO"
+                  [valueChangeEvent]="'keyup'"
+                ></dx-text-box>
+              </div>
+            </div>
+
+            <!-- Switch Client / Entrepôt -->
+            <dx-box>
+              <dxi-item ratio="0.29">
+                <div class="switch-label text-align-right">
+                  {{ "packing-list-facture" | localize }}
+                </div>
+              </dxi-item>
+              <dxi-item ratio="0.7">
+                <div class="dx-field departLivraison-switch">
+                  <div
+                    class="dx-field-label dx-field-label-left text-align-right"
+                  >
+                    {{ "tiers-client" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-switch
+                      #switchCltEnt
+                      formControlName="switchCltEnt"
+                      class="symetrical-switch"
+                      [switchedOnText]=""
+                      [switchedOffText]=""
+                    ></dx-switch>
+                  </div>
+                  <div
+                    class="dx-field-label dx-field-label-right text-align-left"
+                  >
+                    {{ "tiers-entrepot" | localize }}
+                  </div>
+                </div>
+              </dxi-item>
+            </dx-box>
+          </div>
+        </form>
 
         <div style="clear: both"></div>
 
@@ -178,7 +185,10 @@
           <dx-button
             [ngClass]="{
               'inactive-button':
-                !selectOk || this.running.preview || !validateFields()
+                !selectOk ||
+                running?.load ||
+                running?.preview ||
+                !validateFields()
             }"
             text="{{ 'btn-preview' | localize }}"
             type="default"
