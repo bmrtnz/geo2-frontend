@@ -2,19 +2,27 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-.generate-document-container {
 
+.generate-document-container {
+  position: relative;
+  left: 50%;
+  width: 1200px;
+  min-height: 1690px;
+  padding: 0;
+  transform: translateX(-50%);
+  overflow: hidden;
   -webkit-print-color-adjust: exact !important;
   /* Chrome, Safari 6 – 15.3, Edge */
   print-color-adjust: exact !important;
   /* Firefox 97+, Safari 15.4+ */
-
+  background-color: #FFF;
   color: #212121;
-
-  position: relative;
   float: left;
-  padding: 0;
-  width: 1200px;
+
+  &.doc-shadow {
+    margin: 10px 10px 30px 0;
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, .7);
+  }
 
   .normal-font {
     font-weight: normal;
@@ -169,7 +177,7 @@
       }
 
       .detail-col-4 {
-        width: 95px;
+        width: 105px;
       }
 
       .detail-col-5 {
@@ -196,6 +204,10 @@
       .total-row {
         background: #CCC;
         font-weight: bold;
+
+        td {
+          padding-bottom: 4px;
+        }
 
         .detail-col-1 {
           border-right: 0 !important;

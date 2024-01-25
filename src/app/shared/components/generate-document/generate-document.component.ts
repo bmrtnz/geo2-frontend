@@ -1,4 +1,4 @@
-import { Component, Input, NgModule, OnChanges } from "@angular/core";
+import { Component, ElementRef, Input, NgModule, OnChanges } from "@angular/core";
 import { SharedModule } from "../../shared.module";
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { LocalizationService } from "app/shared/services";
@@ -18,6 +18,10 @@ export class GenerateDocumentComponent implements OnChanges {
   @Input() ordres: any[];
   @Input() ordreLignes: any[];
   @Input() numeroPo: string;
+  @Input() totaux: { colis: number, gross: number, net: number };
+  @Input() previewProcess: boolean;
+  @Input() sendPrinterProcess: boolean;
+  @Input() printDate;
 
 
   public fullAddress: string;
@@ -32,7 +36,6 @@ export class GenerateDocumentComponent implements OnChanges {
 
 
   ngOnChanges() {
-    this.date = this.dateMgtService.formatDate(new Date(), "dd/MM/yyyy");
     this.title = this.localization.localize(`document-${this.document}`);
   }
 

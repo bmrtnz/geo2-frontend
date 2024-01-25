@@ -1,5 +1,5 @@
 <dx-popup
-  width="800"
+  width="1270"
   height="auto"
   [fullScreen]="this.popupFullscreen"
   [dragEnabled]="true"
@@ -28,10 +28,21 @@
       [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
+    <dx-button
+      class="upperButton print-button float-right"
+      [disabled]="
+        !this.running.preview || this.running.print || !validateFields()
+      "
+      type="default"
+      text="{{ 'btn-print' | localize }}"
+      [focusStateEnabled]="false"
+      [visible]="true"
+      (onClick)="onPrint()"
+    ></dx-button>
   </div>
 
   <div *dxTemplate="let d of 'content'">
-    <dx-scroll-view>
+    <dx-scroll-view [useNative]="true">
       <div class="packing-list-content-container not-print-mode">
         <div class="dx-field entrepot-field">
           <div class="dx-field-label text-align-right">
@@ -146,14 +157,6 @@
               </div>
             </dxi-item>
           </dx-box>
-          <dx-button
-            class="upperButton print-button float-right"
-            type="default"
-            text="{{ 'btn-print' | localize }}"
-            [focusStateEnabled]="false"
-            [visible]="true"
-            (onClick)="onPrint()"
-          ></dx-button>
         </div>
 
         <div style="clear: both"></div>
@@ -173,20 +176,28 @@
             (onClick)="hidePopup()"
           ></dx-button>
           <dx-button
-            [ngClass]="{ 'inactive-button': !selectOk || !validateFields() }"
-            text="{{ 'btn-valider' | localize }}"
+            [ngClass]="{
+              'inactive-button':
+                !selectOk || this.running.preview || !validateFields()
+            }"
+            text="{{ 'btn-preview' | localize }}"
             type="default"
-            (onClick)="onSubmit()"
+            (onClick)="onPreview()"
           ></dx-button>
         </div>
       </div>
-      <!-- [class]="'print-mode'" -->
+      <br />
+      <div class="preview-anchor"></div>
       <app-generate-document
         [document]="'packing-list'"
         [address]="address"
         [numeroPo]="numeroPo"
         [ordre]="order"
         [ordres]="ordres"
+        [totaux]="totaux"
+        [previewProcess]="running?.preview"
+        [sendPrinterProcess]="running?.sendPrinter"
+        [printDate]="printDate"
       ></app-generate-document>
     </dx-scroll-view>
   </div>

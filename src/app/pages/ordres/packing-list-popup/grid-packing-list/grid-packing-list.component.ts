@@ -90,9 +90,13 @@ export class GridPackingListComponent {
     // and all orders from the same entrepot
     const minDate = new Date();
     minDate.setDate(minDate.getDate() - 180);
-    const array = [];
+    // this.dataSource.filter([
+    //   ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
+    //   "and",
+    //   ["entrepot.id", "=", this.entrepotId]
+    // ])
     this.dataSource.filter([
-      ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
+      [["id", "=", "1672202"], "or", ["id", "=", "1670066"]],
       "and",
       ["entrepot.id", "=", this.entrepotId]
     ])
