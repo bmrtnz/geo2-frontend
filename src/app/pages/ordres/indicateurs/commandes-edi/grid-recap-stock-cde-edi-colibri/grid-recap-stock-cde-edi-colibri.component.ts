@@ -121,7 +121,7 @@ export class GridRecapStockCdeEdiColibriComponent {
     if (e.rowType === "data") {
       // Alternate colors vs gtin
       this.setAlternateColors();
-      e.rowElement.classList.add(this.colors[e.data.id] ? "green-row" : "blue-row");
+      e.rowElement.classList.add(this.colors[e.data.id] ? "alternate-row-1" : "alternate-row-2");
 
       // Hiding checkboxes when there's no fournisseur assigned
       if (!e.data.fournisseur?.id) e.rowElement.classList.add("hide-select-checkbox");
