@@ -43,8 +43,18 @@ export class GenerateDocumentComponent implements OnChanges {
     if (this.ordres) return this.ordres.map(ord => ord.numero).join(" ");
   }
 
-  numMgt(num, digits = 1) {
-    return num ? num.toFixed(digits).replace(".", ",") : "";
+  numDigits(num, digits = 1) {
+    return this.bigNumbers(num ? num.toFixed(digits).replace(".", ",") : "");
+  }
+
+  bigNumbers(num) {
+    return num ? num.toString().split("")
+      .reverse()
+      .join("")
+      .replace(/([0-9]{3})/g, "$1 ")
+      .split("")
+      .reverse()
+      .join("") : "";
   }
 
 }

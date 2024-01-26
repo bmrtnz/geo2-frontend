@@ -214,7 +214,6 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
       this.order[tiers].pays.description,
     ]
     this.address = address.filter(add => add).join("\n");
-    this.numeroPo = this.POInput.value || "-";
 
     let index = 0;
     this.ordres.map(async (ord, idx) => {
@@ -237,6 +236,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
   }
 
   preview() {
+    let refsClient = [];
     this.containers = [];
     this.totaux = {
       colis: 0,
@@ -244,6 +244,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
       net: 0
     }
     this.ordres.map(ord => {
+      refsClient.push(ord.referenceClient);
       if (!this.containers.find(cont => cont.id === ord.logistiques[0]?.numeroContainer)) this.containers.push({
         id: ord.logistiques[0].numeroContainer,
         lignes: [],
@@ -259,6 +260,9 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
         container.lignes.push(ligne);
       })
     })
+    // We use referenceClients as PO, otherwise PO entered by user, otherwise "-"
+    refsClient = refsClient.filter(r => r);
+    this.numeroPo = refsClient.length ? refsClient.join(" ") : this.POInput.value ?? "-";
 
     this.containers.map(c => {
       this.totaux.colis += c.sumColis;
@@ -271,7 +275,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
     this.running.preview = true;
     hideToasts();
     const Element = document.querySelector(".preview-anchor") as HTMLElement;
-    setTimeout(() => Element?.scrollIntoView({ behavior: "smooth" }), 10);
+    setTimeout(() => Element?.scrollIntoView({ behavior: "smooth" }), 100);
   }
 
   async onPrint() {
@@ -323,7 +327,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
           depart: new Date(this.dateDepInput.value).toISOString(),
           livraison: new Date(this.dateArrInput.value).toISOString(),
           impression: new Date(this.dateImpInput.value).toISOString(),
-          numeroPo: this.POInput.value || "-",
+          numeroPo: this.numeroPo.substring(0, 16), // Database limitation,
           typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
           mail: this.authService.currentUser.email ?? "",
           ordres: myOrders,

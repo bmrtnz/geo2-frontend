@@ -144,12 +144,14 @@
             <td class="detail-col-3">
               {{ ligne?.article?.normalisation?.calibreMarquage?.description }}
             </td>
-            <td class="detail-col-4">{{ ligne?.nombreColisExpedies }}</td>
+            <td class="detail-col-4">
+              {{ bigNumbers(ligne?.nombreColisExpedies) }}
+            </td>
             <td class="detail-col-5">
-              {{ numMgt(ligne?.poidsBrutExpedie) }}
+              {{ numDigits(ligne?.poidsBrutExpedie) }}
             </td>
             <td class="detail-col-6">
-              {{ numMgt(ligne?.poidsNetExpedie) }}
+              {{ numDigits(ligne?.poidsNetExpedie) }}
             </td>
           </tr>
           <tr class="total-row">
@@ -158,12 +160,14 @@
               Total&nbsp;{{ container.id }}
             </td>
             <td class="detail-col-3 text-align-left">:</td>
-            <td class="detail-col-4 total-sum">{{ container?.sumColis }}</td>
+            <td class="detail-col-4 total-sum">
+              {{ bigNumbers(container?.sumColis) }}
+            </td>
             <td class="detail-col-5 total-sum">
-              {{ numMgt(container?.sumGross) }}
+              {{ numDigits(container?.sumGross) }}
             </td>
             <td class="detail-col-6 total-sum">
-              {{ numMgt(container?.sumNet) }}
+              {{ numDigits(container?.sumNet) }}
             </td>
           </tr>
         </tbody>
@@ -172,12 +176,14 @@
             <td class="detail-col-1"></td>
             <td class="detail-col-2"></td>
             <td class="detail-col-3 text-align-right">Total quantity&nbsp;:</td>
-            <td class="detail-col-4 total-sum">{{ totaux?.colis }}</td>
+            <td class="detail-col-4 total-sum">
+              {{ bigNumbers(totaux?.colis) }}
+            </td>
             <td class="detail-col-5 total-sum">
-              {{ numMgt(totaux?.gross) }}
+              {{ numDigits(totaux?.gross) }}
             </td>
             <td class="detail-col-6 total-sum">
-              {{ numMgt(totaux?.net) }}
+              {{ numDigits(totaux?.net) }}
             </td>
           </tr>
         </tfoot>
