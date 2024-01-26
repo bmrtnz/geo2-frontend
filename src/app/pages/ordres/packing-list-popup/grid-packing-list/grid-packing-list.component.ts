@@ -99,6 +99,11 @@ export class GridPackingListComponent {
       "and",
       ["entrepot.id", "=", this.entrepotId]
     ])
+    // this.dataSource.filter([
+    //   [["id", "=", "1586575"], "or", ["id", "=", "1667632"], "or", ["id", "=", "1667643"]],
+    //   "and",
+    //   ["entrepot.id", "=", this.entrepotId]
+    // ])
     this.datagrid.dataSource = this.dataSource;
   }
 }

@@ -15,7 +15,8 @@
   class="generate-document-container"
   [ngClass]="{
     'doc-hidden': !previewProcess,
-    'doc-shadow': !sendPrinterProcess
+    'doc-shadow': !sendPrinterProcess,
+    sendPrinter: sendPrinterProcess
   }"
 >
   <div class="date">{{ printDate }}</div>
@@ -131,14 +132,11 @@
             </th>
           </tr>
         </thead>
-        <tbody *ngFor="let ordre of ordres">
+        <tbody *ngFor="let container of containers">
           <!-- Loop through lines -->
-          <tr *ngFor="let ligne of ordre.lignes">
-            <td
-              class="detail-col-1"
-              *ngIf="ordre?.logistiques"
-            >
-              {{ ordre?.logistiques[0].numeroContainer }}
+          <tr *ngFor="let ligne of container.lignes">
+            <td class="detail-col-1">
+              {{ container.id }}
             </td>
             <td class="detail-col-2 text-align-left">
               {{ ligne?.article?.articleDescription?.descriptionLongue }}
@@ -148,24 +146,25 @@
             </td>
             <td class="detail-col-4">{{ ligne?.nombreColisExpedies }}</td>
             <td class="detail-col-5">
-              {{ ligne?.poidsBrutExpedie?.toFixed(1) }}
+              {{ numMgt(ligne?.poidsBrutExpedie) }}
             </td>
             <td class="detail-col-6">
-              {{ ligne?.poidsNetExpedie?.toFixed(1) }}
+              {{ numMgt(ligne?.poidsNetExpedie) }}
             </td>
           </tr>
           <tr class="total-row">
             <td class="detail-col-1"></td>
-            <td class="detail-col-2 text-align-right">Total</td>
-            <td
-              class="detail-col-3 text-align-left"
-              *ngIf="ordre?.logistiques"
-            >
-              &nbsp;&nbsp;{{ ordre?.logistiques[0].numeroContainer }}&nbsp;:
+            <td class="detail-col-2 text-align-right">
+              Total&nbsp;{{ container.id }}
             </td>
-            <td class="detail-col-4">{{ ordre?.sumColis }}</td>
-            <td class="detail-col-5">{{ ordre?.sumGross?.toFixed(1) }}</td>
-            <td class="detail-col-6">{{ ordre?.sumNet?.toFixed(1) }}</td>
+            <td class="detail-col-3 text-align-left">:</td>
+            <td class="detail-col-4 total-sum">{{ container?.sumColis }}</td>
+            <td class="detail-col-5 total-sum">
+              {{ numMgt(container?.sumGross) }}
+            </td>
+            <td class="detail-col-6 total-sum">
+              {{ numMgt(container?.sumNet) }}
+            </td>
           </tr>
         </tbody>
         <tfoot>
@@ -173,9 +172,13 @@
             <td class="detail-col-1"></td>
             <td class="detail-col-2"></td>
             <td class="detail-col-3 text-align-right">Total quantity&nbsp;:</td>
-            <td class="detail-col-4">{{ totaux?.colis }}</td>
-            <td class="detail-col-5">{{ totaux?.gross?.toFixed(1) }}</td>
-            <td class="detail-col-6">{{ totaux?.net?.toFixed(1) }}</td>
+            <td class="detail-col-4 total-sum">{{ totaux?.colis }}</td>
+            <td class="detail-col-5 total-sum">
+              {{ numMgt(totaux?.gross) }}
+            </td>
+            <td class="detail-col-6 total-sum">
+              {{ numMgt(totaux?.net) }}
+            </td>
           </tr>
         </tfoot>
       </table>

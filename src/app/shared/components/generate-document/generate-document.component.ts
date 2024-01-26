@@ -16,12 +16,12 @@ export class GenerateDocumentComponent implements OnChanges {
   @Input() address: string;
   @Input() ordre: Ordre;
   @Input() ordres: any[];
-  @Input() ordreLignes: any[];
   @Input() numeroPo: string;
   @Input() totaux: { colis: number, gross: number, net: number };
   @Input() previewProcess: boolean;
   @Input() sendPrinterProcess: boolean;
   @Input() printDate;
+  @Input() containers: any[];
 
 
   public fullAddress: string;
@@ -41,6 +41,10 @@ export class GenerateDocumentComponent implements OnChanges {
 
   listOrdres() {
     if (this.ordres) return this.ordres.map(ord => ord.numero).join(" ");
+  }
+
+  numMgt(num, digits = 1) {
+    return num ? num.toFixed(digits).replace(".", ",") : "";
   }
 
 }

@@ -7,7 +7,7 @@
   position: relative;
   left: 50%;
   width: 1200px;
-  min-height: 1690px;
+  min-height: 1697px;
   padding: 0;
   transform: translateX(-50%);
   overflow: hidden;
@@ -21,6 +21,10 @@
 
   &.doc-hidden {
     height: 0;
+    min-height: 0;
+  }
+
+  &.sendPrinter {
     min-height: 0;
   }
 
@@ -52,7 +56,7 @@
     line-height: 23px;
     float: left;
     white-space: pre-line;
-    width: 480px;
+    width: 420px;
   }
 
   .date {
@@ -85,16 +89,16 @@
     .MV-PO-container {
       position: relative;
       font-weight: bold;
-      font-size: 17px;
+      font-size: 18px;
       margin-top: 15px;
       margin-left: 45px;
-      text-transform: uppercase;
       float: left;
     }
 
     .order-no-title,
     .order-no {
       float: left;
+      text-transform: uppercase;
     }
 
     .order-no {
@@ -127,7 +131,7 @@
       }
 
       td {
-        font-size: 16px;
+        font-size: 17px;
         padding: 2px;
       }
     }
@@ -212,6 +216,10 @@
 
         td {
           padding-bottom: 4px;
+
+          &.total-sum {
+            letter-spacing: 0.3px;
+          }
         }
 
         .detail-col-1 {

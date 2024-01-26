@@ -61,6 +61,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
   @Output() address: string;
   @Output() order: Ordre;
   @Output() ordres: any[];
+  @Output() containers: any[];
   @Output() numeroPo: string;
   @Output() totaux: { colis: number, gross: number, net: number };
   @Output() printDate;
@@ -212,11 +213,11 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
       this.order[tiers].codePostal + " " + this.order[tiers].ville,
       this.order[tiers].pays.description,
     ]
-    this.address = address.join("\n");
+    this.address = address.filter(add => add).join("\n");
     this.numeroPo = this.POInput.value || "-";
 
+    let index = 0;
     this.ordres.map(async (ord, idx) => {
-      // [{ id: '1670066', numero: '659768' }, { id: '1672202', numero: '661229' }].map(async (ord, idx) => {
       const result = await lastValueFrom(
         this.ordresService.getOne_v2(ord.id, [
           "logistiques.numeroContainer",
@@ -229,33 +230,44 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
           "lignes.poidsNetExpedie",
         ])
       );
+      index++;
       this.ordres[idx] = { ...ord, ...result.data.ordre };
-
-      this.totaux = {
-        colis: 0,
-        gross: 0,
-        net: 0
-      }
-      this.ordres.map(ord => {
-        ord.sumColis = 0;
-        ord.sumGross = 0;
-        ord.sumNet = 0;
-        ord.lignes?.map(ligne => {
-          ord.sumColis += ligne.nombreColisExpedies ?? 0;
-          ord.sumGross += ligne.poidsBrutExpedie ?? 0;
-          ord.sumNet += ligne.poidsNetExpedie ?? 0;
-        })
-        this.totaux.colis += ord.sumColis;
-        this.totaux.gross += ord.sumGross;
-        this.totaux.net += ord.sumNet;
-      })
-
-      if (idx === this.ordres.length - 1) this.preview();
-
+      if (index === this.ordres.length) this.preview();
     });
   }
 
   preview() {
+    this.containers = [];
+    this.totaux = {
+      colis: 0,
+      gross: 0,
+      net: 0
+    }
+    this.ordres.map(ord => {
+      if (!this.containers.find(cont => cont.id === ord.logistiques[0]?.numeroContainer)) this.containers.push({
+        id: ord.logistiques[0].numeroContainer,
+        lignes: [],
+        sumColis: 0,
+        sumGross: 0,
+        sumNet: 0,
+      });
+      const container = this.containers.find(cont => cont.id === ord.logistiques[0].numeroContainer);
+      ord.lignes?.filter(ligne => ligne.poidsNetExpedie).map(ligne => {
+        container.sumColis += ligne.nombreColisExpedies ?? 0;
+        container.sumGross += ligne.poidsBrutExpedie ?? 0;
+        container.sumNet += ligne.poidsNetExpedie ?? 0;
+        container.lignes.push(ligne);
+      })
+    })
+
+    this.containers.map(c => {
+      this.totaux.colis += c.sumColis;
+      this.totaux.gross += c.sumGross;
+      this.totaux.net += c.sumNet;
+    })
+
+    this.ordres.sort((a, b) => a.logistiques[0].numeroContainer.localeCompare(b.logistiques[0].numeroContainer));
+    this.containers.sort((a, b) => a.id.localeCompare(b.id));
     this.running.preview = true;
     hideToasts();
     const Element = document.querySelector(".preview-anchor") as HTMLElement;
