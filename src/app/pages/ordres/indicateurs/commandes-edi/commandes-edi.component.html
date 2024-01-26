@@ -1,8 +1,9 @@
 <dx-popup
   [fullScreen]="this.popupFullscreen"
   [showTitle]="true"
-  [dragEnabled]="false"
-  [hideOnOutsideClick]="false"
+  [dragEnabled]="true"
+  [dragOutsideBoundary]="true"
+  [shading]="false"
   [(visible)]="visible"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
