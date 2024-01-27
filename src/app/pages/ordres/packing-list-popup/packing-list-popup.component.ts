@@ -275,7 +275,7 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
     this.running.preview = true;
     hideToasts();
     const Element = document.querySelector(".preview-anchor") as HTMLElement;
-    setTimeout(() => Element?.scrollIntoView({ behavior: "smooth" }), 100);
+    setTimeout(() => Element?.scrollIntoView({ behavior: "smooth" }), 200);
   }
 
   async onPrint() {
