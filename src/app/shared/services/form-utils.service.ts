@@ -122,6 +122,11 @@ export class FormUtilsService {
     if (myInput?.value?.length) myInput?.setSelectionRange(0, 0);
   }
 
+  // Compare two arrays (values & order)
+  areEqual(array1: any[], array2: any[]) {
+    return array1.length == array2.length && array1.every((element, index) => element === array2[index]);
+  }
+
   // Replace diacritics in a string
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
