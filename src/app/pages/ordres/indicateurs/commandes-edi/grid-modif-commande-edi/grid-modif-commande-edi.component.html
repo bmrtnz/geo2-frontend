@@ -3,7 +3,6 @@
   <dx-button
     class="order-edi-complete-button"
     type="default"
-    [focusStateEnabled]="false"
     text="{{ 'btn-completeOrderEdi' | localize }}"
     (onClick)="onCompleteOrderEdiClick()"
   ></dx-button>
@@ -86,7 +85,6 @@
         class="small-status-button"
         [visible]="false"
         type="default"
-        [focusStateEnabled]="false"
         [text]="'-'"
       ></dx-button>
       <div class="group-text-1"></div>

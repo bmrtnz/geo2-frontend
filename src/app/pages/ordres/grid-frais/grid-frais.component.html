@@ -2,7 +2,6 @@
 <dx-button
   class="dec-dedouan-button"
   type="default"
-  [focusStateEnabled]="false"
   [visible]="showDecDedouan"
   text="{{ 'btn-decdedouan' | localize }}"
   (onClick)="decDedouan()"
@@ -45,7 +44,7 @@
     [allowUpdating]="true"
     [allowDeleting]="true"
     [newRowPosition]="'last'"
-    [mode]="'batch'"
+    [mode]="'cell'"
   ></dxo-editing>
   <dxo-keyboard-navigation
     [enterKeyAction]="'moveFocus'"

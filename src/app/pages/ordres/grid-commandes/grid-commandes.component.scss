@@ -2,25 +2,20 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-::ng-deep .down-move-button,
-.up-move-button {
-  position: absolute;
-  z-index: 2;
-  margin-top: 6px;
-  right: 280px;
 
-  &.down-move-button {
-    right: 209px;
+// Fixing a height trouble
+::ng-deep .dx-sortable-clone tr.grid-commandes-rows {
+  height: 33px !important;
+}
+
+::ng-deep .grid-commandes,
+::ng-deep .dx-sortable-clone {
+
+  .multi-delete {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
   }
-}
-
-::ng-deep .multi-delete {
-  background: transparent !important;
-  border: none !important;
-  color: white !important;
-}
-
-::ng-deep .grid-commandes {
 
   .format-description {
     min-width: 400px !important;
@@ -46,12 +41,6 @@
     .dx-button-text {
       font-weight: bold;
     }
-  }
-
-  .dx-command-drag {
-    padding: 0 !important;
-    width: 25px !important;
-    min-width: 25px !important;
   }
 
   .dx-row-focused {
@@ -116,7 +105,7 @@
     td.dx-command-select {
       width: 20px !important;
       min-width: 20px !important;
-      padding: 0 4px 0 4px !important;
+      padding: 0 4px !important;
     }
   }
 

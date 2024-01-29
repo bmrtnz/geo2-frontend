@@ -7,7 +7,6 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
-import { fixObservableSubclass } from "@apollo/client/utilities";
 import { alert } from "devextreme/ui/dialog";
 import { Role } from "app/shared/models";
 import MouvementEntrepot from "app/shared/models/mouvement-entrepot.model";
@@ -39,7 +38,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
 import notify from "devextreme/ui/notify";
-import { FunctionResult } from "app/shared/services/api/functions.service";
+
 
 enum GridModel {
   MouvementsClients,
@@ -196,30 +195,8 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
       ),
     });
     const index = this.getActiveGridIndex();
+    this.datasources[index].filter([["solde", "<>", 0]]);
     this.paloxGrids.toArray()[index].dataSource = this.datasources[index];
-    this.datasources[index].filter([
-      // ["codeFournisseur", "=", "BURATTI"],
-      ["solde", "<>", 0],
-    ]);
-    // this.datasources[index].filter([
-    //   [
-    //     ["entree", "=", 0],
-    //     "and",
-    //     ["sortie", "<>", 0]
-    //   ],
-    //   "or",
-    //   [
-    //     ["entree", "<>", 0],
-    //     "and",
-    //     ["sortie", "=", 0]
-    //   ],
-    //   "or",
-    //   [
-    //     ["entree", "<>", 0],
-    //     "and",
-    //     ["sortie", "<>", 0],
-    //   ]
-    // ]);
   }
 
   onRowDblClick({ data }: { data: Ordre }) {

@@ -30,8 +30,12 @@
     cursor: help;
   }
 
+  .dx-datagrid-readonly .dx-checkbox {
+    pointer-events: none !important;
+  }
+
   .dx-command-edit.dx-command-edit-with-icons.dx-col-fixed {
-    padding-right: 10px !important;
+    padding: 0 !important;
   }
 
   .visibility-hidden {

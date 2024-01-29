@@ -806,7 +806,7 @@ export class OrdresService
     return Object
       .entries(Statut)
       .map(([key, value]) => ({
-        text: this.localize.localize(StatutLocale[key]),
+        text: this.localize.localize(StatutLocale[key])?.ucFirst(),
         value,
       }))
   }

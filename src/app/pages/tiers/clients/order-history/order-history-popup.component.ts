@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from "@angular/core";
 import Client from "app/shared/models/client.model";
+import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
@@ -27,7 +28,9 @@ export class OrderHistoryPopupComponent implements OnChanges {
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
-  constructor() { }
+  constructor(
+    private localizeService: LocalizationService,
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -39,9 +42,13 @@ export class OrderHistoryPopupComponent implements OnChanges {
     if (this.client?.id) {
       this.clientId = this.client.id;
       this.secteurId = this.client.secteur.id;
-      this.titleStart = "Historique client ";
+      this.titleStart = this.localizeService.localize("histo-client") + " ";
       this.titleMid = this.client.raisonSocial;
     }
+  }
+
+  clientChanged(e) {
+    this.titleMid = e?.raisonSocial ?? "";
   }
 
   onShowing(e) {

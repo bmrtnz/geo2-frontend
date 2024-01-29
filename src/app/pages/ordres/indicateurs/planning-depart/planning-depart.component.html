@@ -12,7 +12,7 @@
 ></dx-button>
 <div>
   <dx-box class="planning-dep-filters">
-    <dxi-item [ratio]="0.6">
+    <dxi-item [ratio]="0.4">
       <div class="dx-field">
         <div class="dx-field-label">
           {{ "tiers-clients-secteur" | localize }}
@@ -29,8 +29,29 @@
         </div>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.1"></dxi-item>
+    <dxi-item [ratio]="0.05"></dxi-item>
     <dxi-item [ratio]="0.4">
+      <!-- Bureau achat -->
+      <div class="dx-field field-large">
+        <div class="dx-field-label noEllipsis">
+          {{ "tiers-fournisseurs-bureauAchat" | localize }}
+        </div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #bureauAchatValue
+            [dataSource]="bureauxAchat"
+            [displayExpr]="displayCodeBefore"
+            valueExpr="id"
+            [searchExpr]="['id']"
+            [showClearButton]="true"
+          >
+            <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
+          </dx-select-box>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [ratio]="0.05"></dxi-item>
+    <dxi-item [ratio]="0.35">
       <div class="dx-field">
         <div class="dx-field-label difference-label">
           {{ "ordre-planning-depart-diff-expe" | localize }}
@@ -43,7 +64,6 @@
         ></dx-check-box>
       </div>
     </dxi-item>
-    <dxi-item [ratio]="0.4"></dxi-item>
   </dx-box>
   <dx-box class="planning-dep-filters">
     <dxi-item [ratio]="0.6">

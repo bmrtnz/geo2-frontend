@@ -3,7 +3,6 @@
     icon="arrowleft"
     type="default"
     [text]="returnBtnTxt"
-    [focusStateEnabled]="false"
     [disabled]="backBtnDisabled"
     (onClick)="backClick()"
   >
@@ -12,7 +11,6 @@
     class="float-right"
     icon="arrowright"
     text="Suivant"
-    [focusStateEnabled]="false"
     [disabled]="!hasNext()"
     (onClick)="selectNext()"
   >
@@ -21,7 +19,6 @@
     class="nav-list-under-btn float-right"
     icon="arrowleft"
     text="Précédent"
-    [focusStateEnabled]="false"
     [disabled]="!hasPrevious()"
     (onClick)="selectPrevious()"
   >

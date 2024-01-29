@@ -10,7 +10,6 @@
     type="default"
     class="create-litige-btn"
     [disabled]="!gridCdeHasRows || running?.createLitige || allowMutations"
-    [focusStateEnabled]="false"
     text="{{ 'ordres-litiges-create' | localize }}"
     (onClick)="createLitige()"
   >
@@ -308,7 +307,6 @@
                   class="btn-frais-annexes"
                   type="default"
                   [disabled]="litigeClosed && noFraisAnnexes"
-                  [focusStateEnabled]="false"
                   text="{{
                     (litigeClosed
                       ? 'btn-fraisAnnnexes-visualiser'
@@ -383,19 +381,16 @@
       <dx-button
         type="default"
         text="{{ 'btn-saveLitige' | localize }}"
-        [focusStateEnabled]="false"
         (onClick)="saveLitige()"
       ></dx-button>
       <dx-button
         type="normal"
         text="{{ 'btn-incidentLitige' | localize }}"
-        [focusStateEnabled]="false"
         (onClick)="incidentLitige()"
       ></dx-button>
       <dx-button
         type="normal"
         text="{{ 'btn-avisResolution' | localize }}"
-        [focusStateEnabled]="false"
         (onClick)="avisResolution()"
         [disabled]="!ordreAvoirFourni.value"
       ></dx-button>
@@ -403,13 +398,11 @@
         type="normal"
         text="{{ 'btn-recapInterne' | localize }}"
         [disabled]="running?.recapInterne"
-        [focusStateEnabled]="false"
         (onClick)="recapInterne()"
       ></dx-button>
       <dx-button
         type="normal"
         text="{{ 'associated-docs' | localize }}"
-        [focusStateEnabled]="false"
         [height]="'auto'"
         (onClick)="openAssociatedDocsPopup()"
       ></dx-button>
@@ -418,35 +411,30 @@
       <dx-button
         type="normal"
         text="{{ 'btn-creerLot' | localize }}"
-        [focusStateEnabled]="false"
         [disabled]="litigeClosed"
         (onClick)="creerLot()"
       ></dx-button>
       <dx-button
         type="normal"
         text="{{ 'btn-modifierLot' | localize }}"
-        [focusStateEnabled]="false"
         [disabled]="!selectedLitigeLigneKey?.length || litigeClosed"
         (onClick)="modifierLot()"
       ></dx-button>
       <dx-button
         type="normal"
         text="{{ 'btn-supprimerLot' | localize }}"
-        [focusStateEnabled]="false"
         [disabled]="!selectedLitigeLigneKey?.length || litigeClosed"
         (onClick)="supprimerLot()"
       ></dx-button>
       <dx-button
         type="danger"
         text="{{ 'btn-deleteLitige' | localize }}"
-        [focusStateEnabled]="false"
         [disabled]="!litigeDeletable"
         (onClick)="deleteLitige()"
       ></dx-button>
       <dx-button
         type="success"
         text="{{ 'btn-close' | localize }}"
-        [focusStateEnabled]="false"
         [disabled]="litigeClosed"
         (onClick)="cloturer()"
       ></dx-button>

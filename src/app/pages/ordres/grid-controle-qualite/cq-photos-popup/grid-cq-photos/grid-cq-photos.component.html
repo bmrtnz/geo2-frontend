@@ -93,7 +93,6 @@
     <dx-button
       class="small-CQ-button download-photos"
       type="success"
-      [focusStateEnabled]="false"
       icon="material-icons file_download"
       [text]="this.localization.localize('telecharger')"
       (onClick)="downloadPhoto(cell)"
@@ -102,7 +101,6 @@
     <dx-button
       class="small-CQ-button comment-photos"
       type="default"
-      [focusStateEnabled]="false"
       [text]="this.localization.localize('annoter')"
       (onClick)="commentPhoto()"
     ></dx-button>

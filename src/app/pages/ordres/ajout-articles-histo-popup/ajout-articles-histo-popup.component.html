@@ -22,7 +22,6 @@
       class="min-max-imize-popup-icon"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
 
@@ -32,7 +31,7 @@
       class="articles-valid-button"
       type="success"
       [disabled]="running"
-      [visible]="nbARticles > 0"
+      [visible]="nbARticles > 0 && !readOnlyMode"
       [text]="validBtnText"
       (onClick)="insertArticles()"
     ></dx-button>
@@ -52,6 +51,7 @@
           [gridSelectionEnabled]="gridSelectionEnabled"
           [popupShown]="popupShown"
           (hidePopup)="clearAndHidePopup()"
+          (clientChanged)="clientChanged($event)"
         ></app-grid-lignes-historique>
         <br />
       </div>

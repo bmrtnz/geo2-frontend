@@ -152,13 +152,23 @@ export class OrdresSuiviComponent implements AfterViewInit {
 
   enableFilters(value) {
     if (!value?.length) return;
+    let campagne;
+
     const criteria = this.searchCriteria.value;
     const operator = ["numero", "numeroFacture", "id"].includes(criteria)
       ? "="
       : "contains";
 
-    // La recherche par numero d'ordre doit fonctionner avec des valeurs partielles (_12345)
-    if (criteria === "numero") value = value.padStart(6, "0");
+    if (criteria === "numero") {
+      // La recherche par numero d'ordre doit pouvoir fonctionner avec un numéro d'ordre complet
+      if (new RegExp("^[0-9]{2}-[0-9]{6}$").test(value)) {
+        campagne = value.split("-")[0];
+        value = value.split("-")[1];
+      } else {
+        // La recherche par numero d'ordre doit pouvoir fonctionner avec des valeurs partielles (_12345)
+        value = value.padStart(6, "0");
+      }
+    }
 
     this.filter = [
       ["valide", "=", true],
@@ -168,10 +178,11 @@ export class OrdresSuiviComponent implements AfterViewInit {
       [criteria, operator, value],
     ];
 
-    // Current + prev campains filtering
-    if (this.currCampaign.value) {
+    // Current + prev campains filtering + full order number handle
+    if (campagne) {
+      this.filter.push("and", ["campagne.id", "=", campagne]);
+    } else if (this.currCampaign.value)
       this.filter.push("and", [["campagne.id", "=", this.campagneEnCours.id], "or", ["campagne.id", "=", this.prevCampagneEnCours.id]]);
-    }
   }
 
   findOrder() {

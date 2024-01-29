@@ -22,7 +22,6 @@
     <dx-button
       class="minimize-popup"
       icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       (onClick)="resizePopup()"
     ></dx-button>
@@ -43,7 +42,6 @@
         [uploadUrl]="uploadUrl()"
         [name]="bodyName"
         [uploadCustomData]="customUploadData"
-        [focusStateEnabled]="false"
         (onBeforeSend)="onBeforeSend($event)"
         (onUploaded)="onUploaded($event)"
         (onUploadError)="onUploadError($event)"

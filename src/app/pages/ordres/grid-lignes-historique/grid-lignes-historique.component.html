@@ -214,6 +214,7 @@
 <div
   *ngIf="hasLitigeDots"
   class="litige-dot-legend-container"
+  [ngClass]="{ 'shift-legend': popupShown }"
 >
   <div class="litige-dot-legend">L</div>
   <div class="litige-dot-legend-text">
@@ -293,24 +294,18 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
+
     <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
-      <!-- Colis summary in header -->
+      <!-- Colis summary in header
+      && Colis summary in groupFooter (for xlsx) -->
       <dxi-group-item
         *ngFor="let field of summaryFields"
         [name]="field"
-        [column]="field"
         summaryType="custom"
         [alignByColumn]="true"
-        [displayFormat]="'{0}'"
-      >
-      </dxi-group-item>
-      <!-- Colis summary in groupFooter (for xlsx) -->
-      <dxi-group-item
-        column="nombreColisExpedies"
-        summaryType="sum"
         showInColumn="nombreColisCommandes"
         [displayFormat]="'{0}'"
-        [showInGroupFooter]="true"
+        [showInGroupFooter]="field === 'nombreColisExpedies'"
       >
       </dxi-group-item>
       <!-- Date depart in groupFooter (for sorting purposes) -->
@@ -408,7 +403,6 @@
         class="grid-zoom-button"
         type="default"
         icon="material-icons search"
-        [focusStateEnabled]="false"
         (onClick)="openFilePopup(cell, $event)"
       >
       </dx-button>

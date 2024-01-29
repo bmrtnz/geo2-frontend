@@ -237,9 +237,9 @@ export class GridFraisComponent implements OnInit, AfterViewInit {
   fetchCodePlusDataSource(frais: OrdreFrais["id"]) {
     if (!frais) return;
     this.initializeFournDataSources();
-    if (frais === "RAMASS" || frais === "FRET")
+    if (["RAMASS", "FRET", "DIVERS"].includes(frais))
       return this.transporteurSource;
-    if (frais === "DEDIMP" || frais === "DEDEXP")
+    if (["DEDIMP", "DEDEXP"].includes(frais))
       return this.transitaireDouanierSource;
     if (frais === "TRANSI")
       return this.transitaireSource;

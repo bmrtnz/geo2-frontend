@@ -21,7 +21,6 @@
       class="min-max-imize-popup-icon"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
       icon="material-icons fullscreen_exit"
-      [focusStateEnabled]="false"
       (onClick)="resizePopup()"
     ></dx-button>
   </div>
@@ -38,6 +37,7 @@
           [popupShown]="popupShown"
           (hidePopup)="hidePopup()"
           (openOrder)="openOrder($event)"
+          (clientChanged)="clientChanged($event)"
         ></app-grid-order-history>
         <br />
       </div>

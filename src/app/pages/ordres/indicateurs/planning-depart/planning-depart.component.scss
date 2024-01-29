@@ -2,10 +2,12 @@
   width: 820px;
 
   .difference-label {
-    width: 170px;
+    width: 200px;
     text-overflow: initial;
     overflow: hidden;
     white-space: inherit;
+    text-align: right;
+    line-height: 14px;
   }
 }
 
