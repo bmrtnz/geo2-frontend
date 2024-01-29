@@ -383,12 +383,12 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
 
   calculateNombrePalettesCommandees(data) {
     // Ajout type colis
-    return data.nombrePalettesExpediees + "/" + (data.nombrePalettesCommandees ?? 0);
+    return (data.nombrePalettesCommandees ?? 0) + "/" + (data.nombrePalettesExpediees ?? 0);
   }
 
   calculateNombreColisCommandes(data) {
     // Ajout type colis
-    return data.nombreColisExpedies + "/" + (data.nombreColisCommandes ?? 0);
+    return (data.nombreColisCommandes ?? 0) + "/" + (data.nombreColisExpedies ?? 0);
   }
 
   calculateVentePrixUnitaire(data) {
