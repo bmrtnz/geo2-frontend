@@ -168,6 +168,12 @@ export class GridRecapStockCdeEdiColibriComponent {
     }
   }
 
+  oncellClick(e) {
+    if (e.rowType == "data" && e.column.dataField !== "quantiteValidee") {
+      e.event.stopImmediatePropagation(); // To avoid row selection
+    }
+  }
+
   addArticlePopup(cell) {
     this.ligneEdi = cell.data;
     this.ajoutArtPopup.visible = true;

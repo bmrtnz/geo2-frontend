@@ -450,9 +450,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
       this.onTabTitleClick({ itemData: { id } });
       e.stopPropagation();
     };
-    // on(event.itemElement, "dxclick", (e) => e.stopPropagation());
+    on(event.itemElement, "dxclick", (e) => e.stopPropagation());
     on(event.itemElement, "dxpointerdown", replaceEvent);
-    on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
+    on(event.itemElement, "dxhoverstart", () => this.setTabTooltip(event));
 
     this.setTabTooltip(event);
 

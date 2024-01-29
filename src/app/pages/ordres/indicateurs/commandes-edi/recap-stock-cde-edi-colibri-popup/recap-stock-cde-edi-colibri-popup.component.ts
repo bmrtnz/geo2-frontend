@@ -127,11 +127,10 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       .sort((a, b) => a.gtin.localeCompare(b.gtin))
       .push({ gtin: "fake" });
     let sumQuantiteValidee = 0, oldGtin, oldQuantiteColis, oldRow;
+    this.selectedRows.map(row => row.warning = false);
     this.selectedRows.map(row => {
-      if (row.gtin !== oldGtin && oldGtin) {
-        oldRow.warning = (sumQuantiteValidee > oldQuantiteColis);
-        sumQuantiteValidee = 0;
-      }
+      if (oldRow) oldRow.warning = sumQuantiteValidee > oldQuantiteColis;
+      if (row.gtin !== oldGtin && oldGtin) sumQuantiteValidee = 0;
       oldGtin = row.gtin;
       oldRow = row;
       oldQuantiteColis = row.ligneEdi?.quantiteColis;
@@ -153,6 +152,11 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridRecap?.enableFilters();
+    // KEEP THIS !!! This resets the paging that often fails at first load
+    setTimeout(() => {
+      this.gridRecap.datagrid.instance.pageSize(100000)
+      this.gridRecap?.dataSource.reload();
+    }, 1000)
   }
 
   clearAll() {
