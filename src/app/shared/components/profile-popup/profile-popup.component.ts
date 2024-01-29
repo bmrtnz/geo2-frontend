@@ -301,6 +301,7 @@ export class ProfilePopupComponent {
         , { utilisateur }).subscribe({
           next: () => {
             this.authService.setCurrentUser(utilisateur);
+            this.authService.userChange.next();
             notify({
               message: this.localizeService.localize("user-profile-saved"),
               type: "success"
