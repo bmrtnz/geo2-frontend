@@ -558,6 +558,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
+
     this.litigesLignesService
       .getList(
         `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
@@ -586,6 +587,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
             responsableQuantite: res.ordreLigne.achatQuantite,
           } as LitigeLigne)
         ),
+        tap(res => {
+          if (this.infosLitige.clientClos) {
+            delete res.clientNombrePalettes;
+            delete res.clientNombreColisReclamation;
+            delete res.clientPoidsNet;
+            delete res.clientQuantite;
+          }
+          if (this.infosLitige.fournisseurClos) {
+            delete res.responsableNombrePalettes;
+            delete res.responsableNombreColis;
+            delete res.responsableQuantite;
+          }
+        }),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
       )
@@ -610,7 +624,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
-      finalize(() => this.gridLot.refresh()),
+      // finalize(() => this.gridLot.refresh()),
     ).subscribe(lot => {
       this.lot = [this.lot[0], lot];
       this.forfaitPopup.visible = true;

@@ -41,7 +41,7 @@ export class MergedDxgridCellTemplateComponent {
 
 @Pipe({ name: "mergeSiblingColumns" })
 export class MergeSiblingColumnsPipe implements PipeTransform {
-  constructor(private domSanitizer: DomSanitizer) {}
+  constructor(private domSanitizer: DomSanitizer) { }
 
   transform(input: {
     cellElement: HTMLElement;
@@ -56,6 +56,7 @@ export class MergeSiblingColumnsPipe implements PipeTransform {
     })
       .map(([columnIndex, target]) => {
         const containerElm = document.createElement("div");
+        containerElm.classList.add('merged-div');
         containerElm.innerHTML += target.innerHTML;
         return containerElm;
       })

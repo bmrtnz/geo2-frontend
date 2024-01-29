@@ -8036,6 +8036,7 @@
         "visible": true,
         "cssClass": "text-align-right no-padding disabled-cell",
         "allowEditing": false,
+        "width": 50,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
