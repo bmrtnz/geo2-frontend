@@ -7304,6 +7304,7 @@
       {
         "visibleIndex": 0,
         "dataField": "id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -7352,7 +7353,8 @@
         "visibleIndex": 10,
         "dataField": "echeanceNiveau",
         "class": "no-padding",
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 12,
