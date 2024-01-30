@@ -46,8 +46,8 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   pulseBtnOn: boolean;
   popupFullscreen = true;
   creatingOrder = false;
-  selectedGTIN: string[];
-  resultsGTIN: string[];
+  selectedEdiLigne: string[];
+  resultsEdiLigne: string[];
 
 
   @ViewChild(GridRecapStockCdeEdiColibriComponent, { static: false }) gridRecap: GridRecapStockCdeEdiColibriComponent;
@@ -87,13 +87,13 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   getGridSelectedArticles() {
-    // We ensure that all GTIN are selected
-    this.selectedGTIN = [];
-    this.resultsGTIN = [];
-    this.gridRecap.datagrid.instance.getSelectedRowsData().map(row => this.selectedGTIN.push(row.gtin))
-    this.selectedGTIN = Array.from(new Set(this.selectedGTIN));
-    (this.gridRecap.datagrid.dataSource as DataSource).items().map((ds) => this.resultsGTIN.push(ds.gtin));
-    this.resultsGTIN = Array.from(new Set(this.resultsGTIN));
+    // We ensure that all numeroLigneEDI are selected
+    this.selectedEdiLigne = [];
+    this.resultsEdiLigne = [];
+    this.gridRecap.datagrid.instance.getSelectedRowsData().map(row => this.selectedEdiLigne.push(row.numeroLigneEDI))
+    this.selectedEdiLigne = Array.from(new Set(this.selectedEdiLigne));
+    (this.gridRecap.datagrid.dataSource as DataSource).items().map((ds) => this.resultsEdiLigne.push(ds.numeroLigneEDI));
+    this.resultsEdiLigne = Array.from(new Set(this.resultsEdiLigne));
 
     return this.gridRecap.datagrid.instance.getSelectedRowsData();
   }
@@ -124,14 +124,14 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       .map(row => row?.data)
       .filter(row => selectedIds.includes(row.id));
     this.selectedRows
-      .sort((a, b) => a.gtin.localeCompare(b.gtin))
-      .push({ gtin: "fake" });
-    let sumQuantiteValidee = 0, oldGtin, oldQuantiteColis, oldRow;
+      .sort((a, b) => a.numeroLigneEDI - b.numeroLigneEDI)
+      .push({ numeroLigneEDI: "fake" });
+    let sumQuantiteValidee = 0, oldNumeroLigneEDI, oldQuantiteColis, oldRow;
     this.selectedRows.map(row => row.warning = false);
     this.selectedRows.map(row => {
       if (oldRow) oldRow.warning = sumQuantiteValidee > oldQuantiteColis;
-      if (row.gtin !== oldGtin && oldGtin) sumQuantiteValidee = 0;
-      oldGtin = row.gtin;
+      if (row.numeroLigneEDI !== oldNumeroLigneEDI && oldNumeroLigneEDI) sumQuantiteValidee = 0;
+      oldNumeroLigneEDI = row.numeroLigneEDI;
       oldRow = row;
       oldQuantiteColis = row.ligneEdi?.quantiteColis;
       sumQuantiteValidee += (row.quantiteValidee ?? oldQuantiteColis);
