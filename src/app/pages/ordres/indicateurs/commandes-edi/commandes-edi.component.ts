@@ -8,7 +8,7 @@ import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 })
 export class CommandesEdiComponent {
   public visible: boolean;
-  public popupFullscreen = false;
+  public popupFullscreen = true;
   public loadingRecap;
 
   @ViewChild(DxScrollViewComponent, { static: false })
