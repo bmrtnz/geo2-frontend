@@ -1,5 +1,5 @@
 <form
-  class="grid-commandes-Edi"
+  class="form-commandes-Edi"
   [formGroup]="formGroup"
 >
   <div class="title-container">
@@ -199,14 +199,6 @@
   </div>
 </form>
 
-<dx-button
-  style="margin-right: 16px"
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this, false)"
-></dx-button>
 <dx-data-grid
   class="grid-cdes-edi"
   [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
@@ -275,6 +267,19 @@
     [showInColumnChooser]="column.showInColumnChooser"
   >
   </dxi-column>
+
+  <dxo-toolbar>
+    <dxi-item location="after">
+      <!-- Grouping functionnality -->
+      <dx-button
+        class="grid-grouping-button"
+        type="default"
+        icon="material-icons menu_open"
+        hint="{{ 'btn-grouping' | localize }}"
+        (onClick)="gridsService.expandCollapseGroups(this)"
+      ></dx-button>
+    </dxi-item>
+  </dxo-toolbar>
 
   <div *dxTemplate="let cell of 'groupCellStatusTemplate'">
     <dx-button
