@@ -63,11 +63,13 @@
   background-color: #8fc459 !important;
 }
 
-::ng-deep .grid-cdes-edi {
-  max-height: 650px !important;
-}
+// ::ng-deep .grid-cdes-edi {
+//   max-height: 650px !important;
+// }
 
 ::ng-deep .grid-commandes-Edi {
+  max-height: calc(100vh - 375px) !important;
+
   h6 {
     margin: 0;
     float: left;
