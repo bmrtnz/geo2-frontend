@@ -7737,7 +7737,7 @@
     ]
   },
   "packing-list": {
-    "pageSize": 100,
+    "pageSize": 50,
     "columns": [
       {
         "visibleIndex": 0,
