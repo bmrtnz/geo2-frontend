@@ -114,7 +114,6 @@ export class OrdresNonConfirmesComponent implements AfterViewInit {
     this.secteurSB.disabled = !this.withSector.value;
 
     this.setDefaultPeriod("J");
-    // this.enableFilters();
   }
 
   setDefaultPeriod(periodId) {

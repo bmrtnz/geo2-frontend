@@ -132,6 +132,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J"
       ));
