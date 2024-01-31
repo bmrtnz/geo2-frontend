@@ -7405,7 +7405,7 @@
       },
       {
         "visibleIndex": 30,
-        "dataField": "ordre.litige.commentairesInternes",
+        "dataField": "ordre.commentaireUsageInterne",
         "visible": false
       }
     ]
