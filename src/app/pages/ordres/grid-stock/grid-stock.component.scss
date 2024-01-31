@@ -287,6 +287,11 @@
       width: 200px;
       min-height: 32px;
 
+      &.espece .dx-placeholder {
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 13px;
+      }
+
       &:last-of-type {
         margin-bottom: 10px;
       }

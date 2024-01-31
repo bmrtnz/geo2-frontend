@@ -252,7 +252,8 @@ export class GridStockComponent implements OnInit {
 
   onFilterChange() {
     this.noEspeceSet = !this.especeSB.value;
-    this.toRefresh = !this.noEspeceSet;
+    // this.toRefresh = !this.noEspeceSet;
+    this.toRefresh = true;
   }
 
   /**
@@ -391,7 +392,7 @@ export class GridStockComponent implements OnInit {
     this.stocksService
       .allStockArticleList(
         this.inheritedFields,
-        this.especeSB.value?.node?.key ?? this.especeSB.value?.key,
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key ?? "%",
         this.varietesSB.value?.key,
         this.originesSB.value?.key,
         this.modesCultureSB.value?.key,

@@ -129,7 +129,7 @@ export class StocksService extends ApiService implements APIRead, APIDistinct {
             },
           ],
           [
-            { name: "espece", type: "String", isOptionnal: false },
+            { name: "espece", type: "String", isOptionnal: true },
             { name: "variete", type: "String", isOptionnal: true },
             { name: "origine", type: "String", isOptionnal: true },
             { name: "modeCulture", type: "String", isOptionnal: true },
