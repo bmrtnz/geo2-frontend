@@ -93,6 +93,7 @@
             formControlName="client"
             [dataSource]="clients"
             [displayExpr]="displayCodeBefore"
+            [showClearButton]="true"
             [searchExpr]="['code']"
             (onValueChanged)="onClientChanged($event)"
             itemTemplate="items"
