@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { AssocArticlesEdiColibriPopupComponent } from "app/shared/components/assoc-articles-edi-colibri-popup/assoc-articles-edi-colibri-popup.component";
 import { DxPopupComponent, DxScrollViewComponent } from "devextreme-angular";
 
 @Component({
@@ -13,6 +14,7 @@ export class CommandesEdiComponent {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
+
 
   constructor() { }
 

@@ -5,6 +5,13 @@
   [hideOnOutsideClick]="false"
   (onShowing)="onShowing($event)"
   [(visible)]="visible"
+  [shading]="false"
+  [resizeEnabled]="true"
+  title=" {{ 'ordres-gestion-articles' | localize }} {{
+    'edi-colibri' | localize
+  }}"
 >
-  <app-association-articles-edi-colibri></app-association-articles-edi-colibri>
+  <app-association-articles-edi-colibri
+    [popup]="true"
+  ></app-association-articles-edi-colibri>
 </dx-popup>

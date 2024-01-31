@@ -70,10 +70,15 @@
     float: left;
   }
 
-  .refresh {
+  .top-button {
     top: -8px;
     float: right;
+
+    &.articles-edi {
+      margin-right: 10px;
+    }
   }
+
 
   .BAFFilterArea {
     min-width: 1024px;

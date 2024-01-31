@@ -49,6 +49,7 @@ import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-co
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import hideToasts from "devextreme/ui/toast/hide_toasts";
+import { AssocArticlesEdiColibriPopupComponent } from "app/shared/components/assoc-articles-edi-colibri-popup/assoc-articles-edi-colibri-popup.component";
 
 enum InputField {
   clientCode = "client",
@@ -108,6 +109,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
   @ViewChild(VisualiserOrdresPopupComponent, { static: false })
   visuCdeEdiPopup: VisualiserOrdresPopupComponent;
+  @ViewChild(AssocArticlesEdiColibriPopupComponent, { static: false }) assocArticlesPopup: AssocArticlesEdiColibriPopupComponent;
 
   @ViewChild(RecapStockCdeEdiColibriPopupComponent, { static: false })
   recapStockPopup: RecapStockCdeEdiColibriPopupComponent;
@@ -792,6 +794,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       dateMin: datePeriod.dateDebut,
       dateMax: datePeriod.dateFin,
     });
+  }
+
+  openArticles() {
+    this.assocArticlesPopup.visible = true;
   }
 }
 

@@ -5,10 +5,16 @@
   <div class="title-container">
     <h6>{{ "preFilter-title" | localize }}</h6>
     <dx-button
-      class="refresh"
+      class="refresh top-button"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
+    ></dx-button>
+    <dx-button
+      class="articles-edi top-button"
+      type="success"
+      text="{{ 'btn-articles-edi' | localize }}"
+      (onClick)="openArticles()"
     ></dx-button>
   </div>
   <div style="clear: both"></div>
@@ -342,3 +348,4 @@
 <app-recap-stock-cde-edi-colibri-popup
   (refreshGridCdeEdi)="enableFilters()"
 ></app-recap-stock-cde-edi-colibri-popup>
+<app-assoc-articles-edi-colibri-popup> </app-assoc-articles-edi-colibri-popup>

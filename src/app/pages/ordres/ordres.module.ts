@@ -166,6 +166,7 @@ import { ZoomLieupassageaquaiPopupComponent } from "./zoom-lieupassageaquai-popu
 import { ZoomTransporteurPopupComponent } from "./zoom-transporteur-popup/zoom-transporteur-popup.component";
 import { RepartitionOrdresRegroupementComponent } from './indicateurs/repartition-ordres-regroupement/repartition-ordres-regroupement.component';
 import { NouvelOrdreMainComponent } from "./nouvel-ordre-main/nouvel-ordre-main.component";
+import { AssocArticlesEdiColibriPopupComponent, AssocArticlesEdiColibriPopupModule } from "app/shared/components/assoc-articles-edi-colibri-popup/assoc-articles-edi-colibri-popup.component";
 
 @NgModule({
   declarations: [
@@ -335,10 +336,11 @@ import { NouvelOrdreMainComponent } from "./nouvel-ordre-main/nouvel-ordre-main.
     AssociatedArticlePromptModule,
     GridHistoriqueEntrepotsModule,
     GridEntrepotsModule,
+    AssocArticlesEdiColibriPopupModule
   ],
   exports: [
     GridStockComponent,
-    ZoomArticlePopupComponent
+    ZoomArticlePopupComponent,
   ],
 })
 export class OrdresModule { }
