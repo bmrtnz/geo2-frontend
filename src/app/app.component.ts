@@ -118,6 +118,7 @@ export class AppComponent {
     dxPopup.defaultOptions({
       options: {
         showCloseButton: true,
+        dragOutsideBoundary: true
       },
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });
