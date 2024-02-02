@@ -243,7 +243,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
           nombreColisCommandes: nbColisCommandes
         }
         // Quelle ligne a le plus gros calibre ?
-        return !calibres.find((r) => r.poidsNetClient > row.poidsNetClient)
+        return !calibres.find((r) => r.poidsNetColis > row.poidsNetColis)
           ? {
             ...row,
             nombrePalettesCommandees: commande.nombrePalettesCommandees,
@@ -298,6 +298,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
               "varieteCode",
               "colisCode",
               "poidsNetClient",
+              "poidsNetColis",
               "origineDescription",
               "transporteurCode",
               "dateModification",
@@ -458,11 +459,11 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
 
   calculateArticleValue(rowData: Partial<DeclarationFraude>) {
-    return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetClient} kg - ${rowData.origineDescription}`;
+    return `${rowData.varieteCode} - ${rowData.colisCode} - ${rowData.poidsNetColis} kg - ${rowData.origineDescription}`;
   }
 
   calculatePoidsNetValue(rowData: Partial<DeclarationFraude>) {
-    return Math.ceil(rowData.nombreColisCommandes * rowData.poidsNetClient);
+    return Math.ceil(rowData.nombreColisCommandes * rowData.poidsNetColis);
   }
 
   calculatePaysValue(rowData: Partial<DeclarationFraude>) {
