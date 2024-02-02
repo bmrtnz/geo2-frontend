@@ -245,14 +245,14 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
     }
     this.ordres.map(ord => {
       refsClient.push(ord.referenceClient);
-      if (!this.containers.find(cont => cont.id === ord.logistiques[0]?.numeroContainer)) this.containers.push({
+      if (!this.containers.find(cont => cont?.id === ord.logistiques[0]?.numeroContainer)) this.containers.push({
         id: ord.logistiques[0].numeroContainer,
         lignes: [],
         sumColis: 0,
         sumGross: 0,
         sumNet: 0,
       });
-      const container = this.containers.find(cont => cont.id === ord.logistiques[0].numeroContainer);
+      const container = this.containers.find(cont => cont?.id === ord.logistiques[0].numeroContainer);
       ord.lignes?.filter(ligne => ligne.poidsNetExpedie).map(ligne => {
         container.sumColis += ligne.nombreColisExpedies ?? 0;
         container.sumGross += ligne.poidsBrutExpedie ?? 0;
@@ -270,8 +270,8 @@ export class PackingListPopupComponent implements OnInit, OnChanges {
       this.totaux.net += c.sumNet;
     })
 
-    this.ordres.sort((a, b) => a.logistiques[0].numeroContainer.localeCompare(b.logistiques[0].numeroContainer));
-    this.containers.sort((a, b) => a.id.localeCompare(b.id));
+    this.ordres.sort((a, b) => a.logistiques[0].numeroContainer?.localeCompare(b.logistiques[0].numeroContainer));
+    this.containers.sort((a, b) => a?.id.localeCompare(b?.id));
     this.running.preview = true;
     hideToasts();
     const Element = document.querySelector(".preview-anchor") as HTMLElement;
