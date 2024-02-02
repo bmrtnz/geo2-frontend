@@ -14,6 +14,7 @@ import { DateManagementService } from "./shared/services/date-management.service
 import { GridUtilsService } from "./shared/services/grid-utils.service";
 import dxAutocomplete from "devextreme/ui/autocomplete";
 import dxButton from "devextreme/ui/button";
+import dxCheckBox from "devextreme/ui/check_box";
 
 @Component({
   selector: "app-root",
@@ -96,6 +97,11 @@ export class AppComponent {
       },
     });
     dxButton.defaultOptions({
+      options: {
+        focusStateEnabled: false,
+      },
+    });
+    dxCheckBox.defaultOptions({
       options: {
         focusStateEnabled: false,
       },

@@ -30,7 +30,7 @@ import { ActivatedRoute } from "@angular/router";
 import { GridsService } from "../../../pages/ordres/grids.service";
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "app/shared/shared.module";
-import { DxButtonModule, DxRadioGroupModule } from "devextreme-angular";
+import { DxButtonModule, DxRadioGroupModule, DxCheckBoxModule, DxCheckBoxComponent } from "devextreme-angular";
 import { ButtonLoaderModule } from "../button-loader/button-loader.component";
 
 @Component({
@@ -109,6 +109,7 @@ export class NouvelOrdreComponent implements AfterViewInit {
   historiqueEntrepotGrid: GridHistoriqueEntrepotsComponent;
   @ViewChild("grid") private grid: SingleSelection<Entrepot | MRUEntrepot>;
   @ViewChild("gridHisto") private gridHisto: SingleSelection<Entrepot | MRUEntrepot>;
+  @ViewChild("keepFilters", { static: false }) keepFilters: DxCheckBoxComponent;
   @ViewChild(InfoPopupComponent, { static: true }) infoComponent: InfoPopupComponent;
 
 
@@ -136,6 +137,8 @@ export class NouvelOrdreComponent implements AfterViewInit {
       .subscribe((res) => {
         this.societe = res.data.societe;
         if (this.silent) return;
+        if (this.keepFilters)
+          this.keepFilters.value = window.localStorage.getItem("keep-new-order-filters") === "true" ? true : false;
         this.favorites ?
           this.historiqueEntrepotGrid?.reload() :
           this.EntrepotGrid?.reload();
@@ -185,6 +188,9 @@ export class NouvelOrdreComponent implements AfterViewInit {
   }
 
   clearGridsFilters() {
+    // Do we keep current filters?
+    if (window.localStorage.getItem("keep-new-order-filters") === "true") return;
+
     this.gridsService.clearFilters(
       this.EntrepotGrid.grid.instance,
       this.EntrepotGrid.columns
@@ -193,6 +199,10 @@ export class NouvelOrdreComponent implements AfterViewInit {
       this.historiqueEntrepotGrid.grid.instance,
       this.historiqueEntrepotGrid.columns
     );
+  }
+
+  onKeepFiltersChanged(e) {
+    window.localStorage.setItem("keep-new-order-filters", e.value?.toString());
   }
 
   private messageFormat(mess) {
@@ -428,6 +438,7 @@ export class NouvelOrdreComponent implements AfterViewInit {
     SharedModule,
     DxButtonModule,
     DxRadioGroupModule,
+    DxCheckBoxModule,
     InfoPopupModule,
     ButtonLoaderModule,
     GridEntrepotsModule,
