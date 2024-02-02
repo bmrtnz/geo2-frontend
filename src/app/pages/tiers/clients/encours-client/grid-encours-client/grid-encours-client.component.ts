@@ -132,7 +132,8 @@ export class GridEncoursClientComponent implements OnChanges {
       "ordre.campagne.id",
       "ordre.societe.id",
       "ordre.logistiques.numeroImmatriculation",
-      "ordre.logistiques.numeroContainer"
+      "ordre.logistiques.numeroContainer",
+      "ordre.litige.commentairesInternes"
     ];
   }
 

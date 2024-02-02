@@ -35,7 +35,7 @@
     [selectTextOnEditStart]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
-    [mode]="'batch'"
+    [mode]="'cell'"
   ></dxo-editing>
   <dxo-state-storing
     [storageKey]="gridConfiguratorService.Grid.OrdreLogistique"
@@ -92,7 +92,6 @@
       icon="plus"
       [onClick]="addStep"
     ></dxi-button>
-    <dxi-button name="edit"></dxi-button>
     <dxi-button name="delete"></dxi-button>
   </dxi-column>
 

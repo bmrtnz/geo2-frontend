@@ -18,10 +18,7 @@
     class="flux-doc-button flux-doc-button-plus"
     type="default"
     hint="{{ 'hint-autres-actions' | localize }}"
-    [focusStateEnabled]="false"
-    [visible]="
-      !orderConfirmationOnly && visibleActionsNumber < actionsFlux?.length
-    "
+    [visible]="!orderConfirmationOnly"
     [disabled]="!plusActionsFluxEnabled"
     text="+"
     (onClick)="showFluxDoxOtherBtns($event)"

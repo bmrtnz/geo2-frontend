@@ -179,6 +179,7 @@
       [max]="100"
       [value]="0"
       [class.complete]="progressBar.value === 100"
+      [class.nodata]="DsItems && !DsItems?.length && !running.loading"
       [statusFormat]="progressFormat"
     >
     </dx-progress-bar>
@@ -194,14 +195,14 @@
     <dx-button
       class="launchSP"
       type="normal"
-      [disabled]="!clotureEnabled"
+      [disabled]="!clotureEnabled || running?.loading"
       text="{{ 'btn-cloture-sp' | localize }}"
       (onClick)="clotureSP($event)"
     ></dx-button>
     <dx-button
       class="launch"
       type="success"
-      [disabled]="!launchEnabled || !gridItemsSelected"
+      [disabled]="!launchEnabled || !gridItemsSelected || running?.loading"
       text="{{ 'btn-launch' | localize }}"
       (onClick)="launch($event)"
     ></dx-button>

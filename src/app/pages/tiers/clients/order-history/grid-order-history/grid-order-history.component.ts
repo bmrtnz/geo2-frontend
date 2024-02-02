@@ -38,10 +38,14 @@ import {
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { from, lastValueFrom, Observable } from "rxjs";
+import { concatMap, map, takeWhile } from "rxjs/operators";
 import { ZoomClientArticlePopupComponent } from "../zoom-client-article-popup/zoom-client-article-popup.component";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { NouvelOrdreComponent } from "app/shared/components/nouvel-ordre/nouvel-ordre.component";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
+import { AssociatedArticlePromptComponent } from "app/shared/components/associated-article-prompt/associated-article-prompt.component";
+
 
 let self;
 
@@ -73,6 +77,8 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @Output() public articleLigneId: string;
   @Output() hidePopup = new EventEmitter<any>();
   @Output() openOrder = new EventEmitter<any>();
+  @Output() clientChanged = new EventEmitter<any>();
+
   @Output() contentReadyEvent = new EventEmitter<any>();
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
@@ -81,6 +87,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
   @ViewChild("switchDepartLivraison", { static: false })
   switchLivraison: DxSwitchComponent;
+  @ViewChild(NouvelOrdreComponent, { static: true }) nouvelOrdre: NouvelOrdreComponent;
+  @ViewChild(AssociatedArticlePromptComponent) associatedPrompt: AssociatedArticlePromptComponent;
+
+
 
   public secteurs: DataSource;
   public clients: DataSource;
@@ -110,12 +120,19 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     bureauAchat: new UntypedFormControl(),
   } as Inputs<UntypedFormControl>);
 
-  public summaryFields = ["nombreColisCommandes"];
+  public summaryFields = [
+    "nombreColisCommandes",
+    "nombreColisExpedies"
+  ];
   public customSummaryFields = [
     "ordre.dateDepartPrevue",
     "ordre.dateLivraisonPrevue"
   ];
   public hasLitigeDots: boolean;
+  public running = {
+    createOrder: false,
+  }
+
 
   constructor(
     public ordreLignesService: OrdreLignesService,
@@ -332,7 +349,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (e.rowType === "data") {
       // Affichage statut
       if (e.column.dataField === "ordre.statut")
-        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
       // Descript. article
       if (
         e.column.dataField ===
@@ -397,12 +414,12 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
 
   calculateNombrePalettesCommandees(data) {
     // Ajout type colis
-    return data.nombrePalettesCommandees + "/" + (data.nombrePalettesExpediees ?? 0);
+    return data.nombrePalettesExpediees + "/" + (data.nombrePalettesCommandees ?? 0);
   }
 
   calculateNombreColisCommandes(data) {
     // Ajout type colis
-    return data.nombreColisCommandes + "/" + (data.nombreColisExpedies ?? 0);
+    return data.nombreColisExpedies + "/" + (data.nombreColisCommandes ?? 0);
   }
 
   calculateVentePrixUnitaire(data) {
@@ -489,6 +506,7 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     });
     // We check that this change is coming from the user
     if (!e.event) return;
+    this.clientChanged.emit(e.value);
     this.formGroup.patchValue({
       entrepot: null,
     });
@@ -498,6 +516,94 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
     if (!this.formGroup.get("client").value) {
       notify("Veuillez sélectionner un client", "warning", 3000);
     }
+  }
+
+  onCreateError() {
+    this.running.createOrder = false;
+    hideToasts();
+  }
+
+  createDirectOrder() {
+    this.running.createOrder = true;
+    notify(this.localizeService.localize("pre-process"), "info");
+    this.nouvelOrdre?.onButtonLoaderClick();
+  }
+
+  async insertArticlesOnNewOrder(ordre) {
+    const chosenArticles = this.datagrid.instance.getSelectedRowsData().map((row) => row.article.id);
+    hideToasts();
+    notify(this.localizeService.localize("create-order-numero", ordre.numero), "info", 9999999);
+
+    const res = await lastValueFrom(this.ordresService
+      .getOneByNumeroAndSocieteAndCampagne(
+        ordre.numero, this.currentCompanyService.getCompany().id, ordre.campagneId, ["id", "campagne.id", "numero"]
+      ));
+    ordre = res.data.ordreByNumeroAndSocieteAndCampagne;
+
+    from(chosenArticles)
+      .pipe(
+        concatMap((articleID, index) =>
+          this.functionsService
+            .ofInitArticleHistory(
+              ordre.id,
+              articleID,
+              this.currentCompanyService.getCompany().id,
+              this.datagrid.instance.getSelectedRowKeys()[index]
+            )
+            .valueChanges.pipe(
+              concatMap(async res => {
+                return res;
+              }),
+              concatMap((res) => {
+                this.associatedPrompt.ordreLigneID =
+                  res.data.ofInitArticleHistory.data.new_orl_ref;
+                this.associatedPrompt.articleAssocieID =
+                  res.data.ofInitArticleHistory.data.art_ass;
+                return this.associatedPrompt.tryPrompt();
+              }),
+              takeWhile((res) => res.loading)
+            )
+        )
+      )
+      .subscribe({
+        error: ({ message }: Error) => {
+          this.running.createOrder = false;
+          hideToasts();
+          console.log(message);
+          notify(this.messageFormat(message), "error", 7000);
+        },
+        complete: () => {
+          this.datagrid.instance.clearSelection();
+          this.running.createOrder = false;
+          hideToasts();
+          if (this.comingFrom === "zoomClient") {
+            this.openOrder.emit({ campagne: { id: ordre.campagne.id }, numero: ordre.numero });
+          } else {
+            window.sessionStorage.setItem(
+              "openOrder",
+              [ordre.numero, ordre.campagne.id].join("|")
+            );
+            this.hidePopup.emit();
+            setTimeout(() => this.router.navigateByUrl("pages/ordres")); // Timeout to let the popup close
+          }
+          notify({
+            message: this.localizeService.localize("ordre-cree", ordre.numero),
+            type: "success"
+          },
+            { position: 'bottom center', direction: 'up-stack' }
+          );
+        },
+      });
+  }
+
+  private messageFormat(mess) {
+    const functionNames = ["ofInitArticleHistory"];
+    functionNames.map(
+      (fn) =>
+        (mess = mess.replace(`Exception while fetching data (/${fn}) : `, ""))
+    );
+    mess = mess.charAt(0).toUpperCase() + mess.slice(1);
+    return mess;
   }
 
   manualDate(e) {
@@ -568,7 +674,10 @@ export class GridOrderHistoryComponent implements OnChanges, AfterViewInit {
       if (options.summaryProcess === "start") {
         options.totalValue = 0;
       } else if (options.summaryProcess === "calculate") {
-        options.totalValue += options.value ? parseInt(options.value.split("/")[0]) : 0;
+        // When the order is cloture, show 'nombreColisExpedies', otherwise 'nombreColisCommandes'
+        const cloture = [Statut.EXPEDIE, Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[options.value?.ordre.statut]);
+        const colisField = cloture ? "nombreColisExpedies" : "nombreColisCommandes";
+        options.totalValue += options.value[colisField] ? parseInt(options.value[colisField]) : 0;
       }
     } else {
       if (self.customSummaryFields.includes(options.name)) {

@@ -6,6 +6,7 @@
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"
   [allowColumnReordering]="true"
+  (onEditingStart)="onEditingStart($event)"
   (onSaving)="onSaving($event)"
   (onToolbarPreparing)="
     onToolbarPreparing($event);

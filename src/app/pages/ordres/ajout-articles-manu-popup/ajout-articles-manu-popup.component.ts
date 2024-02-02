@@ -28,7 +28,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { from, lastValueFrom } from "rxjs";
 import { concatMap, takeWhile } from "rxjs/operators";
-import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { GridCommandesComponent } from "../grid-commandes/grid-commandes.component";
 import { ZoomArticlePopupComponent } from "../zoom-article-popup/zoom-article-popup.component";
 

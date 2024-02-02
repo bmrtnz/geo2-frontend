@@ -21,7 +21,7 @@ import {
 import notify from "devextreme/ui/notify";
 import { from, lastValueFrom } from "rxjs";
 import { concatMap, takeWhile, tap } from "rxjs/operators";
-import { AssociatedArticlePromptComponent } from "../associated-article-prompt/associated-article-prompt.component";
+import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { GridLignesHistoriqueComponent } from "../grid-lignes-historique/grid-lignes-historique.component";
 
 @Component({
@@ -100,10 +100,14 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
         this.titleEnd = this.localizeService.localize("via-histo-client");
       }
     } else {
-      this.titleStart = "Historique client ";
+      this.titleStart = this.localizeService.localize("histo-client") + " ";
       this.titleMid = this.ordre.client.raisonSocial;
       this.titleEnd = "";
     }
+  }
+
+  clientChanged(e) {
+    if (this.readOnlyMode) this.titleMid = e?.raisonSocial ?? "";
   }
 
   updateChosenArticles() {

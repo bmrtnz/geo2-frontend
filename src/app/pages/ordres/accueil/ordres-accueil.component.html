@@ -2,29 +2,82 @@
   {{ "ordres-accueil-ordre-title" | localize }}
 
   <div class="dx-field configuration">
-    <div class="dx-field-label">
-      {{ "ordres-configuration" | localize }}
-    </div>
     <div class="dx-field-value">
       <dx-tag-box
         [items]="allIndicators"
         [value]="loadedIndicators"
         [valueExpr]="'id'"
-        [showClearButton]="true"
         [showSelectionControls]="true"
         [searchEnabled]="false"
-        applyValueMode="useButtons"
         [displayExpr]="displayExpr"
-        (onValueChanged)="tileNumber($event)"
+        [draggable]="true"
+        [selectAllMode]="'always'"
+        selectAllText="{{ 'select-all' | localize }}"
+        (onValueChanged)="saveTileConfig($event)"
+        [showClearButton]="true"
       >
-        <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
+        <dxo-drop-down-options
+          [width]="300"
+          [showCloseButton]="true"
+          [wrapperAttr]="{ class: 'tile-list' }"
+          [hideOnOutsideClick]="true"
+          [animation]="{
+            show: {
+              type: 'pop',
+              duration: 200,
+              from: {
+                scale: 0.55
+              }
+            },
+            hide: {
+              type: 'pop',
+              duration: 200,
+              to: {
+                opacity: 0,
+                scale: 0.55
+              },
+              from: {
+                opacity: 1,
+                scale: 1
+              }
+            }
+          }"
+          [position]="{
+            my: 'right top',
+            at: 'right top',
+            offset: { x: -80, y: 105 }
+          }"
+          [toolbarItems]="[
+            {
+              widget: 'dxButton',
+              options: {
+                disabled: !initialSelection?.length,
+                focusStateEnabled: false,
+                type: 'normal',
+                class: 'refresh-button',
+                icon: 'refresh',
+                onClick: refreshConfig
+              }
+            },
+            {
+              widget: 'dxButton',
+              options: {
+                type: 'normal',
+                class: 'close-button',
+                icon: 'close',
+                onClick: closeConfig
+              }
+            }
+          ]"
+        >
+        </dxo-drop-down-options>
       </dx-tag-box>
     </div>
     <dx-button
       class="tile-config-button"
       icon="material-icons settings"
-      (onClick)="openTagBox()"
-      text=""
+      text="{{ 'ordres-configuration' | localize }}"
+      (onClick)="openCloseConfig()"
     >
     </dx-button>
   </div>
@@ -52,6 +105,7 @@
 <div class="content-block accueilOrdres-page">
   <dx-tile-view
     class="dx-tile-content"
+    [class.dragging]="dragging"
     width="100%"
     height="100%"
     [baseItemWidth]="118"
@@ -66,40 +120,51 @@
       [heightRatio]="1.5"
       [style.background]="'' + indicator.tileBkg + ''"
       [buttonOptions]="indicator"
+      [class.dragging]="dragging"
     >
-      <div class="indicator-container">
-        <dx-button
-          *ngIf="indicator.indicatorIcon"
-          type="danger"
-          icon="{{ indicator.indicatorIcon }}"
-          class="tile-button indicator-button"
-        ></dx-button>
-        <div class="number-container">
-          <div
-            *ngIf="indicator.withCount"
-            class="indicator"
-          >
-            <dx-load-indicator
-              [visible]="indicator.loading"
-              height="40"
-              width="40"
-            ></dx-load-indicator>
-            <span *ngIf="!indicator.loading && indicator.number">{{
-              indicator.number
-            }}</span>
-          </div>
+      <dx-sortable
+        id="{{ indicator.id }}"
+        class="sortable-tiles"
+        [dropFeedbackMode]="'indicate'"
+        [allowReordering]="true"
+        [filter]="'.dx-tile-content'"
+        (onDragStart)="onDragStart($event)"
+        (onReorder)="onDragAndDrop($event)"
+      >
+        <div class="indicator-container">
           <dx-button
-            *ngIf="
-              !indicator.loading && indicator.warningIcon && indicator.number
-            "
+            *ngIf="indicator.indicatorIcon"
             type="danger"
-            icon="{{ indicator.warningIcon }}"
-            class="tile-button warning-button"
+            icon="{{ indicator.indicatorIcon }}"
+            class="tile-button indicator-button"
           ></dx-button>
+          <div class="number-container">
+            <div
+              *ngIf="indicator.withCount"
+              class="indicator"
+            >
+              <dx-load-indicator
+                [visible]="indicator.loading"
+                height="40"
+                width="40"
+              ></dx-load-indicator>
+              <span *ngIf="!indicator.loading && indicator.number">{{
+                indicator.number
+              }}</span>
+            </div>
+            <dx-button
+              *ngIf="
+                !indicator.loading && indicator.warningIcon && indicator.number
+              "
+              type="danger"
+              icon="{{ indicator.warningIcon }}"
+              class="tile-button warning-button"
+            ></dx-button>
+          </div>
+          <div class="parameter">{{ indicator.parameter }}</div>
+          <div class="subParameter">{{ indicator.subParameter }}</div>
         </div>
-        <div class="parameter">{{ indicator.parameter }}</div>
-        <div class="subParameter">{{ indicator.subParameter }}</div>
-      </div>
+      </dx-sortable>
     </dxi-item>
   </dx-tile-view>
 </div>

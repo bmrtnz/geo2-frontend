@@ -57,7 +57,7 @@ import DataSource from "devextreme/data/data_source";
 import { alert, confirm } from "devextreme/ui/dialog";
 import notify from "devextreme/ui/notify";
 import hideToasts from "devextreme/ui/toast/hide_toasts";
-import { combineLatest, defer, interval, Observable, of, Subject, Subscription } from "rxjs";
+import { combineLatest, defer, interval, lastValueFrom, Observable, of, Subject, Subscription } from "rxjs";
 
 import { FileManagerService } from "app/shared/services/file-manager.service";
 import { ONE_MINUTE } from "basic";
@@ -271,6 +271,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "ordreEDI.canalCde",
     "entrepot.client.instructionLogistique",
     "entrepot.instructionLogistique",
+    "ordreDupliq.campagne.id",
+    "ordreDupliq.numero",
   ];
 
   private destroy = new Subject<boolean>();
@@ -367,6 +369,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentFacture: ViewDocument;
   public allowVenteACommissionMutation: boolean;
   public refreshRegimeTva = new EventEmitter();
+  public duplicatedOrder: string;
   public hideDuplicationBUK =
     this.currentCompanyService.getCompany().id !== "BUK";
 
@@ -1348,7 +1351,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openLinkedOrder(ordre: Partial<Ordre>) {
-    this.tabContext.openOrdre(ordre.numero, this.ordre.campagne.id);
+    this.tabContext.openOrdre(ordre.numero, ordre.campagne?.id ?? this.ordre.campagne.id);
   }
 
   deviseDisplayExpr(item) {
@@ -1426,7 +1429,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
         })
       )
       .subscribe({
-        next: (ordre) => {
+        next: async ordre => {
           this.ordre = ordre;
           this.changeDetectorRef.detectChanges();
           // France: 2 Incoterms only
@@ -1462,6 +1465,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.addLinkedOrders();
           this.refreshBadges();
           this.refreshStatus(this.ordre.statut);
+          if (this.ordre.ordreDupliq?.numero) // Is this order is a duplicated one?
+            this.duplicatedOrder = this.gridsService.orderIdentifier(this.ordre.ordreDupliq)
           window.sessionStorage.setItem("idOrdre", this.ordre.id);
           window.sessionStorage.setItem(
             "numeroOrdre" + this.ordre.numero,

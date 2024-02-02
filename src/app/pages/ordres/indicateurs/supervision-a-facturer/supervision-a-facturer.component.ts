@@ -3,7 +3,7 @@ import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { ModeLivraison } from "app/shared/models";
 import OrdreBaf from "app/shared/models/ordre-baf.model";
-import Ordre, { Statut } from "app/shared/models/ordre.model";
+import Ordre, { Statut, StatutLocale } from "app/shared/models/ordre.model";
 import { Role } from "app/shared/models/personne.model";
 import {
   AuthService,
@@ -84,6 +84,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public processedOrders: number;
   public store: CustomStore;
   public company: string;
+  public DsItems: any[];
+  private clearSpinner: any;
+  public running = {
+    loading: false,
+  }
+
 
   @ViewChild(DxDataGridComponent) private datagrid: DxDataGridComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -257,7 +263,8 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (!this.formGroup.get("secteurCode").value) {
       this.toast("please-select-sector", "error");
     } else {
-
+      this.running.loading = true;
+      clearTimeout(this.clearSpinner);
       this.progressSet(); // Initialize progress bar
       this.datagrid.instance.clearSelection();
       this.launchEnabled = true;
@@ -277,64 +284,64 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       } as Inputs);
 
       setTimeout(() => { // Dx needs some time for updating data
-        this.datagrid.dataSource = this.ordresDataSource;
-        const ds = this.datagrid.dataSource as DataSource;
-        this.store = ds.store() as CustomStore;
         this.progressSet(5);
         this.datagrid.instance.beginCustomLoading("");
-        this.store.load().then((res: LoadResult<any>) => {
-          if (Array.isArray(res)) {
-            this.countOrders = res.length;
-            this.processedOrders = 0;
-            this.progressSet(20);
-            setTimeout(() => res.map(data => this.controlBaf(data.ordreRef)));
-          }
+        this.ordresDataSource.load().then(res => {
+          this.DsItems = JSON.parse(JSON.stringify(res));
+          this.datagrid.dataSource = this.DsItems;
+          this.countOrders = this.DsItems.length;
+          if (!this.countOrders) return this.endOfProcess();
+          this.processedOrders = 0;
+          this.progressSet(20);
+          setTimeout(() => this.DsItems.map(data => this.controlBaf(data, data.ordreRef)));
         });
       });
     }
   }
 
-  controlBaf(ordreRef) {
+  controlBaf(data, ordreRef) {
     this.ordresBafService
       .fControlBaf(ordreRef, this.company)
       .subscribe({
         next: (res: any) => {
-          this.store.push([
-            {
-              key: ordreRef,
-              type: "update",
-              data: {
-                indicateurBaf: res.data.fControlBaf.data.ind_baf,
-                description: res.data.fControlBaf.data.desc_ctl,
-                pourcentageMargeBrut: res.data.fControlBaf.data.pc_marge_brute,
-                indicateurTransporteur: res.data.fControlBaf.data.ind_trp,
-                indicateurDate: res.data.fControlBaf.data.ind_date,
-                indicateurPrix: res.data.fControlBaf.data.ind_prix,
-                indicateurStation: res.data.fControlBaf.data.ind_station,
-                indicateurQte: res.data.fControlBaf.data.ind_qte,
-                indicateurAutre: res.data.fControlBaf.data.ind_autre
-              },
-            },
-          ]);
+          data.indicateurBaf = res.data.fControlBaf.data.ind_baf;
+          data.description = res.data.fControlBaf.data.desc_ctl;
+          data.pourcentageMargeBrut = res.data.fControlBaf.data.pc_marge_brute;
+          data.indicateurTransporteur = res.data.fControlBaf.data.ind_trp;
+          data.indicateurDate = res.data.fControlBaf.data.ind_date;
+          data.indicateurPrix = res.data.fControlBaf.data.ind_prix;
+          data.indicateurStation = res.data.fControlBaf.data.ind_station;
+          data.indicateurQte = res.data.fControlBaf.data.ind_qte;
+          data.indicateurAutre = res.data.fControlBaf.data.ind_autre;
           this.processedOrders++;
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
           this.progressSet(ratio);
-          this.datagrid.instance.repaintRows([this.datagrid.instance.getRowIndexByKey(ordreRef)]);
           if (this.processedOrders === this.countOrders) {
-            this.progressSet(100);
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
             this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
             this.datagrid.instance.columnOption("numeroOrdre", "sortOrder", "asc");
-            this.datagrid.instance.endCustomLoading();
-            this.toast("data-loading-ended");
+            this.endOfProcess(true);
           }
         },
         error: (err) => {
           this.processedOrders++;
+          if (this.processedOrders === this.countOrders) {
+            this.running.loading = false;
+            this.datagrid.instance.endCustomLoading();
+          }
           this.toast("error-updating-values", "error", 7000);
           console.log(err);
         },
       });
+  }
+
+  endOfProcess(result?: boolean) {
+    this.running.loading = false;
+    this.progressSet(100);
+    this.toast(result ? "data-loading-ended" : "aucune-donnee-recuperee", result ? "success" : "warning");
+    this.datagrid.instance.endCustomLoading();
+    // In some cases, it can last (?)
+    this.clearSpinner = setTimeout(() => this.datagrid.instance.endCustomLoading(), 1500);
   }
 
   toast(message, type?, displayTime?) {
@@ -540,7 +547,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.rowType === "data") {
       // Best expression for order status display
       if (field === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = Statut[e.value];
+        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
       }
 
       // Adjust clientReference display/hint
@@ -607,7 +614,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   onRowPrepared(e) {
     if (e.rowType === "data") {
       // Hiding checkboxes when status is BLOCKED
-      if (e.data.indicateurBaf === status.BLOQUÉ) {
+      if (e.data.indicateurBaf === undefined || e.data.indicateurBaf === null || e.data.indicateurBaf === status.BLOQUÉ) {
         e.rowElement.classList.add("hide-select-checkbox");
       }
     }
@@ -615,12 +622,10 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
   onSelectionChanged(e) {
     // Disallowing selection of hidden checkboxes (Select All button) when status is BLOCKED
-    e.component.getVisibleRows().map((row) => {
-      if (row.data.indicateurBaf === status.BLOQUÉ)
-        e.component.deselectRows([row.key]);
-    });
-    this.gridItemsSelected =
-      this.datagrid.instance.getSelectedRowsData()?.length > 0;
+    e.component.getVisibleRows()
+      .filter(row => row.data.indicateurBaf === status.BLOQUÉ)
+      .map((row) => e.component.deselectRows([row.key]));
+    this.gridItemsSelected = !!e.component.getSelectedRowsData()?.length;
   }
 
   colorizeCell(theValue) {

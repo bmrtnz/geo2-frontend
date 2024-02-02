@@ -14,8 +14,7 @@ import {
   Indicator,
   OrdresIndicatorsService,
 } from "app/shared/services/ordres-indicators.service";
-// import { Program } from "app/shared/services/program.service";
-import { DxSelectBoxComponent, DxTagBoxComponent } from "devextreme-angular";
+import { DxSelectBoxComponent, DxTagBoxComponent, DxTileViewComponent } from "devextreme-angular";
 import { from, Observable, Subscription } from "rxjs";
 import {
   filter,
@@ -26,6 +25,10 @@ import {
   tap,
 } from "rxjs/operators";
 import { TabContext } from "../root/root.component";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+
+
+let self;
 
 @Component({
   selector: "app-ordres-accueil",
@@ -37,23 +40,34 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
   indicators: (Indicator & any)[];
   allIndicators: Indicator[];
   loadedIndicators: string[];
-  tilesReady: boolean;
   indicatorsSubscription: Subscription;
   indicatorsObservable: Observable<Indicator[]>;
   indicatorsChange = new EventEmitter<string[]>();
   secteurs: Array<Partial<Secteur>>;
+  public selected: string[];
+  public previouslySelected: string[];
+  public initialSelection: string[];
+  public dragStartTile: string;
+  public dragEndTile: string;
+  public currentHoveredTile: string;
+  public dragging: boolean;
 
   @ViewChild(DxTagBoxComponent, { static: false }) tagBox: DxTagBoxComponent;
   @ViewChild(DxSelectBoxComponent) secteurInput: DxSelectBoxComponent;
+  @ViewChild(DxTileViewComponent, { static: false }) tileView: DxTileViewComponent;
+
 
   constructor(
     public ordresIndicatorsService: OrdresIndicatorsService,
     public indicateursService: IndicateursService,
     public authService: AuthService,
+    private formUtils: FormUtilsService,
     public currentCompanyService: CurrentCompanyService,
     private tabContext: TabContext,
     private secteursService: SecteursService
-  ) { }
+  ) {
+    self = this;
+  }
 
   ngOnInit() {
     this.configureIndicator();
@@ -73,23 +87,39 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     return data ? data.parameter + " " + data.subParameter : null;
   }
 
-  openTagBox() {
+  openCloseConfig() {
+    if (this.tagBox.instance.option("opened")) return this.closeConfig();
     this.tagBox.instance.open();
   }
 
-  tileNumber(e) {
-    this.authService
-      .persist({
-        configTuilesOrdres: {
-          selection: e.value,
-        },
-      })
-      .toPromise();
+  closeConfig() {
+    if (self.tagBox.instance.option("opened")) self.tagBox?.instance.close();
+  }
 
-    this.indicatorsChange.emit(e.value);
-    if (e.value.length < 1) {
-      e.component.option("value", this.allIndicators);
-    }
+  refreshConfig() {
+    if (!self.saveTileConfig({ value: self.initialSelection })) self.tileView.instance.repaint();
+    self.tagBox.value = self.selected;
+  }
+
+  saveTileConfig(e) {
+    this.selected = e.value;
+    if (this.formUtils.areEqual(this.selected, this.previouslySelected)) return true;
+    if (this.selected?.length < 1) return e.component.option("value", this.previouslySelected);
+
+    // Gather indicators
+    this.selected = this.selected.map((id) => this.ordresIndicatorsService.getIndicatorByName(id).id);
+    // Sort when addding/removing
+    if (e.component) this.selected.sort((a, b) => this.previouslySelected.indexOf(a) - this.previouslySelected.indexOf(b));
+
+    this.authService.persist({
+      configTuilesOrdres: {
+        selection: this.selected,
+        initial: this.initialSelection
+      },
+    }).toPromise();
+
+    this.indicatorsChange.emit(this.selected);
+    this.previouslySelected = this.selected;
   }
 
   onTileClick(event) {
@@ -97,22 +127,51 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     this.tabContext.openIndicator(indicator.id);
   }
 
+  onDragStart(e) {
+    this.dragging = true;
+    this.dragStartTile = "";
+  }
+
+  onDragAndDrop(e) {
+    const els = document.querySelectorAll(".dx-tile-content:not(.dx-sortable-source) .sortable-tiles");
+    this.dragEndTile = Array.from(els).find(el => el.matches(':hover'))?.id;
+    this.dragging = false;
+    this.dragStartTile = e.element.id;
+    if (!this.dragEndTile || this.dragStartTile === this.dragEndTile) return;
+
+    const indicators = this.indicators.map(ind => ind.id);
+    const fromIndex = indicators.indexOf(this.dragStartTile);
+    const toIndex = indicators.indexOf(this.dragEndTile);
+    // console.log(this.dragStartTile, fromIndex, "=>", this.dragEndTile, toIndex)
+
+    // Moving the tile
+    this.indicators.splice(toIndex, 0, this.indicators.splice(fromIndex, 1)[0]);
+
+    if (!this.saveTileConfig({ value: this.indicators.map(ind => ind.id) }))
+      this.tileView.instance.repaint();
+  }
+
   configureIndicator() {
-    const loadIndicators = (config: { selection: string[] }) => {
-      this.loadedIndicators = config.selection;
+    const firstLoadIndicators = (config: { selection: string[], initial: string[] }) => {
+
+      this.initialSelection = config.selection;
+
       // We remove old (named) indicators that don't exist anymore but were saved
-      this.loadedIndicators = this.loadedIndicators.filter((ind) =>
+      this.loadedIndicators = config.selection?.filter((ind) =>
         this.ordresIndicatorsService.getIndicatorByName(ind)
       );
-      this.indicators = this.loadedIndicators.map((id) =>
-        this.ordresIndicatorsService.getIndicatorByName(id)
-      );
+      this.indicators = this.loadedIndicators
+        .map((id) => this.ordresIndicatorsService.getIndicatorByName(id));
+      this.previouslySelected = this.indicators.map(ind => ind.id);
     };
 
-    this.allIndicators = this.ordresIndicatorsService.getIndicators();
+    // Alphabetical order
+    this.allIndicators = this.ordresIndicatorsService
+      .getIndicators()
+      .sort((a, b) => (a.parameter + " " + a.subParameter).localeCompare((b.parameter + " " + b.subParameter)));
 
-    loadIndicators(
-      this.authService.currentUser?.configTuilesOrdres ?? {
+    firstLoadIndicators(
+      this.authService.currentUser?.configTuilesOrdres?.selection ? this.authService.currentUser?.configTuilesOrdres : {
         selection: this.ordresIndicatorsService
           .getIndicators()
           .map(({ id }) => id),

@@ -57,6 +57,7 @@ export class Ordre extends Model {
   @Field() public commentaireUsageInterne?: string;
   @Field({ model: import("./campagne.model") }) public campagne?: Campagne;
   @Field({ model: import("./edi-ordre.model") }) public ordreEDI?;
+  @Field({ model: import("./ordre.model") }) public ordreDupliq?: Ordre;
   @Field({ model: import("./secteur.model") })
   public secteurCommercial?: Secteur;
   @Field({ model: import("./client.model") }) public client?: Client;
@@ -182,7 +183,12 @@ export class Ordre extends Model {
 
   public static isCloture(ordre: Partial<Ordre>) {
     if (!ordre?.statut) console.warn("Ordre is missing statut");
-    return [Statut.EXPEDIE, Statut.FACTURE, Statut.FACTURE_EDI].includes(Statut[ordre?.statut]);
+    return [
+      Statut.EXPEDIE,
+      Statut.A_FACTURER,
+      Statut.FACTURE,
+      Statut.FACTURE_EDI
+    ].includes(Statut[ordre?.statut]);
   }
 }
 

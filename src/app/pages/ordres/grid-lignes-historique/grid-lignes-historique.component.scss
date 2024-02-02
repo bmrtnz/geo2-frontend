@@ -5,9 +5,13 @@
 
 ::ng-deep .litige-dot-legend-container {
   position: absolute;
-  right: 222px;
+  right: 322px;
   margin-top: 16px;
   z-index: 1;
+
+  &.shift-legend {
+    margin-right: 20px;
+  }
 
   div {
     position: relative;
@@ -39,6 +43,10 @@
     position: relative !important;
     margin: 0 0 0 6px !important;
     right: 0;
+  }
+
+  .create-direct-order-button {
+    margin-left: 22px;
   }
 
   .bio-article {

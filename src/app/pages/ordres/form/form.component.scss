@@ -78,7 +78,7 @@ $left-panel-btn-height: 44px;
   }
 
   .header-btn-baf {
-    margin: -5px 9px 0 0;
+    margin: -5px 11px 0 0;
     height: 27px;
 
     .dx-button-content {
@@ -122,10 +122,11 @@ $left-panel-btn-height: 44px;
     border-left: 1px dotted #fff;
 
     .dx-button-content {
+      top: 1px;
       padding: 0 !important;
 
       .dx-icon {
-        font-size: 18px !important;
+        font-size: 15px !important;
       }
     }
   }
@@ -173,7 +174,6 @@ $left-panel-btn-height: 44px;
   }
 
   .leftPanelCheckBox {
-    margin-left: 9px;
     padding-left: 9px;
     border-left: 1px solid $base-accent;
   }
@@ -303,7 +303,7 @@ $left-panel-btn-height: 44px;
         position: relative;
         top: 6px;
         font-size: 13px;
-        color: #00759c;
+        color: $base-accent;
       }
     }
   }
@@ -344,25 +344,62 @@ $left-panel-btn-height: 44px;
   display: block;
   font-size: 14px;
   text-align: center;
-  background: #00759c;
+  background: $base-accent;
   color: white;
   padding: 1px 0 3px 0;
   margin-bottom: 13px;
   min-height: 22px;
 }
 
-.order-id {
+.order-id,
+.order-dup {
   font-size: 15px;
-  color: #00759c;
+  color: $base-accent;
   float: right;
+  padding-right: 9px;
+}
+
+.order-dup {
+  padding-left: 7px;
+  border-left: 1px solid $base-accent;
 }
 
 .order-type {
   font-size: 15px;
   padding-left: 6px;
-  border-left: 1px solid #00759c;
-  color: #00759c;
+  color: $base-accent;
   float: right;
+}
+
+::ng-deep .duplicated-order {
+  border-left: 1px solid $base-accent;
+  padding: 0 4px;
+  height: 19px;
+  float: right;
+
+  .dx-button {
+    top: -5px;
+    padding: 0 3px;
+    height: 28px;
+    box-shadow: none;
+    transition: background-color .2s, color .2s;
+
+    &:hover {
+      background-color: #59709C !important;
+
+      .dx-button-text {
+        color: #FFF !important;
+      }
+    }
+
+    .dx-button-text {
+      margin-top: 0 !important;
+      color: $base-accent !important;
+      text-transform: none;
+      font-size: 15px;
+      font-weight: 400;
+    }
+  }
 }
 
 .invoice-number {

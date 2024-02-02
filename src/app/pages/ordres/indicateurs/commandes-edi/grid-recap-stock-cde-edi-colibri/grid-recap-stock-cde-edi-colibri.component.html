@@ -12,6 +12,8 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     (onEditorPreparing)="onEditorPreparing($event)"
+    (onCellClick)="oncellClick($event)"
+    (onEditingStart)="onEditingStart($event)"
     (onRowPrepared)="onRowPrepared($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="selectChange.emit($event)"
@@ -90,6 +92,7 @@
         column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
       "
       [showInColumnChooser]="column?.showInColumnChooser"
+      [setCellValue]="setCellValue"
     >
     </dxi-column>
 
@@ -120,7 +123,6 @@
         type="default"
         icon="plus"
         hint="{{ 'hint-add-article' | localize }}"
-        [focusStateEnabled]="false"
         (onClick)="addArticlePopup(cell)"
       >
       </dx-button>

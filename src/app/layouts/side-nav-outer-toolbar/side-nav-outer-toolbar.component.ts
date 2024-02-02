@@ -171,11 +171,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
 
     if (!open) {
       // Standard case = routing
-      if (
-        path &&
-        this.menuOpened &&
-        !(path === "pages/ordres" && this.router.url.includes(path))
-      ) this.router.navigateByUrl(path);
+      if (path && this.menuOpened) this.router.navigateByUrl(path);
     } else {
       // Special cases
       switch (open) {

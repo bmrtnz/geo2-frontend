@@ -283,6 +283,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.tabContext.registerComponent(this);
+    this.tabsUnpined = window.localStorage.getItem("OrderTabsUnpined") === "true" ? true : false;
 
     const openOrder = window.sessionStorage.getItem("openOrder");
     if (openOrder) {
@@ -412,10 +413,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabsPinClick() {
     this.tabsUnpined = !this.tabsUnpined;
-    window.localStorage.setItem(
-      "OrderTabsUnpined",
-      this.tabsUnpined ? "true" : "false"
-    );
+    window.localStorage.setItem("OrderTabsUnpined", this.tabsUnpined.toString());
   }
 
   onTabTitleClick(event: { itemData: Partial<TabPanelItem> }) {
@@ -447,16 +445,14 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabTitleRendered(event) {
-    if (this.tabsUnpined === undefined)
-      this.tabsUnpined = window.localStorage.getItem("OrderTabsUnpined") === "true" ? true : false;
     const replaceEvent = (e) => {
       const id = e.currentTarget.querySelector("[data-item-id]").dataset.itemId;
       this.onTabTitleClick({ itemData: { id } });
       e.stopPropagation();
     };
-    on(event.itemElement, "dxpointerdown", (e) => e.stopPropagation());
-    on(event.itemElement, "dxclick", replaceEvent);
-    on(event.itemElement, "dxhoverstart", (e) => this.setTabTooltip(event));
+    on(event.itemElement, "dxclick", (e) => e.stopPropagation());
+    on(event.itemElement, "dxpointerdown", replaceEvent);
+    on(event.itemElement, "dxhoverstart", () => this.setTabTooltip(event));
 
     this.setTabTooltip(event);
 
@@ -681,8 +677,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         details: "ordre",
         class: "tab-create-order",
         icon: "material-icons note_add",
-        component: (await import("../nouvel-ordre/nouvel-ordre.component"))
-          .NouvelOrdreComponent,
+        component: (await import("../nouvel-ordre-main/nouvel-ordre-main.component"))
+          .NouvelOrdreMainComponent,
         position: Position.Front,
       },
       {

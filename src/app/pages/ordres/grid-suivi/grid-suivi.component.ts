@@ -80,7 +80,7 @@ export class GridSuiviComponent implements AfterViewInit {
   onCellPrepared(e) {
     // Best expression for order status display
     if (e.rowType === "data" && e.column.dataField === "statut") {
-      if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value]);
+      if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
     }
     // Palettes & Colis
     if (e.column.dataField === "totalNombrePalettesCommandees") {

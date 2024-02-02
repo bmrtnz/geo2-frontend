@@ -123,6 +123,8 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>
   ) {
+    // Returns if litige is closed on client side
+    if (rowData.ligne.litige.clientCloture) return;
     const baseTarif = rowData.ligne.clientIndicateurForfait
       ? "UNITE"
       : rowData.ligne.clientUniteFactureCode;
@@ -138,7 +140,8 @@ export class GridLotComponent implements OnInit, OnChanges {
     value: any,
     rowData: Partial<LitigeLigneFait>
   ) {
-    if (rowData.ligne.litige.ordreAvoirFournisseur?.id) return;
+    // Returns if litige is closed on fournisseur side
+    if (rowData.ligne.litige.fournisseurCloture || rowData.ligne.litige.ordreAvoirFournisseur?.id) return;
 
     const baseTarif = rowData.ligne.responsableIndicateurForfait
       ? "UNITE"
@@ -264,6 +267,9 @@ export class GridLotComponent implements OnInit, OnChanges {
         "ligne.ordreLigne.article.emballage.uniteParColis",
         "ligne.litige.ordreAvoirFournisseur.id",
         "ligne.litige.responsableTiers",
+        // mandatory for locking fields
+        "ligne.litige.clientCloture",
+        "ligne.litige.fournisseurCloture",
       ]),
       map((fields) =>
         // upgrade fields that require sub selections
@@ -290,8 +296,24 @@ export class GridLotComponent implements OnInit, OnChanges {
   }
 
   onEditingStart(cell) {
-    if (cell.column.dataField === "ligne.clientPoidsNet" && this.headerData?.consequence === "F")
+    if (["ligne.clientPoidsNet",
+      "ligne.clientNombreColisReclamation",
+      "ligne.clientNombrePalettes"
+    ].includes(cell.column.dataField) && this.headerData?.consequence === "F")
       cell.cancel = true;
+
+    // Disallow changing unit price if cloture client / fournisseur
+    if (cell.column.dataField === "prixUnitaire") {
+      setTimeout(() => {
+        const inputs = document.querySelectorAll(".grid-litige-lots .merged input");
+        if (cell.data.ligne.litige.clientCloture) {
+          (inputs[0] as HTMLInputElement).disabled = true;
+          self.setPrixUnitaires(null, null, cell.data);
+        }
+        if (cell.data.ligne.litige.fournisseurCloture)
+          (inputs[1] as HTMLInputElement).disabled = true;
+      }, 10);
+    }
   }
 
   /**
@@ -474,10 +496,20 @@ export class GridLotComponent implements OnInit, OnChanges {
   ) {
     const context: any = this;
     context.defaultSetCellValue(newData, value, rowData);
+    // Do not change anything when touching pal/col/poids if client keeps product
+    if (self.headerData?.consequence === "F" &&
+      (newData.ligne?.hasOwnProperty("clientPoidsNet") ||
+        newData.ligne?.hasOwnProperty("clientNombrePalettes") ||
+        newData.ligne?.hasOwnProperty("clientNombreColisReclamation"))) {
+      newData.ligne.responsableNombrePalettes = 0;
+      newData.ligne.responsableNombreColis = 0;
+      newData.ligne.responsablePoidsNet = 0;
+      return;
+    }
     self.hasZeroQuantities = false;
     if (newData.hasOwnProperty("prixUnitaire")) return;
     if (newData.ligne?.hasOwnProperty("clientPrixUnitaire")) return self.setPrixUnitaires(newData, value, rowData);
-    self.setQuantite(newData, value, rowData);
+    if (self.headerData?.consequence !== "F") self.setQuantite(newData, value, rowData);
   }
 
   onEditorPreparing(e) {

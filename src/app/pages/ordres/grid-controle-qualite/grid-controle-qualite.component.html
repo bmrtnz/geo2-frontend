@@ -3,7 +3,6 @@
   [visible]="gridRowsTotal > 0"
   class="cq-copy-photos"
   type="default"
-  [focusStateEnabled]="false"
   text="{{ 'btn-photos-download' | localize }}"
   (onClick)="downloadPhotosClick()"
 ></dx-button>
@@ -87,7 +86,6 @@
     <dx-button
       class="small-CQ-button CQ"
       type="default"
-      [focusStateEnabled]="false"
       [text]="this.localization.localize('CQ')"
       (onClick)="
         openReport('ControleQualite-cqTechnique', cell.data.cqTechnique)
@@ -98,7 +96,6 @@
       [id]="'photo-button-' + cell.key"
       class="small-CQ-button photos visibility-hidden"
       type="default"
-      [focusStateEnabled]="false"
       [visible]="true"
       [text]="this.localization.localize('photos')"
       (onClick)="openPhotos(cell)"
@@ -109,7 +106,6 @@
     <dx-button
       class="small-CQ-button createPDF"
       type="default"
-      [focusStateEnabled]="false"
       [text]="this.localization.localize('créer')"
       (onClick)="onClickCreateCQClientReport(cell)"
     >
@@ -118,7 +114,6 @@
       class="small-CQ-button openPDF"
       type="default"
       icon="material-icons search"
-      [focusStateEnabled]="false"
       [visible]="true"
       (onClick)="openCQClientReport(cell)"
     ></dx-button>

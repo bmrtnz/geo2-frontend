@@ -272,6 +272,13 @@ body app-root.production {
   }
 }
 
+// Thinner Drag command
+.dx-command-drag {
+  padding: 0 !important;
+  width: 25px !important;
+  min-width: 25px !important;
+}
+
 // Thinner grids
 .dx-datagrid-rowsview .dx-row>td {
   line-height: 0;

@@ -255,14 +255,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
     if (this.consequences.selectedItems.length)
       this.consequences.selectedItemKeys.shift();
     this.selectedConsequence = e.addedItems[0]?.id;
-    if (!this.loading && this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
     this.headerData.consequence = this.selectedConsequence;
+    if (!this.loading && this.selectedConsequence === "F") this.clearWeightPalCol(); // Client keeps product
   }
 
-  resetWeights() {
+  clearWeightPalCol() {
     this.gridLot.grid.instance.getVisibleRows().map(row =>
-      this.gridLot.grid.instance.cellValue(row.rowIndex, "ligne.clientPoidsNet", 0)
-    )
+      ["ligne.clientPoidsNet",
+        "ligne.clientNombreColisReclamation",
+        "ligne.clientNombrePalettes"
+      ].map(field =>
+        this.gridLot.grid.instance.cellValue(row.rowIndex, field, 0)
+      )
+    );
   }
 
   validate(doAfter?) {
@@ -275,7 +280,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
   }
 
   doValidate(doAfter) {
-    if (this.selectedConsequence === "F") this.resetWeights(); // Client keeps product
+    if (this.selectedConsequence === "F") this.clearWeightPalCol(); // Client keeps product
     this.mutateLot()
       .pipe(
         concatMap((data) => this.gridLot.updateLot(data)),
@@ -553,6 +558,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     this.setRunningAll();
     const [litigeID, lotNum] = this.lot;
+
     this.litigesLignesService
       .getList(
         `litige.id==${litigeID} and numeroGroupementLitige${lotNum ? "==" : "=isnull="
@@ -581,6 +587,19 @@ export class GestionOperationsPopupComponent implements OnChanges {
             responsableQuantite: res.ordreLigne.achatQuantite,
           } as LitigeLigne)
         ),
+        tap(res => {
+          if (this.infosLitige.clientClos) {
+            delete res.clientNombrePalettes;
+            delete res.clientNombreColisReclamation;
+            delete res.clientPoidsNet;
+            delete res.clientQuantite;
+          }
+          if (this.infosLitige.fournisseurClos) {
+            delete res.responsableNombrePalettes;
+            delete res.responsableNombreColis;
+            delete res.responsableQuantite;
+          }
+        }),
         toArray(),
         concatMap((data) => this.gridLot.updateLot(data))
       )
@@ -605,7 +624,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
 
     this.fetchLot().pipe(
       concatMap(lot => this.gridLot.persist().pipe(mapTo(lot))),
-      finalize(() => this.gridLot.refresh()),
+      // finalize(() => this.gridLot.refresh()),
     ).subscribe(lot => {
       this.lot = [this.lot[0], lot];
       this.forfaitPopup.visible = true;
@@ -866,8 +885,7 @@ export class GestionOperationsPopupComponent implements OnChanges {
           if (this.ordreGenNumero) {
             notify({
               message: this.localizeService
-                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok")
-                .replace("&O", this.ordreGenNumero),
+                .localize(type !== "add" ? "ordre-cree" : "ajout-ordre-ok", this.ordreGenNumero),
               type: "success",
               displayTime: 9000
             },

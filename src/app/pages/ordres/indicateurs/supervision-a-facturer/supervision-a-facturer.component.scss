@@ -45,6 +45,16 @@
         color: #8fc459;
       }
     }
+
+    .nodata {
+      .dx-progressbar-range {
+        background-color: #FF7F07;
+      }
+
+      .dx-progressbar-status {
+        color: #FF7F07;
+      }
+    }
   }
 
   .launch-container {
@@ -60,6 +70,10 @@
       &.launchSP {
         color: #FFF !important;
         background-color: $BW-turquoise-light !important;
+
+        &.dx-state-disabled {
+          background: rgba(0, 0, 0, .1) !important;
+        }
 
         &:hover {
           background-color: $BW-turquoise-medium !important;

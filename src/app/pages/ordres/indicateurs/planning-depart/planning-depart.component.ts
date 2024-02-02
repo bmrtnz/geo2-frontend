@@ -32,6 +32,7 @@ import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { DocumentsOrdresPopupComponent } from "../../documents-ordres-popup/documents-ordres-popup.component";
 import { TabContext } from "../../root/root.component";
+import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 
 @Component({
   selector: "app-planning-depart",
@@ -51,6 +52,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   @ViewChild("gridPLANNINGDEPART", { static: false })
   datagrid: DxDataGridComponent;
   @ViewChild("secteurValue", { static: false }) secteurSB: DxSelectBoxComponent;
+  @ViewChild("bureauAchatValue", { static: false }) bureauAchatSB: DxSelectBoxComponent;
   @ViewChild("diffCheckBox", { static: false })
   diffSumColisOrNotDetail: DxCheckBoxComponent;
   @ViewChild("periodeSB", { static: false }) periodeSB: DxSelectBoxComponent;
@@ -63,6 +65,7 @@ export class PlanningDepartComponent implements AfterViewInit {
   public title: string;
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
+  public bureauxAchat: DataSource;
   public titleElement: HTMLInputElement;
   public periodes: any[];
 
@@ -74,6 +77,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     public secteursService: SecteursService,
     public currentCompanyService: CurrentCompanyService,
     public planningDepartService: PlanningDepartService,
+    public bureauxAchatService: BureauxAchatService,
     public ordresService: OrdresService,
     public authService: AuthService,
     public localizeService: LocalizationService,
@@ -87,6 +91,11 @@ export class PlanningDepartComponent implements AfterViewInit {
       "and",
       ["societes", "contains", this.currentCompanyService.getCompany().id],
     ]);
+    this.bureauxAchat = bureauxAchatService.getDataSource_v2([
+      "id",
+      "raisonSocial",
+    ]);
+    this.bureauxAchat.filter(["valide", "=", true]);
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
       Grid.PlanningDepart
     );
@@ -138,7 +147,7 @@ export class PlanningDepartComponent implements AfterViewInit {
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
-
+    console.log(this.bureauAchatSB.value)
     this.datagrid.instance.beginCustomLoading("");
     this.dataSource = this.planningDepartService.getDataSource(
       {
@@ -146,6 +155,7 @@ export class PlanningDepartComponent implements AfterViewInit {
         secteurCode: this.secteurSB.value?.id ?? "%",
         dateMin: this.dateMin.value,
         dateMax: this.dateMax.value,
+        // bureauAchat: this.bureauAchatSB.value?.id ?? "%"
       },
       new Set(await fields.toPromise())
     );
@@ -320,6 +330,18 @@ export class PlanningDepartComponent implements AfterViewInit {
         return "OK";
       }
     }
+  }
+
+  displayCodeBefore(data) {
+    return data
+      ? (data.code ? data.code : data.id) +
+      " - " +
+      (data.nomUtilisateur
+        ? data.nomUtilisateur
+        : data.raisonSocial
+          ? data.raisonSocial
+          : data.description)
+      : null;
   }
 
   manualDate(e) {

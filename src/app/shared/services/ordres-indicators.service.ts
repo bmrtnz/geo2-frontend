@@ -113,7 +113,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: true,
     parameter: "Dépassements",
-    subParameter: "en-cours clients",
+    subParameter: "En-cours clients",
     tileBkg: "#4199B4",
     indicatorIcon: "material-icons people",
     warningIcon: "material-icons warning",
@@ -234,7 +234,7 @@ const indicators: Indicator[] = [
     id: "SupervisionAFacturer",
     enabled: true,
     withCount: false,
-    parameter: "Supervision ordres",
+    parameter: "Ordres",
     subParameter: "à facturer",
     tileBkg: "#725828",
     indicatorIcon: "material-icons list_alt",
@@ -270,7 +270,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: true,
     parameter: "Planning",
-    subParameter: "départs",
+    subParameter: "Départs",
     tileBkg: "#71BF45",
     indicatorIcon: "material-icons calendar_today",
     warningIcon: "",
@@ -331,7 +331,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: false,
     parameter: "Planning",
-    subParameter: "maritime",
+    subParameter: "Maritime",
     tileBkg: "#225AA8",
     indicatorIcon: "material-icons directions_boat",
     warningIcon: "",
@@ -344,7 +344,7 @@ const indicators: Indicator[] = [
     enabled: true,
     withCount: false,
     parameter: "Déclaration",
-    subParameter: "fraude",
+    subParameter: "Fraude",
     tileBkg: "#a34527",
     indicatorIcon: "material-icons warning",
     warningIcon: "",
@@ -545,6 +545,12 @@ export class OrdresIndicatorsService {
   getIndicatorByName(name: string) {
     this.updateIndicators();
     return this.indicators.find((i) => i?.id === name);
+  }
+
+  getIndicatorDisplayById(name: string) {
+    this.updateIndicators();
+    const ind = this.indicators.find((i) => i?.id === name);
+    return ind.parameter + ind.subParameter;
   }
 
   getFormatedDate(date, dateFormat?) {

@@ -25,8 +25,8 @@ export class ConfirmationResultPopupComponent implements OnInit {
   public content: string;
   public state: MessageState = "WARNING";
 
-  @Input() public continuTextKey = "continu";
-  @Input() public backTextKey = "back";
+  @Input() public continuTextKey = "btn-continuer";
+  @Input() public backTextKey = "btn-annuler";
 
   public continueButtonOptions;
   public backButtonOptions;
@@ -36,18 +36,18 @@ export class ConfirmationResultPopupComponent implements OnInit {
 
   @ViewChild(DxPopupComponent) popup: DxPopupComponent;
 
-  constructor(private localization: LocalizationService) {}
+  constructor(private localization: LocalizationService) { }
 
   ngOnInit() {
     this.continueButtonOptions = {
       text: this.localization.localize(this.continuTextKey),
-      stylingMode: "outlined",
-      type: "danger",
+      stylingMode: "contained",
       onClick: () => this.advance.emit(true),
     };
     this.backButtonOptions = {
       text: this.localization.localize(this.backTextKey),
-      stylingMode: "contained",
+      stylingMode: "outlined",
+      type: "danger",
       onClick: () => this.advance.emit(false),
     };
   }
@@ -81,4 +81,4 @@ export class ConfirmationResultPopupComponent implements OnInit {
   declarations: [ConfirmationResultPopupComponent],
   exports: [ConfirmationResultPopupComponent],
 })
-export class ConfirmationResultPopupModule {}
+export class ConfirmationResultPopupModule { }

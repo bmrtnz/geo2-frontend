@@ -21,8 +21,9 @@ import {
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
-import { concatMap, finalize, forkJoin } from "rxjs";
+import { concatMap, forkJoin } from "rxjs";
 import { GridRecapStockCdeEdiColibriComponent } from "../grid-recap-stock-cde-edi-colibri/grid-recap-stock-cde-edi-colibri.component";
+import { GridsService } from "app/pages/ordres/grids.service";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     private stockArticleEdiBassinService: StockArticleEdiBassinService,
     private ordresEdiService: OrdresEdiService,
     private gridUtilsService: GridUtilsService,
+    private gridsService: GridsService,
     private datePipe: DatePipe,
     private tabContext: TabContext,
     private authService: AuthService,
@@ -84,7 +86,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.checkValidQties();
   }
 
-
   getGridSelectedArticles() {
     // We ensure that all GTIN are selected
     this.selectedGTIN = [];
@@ -104,6 +105,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   saveChoices() {
+    if (this.creatingOrder) return;
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     const updatedRows = rows.map(row => ({
       id: row.data.id,
@@ -111,25 +113,28 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     }));
     this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows)
       .subscribe({
-        next: (res) => console.log(res),
         error: (error: Error) => notify(this.messageFormat(error.message), "error", 7000)
       });
   }
 
   checkValidQties() {
-    this.selectedRows = this.gridRecap.datagrid.instance.getSelectedRowsData().slice();
-    this.selectedRows.sort((a, b) => a.gtin.localeCompare(b.gtin));
-    this.selectedRows.push({ gtin: "fake" })
+    const selectedIds = this.getGridSelectedArticles().map(row => row.id);
+    this.selectedRows = this.gridRecap.datagrid.instance
+      .getVisibleRows()
+      .map(row => row?.data)
+      .filter(row => selectedIds.includes(row.id));
+    this.selectedRows
+      .sort((a, b) => a.gtin.localeCompare(b.gtin))
+      .push({ gtin: "fake" });
     let sumQuantiteValidee = 0, oldGtin, oldQuantiteColis, oldRow;
+    this.selectedRows.map(row => row.warning = false);
     this.selectedRows.map(row => {
-      if (row.gtin !== oldGtin && oldGtin) {
-        oldRow.warning = (sumQuantiteValidee > oldQuantiteColis);
-        sumQuantiteValidee = 0;
-      }
+      if (oldRow) oldRow.warning = sumQuantiteValidee > oldQuantiteColis;
+      if (row.gtin !== oldGtin && oldGtin) sumQuantiteValidee = 0;
       oldGtin = row.gtin;
       oldRow = row;
-      oldQuantiteColis = row.ligneEdi?.quantiteColis ?? 0;
-      sumQuantiteValidee += row.quantiteValidee ?? 0;
+      oldQuantiteColis = row.ligneEdi?.quantiteColis;
+      sumQuantiteValidee += (row.quantiteValidee ?? oldQuantiteColis);
     });
     this.selectedRows.pop(); // Remove fake item
   }
@@ -147,6 +152,11 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.gridRecap?.enableFilters();
+    // KEEP THIS !!! This resets the paging that often fails at first load
+    setTimeout(() => {
+      this.gridRecap.datagrid.instance.pageSize(100000)
+      this.gridRecap?.dataSource.reload();
+    }, 1000)
   }
 
   clearAll() {
@@ -164,11 +174,14 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   clearAndHidePopup() {
-    this.hidePopup();
     this.clearAll();
+    this.hidePopup();
   }
 
-  createOrder() {
+  async createOrder() {
+
+    await this.gridsService.waitUntilAllGridDataSaved(this.gridRecap.datagrid);
+
     const rows = this.gridRecap.datagrid.instance.getVisibleRows();
     if (!rows.length) return;
     this.creatingOrder = true;
@@ -177,6 +190,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
       id: row.data.id,
       choix: row.isSelected,
     }));
+
     this.stockArticleEdiBassinService.saveAll(new Set(["id", "choix"]), updatedRows).pipe(
       concatMap(_res => forkJoin([this.functionsService.ofControleSelArt, this.functionsService.ofControleQteArt]
         .map(f => f(this.refOrdreEDI, this.currentCompanyService.getCompany().campagne.id)))),
@@ -203,8 +217,9 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
           noOrdres = noOrdres.split(",");
           noOrdres.pop();
           const text = this.localization.localize("ordre-crees-edi", this.gridUtilsService.friendlyFormatList(noOrdres));
+          const mess = res.data.fCreeOrdresEdi.msg;
           if (res.data.fCreeOrdresEdi.res === FunctionResult.Warning)
-            notify(`${text} -> ${res.data.fCreeOrdresEdi.msg}`, "warning", 5000);
+            notify(`${text} -> ${mess}`, "warning", 5000 + 40 * mess.length);
           else
             notify(text, "success", 5000);
           this.clearAndHidePopup();

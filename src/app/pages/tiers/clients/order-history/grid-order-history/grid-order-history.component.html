@@ -267,7 +267,7 @@
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-selection
-      *ngIf="gridSelectionEnabled"
+      *ngIf="true"
       mode="multiple"
       [allowSelectAll]="false"
       [showCheckBoxesMode]="'always'"
@@ -291,24 +291,18 @@
       [height]="columnChooser.height"
     >
     </dxo-column-chooser>
+
     <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
-      <!-- Colis summary in header -->
+      <!-- Colis summary in header
+      && Colis summary in groupFooter (for xlsx) -->
       <dxi-group-item
         *ngFor="let field of summaryFields"
         [name]="field"
-        [column]="field"
         summaryType="custom"
         [alignByColumn]="true"
-        [displayFormat]="'{0}'"
-      >
-      </dxi-group-item>
-      <!-- Colis summary in groupFooter (for xlsx) -->
-      <dxi-group-item
-        column="nombreColisExpedies"
-        summaryType="sum"
         showInColumn="nombreColisCommandes"
         [displayFormat]="'{0}'"
-        [showInGroupFooter]="true"
+        [showInGroupFooter]="field === 'nombreColisExpedies'"
       >
       </dxi-group-item>
       <!-- Date depart in groupFooter (for sorting purposes) -->
@@ -323,6 +317,7 @@
       >
       </dxi-group-item>
     </dxo-summary>
+
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
@@ -351,30 +346,36 @@
     </dxi-column>
 
     <dxo-toolbar>
-      <!-- Export functionnality -->
       <dxi-item location="after">
-        <div *dxTemplate>
-          <dx-button
-            class="export-button"
-            type="normal"
-            icon="xlsxfile"
-            hint="{{ 'btn-export-xlsx' | localize }}"
-            (onClick)="ordreLignesService.onExporting(datagrid?.instance, this)"
-          ></dx-button>
-        </div>
-      </dxi-item>
-
-      <!-- Grouping functionnality -->
-      <dxi-item location="after">
-        <div *dxTemplate>
-          <dx-button
-            class="grid-grouping-button"
-            type="default"
-            icon="material-icons menu_open"
-            hint="{{ 'btn-grouping' | localize }}"
-            (onClick)="gridsService.expandCollapseGroups(this)"
-          ></dx-button>
-        </div>
+        <!-- Export functionnality -->
+        <dx-button
+          class="export-button"
+          type="normal"
+          icon="xlsxfile"
+          hint="{{ 'btn-export-xlsx' | localize }}"
+          (onClick)="ordreLignesService.onExporting(datagrid?.instance, this)"
+        ></dx-button>
+        <!-- Grouping functionnality -->
+        <dx-button
+          class="grid-grouping-button"
+          type="default"
+          icon="material-icons menu_open"
+          hint="{{ 'btn-grouping' | localize }}"
+          (onClick)="gridsService.expandCollapseGroups(this)"
+        ></dx-button>
+        <!-- Create order functionnality -->
+        <dx-button
+          #createOrderButton
+          [disabled]="
+            !datagrid?.instance?.getSelectedRowsData()?.length ||
+            !formGroup?.get('entrepot')?.value?.id ||
+            running?.createOrder
+          "
+          class="create-direct-order-button"
+          type="success"
+          text="{{ 'creer-ordre' | localize }}"
+          (onClick)="createDirectOrder()"
+        ></dx-button>
       </dxi-item>
     </dxo-toolbar>
 
@@ -393,7 +394,6 @@
         class="grid-zoom-button"
         type="default"
         icon="material-icons search"
-        [focusStateEnabled]="false"
         (onClick)="openFilePopup(cell, $event)"
       >
       </dx-button>
@@ -404,3 +404,12 @@
 <app-zoom-client-article-popup
   [articleLigneId]="articleLigneId"
 ></app-zoom-client-article-popup>
+
+<app-nouvel-ordre
+  [silent]="true"
+  [injectedEntrepot]="formGroup?.get('entrepot')?.value"
+  (whenError)="onCreateError()"
+  (whenCreated)="insertArticlesOnNewOrder($event)"
+></app-nouvel-ordre>
+
+<app-associated-article-prompt></app-associated-article-prompt>
