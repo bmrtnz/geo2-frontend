@@ -1386,7 +1386,7 @@
         "dataField": "articleID",
         "dataType": "string",
         "width": 70,
-        "cssClass": "small-side-padding multi-line-header",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {

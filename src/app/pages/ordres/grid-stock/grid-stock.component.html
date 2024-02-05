@@ -1,5 +1,17 @@
-<div class="grid-stock">
-  <div class="search-criteria-container">
+<div
+  class="grid-stock"
+  [ngClass]="{ zoomOut: zoomOut }"
+>
+  <dx-button
+    class="zoom-stock-out"
+    [icon]="'material-icons zoom_' + (zoomOut ? 'in' : 'out') + '_map'"
+    [hint]="'btn-zoom-stock-' + (zoomOut ? 'in' : 'out') | localize"
+    (onClick)="zoomStockOut()"
+  ></dx-button>
+  <div
+    class="search-criteria-container"
+    [ngClass]="{ noHeight: zoomOut }"
+  >
     <h6>{{ "articles-preFilter-title" | localize }}</h6>
     <div style="clear: both"></div>
     <div
@@ -202,229 +214,227 @@
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="refreshArticlesGrid()"
     ></dx-button>
-    <div style="clear: both"></div>
+  </div>
+  <div style="clear: both"></div>
 
-    <div class="refresh-prev-stock-btn">
+  <dx-data-grid
+    class="dx-card wide-card grid-ordre-ligne-stock"
+    [class.commentaireStock]="this.authService.currentUser.commentaireStock"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
+    [remoteOperations]="false"
+    [showBorders]="false"
+    [focusedRowEnabled]="true"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="true"
+    [noDataText]="'aucun-stock' | localize"
+    [keyExpr]="'id'"
+    (onContentReady)="onContentReady($event)"
+    (onRowPrepared)="onRowPrepared($event)"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onCellDblClick)="onCellDblClick($event)"
+    (onCellClick)="onCellClick($event)"
+    (onContentReady)="contentReadyEvent.emit($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.OrdreStock
+      )
+    "
+  >
+    <dxo-paging></dxo-paging>
+    <dxo-search-panel
+      [visible]="true"
+      [width]="240"
+      placeholder="{{ 'search' | localize }}"
+    ></dxo-search-panel>
+    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-export fileName="Articles"></dxo-export>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    ></dxo-pager>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.OrdreStock"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+    >
+    </dxo-column-chooser>
+
+    <!-- Grouping functionnality -->
+    <dxo-toolbar>
+      <dxi-item location="after">
+        <div *dxTemplate>
+          <dx-button
+            class="grid-grouping-button"
+            type="default"
+            icon="material-icons menu_open"
+            hint="{{ 'btn-grouping' | localize }}"
+            (onClick)="gridsService.expandCollapseGroups(this)"
+          ></dx-button>
+
+          <dx-check-box
+            class="sort-comment"
+            #sortByCommentCheckBox
+            text="{{ 'tri-comment' | localize }}"
+          ></dx-check-box>
+
+          <dx-button
+            class="refresh-prev-stock-btn"
+            text="{{ 'btn-refresh-prev-stock' | localize }}"
+            type="success"
+            [disabled]="calculate"
+            icon="material-icons refresh"
+            (onClick)="refreshPrevStock()"
+          ></dx-button>
+        </div>
+      </dxi-item>
+    </dxo-toolbar>
+
+    <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
+
+    <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
+      <dxi-group-item
+        *ngFor="let field of summaryFields"
+        [column]="field"
+        summaryType="sum"
+        [alignByColumn]="true"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+
+      <dxi-group-item
+        *ngFor="let field of customSummaryFields"
+        [name]="field"
+        [column]="field"
+        summaryType="custom"
+        [alignByColumn]="true"
+        [showInColumn]="field !== 'varieteID' ? field : 'id'"
+      >
+      </dxi-group-item>
+    </dxo-summary>
+
+    <!-- Allow to sort groups by commentaire -->
+    <dxi-sort-by-group-summary-info
+      [summaryItem]="sortByCommentCheckBox?.value ? 'commentaire' : 'varieteID'"
+    >
+    </dxi-sort-by-group-summary-info>
+
+    <!-- Déstocker -->
+    <dxi-column
+      *ngIf="destock"
+      cssClass="small-horiz-padding"
+      width="72"
+      visibleIndex="12"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'destockageTemplate'"
+    >
+    </dxi-column>
+    <div *dxTemplate="let cell of 'destockageTemplate'">
       <dx-button
-        text="{{ 'btn-refresh-prev-stock' | localize }}"
+        class="small-article-button"
         type="success"
-        [disabled]="calculate"
-        icon="material-icons refresh"
-        (onClick)="refreshPrevStock()"
-      ></dx-button>
+        [text]="'Déstocker'"
+        (onClick)="openDestockagePopup(cell.data)"
+      >
+      </dx-button>
     </div>
 
-    <dx-check-box
-      class="sort-comment"
-      #sortByCommentCheckBox
-      text="{{ 'tri-comment' | localize }}"
-    ></dx-check-box>
-
-    <dx-data-grid
-      class="dx-card wide-card grid-ordre-ligne-stock"
-      [class.commentaireStock]="this.authService.currentUser.commentaireStock"
-      [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
-      [remoteOperations]="false"
-      [showBorders]="false"
-      [focusedRowEnabled]="true"
-      [focusedRowIndex]="0"
-      [columnAutoWidth]="true"
-      [columnHidingEnabled]="false"
-      [allowColumnReordering]="true"
-      [rowAlternationEnabled]="true"
-      [noDataText]="'aucun-stock' | localize"
-      [keyExpr]="'id'"
-      (onContentReady)="onContentReady($event)"
-      (onRowPrepared)="onRowPrepared($event)"
-      (onCellPrepared)="onCellPrepared($event)"
-      (onCellDblClick)="onCellDblClick($event)"
-      (onCellClick)="onCellClick($event)"
-      (onContentReady)="contentReadyEvent.emit($event)"
-      (onToolbarPreparing)="
-        gridConfiguratorService.onToolbarPreparing(
-          '',
-          $event,
-          gridConfiguratorService.Grid.OrdreStock
-        )
-      "
+    <!-- Réserver -->
+    <dxi-column
+      *ngIf="reserv"
+      cssClass="small-horiz-padding"
+      width="67"
+      visibleIndex="14"
+      [showInColumnChooser]="false"
+      [cellTemplate]="'reservationTemplate'"
     >
-      <dxo-paging></dxo-paging>
-      <dxo-search-panel
+    </dxi-column>
+    <div *dxTemplate="let cell of 'reservationTemplate'">
+      <dx-button
+        class="small-article-button reservation"
+        type="success"
+        [text]="'Réserver'"
+        (onClick)="openReservationPopup(cell.data)"
+      >
+      </dx-button>
+    </div>
+
+    <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
+      <div
+        class="group-text-1"
+        title="{{ 'hint-dblClick-file' | localize }}"
+      >
+        {{ cell.data.key }}
+      </div>
+      <!-- Clients référençant l'article -->
+      <dx-button
+        *ngIf="clientsRef"
         [visible]="true"
-        [width]="240"
-        placeholder="{{ 'search' | localize }}"
-      ></dxo-search-panel>
-      <dxo-group-panel [visible]="true"> </dxo-group-panel>
-      <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-      <dxo-header-filter
-        [visible]="true"
-        [allowSearch]="true"
-      ></dxo-header-filter>
-      <dxo-export fileName="Articles"></dxo-export>
-      <dxo-pager
-        [showPageSizeSelector]="true"
-        [showInfo]="true"
-        [showNavigationButtons]="true"
-      ></dxo-pager>
-      <dxo-state-storing
-        [storageKey]="gridConfiguratorService.Grid.OrdreStock"
-        [enabled]="true"
-        type="custom"
-        [customLoad]="gridConfiguratorService.load"
-        [customSave]="gridConfiguratorService.save"
-      ></dxo-state-storing>
-      <dxo-filter-row [visible]="true"></dxo-filter-row>
-      <dxo-column-chooser
-        [enabled]="true"
-        [width]="columnChooser.width"
-        [height]="columnChooser.height"
-        mode="select"
-        title="{{ 'columnChooser' | localize }}"
-        [allowSearch]="true"
+        class="small-action-button"
+        type="default"
+        (onClick)="openClientsPopup(cell.data)"
+        hint="{{ 'hint-clients-ref' | localize }}"
+        icon="material-icons person"
+      ></dx-button>
+      <!-- Récapitulatif -->
+      <dx-button
+        *ngIf="recap"
+        class="small-article-button recapitulatif"
+        type="success"
+        [text]="'Récap'"
+        (onClick)="openRecapPopup(cell.data)"
       >
-      </dxo-column-chooser>
-
-      <!-- Grouping functionnality -->
-      <dxo-toolbar>
-        <dxi-item location="after">
-          <div *dxTemplate>
-            <dx-button
-              class="grid-grouping-button"
-              type="default"
-              icon="material-icons menu_open"
-              hint="{{ 'btn-grouping' | localize }}"
-              (onClick)="gridsService.expandCollapseGroups(this)"
-            ></dx-button>
-          </div>
-        </dxi-item>
-      </dxo-toolbar>
-
-      <dxo-search-editor-options [width]="500"> </dxo-search-editor-options>
-
-      <dxo-summary [calculateCustomSummary]="calculateCustomSummary">
-        <dxi-group-item
-          *ngFor="let field of summaryFields"
-          [column]="field"
-          summaryType="sum"
-          [alignByColumn]="true"
-          displayFormat="{0}"
-        >
-        </dxi-group-item>
-
-        <dxi-group-item
-          *ngFor="let field of customSummaryFields"
-          [name]="field"
-          [column]="field"
-          summaryType="custom"
-          [alignByColumn]="true"
-          [showInColumn]="field !== 'varieteID' ? field : 'id'"
-        >
-        </dxi-group-item>
-      </dxo-summary>
-
-      <!-- Allow to sort groups by commentaire -->
-      <dxi-sort-by-group-summary-info
-        [summaryItem]="
-          sortByCommentCheckBox?.value ? 'commentaire' : 'varieteID'
-        "
-      >
-      </dxi-sort-by-group-summary-info>
-
-      <!-- Déstocker -->
-      <dxi-column
-        *ngIf="destock"
-        cssClass="small-horiz-padding"
-        width="72"
-        visibleIndex="12"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'destockageTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'destockageTemplate'">
-        <dx-button
-          class="small-article-button"
-          type="success"
-          [text]="'Déstocker'"
-          (onClick)="openDestockagePopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-
-      <!-- Réserver -->
-      <dxi-column
-        *ngIf="reserv"
-        cssClass="small-horiz-padding"
-        width="67"
-        visibleIndex="14"
-        [showInColumnChooser]="false"
-        [cellTemplate]="'reservationTemplate'"
-      >
-      </dxi-column>
-      <div *dxTemplate="let cell of 'reservationTemplate'">
-        <dx-button
-          class="small-article-button reservation"
-          type="success"
-          [text]="'Réserver'"
-          (onClick)="openReservationPopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-
-      <div *dxTemplate="let cell of 'groupCellButtonsTemplate'">
-        <div
-          class="group-text-1"
-          title="{{ 'hint-dblClick-file' | localize }}"
-        >
-          {{ cell.data.key }}
-        </div>
-        <!-- Clients référençant l'article -->
-        <dx-button
-          *ngIf="clientsRef"
-          [visible]="true"
-          class="small-action-button"
-          type="default"
-          (onClick)="openClientsPopup(cell.data)"
-          hint="{{ 'hint-clients-ref' | localize }}"
-          icon="material-icons person"
-        ></dx-button>
-        <!-- Récapitulatif -->
-        <dx-button
-          *ngIf="recap"
-          class="small-article-button recapitulatif"
-          type="success"
-          [text]="'Récap'"
-          (onClick)="openRecapPopup(cell.data)"
-        >
-        </dx-button>
-      </div>
-      <dxi-column
-        *ngFor="let column of this.columns | async"
-        [dataField]="column.dataField"
-        [visible]="false"
-        [caption]="
-          ('ordreStock-' + column.dataField?.split('.').join('-') | localize) ||
-          column.name
-        "
-        [dataType]="column?.dataType"
-        [width]="column?.width"
-        [minWidth]="column?.minWidth"
-        [calculateCellValue]="this[column?.calculateCellValue]"
-        [cssClass]="column?.cssClass"
-        [groupCellTemplate]="column.groupCellTemplate"
-        [cellTemplate]="column.cellTemplate"
-        [calculateSortValue]="column.calculateSortValue"
-        [calculateGroupValue]="column.calculateGroupValue"
-        [allowSearch]="
-          column?.allowSearch || ['string'].includes(column?.dataType)
-        "
-        [allowHeaderFiltering]="
-          column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-        "
-        [showInColumnChooser]="column.showInColumnChooser"
-      ></dxi-column>
-    </dx-data-grid>
-  </div>
+      </dx-button>
+    </div>
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [visible]="false"
+      [caption]="
+        ('ordreStock-' + column.dataField?.split('.').join('-') | localize) ||
+        column.name
+      "
+      [dataType]="column?.dataType"
+      [width]="column?.width"
+      [minWidth]="column?.minWidth"
+      [calculateCellValue]="this[column?.calculateCellValue]"
+      [cssClass]="column?.cssClass"
+      [groupCellTemplate]="column.groupCellTemplate"
+      [cellTemplate]="column.cellTemplate"
+      [calculateSortValue]="column.calculateSortValue"
+      [calculateGroupValue]="column.calculateGroupValue"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+  </dx-data-grid>
 </div>
+
 <app-zoom-article-popup
   [articleLigneId]="articleLigneId"
 ></app-zoom-article-popup>

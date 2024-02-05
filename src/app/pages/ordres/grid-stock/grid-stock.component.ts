@@ -105,6 +105,7 @@ export class GridStockComponent implements OnInit {
   bureauxAchat: Observable<DataSource>;
   public clients: DataSource;
   public secteurs: DataSource;
+  public zoomOut: boolean;
   trueFalse: any;
   initialSpecy: any;
   calculate: boolean;
@@ -248,6 +249,10 @@ export class GridStockComponent implements OnInit {
     this.onFieldValueChange(null, "espece"); // First run: setting filters values
     // setTimeout(() => this.refreshArticlesGrid(), 500) // A VIRER !!!!
     // this.refreshArticlesGrid() // A VIRER !!!!
+  }
+
+  zoomStockOut() {
+    this.zoomOut = !this.zoomOut;
   }
 
   onFilterChange() {

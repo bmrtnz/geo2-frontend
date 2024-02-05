@@ -19,7 +19,9 @@
     ></dx-button>
     <dx-button
       class="minimize-popup"
-      icon="material-icons fullscreen_exit"
+      [icon]="
+        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
+      "
       (onClick)="resizePopup()"
     ></dx-button>
   </div>

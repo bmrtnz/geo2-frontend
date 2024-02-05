@@ -2,11 +2,79 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
+
+.zoom-stock-out {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  right: 8px;
+  transition: top 0.25s;
+
+  &:not(:hover) {
+    background: #FFF;
+  }
+}
+
 ::ng-deep .grid-stock .dx-datagrid-search-panel {
   display: none;
 }
 
 ::ng-deep .grid-stock {
+
+  &.zoomOut {
+
+    .dx-row.dx-header-row {
+      td {
+        height: 24px !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+      }
+    }
+
+    .zoom-stock-out {
+      margin-top: 5px
+    }
+
+    .dx-datagrid-header-panel .dx-toolbar-after {
+      right: 24px;
+    }
+
+    .dx-datagrid-filter-row {
+      display: none;
+    }
+
+    .dx-group-row td,
+    .grid-stock .dx-group-row div td {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .recapitulatif .dx-button-text {
+      font-size: 10px;
+    }
+
+    .dx-row.dx-group-row {
+      height: 25px !important;
+
+      .group-text-1 {
+        width: 650px;
+      }
+
+      td,
+      td div {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .search-criteria-container {
+    transition: 0.25s;
+    max-height: 120px;
+
+    &.noHeight {
+      max-height: 0 !important;
+    }
+  }
 
   .grid-grouping-button {
     position: relative !important;
@@ -44,6 +112,10 @@
 
   .dx-datagrid {
     min-height: 270px;
+
+    .dx-datagrid-header-panel .dx-toolbar-after {
+      transition: right 0.25s;
+    }
   }
 
   h6 {
@@ -135,6 +207,7 @@
     line-height: 15px;
     cursor: pointer;
     float: left;
+    transition: width 0.25s;
   }
 
   .small-action-button {
@@ -209,19 +282,30 @@
   }
 
   .sort-comment {
-    position: absolute;
-    right: 492px;
-    margin-top: 12px;
+    margin: 5px 0 0 10px;
     background-color: $BW-turquoise-light !important;
     color: white;
     padding: 5px 12px 5px 8px;
-    z-index: 1;
+    float: right;
 
     .dx-checkbox-icon {
       margin-right: 2px;
       color: rgba(0, 0, 0, 0.7);
       border: 0;
       background: white;
+    }
+  }
+
+  .refresh-prev-stock-btn {
+    margin: 0 5px 0 10px;
+
+    .dx-button {
+      height: 29px;
+      font-size: 12px;
+
+      .dx-button-content {
+        padding: 0 12px;
+      }
     }
   }
 
@@ -355,20 +439,4 @@
 
 ::ng-deep .cursor-pointer {
   cursor: pointer !important;
-}
-
-::ng-deep .refresh-prev-stock-btn {
-  position: absolute;
-  margin-top: 11px;
-  right: 210px;
-  z-index: 1;
-
-  .dx-button {
-    height: 29px;
-    font-size: 12px;
-
-    .dx-button-content {
-      padding: 0 12px;
-    }
-  }
 }
