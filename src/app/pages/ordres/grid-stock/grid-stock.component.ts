@@ -253,7 +253,6 @@ export class GridStockComponent implements OnInit {
 
   zoomStockOut() {
     this.zoomOut = !this.zoomOut;
-    console.log(this.datagrid.instance.getVisibleRows())
   }
 
   onFilterChange() {
