@@ -173,8 +173,8 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          const uniqueTiers = [...new Set(data.map((e) => e.codeTiers))].map(
-            (tier) => data.find((e) => e.codeTiers === tier)
+          const uniqueTiers = [...new Set(data.map((e) => e.codeTiers + "-" + e.typeTiers.id))].map(
+            (tiers) => data.find((e) => (e.codeTiers + "-" + e.typeTiers.id) === tiers)
           );
           this.dataGrid.dataSource = new DataSource(
             JSON.parse(JSON.stringify(uniqueTiers))

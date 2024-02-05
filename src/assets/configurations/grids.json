@@ -4813,6 +4813,7 @@
         "visibleIndex": 1,
         "dataField": "typeTiers.description",
         "dataType": "string",
+        "cssClass": "capitalize",
         "width": "110",
         "sortIndex": 1,
         "sortOrder": "asc",
@@ -4944,6 +4945,7 @@
         "sortIndex": 1,
         "sortOrder": "asc",
         "width": "120",
+        "cssClass": "capitalize",
         "allowEditing": false,
         "visible": true
       },
