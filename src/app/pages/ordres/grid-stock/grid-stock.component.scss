@@ -49,20 +49,32 @@
       padding-bottom: 0 !important;
     }
 
-    .recapitulatif .dx-button-text {
+    .small-article-button .dx-button-text {
       font-size: 10px;
     }
 
     .dx-row.dx-group-row {
-      height: 25px !important;
+      height: 22px !important;
+
+      .dx-command-expand div:first-child {
+        height: 19px;
+        line-height: 19px;
+      }
 
       .group-text-1 {
         width: 650px;
       }
+    }
 
-      td,
-      td div {
-        font-size: 13px;
+    .dx-row {
+
+      &.dx-data-row,
+      &.dx-group-row {
+
+        td,
+        td div {
+          font-size: 14px;
+        }
       }
     }
   }
@@ -191,10 +203,6 @@
   .dx-group-row td {
     padding-right: 5px;
     padding-left: 5px;
-  }
-
-  .grid-ordre-ligne-stock {
-    max-height: 650px;
   }
 
   .group-text-1 {
