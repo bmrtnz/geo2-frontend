@@ -21,7 +21,16 @@
 
 ::ng-deep .grid-stock {
 
+  .grid-title {
+    transition: opacity 0.25s;
+    opacity: 0;
+  }
+
   &.zoomOut {
+
+    .grid-title {
+      opacity: 1;
+    }
 
     .dx-row.dx-header-row {
       td {
@@ -148,7 +157,7 @@
       font-size: 13px;
       padding: 3px 15px;
       color: $base-accent;
-      background-color: #FFF;
+      background-color: transparent;
       border-radius: 9px;
     }
   }
@@ -207,7 +216,7 @@
 
   .group-text-1 {
     position: relative;
-    margin-top: 1px;
+    margin-top: 3px;
     height: auto;
     width: 500px;
     padding-bottom: 2px;

@@ -239,7 +239,7 @@
     (onContentReady)="contentReadyEvent.emit($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(
-        '',
+        localizeService?.localize('ordreStock-stock-produits-finis'),
         $event,
         gridConfiguratorService.Grid.OrdreStock
       )
