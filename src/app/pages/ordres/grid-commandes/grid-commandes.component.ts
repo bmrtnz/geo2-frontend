@@ -468,6 +468,8 @@ export class GridCommandesComponent
                 "article.cahierDesCharge.categorie.cahierDesChargesBlueWhale",
                 "article.matierePremiere.origine.id",
                 "article.matierePremiere.modeCulture.id",
+                // Used to colorize in red when pricing alert
+                "ediLigne.alertePrix",
               ],
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
@@ -749,6 +751,9 @@ export class GridCommandesComponent
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
       }
+      // Alerte prix ligne EDI
+      if (e.data.ediLigne?.alertePrix?.length)
+        e.cellElement.classList.add("red-font");
       // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {
         let tauxEncombrement;

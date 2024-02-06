@@ -49,6 +49,7 @@ import { RecapStockCdeEdiColibriPopupComponent } from "../recap-stock-cde-edi-co
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { StockArticleEdiBassinService } from "app/shared/services/api/stock-article-edi-bassin.service";
 import hideToasts from "devextreme/ui/toast/hide_toasts";
+import { AssocArticlesEdiColibriPopupComponent } from "app/shared/components/assoc-articles-edi-colibri-popup/assoc-articles-edi-colibri-popup.component";
 
 enum InputField {
   clientCode = "client",
@@ -89,6 +90,14 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   public gridTitleCount: string;
   public gridTitleInput: HTMLInputElement;
   public devMode = isDevMode();
+  private viewInit: boolean;
+  private userParams: {
+    periode: string,
+    dateMin: Date,
+    dateMax: Date,
+    assistante: string
+  }
+
 
   @Output() commandeEdi: Partial<CommandeEdi>;
   @Output() commandeEdiId: string;
@@ -108,6 +117,7 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   modifCdeEdiPopup: ModifCommandeEdiPopupComponent;
   @ViewChild(VisualiserOrdresPopupComponent, { static: false })
   visuCdeEdiPopup: VisualiserOrdresPopupComponent;
+  @ViewChild(AssocArticlesEdiColibriPopupComponent, { static: false }) assocArticlesPopup: AssocArticlesEdiColibriPopupComponent;
 
   @ViewChild(RecapStockCdeEdiColibriPopupComponent, { static: false })
   recapStockPopup: RecapStockCdeEdiColibriPopupComponent;
@@ -212,12 +222,26 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // Retrieves user params
+    const params = window.localStorage.getItem("params-cde-edi");
+    let config;
+    if (params?.length) config = JSON.parse(params);
+    if (config) {
+      if (config.assistante) this.formGroup.get("codeAssistante").setValue({ id: config.assistante });
+      if (config.periode) {
+        this.setDefaultPeriod(config.periode);
+      } else {
+        this.formGroup.get("dateMin")?.setValue(config.dateMin);
+        this.formGroup.get("dateMax")?.setValue(config.dateMax);
+      }
+    } else {
+      this.setDefaultPeriod("J+1"); // Tomorrow by default
+    }
+    this.viewInit = true;
+
     const dxGridElement = this.datagrid.instance.$element()[0];
     this.gridTitleInput = dxGridElement.querySelector(
       ".dx-toolbar .grid-title input"
-    );
-    this.authService.onUserChanged().subscribe(() =>
-      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
     );
     const initFilterStockKey = this.authService.currentUser.filtreRechercheStockEdi ?? "S";
     this.formGroup.get("filtreStock").setValue(initFilterStockKey);
@@ -312,6 +336,14 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
 
   onFieldValueChange(e?) {
     if (e) this.enableFilters();
+    this.userParams = {
+      periode: this.periodeSB?.value?.id,
+      dateMin: this.formGroup.get("dateMin")?.value,
+      dateMax: this.formGroup.get("dateMax")?.value,
+      assistante: this.formGroup.get("codeAssistante")?.value?.id
+    }
+    if (this.viewInit)
+      window.localStorage.setItem("params-cde-edi", JSON.stringify(this.userParams));
   }
 
   setClientDataSource() {
@@ -366,10 +398,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   manualDate(e) {
+    this.onFieldValueChange();
     // We check that this change is coming from the user, not following a period change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     // Checking that date period is consistent otherwise, we set the other date to the new date
     const deb = new Date(this.formGroup.get("dateMin").value);
@@ -391,10 +422,9 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
   }
 
   setDates(e) {
+    this.onFieldValueChange();
     // We check that this change is coming from the user, not following a prog change
     if (!e.event) return;
-
-    this.onFieldValueChange();
 
     const datePeriod = this.dateMgtService.getDates(e);
 
@@ -790,6 +820,10 @@ export class GridCommandesEdiComponent implements OnInit, AfterViewInit {
       dateMin: datePeriod.dateDebut,
       dateMax: datePeriod.dateFin,
     });
+  }
+
+  openArticles() {
+    this.assocArticlesPopup.visible = true;
   }
 }
 

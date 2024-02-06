@@ -8774,6 +8774,13 @@
       {
         "dataField": "id",
         "visible": false
+      },
+      {
+        "dataField": "ligneEdi.id",
+        "visibleIndex": 96,
+        "type": "selection",
+        "fixed": false,
+        "visible": true
       }
     ]
   },

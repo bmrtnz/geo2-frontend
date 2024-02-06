@@ -63,20 +63,22 @@
   background-color: #8fc459 !important;
 }
 
-::ng-deep .grid-cdes-edi {
-  max-height: 650px !important;
-}
+::ng-deep .form-commandes-Edi {
 
-::ng-deep .grid-commandes-Edi {
   h6 {
     margin: 0;
     float: left;
   }
 
-  .refresh {
+  .top-button {
     top: -8px;
     float: right;
+
+    &.articles-edi {
+      margin-right: 10px;
+    }
   }
+
 
   .BAFFilterArea {
     min-width: 1024px;
@@ -116,5 +118,12 @@
         padding: 0 10px 0 30px;
       }
     }
+  }
+}
+
+::ng-deep .grid-cdes-edi {
+  .grid-grouping-button {
+    margin-top: -12px !important;
+    right: 132px;
   }
 }

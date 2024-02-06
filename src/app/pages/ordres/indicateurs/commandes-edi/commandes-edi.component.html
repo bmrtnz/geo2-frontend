@@ -1,48 +1,16 @@
-<dx-popup
-  [fullScreen]="this.popupFullscreen"
-  [showTitle]="true"
-  [dragEnabled]="true"
-  [dragOutsideBoundary]="true"
-  [shading]="false"
-  [(visible)]="visible"
-  (onShowing)="onShowing($event)"
-  (onShown)="onShown($event)"
-  (onHidden)="onHidden()"
-  [resizeEnabled]="true"
->
-  <div *dxTemplate="let data of 'title'">
-    <div class="title-start">{{ "ordres-commandes-edi" | localize }}&nbsp;</div>
-    <dx-button
-      class="close-popup"
-      icon="close"
-      (onClick)="hidePopup()"
-    ></dx-button>
-    <dx-button
-      class="minimize-popup"
-      [icon]="
-        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
-      "
-      (onClick)="resizePopup()"
-    ></dx-button>
-  </div>
-  <div *dxTemplate="let data of 'content'">
-    <dx-scroll-view>
-      <div class="commandes-edi-content-container">
-        <dx-load-panel
-          shadingColor="rgba(0,0,0,0.2)"
-          [position]="{ of: '.commandes-edi-popup .dx-popup-content' }"
-          [visible]="loadingRecap"
-          [showPane]="true"
-          [shading]="true"
-          [hideOnOutsideClick]="false"
-        >
-        </dx-load-panel>
+<div class="commandes-edi-content-container">
+  <dx-load-panel
+    shadingColor="rgba(0,0,0,0.2)"
+    [position]="{ of: '.commandes-edi-popup .dx-popup-content' }"
+    [visible]="loadingRecap"
+    [showPane]="true"
+    [shading]="true"
+    [hideOnOutsideClick]="false"
+  >
+  </dx-load-panel>
 
-        <br />
-        <app-grid-commandes-edi
-          (showHideLoader)="showHideLoader($event)"
-        ></app-grid-commandes-edi>
-      </div>
-    </dx-scroll-view>
-  </div>
-</dx-popup>
+  <br />
+  <app-grid-commandes-edi
+    (showHideLoader)="showHideLoader($event)"
+  ></app-grid-commandes-edi>
+</div>

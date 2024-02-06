@@ -137,7 +137,7 @@
   .dx-data-row .article-column {
     // background-color: transparent !important;
 
-    &:not(.bio-article) {
+    &:not(.bio-article):not(.red-font) {
       color: #000 !important;
     }
   }

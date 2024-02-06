@@ -244,6 +244,20 @@ const indicators: Indicator[] = [
     ),
   },
   {
+
+    id: "CommandesEdi",
+    enabled: false,
+    withCount: false,
+    parameter: "Commandes",
+    subParameter: "EDI",
+    tileBkg: "#0258A8",
+    indicatorIcon: "material-icons article",
+    warningIcon: "",
+    component: import(
+      "../../pages/ordres/indicateurs/commandes-edi/commandes-edi.component"
+    ),
+  },
+  {
     id: Indicateur.LitigeOuvert,
     enabled: true,
     withCount: true,
@@ -539,6 +553,10 @@ export class OrdresIndicatorsService {
   }
   getIndicators(): Indicator[] {
     this.updateIndicators();
+    // Some indicators can be disabled
+    // Meaning that they won't be shown on tile view
+    // But can be launched from elsewhere
+    // E.g. Commandes Edi
     return this.indicators.filter((indicator) => indicator.enabled);
   }
 

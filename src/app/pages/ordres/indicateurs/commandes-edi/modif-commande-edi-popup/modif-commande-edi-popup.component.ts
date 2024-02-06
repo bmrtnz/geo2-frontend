@@ -58,7 +58,7 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
     if (this.showMode) {
       this.titleStart = `${this.localizeService.localize("commande")} ${this.canalCde}`;
       if (this.commandeEdiId) this.titleMid = " n° " + this.commandeEdiId;
-      this.titleEnd = `- ${this.localizeService.localize('click-ordre-row')}`;
+      this.titleEnd = `- ${this.localizeService.localize('dbl-click-ordre-row')}`;
     } else {
       this.titleStart = this.localizeService.localize("ordre-edi-modification");
     }
@@ -69,6 +69,7 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
   }
 
   onShown() {
+    this.gridComponent.datagrid.instance.option("focusedRowIndex", -1);
     this.gridComponent.enableFilters();
   }
 

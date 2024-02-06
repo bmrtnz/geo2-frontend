@@ -53,8 +53,6 @@ export class GridRecapStockCdeEdiColibriComponent {
   public columns: Observable<GridColumn[]>;
   private gridConfig: Promise<GridConfig>;
   public env = environment;
-  private oldgtin: string = "";
-  private alternateOrder: boolean = false;
   public dataSource: DataSource;
   private colors = {};
 
@@ -119,7 +117,7 @@ export class GridRecapStockCdeEdiColibriComponent {
 
   onRowPrepared(e) {
     if (e.rowType === "data") {
-      // Alternate colors vs gtin
+      // Alternate colors vs numeroLigneEDI
       this.setAlternateColors();
       e.rowElement.classList.add(this.colors[e.data.id] ? "alternate-row-1" : "alternate-row-2");
 
@@ -135,17 +133,17 @@ export class GridRecapStockCdeEdiColibriComponent {
   }
 
   setAlternateColors() {
-    let prevGtin, alternate;
+    let prevEdiLigne, alternate;
     this.datagrid.instance.getVisibleRows().map(row => {
-      if (row.data.gtin !== prevGtin) alternate = !alternate;
+      if (row.data.numeroLigneEDI !== prevEdiLigne) alternate = !alternate;
       this.colors[row.data.id] = alternate;
-      prevGtin = row.data.gtin;
+      prevEdiLigne = row.data.numeroLigneEDI;
     });
   }
 
   showWarning(data) {
     return !!self.selectedRows
-      ?.find(r => r.gtin === data.gtin && r.warning && self.selectedRows.find(r => r.id === data.id));
+      ?.find(r => r.numeroLigneEDI === data.numeroLigneEDI && r.warning && self.selectedRows.find(r => r.id === data.id));
   }
 
   onCellPrepared(e) {
