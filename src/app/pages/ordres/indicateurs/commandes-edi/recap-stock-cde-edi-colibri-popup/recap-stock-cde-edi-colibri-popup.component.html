@@ -37,8 +37,8 @@
           type="success"
           [disabled]="
             creatingOrder ||
-            !selectedGTIN?.length ||
-            selectedGTIN?.length !== resultsGTIN?.length ||
+            !selectedEdiLigne?.length ||
+            selectedEdiLigne?.length !== resultsEdiLigne?.length ||
             !noWarningShown()
           "
           text="{{ 'creer-ordre(s)' | localize }}"
