@@ -340,7 +340,18 @@ export class GridLignesDetailsComponent implements AfterViewInit, OnChanges {
   }
 
   saveGridEditData() {
-    setTimeout(() => this.datagrid.instance.saveEditData());
+    setTimeout(() => this.datagrid.instance.saveEditData().then(() => this.moveRows()));
+  }
+
+  moveRows() {
+    this.datagrid.instance.closeEditCell();
+    // switch focus
+    this.datagrid.instance.focus(
+      this.datagrid.instance.getCellElement(
+        this.datagrid.focusedRowIndex + 1,
+        this.datagrid.focusedColumnIndex
+      )
+    );
   }
 
   onValueChanged(event, cell) {
