@@ -1386,7 +1386,7 @@
         "dataField": "articleID",
         "dataType": "string",
         "width": 70,
-        "cssClass": "small-side-padding multi-line-header",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -7306,6 +7306,7 @@
       {
         "visibleIndex": 0,
         "dataField": "id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -7354,7 +7355,8 @@
         "visibleIndex": 10,
         "dataField": "echeanceNiveau",
         "class": "no-padding",
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 12,
@@ -7405,7 +7407,7 @@
       },
       {
         "visibleIndex": 30,
-        "dataField": "ordre.litige.commentairesInternes",
+        "dataField": "ordre.commentaireUsageInterne",
         "visible": false
       }
     ]
@@ -7739,7 +7741,7 @@
     ]
   },
   "packing-list": {
-    "pageSize": 100,
+    "pageSize": 50,
     "columns": [
       {
         "visibleIndex": 0,

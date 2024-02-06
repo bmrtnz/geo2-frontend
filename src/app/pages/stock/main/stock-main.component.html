@@ -7,6 +7,7 @@
     [loop]="false"
     [animationEnabled]="true"
     [swipeEnabled]="true"
+    [class.noTabs]="gridStock?.zoomOut"
   >
     <div *dxTemplate="let stockCategory of 'title'">
       <span>{{ stockCategory.stockName }}</span>

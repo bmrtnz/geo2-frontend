@@ -7,7 +7,6 @@
   [hideOnOutsideClick]="false"
   [(visible)]="visible"
   [resizeEnabled]="true"
-  [dragOutsideBoundary]="true"
   [shading]="false"
   (onShowing)="onShowing($event)"
   (onShown)="onShown($event)"
@@ -18,7 +17,9 @@
     <dx-button
       class="min-max-imize-popup-icon"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      icon="material-icons fullscreen_exit"
+      [icon]="
+        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
+      "
       (onClick)="resizePopup()"
     ></dx-button>
   </div>

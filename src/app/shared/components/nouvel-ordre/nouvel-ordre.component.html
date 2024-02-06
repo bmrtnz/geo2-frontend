@@ -37,6 +37,14 @@
     (deferedOnClick)="onButtonLoaderClick()"
   ></app-button-loader>
 
+  <!-- Memorize filter clearing -->
+  <dx-check-box
+    #keepFilters
+    class="keep-filters"
+    text="{{ 'keep-filters' | localize }}"
+    (onValueChanged)="onKeepFiltersChanged($event)"
+  ></dx-check-box>
+
   <div style="clear: both"></div>
   <app-grid-historique-entrepots
     #gridHisto

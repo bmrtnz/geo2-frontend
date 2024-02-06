@@ -81,6 +81,7 @@ export class PlanningMaritimeComponent implements OnInit, AfterViewInit {
     this.titleElement = this.datagrid.instance
       .$element()[0]
       .querySelector(".dx-toolbar .dx-placeholder") as HTMLInputElement;
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
     );

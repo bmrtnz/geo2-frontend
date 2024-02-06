@@ -132,6 +132,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J"
       ));
@@ -279,11 +280,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
 
   calculateEntrepot(data) {
     // Ajout CP, ville et pays au lieu de livraison
-    let title = `(Transp. : ${data.transporteur})`;
-    if (data.entrepotCodePostal) {
-      title += `  ${data?.entrepotRaisonSocial} - ${data.entrepotCodePostal} ${data.entrepotVille} (${data.entrepotPays})`;
-    }
-    return title;
+    return `${data?.entrepotRaisonSocial} - ${data.entrepotCodePostal ?? ''} ${data.entrepotVille} (${data.entrepotPays})`;
   }
 
   onValideChanged(e) {

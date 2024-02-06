@@ -33,3 +33,20 @@ h2.nouvelOrdre-title {
 ::ng-deep .pulse .dx-button {
   animation: pulse 0.5s;
 }
+
+::ng-deep .keep-filters {
+  position: absolute;
+  right: 5px;
+  margin-top: 12px;
+  background-color: #8FC459 !important;
+  color: white;
+  padding: 5px 12px 6px 8px;
+  z-index: 1;
+
+  .dx-checkbox-icon {
+    margin-right: 2px;
+    color: rgba(0, 0, 0, 0.7);
+    border: 0;
+    background: white;
+  }
+}

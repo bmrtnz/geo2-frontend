@@ -31,6 +31,7 @@ export class DeclarationFraude extends Model {
   @Field() ordreAnnule: boolean;
   @Field() incotermCode: string;
   @Field() poidsNetClient: number;
+  @Field() poidsNetColis: number;
   @Field() transporteurCode: string;
   @Field() commentaireInterne: string;
   @Field() origineDescription: string;

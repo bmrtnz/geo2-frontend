@@ -54,6 +54,16 @@ export class FournisseursService extends ApiService implements APIRead {
       .pipe(takeWhile((res) => res.loading === false));
   }
 
+  getList(search: string, columns: Array<string>) {
+    return this.apollo
+      .query<{ allFournisseurList: Fournisseur[] }>({
+        query: gql(this.buildGetListGraph(columns)),
+        variables: { search },
+        fetchPolicy: "network-only",
+      })
+      .pipe(takeWhile((res) => res.loading === false));
+  }
+
   getDataSource_v2(columns: Array<string>) {
     return new DataSource({
       sort: [{ selector: "code" }],

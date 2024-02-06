@@ -123,14 +123,19 @@
     background-color: transparent !important;
   }
 
+  .dx-row-focused.dx-data-row.dx-row-alt>td:not(.dx-focused):not(:first-of-type):not(:nth-of-type(2)):not(.dx-cell-modified) {
+    color: #000;
+    background-color: #F0F0F0 !important;
+  }
+
   .dx-row-focused td.dx-command-select {
     .dx-checkbox-icon {
       border-color: #fff !important;
     }
   }
 
-  .article-column {
-    background-color: transparent !important;
+  .dx-data-row .article-column {
+    // background-color: transparent !important;
 
     &:not(.bio-article) {
       color: #000 !important;

@@ -91,8 +91,8 @@ export class GridPackingListComponent {
     minDate.setDate(minDate.getDate() - 180);
     const array = [];
     this.dataSource.filter([
-      ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
-      "and",
+      // ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
+      // "and",
       ["entrepot.id", "=", this.entrepotId]
     ])
     this.datagrid.dataSource = this.dataSource;

@@ -44,10 +44,13 @@
       [showNavigationButtons]="true"
     ></dxo-pager>
     <dxo-filter-row [visible]="true"></dxo-filter-row>
-
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
     <dxi-column
       *ngFor="let column of this.columns | async"
       [dataField]="column.dataField"
+      [type]="column.type"
+      [fixed]="column.fixed"
+      [fixedPosition]="column.fixedPosition"
       [caption]="
         ('tiers-clients-' +
           column.dataField?.replace('.description', '').split('.').join('-')

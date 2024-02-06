@@ -15,11 +15,16 @@ export class DevisesRefsService extends ApiService {
     this.gqlKeyType = "GeoDeviseRefKeyInput";
   }
 
+  static getCacheID(data: Partial<DeviseRef>) {
+    return `GeoDeviseRef:${data.id}-${data.deviseId}`;
+  }
+
   getOne(id: { id: string, devise: string }, columns: Array<string>) {
     return this.apollo
       .query<{ deviseRef: DeviseRef }>({
         query: gql(this.buildGetOneGraph(columns)),
         variables: { id },
+        fetchPolicy: "no-cache",
       })
       .pipe(takeWhile((res) => !res.loading));
   }

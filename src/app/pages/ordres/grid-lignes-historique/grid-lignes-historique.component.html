@@ -95,6 +95,7 @@
             [dataSource]="clients"
             [displayExpr]="displayCodeBefore"
             [searchExpr]="['code']"
+            [showClearButton]="true"
             (onValueChanged)="onClientChanged($event)"
             itemTemplate="items"
           >

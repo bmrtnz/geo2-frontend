@@ -145,6 +145,7 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
         this.authService.currentUser.secteurCommercial
       ]);
     }
+    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J")
     );
