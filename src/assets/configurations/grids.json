@@ -7970,6 +7970,7 @@
         "visible": true,
         "cssClass": "text-align-right no-padding-right disabled-cell",
         "allowEditing": false,
+        "width": 120,
         "cellTemplate": "mergeCellsTemplate",
         "virtual": true
       },
@@ -8064,6 +8065,7 @@
         "editCellTemplate": "mergeEditCellsTemplate",
         "calculateCellValue": "calculateForfait",
         "setCellValue": "calcValue",
+        "width": 120,
         "virtual": true
       },
       {
@@ -8079,6 +8081,7 @@
         "allowEditing": true,
         "showInColumnChooser": false,
         "visible": true,
+        "width": 120,
         "cssClass": "edit-cell",
         "datatype": "number",
         "setCellValue": "calcTaux",
