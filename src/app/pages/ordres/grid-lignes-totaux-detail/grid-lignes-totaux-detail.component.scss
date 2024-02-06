@@ -6,6 +6,16 @@
     display: none;
   }
 
+  .dx-header-row td:first-child {
+    padding-left: 16px !important;
+  }
+
+  .dx-group-row td:first-child {
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.87);
+    padding-left: 16px !important;
+  }
+
   .dx-datagrid-rowsview .dx-datagrid-summary-item,
   .dx-group-cell {
     font-weight: normal !important;
