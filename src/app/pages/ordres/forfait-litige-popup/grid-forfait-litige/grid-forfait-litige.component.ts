@@ -24,6 +24,7 @@ import {
   GridConfig,
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { Change, GridColumn } from "basic";
 import { DxDataGridComponent, DxSelectBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
@@ -58,6 +59,7 @@ export class GridForfaitLitigeComponent {
     private litigesLignesService: LitigesLignesService,
     private litigesService: LitigesService,
     public gridConfiguratorService: GridConfiguratorService,
+    public gridUtilsService: GridUtilsService,
     public transporteursService: TransporteursService,
     public currentCompanyService: CurrentCompanyService,
     public localizeService: LocalizationService,
@@ -189,6 +191,24 @@ export class GridForfaitLitigeComponent {
           (inputs[1] as HTMLInputElement).disabled = true;
       }, 10);
     }
+  }
+
+  onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
+    if (!["Enter", "NumpadEnter"].includes(event.originalEvent?.code)) return;
+
+    let myInput = document.querySelector(".dx-state-focused");
+    // Do not apply when jump into next merged cell
+    if (myInput?.classList?.contains("prev-cell")) return;
+
+    if (!myInput.classList.contains("merged-cell")) this.datagrid.instance.closeEditCell();
+    // switch focus
+    const nextCell = this.datagrid.instance.getCellElement(
+      this.datagrid.focusedRowIndex + 1,
+      this.datagrid.focusedColumnIndex
+    );
+    this.datagrid.instance.focus(nextCell);
+    if (myInput?.classList?.contains("next-cell") && nextCell)
+      setTimeout(() => this.datagrid.instance.editCell(1, "forfait"), 100);
   }
 
   public onSaving(event: {

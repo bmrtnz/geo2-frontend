@@ -7955,7 +7955,8 @@
       {
         "dataField": "article.articleDescription.descriptionLongue",
         "allowEditing": false,
-        "cssClass": "disabled-cell",
+        "width": 300,
+        "cssClass": "disabled-cell article-forfait",
         "visible": true
       },
       {

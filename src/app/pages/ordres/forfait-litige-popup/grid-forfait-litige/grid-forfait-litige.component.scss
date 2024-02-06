@@ -38,6 +38,11 @@
 
 }
 
+::ng-deep .article-forfait {
+  line-height: 18px !important;
+  white-space: normal;
+}
+
 .client-cell {
   color: darken($base-danger, 10%);
 }
