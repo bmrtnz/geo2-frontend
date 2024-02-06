@@ -131,6 +131,10 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     this.formGroup.get("valide").patchValue(true);
   }
 
+  onContentReady(e) {
+    e.component.focus();
+  }
+
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>

@@ -36,6 +36,7 @@
                 [displayExpr]="displayIDBefore"
                 [searchExpr]="['id']"
                 itemTemplate="items"
+                (onContentReady)="onContentReady($event)"
                 [showClearButton]="true"
               >
                 <div *dxTemplate="let data of 'items'">
