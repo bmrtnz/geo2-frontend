@@ -1,5 +1,8 @@
 <div class="association-articles-edi-colibri-page">
-  <h2 class="content-block">
+  <h2
+    *ngIf="!popup"
+    class="content-block"
+  >
     {{ "ordres-gestion-articles" | localize }}
     <span class="blue-font">{{ "edi-colibri" | localize }}</span>
   </h2>

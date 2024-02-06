@@ -9,9 +9,37 @@
     min-width: 1220px;
   }
 
+  .dx-tabs-wrapper {
+    max-height: 51px;
+    transition: max-height 0.25s;
+  }
+
+  .noTabs .dx-tabs-wrapper {
+    max-height: 0 !important;
+  }
+
   .dx-tabpanel-container {
     max-height: calc(100vh - 130px) !important;
     overflow: hidden;
+
+    .tabpanel-item {
+      transition: margin-top 0.25s, padding 0.25s;
+    }
+  }
+
+  .noTabs .dx-tabpanel-container {
+    margin-top: -64px !important;
+    max-height: calc(100vh - 40px) !important;
+
+    .grid-ordre-ligne-stock {
+      max-height: calc(100vh - 123px) !important;
+    }
+
+    .tabpanel-item {
+      border: 0;
+      margin-top: 0;
+      padding: 0;
+    }
   }
 
   .grid-ordre-ligne-stock {

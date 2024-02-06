@@ -87,6 +87,11 @@ interface GridColumn {
   dataType?: any;
 
   /**
+   * Casts column values to a specific type.
+   */
+  type?: any;
+
+  /**
    * Specifies the column's filter value displayed in the filter row.
    */
   filterValue?: any;

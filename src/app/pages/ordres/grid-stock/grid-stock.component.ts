@@ -105,6 +105,7 @@ export class GridStockComponent implements OnInit {
   bureauxAchat: Observable<DataSource>;
   public clients: DataSource;
   public secteurs: DataSource;
+  public zoomOut: boolean;
   trueFalse: any;
   initialSpecy: any;
   calculate: boolean;
@@ -250,9 +251,14 @@ export class GridStockComponent implements OnInit {
     // this.refreshArticlesGrid() // A VIRER !!!!
   }
 
+  zoomStockOut() {
+    this.zoomOut = !this.zoomOut;
+  }
+
   onFilterChange() {
     this.noEspeceSet = !this.especeSB.value;
-    this.toRefresh = !this.noEspeceSet;
+    // this.toRefresh = !this.noEspeceSet;
+    this.toRefresh = true;
   }
 
   /**
@@ -391,7 +397,7 @@ export class GridStockComponent implements OnInit {
     this.stocksService
       .allStockArticleList(
         this.inheritedFields,
-        this.especeSB.value?.node?.key ?? this.especeSB.value?.key,
+        this.especeSB.value?.node?.key ?? this.especeSB.value?.key ?? "%",
         this.varietesSB.value?.key,
         this.originesSB.value?.key,
         this.modesCultureSB.value?.key,

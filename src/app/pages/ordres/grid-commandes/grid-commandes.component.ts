@@ -468,6 +468,8 @@ export class GridCommandesComponent
                 "article.cahierDesCharge.categorie.cahierDesChargesBlueWhale",
                 "article.matierePremiere.origine.id",
                 "article.matierePremiere.modeCulture.id",
+                // Used to colorize in red when pricing alert
+                "ediLigne.alertePrix",
               ],
             ],
             this.ordreLignesService.mapDXFilterToRSQL([
@@ -681,17 +683,22 @@ export class GridCommandesComponent
         )
         .then(async proprietaire => {
           if (newData?.fournisseur) return;
-          const listeExpediteurs = proprietaire?.listeExpediteurs?.split(",");
+          let listeExpediteurs = proprietaire?.listeExpediteurs?.split(",");
           if (listeExpediteurs?.length) {
             for (const exp of listeExpediteurs)
               // Automatically selected when included in the list
               if (exp === proprietaire.code) newData.fournisseur = proprietaire;
 
-            // Select first on the list if no selection
-            const firstFournisseur = await lastValueFrom(self.fournisseursService
-              .getFournisseurByCode(listeExpediteurs[0], ["id", "code", "raisonSocial"])
-              .pipe(map((res) => res.data.fournisseurByCode)));
-            newData.fournisseur = newData?.fournisseur ?? firstFournisseur;
+            // Select first VALID on the list if no selection
+            let searchCond = [];
+            listeExpediteurs.map(code => searchCond.push(`code==${code}`));
+            const search = "(" + searchCond.join(" or ") + ") and valide==true";
+            let fournisseurList = await lastValueFrom(self.fournisseursService
+              .getList(search, ["id", "code", "raisonSocial"])
+              .pipe(map((res) => res.data.allFournisseurList)));
+            listeExpediteurs = listeExpediteurs.filter(value => fournisseurList.map(f => f.code).includes(value));
+            const firstValidFournisseur = fournisseurList.find(fou => fou.code === listeExpediteurs[0]);
+            newData.fournisseur = newData?.fournisseur ?? firstValidFournisseur;
           } else newData.fournisseur = proprietaire;
         });
     } else if (context.dataField === "fournisseur.id") {
@@ -744,6 +751,9 @@ export class GridCommandesComponent
         if (e.data.article.articleDescription.bio)
           e.cellElement.classList.add("bio-article");
       }
+      // Alerte prix ligne EDI
+      if (e.data.ediLigne?.alertePrix?.length)
+        e.cellElement.classList.add("red-font");
       // Taux encombrement
       if (e.column.dataField === "nombrePalettesCommandees") {
         let tauxEncombrement;

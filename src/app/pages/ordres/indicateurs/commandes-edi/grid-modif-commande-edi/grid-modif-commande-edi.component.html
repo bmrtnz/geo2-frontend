@@ -28,7 +28,7 @@
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
     (onCellPrepared)="onCellPrepared($event)"
-    (onCellClick)="onEdiCellClick($event)"
+    (onCellDblClick)="onEdiCellDblClick($event)"
     (onFocusedRowChanged)="onFocusedRowChanged($event)"
     (onToolbarPreparing)="
       gridConfiguratorService.onToolbarPreparing(

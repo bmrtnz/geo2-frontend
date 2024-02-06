@@ -2,11 +2,100 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
+
+.zoom-stock-out {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  right: 8px;
+  transition: top 0.25s;
+
+  &:not(:hover) {
+    background: #FFF;
+  }
+}
+
 ::ng-deep .grid-stock .dx-datagrid-search-panel {
   display: none;
 }
 
 ::ng-deep .grid-stock {
+
+  .grid-title {
+    transition: opacity 0.25s;
+    opacity: 0;
+  }
+
+  &.zoomOut {
+
+    .grid-title {
+      opacity: 1;
+    }
+
+    .dx-row.dx-header-row {
+      td {
+        height: 24px !important;
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+      }
+    }
+
+    .zoom-stock-out {
+      margin-top: 5px
+    }
+
+    .dx-datagrid-header-panel .dx-toolbar-after {
+      right: 24px;
+    }
+
+    .dx-datagrid-filter-row {
+      display: none;
+    }
+
+    .dx-group-row td,
+    .grid-stock .dx-group-row div td {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .small-article-button .dx-button-text {
+      font-size: 10px;
+    }
+
+    .dx-row.dx-group-row {
+      height: 22px !important;
+
+      .dx-command-expand div:first-child {
+        height: 19px;
+        line-height: 19px;
+      }
+
+      .group-text-1 {
+        width: 650px;
+      }
+    }
+
+    .dx-row {
+
+      &.dx-data-row,
+      &.dx-group-row {
+
+        td,
+        td div {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .search-criteria-container {
+    transition: 0.25s;
+    max-height: 120px;
+
+    &.noHeight {
+      max-height: 0 !important;
+    }
+  }
 
   .grid-grouping-button {
     position: relative !important;
@@ -44,6 +133,10 @@
 
   .dx-datagrid {
     min-height: 270px;
+
+    .dx-datagrid-header-panel .dx-toolbar-after {
+      transition: right 0.25s;
+    }
   }
 
   h6 {
@@ -64,7 +157,7 @@
       font-size: 13px;
       padding: 3px 15px;
       color: $base-accent;
-      background-color: #FFF;
+      background-color: transparent;
       border-radius: 9px;
     }
   }
@@ -121,13 +214,9 @@
     padding-left: 5px;
   }
 
-  .grid-ordre-ligne-stock {
-    max-height: 650px;
-  }
-
   .group-text-1 {
     position: relative;
-    margin-top: 1px;
+    margin-top: 3px;
     height: auto;
     width: 500px;
     padding-bottom: 2px;
@@ -135,6 +224,7 @@
     line-height: 15px;
     cursor: pointer;
     float: left;
+    transition: width 0.25s;
   }
 
   .small-action-button {
@@ -209,19 +299,30 @@
   }
 
   .sort-comment {
-    position: absolute;
-    right: 492px;
-    margin-top: 12px;
+    margin: 5px 0 0 10px;
     background-color: $BW-turquoise-light !important;
     color: white;
     padding: 5px 12px 5px 8px;
-    z-index: 1;
+    float: right;
 
     .dx-checkbox-icon {
       margin-right: 2px;
       color: rgba(0, 0, 0, 0.7);
       border: 0;
       background: white;
+    }
+  }
+
+  .refresh-prev-stock-btn {
+    margin: 0 5px 0 10px;
+
+    .dx-button {
+      height: 29px;
+      font-size: 12px;
+
+      .dx-button-content {
+        padding: 0 12px;
+      }
     }
   }
 
@@ -287,6 +388,11 @@
       width: 200px;
       min-height: 32px;
 
+      &.espece .dx-placeholder {
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 13px;
+      }
+
       &:last-of-type {
         margin-bottom: 10px;
       }
@@ -350,20 +456,4 @@
 
 ::ng-deep .cursor-pointer {
   cursor: pointer !important;
-}
-
-::ng-deep .refresh-prev-stock-btn {
-  position: absolute;
-  margin-top: 11px;
-  right: 210px;
-  z-index: 1;
-
-  .dx-button {
-    height: 29px;
-    font-size: 12px;
-
-    .dx-button-content {
-      padding: 0 12px;
-    }
-  }
 }

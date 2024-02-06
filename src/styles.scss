@@ -40,7 +40,8 @@
   display: none !important;
 }
 
-.capitalize {
+.capitalize,
+.capitalize input {
   text-transform: capitalize;
 }
 

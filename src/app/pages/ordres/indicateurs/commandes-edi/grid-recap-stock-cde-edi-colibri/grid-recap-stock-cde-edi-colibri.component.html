@@ -84,6 +84,7 @@
       [cellTemplate]="column.cellTemplate"
       [allowEditing]="column.allowEditing ? column.allowEditing : false"
       [fixed]="column.fixed"
+      [type]="column.type"
       [dataType]="column?.dataType"
       [cssClass]="column?.cssClass"
       [calculateCellValue]="this[column?.calculateCellValue]"
@@ -98,9 +99,8 @@
 
     <!-- Warning icon -->
     <dxi-column
-      *ngIf="true"
       cssClass="no-side-padding text-align-right"
-      visibleIndex="0"
+      visibleIndex="98"
       [showInColumnChooser]="false"
       [cellTemplate]="'warningTemplate'"
     >

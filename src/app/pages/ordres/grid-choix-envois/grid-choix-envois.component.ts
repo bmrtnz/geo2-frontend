@@ -313,10 +313,13 @@ export class GridChoixEnvoisComponent implements OnInit {
           // on retire les duplicats
           let uniqueEnvois = [];
           data.forEach(value => {
-            if (!uniqueEnvois.find(v => value.codeTiers === v.codeTiers && value.numeroAcces1 === v.numeroAcces1))
+            if (!uniqueEnvois.find(v =>
+              value.codeTiers === v.codeTiers &&
+              value.numeroAcces1 === v.numeroAcces1 &&
+              value.typeTiers.id === v.typeTiers.id
+            ))
               uniqueEnvois.push(value);
           });
-
           // handle annule&remplace
           if (this.ar?.hasData) {
             const { ignoredTiers, reasons } = this.ar.get();

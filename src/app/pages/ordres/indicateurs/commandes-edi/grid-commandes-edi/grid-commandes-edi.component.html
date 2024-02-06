@@ -1,14 +1,20 @@
 <form
-  class="grid-commandes-Edi"
+  class="form-commandes-Edi"
   [formGroup]="formGroup"
 >
   <div class="title-container">
     <h6>{{ "preFilter-title" | localize }}</h6>
     <dx-button
-      class="refresh"
+      class="refresh top-button"
       type="default"
       text="{{ 'btn-refresh' | localize }}"
       (onClick)="enableFilters()"
+    ></dx-button>
+    <dx-button
+      class="articles-edi top-button"
+      type="success"
+      text="{{ 'btn-articles-edi' | localize }}"
+      (onClick)="openArticles()"
     ></dx-button>
   </div>
   <div style="clear: both"></div>
@@ -144,7 +150,6 @@
             <dx-select-box
               #periodeSB
               [items]="periodes"
-              [value]="periodes[1]"
               [displayExpr]="dateManagementService.displayPeriodText"
               (onValueChanged)="setDates($event)"
             >
@@ -199,14 +204,6 @@
   </div>
 </form>
 
-<dx-button
-  style="margin-right: 16px"
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this, false)"
-></dx-button>
 <dx-data-grid
   class="grid-cdes-edi"
   [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
@@ -276,6 +273,19 @@
   >
   </dxi-column>
 
+  <dxo-toolbar>
+    <dxi-item location="after">
+      <!-- Grouping functionnality -->
+      <dx-button
+        class="grid-grouping-button"
+        type="default"
+        icon="material-icons menu_open"
+        hint="{{ 'btn-grouping' | localize }}"
+        (onClick)="gridsService.expandCollapseGroups(this)"
+      ></dx-button>
+    </dxi-item>
+  </dxo-toolbar>
+
   <div *dxTemplate="let cell of 'groupCellStatusTemplate'">
     <dx-button
       class="small-status-button"
@@ -337,3 +347,4 @@
 <app-recap-stock-cde-edi-colibri-popup
   (refreshGridCdeEdi)="enableFilters()"
 ></app-recap-stock-cde-edi-colibri-popup>
+<app-assoc-articles-edi-colibri-popup> </app-assoc-articles-edi-colibri-popup>

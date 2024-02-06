@@ -16,6 +16,7 @@ import {
   StockCategory,
   StockService,
 } from "../../../shared/services/api/stock.service";
+import { GridStockComponent } from "app/pages/ordres/grid-stock/grid-stock.component";
 
 @Component({
   selector: "app-stock-main",
@@ -23,14 +24,13 @@ import {
   styleUrls: ["./stock-main.component.scss"],
 })
 export class StockMainComponent implements OnInit {
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
-  now: number;
-  linesCount: number;
 
-  stockCategories: StockCategory[];
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  @ViewChild(GridStockComponent, { static: false }) gridStock: GridStockComponent;
 
-  constructor(public stocksService: StockService) {}
+  public stockCategories: StockCategory[];
+
+  constructor(public stocksService: StockService) { }
 
   ngOnInit() {
     this.stockCategories = this.stocksService.stockCategories;

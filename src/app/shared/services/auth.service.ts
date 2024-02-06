@@ -12,7 +12,7 @@ import dxDataGrid from "devextreme/ui/data_grid";
 export class AuthService {
   private loggedIn = false;
   public currentUser: Utilisateur;
-  private userChange = new Subject<void>();
+  public userChange = new Subject<void>();
 
   readonly LAST_USER_STORE_KEY = "GEO2:LAST-USER";
   readonly CURRENT_USER_STORE_KEY = "GEO2:CURRENT-USER";
@@ -86,6 +86,7 @@ export class AuthService {
   }
 
   public logUser(user: Utilisateur) {
+    this.userChange.next();
     this.setCurrentUser(user);
     window.localStorage.setItem(this.LAST_USER_STORE_KEY, user.nomUtilisateur);
     this.loggedIn = true;
@@ -126,7 +127,6 @@ export class AuthService {
       this.CURRENT_USER_STORE_KEY,
       JSON.stringify(this.currentUser)
     );
-    this.userChange.next();
     this.applySpecificParameters(this.currentUser);
   }
 

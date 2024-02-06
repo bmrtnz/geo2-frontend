@@ -99,7 +99,7 @@ export class ArticleCertificationPopupComponent implements OnChanges {
       )
       .subscribe(([ol, modeCulture]) => {
         if (modeCulture) this.modeCultureInfo = this.formatCert(modeCulture);
-        this.certDataSource = this.certificationsService.getDataSource("id");
+        this.certDataSource = this.certificationsService.getDataSource("id", 1000);
         this.certDataSource.filter([
           ["valide", "=", true],
           "and",

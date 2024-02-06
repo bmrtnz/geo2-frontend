@@ -6,8 +6,17 @@
 
   max-height: calc(100vh - 120px);
 
+  .dx-command-select {
+    text-align: left !important;
+
+    .dx-checkbox {
+      padding-left: 7px !important;
+    }
+  }
+
   .dx-data-row .warning-icon {
-    top: 2px;
+    top: -1px;
+    right: 8px;
     width: 24px;
     height: 24px;
     min-width: 24px;
@@ -31,10 +40,10 @@
 
     &+.button-bkg {
       position: absolute;
-      width: 4px;
+      width: 2px;
       height: 12px;
       background-color: white;
-      margin: -16px 0px 0 12px;
+      margin: -16px 0px 0 10px;
       opacity: 0 !important;
       transition: opacity .25s;
     }

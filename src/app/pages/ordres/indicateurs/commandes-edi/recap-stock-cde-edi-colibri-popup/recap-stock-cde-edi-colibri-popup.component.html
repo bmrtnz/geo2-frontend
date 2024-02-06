@@ -19,7 +19,9 @@
     <dx-button
       class="min-max-imize-popup-icon display-none"
       hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      icon="material-icons fullscreen_exit"
+      [icon]="
+        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
+      "
       (onClick)="resizePopup()"
     ></dx-button>
   </div>
@@ -35,8 +37,8 @@
           type="success"
           [disabled]="
             creatingOrder ||
-            !selectedGTIN?.length ||
-            selectedGTIN?.length !== resultsGTIN?.length ||
+            !selectedEdiLigne?.length ||
+            selectedEdiLigne?.length !== resultsEdiLigne?.length ||
             !noWarningShown()
           "
           text="{{ 'creer-ordre(s)' | localize }}"

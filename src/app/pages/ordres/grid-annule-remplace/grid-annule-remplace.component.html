@@ -84,8 +84,15 @@
       [validationRules]="column.validationRules"
       [editCellTemplate]="column?.editCellTemplate"
       [showEditorAlways]="true"
+      [cssClass]="column?.cssClass"
       [showInColumnChooser]="column.showInColumnChooser"
     >
+      <dxi-validation-rule
+        *ngIf="column.dataField === 'numeroAcces2'"
+        type="stringLength"
+        [max]="70"
+        [trim]="false"
+      ></dxi-validation-rule>
     </dxi-column>
 
     <div *dxTemplate="let cell of 'customSelectBoxTemplate'">

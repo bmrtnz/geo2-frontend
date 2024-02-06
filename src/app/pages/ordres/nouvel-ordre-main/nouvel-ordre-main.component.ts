@@ -3,6 +3,7 @@ import { AuthService } from "app/shared/services";
 import { Program } from "app/shared/services/program.service";
 import CommandesEdiComponent from "../indicateurs/commandes-edi/commandes-edi.component";
 import { ImportProgrammesPopupComponent } from "../import-programmes-popup/import-programmes-popup.component";
+import { TabContext } from "../root/root.component";
 
 
 @Component({
@@ -20,7 +21,8 @@ export class NouvelOrdreMainComponent implements OnInit {
   @ViewChild(ImportProgrammesPopupComponent, { static: false }) importProgPopup: ImportProgrammesPopupComponent;
 
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    private tabContext: TabContext,
   ) { }
 
   ngOnInit() {
@@ -35,7 +37,8 @@ export class NouvelOrdreMainComponent implements OnInit {
   }
 
   openCommandesEdi() {
-    this.cdesEdiPopup.visible = true;
+    // this.cdesEdiPopup.visible = true;
+    this.tabContext.openIndicator("CommandesEdi");
   }
 
   openProgramPopup(e) {

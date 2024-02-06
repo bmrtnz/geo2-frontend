@@ -14,6 +14,7 @@ import { DateManagementService } from "./shared/services/date-management.service
 import { GridUtilsService } from "./shared/services/grid-utils.service";
 import dxAutocomplete from "devextreme/ui/autocomplete";
 import dxButton from "devextreme/ui/button";
+import dxCheckBox from "devextreme/ui/check_box";
 
 @Component({
   selector: "app-root",
@@ -100,6 +101,11 @@ export class AppComponent {
         focusStateEnabled: false,
       },
     });
+    dxCheckBox.defaultOptions({
+      options: {
+        focusStateEnabled: false,
+      },
+    });
     dxTextBox.defaultOptions({
       options: {
         onFocusIn: this.formUtilsService.selectTextOnFocusIn,
@@ -118,6 +124,7 @@ export class AppComponent {
     dxPopup.defaultOptions({
       options: {
         showCloseButton: true,
+        dragOutsideBoundary: true
       },
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });

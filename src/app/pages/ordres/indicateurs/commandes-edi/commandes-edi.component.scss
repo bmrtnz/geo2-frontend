@@ -1,33 +1,4 @@
-::ng-deep .commandes-edi-popup {
-  .dx-template-wrapper.dx-popup-title {
-    overflow: hidden;
-    padding: 0 8px 0 24px;
-
-    .title-start {
-      font-size: 20px;
-      font-weight: 500;
-      float: left;
-      margin: 17px 0;
-      line-height: 29px;
-    }
-
-    .minimize-popup {
-      top: 13px;
-      float: right;
-    }
-
-    .close-popup {
-      top: 13px;
-      float: right;
-    }
-  }
-
-  .dx-popup-content {
-    padding-top: 5px;
-
-    .commandes-edi-content-container {
-      background: #fff !important;
-      padding: 0 15px 0 2px;
-    }
-  }
+::ng-deep .commandes-edi-content-container {
+  max-height: calc(100vh - 183px) !important;
+  overflow-y: auto;
 }

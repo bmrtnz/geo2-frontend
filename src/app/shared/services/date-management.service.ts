@@ -44,7 +44,7 @@ export class DateManagementService {
   }
 
   periods() {
-    const periodChoice = [
+    return [
       {
         id: "J-1",
         code: "yesterday",
@@ -138,7 +138,6 @@ export class DateManagementService {
         code: "samemonthlastyear",
       },
     ];
-    return periodChoice;
   }
 
   getDates(e) {

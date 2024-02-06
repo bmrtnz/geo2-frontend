@@ -1386,7 +1386,7 @@
         "dataField": "articleID",
         "dataType": "string",
         "width": 70,
-        "cssClass": "small-side-padding multi-line-header",
+        "cssClass": "small-side-padding",
         "visible": true
       },
       {
@@ -4813,6 +4813,7 @@
         "visibleIndex": 1,
         "dataField": "typeTiers.description",
         "dataType": "string",
+        "cssClass": "capitalize",
         "width": "110",
         "sortIndex": 1,
         "sortOrder": "asc",
@@ -4944,6 +4945,7 @@
         "sortIndex": 1,
         "sortOrder": "asc",
         "width": "120",
+        "cssClass": "capitalize",
         "allowEditing": false,
         "visible": true
       },
@@ -7304,6 +7306,7 @@
       {
         "visibleIndex": 0,
         "dataField": "id",
+        "showInColumnChooser": false,
         "visible": false
       },
       {
@@ -7352,7 +7355,8 @@
         "visibleIndex": 10,
         "dataField": "echeanceNiveau",
         "class": "no-padding",
-        "visible": true
+        "visible": true,
+        "showInColumnChooser": false
       },
       {
         "visibleIndex": 12,
@@ -7403,7 +7407,7 @@
       },
       {
         "visibleIndex": 30,
-        "dataField": "ordre.litige.commentairesInternes",
+        "dataField": "ordre.commentaireUsageInterne",
         "visible": false
       }
     ]
@@ -7737,7 +7741,7 @@
     ]
   },
   "packing-list": {
-    "pageSize": 100,
+    "pageSize": 50,
     "columns": [
       {
         "visibleIndex": 0,
@@ -8774,6 +8778,13 @@
       {
         "dataField": "id",
         "visible": false
+      },
+      {
+        "dataField": "ligneEdi.id",
+        "visibleIndex": 96,
+        "type": "selection",
+        "fixed": false,
+        "visible": true
       }
     ]
   },

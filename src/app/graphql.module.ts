@@ -13,6 +13,8 @@ import DocumentNum from "./shared/models/document-num.model";
 import { AuthService } from "./shared/services";
 import { DocumentsNumService } from "./shared/services/api/documents-num.service";
 import { GridsConfigsService } from "./shared/services/api/grids-configs.service";
+import DeviseRef from "./shared/models/devise-ref.model";
+import { DevisesRefsService } from "./shared/services/api/devises-refs.service";
 
 const uri = environment.apiEndpoint + "/graphql";
 
@@ -33,6 +35,11 @@ export function createApollo(httpLink: HttpLink) {
         if (responseObject?.__typename === "GeoDocumentNum")
           return DocumentsNumService.getCacheID(
             responseObject as unknown as DocumentNum
+          );
+
+        if (responseObject?.__typename === "GeoDeviseRef")
+          return DevisesRefsService.getCacheID(
+            responseObject as unknown as DeviseRef
           );
 
         if (responseObject?.__typename === "GeoGridConfig")
