@@ -725,30 +725,57 @@ body app-root.production {
   }
 }
 
-.grid-excel-download-element {
-  padding: 4px 10px;
-  width: 158px;
 
-  .dx-item-content {
-    div:not(.dx-button) {
-      position: absolute;
-      font-size: 14px;
-      padding: 4px 10px 4px 1px;
+.grid-toolbar-menu-item {
+  padding: 4px 10px 4px 20px;
+  width: 207px;
+
+  &:first-of-type {
+    margin-top: 12px;
+
+    &:hover {
+      background-color: #F5F5F5;
     }
+  }
 
-    .dx-button {
-      top: -1px;
-      height: 30px;
-      float: left;
-      padding-left: 110px !important;
-      overflow: visible;
+  .dx-item-content div {
+    font-size: 14px;
+    padding: 4px 10px 4px 1px;
+    float: left;
+  }
 
-      .dx-button-content {
-        padding: 0 !important;
+  &.grid-show-buttons {
+    .dx-item-content {
+      padding: 0;
+
+      div:first-child {
+        top: 3px;
+        position: relative;
+      }
+    }
+  }
+
+  &.grid-excel-download-element {
+    .dx-item-content {
+      div:not(.dx-button) {
+        padding-top: 4px;
+        position: absolute;
       }
 
-      &:hover {
-        background-color: transparent !important;
+      .dx-button {
+        top: -1px;
+        height: 30px;
+        float: left;
+        padding-left: 110px !important;
+        overflow: visible;
+
+        .dx-button-content {
+          padding: 0 !important;
+        }
+
+        &:hover {
+          background-color: transparent !important;
+        }
       }
     }
   }
