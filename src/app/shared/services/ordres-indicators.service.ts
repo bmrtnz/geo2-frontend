@@ -96,19 +96,6 @@ const indicators: Indicator[] = [
     ),
   },
   {
-    id: "BonsAFacturer",
-    enabled: false,
-    withCount: true,
-    parameter: "Bons",
-    subParameter: "à facturer",
-    tileBkg: "#01779B",
-    indicatorIcon: "material-icons list_alt",
-    warningIcon: "material-icons warning",
-    component: import(
-      "../../pages/ordres/indicateurs/bon-a-facturer/bon-a-facturer.component"
-    ),
-  },
-  {
     id: Indicateur.ClientsDepassementEncours,
     enabled: true,
     withCount: true,
@@ -414,28 +401,6 @@ export class OrdresIndicatorsService {
           ...instance.filter,
           "and",
           ["codeClient", "<>", "PREORDRE%"],
-        ];
-      }
-
-      // Bon a facturer
-      if (instance.id === "BonsAFacturer") {
-        instance.filter = [
-          ...instance.filter,
-          "and",
-          ["bonAFacturer", "=", false],
-          "and",
-          ["client.usageInterne", "<>", true],
-          "and",
-          ["dateLivraisonPrevue", ">=", this.getFormatedDate(Date.now())],
-          "and",
-          [
-            "dateLivraisonPrevue",
-            "<",
-            this.datePipe.transform(
-              new Date().setDate(new Date().getDate() + 1).valueOf(),
-              "yyyy-MM-dd"
-            ),
-          ],
         ];
       }
 

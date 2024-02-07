@@ -116,7 +116,6 @@ import { GroupageChargementsPopupComponent } from "./groupage-chargements-popup/
 import { HistoriqueModifDetailPopupComponent } from "./historique-modif-detail-popup/historique-modif-detail-popup.component";
 import { GridImportProgrammesComponent } from "./import-programmes-popup/grid-import-programmes/grid-import-programmes.component";
 import { ImportProgrammesPopupComponent } from "./import-programmes-popup/import-programmes-popup.component";
-import { BonAFacturerComponent } from "./indicateurs/bon-a-facturer/bon-a-facturer.component";
 import { ClientsDepEncoursComponent } from "./indicateurs/clients-dep-encours/clients-dep-encours.component";
 import { AjoutArticleEdiColibriPopupComponent } from './indicateurs/commandes-edi/ajout-article-edi-colibri-popup/ajout-article-edi-colibri-popup.component';
 import { ChoixEntrepotCommandeEdiPopupComponent } from "./indicateurs/commandes-edi/choix-entrepot-commande-edi-popup/choix-entrepot-commande-edi-popup.component";
@@ -174,7 +173,6 @@ import { AssocArticlesEdiColibriPopupComponent, AssocArticlesEdiColibriPopupModu
     GridEnvoisComponent,
     LitigesSupervisionComponent,
     GridLogistiquesComponent,
-    BonAFacturerComponent,
     SupervisionLivraisonComponent,
     OrdresNonCloturesComponent,
     OrdresNonConfirmesComponent,
