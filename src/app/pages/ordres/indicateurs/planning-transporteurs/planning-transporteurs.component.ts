@@ -71,7 +71,7 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
   public bureauxAchat: DataSource;
   public statut = Statut;
   public formGroup = new UntypedFormGroup({
-    valide: new UntypedFormControl(),
+    valide: new UntypedFormControl(true),
     transporteurCode: new UntypedFormControl(),
     dateMin: new UntypedFormControl(this.dateManagementService.startOfDay()),
     dateMax: new UntypedFormControl(this.dateManagementService.endOfDay()),
@@ -123,12 +123,10 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     this.ordresDataSource = this.planningTransporteursService.getDataSource_v2(
       await fields.toPromise()
     );
+  }
 
-    // Only way found to validate and show Warning icon
-    this.formGroup.get("transporteurCode").setValue("");
-    this.formGroup.get("transporteurCode").reset();
-    this.transporteurSB.instance.focus();
-    this.formGroup.get("valide").patchValue(true);
+  onContentReady(e) {
+    e.component.focus();
   }
 
   ngAfterViewInit() {

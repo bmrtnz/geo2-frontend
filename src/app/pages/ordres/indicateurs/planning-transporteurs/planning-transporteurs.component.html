@@ -7,7 +7,7 @@
       <dx-box>
         <dxi-item [ratio]="1">
           <!-- Valides/non valides -->
-          <div class="dx-field valideCheckboxField">
+          <div class="dx-field onlyValideCheckbox">
             <div class="dx-field-label">
               {{ "valide-uniq" | localize }}
             </div>
@@ -36,11 +36,16 @@
                 [displayExpr]="displayIDBefore"
                 [searchExpr]="['id']"
                 itemTemplate="items"
+                (onContentReady)="onContentReady($event)"
                 [showClearButton]="true"
               >
                 <div *dxTemplate="let data of 'items'">
                   <div
-                    [title]="!data.valide ? 'non valide' : ''"
+                    [title]="
+                      !data.valide
+                        ? localizeService.localize('hint-not-valid')
+                        : ''
+                    "
                     [ngClass]="{ 'not-valid': !data.valide }"
                   >
                     {{ displayCodeBefore(data) }}

@@ -71,6 +71,10 @@
   opacity: 1;
 }
 
+.not-valid {
+  opacity: 0.5;
+}
+
 .red-font {
   color: #ff325a !important;
 }
@@ -245,6 +249,21 @@ body app-root.production {
 .title-button {
   float: right;
   margin-left: 10px;
+}
+
+.onlyValideCheckbox {
+  .dx-field-label {
+    width: 224px !important;
+    font-size: 13px;
+    line-height: 16px;
+    text-overflow: initial;
+    white-space: normal;
+    padding-right: 5px;
+  }
+
+  .dx-field-value {
+    width: 33px !important;
+  }
 }
 
 // dx-switch identical mode ON & OFF

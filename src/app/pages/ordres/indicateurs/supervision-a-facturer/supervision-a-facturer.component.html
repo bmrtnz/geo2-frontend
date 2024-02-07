@@ -6,10 +6,27 @@
     <div style="clear: both"></div>
     <div class="BAFFilterArea">
       <dx-box>
-        <dxi-item [ratio]="3">
+        <dxi-item [ratio]="1">
+          <!-- Valides/non valides -->
+          <div class="dx-field onlyValideCheckbox">
+            <div class="dx-field-label">
+              {{ "clients-entrepots-valides" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-check-box
+                formControlName="valide"
+                class="float-left"
+                (onValueChanged)="onValideChanged($event)"
+              >
+              </dx-check-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
+        <dxi-item [ratio]="1.8">
           <!-- Secteurs -->
           <div class="dx-field">
-            <div class="dx-field-label">
+            <div class="dx-field-label secteur-label">
               {{ "tiers-clients-secteur" | localize }}
             </div>
             <div class="dx-field-value">
@@ -18,7 +35,7 @@
                 [dataSource]="secteurs"
                 displayExpr="description"
                 searchExpr="description"
-                (onValueChanged)="onSecteurChange($event)"
+                (onValueChanged)="onSecteurChanged($event)"
               >
                 <dx-validator>
                   <dxi-validation-rule
@@ -30,7 +47,7 @@
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Client -->
           <div class="dx-field">
@@ -44,15 +61,29 @@
                 [showClearButton]="true"
                 displayExpr="raisonSocial"
                 [searchExpr]="['code']"
-                (onValueChanged)="onClientChange($event)"
-                [displayExpr]="displayIDBefore"
+                (onValueChanged)="onClientChanged($event)"
+                [displayExpr]="displayCodeBefore"
+                itemTemplate="items"
               >
+                <div *dxTemplate="let data of 'items'">
+                  <div
+                    [title]="
+                      !data.valide
+                        ? localization.localize('hint-not-valid')
+                        : ''
+                    "
+                    [ngClass]="{ 'not-valid': !data.valide }"
+                  >
+                    {{ displayCodeBefore(data) }}
+                  </div>
+                </div>
+                >
                 <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
               </dx-select-box>
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Entrepôt -->
           <div class="dx-field">
@@ -66,13 +97,27 @@
                 [showClearButton]="true"
                 displayExpr="raisonSocial"
                 [searchExpr]="['code']"
-                [displayExpr]="displayIDBefore"
-                >">
+                [displayExpr]="displayCodeBefore"
+                itemTemplate="items"
+              >
+                <div *dxTemplate="let data of 'items'">
+                  <div
+                    [title]="
+                      !data.valide
+                        ? localization.localize('hint-not-valid')
+                        : ''
+                    "
+                    [ngClass]="{ 'not-valid': !data.valide }"
+                  >
+                    {{ displayCodeBefore(data) }}
+                  </div>
+                </div>
+                <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
               </dx-select-box>
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Commercial -->
           <div class="dx-field">
@@ -84,7 +129,7 @@
                 formControlName="codeCommercial"
                 [dataSource]="commerciaux"
                 [showClearButton]="true"
-                [displayExpr]="displayIDBefore"
+                [displayExpr]="displayCodeBefore"
                 [searchExpr]="['id', 'nomUtilisateur']"
               >
               </dx-select-box>
@@ -104,14 +149,14 @@
                 formControlName="codeAssistante"
                 [dataSource]="assistantes"
                 [showClearButton]="true"
-                [displayExpr]="displayIDBefore"
+                [displayExpr]="displayCodeBefore"
                 [searchExpr]="['id', 'nomUtilisateur']"
               >
               </dx-select-box>
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Période -->
           <div class="dx-field">
@@ -130,7 +175,7 @@
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Date de début -->
           <div class="dx-field field">
@@ -148,7 +193,7 @@
             </div>
           </div>
         </dxi-item>
-        <dxi-item [ratio]="0.5"></dxi-item>
+        <dxi-item [ratio]="0.2"></dxi-item>
         <dxi-item [ratio]="3">
           <!-- Date de fin -->
           <div class="dx-field field">

@@ -38,6 +38,7 @@ let self;
 })
 export class DeclarationFraudeComponent implements AfterViewInit {
   @ViewChild(DxDataGridComponent) private grid: DxDataGridComponent;
+  @ViewChild("valideSB", { static: false }) valideSB: DxSelectBoxComponent;
   @ViewChild("secteurSB", { static: false }) secteurSB: DxSelectBoxComponent;
   @ViewChild("clientSB", { static: false }) clientSB: DxSelectBoxComponent;
   @ViewChild("entrepotSB", { static: false }) entrepotSB: DxSelectBoxComponent;
@@ -58,7 +59,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     public dateManagementService: DateManagementService,
     public authService: AuthService,
     private datePipe: DatePipe,
-    private localizer: LocalizationService,
+    public localizer: LocalizationService,
     private tabContext: TabContext
   ) {
     self = this;
@@ -69,22 +70,6 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       ["valide", "=", true],
       "and",
       ["societes", "contains", this.currentCompanyService.getCompany().id],
-    ]);
-    this.clients = clientsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial"
-    ]);
-    this.clients.filter(["societe.id", "=", this.currentCompanyService.getCompany().id]);
-    this.entrepots = entrepotsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial"
-    ]);
-    this.entrepots.filter([
-      ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
-      "and",
-      ["valide", "=", true]
     ]);
     this.transporteurs = this.transporteursService.getDataSource_v2([
       "id",
@@ -128,14 +113,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC")
     );
     this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
-
-    // this.secteurSB.value = { id: "GB" }; // A VIRER !!!!!!!!!!!!!!!!
-    // this.clientSB.value = { id: "001234" }; // A VIRER !!!!!!!!!!!!!!!!
-    // this.dxForm.instance.updateData({// A VIRER !!!!!!!!!!!!!!!!
-    //   dateDepartMin: new Date("2023-06-24"),// A VIRER !!!!!!!!!!!!!!!!
-    //   dateDepartMax: new Date("2023-08-24"),// A VIRER !!!!!!!!!!!!!!!!
-    // });// A VIRER !!!!!!!!!!!!!!!!
-    // this.applyPrefilter("e");// A VIRER !!!!!!!!!!!!!!!!
+    this.valideSB.value = true;
   }
 
   setDefaultPeriod(periodId) {
@@ -166,34 +144,46 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       : null;
   }
 
-  onSecteurChanged(e) {
+  filterClients(onlyValids) {
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
-      "raisonSocial"
+      "raisonSocial",
+      "valide",
     ]);
-    const filter: any = [
-      ["secteur.id", "=", e.value?.id],
-      "and",
-      ["societe.id", "=", this.currentCompanyService.getCompany().id],
-    ];
+    const filter: any = [["societe.id", "=", this.currentCompanyService.getCompany().id]];
+
+    if (this.secteurSB?.value) filter.push("and", ["secteur.id", "=", this.secteurSB?.value?.id])
+    if (onlyValids) filter.push("and", ["valide", "=", true]);
     this.clients.filter(filter);
-    // We check that this change is coming from the user
-    if (!e.event) return;
+  }
+
+  clearCltEnt() {
     this.clientSB.value = null;
     this.entrepotSB.value = null;
+  }
+
+  onValideChanged(e) {
+    this.clearCltEnt();
+    this.filterClients(e.value);
+  }
+
+  onSecteurChanged(e) {
+    this.filterClients(this.valideSB.value);
+    if (e.event) this.clearCltEnt();
   }
 
   onClientChanged(e) {
     this.entrepots = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
-      "raisonSocial"
+      "raisonSocial",
+      "valide"
     ]);
 
     const filter: any = [["client.id", "=", e.value?.id]];
     filter.push("and", ["client.societe.id", "=", this.currentCompanyService.getCompany().id]);
-    filter.push("and", ["valide", "=", true]);
+    if (this.valideSB.value) filter.push("and", ["valide", "=", true]);
     this.entrepots.filter(filter);
 
     this.entrepots.load().then((res) => {

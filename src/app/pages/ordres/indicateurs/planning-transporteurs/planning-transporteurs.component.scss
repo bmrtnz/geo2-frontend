@@ -27,17 +27,13 @@
   .plannTranspFilterArea {
     width: 800px;
 
-    .valideCheckboxField {
+    .onlyValideCheckbox {
       .dx-field-label {
         position: relative;
         top: -1px;
         width: 90px !important;
         white-space: inherit;
         text-overflow: initial;
-      }
-
-      .dx-field-value {
-        width: 33px !important;
       }
     }
 
@@ -94,10 +90,6 @@
 ::ng-deep .canceled-orders td {
   color: #ff325a !important;
   text-shadow: 1px 1px 15px #fff;
-}
-
-::ng-deep .not-valid {
-  opacity: 0.5;
 }
 
 // Highlight canceled orders

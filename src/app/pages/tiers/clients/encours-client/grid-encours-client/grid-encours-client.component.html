@@ -44,7 +44,9 @@
           >
             <div *dxTemplate="let data of 'items'">
               <div
-                [title]="!data.valide ? 'non valide' : ''"
+                [title]="
+                  !data.valide ? localizeService.localize('hint-not-valid') : ''
+                "
                 [ngClass]="{ 'not-valid': !data.valide }"
               >
                 {{ displayCodeBefore(data) }}
