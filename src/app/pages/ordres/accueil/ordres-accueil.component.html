@@ -18,7 +18,11 @@
       >
         <dxo-drop-down-options
           [width]="300"
+          [maxHeight]="700"
           [showCloseButton]="true"
+          [resizeEnabled]="true"
+          [dragEnabled]="true"
+          [dragOutsideBoundary]="true"
           [wrapperAttr]="{ class: 'tile-list' }"
           [hideOnOutsideClick]="true"
           [animation]="{
