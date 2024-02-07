@@ -342,6 +342,7 @@
     "button-bascule-entrepots-valide": "EV",
     "button-bascule-fournisseurs-valide": "FV",
     "charg-group-buttons-info": "Passage à quai - Créer un ordre à partir de la sélection",
+    "hint-certif-origine": "Afficher ou masquer les boutons Certificats / Origine",
     "hint-clients-ref": "Clients référençant cet article",
     "hint-suppression-regroupement": "Supprimer le regroupement",
     "hint-group-order-lines": "Grouper les chargements",

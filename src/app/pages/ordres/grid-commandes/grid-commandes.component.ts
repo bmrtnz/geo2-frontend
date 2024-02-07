@@ -118,16 +118,8 @@ export class GridCommandesComponent
   };
 
   public SHOW = {
-    margePrevisionelle: true,
     columnCertifications: true,
     columnOrigine: true,
-    highlightBio: true,
-    rowOrdering: true,
-    quickSwitch: true,
-    reportCells: true,
-    destockage: true,
-    indicateurStock: true,
-    zoom: true,
   };
 
   public readonly closure_accordions = [
@@ -237,7 +229,7 @@ export class GridCommandesComponent
           cssClass: "grid-show-buttons grid-toolbar-menu-item",
           options: {
             value: window.localStorage.getItem("maskCertOrigin") !== "true" ? true : false,
-            hint: this.localizeService.localize('certif-origine'),
+            hint: this.localizeService.localize('hint-certif-origine'),
             onValueChanged: (e) => this.showCertifOriginChanged(e)
           },
         }
@@ -274,9 +266,11 @@ export class GridCommandesComponent
       });
     if (this.FEATURE.columnCertifications) this.initFeatures();
 
-    // const showCertifOrigin = window.localStorage.getItem("maskCertOrigin") !== "true" ? true : false;
-    // this.SHOW.columnCertifications = showCertifOrigin;
-    // this.SHOW.columnOrigine = showCertifOrigin;
+    const showCertifOrigin = window.localStorage.getItem("maskCertOrigin") !== "true" ? true : false;
+    if (!showCertifOrigin) {
+      this.SHOW.columnCertifications = showCertifOrigin;
+      this.SHOW.columnOrigine = showCertifOrigin;
+    }
   }
 
   onContentReady(e) {
