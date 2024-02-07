@@ -107,6 +107,12 @@
       min-width: 20px !important;
       padding: 0 4px !important;
     }
+
+    .small-article-button.origin,
+    .small-article-button.certification {
+      margin-right: 3px;
+      margin-left: 3px;
+    }
   }
 
   .bio-article {

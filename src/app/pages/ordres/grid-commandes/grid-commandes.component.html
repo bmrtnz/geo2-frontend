@@ -77,7 +77,7 @@
   <!-- certifications -->
   <ng-container *ngIf="FEATURE.columnCertifications">
     <dxi-column
-      cssClass="small-horiz-padding"
+      cssClass="no-side-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'certificationTemplate'"
     >
@@ -86,6 +86,7 @@
       <dx-button
         class="small-article-button certification"
         type="default"
+        [visible]="SHOW.columnCertifications"
         [text]="showCertificationCheck(cell.data)"
         (onClick)="openCertificationPopup(cell.data)"
       ></dx-button>
@@ -95,14 +96,14 @@
   <!-- origine -->
   <ng-container *ngIf="FEATURE.columnOrigine">
     <dxi-column
-      cssClass="small-horiz-padding"
+      cssClass="no-side-padding"
       [showInColumnChooser]="false"
       [cellTemplate]="'origineTemplate'"
     >
     </dxi-column>
     <div *dxTemplate="let cell of 'origineTemplate'">
       <dx-button
-        [visible]="showOriginButton(cell)"
+        [visible]="showOriginButton(cell) && SHOW.columnOrigine"
         class="small-article-button origin"
         type="default"
         [text]="showOriginCheck(cell.data)"

@@ -681,30 +681,6 @@ export class GridConfiguratorService {
         exportTake: 1_000_000,
       })
     );
-
-    // Show/hide certif/origin
-    if (component.$element()[0].classList.contains("grid-commandes")) {
-      toolbarOptions.items.unshift({
-        location: "after",
-        widget: "dxCheckBox",
-        text: this.localizationService.localize('certif-origine'),
-        locateInMenu: "always",
-        cssClass: "grid-show-buttons grid-toolbar-menu-item",
-        options: {
-          hint: this.localizationService.localize('certif-origine'),
-          onClick: () => {
-            // const loadOptions = grid.getDataSource().loadOptions();
-            // grid.getDataSource().loadOptions = () => ({
-            //   ...loadOptions,
-            //   exportTake: options?.exportTake ?? grid.pageSize(),
-            //   exportPage: grid.pageIndex(),
-            // });
-            // // @ts-ignore
-            // grid.exportToExcel();
-          },
-        },
-      });
-    }
   }
 
   /** Build dxToolbarItem for Excel export */

@@ -117,6 +117,19 @@ export class GridCommandesComponent
     zoom: true,
   };
 
+  public SHOW = {
+    margePrevisionelle: true,
+    columnCertifications: true,
+    columnOrigine: true,
+    highlightBio: true,
+    rowOrdering: true,
+    quickSwitch: true,
+    reportCells: true,
+    destockage: true,
+    indicateurStock: true,
+    zoom: true,
+  };
+
   public readonly closure_accordions = [
     "flux",
     "litiges"
@@ -216,6 +229,18 @@ export class GridCommandesComponent
             },
           },
         },
+        {
+          location: "after",
+          widget: "dxCheckBox",
+          text: this.localizeService.localize('certif-origine'),
+          locateInMenu: "always",
+          cssClass: "grid-show-buttons grid-toolbar-menu-item",
+          options: {
+            value: window.localStorage.getItem("maskCertOrigin") !== "true" ? true : false,
+            hint: this.localizeService.localize('certif-origine'),
+            onValueChanged: (e) => this.showCertifOriginChanged(e)
+          },
+        }
       ],
     });
 
@@ -247,10 +272,12 @@ export class GridCommandesComponent
         );
         this.ordreLignesService.updateReportBtns(this.grid); // Like DLUO...
       });
-
     if (this.FEATURE.columnCertifications) this.initFeatures();
-  }
 
+    // const showCertifOrigin = window.localStorage.getItem("maskCertOrigin") !== "true" ? true : false;
+    // this.SHOW.columnCertifications = showCertifOrigin;
+    // this.SHOW.columnOrigine = showCertifOrigin;
+  }
 
   onContentReady(e) {
     if (this.FEATURE.rowOrdering) this.handleNewArticles();
@@ -281,6 +308,14 @@ export class GridCommandesComponent
     this.authService.onUserChanged().subscribe(() =>
       this.ordreLignesService.updateReportBtns(this.grid) // Like DLUO...
     );
+  }
+
+  showCertifOriginChanged(e) {
+    if (!e.event) return;
+    window.localStorage.setItem("maskCertOrigin", (!e.value)?.toString());
+    this.SHOW.columnCertifications = e.value;
+    this.SHOW.columnOrigine = e.value;
+    this.grid.instance.repaint();
   }
 
   displaySummaryFormat(data) {
