@@ -255,7 +255,11 @@
                   >&nbsp;&nbsp;&nbsp;</span
                 >
                 <dx-button
-                  *ngIf="ordreFacture && numeroFacture?.length"
+                  *ngIf="
+                    ordreFacture &&
+                    numeroFacture?.length &&
+                    numeroFacture !== '9999999'
+                  "
                   class="small-button facture-btn"
                   type="danger"
                   hint="{{ 'hint-ordres-factures' | localize }}"
@@ -270,7 +274,7 @@
                 </dx-button>
 
                 <dx-button
-                  *ngIf="numeroAvoir?.length"
+                  *ngIf="numeroAvoir?.length && numeroAvoir !== '9999999'"
                   class="small-button avoir-btn"
                   type="default"
                   hint="{{ 'hint-ordres-avoirs' | localize }}"
