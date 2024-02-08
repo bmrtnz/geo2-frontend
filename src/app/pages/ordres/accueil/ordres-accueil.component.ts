@@ -109,7 +109,12 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     // Gather indicators
     this.selected = this.selected.map((id) => this.ordresIndicatorsService.getIndicatorByName(id).id);
     // Sort when addding/removing
-    if (e.component) this.selected.sort((a, b) => this.previouslySelected.indexOf(a) - this.previouslySelected.indexOf(b));
+    if (e.component) {
+      this.selected.sort((a, b) => {
+        if (this.previouslySelected.indexOf(b) === -1) return -1; // Put the last added tile at the end
+        return this.previouslySelected.indexOf(a) - this.previouslySelected.indexOf(b);
+      });
+    }
 
     this.authService.persist({
       configTuilesOrdres: {
@@ -142,7 +147,6 @@ export class OrdresAccueilComponent implements OnInit, OnDestroy {
     const indicators = this.indicators.map(ind => ind.id);
     const fromIndex = indicators.indexOf(this.dragStartTile);
     const toIndex = indicators.indexOf(this.dragEndTile);
-    // console.log(this.dragStartTile, fromIndex, "=>", this.dragEndTile, toIndex)
 
     // Moving the tile
     this.indicators.splice(toIndex, 0, this.indicators.splice(fromIndex, 1)[0]);
