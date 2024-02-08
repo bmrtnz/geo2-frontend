@@ -41,6 +41,7 @@ import { GridsService } from "../ordres/grids.service";
 import { StatistiquesArticlePopupComponent } from './statistiques/statistiques-article-popup.component';
 import { GridStatArticleClientsComponent } from './statistiques/grid-stat-article-clients/grid-stat-article-clients.component';
 import { GridStatArticleFournisseursComponent } from './statistiques/grid-stat-article-fournisseurs/grid-stat-article-fournisseurs.component';
+import { TopRightPopupButtonsModule } from "app/shared/components/top-right-popup-buttons/top-right-popup-buttons.component";
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { GridStatArticleFournisseursComponent } from './statistiques/grid-stat-a
     HistoriqueValideModule,
     FileManagerModule,
     ViewDocumentPopupModule,
-    DxPopupModule
+    DxPopupModule,
+    TopRightPopupButtonsModule
   ],
   declarations: [
     ArticleDetailsComponent,

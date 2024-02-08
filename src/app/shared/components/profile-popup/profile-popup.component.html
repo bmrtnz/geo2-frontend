@@ -24,21 +24,11 @@
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-mid">{{ titleMid }}</div>
 
-    <dx-button
-      class="close-popup"
-      icon="close"
-      (onClick)="hidePopup()"
-    >
-    </dx-button>
-    <!-- <dx-button
-      class="minimize-popup"
-      [icon]="
-        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
-      "
-
-      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      (onClick)="resizePopup()"
-    ></dx-button> -->
+    <app-top-right-popup-buttons
+      [noResizeButton]="false"
+      (closePopup)="hidePopup()"
+      [popupFullscreen]="popupFullscreen"
+    ></app-top-right-popup-buttons>
 
     <dx-button
       class="btn-title float-right"

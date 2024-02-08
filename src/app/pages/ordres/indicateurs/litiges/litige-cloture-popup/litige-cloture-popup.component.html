@@ -10,11 +10,10 @@
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-end">{{ titleEnd }}</div>
-    <dx-button
-      class="close-article-popup"
-      icon="close"
-      (onClick)="hidePopup()"
-    ></dx-button>
+    <app-top-right-popup-buttons
+      [noResizeButton]="true"
+      (closePopup)="hidePopup()"
+    ></app-top-right-popup-buttons>
   </div>
 
   <div

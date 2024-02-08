@@ -10,4 +10,4 @@ import { DatePipe } from "@angular/common";
   imports: [SharedModule, TiersRoutingModule, ContactsModule],
   providers: [NestedGuard, DatePipe],
 })
-export class TiersModule {}
+export class TiersModule { }

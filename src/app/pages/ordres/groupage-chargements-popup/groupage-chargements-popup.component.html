@@ -13,19 +13,11 @@
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-popup">{{ title }}</div>
-    <dx-button
-      class="close-popup"
-      icon="close"
-      (onClick)="closePopup()"
-    ></dx-button>
-    <dx-button
-      class="minimize-popup"
-      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      [icon]="
-        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
-      "
-      (onClick)="resizePopup()"
-    ></dx-button>
+    <app-top-right-popup-buttons
+      (closePopup)="closePopup()"
+      (resizePopup)="resizePopup()"
+      [popupFullscreen]="popupFullscreen"
+    ></app-top-right-popup-buttons>
   </div>
 
   <div *dxTemplate="let data of 'content'">

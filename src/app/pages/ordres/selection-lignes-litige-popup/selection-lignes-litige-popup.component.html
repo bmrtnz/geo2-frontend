@@ -12,16 +12,11 @@
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title-popup">{{ title }}</div>
-    <dx-button
-      class="close-popup"
-      icon="close"
-      (onClick)="quitPopup()"
-    ></dx-button>
-    <dx-button
-      class="minimize-popup"
-      icon="material-icons fullscreen_exit"
-      (onClick)="resizePopup()"
-    ></dx-button>
+    <app-top-right-popup-buttons
+      (closePopup)="quitPopup()"
+      (resizePopup)="resizePopup()"
+      [popupFullscreen]="popupFullscreen"
+    ></app-top-right-popup-buttons>
   </div>
 
   <div *dxTemplate="let data of 'content'">

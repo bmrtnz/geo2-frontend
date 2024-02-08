@@ -12,12 +12,10 @@
 >
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}&nbsp;</div>
-    <dx-button
-      class="close-histo-detail-popup"
-      icon="close"
-      (onClick)="hidePopup()"
-    >
-    </dx-button>
+    <app-top-right-popup-buttons
+      [noResizeButton]="true"
+      (closePopup)="hidePopup()"
+    ></app-top-right-popup-buttons>
   </div>
 
   <app-grid-histo-modif-detail

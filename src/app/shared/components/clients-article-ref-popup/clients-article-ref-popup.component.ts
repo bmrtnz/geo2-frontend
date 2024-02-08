@@ -21,6 +21,7 @@ import {
   DxDateBoxModule,
   DxScrollViewModule,
 } from "devextreme-angular";
+import { TopRightPopupButtonsModule } from "../top-right-popup-buttons/top-right-popup-buttons.component";
 
 @Component({
   selector: "app-clients-article-ref-popup",
@@ -45,7 +46,7 @@ export class ClientsArticleRefPopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false })
   dxScrollView: DxScrollViewComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -101,8 +102,8 @@ export class ClientsArticleRefPopupComponent implements OnChanges {
     if (article.description) this.pushText(article.description);
     this.pushText(
       article.matierePremiere.variete.description +
-        " " +
-        article.matierePremiere.origine.description
+      " " +
+      article.matierePremiere.origine.description
     );
     if (article.cahierDesCharge.categorie?.description)
       this.pushText(article.cahierDesCharge.categorie.description);
@@ -162,7 +163,8 @@ export class ClientsArticleRefPopupComponent implements OnChanges {
     DxDateBoxModule,
     DxScrollViewModule,
     DxSelectBoxModule,
+    TopRightPopupButtonsModule,
   ],
   exports: [ClientsArticleRefPopupComponent],
 })
-export class ClientsArticleRefPopupModule {}
+export class ClientsArticleRefPopupModule { }

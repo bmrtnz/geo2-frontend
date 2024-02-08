@@ -36,6 +36,7 @@ import { AlertesService } from "app/shared/services/api/alert.service";
 import { FunctionsService } from "app/shared/services/api/functions.service";
 import { SecteursService } from "app/shared/services/api/secteurs.service";
 import DataSource from "devextreme/data/data_source";
+import { TopRightPopupButtonsModule } from "../top-right-popup-buttons/top-right-popup-buttons.component";
 
 let self;
 
@@ -408,6 +409,7 @@ export class ProfilePopupComponent {
     DxScrollViewModule,
     ReactiveFormsModule,
     DxSelectBoxModule,
+    TopRightPopupButtonsModule
   ],
   exports: [ProfilePopupComponent],
 })

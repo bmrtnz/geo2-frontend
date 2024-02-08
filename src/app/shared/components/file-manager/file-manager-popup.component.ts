@@ -24,6 +24,7 @@ import { CommonModule } from "@angular/common";
 import CustomFileSystemProvider from "devextreme/file_management/custom_provider";
 import { SharedModule } from "../../shared.module";
 import { AuthService, LocalizationService } from "../../services";
+import { TopRightPopupButtonsModule } from "../top-right-popup-buttons/top-right-popup-buttons.component";
 
 @Component({
   selector: "app-file-manager-popup",
@@ -117,7 +118,15 @@ export class FileManagerComponent implements OnChanges {
 }
 
 @NgModule({
-  imports: [CommonModule, DxFileManagerModule, DxPopupModule, SharedModule, DxButtonModule, DxScrollViewModule],
+  imports: [
+    CommonModule,
+    DxFileManagerModule,
+    DxPopupModule,
+    SharedModule,
+    DxButtonModule,
+    DxScrollViewModule,
+    TopRightPopupButtonsModule
+  ],
   declarations: [FileManagerComponent],
   exports: [FileManagerComponent],
 })

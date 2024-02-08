@@ -11,19 +11,11 @@
     <div class="title-start">{{ title }}&nbsp;</div>
     <div class="title-mid print-mode">&nbsp;({{ entrepotId }})</div>
     <div class="popup-top-right-items">
-      <dx-button
-        class="close-article-popup"
-        icon="close"
-        (onClick)="hidePopup()"
-      ></dx-button>
-      <dx-button
-        class="min-max-imize-popup-icon"
-        hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-        [icon]="
-          'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
-        "
-        (onClick)="resizePopup()"
-      ></dx-button>
+      <app-top-right-popup-buttons
+        (closePopup)="hidePopup()"
+        (resizePopup)="resizePopup()"
+        [popupFullscreen]="popupFullscreen"
+      ></app-top-right-popup-buttons>
     </div>
   </div>
   <div *dxTemplate="let data of 'content'">

@@ -1,0 +1,12 @@
+// Up right button on popups
+::ng-deep .dx-template-wrapper.dx-popup-title {
+  .min-max-imize-popup-icon {
+    top: 13px;
+    float: right;
+  }
+
+  .close-popup {
+    top: 12px;
+    float: right;
+  }
+}

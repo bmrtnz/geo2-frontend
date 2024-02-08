@@ -18,6 +18,7 @@ import {
   DxButtonModule
 } from "devextreme-angular";
 import { finalize, first } from "rxjs/operators";
+import { TopRightPopupButtonsModule } from "../top-right-popup-buttons/top-right-popup-buttons.component";
 
 @Component({
   selector: "app-choose-ordre-popup",
@@ -73,7 +74,7 @@ export class ChooseOrdrePopupComponent {
 }
 
 @NgModule({
-  imports: [OrdresSuiviModule, DxPopupModule, SharedModule, DxScrollViewModule, DxButtonModule],
+  imports: [OrdresSuiviModule, DxPopupModule, SharedModule, DxScrollViewModule, DxButtonModule, TopRightPopupButtonsModule],
   declarations: [ChooseOrdrePopupComponent],
   exports: [ChooseOrdrePopupComponent],
 })

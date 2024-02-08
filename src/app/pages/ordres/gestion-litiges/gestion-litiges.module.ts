@@ -30,6 +30,7 @@ import { GridLitigesLignesComponent } from "../grid-litiges-lignes/grid-litiges-
 import { LitigeCloturePopupComponent } from "../indicateurs/litiges/litige-cloture-popup/litige-cloture-popup.component";
 import { SelectionLignesLitigePopupComponent } from "../selection-lignes-litige-popup/selection-lignes-litige-popup.component";
 import { GridLotComponent } from "./grid-lot/grid-lot.component";
+import { TopRightPopupButtonsModule } from "app/shared/components/top-right-popup-buttons/top-right-popup-buttons.component";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { GridLotComponent } from "./grid-lot/grid-lot.component";
     DxScrollViewModule,
     DxRadioGroupModule,
     DxSelectBoxModule,
+    TopRightPopupButtonsModule
   ],
   exports: [
     GestionOperationsPopupComponent,
@@ -73,4 +75,4 @@ import { GridLotComponent } from "./grid-lot/grid-lot.component";
     SelectionLignesLitigePopupComponent,
   ],
 })
-export class GestionLitigesModule {}
+export class GestionLitigesModule { }

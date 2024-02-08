@@ -43,6 +43,7 @@ import { DuplicationPopupComponent } from "./duplication-popup/duplication-popup
 import { PromptPopupComponent, PromptPopupModule } from "app/shared/components/prompt-popup/prompt-popup.component";
 import { NouvelOrdreModule } from "app/shared/components/nouvel-ordre/nouvel-ordre.component";
 import { AssociatedArticlePromptModule } from "app/shared/components/associated-article-prompt/associated-article-prompt.component";
+import { TopRightPopupButtonsModule } from "app/shared/components/top-right-popup-buttons/top-right-popup-buttons.component";
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { AssociatedArticlePromptModule } from "app/shared/components/associated-
     ArticlesModule,
     PromptPopupModule,
     NouvelOrdreModule,
-    AssociatedArticlePromptModule
+    AssociatedArticlePromptModule,
+    TopRightPopupButtonsModule
   ],
   declarations: [
     ClientsListComponent,

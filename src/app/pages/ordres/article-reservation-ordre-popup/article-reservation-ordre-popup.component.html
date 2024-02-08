@@ -13,14 +13,11 @@
     <div class="title-start">{{ titleStart }}&nbsp;</div>
     <div class="title-mid">{{ titleMid }}</div>
     <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
-    <dx-button
-      class="min-max-imize-popup-icon"
-      hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-      [icon]="
-        'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'
-      "
-      (onClick)="resizePopup()"
-    ></dx-button>
+    <app-top-right-popup-buttons
+      [noCloseButton]="true"
+      (resizePopup)="resizePopup()"
+      [popupFullscreen]="popupFullscreen"
+    ></app-top-right-popup-buttons>
   </div>
 
   <div *dxTemplate="let data of 'content'">
