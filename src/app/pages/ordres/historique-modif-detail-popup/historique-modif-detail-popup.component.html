@@ -13,7 +13,8 @@
   <div *dxTemplate="let data of 'title'">
     <div class="title">{{ title }}&nbsp;</div>
     <app-top-right-popup-buttons
-      [noResizeButton]="true"
+      [disabledButtons]="['resize']"
+      [popup]="this"
       (closePopup)="hidePopup()"
     ></app-top-right-popup-buttons>
   </div>

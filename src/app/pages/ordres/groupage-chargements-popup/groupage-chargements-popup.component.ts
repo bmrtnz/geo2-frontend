@@ -101,10 +101,6 @@ export class GroupageChargementsPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   updateGridCde() {
     this.lignesChanged.emit();
   }

@@ -65,10 +65,6 @@ export class OrderHistoryPopupComponent implements OnChanges {
     this.popupShown = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   openOrder(ordre) {
     this.orderOpen.emit(ordre);
   }

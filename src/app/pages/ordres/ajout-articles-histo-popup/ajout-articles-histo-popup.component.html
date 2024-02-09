@@ -15,8 +15,7 @@
     <div class="title-start">&nbsp;&nbsp;{{ titleEnd }}</div>
     <app-top-right-popup-buttons
       (closePopup)="hidePopup()"
-      (resizePopup)="resizePopup()"
-      [popupFullscreen]="popupFullscreen"
+      [popup]="this"
     ></app-top-right-popup-buttons>
 
     <dx-button

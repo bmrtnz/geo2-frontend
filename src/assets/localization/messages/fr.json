@@ -236,6 +236,8 @@
     "inventaire": "Inventaire",
     "reduire": "Réduire",
     "agrandir": "Agrandir",
+    "fullscreen": "Plein-écran",
+    "normalscreen": "Vue normale",
     "btn-zoom-stock-out": "Vue agrandie du stock",
     "btn-zoom-stock-in": "Vue reduite du stock",
     "et": "et",

@@ -696,10 +696,6 @@ export class GestionOperationsPopupComponent implements OnChanges {
     }
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   hidePopup() {
     this.gridLot.grid.instance.cancelEditData();
     this.causes.selectedItems = [];

@@ -85,9 +85,6 @@ export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewIn
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
 
   refreshGrids() {
     this.gridClientComponent?.enableFilters();

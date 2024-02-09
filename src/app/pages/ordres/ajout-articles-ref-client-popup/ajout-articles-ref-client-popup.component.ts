@@ -231,10 +231,6 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   clearAndHidePopup() {
     this.hidePopup();
     this.lignesChanged.emit(this.nbARticles);

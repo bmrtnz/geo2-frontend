@@ -1,16 +1,24 @@
 <dx-popup
-  [dragOutsideBoundary]="true"
-  [showTitle]="true"
+  [dragOutsideBoundary]="false"
   [dragEnabled]="true"
   [hideOnOutsideClick]="false"
   (onShowing)="onShowing($event)"
   [(visible)]="visible"
   [shading]="false"
   [resizeEnabled]="false"
-  title=" {{ 'ordres-gestion-articles' | localize }} {{
-    'edi-colibri' | localize
-  }}"
 >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title">
+      {{ "ordres-gestion-articles" | localize }} {{ "edi-colibri" | localize }}"
+    </div>
+    <app-top-right-popup-buttons
+      [disabledButtons]="['resize']"
+      (changeSize)="changeSize($event)"
+      (closePopup)="hidePopup()"
+      [popup]="this"
+    ></app-top-right-popup-buttons>
+  </div>
+
   <app-association-articles-edi-colibri
     [popup]="true"
   ></app-association-articles-edi-colibri>

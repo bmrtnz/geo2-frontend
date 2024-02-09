@@ -79,10 +79,6 @@ export class ModifCommandeEdiPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   onLignesChanged(e) {
     this.lignesChanged.emit(e);
   }

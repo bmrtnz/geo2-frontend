@@ -4,7 +4,6 @@
   [position]="{ of: '.profile-popup' }"
   [visible]="savingUserPrefs"
   [showPane]="true"
-  [shading]="true"
   [hideOnOutsideClick]="false"
 >
 </dx-load-panel>
@@ -25,9 +24,9 @@
     <div class="title-mid">{{ titleMid }}</div>
 
     <app-top-right-popup-buttons
-      [noResizeButton]="false"
+      [disabledButtons]="['resize']"
+      [popup]="this"
       (closePopup)="hidePopup()"
-      [popupFullscreen]="popupFullscreen"
     ></app-top-right-popup-buttons>
 
     <dx-button

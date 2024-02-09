@@ -42,8 +42,4 @@ export class ZoomClientArticlePopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
 }

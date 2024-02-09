@@ -124,7 +124,8 @@ export class AppComponent {
     dxPopup.defaultOptions({
       options: {
         showCloseButton: true,
-        dragOutsideBoundary: true
+        dragOutsideBoundary: false,
+        onInitialized: (e) => e.component.content().parentNode.classList.add("geo2-popup")
       },
     });
     dxTabPanel.defaultOptions({ options: { swipeEnabled: false } });

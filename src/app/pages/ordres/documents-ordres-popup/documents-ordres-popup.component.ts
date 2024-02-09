@@ -61,10 +61,6 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
     this.whenDone.emit();
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   onShowing(e) {
     this.closeConfirm = false;
     this.running = false;

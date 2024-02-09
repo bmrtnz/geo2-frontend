@@ -1,14 +1,25 @@
 <dx-button
-  *ngIf="!noCloseButton"
+  *ngIf="!disabledButtons?.includes('close')"
   class="close-popup"
   icon="close"
   hint="{{ 'btn-fermer' | localize }}"
-  (onClick)="closePopup.emit()"
+  (onClick)="quitPopup()"
 ></dx-button>
 <dx-button
-  *ngIf="!noResizeButton"
-  class="min-max-imize-popup-icon"
-  hint="{{ (popupFullscreen ? 'reduire' : 'agrandir') | localize }}"
-  [icon]="'material-icons zoom_' + (popupFullscreen ? 'in' : 'out') + '_map'"
-  (onClick)="resizePopup.emit()"
+  *ngIf="!disabledButtons?.includes('resize')"
+  class="resize-popup-icon"
+  hint="{{
+    (popup?.popupFullscreen ? 'normalscreen' : 'fullscreen') | localize
+  }}"
+  [icon]="
+    'material-icons zoom_' + (popup?.popupFullscreen ? 'in' : 'out') + '_map'
+  "
+  (onClick)="resizePopup()"
+></dx-button>
+<dx-button
+  *ngIf="!disabledButtons?.includes('minimize')"
+  class="minimize-popup-icon"
+  hint="{{ (minimized ? 'agrandir' : 'reduire') | localize }}"
+  [icon]="'material-icons ' + (minimized ? 'crop_square' : 'minimize')"
+  (onClick)="minimizePopup()"
 ></dx-button>

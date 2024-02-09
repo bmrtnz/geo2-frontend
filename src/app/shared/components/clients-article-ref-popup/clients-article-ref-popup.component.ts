@@ -78,10 +78,6 @@ export class ClientsArticleRefPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   reservationChange() {
     this.whenApplied.emit();
     this.hidePopup();

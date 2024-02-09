@@ -275,10 +275,6 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   clearAndHidePopup() {
     this.lignesChanged.emit(this.nbARticles);
     this.clearAll();

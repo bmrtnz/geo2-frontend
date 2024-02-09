@@ -5,6 +5,7 @@ import { SharedModule } from "app/shared/shared.module";
 import { ZoomArticlePopupComponent } from "app/pages/ordres/zoom-article-popup/zoom-article-popup.component";
 import { OrdresModule } from "app/pages/ordres/ordres.module";
 import notify from "devextreme/ui/notify";
+import { TopRightPopupButtonsModule } from "app/shared/components/top-right-popup-buttons/top-right-popup-buttons.component";
 
 @Component({
   selector: 'app-choose-article-zoom-popup',
@@ -28,6 +29,10 @@ export class ChooseArticleZoomPopupComponent {
   public visible: boolean;
 
 
+  positionChange(e) {
+    console.log(e)
+  }
+
   onHidden() {
     this.codeArtBWBox.instance.reset();
     this.visible = false;
@@ -37,6 +42,10 @@ export class ChooseArticleZoomPopupComponent {
     e.component
       .content()
       .parentNode.classList.add("choose-article-zoom-popup");
+  }
+
+  closePopup() {
+    this.visible = false;
   }
 
   onShown() {
@@ -62,7 +71,15 @@ export class ChooseArticleZoomPopupComponent {
 }
 
 @NgModule({
-  imports: [DxPopupModule, DxTextBoxModule, DxButtonModule, DxValidatorModule, SharedModule, OrdresModule],
+  imports: [
+    DxPopupModule,
+    DxTextBoxModule,
+    DxButtonModule,
+    DxValidatorModule,
+    SharedModule,
+    OrdresModule,
+    TopRightPopupButtonsModule,
+  ],
   declarations: [ChooseArticleZoomPopupComponent],
   exports: [ChooseArticleZoomPopupComponent],
 })

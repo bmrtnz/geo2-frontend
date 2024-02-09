@@ -11,9 +11,8 @@
     <div class="title-start">{{ titleStart }}&nbsp;{{ titleMid }}&nbsp;</div>
     <div class="title-mid">{{ titleEnd }}</div>
     <app-top-right-popup-buttons
+      [popup]="this"
       (closePopup)="hidePopup()"
-      (resizePopup)="resizePopup()"
-      [popupFullscreen]="popupFullscreen"
     ></app-top-right-popup-buttons>
   </div>
 

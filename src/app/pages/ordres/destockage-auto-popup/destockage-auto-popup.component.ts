@@ -192,10 +192,6 @@ export class DestockageAutoPopupComponent implements OnChanges {
     this.whenClosed.emit();
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   quitPopup() {
     this.popup.visible = false;
     this.gridCommandes.update();

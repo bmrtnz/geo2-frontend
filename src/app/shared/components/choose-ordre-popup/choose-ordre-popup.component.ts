@@ -67,10 +67,6 @@ export class ChooseOrdrePopupComponent {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
 }
 
 @NgModule({

@@ -206,10 +206,6 @@ export class ImportProgrammesPopupComponent implements OnChanges {
     this.gridComponent.datagrid.dataSource = null;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   quitPopup() {
     if (this.loading) {
       confirm(

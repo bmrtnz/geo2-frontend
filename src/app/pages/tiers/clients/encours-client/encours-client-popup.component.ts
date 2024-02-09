@@ -64,10 +64,6 @@ export class EncoursClientPopupComponent implements OnChanges {
     this.popupShown = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   openOrder(ordre) {
     if (["detailEncours", "zoomClient"].includes(this.comingFrom))
       this.openEncoursOrder.emit(ordre);

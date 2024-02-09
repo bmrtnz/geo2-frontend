@@ -169,10 +169,6 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
     this.creatingOrder = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   clearAndHidePopup() {
     this.clearAll();
     this.hidePopup();

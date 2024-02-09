@@ -1,6 +1,22 @@
 ::ng-deep .assoc-articles-edi-colibri-popup {
-  height: calc(100% - 60px) !important;
-  overflow-y: auto;
+
+  &.heightControl {
+    height: calc(100% - 60px) !important;
+    overflow-y: auto;
+  }
+
+  .dx-template-wrapper.dx-popup-title {
+    overflow: hidden;
+    padding: 0 8px 0 24px;
+
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+      float: left;
+      margin: 17px 0;
+      line-height: 29px;
+    }
+  }
 
   .grid-articles-edi-colibri {
     max-height: calc(100vh - 280px) !important;

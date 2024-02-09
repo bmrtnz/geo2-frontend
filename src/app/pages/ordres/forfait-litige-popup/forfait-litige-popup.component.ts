@@ -31,7 +31,7 @@ export class ForfaitLitigePopupComponent implements OnChanges {
   @ViewChild(GridForfaitLitigeComponent, { static: false })
   datagridComponent: GridForfaitLitigeComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     if (this.infosLitige) {
@@ -65,10 +65,6 @@ export class ForfaitLitigePopupComponent implements OnChanges {
       this.datagridComponent.datagrid.instance.cancelEditData();
     }
     setTimeout(() => this.hidePopup());
-  }
-
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
   }
 
   // Forwarding event

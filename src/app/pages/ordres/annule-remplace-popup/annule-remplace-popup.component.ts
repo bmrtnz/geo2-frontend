@@ -49,10 +49,6 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
     this.gridAnnuleRemplaceComponent.reload();
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   clearAndHidePopup() {
     this.hidePopup();
   }

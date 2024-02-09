@@ -12,9 +12,8 @@
     <div class="title-mid print-mode">&nbsp;({{ clientId }})</div>
     <div class="popup-top-right-items">
       <app-top-right-popup-buttons
+        [popup]="this"
         (closePopup)="hidePopup()"
-        (resizePopup)="resizePopup()"
-        [popupFullscreen]="popupFullscreen"
       ></app-top-right-popup-buttons>
     </div>
   </div>

@@ -30,7 +30,7 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   @ViewChild(GridFraisAnnexesLitigeComponent, { static: false })
   datagridComponent: GridFraisAnnexesLitigeComponent;
 
-  constructor(private localizeService: LocalizationService) {}
+  constructor(private localizeService: LocalizationService) { }
 
   ngOnChanges() {
     if (this.infosLitige) {
@@ -66,10 +66,6 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
       this.datagridComponent.datagrid.instance.cancelEditData();
     }
     setTimeout(() => this.hidePopup());
-  }
-
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
   }
 
   updateTotalFrais() {

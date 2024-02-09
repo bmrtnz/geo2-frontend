@@ -12,11 +12,56 @@ export class TopRightPopupButtonsComponent {
 
   @Input() public noCloseButton: boolean;
   @Input() public noResizeButton: boolean;
-  @Input() public popupFullscreen: boolean;
+  @Input() public disabledButtons: string[];
+  @Input() public noMinimizeButton: boolean;
+  @Input() public popup;
+  @Output() public changeSize = new EventEmitter();
   @Output() public closePopup = new EventEmitter();
-  @Output() public resizePopup = new EventEmitter();
+
+  private restPositions = ["right bottom", "center"];
+  private reducedHeight = 64;
+  private initialHeight;
+  public minimized: boolean;
 
   constructor() { }
+
+  minimizePopup(fullscreen: boolean = false) {
+    this.minimized = !this.minimized;
+    this.changeSize.emit(this.minimized);
+    if (this.minimized) this.initialHeight = this.popup.popup.instance.option("height");
+    this.popup.popup.instance.option("height", this.minimized ? this.reducedHeight : this.initialHeight);
+    this.popup.popupFullscreen = fullscreen;
+    setTimeout(() => {
+      const pos = this.minimized ? 0 : 1;
+      this.popup.popup.instance.option({
+        position: { my: this.restPositions[pos], at: this.restPositions[pos] },
+        height: this.minimized ? this.reducedHeight : this.initialHeight
+      });
+    });
+  }
+
+  resizePopup() {
+    this.popup.popupFullscreen = !this.popup.popupFullscreen;
+    if (this.popup.popupFullscreen && this.minimized) this.minimizePopup(true);
+    if (this.popup.popupFullscreen) {
+      this.popup.popup.instance.option({
+        position: { my: this.restPositions[1], at: this.restPositions[1] },
+      });
+    }
+  }
+
+  quitPopup() {
+    this.minimized = false;
+    this.closePopup.emit();
+    // Restoring state when hidden
+    setTimeout(() => {
+      this.popup.popup.instance.option({
+        position: { my: this.restPositions[1], at: this.restPositions[1] },
+        height: this.initialHeight
+      });
+    }, 500);
+  }
+
 }
 
 @NgModule({

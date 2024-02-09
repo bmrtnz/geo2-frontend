@@ -46,10 +46,6 @@ export class ZoomClientPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   openOrder(ordre) {
     this.tabContext.openOrdre(ordre.numero, ordre.campagne.id);
     this.visible = false;

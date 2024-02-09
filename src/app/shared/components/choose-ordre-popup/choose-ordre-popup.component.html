@@ -11,9 +11,8 @@
   <div *dxTemplate="let data of 'title'">
     <div class="title-start">{{ title }}&nbsp;</div>
     <app-top-right-popup-buttons
+      [popup]="this"
       (closePopup)="quitPopup()"
-      (resizePopup)="resizePopup()"
-      [popupFullscreen]="popupFullscreen"
     ></app-top-right-popup-buttons>
   </div>
 

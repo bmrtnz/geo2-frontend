@@ -112,10 +112,6 @@ export class PackingListPopupComponent implements OnChanges {
     this.selectOk = !!e?.length;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   validateFields() {
     if (
       this.dateDepInput.value &&

@@ -33,8 +33,4 @@ export class ZoomFournisseurPopupComponent {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
 }

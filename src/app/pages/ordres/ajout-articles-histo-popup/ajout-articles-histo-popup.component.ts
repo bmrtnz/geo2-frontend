@@ -164,10 +164,6 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
     this.popupShown = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   clearAndHidePopup() {
     this.hidePopup();
     this.lignesChanged.emit(this.nbARticles);

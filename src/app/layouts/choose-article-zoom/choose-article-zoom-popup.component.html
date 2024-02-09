@@ -2,13 +2,20 @@
   width="420"
   height="auto"
   [dragEnabled]="true"
-  title="{{ 'zoom-article-title' | localize }}"
   [visible]="visible"
   (onHidden)="onHidden()"
   (onShowing)="onShowing($event)"
   (onShown)="onShown()"
-  [hideOnOutsideClick]="true"
 >
+  <div *dxTemplate="let data of 'title'">
+    <div class="title-start">{{ "zoom-article-title" | localize }}</div>
+    <app-top-right-popup-buttons
+      (closePopup)="closePopup()"
+      [disabledButtons]="['resize', 'minimize']"
+      [popup]="this"
+    ></app-top-right-popup-buttons>
+  </div>
+
   <div *dxTemplate="let d of 'content'">
     <div class="inputs">
       <!-- Code article -->

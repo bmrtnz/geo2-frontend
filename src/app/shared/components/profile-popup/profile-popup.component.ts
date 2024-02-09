@@ -175,10 +175,6 @@ export class ProfilePopupComponent {
       });
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   setTitle() {
     this.titleStart = this.firstUpper(this.localizeService.localize("profil"));
     this.titleStart +=

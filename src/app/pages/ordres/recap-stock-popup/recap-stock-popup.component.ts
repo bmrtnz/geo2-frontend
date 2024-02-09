@@ -64,10 +64,6 @@ export class RecapStockPopupComponent implements OnChanges {
     this.popup.visible = false;
   }
 
-  resizePopup() {
-    this.popupFullscreen = !this.popupFullscreen;
-  }
-
   pushText(info) {
     this.detailedArticleDescription += info + this.separator;
   }
