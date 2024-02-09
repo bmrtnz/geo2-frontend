@@ -1,1 +1,8 @@
+::ng-deep .assoc-articles-edi-colibri-popup {
+  height: calc(100% - 60px) !important;
+  overflow-y: auto;
 
+  .grid-articles-edi-colibri {
+    max-height: calc(100vh - 280px) !important;
+  }
+}
