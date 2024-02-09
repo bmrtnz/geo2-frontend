@@ -24,7 +24,16 @@
         <div style="clear: both"></div>
         <dx-button
           #addButton
-          [ngClass]="{ pulse: pulseBtnOn && !addButton?.disabled }"
+          [ngClass]="{
+            pulse:
+              pulseBtnOn &&
+              !(
+                creatingOrder ||
+                !selectedEdiLigne?.length ||
+                selectedEdiLigne?.length !== resultsEdiLigne?.length ||
+                !noWarningShown()
+              )
+          }"
           class="create-order-button"
           type="success"
           [disabled]="

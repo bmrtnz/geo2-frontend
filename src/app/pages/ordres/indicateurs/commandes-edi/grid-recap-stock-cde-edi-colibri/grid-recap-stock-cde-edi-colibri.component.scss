@@ -16,7 +16,7 @@
 
   .dx-data-row .warning-icon {
     top: -1px;
-    right: 8px;
+    right: 3px;
     width: 24px;
     height: 24px;
     min-width: 24px;
@@ -40,10 +40,10 @@
 
     &+.button-bkg {
       position: absolute;
-      width: 2px;
-      height: 12px;
+      width: 4px;
+      height: 10px;
       background-color: white;
-      margin: -16px 0px 0 10px;
+      margin: -16px 0px 0 9px;
       opacity: 0 !important;
       transition: opacity .25s;
     }

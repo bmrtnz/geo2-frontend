@@ -126,7 +126,7 @@ export class GridRecapStockCdeEdiColibriComponent {
 
       // Pre select row when "choix" value is true
       if (e.data.choix) {
-        this.datagrid.instance.selectRows([e.data.id], true);
+        setTimeout(() => this.datagrid.instance.selectRows([e.data.id], true));
         e.rowElement.classList.add("dx-selection");
       }
     }

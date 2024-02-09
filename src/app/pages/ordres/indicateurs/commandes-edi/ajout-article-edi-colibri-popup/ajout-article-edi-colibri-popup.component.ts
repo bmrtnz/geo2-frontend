@@ -93,7 +93,7 @@ export class AjoutArticleEdiColibriPopupComponent {
       this.quantiteSB.value ?? this.ligneEdi.ligneEdi.quantiteColis,
       this.ligneEdi.id,
     ).subscribe({
-      next: (res) => {
+      next: () => {
         notify(this.localize.localize("article-ajoute"), "success", 1500);
         this.whenValidate.emit();
         this.visible = false;
