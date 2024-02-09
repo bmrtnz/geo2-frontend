@@ -79,7 +79,8 @@ export class GridFraisAnnexesLitigeComponent {
       );
       this.dataSource.filter(["litige.id", "=", this.infosLitige.litige.id]);
       this.datagrid.dataSource = this.dataSource;
-    } else if (this.datagrid) this.datagrid.dataSource = null;
+      // } else if (this.datagrid) this.datagrid.dataSource = null;
+    }
 
     // Get transporteur (A payer) list
     this.litigesService
