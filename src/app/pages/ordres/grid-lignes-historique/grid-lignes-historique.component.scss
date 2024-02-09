@@ -90,10 +90,13 @@
   }
 
   // Highlight canceled orders
-  .canceled-orders td {
-    color: #ff325a !important;
-  }
+  .canceled-orders {
 
+    td,
+    .dx-datagrid-summary-item {
+      color: #ff325a !important;
+    }
+  }
 }
 
 ::ng-deep .secteur-histo-ligne-field {
