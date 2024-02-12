@@ -4,8 +4,16 @@
 
 
 // Fixing a height trouble
-::ng-deep .dx-sortable-clone tr.grid-commandes-rows {
-  height: 33px !important;
+::ng-deep .dx-sortable-clone {
+
+  .dx-datagrid-rowsview .dx-datagrid-content {
+    margin-top: 0;
+  }
+
+  tr.grid-commandes-rows {
+    height: 33px !important;
+  }
+
 }
 
 ::ng-deep .grid-commandes,

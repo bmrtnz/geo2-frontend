@@ -137,8 +137,12 @@ export class AuthService {
       utilisateur.barreDefilementHaut ? "0" : "auto"
     );
     document.documentElement.style.setProperty(
-      '--margin-pos-scrollbar',
+      '--margin1-pos-scrollbar',
       utilisateur.barreDefilementHaut ? "-2px" : "-9px"
+    );
+    document.documentElement.style.setProperty(
+      '--margin2-pos-scrollbar',
+      utilisateur.barreDefilementHaut && utilisateur.barreDefilementVisible ? "10px" : "0px"
     );
     document.documentElement.style.setProperty(
       '--padding-pos-scrollbar',
