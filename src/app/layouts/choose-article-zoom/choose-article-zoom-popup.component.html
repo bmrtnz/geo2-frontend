@@ -42,6 +42,7 @@
       <br />
       <div class="popup-action">
         <dx-button
+          [disabled]="wrongValue() || running"
           text="{{ 'btn-access-file' | localize }}"
           type="default"
           (onClick)="accessArticle()"

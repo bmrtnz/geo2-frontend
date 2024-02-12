@@ -27,11 +27,9 @@ export class ChooseArticleZoomPopupComponent {
 
   public title: string;
   public visible: boolean;
+  public running: boolean;
+  public notValid: string[];
 
-
-  positionChange(e) {
-    console.log(e)
-  }
 
   onHidden() {
     this.codeArtBWBox.instance.reset();
@@ -39,6 +37,7 @@ export class ChooseArticleZoomPopupComponent {
   }
 
   onShowing(e) {
+    this.notValid = [];
     e.component
       .content()
       .parentNode.classList.add("choose-article-zoom-popup");
@@ -49,24 +48,32 @@ export class ChooseArticleZoomPopupComponent {
   }
 
   onShown() {
+    this.running = false;
     this.codeArtBWBox.instance.focus();
+  }
+
+  wrongValue() {
+    return this.notValid?.includes(("000000" + this.codeArtBWBox?.value).slice(-6)) ||
+      !new RegExp("^[0-9]{1,6}$").test(this.codeArtBWBox?.value);
   }
 
   accessArticle() {
     if (!this.codeArtBWBox.value) return;
     let myValue = this.codeArtBWBox.value;
-    if (myValue.length > 6) {
-      notify(this.localizeService.localize("warn-article-type", myValue), "error", 3000);
-    } else {
-      myValue = ("000000" + myValue).slice(-6);
-      this.articlesService.getOne_v2(myValue, ["id", "valide"]).subscribe((res) => {
-        const myArt = res?.data?.article;
-        if (!myArt) return notify(this.localizeService.localize("warn-unknown-article", myValue), "error", 3000);
-        this.articleId = myValue;
-        this.zoomPopup.visible = true;
-        this.visible = false;
-      });
-    }
+
+    this.running = true;
+    myValue = ("000000" + myValue).slice(-6);
+    this.articlesService.getOne_v2(myValue, ["id", "valide"]).subscribe((res) => {
+      this.running = false;
+      const myArt = res?.data?.article;
+      if (!myArt) {
+        this.notValid.push(myValue);
+        return notify(this.localizeService.localize("warn-unknown-article", myValue), "error", 3000);
+      }
+      this.articleId = myValue;
+      this.zoomPopup.visible = true;
+      this.visible = false;
+    });
   }
 }
 

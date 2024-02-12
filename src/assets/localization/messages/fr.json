@@ -164,6 +164,7 @@
     "warn-article-type": "{0} : format/type incorrect",
     "warn-not-allowed": "Fonction non autorisée",
     "warn-quantities": "Une ou plusieurs quantités sont à zéro",
+    "warn-only-numbers": "Seuls les caractères 0-9 sont acceptés",
     "afficher-boutons-navigation-rapide": "Afficher la barre de boutons de navigation rapide",
     "masquer-boutons-navigation-rapide": "Masquer la barre de boutons de navigation rapide",
     "btn-origine": "Origine",

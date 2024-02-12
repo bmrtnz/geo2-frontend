@@ -20,12 +20,13 @@ export class TopRightPopupButtonsComponent {
 
   private restPositions = ["right bottom", "center"];
   private reducedHeight = 64;
+  private rightShift = 75;
   private initialHeight;
   public minimized: boolean;
 
   constructor() { }
 
-  minimizePopup(fullscreen: boolean = false) {
+  minMaximizePopup(fullscreen: boolean = false) {
     this.minimized = !this.minimized;
     this.changeSize.emit(this.minimized);
     if (this.minimized) this.initialHeight = this.popup.popup.instance.option("height");
@@ -33,8 +34,9 @@ export class TopRightPopupButtonsComponent {
     this.popup.popupFullscreen = fullscreen;
     setTimeout(() => {
       const pos = this.minimized ? 0 : 1;
+      const offSet = this.minimized ? `-${this.rightShift} 0` : null;
       this.popup.popup.instance.option({
-        position: { my: this.restPositions[pos], at: this.restPositions[pos] },
+        position: { my: this.restPositions[pos], at: this.restPositions[pos], offset: offSet },
         height: this.minimized ? this.reducedHeight : this.initialHeight
       });
     });
@@ -42,10 +44,10 @@ export class TopRightPopupButtonsComponent {
 
   resizePopup() {
     this.popup.popupFullscreen = !this.popup.popupFullscreen;
-    if (this.popup.popupFullscreen && this.minimized) this.minimizePopup(true);
+    if (this.popup.popupFullscreen && this.minimized) this.minMaximizePopup(true);
     if (this.popup.popupFullscreen) {
       this.popup.popup.instance.option({
-        position: { my: this.restPositions[1], at: this.restPositions[1] },
+        position: { my: this.restPositions[1], at: this.restPositions[1], offset: null },
       });
     }
   }
@@ -56,7 +58,7 @@ export class TopRightPopupButtonsComponent {
     // Restoring state when hidden
     setTimeout(() => {
       this.popup.popup.instance.option({
-        position: { my: this.restPositions[1], at: this.restPositions[1] },
+        position: { my: this.restPositions[1], at: this.restPositions[1], offset: null },
         height: this.initialHeight
       });
     }, 500);
