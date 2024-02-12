@@ -78,7 +78,7 @@ const indicators: Indicator[] = [
     parameter: "Suivi",
     subParameter: "des ordres",
     tileBkg: "#01AA9B",
-    indicatorIcon: "material-icons euro_symbol",
+    indicatorIcon: "material-icons search",
     warningIcon: "",
     component: import("../../pages/ordres/suivi/ordres-suivi.component"),
   },
@@ -132,7 +132,7 @@ const indicators: Indicator[] = [
     parameter: "Ordres",
     subParameter: "non confirmés",
     tileBkg: "#5A6382",
-    indicatorIcon: "material-icons remove_done",
+    indicatorIcon: "material-icons pending",
     warningIcon: "",
     component: import(
       "../../pages/ordres/indicateurs/ordres-non-confirmes/ordres-non-confirmes.component"
@@ -224,7 +224,7 @@ const indicators: Indicator[] = [
     parameter: "Ordres",
     subParameter: "à facturer",
     tileBkg: "#725828",
-    indicatorIcon: "material-icons list_alt",
+    indicatorIcon: "material-icons verified",
     warningIcon: "",
     component: import(
       "../../pages/ordres/indicateurs/supervision-a-facturer/supervision-a-facturer.component"
@@ -321,7 +321,7 @@ const indicators: Indicator[] = [
     parameter: "Historique",
     subParameter: "des ordres",
     tileBkg: "#BF9126",
-    indicatorIcon: "material-icons history",
+    indicatorIcon: "material-icons hourglass_bottom",
     warningIcon: "",
     component: import(
       "../../pages/ordres/indicateurs/historique-ordres/historique-ordres.component"
@@ -347,7 +347,7 @@ const indicators: Indicator[] = [
     parameter: "Déclaration",
     subParameter: "Fraude",
     tileBkg: "#a34527",
-    indicatorIcon: "material-icons warning",
+    indicatorIcon: "material-icons beenhere",
     warningIcon: "",
     component: import(
       "../../pages/ordres/indicateurs/declaration-fraude/declaration-fraude.component"

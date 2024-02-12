@@ -55,7 +55,10 @@
               selectionMode="single"
               selectAllMode="false"
               [showSelectionControls]="true"
-              noDataText="{{ 'loading-progress' | localize }}"
+              noDataText="{{
+                (responsibles?.value ? 'loading-progress' : 'warning-no-data')
+                  | localize
+              }}"
               (onSelectionChanged)="onCauseChanged($event)"
             ></dx-list>
           </dxi-item>
@@ -75,7 +78,10 @@
               selectionMode="single"
               selectAllMode="false"
               [showSelectionControls]="true"
-              noDataText="{{ 'loading-progress' | localize }}"
+              noDataText="{{
+                (responsibles?.value ? 'loading-progress' : 'warning-no-data')
+                  | localize
+              }}"
               (onSelectionChanged)="onConsequenceChanged($event)"
             ></dx-list>
           </dxi-item>
