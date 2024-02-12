@@ -1446,6 +1446,7 @@
     [ordreId]="ordre?.id"
     [gridCommandes]="gridCommandes"
     (updateGridCde)="gridCommandes.update()"
+    (dataLoaded)="destockAutoDone($event)"
     (whenClosed)="running.destockAuto = false"
   ></app-destockage-auto-popup>
 

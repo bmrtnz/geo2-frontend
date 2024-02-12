@@ -1191,7 +1191,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   async onDestockAutoClick() {
     this.running.destockAuto = true;
     await this.gridsService.waitUntilAllGridDataSaved(this.gridCommandes?.grid);
+    // this.destockageAutoPopup.enableFilters(true);
     this.destockageAutoPopup.visible = true;
+  }
+
+  destockAutoDone(data) {
+    if (data.filter(stock => stock.warning)?.length) {
+      this.destockageAutoPopup.visible = true;
+    } else {
+      notify({
+        message: this.localization.localize("saveOK"),
+        type: "success",
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+      this.running.destockAuto = false;
+    }
   }
 
   updateDestockAuto() {

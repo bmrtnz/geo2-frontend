@@ -39,7 +39,9 @@ export class DestockageAutoPopupComponent implements OnChanges {
   @Input() gridCommandes: GridCommandesComponent;
   @Output() updateGridDestockAuto = new EventEmitter();
   @Output() updateGridCde = new EventEmitter();
+  @Output() dataLoaded = new EventEmitter();
   @Output() public whenClosed = new EventEmitter();
+
 
   @ViewChild(DxDataGridComponent) public datagrid: DxDataGridComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -115,8 +117,8 @@ export class DestockageAutoPopupComponent implements OnChanges {
       this.title = this.localizeService.localize("title-destockage-auto-popup");
   }
 
-  enableFilters() {
-    this.datagrid.instance.beginCustomLoading("");
+  enableFilters(silent: boolean = false) {
+    if (!silent) this.datagrid.instance.beginCustomLoading("");
     this.stockMouvementsService
       .fResaAutoOrdre(this.ordreId, this.authService.currentUser.nomUtilisateur)
       .subscribe({
@@ -138,8 +140,13 @@ export class DestockageAutoPopupComponent implements OnChanges {
               .split("~n")
               .join("<br>");
           });
-          this.applyErrorsFilter();
-          setTimeout(() => this.datagrid.instance.endCustomLoading());
+          if (!silent) {
+            this.switchErrors.value = !!this.DsItems.filter(ds => ds.warning)?.length;
+            this.switchErrors.disabled = !this.switchErrors.value;
+            this.applyErrorsFilter();
+            setTimeout(() => this.datagrid.instance.endCustomLoading());
+          }
+          // this.dataLoaded.emit(this.DsItems);
         },
         error: (error: Error) => {
           console.log(error);
@@ -187,7 +194,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
   }
 
   onHidden() {
-    this.switchErrors.value = true;
+    this.switchErrors.value = false;
     this.datagrid.dataSource = null;
     this.whenClosed.emit();
   }
