@@ -25,7 +25,7 @@ export class RecapStockPopupComponent implements OnChanges {
   public visible: boolean;
   public title: string;
   public okDisabled = false;
-  public popupFullscreen = true;
+  public popupFullscreen: boolean;
   public detailedArticleDescription: string;
   private separator = " ● ";
 
@@ -49,8 +49,8 @@ export class RecapStockPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("recap-stock-popup");
     this.popupFullscreen = true;
+    e.component.content().parentNode.classList.add("recap-stock-popup");
   }
 
   onShown(e) {

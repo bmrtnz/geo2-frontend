@@ -44,7 +44,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   titleStart: string;
   titleMid: string;
   pulseBtnOn: boolean;
-  popupFullscreen = true;
+  popupFullscreen: boolean;
   creatingOrder = false;
   selectedEdiLigne: string[];
   resultsEdiLigne: string[];
@@ -144,6 +144,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component
       .content()
       .parentNode.classList.add("recap-stock-cde-edi-colibri-popup");

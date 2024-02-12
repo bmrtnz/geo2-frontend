@@ -43,7 +43,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   titleEnd: string;
   titlePlus: string;
   pulseBtnOn: boolean;
-  popupFullscreen = true;
+  popupFullscreen: boolean;
 
   @ViewChild(ArticlesListComponent, { static: false })
   catalogue: ArticlesListComponent;
@@ -78,6 +78,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component
       .content()
       .parentNode.classList.add("ajout-articles-stock-popup");

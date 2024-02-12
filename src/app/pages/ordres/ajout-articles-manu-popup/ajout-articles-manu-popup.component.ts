@@ -60,7 +60,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   titleEnd: string;
   pulseBtnOn: boolean;
   remplacementArticle: boolean;
-  popupFullscreen = true;
+  popupFullscreen: boolean;
   multipleItems: number;
   maxRowNumber: number;
   public running: boolean;
@@ -185,6 +185,7 @@ export class AjoutArticlesManuPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component.content().parentNode.classList.add("ajout-articles-manu-popup");
   }
 

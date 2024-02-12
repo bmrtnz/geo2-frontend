@@ -59,7 +59,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   titleEnd: string;
   pulseBtnOn: boolean;
   remplacementArticle: boolean;
-  popupFullscreen = true;
+  popupFullscreen: boolean;
   public running: boolean;
 
   @ViewChild(GridArticlesRefClientComponent, { static: false })
@@ -184,6 +184,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component
       .content()
       .parentNode.classList.add("app-ajout-articles-ref-client-popup");
