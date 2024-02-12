@@ -26,7 +26,7 @@ export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewIn
 
   public visible: boolean;
   public title: string;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public detailedArticleDescription: string;
   private separator = " ● ";
   public periodes: any[];
