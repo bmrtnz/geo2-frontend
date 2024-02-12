@@ -77,10 +77,11 @@ export class GestionOperationsPopupComponent implements OnChanges {
   public selectedConsequence: string;
   public selectedResponsible: string;
   public title: string;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public ordreGenNumero: string;
   public running: any;
   public loading: boolean;
+
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild("causes", { static: false }) causes: DxListComponent;

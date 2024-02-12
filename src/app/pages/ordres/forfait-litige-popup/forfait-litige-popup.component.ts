@@ -25,7 +25,8 @@ export class ForfaitLitigePopupComponent implements OnChanges {
 
   public visible: boolean;
   public title: string;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
+
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridForfaitLitigeComponent, { static: false })

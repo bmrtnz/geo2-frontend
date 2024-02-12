@@ -53,7 +53,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   titleMid: string;
   titleEnd: string;
   pulseBtnOn: boolean;
-  popupFullscreen = true;
+  popupFullscreen: boolean;
   public running: boolean;
 
   @ViewChild(GridLignesHistoriqueComponent, { static: false })
@@ -139,6 +139,7 @@ export class AjoutArticlesHistoPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
+    this.popupFullscreen = true;
     e.component
       .content()
       .parentNode.classList.add("ajout-articles-histo-popup");

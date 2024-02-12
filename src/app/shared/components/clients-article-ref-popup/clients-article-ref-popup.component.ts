@@ -37,7 +37,7 @@ export class ClientsArticleRefPopupComponent implements OnChanges {
   public visible: boolean;
   public title: string;
   public okDisabled = false;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public detailedArticleDescription: string;
   private separator = " ● ";
   public clients: any[];

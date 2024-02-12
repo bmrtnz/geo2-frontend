@@ -36,7 +36,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
 
   public visible: boolean;
   public gridHasData: boolean;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public loadingMessage: string;
   public bodyName = ProgramService.bodyName;
   public buildAccept = ProgramService.buildAccept();

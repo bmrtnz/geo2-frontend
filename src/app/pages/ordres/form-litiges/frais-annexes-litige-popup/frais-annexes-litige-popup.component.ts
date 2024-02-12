@@ -24,7 +24,8 @@ export class FraisAnnexesLitigePopupComponent implements OnChanges {
   public visible: boolean;
   public titleStart: string;
   public titleEnd: string;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
+
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(GridFraisAnnexesLitigeComponent, { static: false })

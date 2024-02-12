@@ -44,7 +44,7 @@ export class GroupageChargementsPopupComponent implements OnChanges {
   title: string;
   pulseBtnOn: boolean;
   remplacementArticle: boolean;
-  popupFullscreen = false;
+  popupFullscreen: boolean;
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false })

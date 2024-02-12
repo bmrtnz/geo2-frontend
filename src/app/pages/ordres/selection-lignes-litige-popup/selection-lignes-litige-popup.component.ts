@@ -58,7 +58,7 @@ export class SelectionLignesLitigePopupComponent implements OnChanges {
   public visible: boolean;
   public title: string;
   public selectedLignesIds: string[];
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public buttonText: string;
   public running: boolean;
 

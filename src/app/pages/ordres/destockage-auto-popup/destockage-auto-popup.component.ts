@@ -54,7 +54,7 @@ export class DestockageAutoPopupComponent implements OnChanges {
   public detailedFields: GridColumn[];
   public visible: boolean;
   public gridHasData: boolean;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public title: string;
   private lignes: Partial<OrdreLigne>[];
   private ordreLigne: any;

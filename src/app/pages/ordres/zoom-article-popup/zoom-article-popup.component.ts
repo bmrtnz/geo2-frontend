@@ -13,8 +13,8 @@ export class ZoomArticlePopupComponent implements OnChanges {
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
-  visible: boolean;
-  title: string;
+  public visible: boolean;
+  public title: string;
   public popupFullscreen: boolean;
 
 

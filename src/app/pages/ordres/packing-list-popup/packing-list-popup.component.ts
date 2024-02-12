@@ -51,7 +51,7 @@ export class PackingListPopupComponent implements OnChanges {
   public paloxLabel: string;
   public dateLabel: string;
   public visible: boolean;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
   public labelEntrepot: string;
   public selectOk: boolean;
   public ordres: any[];

@@ -46,7 +46,8 @@ export class ArticleReservationOrdrePopupComponent implements OnChanges {
   quantiteAReserver: number;
   resaStatus: LigneReservation[];
   public okDisabled = false;
-  public popupFullscreen = false;
+  public popupFullscreen: boolean;
+
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
   @ViewChild(DxScrollViewComponent, { static: false })
