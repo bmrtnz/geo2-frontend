@@ -6,7 +6,6 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ArticlesListComponent } from "app/pages/articles/list/articles-list.component";
 import { EdiLigne } from "app/shared/models";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
@@ -17,6 +16,7 @@ import {
   DxTagBoxComponent,
 } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
+import { GridStockComponent } from "../grid-stock/grid-stock.component";
 
 @Component({
   selector: "app-ajout-articles-stock-popup",
@@ -45,8 +45,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   pulseBtnOn: boolean;
   popupFullscreen = true;
 
-  @ViewChild(ArticlesListComponent, { static: false })
-  catalogue: ArticlesListComponent;
+  @ViewChild(GridStockComponent, { static: false }) catalogue: GridStockComponent;
   @ViewChild(DxTagBoxComponent, { static: false })
   saisieCode: DxTagBoxComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -85,6 +84,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
 
   onShown(e) {
     if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
+    if (this.catalogue?.datagrid?.dataSource) this.catalogue.refreshArticlesGrid();
   }
 
   onHidden() {
