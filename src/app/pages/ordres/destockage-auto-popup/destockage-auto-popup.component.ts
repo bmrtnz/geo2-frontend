@@ -142,7 +142,6 @@ export class DestockageAutoPopupComponent implements OnChanges {
           });
           if (!silent) {
             this.switchErrors.value = !!this.DsItems.filter(ds => ds.warning)?.length;
-            this.switchErrors.disabled = !this.switchErrors.value;
             this.applyErrorsFilter();
             setTimeout(() => this.datagrid.instance.endCustomLoading());
           }
