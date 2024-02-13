@@ -2,6 +2,18 @@
 
 ::ng-deep .tabs-ordres-page {
 
+  .order-tabpanel-tabs {
+    margin-left: 0 !important;
+
+    .dx-tabpanel-tabs {
+      margin-left: 40px;
+    }
+
+    .dx-multiview-wrapper .dx-multiview-item {
+      padding-left: 40px;
+    }
+  }
+
   .dx-tab-close-all-orders:hover {
     &+.dx-tab-close-all-indics .tab-close-all-indics:not(.hideTab) {
       width: 98px !important;

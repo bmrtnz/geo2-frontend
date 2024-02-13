@@ -373,6 +373,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public duplicatedOrder: string;
   public hideDuplicationBUK =
     this.currentCompanyService.getCompany().id !== "BUK";
+  public reducedLeftButtons: boolean;
 
   public running = {
     destockAuto: false,
@@ -393,8 +394,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   fileManagerComponent: FileManagerComponent;
   @ViewChild("comLog", { static: false }) comLog: DxSelectBoxComponent;
   @ViewChild("comInt", { static: false }) comInt: DxSelectBoxComponent;
-  @ViewChild("leftAccessPanel", { static: false })
-  leftAccessPanel: DxCheckBoxComponent;
   @ViewChildren(DxAccordionComponent) accordion: QueryList<DxAccordionComponent>;
   @ViewChildren(DxButtonComponent) buttons: QueryList<ElementRef | DxButtonComponent>;
   @ViewChildren("anchor") anchors: QueryList<ElementRef | DxAccordionComponent>;
@@ -450,6 +449,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public bafButtonEnabled = true;
 
   ngOnInit() {
+    // Reduced left panel buttons
+    this.reducedLeftButtons = window.localStorage.getItem("HideOrderleftPanelView") === "true" ? true : false;
     this.initializeForm();
     this.initializeAnchors();
 
@@ -577,11 +578,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     // Keep this, anchors may, in some cases, not created as they should
     this.enableAnchors();
     this.updateTabStatusDot();
-    // Show/hide left button panel
-    this.leftAccessPanel.value =
-      window.localStorage.getItem("HideOrderleftPanelView") === "true"
-        ? false
-        : true;
   }
 
   ngOnDestroy() {
@@ -1721,10 +1717,8 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   leftPanelChange(e) {
-    window.localStorage.setItem(
-      "HideOrderleftPanelView",
-      e.value === true ? "false" : "true"
-    );
+    this.reducedLeftButtons = !this.reducedLeftButtons;
+    window.localStorage.setItem("HideOrderleftPanelView", this.reducedLeftButtons.toString());
   }
 
   getFraisClient() {

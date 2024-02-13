@@ -18,8 +18,65 @@ $left-panel-btn-height: 44px;
     }
   }
 
-  .width0 {
-    width: 0 !important;
+  .reducedLeftButtons {
+    width: 34px !important;
+    top: 78px;
+    left: 2px;
+
+    .form-scrollTo-buttons-subcontainer {
+      padding-right: 0;
+
+      .top-order-number {
+        display: none;
+      }
+
+      .button-container {
+        .add-litige-button {
+          margin: -6px -17px 0 0;
+
+          .dx-icon.dx-icon-edit-button-addrow {
+            font-size: 13px !important;
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        .dot {
+          color: #FFF;
+          margin: -1px -10px 0 0;
+        }
+      }
+
+      .scrollTo-buttons {
+        min-width: 0 !important;
+        box-shadow: none !important;
+        background: none !important;
+        margin-bottom: 5px;
+
+        &.minmaximize .dx-button-content .dx-icon {
+          font-size: 26px !important;
+          margin-left: -2px !important;
+        }
+
+        &:hover {
+          .dx-icon {
+            color: #333 !important;
+          }
+        }
+
+        .dx-button-content {
+          .dx-icon {
+            color: #AAA;
+            margin-left: -4px !important;
+            font-size: 29px !important;
+          }
+
+          .dx-button-text {
+            display: none !important;
+          }
+        }
+      }
+    }
   }
 
   .top-grid-cde-buttons {
@@ -188,7 +245,7 @@ $left-panel-btn-height: 44px;
   top: -10px;
 }
 
-.add-litige-button {
+::ng-deep .add-litige-button {
   position: absolute;
   right: 10px;
   margin: -1px -3px 0 0;
@@ -209,7 +266,8 @@ $left-panel-btn-height: 44px;
     padding: 1px !important;
 
     &:hover {
-      background: #79B23F;
+
+      background: #79B23F !important;
     }
   }
 }
@@ -231,6 +289,19 @@ $left-panel-btn-height: 44px;
       width: 100%;
       min-height: $left-panel-btn-height;
       margin-bottom: 10px;
+
+      &.minmaximize.normalSize {
+        position: absolute;
+        left: -2px;
+        width: 24px !important;
+        background: transparent;
+        margin: -38px 0 0 0;
+        z-index: 1;
+
+        .dx-icon {
+          color: #FFF;
+        }
+      }
 
       .dx-button-content {
         display: block;
@@ -356,7 +427,6 @@ $left-panel-btn-height: 44px;
   font-size: 15px;
   color: $base-accent;
   float: right;
-  padding-right: 9px;
 }
 
 .order-dup {
