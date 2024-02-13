@@ -277,18 +277,18 @@ export class OrdreLignesService extends ApiService implements APIRead {
     if ([Statut.ANNULE.toString(), Statut.A_FACTURER.toString(), Statut.FACTURE.toString(), Statut.FACTURE_EDI.toString()].includes(Statut[data.ordre?.statut]))
       return this.lock(e);
 
-    // Special case: lock every cell except some when vente à commission is true & !allowmutations
+    // Special case: lock every cell except some when vente à commission is true & !allowmutations + "codePromo" #24462
     if (!allowMutations) {
       if (data.ordre.venteACommission === true) {
-        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit", "codePromo.id"].includes(e.column.dataField)) {
           return this.lock(e);
         } else {
           return;
         }
       } else {
         // Special case: unlock every cell except some when !allowmutations
-        // Added "achatDevisePrixUnitaire", "achatUnite.id" 10-01-2023 CDT:569
-        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit"].includes(e.column.dataField)) {
+        // Added "achatDevisePrixUnitaire", "achatUnite.id" 10-01-2023 CDT:569 + "codePromo" #24462
+        if (!["ventePrixUnitaire", "venteUnite.id", "achatDevisePrixUnitaire", "achatUnite.id", "gratuit", "codePromo.id"].includes(e.column.dataField)) {
           return this.lock(e);
         } else {
           return;
