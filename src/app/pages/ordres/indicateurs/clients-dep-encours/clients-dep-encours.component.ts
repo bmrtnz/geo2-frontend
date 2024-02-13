@@ -154,8 +154,6 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
   enableFilters() {
     this.secteurId = this.secteurSB.value?.id;
     this.commercialId = this.commercialSB.value?.id;
-    const filter = [];
-    const filterItem = [];
     this.datagrid.dataSource = null;
     const dataSource = this.paysDepassementService.getDataSource(
       this.indicator.explicitSelection,
@@ -167,15 +165,12 @@ export class ClientsDepEncoursComponent implements AfterViewInit {
         clientValide: this.validClients.value === true ? true : null
       }
     );
-    if (this.paysSB.value) filterItem.push(["id", "=", this.paysSB.value.id]);
-    filterItem.forEach((element) => {
-      filter.push(element);
-      filter.push("and");
-    });
-    filter.pop(); // Remove last 'and'
-
-    if (filter.length) dataSource.filter(filter);
-    this.datagrid.dataSource = dataSource;
+    setTimeout(() => this.datagrid.instance.beginCustomLoading(""))
+    dataSource.load().then(res => {
+      if (this.paysSB.value) res = res.filter(r => r.id === this.paysSB.value.id);
+      this.datagrid.dataSource = res;
+      this.datagrid.instance.endCustomLoading();
+    })
   }
 
   onSecteurChanged(e) {
