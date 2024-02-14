@@ -127,6 +127,11 @@ export class FormUtilsService {
     return array1.length == array2.length && array1.every((element, index) => element === array2[index]);
   }
 
+  // Is vowel?
+  vowelTest(text) {
+    return /^[AEIOUYaeiouy]$/i.test(text);
+  }
+
   // Replace diacritics in a string
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");

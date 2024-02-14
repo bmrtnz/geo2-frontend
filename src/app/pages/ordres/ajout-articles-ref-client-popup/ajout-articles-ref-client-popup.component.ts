@@ -30,6 +30,7 @@ import { GridUtilsService } from "app/shared/services/grid-utils.service";
 import { GridArticlesRefClientComponent } from "./grid-articles-ref-client/grid-articles-ref-client.component";
 import { AssociatedArticlePromptComponent } from "../../../shared/components/associated-article-prompt/associated-article-prompt.component";
 import { EdiLigne } from "app/shared/models";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
 
 
 @Component({
@@ -75,6 +76,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
     public OrdreLigneService: OrdreLignesService,
     public referencesClientService: ReferencesClientService,
     private gridConfiguratorService: GridConfiguratorService,
+    private formUtils: FormUtilsService,
     private functionsService: FunctionsService,
     private gridUtilsService: GridUtilsService,
     private currentCompanyService: CurrentCompanyService,
@@ -156,7 +158,7 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
         .removeRefs(this.ordre.client.id, artIds)
         .subscribe({
           next: () => {
-            const trad = this.vowelTest(this.ordre.client.code[0])
+            const trad = this.formUtils.vowelTest(this.ordre.client.code[0])
               ? "-vowel"
               : "";
             const message = this.localizeService
@@ -177,10 +179,6 @@ export class AjoutArticlesRefClientPopupComponent implements OnChanges {
             ),
         });
     }
-  }
-
-  vowelTest(text) {
-    return /^[AEIOUYaeiouy]$/i.test(text);
   }
 
   onShowing(e) {
