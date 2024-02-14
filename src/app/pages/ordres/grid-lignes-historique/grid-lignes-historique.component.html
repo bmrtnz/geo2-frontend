@@ -5,7 +5,7 @@
   <dx-box>
     <dxi-item [ratio]="0.8">
       <!-- Valides/non valides -->
-      <div class="dx-field valideCheckboxField">
+      <div class="dx-field onlyValideCheckbox">
         <div class="dx-field-label">
           {{ "clients-entrepots-valides" | localize }}
         </div>
@@ -101,7 +101,9 @@
           >
             <div *dxTemplate="let data of 'items'">
               <div
-                [title]="!data.valide ? 'non valide' : ''"
+                [title]="
+                  !data.valide ? localizeService.localize('hint-not-valid') : ''
+                "
                 [ngClass]="{ 'not-valid': !data.valide }"
               >
                 {{ displayCodeBefore(data) }}
@@ -135,7 +137,9 @@
           >
             <div *dxTemplate="let data of 'items'">
               <div
-                [title]="!data.valide ? 'non valide' : ''"
+                [title]="
+                  !data.valide ? localizeService.localize('hint-not-valid') : ''
+                "
                 [ngClass]="{ 'not-valid': !data.valide }"
               >
                 {{ displayCodeBefore(data) }}

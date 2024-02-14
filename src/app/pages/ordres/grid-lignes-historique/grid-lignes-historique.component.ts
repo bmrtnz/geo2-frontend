@@ -428,8 +428,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
       "and",
       ["societe.id", "=", this.currentCompanyService.getCompany().id],
     ];
-    if (this.formGroup.get("valide").value)
-      filter.push("and", ["valide", "=", true]);
+    if (e.value) filter.push("and", ["valide", "=", true]);
     this.clients.filter(filter);
   }
 

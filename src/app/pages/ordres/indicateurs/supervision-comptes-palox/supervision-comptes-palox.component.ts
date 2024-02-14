@@ -30,7 +30,7 @@ import {
   GridConfiguratorService,
 } from "app/shared/services/grid-configurator.service";
 import { GridColumn } from "basic";
-import { DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
+import { DxCheckBoxComponent, DxDataGridComponent, DxSwitchComponent } from "devextreme-angular";
 import { AjustDecomptePaloxPopupComponent } from "../../ajust-decompte-palox-popup/ajust-decompte-palox-popup.component";
 import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
@@ -71,6 +71,7 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
 
   @ViewChild("switchType", { static: false }) switchType: DxSwitchComponent;
   @ViewChild("switchEntity", { static: false }) switchEntity: DxSwitchComponent;
+  @ViewChild("onlyValids", { static: false }) onlyValids: DxCheckBoxComponent;
   @ViewChild(AjustDecomptePaloxPopupComponent, { static: false })
   ajustDecPopup: AjustDecomptePaloxPopupComponent;
 
@@ -81,6 +82,7 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
   public entrepot: DataSource;
   public fournisseur: DataSource;
   public formGroup = new UntypedFormGroup({
+    valide: new UntypedFormControl(true),
     entrepot: new UntypedFormControl(),
     fournisseur: new UntypedFormControl(),
     commercial: new UntypedFormControl(),
@@ -112,28 +114,6 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
       entrepot: true,
       fournisseur: true,
     };
-    this.entrepot = this.entrepotsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial",
-    ]);
-    this.entrepot.filter([
-      [
-        ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
-        "and",
-        ["client.secteur.id", "=", "PAL"],
-      ],
-    ]);
-    this.fournisseur = this.fournisseursService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial",
-    ]);
-    this.fournisseur.filter([
-      ["consignePaloxUdc", "=", true],
-      "or",
-      ["consignePaloxSa", "=", true],
-    ]);
     this.commercial = this.personnesService.getDataSource_v2([
       "id",
       "nomUtilisateur",
@@ -179,6 +159,7 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.switchChange();
+    this.onValideChanged(this.onlyValids);
   }
 
   enableFilters() {
@@ -214,6 +195,37 @@ export class SupervisionComptesPaloxComponent implements OnInit, AfterViewInit {
           ? data.raisonSocial
           : data.description)
       : null;
+  }
+
+  onValideChanged(e) {
+    this.formGroup.get(this.switchEntity.value ? "fournisseur" : "entrepot").reset();
+    this.fournisseur = this.fournisseursService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+      "valide",
+    ]);
+    const filter: any = [];
+    if (e.value) filter.push(["valide", "=", true], "and");
+    filter.push([
+      ["consignePaloxUdc", "=", true],
+      "or",
+      ["consignePaloxSa", "=", true],
+    ]);
+    this.entrepot = this.entrepotsService.getDataSource_v2([
+      "id",
+      "code",
+      "raisonSocial",
+      "valide",
+    ]);
+    const filter2: any = [
+      ["client.societe.id", "=", this.currentCompanyService.getCompany().id],
+      "and",
+      ["client.secteur.id", "=", "PAL"],
+    ];
+    if (e.value) filter2.push("and", ["valide", "=", true]);
+    this.fournisseur.filter(filter);
+    this.entrepot.filter(filter2);
   }
 
   switchChange() {

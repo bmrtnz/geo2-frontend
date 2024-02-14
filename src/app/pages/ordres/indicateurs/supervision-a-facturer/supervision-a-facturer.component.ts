@@ -38,6 +38,7 @@ import { TabContext } from "../../root/root.component";
 let self;
 
 enum InputField {
+  valide = "valide",
   secteurCode = "secteur",
   clientCode = "client",
   entrepotCode = "entrepot",
@@ -98,6 +99,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
 
 
   public formGroup = new UntypedFormGroup({
+    valide: new UntypedFormControl(true),
     secteurCode: new UntypedFormControl(),
     clientCode: new UntypedFormControl(),
     entrepotCode: new UntypedFormControl(),
@@ -110,12 +112,11 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   constructor(
     public gridConfiguratorService: GridConfiguratorService,
     private secteursService: SecteursService,
-    private localizeService: LocalizationService,
     private ordresService: OrdresService,
     private personnesService: PersonnesService,
     private entrepotsService: EntrepotsService,
     private clientsService: ClientsService,
-    private localization: LocalizationService,
+    public localization: LocalizationService,
     public dateManagementService: DateManagementService,
     private currentCompanyService: CurrentCompanyService,
     public ordresBafService: OrdresBafService,
@@ -135,17 +136,6 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
       ["valide", "=", true],
       "and",
       ["societes", "contains", this.company],
-    ]);
-    this.clients = this.clientsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial",
-      "secteur.id",
-    ]);
-    this.entrepots = this.entrepotsService.getDataSource_v2([
-      "id",
-      "code",
-      "raisonSocial",
     ]);
     this.commerciaux = this.personnesService.getDataSource_v2([
       "id",
@@ -248,7 +238,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     this.progress.value = ratio ?? 0;
   }
 
-  displayIDBefore(data) {
+  displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
       " - " +
@@ -355,29 +345,56 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     );
   }
 
-  onSecteurChange(e) {
+  filterClients(onlyValids) {
     this.clients = this.clientsService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial",
-      "secteur.id",
+      "valide",
     ]);
-    if (e.value)
-      this.clients.filter([
-        ["secteur.id", "=", e.value.id],
-        "and",
-        ["societe.id", "=", this.company],
-      ]);
+    const filter: any = [["societe.id", "=", this.currentCompanyService.getCompany().id]];
+
+    if (this.formGroup.get("secteurCode")?.value)
+      filter.push("and", ["secteur.id", "=", this.formGroup.get("secteurCode")?.value?.id])
+    if (onlyValids) filter.push("and", ["valide", "=", true]);
+    this.clients.filter(filter);
   }
 
-  onClientChange(e) {
+  clearCltEnt() {
+    this.formGroup.get("clientCode").reset();
+    this.formGroup.get("entrepotCode").reset();
+  }
+
+  onValideChanged(e) {
+    this.clearCltEnt();
+    this.filterClients(e.value);
+  }
+
+  onSecteurChanged(e) {
+    this.filterClients(this.formGroup.get("valide").value);
+    if (e.event) this.clearCltEnt();
+  }
+
+  onClientChanged(e) {
     this.entrepots = this.entrepotsService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial",
-      "client.id",
+      "valide"
     ]);
-    if (e.value) this.entrepots.filter(["client.id", "=", e.value.id]);
+
+    const filter: any = [["client.id", "=", e.value?.id]];
+    filter.push("and", ["client.societe.id", "=", this.company]);
+    if (this.formGroup.get("valide").value) filter.push("and", ["valide", "=", true]);
+    this.entrepots.filter(filter);
+
+    this.entrepots.load().then((res) => {
+      if (res?.length === 1)
+        this.formGroup.get("entrepotCode").patchValue({ id: res[0].id });
+    });
+    // We check that this change is coming from the user
+    if (!e.event) return;
+    this.formGroup.get("entrepotCode").reset();
   }
 
   onGridContentReady(e) {
@@ -548,7 +565,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
     if (e.rowType === "data") {
       // Best expression for order status display
       if (field === "ordre.statut") {
-        if (Statut[e.value]) e.cellElement.innerText = this.localizeService.localize(StatutLocale[e.value])?.ucFirst();
+        if (Statut[e.value]) e.cellElement.innerText = this.localization.localize(StatutLocale[e.value])?.ucFirst();
       }
 
       // Adjust clientReference display/hint

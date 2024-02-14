@@ -7,6 +7,11 @@
   .supervision-BAF-form {
     margin: 15px 20px 0 20px;
 
+    .secteur-label {
+      text-overflow: initial;
+      padding-right: 5px;
+    }
+
     .title-container {
       h6 {
         margin: 0;

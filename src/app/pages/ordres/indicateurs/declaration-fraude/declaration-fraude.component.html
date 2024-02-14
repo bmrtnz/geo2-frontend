@@ -4,7 +4,27 @@
   class="fraud-form"
   labelLocation="left"
 >
-  <!-- (onFieldDataChanged)="onFieldDataChanged()" -->
+  <dxi-item
+    class="first-row"
+    itemType="group"
+    [colCount]="6"
+  >
+    <!-- Valides / non valides -->
+    <div class="dx-field onlyValideCheckbox">
+      <div class="dx-field-label">
+        {{ "clients-entrepots-valides" | localize }}
+      </div>
+      <div class="dx-field-value">
+        <dx-check-box
+          #valideSB
+          class="float-left"
+          (onValueChanged)="onValideChanged($event)"
+        >
+        </dx-check-box>
+      </div>
+    </div>
+  </dxi-item>
+
   <dxi-item
     itemType="group"
     [colCount]="6"
@@ -45,7 +65,18 @@
             [searchExpr]="['code']"
             [showClearButton]="true"
             (onValueChanged)="onClientChanged($event)"
+            itemTemplate="items"
           >
+            <div *dxTemplate="let data of 'items'">
+              <div
+                [title]="
+                  !data.valide ? localizer.localize('hint-not-valid') : ''
+                "
+                [ngClass]="{ 'not-valid': !data.valide }"
+              >
+                {{ displayCodeBefore(data) }}
+              </div>
+            </div>
             <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
           </dx-select-box>
         </div>
@@ -64,7 +95,18 @@
             [searchExpr]="['code']"
             [displayExpr]="displayCodeBefore"
             [showClearButton]="true"
+            itemTemplate="items"
           >
+            <div *dxTemplate="let data of 'items'">
+              <div
+                [title]="
+                  !data.valide ? localizer.localize('hint-not-valid') : ''
+                "
+                [ngClass]="{ 'not-valid': !data.valide }"
+              >
+                {{ displayCodeBefore(data) }}
+              </div>
+            </div>
             <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
           </dx-select-box>
         </div>

@@ -53,8 +53,15 @@
 }
 
 ::ng-deep .fraud-form {
+
+  .first-row {
+    position: absolute;
+    margin: -25px 0 0 10px;
+  }
+
   .dx-first-col.dx-last-col.dx-field-item.dx-col-0.dx-field-item-optional.dx-field-item-has-group {
-    padding: 0 0 5px 0;
+    padding: 0 0 2px 0;
+    margin: 2px 0 -2px 0;
   }
 
   .dx-first-row.dx-last-row.dx-field-item {

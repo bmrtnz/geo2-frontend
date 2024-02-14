@@ -76,7 +76,21 @@
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
               [searchExpr]="['code']"
+              itemTemplate="items"
             >
+              <div *dxTemplate="let data of 'items'">
+                <div
+                  [title]="
+                    !data.valide
+                      ? localizeService.localize('hint-not-valid')
+                      : ''
+                  "
+                  [ngClass]="{ 'not-valid': !data.valide }"
+                >
+                  {{ displayCodeBefore(data) }}
+                </div>
+              </div>
+              >
               <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
@@ -96,7 +110,21 @@
               [displayExpr]="displayCodeBefore"
               [showClearButton]="true"
               [searchExpr]="['code']"
+              itemTemplate="items"
             >
+              <div *dxTemplate="let data of 'items'">
+                <div
+                  [title]="
+                    !data.valide
+                      ? localizeService.localize('hint-not-valid')
+                      : ''
+                  "
+                  [ngClass]="{ 'not-valid': !data.valide }"
+                >
+                  {{ displayCodeBefore(data) }}
+                </div>
+              </div>
+              >
               <dxo-drop-down-options [width]="350"> </dxo-drop-down-options>
             </dx-select-box>
           </div>
@@ -114,6 +142,21 @@
               type="date"
               [displayFormat]="'dd-MM-yy'"
             ></dx-date-box>
+          </div>
+        </div>
+        <!-- Valides/non valides -->
+        <div class="dx-field onlyValideCheckbox">
+          <div class="dx-field-label">
+            {{ "valide-uniq" | localize }}
+          </div>
+          <div class="dx-field-value">
+            <dx-check-box
+              #onlyValids
+              formControlName="valide"
+              class="float-left"
+              (onValueChanged)="onValideChanged($event)"
+            >
+            </dx-check-box>
           </div>
         </div>
       </dxi-item>

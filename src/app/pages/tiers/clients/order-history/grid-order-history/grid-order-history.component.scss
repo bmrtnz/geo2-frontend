@@ -127,18 +127,6 @@
     }
   }
 
-  .valideCheckboxField {
-    .dx-field-label {
-      width: 224px !important;
-      text-overflow: initial;
-      white-space: normal;
-    }
-
-    .dx-field-value {
-      width: 33px !important;
-    }
-  }
-
   .departLivraison-switch {
     height: 36px !important;
 
@@ -185,8 +173,4 @@
   .dx-datagrid-summary-item {
     color: #FFF;
   }
-}
-
-::ng-deep .not-valid {
-  opacity: 0.5;
 }
