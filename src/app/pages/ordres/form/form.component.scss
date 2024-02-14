@@ -135,7 +135,7 @@ $left-panel-btn-height: 44px;
   }
 
   .header-btn-baf {
-    margin: -5px 11px 0 0;
+    margin: -5px 0 0 8px;
     height: 27px;
 
     .dx-button-content {
@@ -422,16 +422,10 @@ $left-panel-btn-height: 44px;
   min-height: 22px;
 }
 
-.order-id,
-.order-dup {
+.order-id {
   font-size: 15px;
   color: $base-accent;
   float: right;
-}
-
-.order-dup {
-  padding-left: 7px;
-  border-left: 1px solid $base-accent;
 }
 
 .order-type {
@@ -443,8 +437,9 @@ $left-panel-btn-height: 44px;
 
 ::ng-deep .duplicated-order {
   border-left: 1px solid $base-accent;
-  padding: 0 4px;
+  padding: 0 0 0 4px;
   height: 19px;
+  margin-left: 7px;
   float: right;
 
   .dx-button {
