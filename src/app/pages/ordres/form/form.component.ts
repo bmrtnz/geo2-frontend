@@ -663,6 +663,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ordresService.save({ ordre }).subscribe({
         next: (res) => {
           this.refreshStatus(res.data.saveOrdre.statut);
+          this.recalculateMarginsFromTransport(ordre);
           this.headerSaving = false;
           this.ordre = { ...this.ordre, ...ordre };
           this.formGroup.markAsPristine();
@@ -1794,6 +1795,22 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!res || !this.ordre || res?.id.split("-")[1] !== this.ordre.numero) return;
       res.status = Statut[this.ordre?.statut] === Statut.CONFIRME.toString();
     });
+  }
+
+  recalculateMarginsFromTransport(ordre) {
+    // Did we touch at least one of these fields?
+    if (!this.formUtils.getIntersection(
+      ["transporteurDEVPrixUnitaire", "transporteurDEVCode", "baseTarifTransport"],
+      Object.keys(ordre)).length) return
+
+    this.functionsService
+      .fCalculMargePrevi(
+        this.ordre.id,
+        this.currentCompanyService.getCompany().id
+      )
+      .subscribe({
+        error: ({ message }: Error) => console.log(message),
+      });
   }
 
   openDateChangePopup() {

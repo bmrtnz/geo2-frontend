@@ -127,6 +127,11 @@ export class FormUtilsService {
     return array1.length == array2.length && array1.every((element, index) => element === array2[index]);
   }
 
+  // Get intersection between two arrays
+  getIntersection(array1: any[], array2: any[]) {
+    return array1.filter(value => array2.includes(value));
+  }
+
   // Replace diacritics in a string
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
