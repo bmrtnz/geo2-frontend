@@ -182,7 +182,7 @@ export class ProfilePopupComponent {
     this.titleStart = this.firstUpper(this.localizeService.localize("profil"));
     this.titleStart +=
       " " +
-      (this.vowelTest(this.nomInterne[0])
+      (this.formUtilsService.vowelTest(this.nomInterne[0])
         ? this.localizeService.localize("d")
         : this.localizeService.localize("of") + " ");
     this.titleMid = this.firstUpper(this.nomInterne);
@@ -340,10 +340,6 @@ export class ProfilePopupComponent {
 
   hidePopup() {
     this.visible = false;
-  }
-
-  vowelTest(text) {
-    return /^[AEIOUYaeiouy]$/i.test(text);
   }
 
   ////////////////////////////////

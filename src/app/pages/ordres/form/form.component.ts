@@ -153,7 +153,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private personnesService: PersonnesService,
     private instructionsService: InstructionsService,
     private portsService: PortsService,
-    public formUtilsService: FormUtilsService,
     private basesTarifService: BasesTarifService,
     private transporteursService: TransporteursService,
     private referencesClientService: ReferencesClientService,
@@ -779,7 +778,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           if (addedArt.length) {
             const addedArtids = [];
             addedArt.map((artId) => addedArtids.push(artId.article?.id));
-            const trad = this.vowelTest(this.ordre.client.code[0])
+            const trad = this.formUtils.vowelTest(this.ordre.client.code[0])
               ? "-vowel"
               : "";
             let message = this.localization
@@ -2046,10 +2045,6 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
   public refreshHeader(e?) {
     this.headerRefresh = true;
     this.initializeForm("no-cache");
-  }
-
-  vowelTest(text) {
-    return /^[AEIOUYaeiouy]$/i.test(text);
   }
 
   public async onDuplicationBukSaClick() {

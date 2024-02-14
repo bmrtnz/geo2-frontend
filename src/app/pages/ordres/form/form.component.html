@@ -1124,7 +1124,7 @@
                       "
                       text="{{ 'btn-addrefclt' | localize }}"
                       [hint]="
-                        ((vowelTest(ordre?.client?.code)
+                        ((this.formUtils.vowelTest(ordre?.client?.code)
                           ? 'hint-addrefclt2'
                           : 'hint-addrefclt'
                         ) | localize) + ordre?.client?.code
