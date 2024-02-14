@@ -34,6 +34,7 @@ import {
   defer,
   EMPTY,
   iif,
+  lastValueFrom,
   Observable,
   of,
   Subject,
@@ -529,17 +530,19 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  async onTabCloseClick(event: MouseEvent) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
+  async onTabCloseClick(event: MouseEvent, pullID?: string) {
 
-    // Save before closing
-    // Seen with Bruno 18-08-2023 : no confirmation required
-    const closeTabBtn = (event.target as HTMLElement);
-    const pullID = closeTabBtn.parentElement.dataset.itemId;
-    const grid = this.gridsService.get("Commande", pullID);
-    if (grid?.instance.hasEditData()) closeTabBtn.classList.add("infinite-rotate");
-    await this.gridsService.waitUntilAllGridDataSaved(grid);
+    if (!pullID) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      // Save before closing
+      // Seen with Bruno 18-08-2023 : no confirmation required
+      const closeTabBtn = (event.target as HTMLElement);
+      pullID = closeTabBtn.parentElement.dataset.itemId;
+      const grid = this.gridsService.get("Commande", pullID);
+      if (grid?.instance.hasEditData()) closeTabBtn.classList.add("infinite-rotate");
+      await this.gridsService.waitUntilAllGridDataSaved(grid);
+    }
 
     this.selectTab(TAB_LOAD_ID);
     let indicateur = this.route.snapshot.queryParamMap
@@ -648,8 +651,22 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tabChangeEvent.emit({ status: "in", item });
         return of("done");
       }),
+      tap(() => this.cleanItems()),
       tap(() => this.tabLoadPanel.visible = false),
     );
+  }
+
+  private cleanItems() {
+    // This removes orders that may subsist from another company
+    this.items.filter(item => item.type === TabType.Ordre).map(async item => {
+      const res = await lastValueFrom(this.ordresService
+        .getOneByNumeroAndSocieteAndCampagne(
+          item.id.split("-")[1],
+          this.currentCompanyService.getCompany().id, item.id.split("-")[0],
+          ["id"]
+        ));
+      if (!res.data?.ordreByNumeroAndSocieteAndCampagne) this.onTabCloseClick(null, item.id);
+    })
   }
 
   public isStaticItem(item: TabPanelItem) {
