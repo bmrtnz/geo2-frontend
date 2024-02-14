@@ -13,7 +13,7 @@
           'material-icons zoom_' + (!reducedLeftButtons ? 'in' : 'out') + '_map'
         "
         hint="{{
-          (reducedLeftButtons ? 'normal-buttons' : 'reduced-buttons') | localize
+          (reducedLeftButtons ? 'reduced-buttons' : 'normal-buttons') | localize
         }}"
         (onClick)="leftPanelChange($event)"
       >
@@ -23,7 +23,7 @@
         data-accordion="articles"
         height="auto"
         icon="box"
-        hint="{{ 'ordres-suivi-articles' | localize }}"
+        hint="{{ 'articles-title' | localize }}"
         text="{{ 'ordres-suivi-articles' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
@@ -35,7 +35,7 @@
         data-accordion="logistique"
         height="auto"
         icon="material-icons local_shipping"
-        hint="{{ 'ordres-suivi-logistique' | localize }}"
+        hint="{{ 'ordres-suivi-groupe-logistique' | localize }}"
         text="{{ 'ordres-suivi-logistique' | localize }}"
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
@@ -74,7 +74,7 @@
           [routerLink]="[]"
           [queryParamsHandling]="'merge'"
           [fragment]="fragments.Litiges"
-          hint="{{ 'ordres-suivi-litiges' | localize }}"
+          hint="{{ 'ordres-suivi-groupe-litiges' | localize }}"
           text="{{ 'ordres-suivi-litiges' | localize }}"
         >
         </dx-button>
@@ -138,7 +138,7 @@
           [routerLink]="[]"
           [queryParamsHandling]="'merge'"
           [fragment]="fragments.Commentaires"
-          hint="{{ 'ordres-suivi-commentaires' | localize }}"
+          hint="{{ 'ordres-suivi-groupe-commentaires' | localize }}"
           text="{{ 'ordres-suivi-commentaires' | localize }}"
         >
         </dx-button>
@@ -151,7 +151,7 @@
         [routerLink]="[]"
         [queryParamsHandling]="'merge'"
         [fragment]="fragments.Log"
-        hint="{{ 'ordres-suivi-log' | localize }}"
+        hint="{{ 'ordres-suivi-groupe-log' | localize }}"
         text="{{ 'ordres-suivi-log' | localize }}"
       >
       </dx-button>
@@ -161,7 +161,7 @@
         icon="material-icons folder"
         [disabled]="!ordre"
         (onClick)="fileManagerClick()"
-        hint="{{ 'ordres-suivi-documents' | localize }}"
+        hint="{{ 'documents' | localize }}"
         text="{{ 'ordres-suivi-documents' | localize }}"
       >
       </dx-button>
