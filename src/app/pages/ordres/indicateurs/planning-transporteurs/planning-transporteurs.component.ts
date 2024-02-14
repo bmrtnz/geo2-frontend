@@ -129,10 +129,6 @@ export class PlanningTransporteursComponent implements OnInit, AfterViewInit {
     e.component.focus();
   }
 
-  onContentReady(e) {
-    e.component.focus();
-  }
-
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "J");
     this.authService.onUserChanged().subscribe(() =>

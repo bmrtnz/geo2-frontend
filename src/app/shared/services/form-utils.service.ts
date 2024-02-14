@@ -132,6 +132,10 @@ export class FormUtilsService {
     return array1.filter(value => array2.includes(value));
   }
 
+  vowelTest(text) {
+    return /^[AEIOUYaeiouy]$/i.test(text);
+  }
+
   // Replace diacritics in a string
   noDiacritics(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
