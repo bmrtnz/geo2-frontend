@@ -398,6 +398,7 @@
                           </dx-select-box>
                         </div>
                         <dx-button
+                          *ngIf="!!fullOrderNumber"
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
@@ -437,6 +438,7 @@
                         >
                         </dx-button>
                         <dx-button
+                          *ngIf="!!fullOrderNumber"
                           class="form-zoom-button rightPositioned"
                           type="default"
                           icon="material-icons search"
@@ -580,6 +582,7 @@
                           [baseSize]="10"
                         >
                           <dx-button
+                            *ngIf="!!fullOrderNumber"
                             class="form-zoom-button"
                             type="default"
                             icon="material-icons search"

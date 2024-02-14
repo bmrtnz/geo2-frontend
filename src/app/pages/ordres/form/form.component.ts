@@ -1429,7 +1429,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ordre = ordre;
           this.changeDetectorRef.detectChanges();
           // France: 2 Incoterms only
-          if (this.ordre.secteurCommercial?.id === "F")
+          if (this.ordre?.secteurCommercial?.id === "F")
             this.incotermsDS.filter([
               ["id", "=", "CPT"],
               "or",
@@ -1438,7 +1438,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
           this.headerRefresh = false;
           if (this.ordre === null) {
             notify(
-              `Récupération des données de l'ordre impossible...`,
+              this.localization.localize("warn-null-order") + "...",
               "error",
               7000
             );
