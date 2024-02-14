@@ -46,7 +46,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   @Input() selectedLitigeLigneKey: LitigeLigne["id"];
   @Input() grid: GridLitigesLignesComponent;
   @Output() public ordreSelected = new EventEmitter<Litige>();
-  @Output() public litigeCreated = new EventEmitter();
+  @Output() public litigeCreatedOrDeleted = new EventEmitter();
   @Output() public currOrdre;
   @Output() public infosLitige: any;
   @Output() public litigeID: string;
@@ -215,7 +215,7 @@ export class FormLitigesComponent implements OnInit, OnChanges {
               this.running.createLitige = false;
               this.loadForm();
               this.selectLignesPopup.visible = true;
-              this.litigeCreated.emit();
+              this.litigeCreatedOrDeleted.emit();
             },
             error: (err) => {
               this.running.createLitige = false;
@@ -397,7 +397,17 @@ export class FormLitigesComponent implements OnInit, OnChanges {
   public deleteLitige() {
     this.litigesService
       .delete(this.infosLitige.litige.id)
-      .subscribe(() => this.loadForm());
+      .subscribe(() => {
+        notify({
+          message: this.localization.localize("litige-deleted"),
+          type: "success",
+          displayTime: 6000
+        },
+          { position: 'bottom center', direction: 'up-stack' }
+        );
+        this.loadForm();
+        this.litigeCreatedOrDeleted.emit();
+      });
   }
 
   public updateAllowDeletion() {

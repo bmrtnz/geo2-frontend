@@ -2186,6 +2186,7 @@
     "debut": "début",
     "search-linked-orders": "Recherche ordres liés",
     "litige-save-success": "Sauvegarde du litige effectuée",
+    "litige-deleted": "Le litige a bien été supprimé",
     "duplicate-first-column-value-to-all-rows": "Dupliquer sur toutes les lignes",
     "report": "reporter",
     "report-text": "Reporter la valeur de la première cellule sur toutes les autres",
