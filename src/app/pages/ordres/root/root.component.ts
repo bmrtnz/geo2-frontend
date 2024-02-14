@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   HostListener,
@@ -276,7 +277,8 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     private dateManagementService: DateManagementService,
     public gridUtilsService: GridUtilsService,
     private authService: AuthService,
-    private tabContext: TabContext
+    private tabContext: TabContext,
+    private cd: ChangeDetectorRef,
   ) {
     this.moreThanOneOpenOrder = 0;
     this.moreThanOneOpenIndic = 0;
@@ -581,6 +583,7 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     // Checking if grids have unsaved data
     ordre.map(ord => this.gridsService.waitUntilAllGridDataSaved(this.gridsService.get("Commande", ord)));
 
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
     ordre = [];
     let navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
     navID = (navID !== TAB_LOAD_ID) ? navID : TAB_HOME_ID;
@@ -592,7 +595,6 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     // Hide all orders tabs - Handle close btn
     document.querySelector('.tab-close-all-orders')?.classList.add("hideTab");
-    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
     if (!silent) notify({
       message: this.localizationService
         .localize(this.moreThanOneOpenOrder ? "all-orders-were-closed" : "open-order-was-closed"),
@@ -605,7 +607,9 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
   closeEveryIndicator(silent?: boolean) {
     this.selectTab(TAB_LOAD_ID);
     const ordre = this.route.snapshot.queryParamMap.getAll(TabType.Ordre);
-    let indicateur = [];
+    let indicateur = this.route.snapshot.queryParamMap.getAll(TabType.Indicator);
+    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
+    indicateur = [];
     const navID = history?.state[PREVIOUS_STATE] ?? TAB_HOME_ID;
 
     this.router.navigate(["pages/ordres", TAB_LOAD_ID]).then((_) =>
@@ -615,7 +619,6 @@ export class RootComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     // Hide all indicators tabs - Handle close btn
     document.querySelector('.tab-close-all-indics')?.classList.add("hideTab");
-    this.updateTabsSharing(ordre?.length, indicateur?.filter((id) => id !== TAB_LOAD_ID)?.length);
     if (!silent) notify({
       message: this.localizationService
         .localize(this.moreThanOneOpenIndic ? "all-indicators-were-closed" : "open-indicator-was-closed"),
