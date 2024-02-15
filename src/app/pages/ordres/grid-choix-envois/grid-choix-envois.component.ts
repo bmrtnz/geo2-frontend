@@ -342,8 +342,7 @@ export class GridChoixEnvoisComponent implements OnInit {
           }
           this.gridData = new DataSource(uniqueEnvois);
           setTimeout(() => {
-            this.dataGrid.instance.selectAll();
-            this.canBeSent = true;
+            this.dataGrid.instance.selectAll().then((_) => this.canBeSent = true);
           }, 1000);
         },
         error: (message) => notify({ message }, "error", 7000),

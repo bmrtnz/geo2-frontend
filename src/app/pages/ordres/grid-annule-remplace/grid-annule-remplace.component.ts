@@ -182,8 +182,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
             this.handleRaisonAR();
           });
           setTimeout(() => {
-            this.dataGrid.instance.selectAll();
-            this.canBeSent = true;
+            this.dataGrid.instance.selectAll().then((_) => this.canBeSent = true);
           }, 1000);
         },
         error: (message) => notify({ message }, "error", 7000),
@@ -195,9 +194,7 @@ export class GridAnnuleRemplaceComponent implements OnInit {
       this.dataGrid.instance.getSelectedRowsData();
     if (!selection.every((envoi) => envoi.numeroAcces2))
       return throwError(
-        Error(
-          "Le motif d'annulation est obligatoire pour les envois sélectionnés"
-        )
+        Error(this.localizeService.localize("warn-mandatory-reason"))
       );
     this.dataGrid.instance.getVisibleRows().forEach((row) => {
       if (row.isSelected)
