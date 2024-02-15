@@ -57,7 +57,6 @@ export class DuplicationOrdrePopupComponent {
   public activateEntrepot: boolean;
   public entrepotDS: DataSource;
   public showModify: boolean;
-  public minDate;
   public formGroup = new UntypedFormGroup({
     dateDepartPrevue: new UntypedFormControl(),
     dateLivraisonPrevue: new UntypedFormControl(),
@@ -73,7 +72,6 @@ export class DuplicationOrdrePopupComponent {
   }
 
   onShown(e) {
-    this.minDate = this.dateManagementService.formatDate(new Date) + "T00:00:00";
     this.setDefaultValues();
     this.duplicatetButton?.instance.focus();
     this.showModify = false;
@@ -110,10 +108,10 @@ export class DuplicationOrdrePopupComponent {
     });
     this.formGroup
       .get("dateDepartPrevue")
-      .patchValue(this.minDate);
+      .patchValue(this.ordre.dateDepartPrevue);
     this.formGroup
       .get("dateLivraisonPrevue")
-      .patchValue(this.dateManagementService.formatDate(this.dateManagementService.findDate(1)));
+      .patchValue(this.ordre.dateLivraisonPrevue);
     this.formGroup.get("entrepot").patchValue({
       id: this.ordre.entrepot.id,
       code: this.ordre.entrepot.code,

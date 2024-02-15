@@ -60,12 +60,12 @@
               name="{{ 'ordre-duplication-dateDepartPrevue' | localize }}"
             >
               <dxi-validation-rule type="required"></dxi-validation-rule>
-              <dxi-validation-rule
+              <!-- <dxi-validation-rule
                 *ngIf="minDate"
                 type="range"
                 [min]="minDate"
                 message="{{ 'warning-wrong-date' | localize }}"
-              ></dxi-validation-rule>
+              ></dxi-validation-rule> -->
             </dx-validator>
           </dx-date-box>
         </div>
@@ -88,12 +88,12 @@
               name="{{ 'ordre-duplication-dateLivraisonPrevue' | localize }}"
             >
               <dxi-validation-rule type="required"></dxi-validation-rule>
-              <dxi-validation-rule
+              <!-- <dxi-validation-rule
                 *ngIf="minDate"
                 type="range"
                 [min]="minDate.split('T')[0]"
                 message="{{ 'warning-wrong-date' | localize }}"
-              ></dxi-validation-rule>
+              ></dxi-validation-rule> -->
             </dx-validator>
           </dx-date-box>
         </div>
@@ -129,12 +129,7 @@
       ></dx-button>
       <dx-button
         #duplicatetButton
-        [disabled]="
-          processRunning ||
-          formGroup?.get('dateDepartPrevue')?.value < minDate ||
-          formGroup?.get('dateLivraisonPrevue')?.value <
-            formGroup?.get('dateDepartPrevue')?.value?.split('T')[0]
-        "
+        [disabled]="processRunning"
         type="normal"
         text="{{ 'btn-duplication-ordre' | localize }}"
         (onClick)="applyClick()"
