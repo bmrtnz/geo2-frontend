@@ -1925,6 +1925,7 @@
     "warning-wrong-date": "Cette date semble incohérente",
     "warn-turn-on-alert": "Êtes-vous sûr(e) de vouloir activer une notification {0} de type {1} ?",
     "warn-order-other-company": "L'ordre sélectionné {0} est un ordre {1}",
+    "warn-mandatory-reason": "Le motif d'annulation est obligatoire pour les envois sélectionnés",
     "generale": "générale",
     "on-sector": "sur le secteur {0} et",
     "ControleQualite-cq": "CQ",
