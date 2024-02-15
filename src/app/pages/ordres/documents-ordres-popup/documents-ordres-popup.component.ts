@@ -11,6 +11,7 @@ import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
 import { DxPopupComponent } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
+import { lastValueFrom } from "rxjs";
 import { GridChoixEnvoisComponent } from "../grid-choix-envois/grid-choix-envois.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
 
@@ -82,7 +83,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
       this.closeConfirm = await result;
       if (this.closeConfirm) {
-        await this.gridChoixEnvoisComponent.clearTemps();
+        await lastValueFrom(this.gridChoixEnvoisComponent.clearTemps());
         this.hidePopup();
       }
     }

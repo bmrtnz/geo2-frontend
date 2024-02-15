@@ -29,7 +29,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, finalize, map } from "rxjs/operators";
+import { concatMap, concatMapTo, finalize, map } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
 import { GridsService } from "../grids.service";
 
@@ -238,12 +238,12 @@ export class GridChoixEnvoisComponent implements OnInit {
   }
 
   clearTemps() {
-    this.envoisService.getList(
+    return this.envoisService.getList(
       `ordre.id==${this.ordre.id} and traite==A`,
-      ["id"]).subscribe(res => {
-        const temps = res.data.allEnvoisList.map(({ id }) => ({ id }));
-        this.envoisService.deleteTempEnvois(temps).toPromise()
-      });
+      ["id"]).pipe(
+        map(res => res.data.allEnvoisList.map(({ id }) => ({ id }))),
+        concatMap(res => this.envoisService.deleteTempEnvois(res)),
+      );
   }
 
   // Used to override std arrows behaviour
