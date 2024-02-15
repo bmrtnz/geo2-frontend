@@ -28,6 +28,8 @@ import { saveAs } from "file-saver";
 import { defer, of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import notify from "devextreme/ui/notify";
+
 
 let self;
 
@@ -115,6 +117,8 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     );
     this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
     this.valideSB.value = true;
+    // Only solution found for showing warning
+    this.secteurSB.value = "";
   }
 
   setDefaultPeriod(periodId) {
@@ -259,6 +263,13 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
+    if (!this.secteurSB?.value?.id) return notify({
+      message: this.localizer.localize("please-select-sector"),
+      type: "warning",
+      displayTime: 3000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
 
     this.dataSource = null;
 
