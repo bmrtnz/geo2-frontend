@@ -1,58 +1,59 @@
 @import "src/themes/generated/variables.base.scss";
 
-.dx-fieldset {
+::ng-deep form.dx-fieldset {
   display: flex;
-}
 
-.dx-field {
-  margin-right: 20px;
-}
+  margin: 20px 20px 10px 20px;
 
-::ng-deep .PlannFourFilterArea {
-  width: 1100px;
 
-  .refresh {
-    float: right;
-    right: 19px;
+  .dx-field {
+    margin-right: 20px;
   }
 
-  .refresh {
-    float: right;
-    right: 19px;
-  }
+  .plannFourFilterArea {
+    width: 1100px;
 
-  .dx-datebox .dx-texteditor-input {
-    padding-right: 0 !important;
-  }
+    .refresh {
+      float: right;
+      right: 19px;
+    }
 
-  .orderTileleftFilters .dx-field {
-    margin-bottom: 0;
-  }
+    .refresh {
+      top: 8px;
+      right: 19px;
+      float: right;
+    }
 
-  .orderRightRightFilters {
-    margin-top: 4px;
-  }
+    .dx-datebox .dx-texteditor-input {
+      padding-right: 0 !important;
+    }
 
-  .validOnlyButtons {
-    display: block;
-    min-width: 0 !important;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    float: left;
+    .orderTileleftFilters .dx-field {
+      margin-bottom: 0;
+    }
 
-    .dx-button-content {
-      padding: 6px;
+    .orderRightRightFilters {
+      margin-top: 4px;
+    }
+
+    .validOnlyButtons {
+      display: block;
+      min-width: 0 !important;
+      width: 30px;
+      height: 30px;
+      margin: 10px 6px;
+      border-radius: 50%;
+      float: left;
+
+      .dx-button-content {
+        padding: 6px;
+      }
     }
   }
 }
 
 ::ng-deep .gridPF-container {
   position: relative;
-
-  .grid-planning-fournisseurs {
-    max-height: calc(100vh - 275px) !important;
-  }
 
   .showPrices-box {
     width: 300px;
@@ -66,15 +67,18 @@
       margin-left: 10px;
     }
   }
-}
 
-// Highlight canceled orders
-::ng-deep .canceled-orders td {
-  color: #ff325a !important;
-  text-shadow: 1px 1px 15px #fff;
-}
+  .grid-planning-fournisseurs {
 
-// Alternate row
-::ng-deep .alternate-row td {
-  background-color: #DDD;
+    // Highlight canceled orders
+    .canceled-orders td {
+      color: #ff325a !important;
+      text-shadow: 1px 1px 15px #fff;
+    }
+
+    // Alternate row
+    .alternate-row td {
+      background-color: #DDD;
+    }
+  }
 }
