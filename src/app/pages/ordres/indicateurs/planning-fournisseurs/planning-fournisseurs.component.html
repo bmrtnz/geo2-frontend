@@ -2,7 +2,7 @@
   class="dx-fieldset"
   [formGroup]="formGroup"
 >
-  <div class="PlannFourFilterArea">
+  <div class="plannFourFilterArea">
     <dx-box>
       <dxi-item [ratio]="5">
         <div class="orderTileleftFilters">
@@ -39,28 +39,11 @@
               </dx-tag-box>
             </div>
           </div>
-          <!-- Fournisseur -->
-          <div class="dx-field">
-            <div class="dx-field-label capitalize noEllipsis">
-              {{ "fournisseur" | localize }}
-            </div>
-            <div class="dx-field-value">
-              <dx-tag-box
-                formControlName="fournisseur"
-                [dataSource]="fournisseurs"
-                [displayExpr]="displayCodeBefore"
-                [showClearButton]="true"
-                [searchExpr]="['code']"
-              >
-                <dxo-drop-down-options [width]="300"> </dxo-drop-down-options>
-              </dx-tag-box>
-            </div>
-          </div>
         </div>
       </dxi-item>
       <dxi-item [ratio]="10.7">
         <dx-box>
-          <dxi-item [ratio]="4.3">
+          <dxi-item [ratio]="5">
             <!-- Période -->
             <div class="dx-field field-small">
               <div class="dx-field-label noEllipsis">
@@ -113,55 +96,76 @@
             </div>
           </dxi-item>
         </dx-box>
-        <dxi-item [ratio]="7">
+        <dxi-item [ratio]="10.7">
           <div class="orderRightRightFilters">
             <dx-box>
-              <dxi-item [ratio]="1">
-                <!-- Only valid buttons -->
-                <dx-button
-                  class="validOnlyButtons"
-                  type="default"
-                  data-entity="client"
-                  hint="{{ 'hint-bascule-clients-valide' | localize }}"
-                  text="{{ 'button-bascule-clients-valide' | localize }}"
-                  (onClick)="validOrAll($event)"
-                ></dx-button>
+              <dxi-item [ratio]="3.1">
+                <!-- Fournisseur -->
+                <div class="dx-field">
+                  <div class="dx-field-label capitalize noEllipsis">
+                    {{ "fournisseur" | localize }}
+                  </div>
+                  <div class="dx-field-value">
+                    <dx-tag-box
+                      formControlName="fournisseur"
+                      [dataSource]="fournisseurs"
+                      [displayExpr]="displayCodeBefore"
+                      [showClearButton]="true"
+                      [searchExpr]="['code']"
+                    >
+                      <dxo-drop-down-options [width]="300">
+                      </dxo-drop-down-options>
+                    </dx-tag-box>
+                  </div>
+                </div>
               </dxi-item>
-              <dxi-item [ratio]="1">
-                <dx-button
-                  class="validOnlyButtons"
-                  type="default"
-                  data-entity="entrepot"
-                  hint="{{ 'hint-bascule-entrepots-valide' | localize }}"
-                  text="{{ 'button-bascule-entrepots-valide' | localize }}"
-                  (onClick)="validOrAll($event)"
-                ></dx-button>
+              <dxi-item [ratio]="0.5"></dxi-item>
+              <dxi-item [ratio]="2">
+                <div>
+                  <!-- Only valid buttons -->
+                  <dx-button
+                    class="validOnlyButtons"
+                    type="default"
+                    data-entity="client"
+                    hint="{{ 'hint-bascule-clients-valide' | localize }}"
+                    text="{{ 'button-bascule-clients-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  ></dx-button>
+                  <dx-button
+                    class="validOnlyButtons"
+                    type="default"
+                    data-entity="entrepot"
+                    hint="{{ 'hint-bascule-entrepots-valide' | localize }}"
+                    text="{{ 'button-bascule-entrepots-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  ></dx-button>
+                  <dx-button
+                    class="validOnlyButtons"
+                    type="default"
+                    data-entity="fournisseur"
+                    hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
+                    text="{{ 'button-bascule-fournisseurs-valide' | localize }}"
+                    (onClick)="validOrAll($event)"
+                  >
+                  </dx-button>
+                </div>
               </dxi-item>
-              <dxi-item [ratio]="1">
-                <dx-button
-                  class="validOnlyButtons"
-                  type="default"
-                  data-entity="fournisseur"
-                  hint="{{ 'hint-bascule-fournisseurs-valide' | localize }}"
-                  text="{{ 'button-bascule-fournisseurs-valide' | localize }}"
-                  (onClick)="validOrAll($event)"
-                >
-                </dx-button>
+              <dxi-item [ratio]="1.5">
+                <div>
+                  <dx-button
+                    class="refresh"
+                    type="default"
+                    text="{{ 'btn-refresh' | localize }}"
+                    (onClick)="enableFilters()"
+                  ></dx-button>
+                </div>
               </dxi-item>
-              <dxi-item [ratio]="10"> </dxi-item>
             </dx-box>
-            <dx-button
-              class="refresh"
-              type="default"
-              text="{{ 'btn-refresh' | localize }}"
-              (onClick)="enableFilters()"
-            ></dx-button>
           </div>
         </dxi-item>
       </dxi-item>
     </dx-box>
   </div>
-  <br />
 </form>
 
 <div class="gridPF-container">

@@ -28,11 +28,12 @@ import { CurrentCompanyService } from "app/shared/services/current-company.servi
 import { DateManagementService } from "app/shared/services/date-management.service";
 import { BureauxAchatService } from "app/shared/services/api/bureaux-achat.service";
 import { OrdreLignesService } from "app/shared/services/api/ordres-lignes.service";
+import notify from "devextreme/ui/notify";
 
 enum InputField {
-  bureauAchat = "logistique.fournisseur.bureauAchat",
-  secteurCommercial = "ordre.secteurCommercial",
-  fournisseur = "logistique.fournisseur",
+  bureauAchat = "logistique.fournisseur.bureauAchat.id",
+  secteurCommercial = "ordre.secteurCommercial.id",
+  fournisseur = "logistique.fournisseur.code",
   from = "logistique.dateDepartPrevueFournisseur",
   to = "logistique.dateDepartPrevueFournisseur",
 }
@@ -192,33 +193,16 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   }
 
   filterFournisseurs(bureauAchat?) {
-    bureauAchat = bureauAchat?.value ? bureauAchat.value : null;
+    bureauAchat = bureauAchat?.value ?? null;
     this.fournisseurs = this.fournisseursService.getDataSource_v2([
       "id",
       "code",
       "raisonSocial",
     ]);
-    this.fournisseurs.filter(["valide", "=", true]);
-    if (bureauAchat) {
-      const bureauAchatFilters = []
-      bureauAchat.forEach((bureauAchat) => {
-        bureauAchatFilters.push(["bureauAchat.id", "=", bureauAchat.id], "or")
-      });
-      if (bureauAchatFilters.length) {
-        bureauAchatFilters.reduce((a, b) => {
-          return a.concat(b);
-        })
-
-        bureauAchatFilters.pop();
-
-        this.fournisseurs.filter([
-          ["valide", "=", true],
-          "and",
-          bureauAchatFilters,
-        ]);
-      }
-    }
-
+    const filter = [];
+    filter.push(["valide", "=", true]);
+    if (bureauAchat) filter.push("and", ["bureauAchat.id", "=", bureauAchat.id]);
+    this.fournisseurs.filter(filter);
   }
 
   validOrAll(e) {
@@ -265,8 +249,20 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
   }
 
   onRowDblClick(e) {
-    if (e.data.ordre?.societe.id === this.currentCompanyService.getCompany().id)
+    if (e.data.ordre?.societe.id === this.currentCompanyService.getCompany().id) {
       this.tabContext.openOrdre(e.data.ordre.numero, e.data.ordre.campagne.id);
+    } else {
+      notify({
+        message: this.localizeService.localize(
+          "warn-order-other-company",
+          e.data.ordre.campagne.id + "-" + e.data.ordre.numero,
+          e.data.ordre.societe.id
+        ),
+        type: "warning"
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+    }
   }
 
   private buildFormFilter(values: Inputs): any[] {
@@ -274,55 +270,42 @@ export class PlanningFournisseursComponent implements OnInit, AfterViewInit {
 
     // Valid entities
     Object.keys(validField).map((entity) => {
-      if (this.validRequiredEntity[entity]) {
+      if (this.validRequiredEntity[entity])
         filter.push([validField[entity], "=", "true"]);
-      }
     });
 
     try {
-      if (values.bureauAchat != null) {
-        if (values.bureauAchat.length) {
-          const bureauAchatFilters = [];
-          values.bureauAchat.forEach((bureauAchat) => {
-            bureauAchatFilters.push([InputField.bureauAchat, "=", bureauAchat], "or");
+      if (values.bureauAchat !== null)
+        filter.push([InputField.bureauAchat, "=", values.bureauAchat.id])
+
+      if (values.fournisseur !== null) {
+        if (values.fournisseur.length) {
+          var fournisseurFilters = [];
+          values.fournisseur.forEach((fournisseur) => {
+            fournisseurFilters.push([InputField.fournisseur, "=", fournisseur.code], "or");
           })
-          bureauAchatFilters.pop()
-          filter.push(bureauAchatFilters)
+          fournisseurFilters.pop()
+          filter.push(fournisseurFilters)
         }
       }
 
-      if (values.secteurCommercial != null) {
+      if (values.secteurCommercial !== null) {
         if (values.secteurCommercial.length) {
           var secteurCommercialFilters = [];
           values.secteurCommercial.forEach((secteurCommercial) => {
-            secteurCommercialFilters.push([InputField.secteurCommercial, "=", secteurCommercial], "or");
+            secteurCommercialFilters.push([InputField.secteurCommercial, "=", secteurCommercial.id], "or");
           })
           secteurCommercialFilters.pop()
           filter.push(secteurCommercialFilters)
         }
       }
-
-      if (values.fournisseur != null) {
-        if (values.fournisseur.length) {
-          const fournisseursFilter = [];
-          values.fournisseur.forEach((fournisseur) => {
-            fournisseursFilter.push([InputField.fournisseur, "=", fournisseur], "or");
-          })
-          fournisseursFilter.pop()
-          filter.push(fournisseursFilter)
-        }
-      }
-
     } catch (error) {
     }
 
     if (values.from) filter.push([InputField.from, ">=", values.from]);
-
     if (values.to) filter.push([InputField.to, "<=", values.to]);
 
-    return filter.length
-      ? filter.reduce((crt, acm) => [crt, "and", acm])
-      : null;
+    return filter.length ? filter.reduce((crt, acm) => [crt, "and", acm]) : null;
   }
 
   manualDate(e) {
