@@ -2,65 +2,73 @@
 @import "themes/generated/variables.base";
 @import "scss/variables.scss";
 
-::ng-deep .small-status-button {
-  position: relative;
-  top: 1px;
-  height: 18px;
-  min-width: 0;
-  margin-right: 13px;
-  pointer-events: none;
-  padding: 2px 14px 0 14px;
-  font-size: 13px;
-  float: left;
-}
+::ng-deep .grid-cdes-edi {
 
-::ng-deep .small-action-button {
-  position: relative;
-  float: right;
-  margin: 0 5px;
-  height: 20px;
-  line-height: 14px;
-  padding: 0;
-  font-size: 11px;
+  .grid-grouping-button {
+    margin-top: -12px !important;
+    right: 132px;
+  }
 
-  .dx-button-content {
-    padding: 6px 9px;
+  .small-status-button {
+    position: relative;
+    top: 1px;
+    height: 18px;
+    min-width: 0;
+    margin-right: 13px;
+    pointer-events: none;
+    padding: 2px 14px 0 14px;
+    font-size: 13px;
+    float: left;
+  }
 
-    .dx-button-text {
-      line-height: 11px;
+  .small-action-button {
+    position: relative;
+    float: right;
+    margin: 0 5px;
+    height: 20px;
+    line-height: 14px;
+    padding: 0;
+    font-size: 11px;
+
+    .dx-button-content {
+      padding: 6px 9px;
+
+      .dx-button-text {
+        line-height: 11px;
+      }
     }
   }
-}
 
-::ng-deep .group-text-1 {
-  position: relative;
-  margin-top: 3px;
-  height: auto;
-  width: 560px;
-  white-space: initial;
-  line-height: 16px;
-  float: left;
-}
+  .group-text-1 {
+    position: relative;
+    margin-top: 3px;
+    height: auto;
+    width: 560px;
+    white-space: initial;
+    line-height: 16px;
+    float: left;
+  }
 
-::ng-deep .group-text-2 {
-  position: relative;
-  top: 1px;
-  padding: 10px;
-  margin-left: 20px;
-  color: rgba(0, 0, 0, 0.7);
-  float: left;
-}
+  .group-text-2 {
+    position: relative;
+    top: 1px;
+    padding: 10px;
+    margin-left: 20px;
+    color: rgba(0, 0, 0, 0.7);
+    float: left;
+  }
 
-::ng-deep .group-back-color {
-  background-color: #ffe7ad !important;
-}
+  .group-back-color {
+    background-color: #ffe7ad !important;
+  }
 
-::ng-deep .info-U {
-  background-color: #ffa100 !important;
-}
+  .info-U {
+    background-color: #ffa100 !important;
+  }
 
-::ng-deep .info-C {
-  background-color: #8fc459 !important;
+  .info-C {
+    background-color: #8fc459 !important;
+  }
 }
 
 ::ng-deep .form-commandes-Edi {
@@ -118,12 +126,5 @@
         padding: 0 10px 0 30px;
       }
     }
-  }
-}
-
-::ng-deep .grid-cdes-edi {
-  .grid-grouping-button {
-    margin-top: -12px !important;
-    right: 132px;
   }
 }

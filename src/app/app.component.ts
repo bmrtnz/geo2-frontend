@@ -140,6 +140,7 @@ export class AppComponent {
           trueText: this.localization.localize("trueText"),
           falseText: this.localization.localize("falseText"),
         },
+        elementAttr: { class: "dx-card wide-card" }, // Standard shadow type
         loadPanel: {
           text: this.localization.localize("data-loading-process")
         },
