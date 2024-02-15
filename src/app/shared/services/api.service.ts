@@ -292,25 +292,6 @@ export abstract class ApiService implements OnDestroy {
   }
 
   /**
-   * Locate page and index of entity in paginated list
-   * @param inputVariables Page location variables
-   */
-  public locatePage(inputVariables: LocateVariables) {
-    const type = `Geo${this.model.name}`;
-    const pageSize = this.pageSize;
-    const query = this.buildLocate();
-
-    return this.query<{ locatePage: number }>(query, {
-      fetchPolicy: "no-cache",
-      variables: { pageSize, type, ...inputVariables },
-    } as WatchQueryOptions<any>).pipe(
-      takeUntil(this.destroy),
-      map((res) => res.data),
-      take(1)
-    );
-  }
-
-  /**
    * Run GraphQL query
    * @param gqlQuery GraphQL query
    * @param options Query options
@@ -575,19 +556,6 @@ export abstract class ApiService implements OnDestroy {
       key: this.keyField,
       ...options,
     });
-  }
-
-  /**
-   * Build locate query
-   */
-  public buildLocate() {
-    const operation = `locatePage`;
-    const alias = operation.ucFirst();
-    return `
-      query ${alias}($pageSize: Int!, $type: String!, $key: [String]!) {
-        ${operation}(pageSize: $pageSize, type: $type, key: $key)
-      }
-    `;
   }
 
   /**

@@ -4,7 +4,7 @@ import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Apollo } from "apollo-angular";
 import {
   ApolloTestingController,
-  ApolloTestingModule,
+  ApolloTestingModule
 } from "apollo-angular/testing";
 import { LoadOptions } from "devextreme/data/load_options";
 import { Field, Model } from "../models/model";
@@ -106,28 +106,6 @@ describe("ApiService", () => {
     expect(extracted.id).toEqual("002"); // Keyfield always provided
     expect(extracted.description).toEqual("Still a copy");
     expect(extracted.valide).toBeUndefined();
-  });
-
-  it("should handle `locatePage()`", (done) => {
-    const service: TestApiService = TestBed.inject(TestApiService);
-    const controller: ApolloTestingController = TestBed.inject(
-      ApolloTestingController
-    );
-
-    service
-      .locatePage({
-        key: "002",
-      })
-      .subscribe((res) => {
-        expect(res.locatePage).toEqual(0);
-        done();
-      });
-
-    const operation = controller.expectOne("LocatePage");
-    expect(operation.operation.variables.key).toEqual("002");
-    expect(operation.operation.variables.type).toEqual("GeoTest");
-    operation.flush({ data: { locatePage: 0 } });
-    controller.verify();
   });
 
   it("should handle `createCustomStore()`", () => {
