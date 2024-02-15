@@ -106,6 +106,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public resumeLabel: string;
   public etatLabel: string;
   @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
+  public summaryFields = ["nombreColisCommandes", "poidsNet"];
 
   ngAfterViewInit() {
     this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
@@ -423,8 +424,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.data.nombreColisCommandes)
-        e.cellElement.classList.add("bold-black");
+      if (e.data.nombreColisCommandes) e.cellElement.classList.add("bold-black");
     }
   }
 
@@ -476,7 +476,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     return gText;
   }
 
-  onExporting(event: { component: dxDataGrid; cancel: boolean }) {
+  onExporting(event: { component: dxDataGrid; cancel: boolean }, component) {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet();
     const redundantRows = event.component
@@ -486,6 +486,15 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     exportDataGrid({
       component: event.component,
       worksheet,
+      customizeCell: ({ gridCell, excelCell }) => {
+        excelCell.font = {};
+        if (gridCell.rowType === "data") {
+          // Canceled orders rows should be in red
+          if (gridCell.data?.ordreAnnule) excelCell.font.color = { argb: 'FF325A' }
+          // Bold rows when colis commandés
+          if (gridCell.data?.nombreColisCommandes) excelCell.font.bold = true;
+        }
+      }
     }).then(() => {
       const offset = 2;
       redundantRows.forEach((r, i) =>
