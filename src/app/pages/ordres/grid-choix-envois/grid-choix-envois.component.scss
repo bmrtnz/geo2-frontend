@@ -15,4 +15,15 @@
   .no-arrow .dx-texteditor-buttons-container {
     display: none !important;
   }
+
+  .dx-selection {
+    td.dx-cell-modified {
+      background-color: #DBECCA !important;
+    }
+
+    td.dx-datagrid-invalid {
+      background-color: #FFBDCA !important;
+    }
+  }
+
 }

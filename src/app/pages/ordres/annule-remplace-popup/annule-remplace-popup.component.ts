@@ -6,6 +6,8 @@ import notify from "devextreme/ui/notify";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
 import { GridAnnuleRemplaceComponent } from "../grid-annule-remplace/grid-annule-remplace.component";
 import { GridEnvoisComponent } from "../grid-envois/grid-envois.component";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
+import { GridsService } from "../grids.service";
 
 @Component({
   selector: "app-annule-remplace-popup",
@@ -26,7 +28,10 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   @ViewChild(GridAnnuleRemplaceComponent)
   gridAnnuleRemplaceComponent: GridAnnuleRemplaceComponent;
 
-  constructor(public localizeService: LocalizationService) { }
+  constructor(
+    public localizeService: LocalizationService,
+    public gridsService: GridsService,
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -56,13 +61,21 @@ export class AnnuleRemplacePopupComponent implements OnChanges {
   goDocuments() {
     this.running = true;
     this.gridAnnuleRemplaceComponent.done().subscribe({
-      next: async (arData) => {
+      next: async () => {
         this.popup.instance.hide();
         await this.docsPopup.open();
       },
       error: (error: Error) => {
         this.running = false;
-        notify(error.message.replace("Error :", ""), "error", 7000);
+        hideToasts();
+        console.log(error);
+        notify({
+          message: error.message.replace("Error :", ""),
+          type: "error",
+          displayTime: 7000
+        },
+          { position: 'bottom center', direction: 'up-stack' }
+        );
       },
     });
   }

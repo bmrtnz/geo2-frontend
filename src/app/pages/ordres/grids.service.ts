@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
+import { LocalizationService } from "app/shared/services";
 import { GridColumn, ONE_MINUTE } from "basic";
 import { DxDataGridComponent } from "devextreme-angular";
 import dxDataGrid from "devextreme/ui/data_grid";
 import notify from "devextreme/ui/notify";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
 import { Observable } from "rxjs";
 
 type OrdreGridId =
@@ -30,6 +32,12 @@ type OrdreGridId =
 
 export class GridsService {
   private grids: { [key: string]: DxDataGridComponent } = {};
+
+  constructor(
+    private localizationService: LocalizationService,
+  ) {
+
+  }
 
   /**
    * Register grid instance for future actions
@@ -87,10 +95,17 @@ export class GridsService {
   /**
    * Wait until grid data has been saved
    */
-  public waitUntilAllGridDataSaved(grid) {
+  public waitUntilAllGridDataSaved(grid, message = false) {
     if (!grid?.instance.hasEditData()) return Promise.resolve();
-
-    grid.instance.saveEditData();
+    if (message) {
+      notify({
+        message: this.localizationService.localize("data-saving-process"),
+        displayTime: 999999
+      },
+        { position: 'bottom center', direction: 'up-stack' }
+      );
+    }
+    setTimeout(() => grid.instance.saveEditData());
     return new Promise<void>((resolve, reject) => {
       // Wait until grid has been totally saved
       const saveTimeout = setTimeout(() => {
@@ -100,6 +115,7 @@ export class GridsService {
       }, 2 * ONE_MINUTE)
       const saveInterval = setInterval(() => {
         if (!grid.instance.hasEditData()) {
+          if (message) hideToasts();
           clearInterval(saveInterval);
           clearTimeout(saveTimeout);
           resolve();
