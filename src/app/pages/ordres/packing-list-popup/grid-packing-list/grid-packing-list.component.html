@@ -6,6 +6,7 @@
   [focusedRowIndex]="0"
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
+  (onRowClick)="gridUtilsService.selectRowByClick($event)"
   (onSelectionChanged)="onSelectionChanged($event)"
   [columnAutoWidth]="true"
   [columnHidingEnabled]="false"

@@ -114,4 +114,17 @@ export class GridUtilsService {
       e.fileName += ` - ${self.dateManagementService.formatDate(new Date(), "dd-MM-yyyy")}`;
   }
 
+  // Allows to select an item by clicking on a row
+  selectRowByClick(e) {
+    const keys = e.component.getSelectedRowKeys();
+    const index = keys.indexOf(e.key);
+
+    if (index > -1) {
+      keys.splice(index, 1);
+    } else {
+      keys.push(e.key);
+    }
+    e.component.selectRows(keys);
+  }
+
 }

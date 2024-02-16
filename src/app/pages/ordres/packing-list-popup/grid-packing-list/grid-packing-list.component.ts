@@ -20,6 +20,7 @@ import { environment } from "environments/environment";
 import { map } from "rxjs/operators";
 import { OrdresService } from "app/shared/services/api/ordres.service";
 import { DatePipe } from "@angular/common";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 
 @Component({
@@ -45,6 +46,7 @@ export class GridPackingListComponent {
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
     public authService: AuthService,
+    public gridUtilsService: GridUtilsService,
     private datePipe: DatePipe
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
