@@ -130,7 +130,8 @@ export class SideNavOuterToolbarComponent implements OnInit {
       ".tabs-ordres-page .dx-item-selected .form-scrollTo-buttons-container"
     ) as HTMLElement;
     if (orderScrollBtns) {
-      const newPos = topValue > 100 ? topValue - 68 : 32;
+      const offsetPos = window.localStorage.getItem("HideOrderleftPanelView") === "true" ? 44 : 0;
+      const newPos = topValue > (100 + offsetPos) ? topValue - 68 : 32 + offsetPos;
       orderScrollBtns.style.top = newPos + "px";
     }
   }
