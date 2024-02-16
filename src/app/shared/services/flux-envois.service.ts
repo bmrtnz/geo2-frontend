@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import notify from "devextreme/ui/notify";
-import { defer, of } from "rxjs";
-import { catchError, concatMap, filter, map } from "rxjs/operators";
+import { defer, lastValueFrom, of } from "rxjs";
+import { catchError, concatMap, debounceTime, filter, map } from "rxjs/operators";
 import { AuthService, LocalizationService } from ".";
 import { ConfirmationResultPopupComponent } from "../components/confirmation-result-popup/confirmation-result-popup.component";
 import { Flux, Societe } from "../models";
@@ -87,6 +87,10 @@ export class FluxEnvoisService {
     }).pipe(
       filter(result => !!result),
       map((result) => Object.values(result.data)[0]),
+      concatMap(async res => {
+        await lastValueFrom(this.envoisService.clearTemps(ordreID));
+        return of(res);
+      }),
       concatMap((response: any) => {
         if (response.res === FunctionResult.Warning)
           return outputPopup.openAs("WARNING", response.msg);
