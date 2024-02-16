@@ -2,13 +2,12 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
+  OnChanges, Output,
+  ViewChild
 } from "@angular/core";
 import Ordre from "app/shared/models/ordre.model";
 import { LocalizationService } from "app/shared/services";
+import { EnvoisService } from "app/shared/services/api/envois.service";
 import { DxPopupComponent } from "devextreme-angular";
 import { confirm } from "devextreme/ui/dialog";
 import { lastValueFrom } from "rxjs";
@@ -38,7 +37,10 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
   @ViewChild(GridChoixEnvoisComponent)
   gridChoixEnvoisComponent: GridChoixEnvoisComponent;
 
-  constructor(public localizeService: LocalizationService) { }
+  constructor(
+    public localizeService: LocalizationService,
+    private envoisService: EnvoisService,
+  ) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -83,7 +85,7 @@ export class DocumentsOrdresPopupComponent implements OnChanges {
 
       this.closeConfirm = await result;
       if (this.closeConfirm) {
-        await lastValueFrom(this.gridChoixEnvoisComponent.clearTemps());
+        await lastValueFrom(this.envoisService.clearTemps(this.ordre.id));
         this.hidePopup();
       }
     }

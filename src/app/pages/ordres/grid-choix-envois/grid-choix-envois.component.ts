@@ -237,15 +237,6 @@ export class GridChoixEnvoisComponent implements OnInit {
     return null;
   }
 
-  clearTemps() {
-    return this.envoisService.getList(
-      `ordre.id==${this.ordre.id} and traite==A`,
-      ["id"]).pipe(
-        map(res => res.data.allEnvoisList.map(({ id }) => ({ id }))),
-        concatMap(res => this.envoisService.deleteTempEnvois(res)),
-      );
-  }
-
   // Used to override std arrows behaviour
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
     const keyCode = event.originalEvent?.code;

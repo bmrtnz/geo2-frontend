@@ -6,7 +6,7 @@ import Envois from "app/shared/models/envois.model";
 import Ordre from "app/shared/models/ordre.model";
 import DataSource from "devextreme/data/data_source";
 import { LoadOptions } from "devextreme/data/load_options";
-import { map, take } from "rxjs/operators";
+import { concatMap, map, take } from "rxjs/operators";
 import { APIRead, ApiService, RelayPage } from "../api.service";
 import { FunctionResponse, FunctionsService } from "./functions.service";
 
@@ -348,5 +348,15 @@ export class EnvoisService extends ApiService implements APIRead {
       ),
       variables: { allEnvois },
     });
+  }
+
+  /** Clear envois entities with a "temporary" state */
+  clearTemps(ordreID: Ordre["id"]) {
+    return this.getList(
+      `ordre.id==${ordreID} and traite==A`,
+      ["id"]).pipe(
+        map(res => res.data.allEnvoisList.map(({ id }) => ({ id }))),
+        concatMap(res => this.deleteTempEnvois(res)),
+      );
   }
 }
