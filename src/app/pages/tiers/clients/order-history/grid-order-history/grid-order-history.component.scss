@@ -38,10 +38,6 @@
     right: 0;
   }
 
-  .create-direct-order-button {
-    margin-left: 22px;
-  }
-
   .bio-article {
     color: #39970e !important;
     cursor: pointer;
@@ -112,7 +108,7 @@
   }
 }
 
-::ng-deep .filter-container {
+::ng-deep .history-filter-container {
   margin-bottom: 15px;
   overflow: hidden;
   max-width: 1790px;

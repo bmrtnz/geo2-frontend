@@ -171,10 +171,14 @@ export class OrdresNonConfirmesComponent implements AfterViewInit {
       "and",
       [`dateCreation`, ">=", this.dateManagementService.formatDate(values.dateMin)],
     );
-    if (values?.dateMax) filters.push(
-      "and",
-      [`dateCreation`, "<=", this.dateManagementService.formatDate(values.dateMax)],
-    );
+    if (values?.dateMax) {
+      // When we use only date (not time), date end must be +1
+      const dateMaxAdjust = new Date(values.dateMax).setDate(new Date(values.dateMax).getDate() + 1);
+      filters.push(
+        "and",
+        [`dateCreation`, "<=", this.dateManagementService.formatDate(dateMaxAdjust)],
+      );
+    }
     this.dataSource?.filter(filters);
     this.grid.dataSource = this.dataSource;
   }

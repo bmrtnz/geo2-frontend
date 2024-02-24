@@ -373,6 +373,15 @@ body app-root.production {
   padding: 3px 8px 4px 0px;
 }
 
+.create-direct-order-button {
+  margin-left: 22px;
+  border: 1px solid #8FC459;
+
+  &.dx-state-disabled {
+    border: none;
+  }
+}
+
 // Grid titles
 .grid-title input {
   font-size: 16px;
@@ -409,6 +418,16 @@ body app-root.production {
     transform: scale(1);
   }
 }
+
+.pulse {
+  animation: pulse 0.5s;
+}
+
+.pulse-repeated {
+  animation: pulse 0.5s;
+  animation-iteration-count: 6;
+}
+
 
 // To hide datagrid select checkboxes
 .hide-select-checkbox .dx-command-select {
@@ -930,6 +949,44 @@ body app-root.production {
     padding-left: 18px;
     padding-right: 4px;
     line-height: 1;
+  }
+}
+
+////////////////////////////////////////
+/// Better readability search lists  ///
+////////////////////////////////////////
+
+.dx-header-filter-menu .dx-popup-content {
+  overflow: hidden;
+
+  .dx-list-search+.dx-scrollable-wrapper {
+    .dx-list-select-all {
+      padding: 10px 0 !important;
+      margin-bottom: 7px;
+
+      .dx-list-select-all-label {
+        position: relative;
+        top: -2px;
+        font-size: 14px;
+        padding: 0px 24px 0 14px !important;
+        margin-top: 0 !important;
+      }
+    }
+
+    .dx-item.dx-list-item {
+      &:last-of-type {
+        margin-bottom: 15px;
+      }
+
+      .dx-list-item-before-bag {
+        width: 45px;
+      }
+
+      .dx-item-content {
+        padding: 5px 16px 5px 2px !important;
+        font-size: 14px;
+      }
+    }
   }
 }
 

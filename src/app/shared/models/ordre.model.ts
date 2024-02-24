@@ -77,6 +77,7 @@ export class Ordre extends Model {
   @Field({ model: import("./port.model") }) public portTypeA?: Port;
   @Field({ model: import("./entrepot.model") }) public entrepot?: Partial<Entrepot>;
   @Field({ dataType: "datetime" }) public dateDepartPrevue?: string;
+  @Field() public dateDepartPrevueBrute?: string;
   @Field({ dataType: "datetime" }) public dateLivraisonPrevue?: string;
   @Field() public venteACommission?: boolean;
   @Field() public bonAFacturer?: boolean;

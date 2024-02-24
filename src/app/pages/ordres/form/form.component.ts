@@ -20,6 +20,7 @@ import { PromptPopupComponent } from "app/shared/components/prompt-popup/prompt-
 import { Role, Societe, Type } from "app/shared/models";
 import { Ordre, Statut, StatutLocale } from "app/shared/models/ordre.model";
 import {
+  ArticlesService,
   AuthService,
   ClientsService,
   EntrepotsService,
@@ -157,6 +158,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     private transporteursService: TransporteursService,
     private referencesClientService: ReferencesClientService,
     private mruOrdresService: MruOrdresService,
+    public articlesService: ArticlesService,
     public mruEntrepotsService: MruEntrepotsService,
     private tabContext: TabContext,
     public authService: AuthService,
@@ -273,6 +275,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
     "entrepot.instructionLogistique",
     "ordreDupliq.campagne.id",
     "ordreDupliq.numero",
+    "entrepot.langue.id",
   ];
 
   private destroy = new Subject<boolean>();
@@ -1460,6 +1463,7 @@ export class FormComponent implements OnInit, OnDestroy, AfterViewInit {
             );
             return;
           }
+
           this.resetTabTitleAndInfo();
           this.allowMutations = !Ordre.isCloture(this.ordre);
           this.ordresLignesViewExp = !this.allowMutations;

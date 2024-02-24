@@ -205,6 +205,8 @@ export class ArticleDetailsComponent
 
   etiquetteVisible = false;
   currentEtiquette: ViewDocument;
+  public printDocumentTitle;
+
 
   id: string;
 
@@ -285,6 +287,7 @@ export class ArticleDetailsComponent
 
   afterLoadInitForm(res) {
     this.article = new Article(res.data.article);
+    this.printDocumentTitle = `Fiche-article-${this.article?.id}`;
     this.formGroup.reset();
     this.formGroup.patchValue(this.article);
     this.formGroup.get("emballage.emballage.id").reset(

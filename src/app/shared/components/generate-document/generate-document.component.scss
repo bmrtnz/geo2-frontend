@@ -1,0 +1,247 @@
+// Var
+@import "themes/generated/variables.base";
+@import "scss/variables.scss";
+
+
+.generate-document-container {
+  position: relative;
+  left: 50%;
+  width: 1200px;
+  min-height: 1697px;
+  padding: 0;
+  transform: translateX(-50%);
+  overflow: hidden;
+  -webkit-print-color-adjust: exact !important;
+  /* Chrome, Safari 6 – 15.3, Edge */
+  print-color-adjust: exact !important;
+  /* Firefox 97+, Safari 15.4+ */
+  background-color: #FFF;
+  color: #212121;
+  float: left;
+
+  &.doc-hidden {
+    height: 0;
+    min-height: 0;
+  }
+
+  &.sendPrinter {
+    min-height: 0;
+  }
+
+  &.doc-shadow {
+    margin: 10px 10px 30px 0;
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, .7);
+  }
+
+  .normal-font {
+    font-weight: normal;
+  }
+
+  .main-logo-container img {
+    position: relative;
+    top: 42px;
+    left: 61px;
+    width: 187px;
+    max-height: 200px;
+    float: left;
+    overflow: hidden;
+  }
+
+  .address {
+    position: relative;
+    margin-top: 85px;
+    margin-left: 599px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 23px;
+    float: left;
+    white-space: pre-line;
+    width: 420px;
+  }
+
+  .date {
+    position: absolute;
+    top: 52px;
+    left: 833px;
+    font-weight: bold;
+    font-size: 16px;
+    float: right;
+  }
+
+  .title {
+    position: relative;
+    margin-top: 96px;
+    right: 100px;
+    font-weight: bold;
+    font-family: Tahoma, "Trebuchet MS", sans-serif;
+    font-size: 26px;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .packing-list-body {
+    overflow: hidden;
+
+    .order-no-container,
+    .etd-eta-no-container,
+    .MV-PO-container {
+      position: relative;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 15px;
+      margin-left: 45px;
+      float: left;
+    }
+
+    .order-no-title,
+    .order-no {
+      float: left;
+      text-transform: uppercase;
+    }
+
+    .order-no {
+      max-width: 380px;
+    }
+
+    .etd-eta-no-container {
+      position: absolute;
+      left: 573px;
+    }
+
+    .MV-PO-container {
+      margin-top: 16px;
+      margin-left: 67px;
+      line-height: 26px;
+
+      .po {
+        margin-left: 7px;
+      }
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      font-size: 17px;
+
+      th {
+        padding: 6px;
+        line-height: 14px;
+      }
+
+      td {
+        font-size: 17px;
+        padding: 2px;
+      }
+    }
+
+    .table-main {
+      margin: 12px 0 0 242px;
+      position: relative;
+
+      .main-col-1 {
+        width: 94px;
+      }
+
+      .main-col-2 {
+        width: 156px;
+      }
+
+      .main-col-3 {
+        width: 195px;
+      }
+
+      .main-col-4 {
+        width: 393px;
+      }
+
+      &table,
+      th,
+      td {
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      thead tr {
+        background-color: #AAA;
+        color: #FFF;
+      }
+    }
+
+    .table-detail {
+      margin: 29px 0 0 37px;
+      position: relative;
+
+      .detail-col-1 {
+        width: 142px;
+      }
+
+      .detail-col-2 {
+        width: 463px;
+      }
+
+      .detail-col-3 {
+        width: 123px;
+      }
+
+      .detail-col-4 {
+        width: 105px;
+      }
+
+      .detail-col-5 {
+        width: 107px;
+      }
+
+      .detail-col-6 {
+        width: 106px;
+      }
+
+      &table,
+      th,
+      td {
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      thead tr,
+      tfoot tr {
+        background-color: #666;
+        color: #FFF;
+      }
+
+      .total-row {
+        background: #CCC;
+        font-weight: bold;
+
+        td {
+          padding-bottom: 4px;
+
+          &.total-sum {
+            letter-spacing: 0.3px;
+          }
+        }
+
+        .detail-col-1 {
+          border-right: 0 !important;
+        }
+
+        .detail-col-2 {
+          border-right: 0 !important;
+          border-left: 0 !important;
+        }
+
+        .detail-col-3 {
+          border-left: 0 !important;
+          border-right: 0 !important;
+        }
+
+        .detail-col-4 {
+          border-left: 0 !important;
+        }
+      }
+
+    }
+  }
+
+}

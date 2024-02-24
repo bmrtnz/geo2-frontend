@@ -289,7 +289,7 @@
                       [dataSource]="secteurs"
                       displayExpr="id"
                       valueExpr="id"
-                      searchExpr="['id', 'description']"
+                      [searchExpr]="['id', 'description']"
                       (onValueChanged)="onSecteurChanged($event)"
                     >
                     </dx-tag-box>

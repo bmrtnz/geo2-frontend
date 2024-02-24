@@ -41,6 +41,10 @@
       width: 105px;
     }
 
+    .dx-progressbar-range {
+      transition: none !important;
+    }
+
     .complete {
       .dx-progressbar-range {
         background-color: #8fc459;

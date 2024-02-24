@@ -1,0 +1,180 @@
+<div
+  class="generate-document-container"
+  [ngClass]="{
+    'doc-hidden': !previewProcess,
+    'doc-shadow': !sendPrinterProcess,
+    sendPrinter: sendPrinterProcess
+  }"
+>
+  <div class="date">{{ printDate }}</div>
+  <div class="address">{{ address }}</div>
+  <div class="title">{{ title }}</div>
+
+  <!-- Packing list -->
+  <div *ngIf="document === 'packing-list'">
+    <div class="packing-list-body">
+      <div class="order-no-container">
+        <div class="order-no-title normal-font">
+          {{ "ordre-en" | localize }} :&nbsp;
+        </div>
+        <div class="order-no">{{ listOrdres() }}</div>
+      </div>
+
+      <div class="etd-eta-no-container">
+        <span class="normal-font">ETD&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+        <span>{{ ordre?.portTypeD?.name }}&nbsp;</span>
+        <span *ngIf="ordre?.etdDate">{{
+          dateMgtService.formatDate(ordre?.etdDate, "dd/MM/yyyy")
+        }}</span>
+        <div style="clear: both; height: 3px"></div>
+        <span class="normal-font">ETA&nbsp;:&nbsp;&nbsp;&nbsp;</span>
+        <span>{{ ordre?.portTypeA?.name }}&nbsp;</span>
+        <span *ngIf="ordre?.etaDate">{{
+          dateMgtService.formatDate(ordre?.etaDate, "dd/MM/yyyy")
+        }}</span>
+      </div>
+
+      <div style="clear: both"></div>
+      <div class="MV-PO-container">
+        <span class="order-no-title normal-font">M/V&nbsp;:&nbsp;</span
+        ><span>{{ ordre?.codeChargement }}</span>
+        <div style="clear: both"></div>
+        <span class="po normal-font">PO&nbsp;:&nbsp;</span
+        ><span>{{ numeroPo }}</span>
+      </div>
+      <div style="clear: both"></div>
+
+      <!-- Table main -->
+      <table class="table-main">
+        <thead>
+          <tr>
+            <th class="main-col-1">
+              {{ "packing-list-order-number" | localize }}
+            </th>
+            <th class="main-col-2">
+              {{
+                localization.localize("packing-list-container")?.toUpperCase()
+              }}
+            </th>
+            <th class="main-col-3">
+              {{ localization.localize("packing-list-seal")?.toUpperCase() }}
+            </th>
+            <th class="main-col-4">
+              {{ localization.localize("packing-list-temp")?.toUpperCase() }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through orders -->
+          <tr *ngFor="let ordre of ordres; index as i">
+            <td class="main-col-1">{{ ordre?.numero }}</td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-2"
+            >
+              {{ ordre?.logistiques[0].numeroContainer }}
+            </td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-3"
+            >
+              {{ ordre?.logistiques[0].numeroPlomb }}
+            </td>
+            <td
+              *ngIf="ordre?.logistiques"
+              class="main-col-4"
+            >
+              {{ ordre?.logistiques[0].detecteurTemperature }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="table-detail">
+        <thead>
+          <tr>
+            <th class="detail-col-1">
+              {{
+                localization.localize("packing-list-container")?.toUpperCase()
+              }}
+            </th>
+            <th class="detail-col-2">
+              {{
+                localization
+                  .localize("packing-list-product-variety")
+                  ?.toUpperCase()
+              }}
+            </th>
+            <th class="detail-col-3">
+              {{ localization.localize("packing-list-size") }}
+            </th>
+            <th class="detail-col-4">
+              {{ localization.localize("packing-list-quantity") }}
+            </th>
+            <th class="detail-col-5">
+              {{ localization.localize("packing-list-gross-weight") }}
+            </th>
+            <th class="detail-col-6">
+              {{ localization.localize("packing-list-net-weight") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let container of containers">
+          <!-- Loop through lines -->
+          <tr *ngFor="let ligne of container.lignes">
+            <td class="detail-col-1">
+              {{ container.id }}
+            </td>
+            <td class="detail-col-2 text-align-left">
+              {{ ligne?.description }}
+            </td>
+            <td class="detail-col-3">
+              {{ ligne?.article?.normalisation?.calibreMarquage?.description }}
+            </td>
+            <td class="detail-col-4">
+              {{ bigNumbers(ligne?.nombreColisExpedies) }}
+            </td>
+            <td class="detail-col-5">
+              {{ numDigits(ligne?.poidsBrutExpedie) }}
+            </td>
+            <td class="detail-col-6">
+              {{ numDigits(ligne?.poidsNetExpedie) }}
+            </td>
+          </tr>
+          <tr class="total-row">
+            <td class="detail-col-1"></td>
+            <td class="detail-col-2 text-align-right">
+              Total&nbsp;{{ container.id }}
+            </td>
+            <td class="detail-col-3 text-align-left">:</td>
+            <td class="detail-col-4 total-sum">
+              {{ bigNumbers(container?.sumColis) }}
+            </td>
+            <td class="detail-col-5 total-sum">
+              {{ numDigits(container?.sumGross) }}
+            </td>
+            <td class="detail-col-6 total-sum">
+              {{ numDigits(container?.sumNet) }}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td class="detail-col-1"></td>
+            <td class="detail-col-2"></td>
+            <td class="detail-col-3 text-align-right">Total quantity&nbsp;:</td>
+            <td class="detail-col-4 total-sum">
+              {{ bigNumbers(totaux?.colis) }}
+            </td>
+            <td class="detail-col-5 total-sum">
+              {{ numDigits(totaux?.gross) }}
+            </td>
+            <td class="detail-col-6 total-sum">
+              {{ numDigits(totaux?.net) }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

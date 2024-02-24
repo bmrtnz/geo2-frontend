@@ -25,6 +25,7 @@ import { FluxEnvoisService } from "app/shared/services/flux-envois.service";
 import { DxNumberBoxComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
+import { confirm } from "devextreme/ui/dialog";
 import { from, iif, of } from "rxjs";
 import { concatMap, filter, map, mergeAll } from "rxjs/operators";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
@@ -331,20 +332,27 @@ export class FormLitigesComponent implements OnInit, OnChanges {
     });
   }
 
-  supprimerLot() {
-    this.litigesLignesService.deleteLot(
-      this.infosLitige.litige.id,
-      this.grid.getSelectedRowData().numeroGroupementLitige,
-    ).subscribe({
-      error: (err: Error) => notify({
-        message: this.messageFormat(err.message),
-        type: "error",
-        displayTime: 7000
-      },
-        { position: 'bottom center', direction: 'up-stack' }
-      ),
-      complete: () => this.grid.reload(),
-    });
+  async supprimerLot() {
+    if (
+      await confirm(
+        this.localization.localize("text-popup-supprimer-lot"),
+        this.localization.localize("btn-supprimerLot")
+      )
+    ) {
+      this.litigesLignesService.deleteLot(
+        this.infosLitige.litige.id,
+        this.grid.getSelectedRowData().numeroGroupementLitige,
+      ).subscribe({
+        error: (err: Error) => notify({
+          message: this.messageFormat(err.message),
+          type: "error",
+          displayTime: 7000
+        },
+          { position: 'bottom center', direction: 'up-stack' }
+        ),
+        complete: () => this.grid.reload(),
+      });
+    }
   }
 
   fraisAnnexes() {

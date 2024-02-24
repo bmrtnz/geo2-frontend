@@ -93,6 +93,8 @@ export class LieuxPassageAQuaiDetailsComponent
   createMode = false;
   CCexists = false;
   preSaisie: string;
+  public printDocumentTitle: string;
+
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -174,6 +176,7 @@ export class LieuxPassageAQuaiDetailsComponent
 
   afterLoadInitForm(res) {
     this.lieupassageaquai = res.data.lieuPassageAQuai;
+    this.printDocumentTitle = `Fiche-lieu-pass-quai-${this.lieupassageaquai?.id}`;
     this.formGroup.patchValue(this.lieupassageaquai);
     this.contentReadyEvent.emit();
     this.preSaisie =

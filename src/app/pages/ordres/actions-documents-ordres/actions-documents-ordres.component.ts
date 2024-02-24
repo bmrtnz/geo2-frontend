@@ -9,9 +9,6 @@ import {
   ViewDocument,
   ViewDocumentPopupComponent,
 } from "../../../shared/components/view-document-popup/view-document-popup.component";
-import {
-  LocalizationService,
-} from "app/shared/services";
 import { PackingListPopupComponent } from ".././packing-list-popup/packing-list-popup.component";
 import { AnnuleRemplacePopupComponent } from "../annule-remplace-popup/annule-remplace-popup.component";
 import { DocumentsOrdresPopupComponent } from "../documents-ordres-popup/documents-ordres-popup.component";
@@ -37,7 +34,7 @@ export class ActionsDocumentsOrdresComponent {
   public actionsFlux: any[];
   public plusActionsFlux: any[];
   public plusActionsFluxEnabled: boolean;
-  public visibleActionsNumber = 5; // Visible buttons number, others in a popup
+  public visibleActionsNumber = 12; // Visible buttons number, others in a popup
   public currentCMR: ViewDocument;
   public CMRVisible = false;
   public actionSheetTarget: any;
@@ -60,7 +57,6 @@ export class ActionsDocumentsOrdresComponent {
     private gridsService: GridsService,
     private envoisService: EnvoisService,
     private fluxEnvoisService: FluxEnvoisService,
-    private localization: LocalizationService
   ) {
     this.actionsFlux = [
       { id: "ORDRE", text: "Confirmation cde", visible: true, disabled: false },

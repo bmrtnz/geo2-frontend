@@ -1,322 +1,330 @@
-<form
-  class="dx-fieldset"
-  [formGroup]="formGroup"
->
-  <div class="title-container">
-    <h6>{{ "preFilter-title" | localize }}</h6>
-    <dx-button
-      class="refresh"
-      [class]="toRefresh ? '' : 'inactive-button'"
-      type="default"
-      text="{{ 'btn-refresh' | localize }}"
-      (onClick)="enableFilters()"
-    ></dx-button>
-  </div>
-  <div style="clear: both"></div>
-  <div class="litiges-superv-filter-area">
-    <dx-box>
-      <dxi-item [ratio]="2">
-        <!-- Secteurs -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "tiers-clients-secteur" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              id="litiges-codeSecteur"
-              formControlName="codeSecteur"
-              [dataSource]="secteurs"
-              [showClearButton]="true"
-              displayExpr="description"
-              searchExpr="description"
-              (onValueChanged)="onFieldValueChange($event)"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.4"
-        ><div class="or-field">{{ "or" | localize }}</div></dxi-item
-      >
-      <dxi-item [ratio]="3">
-        <!-- Commercial -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-commercial" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              id="litiges-codeCommercial"
-              formControlName="codeCommercial"
-              [dataSource]="commerciaux"
-              [showClearButton]="true"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id', 'nomUtilisateur']"
-              (onValueChanged)="onFieldValueChange($event)"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-      <dxi-item [ratio]="0.4"
-        ><div class="or-field">{{ "or" | localize }}</div></dxi-item
-      >
-      <dxi-item [ratio]="3">
-        <!-- Assistante -->
-        <div class="dx-field">
-          <div class="dx-field-label">
-            {{ "ordres-assistante" | localize }}
-          </div>
-          <div class="dx-field-value">
-            <dx-select-box
-              id="litiges-codeAssistante"
-              formControlName="codeAssistante"
-              [dataSource]="assistantes"
-              [showClearButton]="true"
-              [displayExpr]="displayIDBefore"
-              [searchExpr]="['id', 'nomUtilisateur']"
-              (onValueChanged)="onFieldValueChange($event)"
-            >
-            </dx-select-box>
-          </div>
-        </div>
-      </dxi-item>
-    </dx-box>
-  </div>
-</form>
-
-<dx-button
-  class="grid-grouping-button"
-  type="default"
-  icon="material-icons menu_open"
-  hint="{{ 'btn-grouping' | localize }}"
-  (onClick)="gridsService.expandCollapseGroups(this)"
-></dx-button>
-
-<dx-data-grid
-  class="ordres-litiges-grid"
-  [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
-  [showBorders]="false"
-  [focusedRowEnabled]="false"
-  [focusedRowIndex]="0"
-  [columnAutoWidth]="true"
-  [columnHidingEnabled]="false"
-  [allowColumnReordering]="true"
-  [rowAlternationEnabled]="false"
-  (onCellPrepared)="onCellPrepared($event)"
-  (onCellClick)="onCellClick($event)"
-  (onToolbarPreparing)="
-    gridConfiguratorService.onToolbarPreparing(
-      '',
-      $event,
-      gridConfiguratorService.Grid.Litiges,
-      enableFilters.bind(this)
-    )
-  "
->
-  <!-- Grid configuration -->
-  <dxo-header-filter
-    [visible]="true"
-    [allowSearch]="true"
-  ></dxo-header-filter>
-  <dxo-paging></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [showInfo]="true"
-    [showNavigationButtons]="true"
-    [showPageSizeSelector]="true"
-  ></dxo-pager>
-  <dxo-group-panel [visible]="true"> </dxo-group-panel>
-  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-  <dxo-export fileName="Litiges en cours"></dxo-export>
-  <dxo-state-storing
-    [storageKey]="gridConfiguratorService.Grid.Litiges"
-    [enabled]="true"
-    type="custom"
-    [customLoad]="gridConfiguratorService.load"
-    [customSave]="gridConfiguratorService.save"
-  ></dxo-state-storing>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-column-chooser
-    [enabled]="true"
-    mode="select"
-    title="{{ 'columnChooser' | localize }}"
-    [allowSearch]="true"
-    [width]="columnChooser.width"
-    [height]="columnChooser.height"
+<div class="supervision-litiges">
+  <form
+    class="dx-fieldset"
+    [formGroup]="formGroup"
   >
-  </dxo-column-chooser>
+    <div style="clear: both"></div>
+    <div class="litiges-superv-filter-area">
+      <dx-box>
+        <dxi-item [ratio]="2">
+          <!-- Secteurs -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "tiers-clients-secteur" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                id="litiges-codeSecteur"
+                formControlName="codeSecteur"
+                [dataSource]="secteurs"
+                [showClearButton]="true"
+                displayExpr="description"
+                searchExpr="description"
+                (onValueChanged)="onFieldValueChange($event)"
+              >
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.4"
+          ><div class="or-field">{{ "or" | localize }}</div></dxi-item
+        >
+        <dxi-item [ratio]="2.5">
+          <!-- Commercial -->
+          <div class="dx-field field-large">
+            <div class="dx-field-label">
+              {{ "ordres-commercial" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                id="litiges-codeCommercial"
+                formControlName="codeCommercial"
+                [dataSource]="commerciaux"
+                [showClearButton]="true"
+                [displayExpr]="displayIDBefore"
+                [searchExpr]="['id', 'nomUtilisateur']"
+                (onValueChanged)="onFieldValueChange($event)"
+              >
+                <dxo-drop-down-options [width]="250"> </dxo-drop-down-options>
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="0.4"
+          ><div class="or-field">{{ "or" | localize }}</div></dxi-item
+        >
+        <dxi-item [ratio]="3">
+          <!-- Assistante -->
+          <div class="dx-field">
+            <div class="dx-field-label">
+              {{ "ordres-assistante" | localize }}
+            </div>
+            <div class="dx-field-value">
+              <dx-select-box
+                id="litiges-codeAssistante"
+                formControlName="codeAssistante"
+                [dataSource]="assistantes"
+                [showClearButton]="true"
+                [displayExpr]="displayIDBefore"
+                [searchExpr]="['id', 'nomUtilisateur']"
+                (onValueChanged)="onFieldValueChange($event)"
+              >
+              </dx-select-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [ratio]="1.5">
+          <div>
+            <dx-button
+              class="refresh"
+              [class]="toRefresh ? '' : 'inactive-button'"
+              type="default"
+              text="{{ 'btn-refresh' | localize }}"
+              (onClick)="enableFilters()"
+            ></dx-button>
+          </div>
+        </dxi-item>
+      </dx-box>
+    </div>
+  </form>
 
-  <dxo-summary>
-    <dxi-group-item
-      column="prixClient"
-      summaryType="sum"
-      [alignByColumn]="true"
-      [showInGroupFooter]="false"
-      [valueFormat]="{
-        type: 'fixedPoint',
-        precision: 2
-      }"
-      displayFormat="{0}"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="prixFourni"
-      summaryType="sum"
-      [alignByColumn]="true"
-      [showInGroupFooter]="false"
-      [valueFormat]="{
-        type: 'fixedPoint',
-        precision: 2
-      }"
-      displayFormat="{0}"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="clientClos"
-      summaryType="avg"
-      [alignByColumn]="true"
-      [showInGroupFooter]="false"
-      [valueFormat]="{
-        type: 'fixedPoint',
-        precision: 0
-      }"
-      displayFormat="{0}"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="fournisseurClos"
-      summaryType="avg"
-      [alignByColumn]="true"
-      [showInGroupFooter]="false"
-      [valueFormat]="{
-        type: 'fixedPoint',
-        precision: 0
-      }"
-      displayFormat="{0}"
-    >
-    </dxi-group-item>
-    <dxi-group-item
-      column="id"
-      summaryType="sum"
-      [alignByColumn]="true"
-    >
-    </dxi-group-item>
-  </dxo-summary>
+  <dx-button
+    class="grid-grouping-button"
+    type="default"
+    icon="material-icons menu_open"
+    hint="{{ 'btn-grouping' | localize }}"
+    (onClick)="gridsService.expandCollapseGroups(this)"
+  ></dx-button>
 
-  <dxi-column
-    *ngFor="let column of this.columns | async"
-    [dataField]="column.dataField"
-    [cssClass]="column.cssClass"
-    [format]="column.format"
-    [width]="column?.width || 'auto'"
-    [caption]="
-      ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-')
-        | localize) || column.name
+  <dx-data-grid
+    class="ordres-litiges-grid"
+    [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
+    [showBorders]="false"
+    [focusedRowEnabled]="false"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+    [allowColumnReordering]="true"
+    [rowAlternationEnabled]="false"
+    (onCellPrepared)="onCellPrepared($event)"
+    (onCellClick)="onCellClick($event)"
+    (onToolbarPreparing)="
+      gridConfiguratorService.onToolbarPreparing(
+        '',
+        $event,
+        gridConfiguratorService.Grid.Litiges,
+        enableFilters.bind(this)
+      )
     "
-    [dataType]="column?.dataType"
-    [allowSearch]="column?.allowSearch || ['string'].includes(column?.dataType)"
-    [allowHeaderFiltering]="
-      column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
-    "
-    [showInColumnChooser]="column.showInColumnChooser"
-  ></dxi-column>
-  <dxo-master-detail
-    [enabled]="true"
-    template="detail"
-    [autoExpandAll]="true"
-  ></dxo-master-detail>
-  <div *dxTemplate="let ds of 'detail'">
-    <div class="master-detail">
-      <div class="cause-container">
-        <span class="litiges-tiers bold-text">{{ ds.data.codeClient }}</span>
-        <span class="">&nbsp;-&nbsp;</span>
-        <span class="litiges-tiers bold-text">{{
-          ds.data.litige.ordreOrigine.entrepot.code
-        }}</span>
-        <span class="">&nbsp;-&nbsp;</span>
-        <span class=""
-          >{{
-            "ordres-supervision-litiges-dateDepartPrevueFournisseur" | localize
-          }}
-          :&nbsp;</span
-        >
-        <span class="litiges-dateDepartPrevueFournisseur bold-text">{{
-          dateManagementService.formatDate(
-            ds.data.dateDepartPrevueFournisseur,
-            "dd-MM-yyyy"
-          )
-        }}</span>
-        <span class="">&nbsp;-&nbsp;</span>
-        <span class=""
-          >{{ "articles-matierePremiere-variete" | localize }} :&nbsp;</span
-        >
-        <span class="bold-text">{{ ds.data.descriptionVariete }}</span>
-      </div>
-      <div style="clear: both"></div>
-      <div class="conseq-container">
-        <span class="litiges-causeconseq red-font text-align-right float-left"
-          >{{
-            "ordres-supervision-litiges-descriptionCause" | localize
-          }}
-          :&nbsp;</span
-        >
-        <span class="litiges-descriptionCause bold-text float-left">{{
-          ds.data.descriptionCause
-        }}</span>
-        <span class="float-left">&nbsp;-&nbsp;</span>
-        <span class="litiges-causeconseq green-font text-align-right float-left"
-          >{{
-            "ordres-supervision-litiges-descriptionConsequence" | localize
-          }}
-          :&nbsp;</span
-        >
-        <span class="litiges-descriptionConsequence bold-text float-left">{{
-          ds.data.descriptionConsequence
-        }}</span>
-        <span class="float-left">&nbsp;-&nbsp;</span>
-        <span class="float-left"
-          >{{
-            "ordres-supervision-litiges-numeroOrdreRemplacement" | localize
-          }}
-          :&nbsp;</span
-        >
-        <span>
-          <dx-button
-            [ngClass]="{
-              'text-underlined-button':
-                ds.data.societe.id === this.currCompanyId
-            }"
-            text="{{ ds.data.numeroOrdreRemplacement }}"
-            [hint]="
-              ds.data.societe.id === this.currCompanyId
-                ? localization.localize('hint-click-ordre')
-                : ''
-            "
-            (onClick)="onOpenNewOrder(ds)"
+  >
+    <!-- Grid configuration -->
+    <dxo-header-filter
+      [visible]="true"
+      [allowSearch]="true"
+    ></dxo-header-filter>
+    <dxo-paging></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-pager>
+    <dxo-group-panel [visible]="true"> </dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+    <dxo-export fileName="Litiges en cours"></dxo-export>
+    <dxo-state-storing
+      [storageKey]="gridConfiguratorService.Grid.Litiges"
+      [enabled]="true"
+      type="custom"
+      [customLoad]="gridConfiguratorService.load"
+      [customSave]="gridConfiguratorService.save"
+    ></dxo-state-storing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <dxo-column-chooser
+      [enabled]="true"
+      mode="select"
+      title="{{ 'columnChooser' | localize }}"
+      [allowSearch]="true"
+      [width]="columnChooser.width"
+      [height]="columnChooser.height"
+    >
+    </dxo-column-chooser>
+
+    <dxo-summary>
+      <dxi-group-item
+        column="prixClient"
+        summaryType="sum"
+        [alignByColumn]="true"
+        [showInGroupFooter]="false"
+        [valueFormat]="{
+          type: 'fixedPoint',
+          precision: 2
+        }"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+      <dxi-group-item
+        column="prixFourni"
+        summaryType="sum"
+        [alignByColumn]="true"
+        [showInGroupFooter]="false"
+        [valueFormat]="{
+          type: 'fixedPoint',
+          precision: 2
+        }"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+      <dxi-group-item
+        column="clientClos"
+        summaryType="avg"
+        [alignByColumn]="true"
+        [showInGroupFooter]="false"
+        [valueFormat]="{
+          type: 'fixedPoint',
+          precision: 0
+        }"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+      <dxi-group-item
+        column="fournisseurClos"
+        summaryType="avg"
+        [alignByColumn]="true"
+        [showInGroupFooter]="false"
+        [valueFormat]="{
+          type: 'fixedPoint',
+          precision: 0
+        }"
+        displayFormat="{0}"
+      >
+      </dxi-group-item>
+      <dxi-group-item
+        column="id"
+        summaryType="sum"
+        [alignByColumn]="true"
+      >
+      </dxi-group-item>
+    </dxo-summary>
+
+    <dxi-column
+      *ngFor="let column of this.columns | async"
+      [dataField]="column.dataField"
+      [cssClass]="column.cssClass"
+      [format]="column.format"
+      [width]="column?.width || 'auto'"
+      [caption]="
+        ('ordres-supervision-litiges-' + column.dataField?.split('.').join('-')
+          | localize) || column.name
+      "
+      [dataType]="column?.dataType"
+      [allowSearch]="
+        column?.allowSearch || ['string'].includes(column?.dataType)
+      "
+      [allowHeaderFiltering]="
+        column?.allowHeaderFiltering || ['string'].includes(column?.dataType)
+      "
+      [showInColumnChooser]="column.showInColumnChooser"
+    ></dxi-column>
+    <dxo-master-detail
+      [enabled]="true"
+      template="detail"
+      [autoExpandAll]="true"
+    ></dxo-master-detail>
+    <div *dxTemplate="let ds of 'detail'">
+      <div class="master-detail">
+        <div class="cause-container">
+          <span class="litiges-tiers bold-text">{{ ds.data.codeClient }}</span>
+          <span class="">&nbsp;-&nbsp;</span>
+          <span class="litiges-tiers bold-text">{{
+            ds.data.litige.ordreOrigine.entrepot.code
+          }}</span>
+          <span class="">&nbsp;-&nbsp;</span>
+          <span class=""
+            >{{
+              "ordres-supervision-litiges-dateDepartPrevueFournisseur"
+                | localize
+            }}
+            :&nbsp;</span
           >
-          </dx-button>
-        </span>
-        <span class="litiges-proprietaire-code"
-          >&nbsp;-
-          {{ "ordres-supervision-litiges-proprietaire-code" | localize }}
-          :&nbsp;</span
-        >
-        <span class="litiges-tiers bold-text">{{
-          ds.data.proprietaire.code
-        }}</span>
-        <span class="litiges-proprietaire-code"
-          >&nbsp;-
-          {{ "ordres-supervision-litiges-fournisseur-code" | localize }}
-          :&nbsp;</span
-        >
-        <span class="litiges-tiers bold-text">{{
-          ds.data.fournisseur.code
-        }}</span>
+          <span class="litiges-dateDepartPrevueFournisseur bold-text">{{
+            dateManagementService.formatDate(
+              ds.data.dateDepartPrevueFournisseur,
+              "dd-MM-yyyy"
+            )
+          }}</span>
+          <span class="">&nbsp;-&nbsp;</span>
+          <span class=""
+            >{{ "articles-matierePremiere-variete" | localize }} :&nbsp;</span
+          >
+          <span class="bold-text">{{ ds.data.descriptionVariete }}</span>
+        </div>
+        <div style="clear: both"></div>
+        <div class="conseq-container">
+          <span class="litiges-causeconseq red-font text-align-right float-left"
+            >{{
+              "ordres-supervision-litiges-descriptionCause" | localize
+            }}
+            :&nbsp;</span
+          >
+          <span class="litiges-descriptionCause bold-text float-left">{{
+            ds.data.descriptionCause
+          }}</span>
+          <span class="float-left">&nbsp;-&nbsp;</span>
+          <span
+            class="litiges-causeconseq green-font text-align-right float-left"
+            >{{
+              "ordres-supervision-litiges-descriptionConsequence" | localize
+            }}
+            :&nbsp;</span
+          >
+          <span class="litiges-descriptionConsequence bold-text float-left">{{
+            ds.data.descriptionConsequence
+          }}</span>
+          <span class="float-left">&nbsp;-&nbsp;</span>
+          <span class="float-left"
+            >{{
+              "ordres-supervision-litiges-numeroOrdreRemplacement" | localize
+            }}
+            :&nbsp;</span
+          >
+          <span>
+            <dx-button
+              [ngClass]="{
+                'text-underlined-button':
+                  ds.data.societe.id === this.currCompanyId
+              }"
+              text="{{ ds.data.numeroOrdreRemplacement }}"
+              [hint]="
+                ds.data.societe.id === this.currCompanyId
+                  ? localization.localize('hint-click-ordre')
+                  : ''
+              "
+              (onClick)="onOpenNewOrder(ds)"
+            >
+            </dx-button>
+          </span>
+          <span class="litiges-proprietaire-code"
+            >&nbsp;-
+            {{ "ordres-supervision-litiges-proprietaire-code" | localize }}
+            :&nbsp;</span
+          >
+          <span class="litiges-tiers bold-text">{{
+            ds.data.proprietaire.code
+          }}</span>
+          <span class="litiges-proprietaire-code"
+            >&nbsp;-
+            {{ "ordres-supervision-litiges-fournisseur-code" | localize }}
+            :&nbsp;</span
+          >
+          <span class="litiges-tiers bold-text">{{
+            ds.data.fournisseur.code
+          }}</span>
+        </div>
       </div>
     </div>
-  </div>
-</dx-data-grid>
+  </dx-data-grid>
+</div>
 
 <app-litige-cloture-popup
   [infosLitige]="infosLitige"

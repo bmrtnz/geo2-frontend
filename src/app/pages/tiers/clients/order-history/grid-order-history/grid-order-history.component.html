@@ -1,5 +1,5 @@
 <form
-  class="filter-container"
+  class="history-filter-container"
   [formGroup]="formGroup"
 >
   <dx-box>
@@ -120,7 +120,10 @@
     <dxi-item [ratio]="0.5"></dxi-item>
     <dxi-item [ratio]="3.5">
       <!-- Entrepot -->
-      <div class="dx-field">
+      <div
+        class="dx-field"
+        [ngClass]="{ 'pulse-repeated': pulseBtnOn }"
+      >
         <div class="dx-field-label">
           {{ "tiers-entrepot" | localize }}
         </div>
@@ -227,13 +230,13 @@
 
 <div class="grid-order-history-container">
   <dx-data-grid
-    class="dx-card wide-card grid-order-history"
+    class="grid-order-history"
     [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [width]="'100%'"
     [focusedRowEnabled]="true"
     [remoteOperations]="{
       filtering: true,
-      grouping: false,
+      grouping: true,
       groupPaging: false,
       paging: false,
       sorting: false,
@@ -371,13 +374,16 @@
         <!-- Create order functionnality -->
         <dx-button
           #createOrderButton
+          class="create-direct-order-button"
+          [stylingMode]="
+            formGroup?.get('entrepot')?.value?.id ? 'contained' : 'outlined'
+          "
           [disabled]="
             !datagrid?.instance?.getSelectedRowsData()?.length ||
-            !formGroup?.get('entrepot')?.value?.id ||
             running?.createOrder
           "
-          class="create-direct-order-button"
           type="success"
+          hint="{{ 'btn-create-order' | localize }}"
           text="{{ 'creer-ordre' | localize }}"
           (onClick)="createDirectOrder()"
         ></dx-button>

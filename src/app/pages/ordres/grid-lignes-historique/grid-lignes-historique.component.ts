@@ -89,6 +89,7 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   public hintClick: string;
   public hintNotValid: string;
   public periodes: any[];
+  pulseBtnOn: boolean;
   public formGroup = new UntypedFormGroup({
     valide: new UntypedFormControl(),
     dateMin: new UntypedFormControl(),
@@ -492,6 +493,18 @@ export class GridLignesHistoriqueComponent implements OnChanges, AfterViewInit {
   }
 
   createDirectOrder() {
+
+    if (!this.formGroup?.get('entrepot')?.value?.id) {
+      this.pulseBtnOn = false;
+      setTimeout(() => (this.pulseBtnOn = true), 1);
+      notify(
+        `${this.localizeService.localize("warn-no-entrepot")}`,
+        "warning",
+        5000
+      );
+      return
+    }
+
     this.running.createOrder = true;
     notify(this.localizeService.localize("pre-process"), "info");
     this.nouvelOrdre?.onButtonLoaderClick();

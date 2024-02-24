@@ -11,6 +11,7 @@ import { BaseTarif } from "./base-tarif.model";
 import { Transitaire } from "./transitaire.model";
 import { Client } from "./client.model";
 import Ordre from "./ordre.model";
+import PaysTraduction from "./pays-traduction.model";
 
 export enum ModeLivraison {
   DIRECT = "D",
@@ -24,6 +25,7 @@ export class Entrepot extends Model {
   @Field() public code: string;
   @Field({ asLabel: true }) public raisonSocial: string;
   @Field() public ville: string;
+  @Field({ model: import("./pays.model") }) public langue: Pays;
   @Field({ model: import("./pays.model") }) public pays: Pays;
   @Field() public adresse1: string;
   @Field() public valide: boolean;
@@ -32,7 +34,7 @@ export class Entrepot extends Model {
   @Field() public adresse3: string;
   @Field() public codePostal: string;
   @Field({ model: import("./ordre.model") }) public ordres: Ordre[];
-  @Field({ model: import("./pays.model") }) public langue: Pays;
+  @Field({ model: import("./pays-traduction.model") }) public paysTraduction: PaysTraduction;
   @Field({ model: import("./incoterm.model") }) public incoterm: Incoterm;
   @Field() public tvaCee: string;
   @Field({ model: import("./regime-tva.model") }) public regimeTva: RegimeTva;

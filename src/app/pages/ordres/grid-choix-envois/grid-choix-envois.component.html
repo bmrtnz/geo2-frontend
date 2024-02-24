@@ -15,11 +15,12 @@
     [paging]="{
       enabled: false
     }"
+    (onKeyDown)="onKeyDown($event)"
     (onCellClick)="onCellClick($event)"
     (onRowClick)="onRowClick($event)"
-    (onKeyDown)="onKeyDown($event)"
     (onContentReady)="onContentReady($event)"
     (onToolbarPreparing)="
+      onToolbarPreparing($event);
       gridConfiguratorService.onToolbarPreparing(
         localizeService.localize('documents-list'),
         $event,
@@ -28,11 +29,16 @@
     "
   >
     <!-- Grid configuration -->
+    <dxo-keyboard-navigation
+      [enterKeyAction]="'move'"
+      [enterKeyDirection]="'column'"
+      [editOnKeyPress]="true"
+    ></dxo-keyboard-navigation>
     <dxo-export fileName="Liste des documents"></dxo-export>
     <dxo-editing
       [selectTextOnEditStart]="true"
       [allowUpdating]="true"
-      [mode]="'cell'"
+      [mode]="'batch'"
     ></dxo-editing>
     <dxo-state-storing
       [storageKey]="gridConfiguratorService.Grid.ChoixEnvois"

@@ -16,6 +16,20 @@
       margin: 17px 0;
       line-height: 29px;
     }
+
+    .print-button {
+      top: 13px;
+      margin-right: 14px;
+
+      &.dx-state-disabled {
+        background: rgba(0, 0, 0, .1) !important;
+      }
+    }
+  }
+
+  .dx-popup-content {
+    height: calc(100vh - 110px) !important;
+    background-color: #F5F5F5;
   }
 
   .dx-invalid-message {
@@ -27,7 +41,7 @@
   }
 
   .packing-list-content-container {
-    background: #fff !important;
+    background: transparent !important;
     padding: 0 15px 0 2px;
 
     .grid-packing-list {
@@ -46,7 +60,7 @@
     }
 
     .entrepot-field {
-      width: 730px;
+      width: 734px;
       margin-bottom: 2px;
     }
 
@@ -59,7 +73,7 @@
     }
 
     .inputs-container {
-      width: 360px;
+      width: 367px;
       float: left;
 
       .dx-field {
@@ -76,14 +90,6 @@
 
       .departLivraison-switch {
         height: 36px;
-
-        .dx-switch-handle:before {
-          background-color: $base-accent !important;
-        }
-
-        .dx-switch-container:before {
-          background-color: rgba(0, 117, 156, 0.5) !important;
-        }
 
         .dx-field-value {
           width: 33px !important;

@@ -87,6 +87,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   public company: string;
   public DsItems: any[];
   private clearSpinner: any;
+  public stepRefresh: number;
   public running = {
     loading: false,
   }
@@ -284,6 +285,7 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           if (!this.countOrders) return this.endOfProcess();
           this.processedOrders = 0;
           this.progressSet(20);
+          this.stepRefresh = Math.min(Math.max(Math.round(this.countOrders / 60), 1), 10);
           setTimeout(() => this.DsItems.map(data => this.controlBaf(data, data.ordreRef)));
         });
       });
@@ -306,12 +308,18 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
           data.indicateurAutre = res.data.fControlBaf.data.ind_autre;
           this.processedOrders++;
           const ratio = Math.round(79 * this.processedOrders / this.countOrders) + 20;
-          this.progressSet(ratio);
+          if (!(ratio % this.stepRefresh)) this.progressSet(ratio);
           if (this.processedOrders === this.countOrders) {
-            this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "asc");
-            this.datagrid.instance.columnOption("indicateurBaf", "sortOrder", "desc");
-            this.datagrid.instance.columnOption("numeroOrdre", "sortOrder", "asc");
             this.endOfProcess(true);
+            setTimeout(() => {
+              this.DsItems.sort((a, b) => {
+                if (a.indicateurBaf < b.indicateurBaf) return -1;
+                if (a.indicateurBaf > b.indicateurBaf) return 1;
+                if (a.numeroOrdre < b.numeroOrdre) return -1;
+                if (a.numeroOrdre > b.numeroOrdre) return 1;
+                return 0;
+              });
+            }, 100);
           }
         },
         error: (err) => {
@@ -327,12 +335,12 @@ export class SupervisionAFacturerComponent implements OnInit, AfterViewInit {
   }
 
   endOfProcess(result?: boolean) {
-    this.running.loading = false;
     this.progressSet(100);
     this.toast(result ? "data-loading-ended" : "aucune-donnee-recuperee", result ? "success" : "warning");
     this.datagrid.instance.endCustomLoading();
     // In some cases, it can last (?)
     this.clearSpinner = setTimeout(() => this.datagrid.instance.endCustomLoading(), 1500);
+    this.running.loading = false;
   }
 
   toast(message, type?, displayTime?) {

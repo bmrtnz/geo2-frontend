@@ -2,7 +2,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -19,7 +18,9 @@ import DataSource from "devextreme/data/data_source";
 import { environment } from "environments/environment";
 import { map } from "rxjs/operators";
 import { OrdresService } from "app/shared/services/api/ordres.service";
+import { CurrentCompanyService } from "app/shared/services/current-company.service";
 import { DatePipe } from "@angular/common";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 
 @Component({
@@ -44,7 +45,9 @@ export class GridPackingListComponent {
     private ordresService: OrdresService,
     public gridConfiguratorService: GridConfiguratorService,
     public localizeService: LocalizationService,
+    public currentCompanyService: CurrentCompanyService,
     public authService: AuthService,
+    public gridUtilsService: GridUtilsService,
     private datePipe: DatePipe
   ) {
     this.gridConfig = this.gridConfiguratorService.fetchDefaultConfig(
@@ -76,25 +79,29 @@ export class GridPackingListComponent {
   }
 
   async enableFilters() {
+    this.datagrid.instance.option("focusedRowIndex", -1);
     const fields = this.columns.pipe(
       map((columns) => columns.map((column) => column.dataField))
     );
     this.dataSource = this.ordresService.getDataSource_v2(
       await fields.toPromise()
     );
-    // Retrieves all orders from the same entrepot
-
-
+    // Retrieves orders from the same entrepot
+    this.dataSource.filter(["entrepot.id", "=", this.entrepotId]);
+    // this.dataSource.filter([
+    // [["id", "=", "1672202"], "or", ["id", "=", "1670066"]]
+    // [["id", "=", "1586575"], "or", ["id", "=", "1667632"], "or", ["id", "=", "1667611"]]
+    // [["id", "=", "2256363"], "or", ["id", "=", "2256464"], "or", ["id", "=", "2259174"]]
+    // ]);
+    this.datagrid.dataSource = this.dataSource;
     // Retrieves orders of less than 180 days
-    // and all orders from the same entrepot
+    // and from the same entrepot
     const minDate = new Date();
     minDate.setDate(minDate.getDate() - 180);
-    const array = [];
     this.dataSource.filter([
-      // ["dateDepartPrevue", ">=", this.datePipe.transform(minDate, "yyyy-MM-ddTHH:mm:ss")],
+      // ["dateDepartPrevueBrute", ">=", this.datePipe.transform(minDate, "yyyyMMdd")],
       // "and",
       ["entrepot.id", "=", this.entrepotId]
-    ])
-    this.datagrid.dataSource = this.dataSource;
+    ]);
   }
 }

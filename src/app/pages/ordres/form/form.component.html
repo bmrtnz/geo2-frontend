@@ -254,6 +254,7 @@
                 ></dx-button>
               </div>
             </div>
+
             <div class="order-tabs">
               <div
                 #anchor
@@ -265,7 +266,7 @@
                 }}</span>
 
                 <!-- separator -->
-                <span> - </span>
+                <span>&nbsp;-&nbsp;</span>
 
                 <span
                   *ngIf="ordre"
@@ -1270,7 +1271,11 @@
                     ></app-form-litiges>
                     <app-grid-litiges-lignes
                       #gridLitigesLignes
-                      [hidden]="!formLitiges.infosLitige"
+                      [hidden]="
+                        !formLitiges.infosLitige ||
+                        formLitiges.noLitiges === null ||
+                        formLitiges.noLitiges === true
+                      "
                       [ordre]="data"
                       (litigeLigneSelected)="formLitiges.modifierLot()"
                     >

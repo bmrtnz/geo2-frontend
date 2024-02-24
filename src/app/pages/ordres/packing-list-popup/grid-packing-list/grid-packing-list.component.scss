@@ -4,7 +4,6 @@
 
 ::ng-deep .grid-packing-list {
   min-height: 200px;
-  max-height: 300px;
 
   .dx-toolbar-after {
     background-color: #fff;
@@ -18,15 +17,27 @@
     width: 65% !important;
   }
 
+  .dx-row {
+    td.dx-command-select {
+      width: 20px !important;
+      min-width: 20px !important;
+      padding: 0 4px !important;
+    }
+  }
+
   .highlight-order {
-    background-color: $BW-purple-light !important;
+    background-color: $BW-purple-ultralight !important;
 
     &.dx-row-focused td {
       background-color: $BW-purple-dark !important;
+
+      &.dx-command-select .dx-checkbox-icon {
+        border-color: #FFF;
+      }
     }
 
     td {
-      background-color: $BW-purple-light !important;
+      background-color: $BW-purple-ultralight !important;
     }
   }
 }

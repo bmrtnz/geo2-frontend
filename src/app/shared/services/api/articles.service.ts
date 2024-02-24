@@ -4,6 +4,7 @@ import { Apollo } from "apollo-angular";
 import { Article } from "app/shared/models";
 import ArticleStatistiqueClient from "app/shared/models/article-statistique-client.model";
 import ArticleStatistiqueFournisseur from "app/shared/models/article-statistique-fournisseur.model";
+import VarieteTraduction from "app/shared/models/variete.traduction";
 import {
   APIRead,
   ApiService,
@@ -171,6 +172,37 @@ export class ArticlesService extends ApiService implements APIRead {
       searchExpr,
       fetchPolicy
     );
+  }
+
+  /**
+  * Point d'entrée pour la traduction d'une variété
+  */
+  getOneVarieteTraduction(
+    id: {
+      langue: VarieteTraduction["langue"];
+      variete: VarieteTraduction["variete"]["id"];
+    },
+    body: Set<string>
+  ) {
+    return this.apollo
+      .query<{ varieteTraduction: VarieteTraduction }>({
+        query: gql(
+          ApiService.buildGraph(
+            "query",
+            [
+              {
+                name: "varieteTraduction",
+                body,
+                params: [{ name: "id", value: "id", isVariable: true }],
+              },
+            ],
+            [{ name: "id", type: 'GeoVarieteTraductionIdInput', isOptionnal: false }]
+          )
+        ),
+        variables: { id },
+        fetchPolicy: "no-cache",
+      })
+      .pipe(map((res) => res.data));
   }
 
   /**

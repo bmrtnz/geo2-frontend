@@ -591,6 +591,294 @@
             </div>
           </div>
         </div>
+        <div
+          class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
+        >
+          <span class="dx-form-group-caption">{{
+            "articles-groupe-normalisation" | localize
+          }}</span>
+          <div class="dx-form-group-content">
+            <!-- Sticker -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-stickeur" | localize }}
+              </div>
+              <div
+                class="dx-field-value dx-field-value-with-icon"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="stickeur"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="stickeurs"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                  <dx-validator
+                    name="{{ 'articles-normalisation-stickeur' | localize }}"
+                  >
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
+                <dx-button
+                  *ngIf="article?.normalisation?.stickeur?.document?.isPresent"
+                  (onClick)="
+                    viewEtiquette(
+                      'articles-normalisation-stickeur',
+                      article.normalisation.stickeur.document
+                    )
+                  "
+                  class="icon-btn"
+                  icon="material-icons sm visibility"
+                ></dx-button>
+              </div>
+            </div>
+            <!-- Marque -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-marque" | localize }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="marque"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="marques"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                  <dx-validator
+                    name="{{ 'articles-normalisation-marque' | localize }}"
+                  >
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
+              </div>
+            </div>
+            <!-- Calibre Marquage -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-calibreMarquage" | localize }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="calibreMarquage"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="calibresMarquage"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                  <dx-validator
+                    name="{{
+                      'articles-normalisation-calibreMarquage' | localize
+                    }}"
+                  >
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dx-validator>
+                </dx-select-box>
+              </div>
+            </div>
+            <!-- Description spéciale calibre client -->
+            <div class="dx-field">
+              <div class="dx-field-label multiline-field-label">
+                {{
+                  "articles-normalisation-descriptionCalibreClient" | localize
+                }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="descriptionCalibreClient"
+                  [readOnly]="readOnlyMode"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- Etiquette client -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-etiquetteColis" | localize }}
+              </div>
+              <div
+                class="dx-field-value dx-field-value-with-icon"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="etiquetteColis"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="etiquettesColis"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                </dx-select-box>
+                <dx-button
+                  *ngIf="
+                    article?.normalisation?.etiquetteColis?.document?.isPresent
+                  "
+                  (onClick)="
+                    viewEtiquette(
+                      'articles-normalisation-etiquetteColis',
+                      article.normalisation.etiquetteColis.document
+                    )
+                  "
+                  class="icon-btn"
+                  icon="material-icons sm visibility"
+                ></dx-button>
+              </div>
+            </div>
+            <!-- Etiquette UC -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-etiquetteUc" | localize }}
+              </div>
+              <div
+                class="dx-field-value dx-field-value-with-icon"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="etiquetteUc"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="etiquettesUc"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                </dx-select-box>
+                <dx-button
+                  *ngIf="
+                    article?.normalisation?.etiquetteUc?.document?.isPresent
+                  "
+                  (onClick)="
+                    viewEtiquette(
+                      'articles-normalisation-etiquetteUc',
+                      article.normalisation?.etiquetteUc?.document
+                    )
+                  "
+                  class="icon-btn"
+                  icon="material-icons sm visibility"
+                ></dx-button>
+              </div>
+            </div>
+            <!-- Etiquette événementielle -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{
+                  "articles-normalisation-etiquetteEvenementielle" | localize
+                }}
+              </div>
+              <div
+                class="dx-field-value dx-field-value-with-icon"
+                formGroupName="normalisation"
+              >
+                <dx-select-box
+                  formControlName="etiquetteEvenementielle"
+                  [readOnly]="readOnlyMode"
+                  [dataSource]="etiquettesEvenementielle"
+                  [displayExpr]="displayIDBefore"
+                  [searchExpr]="['id']"
+                >
+                </dx-select-box>
+                <dx-button
+                  *ngIf="
+                    article?.normalisation?.etiquetteEvenementielle?.document
+                      ?.isPresent
+                  "
+                  (onClick)="
+                    viewEtiquette(
+                      'articles-normalisation-etiquetteEvenementielle',
+                      article.normalisation?.etiquetteEvenementielle?.document
+                    )
+                  "
+                  class="icon-btn"
+                  icon="material-icons sm visibility"
+                ></dx-button>
+              </div>
+            </div>
+            <!-- GTIN UC -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-gtinUc" | localize }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="gtinUc"
+                  [readOnly]="readOnlyMode"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- GTIN UC BW -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-gtinUcBlueWhale" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  formControlName="gtinUcBlueWhale"
+                  [readOnly]="true"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- GTIN Colis -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-gtinColis" | localize }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="gtinColis"
+                  [readOnly]="readOnlyMode"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- GTIN Colis BW-->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-gtinColisBlueWhale" | localize }}
+              </div>
+              <div class="dx-field-value">
+                <dx-text-box
+                  formControlName="gtinColisBlueWhale"
+                  [readOnly]="true"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+            <!-- Code article client -->
+            <div class="dx-field">
+              <div class="dx-field-label">
+                {{ "articles-normalisation-articleClient" | localize }}
+              </div>
+              <div
+                class="dx-field-value"
+                formGroupName="normalisation"
+              >
+                <dx-text-box
+                  formControlName="articleClient"
+                  [readOnly]="readOnlyMode"
+                  [inputAttr]="{ style: 'text-transform: uppercase' }"
+                  (onValueChanged)="valueToUpperCase($event)"
+                  valueChangeEvent="keyup"
+                >
+                </dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
       </dxi-item>
       <dxi-item [ratio]="0.2"> </dxi-item>
       <dxi-item [ratio]="4">
@@ -1041,294 +1329,6 @@
                 </div>
               </dxi-item>
             </dx-accordion>
-          </div>
-        </div>
-        <div
-          class="dx-form-group dx-form-group-with-caption dx-card responsive-paddings"
-        >
-          <span class="dx-form-group-caption">{{
-            "articles-groupe-normalisation" | localize
-          }}</span>
-          <div class="dx-form-group-content">
-            <!-- Sticker -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-stickeur" | localize }}
-              </div>
-              <div
-                class="dx-field-value dx-field-value-with-icon"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="stickeur"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="stickeurs"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                  <dx-validator
-                    name="{{ 'articles-normalisation-stickeur' | localize }}"
-                  >
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
-                <dx-button
-                  *ngIf="article?.normalisation?.stickeur?.document?.isPresent"
-                  (onClick)="
-                    viewEtiquette(
-                      'articles-normalisation-stickeur',
-                      article.normalisation.stickeur.document
-                    )
-                  "
-                  class="icon-btn"
-                  icon="material-icons sm visibility"
-                ></dx-button>
-              </div>
-            </div>
-            <!-- Marque -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-marque" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="marque"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="marques"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                  <dx-validator
-                    name="{{ 'articles-normalisation-marque' | localize }}"
-                  >
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
-              </div>
-            </div>
-            <!-- Calibre Marquage -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-calibreMarquage" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="calibreMarquage"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="calibresMarquage"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                  <dx-validator
-                    name="{{
-                      'articles-normalisation-calibreMarquage' | localize
-                    }}"
-                  >
-                    <dxi-validation-rule type="required"></dxi-validation-rule>
-                  </dx-validator>
-                </dx-select-box>
-              </div>
-            </div>
-            <!-- Description spéciale calibre client -->
-            <div class="dx-field">
-              <div class="dx-field-label multiline-field-label">
-                {{
-                  "articles-normalisation-descriptionCalibreClient" | localize
-                }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-text-box
-                  formControlName="descriptionCalibreClient"
-                  [readOnly]="readOnlyMode"
-                >
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- Etiquette client -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-etiquetteColis" | localize }}
-              </div>
-              <div
-                class="dx-field-value dx-field-value-with-icon"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="etiquetteColis"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="etiquettesColis"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                </dx-select-box>
-                <dx-button
-                  *ngIf="
-                    article?.normalisation?.etiquetteColis?.document?.isPresent
-                  "
-                  (onClick)="
-                    viewEtiquette(
-                      'articles-normalisation-etiquetteColis',
-                      article.normalisation.etiquetteColis.document
-                    )
-                  "
-                  class="icon-btn"
-                  icon="material-icons sm visibility"
-                ></dx-button>
-              </div>
-            </div>
-            <!-- Etiquette UC -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-etiquetteUc" | localize }}
-              </div>
-              <div
-                class="dx-field-value dx-field-value-with-icon"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="etiquetteUc"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="etiquettesUc"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                </dx-select-box>
-                <dx-button
-                  *ngIf="
-                    article?.normalisation?.etiquetteUc?.document?.isPresent
-                  "
-                  (onClick)="
-                    viewEtiquette(
-                      'articles-normalisation-etiquetteUc',
-                      article.normalisation?.etiquetteUc?.document
-                    )
-                  "
-                  class="icon-btn"
-                  icon="material-icons sm visibility"
-                ></dx-button>
-              </div>
-            </div>
-            <!-- Etiquette événementielle -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{
-                  "articles-normalisation-etiquetteEvenementielle" | localize
-                }}
-              </div>
-              <div
-                class="dx-field-value dx-field-value-with-icon"
-                formGroupName="normalisation"
-              >
-                <dx-select-box
-                  formControlName="etiquetteEvenementielle"
-                  [readOnly]="readOnlyMode"
-                  [dataSource]="etiquettesEvenementielle"
-                  [displayExpr]="displayIDBefore"
-                  [searchExpr]="['id']"
-                >
-                </dx-select-box>
-                <dx-button
-                  *ngIf="
-                    article?.normalisation?.etiquetteEvenementielle?.document
-                      ?.isPresent
-                  "
-                  (onClick)="
-                    viewEtiquette(
-                      'articles-normalisation-etiquetteEvenementielle',
-                      article.normalisation?.etiquetteEvenementielle?.document
-                    )
-                  "
-                  class="icon-btn"
-                  icon="material-icons sm visibility"
-                ></dx-button>
-              </div>
-            </div>
-            <!-- GTIN UC -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-gtinUc" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-text-box
-                  formControlName="gtinUc"
-                  [readOnly]="readOnlyMode"
-                >
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- GTIN UC BW -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-gtinUcBlueWhale" | localize }}
-              </div>
-              <div class="dx-field-value">
-                <dx-text-box
-                  formControlName="gtinUcBlueWhale"
-                  [readOnly]="true"
-                >
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- GTIN Colis -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-gtinColis" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-text-box
-                  formControlName="gtinColis"
-                  [readOnly]="readOnlyMode"
-                >
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- GTIN Colis BW-->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-gtinColisBlueWhale" | localize }}
-              </div>
-              <div class="dx-field-value">
-                <dx-text-box
-                  formControlName="gtinColisBlueWhale"
-                  [readOnly]="true"
-                >
-                </dx-text-box>
-              </div>
-            </div>
-            <!-- Code article client -->
-            <div class="dx-field">
-              <div class="dx-field-label">
-                {{ "articles-normalisation-articleClient" | localize }}
-              </div>
-              <div
-                class="dx-field-value"
-                formGroupName="normalisation"
-              >
-                <dx-text-box
-                  formControlName="articleClient"
-                  [readOnly]="readOnlyMode"
-                  [inputAttr]="{ style: 'text-transform: uppercase' }"
-                  (onValueChanged)="valueToUpperCase($event)"
-                  valueChangeEvent="keyup"
-                >
-                </dx-text-box>
-              </div>
-            </div>
           </div>
         </div>
       </dxi-item>

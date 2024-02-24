@@ -28,6 +28,8 @@ import { saveAs } from "file-saver";
 import { defer, of } from "rxjs";
 import { concatMap, finalize } from "rxjs/operators";
 import { TabContext } from "../../root/root.component";
+import notify from "devextreme/ui/notify";
+
 
 let self;
 
@@ -89,10 +91,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     dateDepartMin?: Date;
     dateDepartMax?: Date;
     dateModification?: Date;
-  } = {
-      dateDepartMin: this.dateManagementService.startOfDay(),
-      dateDepartMax: this.dateManagementService.endOfDay(),
-    };
+  };
 
   public secteurs: DataSource;
   public clients: DataSource;
@@ -105,15 +104,17 @@ export class DeclarationFraudeComponent implements AfterViewInit {
   public now: number = Date.now();
   public resumeLabel: string;
   public etatLabel: string;
+  public maxDays = 15;
+
   @ViewChild(DxFormComponent) public dxForm: DxFormComponent;
+  public summaryFields = ["nombreColisCommandes", "poidsNet"];
 
   ngAfterViewInit() {
-    this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC");
-    this.authService.onUserChanged().subscribe(() =>
-      this.setDefaultPeriod(this.authService.currentUser?.periode ?? "MAC")
-    );
+    this.setDefaultPeriod("J");
     this.updateModifiedDate(new Date(this.preFilterData.dateDepartMin));
     this.valideSB.value = true;
+    // Only solution found for showing warning
+    this.secteurSB.value = "";
   }
 
   setDefaultPeriod(periodId) {
@@ -131,7 +132,6 @@ export class DeclarationFraudeComponent implements AfterViewInit {
       dateDepartMax: datePeriod.dateFin,
     });
   }
-
   displayCodeBefore(data) {
     return data
       ? (data.code ? data.code : data.id) +
@@ -256,8 +256,23 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     );
   }
 
+  checkPeriodOver() {
+    return this.dateManagementService.getDeltaDate(
+      this.preFilterData.dateDepartMin,
+      this.preFilterData.dateDepartMax
+    ) > this.maxDays;
+  }
+
   public applyPrefilter(event) {
     if (!this.dxForm.instance.validate().isValid) return;
+    // Check period
+    if (this.checkPeriodOver()) return notify({
+      message: this.localizer.localize("warn-period-over", this.maxDays),
+      type: "warning",
+      displayTime: 4500
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
 
     this.dataSource = null;
 
@@ -423,8 +438,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
 
   onCellPrepared(e) {
     if (e.rowType === "data") {
-      if (e.data.nombreColisCommandes)
-        e.cellElement.classList.add("bold-black");
+      if (e.data.nombreColisCommandes) e.cellElement.classList.add("bold-black");
     }
   }
 
@@ -476,7 +490,7 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     return gText;
   }
 
-  onExporting(event: { component: dxDataGrid; cancel: boolean }) {
+  onExporting(event: { component: dxDataGrid; cancel: boolean }, component) {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet();
     const redundantRows = event.component
@@ -486,6 +500,15 @@ export class DeclarationFraudeComponent implements AfterViewInit {
     exportDataGrid({
       component: event.component,
       worksheet,
+      customizeCell: ({ gridCell, excelCell }) => {
+        excelCell.font = {};
+        if (gridCell.rowType === "data") {
+          // Canceled orders rows should be in red
+          if (gridCell.data?.ordreAnnule) excelCell.font.color = { argb: 'FF325A' }
+          // Bold rows when colis commandés
+          if (gridCell.data?.nombreColisCommandes) excelCell.font.bold = true;
+        }
+      }
     }).then(() => {
       const offset = 2;
       redundantRows.forEach((r, i) =>

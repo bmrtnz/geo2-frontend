@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { OrdresIndicatorsService } from "./ordres-indicators.service";
 import { LocalizationService } from "./localization.service";
+import { ONE_DAY } from "basic";
 
 let self;
 
@@ -316,6 +317,12 @@ export class DateManagementService {
       currDateTime0.setDate(currDateTime0.getDate() + delta).valueOf(),
       "yyyy-MM-ddTHH:mm:ss"
     );
+  }
+
+  getDeltaDate(date1, date2) {
+    const firstDate = new Date(date1);
+    const secondDate = new Date(date2);
+    return Math.ceil(Math.abs((firstDate.getTime() - secondDate.getTime())) / ONE_DAY);
   }
 
   getWeekNumber(d) {

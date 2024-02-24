@@ -15,6 +15,7 @@ import { map } from "rxjs/operators";
 import notify from "devextreme/ui/notify";
 import { AuthService, LocalizationService } from "app/shared/services";
 import { CurrentCompanyService } from "app/shared/services/current-company.service";
+import { GridUtilsService } from "app/shared/services/grid-utils.service";
 
 @Component({
   selector: "app-visualiser-ordres-popup",
@@ -41,6 +42,7 @@ export class VisualiserOrdresPopupComponent {
     private currentCompanyService: CurrentCompanyService,
     private localization: LocalizationService,
     public tabContext: TabContext,
+    public gridUtilsService: GridUtilsService,
     public authService: AuthService,
     public ordreLignesService: OrdreLignesService
   ) {
@@ -117,20 +119,6 @@ export class VisualiserOrdresPopupComponent {
       if (e.column.dataField === "ordre.numero")
         e.cellElement.classList.add("bold-text");
     }
-  }
-
-  onRowClick(e) {
-    // Allows to select an item by clicking on a row
-    // in addition to the expected checkbox
-    const keys = e.component.getSelectedRowKeys();
-    const index = keys.indexOf(e.key);
-
-    if (index > -1) {
-      keys.splice(index, 1);
-    } else {
-      keys.push(e.key);
-    }
-    e.component.selectRows(keys);
   }
 
   applyClick() {

@@ -47,8 +47,7 @@ export class ImportProgrammesPopupComponent implements OnChanges {
   @ViewChild(GridImportProgrammesComponent, { static: false })
   gridComponent: GridImportProgrammesComponent;
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
-  @ViewChild(DxScrollViewComponent, { static: false })
-  dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
   @ViewChild(DxFileUploaderComponent, { static: false })
   uploader: DxFileUploaderComponent;
 

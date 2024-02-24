@@ -190,6 +190,8 @@ export class EntrepotDetailsComponent
   idTvaRequired: boolean;
   preSaisie: string;
   client: Client;
+  public printDocumentTitle: string;
+
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -352,6 +354,7 @@ export class EntrepotDetailsComponent
 
   afterLoadInitForm(res) {
     this.entrepot = res.data.entrepot;
+    this.printDocumentTitle = `Fiche-entrepôt-${this.entrepot?.code}`;
     this.client = this.entrepot.client;
     this.formGroup.patchValue(this.entrepot);
     this.idEntrepot = this.entrepot.id; // Used for bassins grid

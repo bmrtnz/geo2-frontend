@@ -254,7 +254,7 @@
   (onCellPrepared)="onCellPrepared($event)"
   (onRowPrepared)="onRowPrepared($event)"
   (onRowDblClick)="onRowDblClick($event)"
-  (onExporting)="onExporting($event)"
+  (onExporting)="onExporting($event, this)"
 >
   <dxo-grouping></dxo-grouping>
   <dxo-load-panel [enabled]="true"></dxo-load-panel>
@@ -375,14 +375,14 @@
       [showInGroupFooter]="true"
     ></dxi-group-item> -->
     <dxi-group-item
-      column="nombreColisCommandes"
+      [column]="summaryFields[0]"
       summaryType="sum"
       [showInGroupFooter]="true"
       [displayFormat]="'{0}'"
     >
     </dxi-group-item>
     <dxi-group-item
-      column="poidsNet"
+      [column]="summaryFields[1]"
       summaryType="sum"
       [showInGroupFooter]="true"
       [displayFormat]="'{0}'"

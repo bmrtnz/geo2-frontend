@@ -30,7 +30,8 @@
     width: 100% !important;
     height: auto !important;
 
-    .zoom-popup {
+    .zoom-popup,
+    .document-popup {
       left: 0;
       top: 0;
       width: 100% !important;
@@ -63,6 +64,14 @@
         .dx-scrollable-scrollbar {
           display: none;
         }
+      }
+    }
+
+    .document-popup .dx-popup-content {
+      padding: 0 !important; // Fill all space
+
+      .generate-document-container {
+        height: auto !important;
       }
     }
   }

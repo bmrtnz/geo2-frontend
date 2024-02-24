@@ -64,7 +64,7 @@
         <i
           class="dx-icon dx-icon-close"
           *ngIf="!isStaticItem(tab)"
-          (click)="onTabCloseClick($event)"
+          (mousedown)="onTabCloseClick($event)"
         ></i>
         <div
           *ngIf="tab.type === typeTab.Ordre && tab.status"

@@ -77,7 +77,7 @@ export class AjoutArticlesStockPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    this.popupFullscreen = true;
+    setTimeout(() => this.popupFullscreen = true); // Small timeout to avoid ng checked error
     e.component
       .content()
       .parentNode.classList.add("ajout-articles-stock-popup");

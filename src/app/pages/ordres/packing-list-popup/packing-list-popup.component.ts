@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -11,24 +12,35 @@ import {
   DxDateBoxComponent,
   DxTextBoxComponent,
   DxSwitchComponent,
+  DxScrollViewComponent,
 } from "devextreme-angular";
 import { alert, confirm } from "devextreme/ui/dialog";
-import { AuthService, LocalizationService } from "app/shared/services";
+import { ArticlesService, AuthService, LocalizationService } from "app/shared/services";
 import Ordre from "app/shared/models/ordre.model";
 import { GridPackingListComponent } from "./grid-packing-list/grid-packing-list.component";
 import { PacklistsService } from "app/shared/services/api/packlists.service";
 import notify from "devextreme/ui/notify";
+import { OrdresService } from "app/shared/services/api/ordres.service";
+import { lastValueFrom } from "rxjs";
+import { FormUtilsService } from "app/shared/services/form-utils.service";
+import hideToasts from "devextreme/ui/toast/hide_toasts";
+import { DateManagementService } from "app/shared/services/date-management.service";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-packing-list-popup",
   templateUrl: "./packing-list-popup.component.html",
   styleUrls: ["./packing-list-popup.component.scss"],
 })
-export class PackingListPopupComponent implements OnChanges {
+export class PackingListPopupComponent implements OnInit, OnChanges {
   constructor(
     private localizeService: LocalizationService,
     private authService: AuthService,
-    private packlistsService: PacklistsService
+    private packlistsService: PacklistsService,
+    private articlesService: ArticlesService,
+    private dateManagementService: DateManagementService,
+    public formsUtils: FormUtilsService,
+    private ordresService: OrdresService
   ) { }
 
   @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
@@ -41,11 +53,21 @@ export class PackingListPopupComponent implements OnChanges {
   @ViewChild("dateImp", { static: false }) dateImpInput: DxDateBoxComponent;
   @ViewChild("PO", { static: false }) POInput: DxTextBoxComponent;
   @ViewChild("switchCltEnt", { static: false }) switchCltEnt: DxSwitchComponent;
+  @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
 
   @Input() ordre: Ordre;
 
   @Output() whenValidate = new EventEmitter<any>();
   @Output() ordreId: string;
+  @Output() address: string;
+  @Output() order: Ordre;
+  @Output() ordres: any[];
+  @Output() containers: any[];
+  @Output() numeroPo: string;
+  @Output() totaux: { colis: number, gross: number, net: number };
+  @Output() printDate;
+
+
 
   public title: string;
   public paloxLabel: string;
@@ -54,9 +76,27 @@ export class PackingListPopupComponent implements OnChanges {
   public popupFullscreen: boolean;
   public labelEntrepot: string;
   public selectOk: boolean;
-  public ordres: any[];
   public shown: boolean;
   public infoPopupText: string;
+  public printDocumentTitle;
+  public running = {
+    load: false,
+    preview: false,
+    print: false,
+    sendPrinter: false
+  }
+  public formGroup = new UntypedFormGroup({
+    dateDep: new UntypedFormControl(),
+    dateArr: new UntypedFormControl(),
+    dateImp: new UntypedFormControl(),
+    PO: new UntypedFormControl(),
+    switchCltEnt: new UntypedFormControl(),
+  });
+
+
+  ngOnInit() {
+    this.formGroup.valueChanges.subscribe((_) => this.resetRunning());
+  }
 
   ngOnChanges() {
     if (this.ordre) {
@@ -66,10 +106,11 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   onShowing(e) {
-    e.component.content().parentNode.classList.add("packing-list-popup");
+    e.component.content().parentNode.classList.add("packing-list-popup", "document-popup");
   }
 
   onShown(e) {
+    if (this.dxScrollView) this.dxScrollView.instance.scrollTo(0);
     this.entrepotInput.value = `${this.ordre.entrepot.code} - ${this.ordre.entrepot.raisonSocial}`;
     this.dateDepInput.value = this.ordre.etdDate ?? new Date();
     this.dateArrInput.value = this.ordre.etaDate ?? new Date();
@@ -89,6 +130,7 @@ export class PackingListPopupComponent implements OnChanges {
         "warning",
         5000
       );
+
   }
 
   onHidden() {
@@ -99,8 +141,8 @@ export class PackingListPopupComponent implements OnChanges {
     this.dateArrInput.instance.reset();
     this.POInput.instance.reset();
     this.switchCltEnt.instance.reset();
-    this.gridComponent.datagrid.dataSource = null;
     this.gridComponent.datagrid.instance.clearSelection();
+    this.gridComponent.datagrid.dataSource = null;
   }
 
   hidePopup() {
@@ -108,8 +150,13 @@ export class PackingListPopupComponent implements OnChanges {
   }
 
   selectedOrderIds(e) {
+    this.resetRunning();
     this.ordres = e;
     this.selectOk = !!e?.length;
+  }
+
+  resetRunning() {
+    Object.keys(this.running).forEach(key => this.running[key] = false);
   }
 
   validateFields() {
@@ -120,9 +167,143 @@ export class PackingListPopupComponent implements OnChanges {
       return true;
   }
 
-  async onSubmit() {
-    if (!this.validateFields()) return;
+  async onPreview() {
+    this.running.load = true;
+    notify({
+      message: this.localizeService.localize("prepare-preview"),
+      displayTime: 60000
+    },
+      { position: 'bottom center', direction: 'up-stack' }
+    );
 
+    this.printDate = this.dateManagementService.formatDate(this.dateImpInput.value, "dd/MM/yyyy");
+    const result = await lastValueFrom(
+      this.ordresService.getOne_v2(this.ordre?.id, [...[
+        "client.raisonSocial",
+        "client.adresse1",
+        "client.adresse2",
+        "client.adresse3",
+        "client.codePostal",
+        "client.ville",
+        "client.langue.id",
+        "client.pays.description",
+        "entrepot.raisonSocial",
+        "entrepot.adresse1",
+        "entrepot.adresse2",
+        "entrepot.adresse3",
+        "entrepot.codePostal",
+        "entrepot.ville",
+        "entrepot.langue.id",
+        "entrepot.pays.description",
+        "portTypeD.name",
+        "portTypeA.name",
+      ], ...(this.ordre.entrepot.langue.id !== 'FR') ? ["entrepot.paysTraduction.description"] : []
+      ]));
+    // The table is not exhaustive, and makes the process stop if language is french!
+
+    this.order = { ...this.ordre, ...result.data.ordre };
+    const tiers = !this.switchCltEnt.value ? "client" : "entrepot";
+    const address = [
+      this.order[tiers].raisonSocial,
+      this.order[tiers].adresse1,
+      this.order[tiers].adresse2,
+      this.order[tiers].adresse3,
+      this.order[tiers].codePostal + " " + this.order[tiers].ville,
+      this.order["entrepot"].paysTraduction?.description ?? this.order["entrepot"].pays.description,
+    ]
+    this.address = address.filter(add => add).join("\n");
+
+    let index = 0;
+    this.ordres.map(async (ord, idx) => {
+      const result = await lastValueFrom(
+        this.ordresService.getOne_v2(ord.id, [
+          "logistiques.numeroContainer",
+          "logistiques.numeroPlomb",
+          "logistiques.detecteurTemperature",
+          "lignes.article.id",
+          "lignes.article.matierePremiere.variete.id",
+          "lignes.article.matierePremiere.variete.description",
+          "lignes.article.cahierDesCharge.categorie.description",
+          "lignes.article.emballage.emballage.description",
+          "lignes.article.normalisation.calibreMarquage.description",
+          "lignes.nombreColisExpedies",
+          "lignes.poidsBrutExpedie",
+          "lignes.poidsNetExpedie",
+        ])
+      );
+      index++;
+      this.ordres[idx] = { ...ord, ...result.data.ordre };
+      if (index === this.ordres.length) this.preview();
+    });
+  }
+
+  preview() {
+    let refsClient = [];
+    this.containers = [];
+    this.totaux = {
+      colis: 0,
+      gross: 0,
+      net: 0
+    }
+    const lang = this.order.entrepot.langue?.id ?? this.order.client.langue?.id ?? "GB";
+
+    this.ordres.map(ord => {
+      refsClient.push(ord.referenceClient);
+      if (!this.containers.find(cont => cont?.id === ord.logistiques?.[0].numeroContainer)) this.containers.push({
+        id: ord.logistiques?.[0].numeroContainer,
+        lignes: [],
+        sumColis: 0,
+        sumGross: 0,
+        sumNet: 0,
+      });
+      const container = this.containers.find(cont => cont?.id === ord.logistiques?.[0].numeroContainer);
+      ord.lignes?.filter(ligne => ligne.poidsNetExpedie).map(async ligne => {
+        container.sumColis += ligne.nombreColisExpedies ?? 0;
+        container.sumGross += ligne.poidsBrutExpedie ?? 0;
+        container.sumNet += ligne.poidsNetExpedie ?? 0;
+
+        let description = ligne.article.matierePremiere.variete.description;
+        if (lang !== "FR") {
+          const id1 = { langue: lang, variete: ligne.article.matierePremiere.variete.id }
+          const result = await lastValueFrom(this.articlesService.getOneVarieteTraduction(
+            id1, new Set(["description"])
+          ));
+          description = result.varieteTraduction?.description ?? description;
+        }
+
+        const desc = [];
+        desc.push(description);
+        desc.push(ligne.article.cahierDesCharge.categorie.description);
+        desc.push(ligne.article.emballage.emballage.description);
+        container.lignes.push({
+          ...ligne,
+          description: desc.join(" - ")
+        });
+      })
+    })
+    // We use referenceClients as PO, otherwise PO entered by user, otherwise "-"
+    refsClient = refsClient.filter(r => r);
+    this.numeroPo = refsClient.length ? refsClient.join(" ") : this.POInput.value ?? "-";
+
+    this.containers.map(c => {
+      this.totaux.colis += c.sumColis;
+      this.totaux.gross += c.sumGross;
+      this.totaux.net += c.sumNet;
+    })
+
+    this.ordres.sort((a, b) => a.logistiques?.[0].numeroContainer?.localeCompare(b.logistiques?.[0].numeroContainer));
+    this.containers.sort((a, b) => a?.id.localeCompare(b?.id));
+    hideToasts();
+    this.running.preview = true;
+    setTimeout(() => {
+      const Element = document.querySelector(".generate-document-container") as HTMLElement;
+      Element?.scrollIntoView({ behavior: "smooth" });
+    }, 10);
+  }
+
+  async onPrint() {
+    if (!this.validateFields()) return;
+    this.running.print = true;
     // Save all orders into myOrders
     // Checks client.raisonSocial difference and etd/eta not null
     const myOrders = [];
@@ -154,7 +335,10 @@ export class PackingListPopupComponent implements OnChanges {
         )
       ) {
         this.saveData(myOrders);
-      } else return;
+      } else {
+        this.running.print = false;
+        return;
+      }
     }
     this.saveData(myOrders);
   }
@@ -166,7 +350,7 @@ export class PackingListPopupComponent implements OnChanges {
           depart: new Date(this.dateDepInput.value).toISOString(),
           livraison: new Date(this.dateArrInput.value).toISOString(),
           impression: new Date(this.dateImpInput.value).toISOString(),
-          numeroPo: this.POInput.value || "-",
+          numeroPo: this.numeroPo.substring(0, 16), // Database limitation,
           typeTier: { id: this.switchCltEnt.value ? "E" : "C" },
           mail: this.authService.currentUser.email ?? "",
           ordres: myOrders,
@@ -175,16 +359,15 @@ export class PackingListPopupComponent implements OnChanges {
       )
       .subscribe({
         next: () => {
-          // Message and close
-          notify(
-            this.localizeService.localize("text-popup-CQ-creation-PDF-deposee"),
-            "success",
-            5000
-          );
-          this.hidePopup();
+          // Print and clear
+          this.running.sendPrinter = true;
+          this.printDocumentTitle = `Packing-list-${this.ordres.map(ord => ord.numero).join("-")}`;
+          this.formsUtils.onPrint(this);
+          setTimeout(() => this.gridComponent.datagrid.instance.clearSelection(), 1000);
         },
         error: (error: Error) => {
           console.log(error);
+          this.running.print = false;
           notify(this.messageFormat(error.message), "error", 7000);
         },
       });

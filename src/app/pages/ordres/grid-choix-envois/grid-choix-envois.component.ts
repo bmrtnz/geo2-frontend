@@ -29,7 +29,7 @@ import DataSource from "devextreme/data/data_source";
 import notify from "devextreme/ui/notify";
 import { environment } from "environments/environment";
 import { from, Observable, zip } from "rxjs";
-import { concatMapTo, finalize, map } from "rxjs/operators";
+import { concatMap, concatMapTo, finalize, map } from "rxjs/operators";
 import { FluxArService } from "../flux-ar.service";
 import { GridsService } from "../grids.service";
 
@@ -197,7 +197,6 @@ export class GridChoixEnvoisComponent implements OnInit {
 
   onCellClick(e) {
     if (e.rowType !== "data") return;
-
     // Handle CUSINV + Mail selectbox functionality
     if (e.column.dataField === "numeroAcces1") {
       if (e.data?.moyenCommunication?.id === 'MAI' && e.data?.flux.id === "CUSINV") {
@@ -207,6 +206,10 @@ export class GridChoixEnvoisComponent implements OnInit {
         this.SelectBoxPopupWidth = 0;
       }
     }
+  }
+
+  onToolbarPreparing(e) {
+    e.toolbarOptions.items[0].visible = false; // Hide save button
   }
 
   onRowClick({ rowIndex }) {
@@ -237,42 +240,18 @@ export class GridChoixEnvoisComponent implements OnInit {
     return null;
   }
 
-  clearTemps() {
-    this.envoisService.getList(
-      `ordre.id==${this.ordre.id} and traite==A`,
-      ["id"]).subscribe(res => {
-        const temps = res.data.allEnvoisList.map(({ id }) => ({ id }));
-        this.envoisService.deleteTempEnvois(temps).toPromise()
-      });
-  }
-
   // Used to override std arrows behaviour
   onKeyDown({ event }: { event: { originalEvent: KeyboardEvent } }) {
     const keyCode = event.originalEvent?.code;
     const columnOptions = this.dataGrid.instance.columnOption(this.dataGrid.focusedColumnIndex);
     if (!["ArrowUp", "ArrowDown"].includes(keyCode) || columnOptions.name !== "numeroAcces2") return;
-    this.saveCurrentCell((keyCode === "ArrowDown" ? 1 : -1));
-  }
-
-  async saveCurrentCell(dir) {
-    this.dataGrid.instance.cellValue(
-      this.dataGrid.focusedRowIndex,
-      "numeroAcces2",
-      this.dataGrid.instance.$element()[0].querySelector(".dx-focused .dx-texteditor-input")?.value
-    );
-    await this.gridsService.waitUntilAllGridDataSaved(this.dataGrid)
-    this.moveRows(dir);
-  }
-
-  moveRows(dir) {
-    this.dataGrid.instance.closeEditCell();
-    // switch focus
     this.dataGrid.instance.focus(
       this.dataGrid.instance.getCellElement(
-        this.dataGrid.focusedRowIndex + dir,
+        this.dataGrid.focusedRowIndex + (keyCode === "ArrowDown" ? 1 : -1),
         this.dataGrid.focusedColumnIndex
       )
     );
+    event.originalEvent.preventDefault();
   }
 
   reload(annuleOrdre?) {

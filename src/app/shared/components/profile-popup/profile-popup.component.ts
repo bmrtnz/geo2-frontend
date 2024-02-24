@@ -22,6 +22,7 @@ import {
   DxValidatorComponent,
   DxDateBoxComponent,
   DxTagBoxModule,
+  DxPopupComponent,
 } from "devextreme-angular";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, LocalizationService } from "app/shared/services";
@@ -57,6 +58,7 @@ export class ProfilePopupComponent {
   @ViewChildren(DxValidatorComponent) validators: QueryList<DxValidatorComponent>;
   @ViewChild("secteursList", { static: false }) secteursList: DxTagBoxComponent;
   @ViewChild(DxScrollViewComponent, { static: false }) dxScrollView: DxScrollViewComponent;
+  @ViewChild(DxPopupComponent, { static: false }) popup: DxPopupComponent;
 
   public secteurs: DataSource;
   public visible: boolean;
@@ -336,7 +338,7 @@ export class ProfilePopupComponent {
   }
 
   hidePopup() {
-    this.visible = false;
+    this.popup.visible = false;
   }
 
   ////////////////////////////////

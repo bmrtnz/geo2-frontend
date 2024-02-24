@@ -66,7 +66,7 @@ export class StatistiquesArticlePopupComponent implements OnChanges, AfterViewIn
   }
 
   onShowing(e) {
-    this.popupFullscreen = true;
+    setTimeout(() => this.popupFullscreen = true); // Small timeout to avoid ng checked error
     e.component.content().parentNode.classList.add("statistiques-article-popup");
   }
 

@@ -59,7 +59,6 @@
   ></dx-button>
 
   <dx-data-grid
-    class="dx-card wide-card"
     [class.fixedScrollbars]="authService?.currentUser?.barreDefilementVisible"
     [dataSource]="reservationsSource | async"
     [remoteOperations]="false"

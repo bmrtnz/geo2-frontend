@@ -720,7 +720,7 @@ export class GridCommandesComponent
 
             // Select first VALID on the list if no selection
             let searchCond = [];
-            listeExpediteurs.map(code => searchCond.push(`code==${code}`));
+            listeExpediteurs.map(code => searchCond.push(`code=="${code}"`));
             const search = "(" + searchCond.join(" or ") + ") and valide==true";
             let fournisseurList = await lastValueFrom(self.fournisseursService
               .getList(search, ["id", "code", "raisonSocial"])

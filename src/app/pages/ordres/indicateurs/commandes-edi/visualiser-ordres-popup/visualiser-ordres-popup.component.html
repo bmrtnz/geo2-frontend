@@ -27,7 +27,7 @@
     [columnHidingEnabled]="false"
     [allowColumnReordering]="true"
     [rowAlternationEnabled]="true"
-    (onRowClick)="onRowClick($event)"
+    (onRowClick)="gridUtilsService.selectRowByClick($event)"
     (onCellPrepared)="onCellPrepared($event)"
     (onSelectionChanged)="selectFromGrid()"
     (onToolbarPreparing)="

@@ -144,7 +144,7 @@ export class RecapStockCdeEdiColibriPopupComponent implements OnInit {
   }
 
   onShowing(e) {
-    this.popupFullscreen = true;
+    setTimeout(() => this.popupFullscreen = true); // Small timeout to avoid ng checked error
     e.component
       .content()
       .parentNode.classList.add("recap-stock-cde-edi-colibri-popup");

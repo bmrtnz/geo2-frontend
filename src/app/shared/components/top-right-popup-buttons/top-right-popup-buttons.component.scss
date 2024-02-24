@@ -1,14 +1,30 @@
 // Up right button on popups
 ::ng-deep .dx-template-wrapper.dx-popup-title {
 
-  .minimize-popup-icon {
-    top: 13px;
+  .dx-button {
     float: right;
+
+    &.close-popup {
+      top: 11px;
+    }
+
+    &.resize-popup-icon {
+      top: 12px;
+
+      .zoom_out_map,
+      .zoom_in_map {
+        font-size: 22px !important;
+      }
+    }
+
+    &.minimize-popup-icon {
+      top: 12px;
+
+      .minimize {
+        margin-top: -16px;
+      }
+    }
+
   }
 
-  .close-popup,
-  .resize-popup-icon {
-    top: 12px;
-    float: right;
-  }
 }
